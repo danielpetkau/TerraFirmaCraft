@@ -8,11 +8,15 @@ package net.dries007.tfc.world.biome;
 
 import java.util.Random;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.levelgen.XoroshiroRandomSource;
 
 import net.dries007.tfc.world.BiomeNoiseSampler;
+import net.dries007.tfc.world.noise.Cellular2D;
 import net.dries007.tfc.world.noise.FastNoiseLite;
 import net.dries007.tfc.world.noise.Noise2D;
 import net.dries007.tfc.world.noise.OpenSimplex2D;
+import net.dries007.tfc.world.region.Units;
 
 import static net.dries007.tfc.world.TFCChunkGenerator.*;
 
@@ -509,9 +513,9 @@ public final class BiomeNoise
     }
 
     // Shield volcanoes with minimal erosion, recent lava flows on surface, no/small calderas
-    public static Noise2D activeShieldVolcano(long seed, double minElev, double maxElev)
+    public static Noise2D activeShieldVolcano(long seed, double minElev, double maxElev, Noise2D hotspot)
     {
-        final Noise2D volcano = hotSpotIntensity(seed).map(y ->
+        final Noise2D volcano = hotspot.map(y ->
             y < 0.75 ? Mth.map(y, 0, 0.75, minElev, maxElev)
             : y < 0.78 ? Mth.map(y, 0.75, 0.78, maxElev - 1, maxElev - 18)
             : Mth.map(y, 0.78, 1, maxElev - 18, minElev));
@@ -530,12 +534,13 @@ public final class BiomeNoise
     }
 
     // Shield volcanoes with some erosion, no recent lava flows, large calderas with open sides
-    public static Noise2D dormantShieldVolcano(long seed, double minElev, double maxElev)
+    public static Noise2D dormantShieldVolcano(long seed, double minElev, double maxElev, Noise2D hotspot)
     {
-        final Noise2D volcano = hotSpotIntensity(seed).map(y ->
-            y < 0.55 ? Mth.map(y, 0, 0.55, minElev, maxElev)
-                : y < 0.6 ? Mth.map(y, 0.55, 0.6, maxElev - 1, minElev * 0.5 + maxElev * 0.6)
-                : Mth.map(y, 0.6, 1, minElev * 0.5 + maxElev * 0.6, minElev));
+        final Noise2D volcano = hotspot.map(y ->
+            y < 0.2 ? minElev
+                : y < 0.6 ? Mth.map(y, 0.2, 0.6, minElev, maxElev)
+                : y < 0.63 ? Mth.map(y, 0.6, 0.63, maxElev - 1, minElev * 0.5 + maxElev * 0.6)
+                : Mth.map(y, 0.63, 1, minElev * 0.5 + maxElev * 0.6, minElev));
 
         final OpenSimplex2D warp = new OpenSimplex2D(seed + 43L).octaves(4).spread(0.03f).scaled(-100f, 100f);
         final Noise2D surface = new OpenSimplex2D(seed + 44L)
@@ -543,7 +548,7 @@ public final class BiomeNoise
             .spread(0.06f)
             .warped(warp)
             .map(x -> x > 0.4 ? x - 0.8f : -x)
-            .scaled(-0.4f, 0.8f, -15, 0);
+            .scaled(-0.4f, 0.8f, -12, 0);
 
         final Noise2D scale = new OpenSimplex2D(seed + 789913L).octaves(2).spread(0.002f).scaled(0.75, 1);
 
@@ -551,12 +556,13 @@ public final class BiomeNoise
     }
 
     // Shield volcanoes with heavily eroded calderas
-    public static Noise2D weatheredShieldVolcano(long seed, double minElev, double maxElev)
+    public static Noise2D weatheredShieldVolcano(long seed, double minElev, double maxElev, Noise2D hotspot)
     {
-        final Noise2D volcano = hotSpotIntensity(seed).map(y ->
-            y < 0.55 ? Mth.map(y, 0, 0.55, minElev, maxElev)
-                : y < 0.6 ? Mth.map(y, 0.55, 0.6, maxElev - 1, minElev * 0.5 + maxElev * 0.6)
-                : Mth.map(y, 0.6, 1, minElev * 0.5 + maxElev * 0.6, minElev));
+        final Noise2D volcano = hotspot.map(y ->
+            y < 0.2 ? minElev
+                : y < 0.6 ? Mth.map(y, 0.2, 0.6, minElev, maxElev)
+                : y < 0.63 ? Mth.map(y, 0.6, 0.63, maxElev - 1, minElev * 0.5 + maxElev * 0.6)
+                : Mth.map(y, 0.63, 1, minElev * 0.5 + maxElev * 0.6, minElev));
 
         final OpenSimplex2D warp = new OpenSimplex2D(seed + 43L).octaves(4).spread(0.03f).scaled(-100f, 100f);
         final Noise2D surface = new OpenSimplex2D(seed + 44L)
@@ -564,7 +570,7 @@ public final class BiomeNoise
             .spread(0.06f)
             .warped(warp)
             .map(x -> x > 0.4 ? x - 0.8f : -x)
-            .scaled(-0.4f, 0.8f, -24, 0);
+            .scaled(-0.4f, 0.8f, -20, 0);
 
         final Noise2D valleys = new OpenSimplex2D(seed + 90183L).spread(0.01).ridged().octaves(3).scaled(maxElev * 2.2, minElev);
 
@@ -578,67 +584,61 @@ public final class BiomeNoise
         return new OpenSimplex2D(seed + 23891L).ridged().spread(0.01);
     }
 
-    // Current idea with this is a cutoff noise map to generate islands, both the region generator and the biome noise would use this map at a different scale.
+    // Currently erupting location in a hotspot chain
+    public static Noise2D activeHotSpots(long seed)
+    {
+        final double horizontalScale = 0.003;
+        final double cutoff = 0.75;
+        final double rescale = 6;
+
+        Noise2D hotspots = new OpenSimplex2D(seed).map(y -> {
+            y = y > cutoff ? y - cutoff : 0;
+            y = (y * rescale);
+            return y;
+        }).octaves(3).spread(horizontalScale);
+        return hotspots;
+    }
+
+    // Second location in a hotspot chain
+    public static Noise2D dormantHotSpots(long seed)
+    {
+        return activeHotSpots(seed).islandWarp(plateRegions(seed), 1024, 0);
+    }
+
+    // Third location in a hotspot chain
+    public static Noise2D extinctHotSpots(long seed)
+    {
+        return activeHotSpots(seed).islandWarp(plateRegions(seed), 2048, 0.25);
+    }
+
+    // Fourth location in a hotspot chain
+    public static Noise2D ancientHotSpots(long seed)
+    {
+        return activeHotSpots(seed).islandWarp(plateRegions(seed), 3072, 0.5);
+    }
+
+
+    // TODO: Current idea with this is a cutoff noise map to generate islands, both the region generator and the biome noise would use this map at a different scale.
     public static Noise2D hotSpotIntensity(long seed)
     {
-        final double horizontalScale = 0.003;
-        final double cutoff = 0.75;
-        final double rescale = 6;
-
-        Noise2D youngest = new OpenSimplex2D(seed).map(y -> {
-            y = y > cutoff ? y - cutoff : 0;
-            y = (y * rescale);
-            return y;
-        }).octaves(3).spread(horizontalScale);
-
-        Noise2D young = youngest.islandWarp(-1000, 800);
-        Noise2D old = youngest.islandWarp(-1800, 1700);
-        Noise2D oldest = youngest.islandWarp(-2400, 2600);
-        return youngest.max(young).max(old).max(oldest);
+        return activeHotSpots(seed).max(dormantHotSpots(seed)).max(extinctHotSpots(seed)).max(ancientHotSpots(seed));
     }
 
-    // TODO: Structure code better, write comments explaining everything that must match the region generator
-    // This must mirror the hotSpotIntensity method exactly, but return an age
+    // This takes noise maps of each of the age categories of hotspots, and maps which one is dominant at every location in the world
     public static Noise2D hotSpotAge(long seed)
     {
-        final double horizontalScale = 0.003;
-        final double cutoff = 0.75;
-        final double rescale = 6;
+        Noise2D active = activeHotSpots(seed);
+        Noise2D dormant = dormantHotSpots(seed);
+        Noise2D extinct = extinctHotSpots(seed);
+        Noise2D ancient = ancientHotSpots(seed);
 
-        Noise2D youngest = new OpenSimplex2D(seed).map(y -> {
-            y = y > cutoff ? y - cutoff : 0;
-            y = (y * rescale);
-            return y;
-        }).octaves(3).spread(horizontalScale);
-
-        Noise2D young = youngest.islandWarp(-1000, 800);
-        Noise2D old = youngest.islandWarp(-1800, 1700);
-        Noise2D oldest = youngest.islandWarp(-2400, 2600);
-
-        return youngest.mapAges(young, old, oldest);
+        return active.mapAges(dormant, extinct, ancient);
     }
 
-    // Noise for hotspot velocity vectors
-    // TODO: Remove or replace
-    public static Noise2D islandHash(double scale, int seed)
+    // No related to the region generator cells
+    public static Cellular2D plateRegions(long seed)
     {
-        return (x, z) -> {
-            x *= scale;
-            z *= scale;
-
-            final int primeX = 501125321;
-            final int primeY = 1136930381;
-
-            int xr = FastNoiseLite.FastFloor(x);
-            int yr = FastNoiseLite.FastFloor(z);
-
-            int xPrimed = (xr - 1) * primeX;
-            int yPrimed = (yr - 1) * primeY;
-
-            int hash = FastNoiseLite.Hash(seed, xPrimed, yPrimed);
-
-            return (hash & (255 << 1)) * 0.002 + 0.5;
-        };
+        return new Cellular2D(seed).spread(0.00390625f / Units.CELL_WIDTH_IN_GRID); // 1/256 (half) the scale of the region generator
     }
 
     /**

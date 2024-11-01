@@ -140,13 +140,25 @@ public interface Noise2D
         };
     }
 
-    //TODO: Get better system
-    default Noise2D islandWarp(int dx, int dz)
+    default Noise2D islandWarp(Noise2D warp, int velocityScale, double accelScale)
     {
         return (x, z) -> {
-            x = x + dx;
-            z = z + dz;
-            return Noise2D.this.noise(x, z);
+            // Random vector
+            final double ux = warp.noise(x, z);
+            // Random magnitude from pev vector by multiplying and taking modulo, random direction based on magnitude
+            final double uz = (Math.abs(ux * 16) % 1 > 0.5 ? 1 : -1) * (ux * 256) % 1;
+
+            // Increase magnitude of vector to ensure islands don't generate on top of each other
+            final int sx = ux > 0 ? 1 : -1;
+            final int sz = uz > 0 ? 1 : -1;
+            final double vx = (ux + sx) * velocityScale;
+            final double vz = (uz + sz) * velocityScale;
+
+            // Perpendicular acceleration vector to create curved chains
+            final double ax = -(vz) * accelScale;
+            final double az = vx * accelScale;
+
+            return Noise2D.this.noise(x + vx + ax, z + vz + az);
         };
     }
 
