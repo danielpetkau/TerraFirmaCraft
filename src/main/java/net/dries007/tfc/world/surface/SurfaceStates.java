@@ -13,15 +13,21 @@ import net.minecraft.world.level.material.Fluids;
 
 import net.dries007.tfc.common.blocks.SandstoneBlockType;
 import net.dries007.tfc.common.blocks.TFCBlocks;
+import net.dries007.tfc.common.blocks.rock.Rock;
 import net.dries007.tfc.common.blocks.soil.SandBlockType;
 import net.dries007.tfc.common.blocks.soil.SoilBlockType;
 import net.dries007.tfc.common.fluids.TFCFluids;
+import net.dries007.tfc.world.settings.RockSettings;
 
 public final class SurfaceStates
 {
     public static final SurfaceState RAW = context -> context.getRock().raw().defaultBlockState();
     public static final SurfaceState COBBLE = context -> context.getRock().cobble().defaultBlockState();
     public static final SurfaceState GRAVEL = context -> context.getRock().gravel().defaultBlockState();
+
+    public static final SurfaceState BASALT = context -> TFCBlocks.ROCK_BLOCKS.get(Rock.BASALT).get(Rock.BlockType.RAW).get().defaultBlockState();
+    public static final SurfaceState BASALT_COBBLE = context -> TFCBlocks.ROCK_BLOCKS.get(Rock.BASALT).get(Rock.BlockType.COBBLE).get().defaultBlockState();
+    public static final SurfaceState BASALT_GRAVEL = context -> TFCBlocks.ROCK_BLOCKS.get(Rock.BASALT).get(Rock.BlockType.GRAVEL).get().defaultBlockState();
 
     /**
      * Grass / Dirt / Gravel, or Sand / Sand / Sandstone

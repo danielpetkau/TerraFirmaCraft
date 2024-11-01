@@ -116,6 +116,15 @@ def generate(rm: ResourceManager):
     biome(rm, 'doline_rolling_hills', 'plains')
     biome(rm, 'cenote_rolling_hills', 'plains')
 
+    biome(rm, 'active_oceanic_shield_volcano', 'extreme_hills')
+    biome(rm, 'dormant_oceanic_shield_volcano', 'extreme_hills')
+    biome(rm, 'extinct_oceanic_shield_volcano', 'extreme_hills')
+    biome(rm, 'ancient_oceanic_shield_volcano', 'extreme_hills')
+    biome(rm, 'active_continental_shield_volcano', 'extreme_hills')
+    biome(rm, 'dormant_continental_shield_volcano', 'extreme_hills')
+    biome(rm, 'extinct_continental_shield_volcano', 'extreme_hills')
+    biome(rm, 'ancient_continental_shield_volcano', 'extreme_hills')
+
     biome(rm, 'mountain_lake', 'extreme_hills')
     biome(rm, 'volcanic_mountain_lake', 'extreme_hills', volcano_features=True)
     biome(rm, 'old_mountain_lake', 'extreme_hills')

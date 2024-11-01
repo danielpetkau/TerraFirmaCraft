@@ -5,6 +5,10 @@
     "tfc:ocean",
     "tfc:ocean_reef",
     "tfc:deep_ocean",
-    "tfc:deep_ocean_trench"
+    "tfc:deep_ocean_trench",
+    "tfc:active_oceanic_shield_volcano",
+    "tfc:dormant_oceanic_shield_volcano",
+    "tfc:extinct_oceanic_shield_volcano",
+    "tfc:ancient_oceanic_shield_volcano"
   ]
 }

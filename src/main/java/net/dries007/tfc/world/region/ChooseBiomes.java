@@ -147,55 +147,52 @@ public enum ChooseBiomes implements RegionTask
     }
 
 
-    //TODO: Add actual biomes instead of just placing exiting stuff
     private int getOceanicHotSpotBiome(int age)
     {
         if (age == 4)
-            return TOWER_KARST_LAKE;
+            return ANCIENT_OCEANIC_SHIELD_VOLCANO;
         if (age == 3)
-            return TOWER_KARST_PLAINS;
+            return EXTINCT_OCEANIC_SHIELD_VOLCANO;
         if (age == 2)
-            return TOWER_KARST_HIGHLANDS;
+            return DORMANT_OCEANIC_SHIELD_VOLCANO;
         if (age == 1)
-            return TOWER_KARST_BAY;
+            return ACTIVE_OCEANIC_SHIELD_VOLCANO;
         return OCEAN;
     }
 
     private int getLandHotSpotBiome(int age)
     {
         if (age == 4)
-            return TOWER_KARST_LAKE;
+            return ANCIENT_CONTINENTAL_SHIELD_VOLCANO;
         if (age == 3)
-            return TOWER_KARST_PLAINS;
+            return EXTINCT_CONTINENTAL_SHIELD_VOLCANO;
         if (age == 2)
-            return TOWER_KARST_HIGHLANDS;
+            return DORMANT_CONTINENTAL_SHIELD_VOLCANO;
         if (age == 1)
-            return TOWER_KARST_BAY;
+            return ACTIVE_CONTINENTAL_SHIELD_VOLCANO;
         return PLAINS;
     }
 
-    // TODO: Revert. I overrode this to make biomes easier to find
     private int getTowerKarstBiome(int biome)
     {
-        return SALT_FLATS;
-//        if (biome == SALT_MARSH)
-//            return TOWER_KARST_BAY;
-//        else if (biome == LOWLANDS)
-//            return TOWER_KARST_LAKE;
-//        else if (biome == PLAINS || biome == LOW_CANYONS)
-//            return TOWER_KARST_PLAINS;
-//        else if (biome == CANYONS)
-//            return TOWER_KARST_CANYONS;
-//        else if (biome == HILLS || biome == ROLLING_HILLS || biome == BADLANDS)
-//            return TOWER_KARST_HILLS;
-//        else if (biome == HIGHLANDS || biome == INVERTED_BADLANDS)
-//            return TOWER_KARST_HIGHLANDS;
-//        else if (biome == PLATEAU)
-//            return EXTREME_DOLINE_PLATEAU;
-//        else if (biome == OLD_MOUNTAINS || biome == MOUNTAINS || biome == OCEANIC_MOUNTAINS)
-//            return EXTREME_DOLINE_MOUNTAINS;
-//        else
-//            return biome;
+        if (biome == SALT_MARSH)
+            return TOWER_KARST_BAY;
+        else if (biome == LOWLANDS)
+            return TOWER_KARST_LAKE;
+        else if (biome == PLAINS || biome == LOW_CANYONS)
+            return TOWER_KARST_PLAINS;
+        else if (biome == CANYONS)
+            return TOWER_KARST_CANYONS;
+        else if (biome == HILLS || biome == ROLLING_HILLS || biome == BADLANDS)
+            return TOWER_KARST_HILLS;
+        else if (biome == HIGHLANDS || biome == INVERTED_BADLANDS)
+            return TOWER_KARST_HIGHLANDS;
+        else if (biome == PLATEAU)
+            return EXTREME_DOLINE_PLATEAU;
+        else if (biome == OLD_MOUNTAINS || biome == MOUNTAINS || biome == OCEANIC_MOUNTAINS)
+            return EXTREME_DOLINE_MOUNTAINS;
+        else
+            return biome;
     }
 
     private int getShilinBiome(int biome)

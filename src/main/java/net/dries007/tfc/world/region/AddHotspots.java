@@ -19,21 +19,20 @@ public enum AddHotspots implements RegionTask
     public void apply(RegionGenerator.Context context)
     {
         final Region region = context.region;
-        final long seed = 1234L; //context.generator().levelSeed();
+        final long seed = context.generator().levelSeed();
 
         final Noise2D hotspotAge = BiomeNoise.hotSpotAge(seed).spread(128);
         final Noise2D hotspotIntensity = BiomeNoise.hotSpotIntensity(seed).spread(128); //TODO: Remove the point.intensity, this noise map can cover us
 
         final IntArrayFIFOQueue queue = new IntArrayFIFOQueue();
 
-        // If a location reaches a value of at least 0.5 (large enough to form a crater) a hot spot is placed
+        // If a location reaches a value of at least 0.55 (large enough to form a crater) a hot spot is placed
         for (final var point : region.points())
         {
-            double val = hotspotIntensity.noise(point.x, point.z);
-            if (val > 0.5) //TODO:
+            double val = hotspotIntensity.noise(shift(point.x), shift(point.z));
+            if (val > 0.55)
             {
-                //TODO (byte) (int) (5 - val * 4);
-                point.hotSpotAge = (byte) (int) hotspotAge.noise(point.x, point.z);
+                point.hotSpotAge = (byte) (int) hotspotAge.noise(shift(point.x), shift(point.z));
 
                 queue.enqueue(point.index);
             }
@@ -52,15 +51,15 @@ public enum AddHotspots implements RegionTask
                     {
                         if (next.hotSpotAge == 0)
                         {
-                            if (hotspotIntensity.noise(next.x, next.z) > 0.25)
+                            if (hotspotIntensity.noise(shift(next.x), shift(next.z)) > 0.15)
                             {
                                 queue.enqueue(next.index);
-                                next.hotSpotAge = (byte) (int) hotspotAge.noise(next.x, next.z);
+                                next.hotSpotAge = (byte) (int) hotspotAge.noise(shift(next.x), shift(next.z));
                             }
                             // This guarantees the 8 points around any caldera are filled in to keep biome blending away from the crater
-                            else if (hotspotIntensity.noise(next.x - dx, next.z - dz) > 0.5)
+                            else if (hotspotIntensity.noise(shift(next.x) - dx, shift(next.z) - dz ) > 0.55)
                             {
-                                next.hotSpotAge = (byte) (int) hotspotAge.noise(next.x - dx, next.z - dz);
+                                next.hotSpotAge = (byte) (int) hotspotAge.noise(shift(next.x) - dx, shift(next.z) - dz );
                             }
                         }
                     }
@@ -68,5 +67,13 @@ public enum AddHotspots implements RegionTask
             }
         }
 
+    }
+
+    // Shifts the location by 0.5 towards the origin.
+    // Use this when sampling noise from regional coordinates to sample the center of the region point
+    public double shift(int point)
+    {
+        if (point == 0) return 0;
+        return point - (0.5 * Math.signum(point));
     }
 }

@@ -23,7 +23,7 @@ import net.dries007.tfc.world.region.Units;
 
 public class TFCLayers
 {
-    private static final BiomeExtension[] BIOME_LAYERS = new BiomeExtension[64];
+    private static final BiomeExtension[] BIOME_LAYERS = new BiomeExtension[128];
     private static final MutableInt BIOME_LAYER_INDEX = new MutableInt(0);
 
     /**
@@ -93,6 +93,14 @@ public class TFCLayers
     public static final int CENOTE_PLATEAU = idFor(TFCBiomes.CENOTE_PLATEAU);
     public static final int EXTREME_DOLINE_PLATEAU = idFor(TFCBiomes.EXTREME_DOLINE_PLATEAU);
     public static final int EXTREME_DOLINE_MOUNTAINS = idFor(TFCBiomes.EXTREME_DOLINE_MOUNTAINS);
+    public static final int ACTIVE_OCEANIC_SHIELD_VOLCANO = idFor(TFCBiomes.ACTIVE_OCEANIC_SHIELD_VOLCANO);
+    public static final int DORMANT_OCEANIC_SHIELD_VOLCANO = idFor(TFCBiomes.DORMANT_OCEANIC_SHIELD_VOLCANO);
+    public static final int EXTINCT_OCEANIC_SHIELD_VOLCANO = idFor(TFCBiomes.EXTINCT_OCEANIC_SHIELD_VOLCANO);
+    public static final int ANCIENT_OCEANIC_SHIELD_VOLCANO = idFor(TFCBiomes.ANCIENT_OCEANIC_SHIELD_VOLCANO);
+    public static final int ACTIVE_CONTINENTAL_SHIELD_VOLCANO = idFor(TFCBiomes.ACTIVE_CONTINENTAL_SHIELD_VOLCANO);
+    public static final int DORMANT_CONTINENTAL_SHIELD_VOLCANO = idFor(TFCBiomes.DORMANT_CONTINENTAL_SHIELD_VOLCANO);
+    public static final int EXTINCT_CONTINENTAL_SHIELD_VOLCANO = idFor(TFCBiomes.EXTINCT_CONTINENTAL_SHIELD_VOLCANO);
+    public static final int ANCIENT_CONTINENTAL_SHIELD_VOLCANO = idFor(TFCBiomes.ANCIENT_CONTINENTAL_SHIELD_VOLCANO);
 
     public static BiomeExtension getFromLayerId(int id)
     {
@@ -218,6 +226,11 @@ public class TFCLayers
         if (value == TOWER_KARST_LAKE)
         {
             return TOWER_KARST_BAY;
+        }
+        if (value == ACTIVE_CONTINENTAL_SHIELD_VOLCANO || value == DORMANT_CONTINENTAL_SHIELD_VOLCANO || value == EXTINCT_CONTINENTAL_SHIELD_VOLCANO || value == ANCIENT_CONTINENTAL_SHIELD_VOLCANO
+        || value == ACTIVE_OCEANIC_SHIELD_VOLCANO || value == DORMANT_OCEANIC_SHIELD_VOLCANO || value == EXTINCT_OCEANIC_SHIELD_VOLCANO || value == ANCIENT_OCEANIC_SHIELD_VOLCANO)
+        {
+            return value;
         }
         return SHORE;
     }

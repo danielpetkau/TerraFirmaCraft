@@ -150,6 +150,11 @@ public class BiomeBuilder
 
     public BiomeBuilder volcanoes(int frequency, int baseHeight, int scaleHeight, int volcanoBasaltHeight)
     {
+        return volcanoes(frequency, baseHeight, scaleHeight, volcanoBasaltHeight, false);
+    }
+
+    public BiomeBuilder volcanoes(int frequency, int baseHeight, int scaleHeight, int volcanoBasaltHeight, boolean additive)
+    {
         this.volcanic = true;
         this.volcanoFrequency = frequency;
         this.volcanoBasaltHeight = TFCChunkGenerator.SEA_LEVEL_Y + volcanoBasaltHeight;
@@ -158,7 +163,7 @@ public class BiomeBuilder
         assert surfaceBuilderFactory != null : "volcanoes must be called after setting a surface builder";
 
         final LongFunction<Noise2D> baseHeightNoiseFactory = this.heightNoiseFactory;
-        this.heightNoiseFactory = seed -> BiomeNoise.addVolcanoes(seed, baseHeightNoiseFactory.apply(seed), frequency, baseHeight, scaleHeight);
+        this.heightNoiseFactory = seed -> BiomeNoise.addVolcanoes(seed, baseHeightNoiseFactory.apply(seed), frequency, baseHeight, scaleHeight, additive);
         this.noiseFactory = seed -> BiomeNoiseSampler.fromHeightNoise(heightNoiseFactory.apply(seed));
 
         this.surfaceBuilderFactory = VolcanoesSurfaceBuilder.create(surfaceBuilderFactory);
