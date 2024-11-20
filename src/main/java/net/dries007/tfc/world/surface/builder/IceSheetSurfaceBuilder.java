@@ -24,7 +24,6 @@ public class IceSheetSurfaceBuilder implements SurfaceBuilder
     public static final SurfaceBuilderFactory OCEANIC_MOUNTAINS = seed -> new IceSheetSurfaceBuilder(seed, BiomeNoise.glacialMountainsBase(seed), true);
 
     private final long seed;
-    //TODO: Use or lose
     private final boolean oceanic;
     private final Noise2D baseNoise;
 
@@ -68,7 +67,8 @@ public class IceSheetSurfaceBuilder implements SurfaceBuilder
                         // Only include ice underwater if it is a thick layer, otherwise fall back to mountain surface builder
                         if (y < context.getSeaLevel() - 1)
                         {
-                            if (y > endHeight + 3)
+                            // TODO: Figure this underwater ice stuff out
+                            if (y > endHeight + 3 && y > context.getSeaLevel() - 3)
                             {
                                 context.setBlockState(y, iceState);
                             }
