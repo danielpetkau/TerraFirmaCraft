@@ -116,6 +116,7 @@ def generate(rm: ResourceManager):
     biome(rm, 'burren_badlands', 'mesa')
     biome(rm, 'doline_rolling_hills', 'plains')
     biome(rm, 'cenote_rolling_hills', 'plains')
+    biome(rm, 'burren_roche_moutonee', 'exteme_hills')
 
     biome(rm, 'active_shield_volcano', 'extreme_hills', volcano_features=True, shield_volcano_features=True)
     biome(rm, 'dormant_shield_volcano', 'extreme_hills', hot_spring_features=True, shield_volcano_features=True)
@@ -125,7 +126,7 @@ def generate(rm: ResourceManager):
     biome(rm, 'shield_volcano_shore', 'beach', ocean_features=True, shield_volcano_features=True)
     biome(rm, 'old_shield_volcano_shore', 'beach', ocean_features=True, shield_volcano_features=True)
 
-# TODO: add lake tags for fish spawning to shield volcanoes, subglacial lakes
+# TODO: add lake tags for fish spawning to shield volcanoes, subglacial lakes, check biome tags and stuff in general for all new biomes
     biome(rm, 'mountain_lake', 'extreme_hills')
     biome(rm, 'volcanic_mountain_lake', 'extreme_hills', volcano_features=True)
     biome(rm, 'old_mountain_lake', 'extreme_hills')
@@ -133,19 +134,33 @@ def generate(rm: ResourceManager):
     biome(rm, 'volcanic_oceanic_mountain_lake', 'river', ocean_features='both', volcano_features=True)
     biome(rm, 'plateau_lake', 'extreme_hills', boulders=True)
 
+    # Full ice sheet biomes
     biome(rm, 'ice_sheet', 'exteme_hills', barren=True)
     biome(rm, 'ice_sheet_mountains', 'exteme_hills', barren=True)
     biome(rm, 'ice_sheet_oceanic_mountains', 'exteme_hills', barren=True)
-    biome(rm, 'ice_sheet_edge', 'exteme_hills', barren=True)
-    biome(rm, 'ice_sheet_mountains_edge', 'exteme_hills', barren=True)
-    biome(rm, 'ice_sheet_shore', 'exteme_hills', barren=True)
-    biome(rm, 'ice_sheet_mountains_shore', 'exteme_hills', barren=True)
-    biome(rm, 'terminal_moraine', 'exteme_hills')
-    biome(rm, 'ice_sheet_tuyas', 'exteme_hills', barren=True)
-    biome(rm, 'subglacial_lake', 'exteme_hills', barren=True)
     biome(rm, 'ice_sheet_active_shield_volcano', 'exteme_hills', barren=True)
     biome(rm, 'ice_sheet_shield_volcano', 'exteme_hills', barren=True)
+    biome(rm, 'ice_sheet_tuyas', 'exteme_hills', barren=True)
+    biome(rm, 'subglacial_lake', 'exteme_hills', barren=True)
 
+    # Ice sheet edge biomes
+    # TODO: Make boulders substantially more common in many of these biomes, maybe special extra-large erratics that are also random stone types? But that could be confusing
+    biome(rm, 'ice_sheet_edge', 'exteme_hills')
+    biome(rm, 'glaciated_mountains', 'exteme_hills')
+    biome(rm, 'glaciated_oceanic_mountains', 'exteme_hills')
+    biome(rm, 'meltwater_lake', 'river')
+    biome(rm, 'glaciated_active_shield_volcano', 'exteme_hills')
+    biome(rm, 'glaciated_shield_volcano', 'exteme_hills')
+    biome(rm, 'ice_sheet_shore', 'exteme_hills')
+
+    # Paleo/periglacial biomes
+    biome(rm, 'glacially_carved_mountains', 'exteme_hills')
+    biome(rm, 'glacially_carved_oceanic_mountains', 'exteme_hills')
+    biome(rm, 'channeled_scablands', 'exteme_hills')
+    biome(rm, 'drumlins', 'plains')
+    biome(rm, 'tuyas', 'plains')
+    biome(rm, 'knob_and_kettle', 'plains')
+    biome(rm, 'patterned_knob_and_kettle', 'plains')
     # Carvers
     rm.configured_carver('cave', 'tfc:cave', {
         'probability': 0.3,

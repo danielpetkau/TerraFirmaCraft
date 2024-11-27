@@ -48,14 +48,15 @@ public enum RegionEdgeBiomeLayer implements AdjacentTransformLayer
         // Add ice sheet edges
         if (TFCLayers.isFlatIceSheet(center))
         {
-            if ((matcher.test(i -> i == TERMINAL_MORAINE)) && matcher.test(TFCLayers::isFlatIceSheet))
+            // TODO: Rewrite border system completely
+            if ((matcher.test(i -> i == DRUMLINS)) && matcher.test(TFCLayers::isFlatIceSheet))
             {
                 return ICE_SHEET_EDGE;
             }
         }
         if (TFCLayers.isFlatIceSheet(center))
         {
-            if ((matcher.test(i -> i == TERMINAL_MORAINE)) && (matcher.test(i -> i == ICE_SHEET_EDGE)))
+            if ((matcher.test(i -> i == DRUMLINS)) && (matcher.test(i -> i == ICE_SHEET_EDGE)))
             {
                 return ICE_SHEET_EDGE;
             }
@@ -65,16 +66,16 @@ public enum RegionEdgeBiomeLayer implements AdjacentTransformLayer
         // Add ice sheet mountain edges
         if (center == ICE_SHEET_MOUNTAINS)
         {
-            if ((matcher.test(i -> i == TERMINAL_MORAINE)) && matcher.test(i -> i == ICE_SHEET_MOUNTAINS))
+            if ((matcher.test(i -> i == DRUMLINS)) && matcher.test(i -> i == ICE_SHEET_MOUNTAINS))
             {
-                return ICE_SHEET_MOUNTAINS_EDGE;
+                return GLACIATED_MOUNTAINS;
             }
         }
         if (center == ICE_SHEET_MOUNTAINS)
         {
-            if ((matcher.test(i -> i == TERMINAL_MORAINE)) && matcher.test(i -> i == ICE_SHEET_MOUNTAINS))
+            if ((matcher.test(i -> i == DRUMLINS)) && matcher.test(i -> i == ICE_SHEET_MOUNTAINS))
             {
-                return ICE_SHEET_MOUNTAINS_EDGE;
+                return GLACIATED_MOUNTAINS;
             }
         }
 

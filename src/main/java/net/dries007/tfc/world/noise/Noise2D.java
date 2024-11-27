@@ -210,6 +210,14 @@ public interface Noise2D
     }
 
     /**
+     * Sum of a noise and a constant.
+     */
+    default Noise2D addConstant(double constant)
+    {
+        return (x, y) -> Noise2D.this.noise(x, y) + constant;
+    }
+
+    /**
      * Minimum of two noises.
      */
     default Noise2D min(Noise2D other)
@@ -245,11 +253,29 @@ public interface Noise2D
      * Used to generate varying-height cliffs starting at various noise values
      * @param compare value above which cliffs should be added
      * @param addend cliff height noise
+     */
+    default Noise2D cliffMap(Noise2D compare, Noise2D addend)
+    {
+        return (x, z) -> {
+            if (Noise2D.this.noise(x, z) > compare.noise(x, z))
+            {
+                return Noise2D.this.noise(x, z) + addend.noise(x, z);
+            }
+            else
+            {
+                return Noise2D.this.noise(x, z);
+            }
+        };
+    }
+
+    /**
+     * Used to generate varying-height cliffs starting at various noise values
+     * @param compare value above which cliffs should be added
+     * @param addend cliff height noise
      * @param scale how much to scale this noise by if cliffs are added
      */
     default Noise2D fenglinCliffMap(Noise2D compare, Noise2D addend, Noise2D scale)
     {
-
         return (x, z) -> {
             if (Noise2D.this.noise(x, z) > compare.noise(x, z))
             {

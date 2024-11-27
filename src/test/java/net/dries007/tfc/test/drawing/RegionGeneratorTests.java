@@ -268,10 +268,11 @@ public class RegionGeneratorTests implements TestSetup
             return new Color(255, 255, 255);
         if (biome == ICE_SHEET_MOUNTAINS) return new Color(205, 255, 205);
         if (biome == ICE_SHEET_OCEANIC_MOUNTAINS) return new Color(205, 205, 255);
-        if (biome == ICE_SHEET_SHORE || biome == ICE_SHEET_MOUNTAINS_SHORE) return new Color(160, 160, 255);
+        if (biome == ICE_SHEET_SHORE || biome == GLACIATED_OCEANIC_MOUNTAINS) return new Color(160, 160, 255);
         if (biome == ICE_SHEET_SHIELD_VOLCANO || biome == ICE_SHEET_ACTIVE_SHIELD_VOLCANO) return new Color(255, 205, 205);
-        if (biome == ICE_SHEET_EDGE || biome == ICE_SHEET_MOUNTAINS_EDGE) return new Color(155, 155, 155);
-        if (biome == TERMINAL_MORAINE) return new Color(125, 125, 125);
+        if (biome == ICE_SHEET_EDGE || biome == GLACIATED_MOUNTAINS) return new Color(155, 155, 155);
+        // TODO: Add further periglacial biomes, rework biome map displays to have separate ones that emphasize height vs climate
+        if (biome == DRUMLINS) return new Color(125, 125, 125);
 
         return Color.BLACK;
     }
@@ -370,12 +371,12 @@ public class RegionGeneratorTests implements TestSetup
             return new Color(250, 90, 250);
 
         // Ice Sheets
-        // TODO: fix up/coimplete
+        // TODO: fix up/complete
         if (biome == ICE_SHEET || biome == ICE_SHEET_TUYAS) return new Color(255, 255, 255);
         if (biome == ICE_SHEET_MOUNTAINS || biome == ICE_SHEET_SHIELD_VOLCANO
-            || biome == ICE_SHEET_ACTIVE_SHIELD_VOLCANO || biome == ICE_SHEET_MOUNTAINS_EDGE) return new Color(250, 160, 250);
+            || biome == ICE_SHEET_ACTIVE_SHIELD_VOLCANO || biome == GLACIATED_MOUNTAINS) return new Color(250, 160, 250);
         if (biome == ICE_SHEET_EDGE) return new Color(185, 185, 185);
-        if (biome == TERMINAL_MORAINE) return new Color(125, 125, 125);
+        if (biome == DRUMLINS) return new Color(125, 125, 125);
 
         return Color.BLACK;
     }

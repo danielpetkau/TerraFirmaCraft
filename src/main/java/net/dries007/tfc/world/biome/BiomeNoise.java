@@ -130,7 +130,6 @@ public final class BiomeNoise
     }
 
     // Referenced from multiple locations
-    // TODO: Drumlin/terminal moraine noise?
     public static Noise2D glacialBase(long seed)
     {
         return hills(seed, -4, 8);
@@ -141,19 +140,75 @@ public final class BiomeNoise
         return hills(seed, -8, -2);
     }
 
-    public static Noise2D glacialSurface(long seed)
+    public static Noise2D glacialIceSurface(long seed)
     {
         return BiomeNoise.hills(seed, 30, 38);
     }
 
-    public static Noise2D glacialOceanicSurface(long seed)
+    public static Noise2D glacialOceanicIceSurface(long seed)
     {
         return BiomeNoise.hills(seed, 18, 26);
     }
 
+    public static Noise2D glacialCirquesIceSurface(long seed)
+    {
+        return glacialValleyAbsNoise(seed).map(y -> y < 0.41 ? -100 : y < 0.61 ? 5 * (y - 0.41) * 16: 16).add(BiomeNoise.hills(seed, 30, 38)); // TODO: -100 is a dumb way to do this, tidy up
+    }
+
+    public static Noise2D glacialOceanicCirquesIceSurface(long seed)
+    {
+        return glacialValleyAbsNoise(seed).map(y -> y < 0.41 ? -100 : y < 0.61 ? 5 * (y - 0.41) * 16: 16).add(BiomeNoise.hills(seed, 18, 26));
+    }
+
     public static Noise2D glacialMountainsBase(long seed)
     {
-        return BiomeNoise.mountains(seed, -24, 55);
+        return BiomeNoise.glacialCirques(seed);
+    }
+
+    public static Noise2D glacialValleyBaseNoise(long seed)
+    {
+        return new OpenSimplex2D(seed).spread(0.0025);
+    }
+
+    public static Noise2D glacialValleyShapeNoise(long seed)
+    {
+        return glacialValleyBaseNoise(seed).map(y -> Math.min(6 * y * y, 1));
+    }
+
+    public static Noise2D glacialValleyAbsNoise(long seed)
+    {
+        return glacialValleyBaseNoise(seed).map(Math::abs);
+    }
+
+    public static Noise2D glacialCirques(long seed)
+    {
+        final double cellScale = 0.010;
+        Cellular2D cells = new Cellular2D(seed).spread(cellScale); // TODO: Readd custom jitter?
+        Noise2D warp = new OpenSimplex2D(seed).spread(0.02).scaled(-0.25, 0.25);
+
+        Noise2D shape = glacialValleyShapeNoise(seed);
+        Noise2D shapeMap = glacialValleyAbsNoise(seed);
+
+        final Noise2D cliffScale = new OpenSimplex2D(seed + 785267L).spread(0.02).scaled(1, 10);
+        final Noise2D cliffStartHeight = new OpenSimplex2D(seed + 3798L).spread(0.06).scaled(14, 20);
+
+
+        Noise2D cirques = (x, z) -> {
+            Cellular2D.Cell cell = cells.cell(x, z);
+
+            final double f1 = cell.f1(); // TODO: try warping these
+            final double f2 = cell.f2();
+            if (shapeMap.noise(cell.cx() / cellScale, cell.cy() / cellScale) > 0.60) // TODO: See if we can make this a property of the cell itself, like this noise map sets the cell hash value - this may be tricky/undoable because of the scaling that has to happen here
+            {
+                return 1 + 2 * (f1 > 0 ? (f2 - f1) : 1) + warp.noise(x, z); // TODO: Consider 2x scaling?
+            }
+            else
+            {
+                final double y = 1 - (f1 > 0 ? (f2 - f1) : 1) + warp.noise(x, z);
+                return y * y;
+            }
+        };
+        return cirques.scaled(0, 1, 20, 46).lazyProduct(shape).cliffMap(cliffStartHeight.addConstant(20), cliffScale).cliffMap(cliffStartHeight, cliffScale).addConstant(SEA_LEVEL_Y - 12); // TODO: Improve cliff function
     }
 
     /**
@@ -613,6 +668,18 @@ public final class BiomeNoise
             .scaled(-0.4f, 0.8f, -9, 9);
 
         return volcano.add(surface);
+    }
+
+    // Shield volcanoes with minimal erosion, recent lava flows on surface, no/small calderas
+    public static Noise2D shieldVolcanoGlacialSurfaceAddition(long seed, Noise2D hotspot)
+    {
+        final double edgeElev = 0;
+        final double calderaEdgeElev = 50;
+        final double calderaCenterElev = 60;
+
+        return hotspot.map(y ->
+            y < 0.75 ? Mth.map(y, 0, 0.75, edgeElev, calderaEdgeElev) // Slope upwards to mountain top or crater rim
+                : y < 0.9 ? Mth.map(y, 0.75, 0.9, calderaEdgeElev, calderaCenterElev) : calderaCenterElev); // Interior of crater
     }
 
     // Shield volcanoes with some erosion, no recent lava flows, large calderas with open sides

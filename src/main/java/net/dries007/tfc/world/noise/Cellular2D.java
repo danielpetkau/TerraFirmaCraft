@@ -14,15 +14,21 @@ import it.unimi.dsi.fastutil.HashCommon;
  */
 public class Cellular2D implements Noise2D
 {
-    public static final double JITTER = 0.43701595f;
-
+    // Verify that making this a private, local variable hasn't screwed anything up?
+    private final double jitter;
     private final int seed;
     private double frequency;
 
     public Cellular2D(long seed)
     {
+        this(seed, 0.43701595f);
+    }
+
+    public Cellular2D(long seed, float jitter)
+    {
         this.seed = HashCommon.long2int(seed);
         this.frequency = 1;
+        this.jitter = jitter;
     }
 
     @Override
@@ -65,17 +71,18 @@ public class Cellular2D implements Noise2D
         int xPrimed = (xr - 1) * primeX;
         int yPrimedBase = (yr - 1) * primeY;
 
-        for (int xi = xr - 1; xi <= xr + 1; xi++)
+        //TODO: optimize to only check the extra ring of grid points for distance1
+        for (int xi = xr - 2; xi <= xr + 2; xi++)
         {
             int yPrimed = yPrimedBase;
 
-            for (int yi = yr - 1; yi <= yr + 1; yi++)
+            for (int yi = yr - 2; yi <= yr + 2; yi++)
             {
                 int hash = FastNoiseLite.Hash(seed, xPrimed, yPrimed);
                 int idx = hash & (255 << 1);
 
-                double vecX = xi + FastNoiseLite.RandVecs2D[idx] * JITTER;
-                double vecY = yi + FastNoiseLite.RandVecs2D[idx | 1] * JITTER;
+                double vecX = xi + FastNoiseLite.RandVecs2D[idx] * jitter;
+                double vecY = yi + FastNoiseLite.RandVecs2D[idx | 1] * jitter;
 
                 double newDistance = (vecX - x) * (vecX - x) + (vecY - y) * (vecY - y);
 

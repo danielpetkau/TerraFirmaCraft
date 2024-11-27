@@ -28,6 +28,7 @@ public enum ChooseBiomes implements RegionTask
     @Override
     public void apply(RegionGenerator.Context context)
     {
+        // TODO: Instead of placing standard biomes, checking them, and replacing them, just place the correct ones in the first place by maintaining more of the above lists, and checking climate etc. while placing
         final Region region = context.region;
         final Area blobArea = context.generator().biomeArea.get();
         final long rngSeed = context.random.nextLong();
@@ -114,7 +115,7 @@ public enum ChooseBiomes implements RegionTask
                 if (temperature < maxIceSheetTemp)
                 {
                     // Makes oceanic glacial mountains more common by replacing coastal highlands as well
-                    if (point.biomeAltitude >= 3 && point.distanceToOcean < 3) point.biome = point.distanceToOcean < 1 ? ICE_SHEET_MOUNTAINS_SHORE : ICE_SHEET_OCEANIC_MOUNTAINS;
+                    if (point.biomeAltitude >= 3 && point.distanceToOcean < 3) point.biome = point.distanceToOcean < 1 ? GLACIATED_OCEANIC_MOUNTAINS : ICE_SHEET_OCEANIC_MOUNTAINS;
                     else if (point.mountain()) point.biome = ICE_SHEET_MOUNTAINS;
                     else
                     {
@@ -133,7 +134,7 @@ public enum ChooseBiomes implements RegionTask
                 else if (temperature < maxIceSheetTemp + 2f && !(point.biome == MOUNTAINS || point.biome == VOLCANIC_MOUNTAINS
                     || point.biome == OCEANIC_MOUNTAINS || point.biome == VOLCANIC_OCEANIC_MOUNTAINS || point.biome == OLD_MOUNTAINS))
                 {
-                    point.biome = TERMINAL_MORAINE;
+                    point.biome = DRUMLINS;
                 }
             }
 
@@ -196,10 +197,10 @@ public enum ChooseBiomes implements RegionTask
     {
         if (biome == MOUNTAINS || biome == MOUNTAIN_LAKE || biome == OLD_MOUNTAINS || biome == ICE_SHEET_MOUNTAINS || biome == VOLCANIC_MOUNTAINS
             || biome == VOLCANIC_MOUNTAIN_LAKE)
-            return ICE_SHEET_MOUNTAINS_EDGE;
+            return GLACIATED_MOUNTAINS;
         if (biome == OCEANIC_MOUNTAINS || biome == OCEANIC_MOUNTAIN_LAKE || biome == VOLCANIC_OCEANIC_MOUNTAINS || biome == VOLCANIC_OCEANIC_MOUNTAIN_LAKE
             || biome == ICE_SHEET_OCEANIC_MOUNTAINS)
-            return ICE_SHEET_MOUNTAINS_SHORE;
+            return GLACIATED_OCEANIC_MOUNTAINS;
 
         return ICE_SHEET_EDGE;
     }

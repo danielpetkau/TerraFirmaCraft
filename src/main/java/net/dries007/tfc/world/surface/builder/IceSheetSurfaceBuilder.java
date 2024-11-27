@@ -17,20 +17,26 @@ import net.dries007.tfc.world.surface.SurfaceStates;
 
 public class IceSheetSurfaceBuilder implements SurfaceBuilder
 {
-    public static final SurfaceBuilderFactory NORMAL = seed -> new IceSheetSurfaceBuilder(seed, BiomeNoise.glacialBase(seed), false);
-    public static final SurfaceBuilderFactory LAKE = seed -> new IceSheetSurfaceBuilder(seed, BiomeNoise.glacialOceanicBase(seed), false);
-    public static final SurfaceBuilderFactory MOUNTAINS = seed -> new IceSheetSurfaceBuilder(seed, BiomeNoise.glacialMountainsBase(seed), false);
-    public static final SurfaceBuilderFactory OCEANIC = seed -> new IceSheetSurfaceBuilder(seed, BiomeNoise.glacialOceanicBase(seed), true);
-    public static final SurfaceBuilderFactory OCEANIC_MOUNTAINS = seed -> new IceSheetSurfaceBuilder(seed, BiomeNoise.glacialMountainsBase(seed), true);
+    public static final SurfaceBuilderFactory NORMAL = seed -> new IceSheetSurfaceBuilder(seed, BiomeNoise.glacialBase(seed), BiomeNoise.glacialIceSurface(seed));
+    public static final SurfaceBuilderFactory LAKE = seed -> new IceSheetSurfaceBuilder(seed, BiomeNoise.glacialOceanicBase(seed), BiomeNoise.glacialIceSurface(seed));
+    public static final SurfaceBuilderFactory ICE_SHEET_MOUNTAINS = seed -> new IceSheetSurfaceBuilder(seed, BiomeNoise.glacialMountainsBase(seed), BiomeNoise.glacialIceSurface(seed).max(BiomeNoise.glacialCirquesIceSurface(seed)));
+    public static final SurfaceBuilderFactory GLACIATED_MOUNTAINS = seed -> new IceSheetSurfaceBuilder(seed, BiomeNoise.glacialMountainsBase(seed), BiomeNoise.glacialCirquesIceSurface(seed));
+    public static final SurfaceBuilderFactory OCEANIC = seed -> new IceSheetSurfaceBuilder(seed, BiomeNoise.glacialOceanicBase(seed), BiomeNoise.glacialOceanicIceSurface(seed));
+    public static final SurfaceBuilderFactory ICE_SHEET_OCEANIC_MOUNTAINS = seed -> new IceSheetSurfaceBuilder(seed, BiomeNoise.glacialMountainsBase(seed), BiomeNoise.glacialOceanicIceSurface(seed).max(BiomeNoise.glacialOceanicCirquesIceSurface(seed)));
+    public static final SurfaceBuilderFactory GLACIATED_OCEANIC_MOUNTAINS = seed -> new IceSheetSurfaceBuilder(seed, BiomeNoise.glacialMountainsBase(seed), BiomeNoise.glacialOceanicCirquesIceSurface(seed));
+    // TODO: These need special surface builders to add the basalt
+    public static final SurfaceBuilderFactory ACTIVE_SHIELD_VOLCANO = seed -> new IceSheetSurfaceBuilder(seed, BiomeNoise.activeShieldVolcano(seed, BiomeNoise.activeHotSpots(seed)), BiomeNoise.glacialIceSurface(seed));
+    public static final SurfaceBuilderFactory DORMANT_SHIELD_VOLCANO = seed -> new IceSheetSurfaceBuilder(seed, BiomeNoise.dormantShieldVolcano(seed, BiomeNoise.hotSpotIntensity(seed)), BiomeNoise.glacialIceSurface(seed));
+
 
     private final long seed;
-    private final boolean oceanic;
+    private final Noise2D iceSurfaceNoise;
     private final Noise2D baseNoise;
 
-    IceSheetSurfaceBuilder(long seed, Noise2D baseNoise, boolean oceanic)
+    IceSheetSurfaceBuilder(long seed, Noise2D baseNoise, Noise2D iceSurfaceNoise)
     {
         this.baseNoise = baseNoise;
-        this.oceanic = oceanic;
+        this.iceSurfaceNoise = iceSurfaceNoise;
         this.seed = seed;
     }
 
@@ -45,7 +51,7 @@ public class IceSheetSurfaceBuilder implements SurfaceBuilder
         SurfaceState iceState = SurfaceStates.GLACIER;
 
         final int endHeight = (int) Math.ceil(baseNoise.noise(x, z));
-        final int glacierSurfaceHeight = (int) Math.ceil(oceanic ? BiomeNoise.glacialOceanicSurface(seed).noise(x, z) : BiomeNoise.glacialSurface(seed).noise(x, z));
+        final int glacierSurfaceHeight = (int) Math.ceil(iceSurfaceNoise.noise(x, z));
 
         if (startY < endHeight + 2 || startY > glacierSurfaceHeight + 2)
         {
@@ -77,19 +83,21 @@ public class IceSheetSurfaceBuilder implements SurfaceBuilder
                                 MountainSurfaceBuilder.INSTANCE.apply(seed);
                             }
                         }
-                        surfaceY = y; // Reached surface. Place top state and switch to subsurface layers
+                        else {
+                            surfaceY = y; // Reached surface. Place top state and switch to subsurface layers
 
-                        surfaceDepth = context.calculateAltitudeSlopeSurfaceDepth(surfaceY, 3, -3);
-                        if (surfaceDepth <= -1)
-                        {
-                            // skip the top layer entirely
-                            context.setBlockState(y, iceState);
+                            surfaceDepth = context.calculateAltitudeSlopeSurfaceDepth(surfaceY, 3, -3);
+                            if (surfaceDepth <= -1)
+                            {
+                                // skip the top layer entirely
+                                context.setBlockState(y, iceState);
+                            }
+                            else
+                            {
+                                context.setBlockState(y, snowState);
+                            }
+                            surfaceDepth = 36;
                         }
-                        else
-                        {
-                            context.setBlockState(y, snowState);
-                        }
-                        surfaceDepth = 36;
                     }
                     else if (surfaceDepth > 0)
                     {

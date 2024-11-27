@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Test;
 import net.dries007.tfc.test.TestSetup;
 import net.dries007.tfc.world.biome.BiomeNoise;
 import net.dries007.tfc.world.noise.Noise2D;
+import net.dries007.tfc.world.noise.OpenSimplex2D;
 
 import static net.dries007.tfc.world.TFCChunkGenerator.*;
 import static net.dries007.tfc.world.biome.BiomeNoise.*;
@@ -103,5 +104,11 @@ public class BiomeNoiseTest implements TestSetup
     public void testShieldVolcano()
     {
         terrain.draw("noise_shield_volcanoes", hotSpotIntensity(1234L).scaled(SEA_LEVEL_Y - 10, SEA_LEVEL_Y + 50));
+    }
+
+    @Test
+    public void testCirque()
+    {
+        terrain.draw("noise_cirques", glacialCirques(seed()));
     }
 }

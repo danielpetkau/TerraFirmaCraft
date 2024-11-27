@@ -100,17 +100,30 @@ public class TFCLayers
     public static final int SHIELD_VOLCANO_SHORE = idFor(TFCBiomes.SHIELD_VOLCANO_SHORE);
     public static final int OLD_SHIELD_VOLCANO_SHORE = idFor(TFCBiomes.OLD_SHIELD_VOLCANO_SHORE);
     public static final int ICE_SHEET = idFor(TFCBiomes.ICE_SHEET);
-    public static final int ICE_SHEET_EDGE = idFor(TFCBiomes.ICE_SHEET_EDGE);
-    public static final int ICE_SHEET_SHORE = idFor(TFCBiomes.ICE_SHEET_SHORE);
-    public static final int TERMINAL_MORAINE = idFor(TFCBiomes.TERMINAL_MORAINE);
-    public static final int SUBGLACIAL_LAKE = idFor(TFCBiomes.SUBGLACIAL_LAKE);
     public static final int ICE_SHEET_MOUNTAINS = idFor(TFCBiomes.ICE_SHEET_MOUNTAINS);
-    public static final int ICE_SHEET_MOUNTAINS_EDGE = idFor(TFCBiomes.ICE_SHEET_MOUNTAINS_EDGE);
     public static final int ICE_SHEET_OCEANIC_MOUNTAINS = idFor(TFCBiomes.ICE_SHEET_OCEANIC_MOUNTAINS);
-    public static final int ICE_SHEET_MOUNTAINS_SHORE = idFor(TFCBiomes.ICE_SHEET_MOUNTAINS_SHORE);
-    public static final int ICE_SHEET_TUYAS = idFor(TFCBiomes.ICE_SHEET_TUYAS);
     public static final int ICE_SHEET_ACTIVE_SHIELD_VOLCANO = idFor(TFCBiomes.ICE_SHEET_ACTIVE_SHIELD_VOLCANO);
     public static final int ICE_SHEET_SHIELD_VOLCANO = idFor(TFCBiomes.ICE_SHEET_SHIELD_VOLCANO);
+    public static final int ICE_SHEET_TUYAS = idFor(TFCBiomes.ICE_SHEET_TUYAS);
+    public static final int SUBGLACIAL_LAKE = idFor(TFCBiomes.SUBGLACIAL_LAKE);
+
+
+
+    public static final int ICE_SHEET_EDGE = idFor(TFCBiomes.ICE_SHEET_EDGE);
+    public static final int GLACIATED_MOUNTAINS = idFor(TFCBiomes.GLACIATED_MOUNTAINS);
+    public static final int GLACIATED_OCEANIC_MOUNTAINS = idFor(TFCBiomes.GLACIATED_OCEANIC_MOUNTAINS);
+    public static final int MELTWATER_LAKE = idFor(TFCBiomes.MELTWATER_LAKE);
+    public static final int GLACIATED_ACTIVE_SHIELD_VOLCANO = idFor(TFCBiomes.GLACIATED_ACTIVE_SHIELD_VOLCANO);
+    public static final int GLACIATED_SHIELD_VOLCANO = idFor(TFCBiomes.GLACIATED_SHIELD_VOLCANO);
+    public static final int ICE_SHEET_SHORE = idFor(TFCBiomes.ICE_SHEET_SHORE);
+
+    public static final int GLACIALLY_CARVED_MOUNTAINS = idFor(TFCBiomes.GLACIALLY_CARVED_MOUNTAINS);
+    public static final int GLACIALLY_CARVED_OCEANIC_MOUNTAINS = idFor(TFCBiomes.GLACIALLY_CARVED_OCEANIC_MOUNTAINS);
+    public static final int CHANNELED_SCABLANDS = idFor(TFCBiomes.CHANNELED_SCABLANDS);
+    public static final int DRUMLINS = idFor(TFCBiomes.DRUMLINS);
+    public static final int TUYAS = idFor(TFCBiomes.TUYAS);
+    public static final int KNOB_AND_KETTLE = idFor(TFCBiomes.KNOB_AND_KETTLE);
+    public static final int PATTERNED_KNOB_AND_KETTLE = idFor(TFCBiomes.PATTERNED_KNOB_AND_KETTLE);
 
 
     public static BiomeExtension getFromLayerId(int id)
@@ -251,9 +264,9 @@ public class TFCLayers
         {
             return ICE_SHEET_SHORE;
         }
-        if (value == ICE_SHEET_OCEANIC_MOUNTAINS || value == ICE_SHEET_MOUNTAINS_EDGE)
+        if (value == ICE_SHEET_OCEANIC_MOUNTAINS || value == GLACIATED_MOUNTAINS || value == GLACIATED_OCEANIC_MOUNTAINS)
         {
-            return ICE_SHEET_MOUNTAINS_SHORE;
+            return GLACIATED_OCEANIC_MOUNTAINS;
         }
         return SHORE;
     }
@@ -293,6 +306,23 @@ public class TFCLayers
         if (isFlatIceSheet(value))
         {
             return SUBGLACIAL_LAKE;
+        }
+        // No lakes for ice sheet mountain biomes
+        if (value == ICE_SHEET_MOUNTAINS)
+        {
+            return ICE_SHEET_MOUNTAINS;
+        }
+        if (value == ICE_SHEET_OCEANIC_MOUNTAINS)
+        {
+            return ICE_SHEET_OCEANIC_MOUNTAINS;
+        }
+        if (value == ICE_SHEET_ACTIVE_SHIELD_VOLCANO)
+        {
+            return ICE_SHEET_ACTIVE_SHIELD_VOLCANO;
+        }
+        if (value == ICE_SHEET_SHIELD_VOLCANO)
+        {
+            return ICE_SHEET_SHIELD_VOLCANO;
         }
         return LAKE;
     }
