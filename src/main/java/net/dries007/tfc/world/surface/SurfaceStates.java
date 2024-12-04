@@ -34,10 +34,10 @@ public final class SurfaceStates
     public static final SurfaceState TUFF = context -> TFCBlocks.ROCK_BLOCKS.get(Rock.TUFF).get(Rock.BlockType.RAW).get().defaultBlockState();
     public static final SurfaceState TUFF_GRAVEL = context -> TFCBlocks.ROCK_BLOCKS.get(Rock.TUFF).get(Rock.BlockType.GRAVEL).get().defaultBlockState();
 
-//    public static final SurfaceState GLACIER = context -> Blocks.LIGHT_BLUE_STAINED_GLASS.defaultBlockState(); // TODO: Replace
-//    public static final SurfaceState SNOW = context -> Blocks.WHITE_STAINED_GLASS.defaultBlockState(); // TODO: Replace
-    public static final SurfaceState GLACIER = context -> Blocks.PACKED_ICE.defaultBlockState();
-    public static final SurfaceState SNOW = context -> Blocks.SNOW_BLOCK.defaultBlockState();
+    public static final SurfaceState GLACIER = context -> Blocks.LIGHT_BLUE_STAINED_GLASS.defaultBlockState(); // TODO: Replace
+    public static final SurfaceState SNOW = context -> Blocks.WHITE_STAINED_GLASS.defaultBlockState(); // TODO: Replace
+//    public static final SurfaceState GLACIER = context -> Blocks.PACKED_ICE.defaultBlockState();
+//    public static final SurfaceState SNOW = context -> Blocks.SNOW_BLOCK.defaultBlockState();
 
     /**
      * Grass / Dirt / Gravel, or Sand / Sand / Sandstone

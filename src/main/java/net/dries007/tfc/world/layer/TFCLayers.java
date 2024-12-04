@@ -204,6 +204,8 @@ public class TFCLayers
 
         mainLayer = ShoreLayer.INSTANCE.apply(random.nextLong(), mainLayer);
         mainLayer = MoreShoresLayer.INSTANCE.apply(random.nextLong(), mainLayer);
+        mainLayer = IceSheetEdgeLayer.INSTANCE.apply(random.nextLong(), mainLayer);
+        mainLayer = SecondaryIceSheetEdgeLayer.INSTANCE.apply(random.nextLong(), mainLayer);
         mainLayer = ZoomLayer.NORMAL.apply(random.nextLong(), mainLayer);
         mainLayer = ZoomLayer.NORMAL.apply(random.nextLong(), mainLayer);
 
@@ -359,17 +361,6 @@ public class TFCLayers
     public static boolean isFlatIceSheet(int value)
     {
         return value == ICE_SHEET || value == ICE_SHEET_TUYAS || value == SUBGLACIAL_LAKE;
-    }
-
-    public static boolean isNotIceSheet(int value)
-    {
-        return value != ICE_SHEET && value != ICE_SHEET_TUYAS && value != SUBGLACIAL_LAKE && value != ICE_SHEET_MOUNTAINS && value != ICE_SHEET_OCEANIC_MOUNTAINS
-            && value != ICE_SHEET_SHIELD_VOLCANO && value != ICE_SHEET_ACTIVE_SHIELD_VOLCANO;
-    }
-
-    public static boolean isNotIceSheetOrGlaciated(int value)
-    {
-        return isNotIceSheet(value) && value != GLACIATED_MOUNTAINS && value != GLACIATED_OCEANIC_MOUNTAINS && value != GLACIATED_SHIELD_VOLCANO && value != GLACIATED_ACTIVE_SHIELD_VOLCANO;
     }
 
     public static int idFor(BiomeExtension extension)

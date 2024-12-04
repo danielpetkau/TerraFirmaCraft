@@ -132,7 +132,7 @@ public final class BiomeNoise
     // Referenced from multiple locations
     public static Noise2D glacialBase(long seed)
     {
-        return hills(seed, -4, 8);
+        return knobAndKettle(seed).addConstant(1.5);
     }
 
     public static Noise2D glacialOceanicBase(long seed)
@@ -208,20 +208,20 @@ public final class BiomeNoise
                 return y * y;
             }
         };
-        return cirques.scaled(0, 1, 20, 46).lazyProduct(shape).cliffMap(cliffStartHeight.addConstant(20), cliffScale).cliffMap(cliffStartHeight, cliffScale).addConstant(SEA_LEVEL_Y - 12); // TODO: Improve cliff function
+        return cirques.scaled(0, 1, 20, 46).lazyProduct(shape).cliffMap(cliffStartHeight.addConstant(30), cliffScale).cliffMap(cliffStartHeight, cliffScale).addConstant(SEA_LEVEL_Y - 12); // TODO: Improve cliff function
     }
 
     // TODO: too high, too flat, knobs/kettles very rare, add patterned ground stuff
     public static Noise2D knobAndKettle(long seed)
     {
-        return new OpenSimplex2D(seed).octaves(4).spread(0.08f)
-            .map(y -> y > 0.5 ? 2 * y - 1 : y < -0.5 ? 2 * y + 1 : 0)
-            .scaled(-10, 10).add(BiomeNoise.hills(seed, 4, 8));
+        return new OpenSimplex2D(seed).octaves(2).spread(0.04f)
+            .map(y -> y > 0.3 ? y - 0.3 : y < -0.3 ? y + 0.3 : 0)
+            .scaled(-9, 9).add(BiomeNoise.hills(seed, -3, 3));
     }
 
     public static Noise2D drumlins(long seed)
     {
-        return new OpenSimplex2D(seed).octaves(3).spread(0.06f).scaled(SEA_LEVEL_Y - 12, SEA_LEVEL_Y + 24).stretchX(2.5);
+        return new OpenSimplex2D(seed).octaves(3).spread(0.06f).scaled(SEA_LEVEL_Y - 12, SEA_LEVEL_Y + 24).stretchZ(2.5);
     }
 
     // TODO: Detail work
@@ -689,16 +689,17 @@ public final class BiomeNoise
         return volcano.add(surface);
     }
 
-    // Shield volcanoes with minimal erosion, recent lava flows on surface, no/small calderas
-    public static Noise2D shieldVolcanoGlacialSurfaceAddition(long seed, Noise2D hotspot)
+    // Surface for Ice Sheet Shield Volcanos
+    public static Noise2D shieldVolcanoIceSheetSurface(long seed, Noise2D hotspot)
     {
         final double edgeElev = 0;
-        final double calderaEdgeElev = 50;
-        final double calderaCenterElev = 60;
+        final double calderaEdgeElev = 30;
+        final double calderaCenterElev = 40;
 
         return hotspot.map(y ->
             y < 0.75 ? Mth.map(y, 0, 0.75, edgeElev, calderaEdgeElev) // Slope upwards to mountain top or crater rim
-                : y < 0.9 ? Mth.map(y, 0.75, 0.9, calderaEdgeElev, calderaCenterElev) : calderaCenterElev); // Interior of crater
+                : y < 0.9 ? Mth.map(y, 0.75, 0.9, calderaEdgeElev, calderaCenterElev) : calderaCenterElev) // Interior of crater
+            .add(glacialIceSurface(seed));
     }
 
     // Shield volcanoes with some erosion, no recent lava flows, large calderas with open sides
