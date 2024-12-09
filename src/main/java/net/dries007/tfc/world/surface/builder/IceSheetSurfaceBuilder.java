@@ -19,9 +19,9 @@ public class IceSheetSurfaceBuilder implements SurfaceBuilder
 {
     public static final SurfaceBuilderFactory NORMAL = seed -> new IceSheetSurfaceBuilder(seed, BiomeNoise.glacialBase(seed), BiomeNoise.glacialIceSurface(seed));
     public static final SurfaceBuilderFactory LAKE = seed -> new IceSheetSurfaceBuilder(seed, BiomeNoise.glacialOceanicBase(seed), BiomeNoise.glacialIceSurface(seed));
-    public static final SurfaceBuilderFactory ICE_SHEET_MOUNTAINS = seed -> new IceSheetSurfaceBuilder(seed, BiomeNoise.glacialCirques(seed).addConstant(30), BiomeNoise.glacialIceSurface(seed).max(BiomeNoise.glacialCirquesIceSurface(seed).addConstant(30)));
+    public static final SurfaceBuilderFactory ICE_SHEET_MOUNTAINS = seed -> new IceSheetSurfaceBuilder(seed, BiomeNoise.glacialCirques(seed).addConstant(44), BiomeNoise.glacialMontaneIceSurface(seed).max(BiomeNoise.glacialCirquesIceSurface(seed).addConstant(44)));
     // TODO: rework into versions with soils
-    public static final SurfaceBuilderFactory GLACIATED_MOUNTAINS = seed -> new IceSheetSurfaceBuilder(seed, BiomeNoise.glacialCirques(seed).addConstant(30), BiomeNoise.glacialCirquesIceSurface(seed).addConstant(30));
+    public static final SurfaceBuilderFactory GLACIATED_MOUNTAINS = seed -> new IceSheetSurfaceBuilder(seed, BiomeNoise.glacialCirques(seed).addConstant(44), BiomeNoise.glacialCirquesIceSurface(seed).addConstant(44));
     public static final SurfaceBuilderFactory OCEANIC = seed -> new IceSheetSurfaceBuilder(seed, BiomeNoise.glacialOceanicBase(seed), BiomeNoise.glacialOceanicIceSurface(seed));
     public static final SurfaceBuilderFactory ICE_SHEET_OCEANIC_MOUNTAINS = seed -> new IceSheetSurfaceBuilder(seed, BiomeNoise.glacialCirques(seed), BiomeNoise.glacialIceSurface(seed).max(BiomeNoise.glacialOceanicCirquesIceSurface(seed))); // TODO: maybe change back to the oceanic ice sheet surface
     public static final SurfaceBuilderFactory GLACIATED_OCEANIC_MOUNTAINS = seed -> new IceSheetSurfaceBuilder(seed, BiomeNoise.glacialCirques(seed), BiomeNoise.glacialOceanicCirquesIceSurface(seed));
@@ -57,15 +57,6 @@ public class IceSheetSurfaceBuilder implements SurfaceBuilder
         if (startY < glacierBaseHeight - 2 || startY > glacierSurfaceHeight + 3)
         {
             MountainSurfaceBuilder.INSTANCE.apply(seed).buildSurface(context, startY, endY);
-        }
-        else if (startY < glacierBaseHeight || startY > glacierSurfaceHeight)
-        {
-           surfaceDepth = context.calculateAltitudeSlopeSurfaceDepth(surfaceY, 3, -3);
-           if (surfaceDepth > -1)
-           {
-               // Gravel instead of stone for flat areas
-               context.setBlockState(startY, SurfaceStates.GRAVEL);
-           }
         }
         else {
             for (int y = startY; y >= glacierBaseHeight; --y)

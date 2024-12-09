@@ -7450,6 +7450,8 @@
   "biome.tfc.ice_sheet_tuyas": "Ice Sheet Tuyas",
   "biome.tfc.subglacial_lake": "Subglacial Lake",
   "biome.tfc.ice_sheet_edge": "Ice Sheet Edge",
+  "biome.tfc.ice_sheet_mountains_edge": "Ice Sheet Mountains Edge",
+  "biome.tfc.ice_sheet_oceanic_mountains_edge": "Ice Sheet Oceanic Mountains Edge",
   "biome.tfc.glaciated_mountains": "Glaciated Mountains",
   "biome.tfc.glaciated_oceanic_mountains": "Glaciated Oceanic Mountains",
   "biome.tfc.meltwater_lake": "Meltwater Lake",

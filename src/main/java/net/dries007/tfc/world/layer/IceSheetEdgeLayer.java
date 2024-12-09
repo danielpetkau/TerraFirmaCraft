@@ -23,11 +23,18 @@ public enum IceSheetEdgeLayer implements AdjacentTransformLayer
     {
         final Predicate<IntPredicate> matcher = p -> p.test(north) || p.test(east) || p.test(south) || p.test(west);
 
-
         // Add ice sheet edges, replacing the ice sheet
-        if (isFlatIceSheet(center))
+//        if (isFlatIceSheet(center))
+//        {
+//            // TODO: Cleanup, move these test methods to unified locations
+//            if ((matcher.test(IceSheetEdgeLayer::isNotIceSheetOrGlaciated)))
+//            {
+//                return ICE_SHEET_EDGE;
+//            }
+//        }
+        if (center == KNOB_AND_KETTLE || center == PATTERNED_KNOB_AND_KETTLE)
         {
-            if ((matcher.test(IceSheetEdgeLayer::isNotIceSheetOrGlaciated)))
+            if ((matcher.test(TFCLayers::isFlatIceSheet)))
             {
                 return ICE_SHEET_EDGE;
             }
@@ -43,7 +50,7 @@ public enum IceSheetEdgeLayer implements AdjacentTransformLayer
             }
             else if (matcher.test(IceSheetEdgeLayer::isNotIceSheet))
             {
-                return GLACIATED_OCEANIC_MOUNTAINS;
+                return ICE_SHEET_OCEANIC_MOUNTAINS_EDGE;
             }
         }
         if (center == ICE_SHEET_MOUNTAINS)
@@ -54,7 +61,7 @@ public enum IceSheetEdgeLayer implements AdjacentTransformLayer
             }
             else if (matcher.test(IceSheetEdgeLayer::isNotIceSheet))
             {
-                return GLACIATED_MOUNTAINS;
+                return ICE_SHEET_MOUNTAINS_EDGE;
             }
         }
 

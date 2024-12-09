@@ -108,9 +108,9 @@ public class TFCLayers
     public static final int ICE_SHEET_TUYAS = idFor(TFCBiomes.ICE_SHEET_TUYAS);
     public static final int SUBGLACIAL_LAKE = idFor(TFCBiomes.SUBGLACIAL_LAKE);
 
-
-
     public static final int ICE_SHEET_EDGE = idFor(TFCBiomes.ICE_SHEET_EDGE);
+    public static final int ICE_SHEET_OCEANIC_MOUNTAINS_EDGE = idFor(TFCBiomes.ICE_SHEET_OCEANIC_MOUNTAINS_EDGE);
+    public static final int ICE_SHEET_MOUNTAINS_EDGE = idFor(TFCBiomes.ICE_SHEET_MOUNTAINS_EDGE);
     public static final int GLACIATED_MOUNTAINS = idFor(TFCBiomes.GLACIATED_MOUNTAINS);
     public static final int GLACIATED_OCEANIC_MOUNTAINS = idFor(TFCBiomes.GLACIATED_OCEANIC_MOUNTAINS);
     public static final int MELTWATER_LAKE = idFor(TFCBiomes.MELTWATER_LAKE);
@@ -204,8 +204,9 @@ public class TFCLayers
 
         mainLayer = ShoreLayer.INSTANCE.apply(random.nextLong(), mainLayer);
         mainLayer = MoreShoresLayer.INSTANCE.apply(random.nextLong(), mainLayer);
+        //TODO
         mainLayer = IceSheetEdgeLayer.INSTANCE.apply(random.nextLong(), mainLayer);
-        mainLayer = SecondaryIceSheetEdgeLayer.INSTANCE.apply(random.nextLong(), mainLayer);
+//        mainLayer = SecondaryIceSheetEdgeLayer.INSTANCE.apply(random.nextLong(), mainLayer);
         mainLayer = ZoomLayer.NORMAL.apply(random.nextLong(), mainLayer);
         mainLayer = ZoomLayer.NORMAL.apply(random.nextLong(), mainLayer);
 

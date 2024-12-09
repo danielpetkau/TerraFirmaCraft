@@ -61,11 +61,11 @@ public enum ChooseBiomes implements RegionTask
                     // TODO: Balance values, based on -17 being the year-round-freeze avg temp
                     // Different temperature limits used because biomes at at different elevations
                     final float maxIceSheetTemp = -16f + 0.006f * point.rainfall;
-                    if (temp < maxIceSheetTemp)
+                    if (temp < maxIceSheetTemp + 2)
                     {
                         point.biome = ICE_SHEET_OCEANIC_MOUNTAINS;
                     }
-                    else if (temp < maxIceSheetTemp + 4) // TODO: Tweak numbers
+                    else if (temp < maxIceSheetTemp + 6) // TODO: Tweak numbers
                     {
                         point.biome = GLACIATED_OCEANIC_MOUNTAINS;
                     }
@@ -89,7 +89,7 @@ public enum ChooseBiomes implements RegionTask
                     {
                         point.biome = GLACIATED_MOUNTAINS;
                     }
-                    else if (temp < maxIceSheetTemp + 8) // TODO: Tweak numbers, random chance of mountains this far south not being glacially carved?
+                    else if (temp < maxIceSheetTemp + 12) // TODO: Tweak numbers, random chance of mountains this far south not being glacially carved?
                     {
                         point.biome = GLACIALLY_CARVED_MOUNTAINS;
                     }
@@ -304,7 +304,7 @@ public enum ChooseBiomes implements RegionTask
 
     private int getBurrenBiome(int biome)
     {
-        if (biome == PLAINS || biome == CANYONS || biome == KNOB_AND_KETTLE || biome == PATTERNED_KNOB_AND_KETTLE)
+        if (biome == PLAINS || biome == CANYONS)
             return BURREN_PLAINS;
         if (biome == BADLANDS || biome == HILLS || biome == ROLLING_HILLS)
             return BURREN_BADLANDS;

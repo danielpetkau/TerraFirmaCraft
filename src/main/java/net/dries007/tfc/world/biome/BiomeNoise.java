@@ -137,12 +137,17 @@ public final class BiomeNoise
 
     public static Noise2D glacialOceanicBase(long seed)
     {
-        return hills(seed, -8, -2);
+        return hills(seed, -14, -6);
     }
 
     public static Noise2D glacialIceSurface(long seed)
     {
         return BiomeNoise.hills(seed, 30, 38);
+    }
+
+    public static Noise2D glacialMontaneIceSurface(long seed)
+    {
+        return BiomeNoise.hills(seed, 40, 48);
     }
 
     public static Noise2D glacialOceanicIceSurface(long seed)
@@ -156,13 +161,18 @@ public final class BiomeNoise
             .map(y ->
                 y < 0.38 ? -100 :
                 y < 0.43 ? Mth.map(y, 0.38, 0.43, -50, 0) :
-                    Mth.map(y, 0.43, 1, 0, 22))
-            .add(BiomeNoise.hills(seed, 25, 33));
+                    Mth.map(y, 0.43, 1, 0, 32))
+            .add(BiomeNoise.hills(seed, 15, 23));
     }
 
     public static Noise2D glacialOceanicCirquesIceSurface(long seed)
     {
-        return glacialValleyAbsNoise(seed).map(y -> y < 0.41 ? -100 : y < 0.61 ? 5 * (y - 0.41) * 16: 16).add(BiomeNoise.hills(seed, 18, 26));
+        return glacialValleyAbsNoise(seed)
+            .map(y ->
+                y < 0.38 ? -100 :
+                    y < 0.43 ? Mth.map(y, 0.38, 0.43, -50, 0) :
+                        Mth.map(y, 0.43, 1, 0, 32))
+            .add(BiomeNoise.hills(seed, -29, -21));
     }
 
     public static Noise2D glacialValleyBaseNoise(long seed)
@@ -208,7 +218,7 @@ public final class BiomeNoise
                 return y * y;
             }
         };
-        return cirques.scaled(0, 1, 20, 46).lazyProduct(shape).cliffMap(cliffStartHeight.addConstant(30), cliffScale).cliffMap(cliffStartHeight, cliffScale).addConstant(SEA_LEVEL_Y - 12); // TODO: Improve cliff function
+        return cirques.scaled(0, 1, 20, 46).lazyProduct(shape).cliffMap(cliffStartHeight.addConstant(44), cliffScale).cliffMap(cliffStartHeight, cliffScale).addConstant(SEA_LEVEL_Y - 15); // TODO: Improve cliff function
     }
 
     // TODO: too high, too flat, knobs/kettles very rare, add patterned ground stuff
