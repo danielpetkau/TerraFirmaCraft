@@ -137,7 +137,7 @@ public final class BiomeNoise
 
     public static Noise2D glacialOceanicBase(long seed)
     {
-        return hills(seed, -14, -6);
+        return hills(seed, -12, -2);
     }
 
     public static Noise2D glacialIceSurface(long seed)
@@ -203,10 +203,10 @@ public final class BiomeNoise
         final Noise2D cliffStartHeight = new OpenSimplex2D(seed + 3798L).spread(0.06).scaled(14, 20);
 
 
-        Noise2D cirques = (x, z) -> {
+        final Noise2D cirques = (x, z) -> {
             Cellular2D.Cell cell = cells.cell(x, z);
 
-            final double f1 = cell.f1(); // TODO: try warping these
+            final double f1 = cell.f1();
             final double f2 = cell.f2();
             if (shapeMap.noise(cell.cx() / cellScale, cell.cy() / cellScale) > 0.60) // TODO: See if we can make this a property of the cell itself, like this noise map sets the cell hash value - this may be tricky/undoable because of the scaling that has to happen here
             {
@@ -218,20 +218,47 @@ public final class BiomeNoise
                 return y * y;
             }
         };
-        return cirques.scaled(0, 1, 20, 46).lazyProduct(shape).cliffMap(cliffStartHeight.addConstant(44), cliffScale).cliffMap(cliffStartHeight, cliffScale).addConstant(SEA_LEVEL_Y - 15); // TODO: Improve cliff function
+        return cirques.scaled(0, 1, 20, 46).lazyProduct(shape).cliffMap(cliffStartHeight.addConstant(39), cliffScale).cliffMap(cliffStartHeight, cliffScale).addConstant(SEA_LEVEL_Y - 15); // TODO: Improve cliff function
+    }
+
+    // Polygonal incisions 1 block deep, mimics patterned ground caused by permafrost
+    public static Noise2D patternedGround(long seed)
+    {
+        Cellular2D cells = new Cellular2D(seed).spread(0.05);
+        return (x, z) -> {
+            Cellular2D.Cell cell = cells.cell(x, z);
+
+            final double f1 = cell.f1();
+            final double f2 = cell.f2();
+
+            return f2 - f1 < 0.12 ? -1 : 0;
+        };
+    }
+
+    // Ring-shaped protrusions 1 block high, based on those found in the Svalbard Archipelago and other polar climates
+    public static Noise2D stoneCircles(long seed)
+    {
+        Cellular2D cells = new Cellular2D(seed, 0.26f).spread(0.11);
+        return (x, z) -> {
+            Cellular2D.Cell cell = cells.cell(x, z);
+
+            final double f1 = cell.f1();
+
+            return f1 > 0.07 && f1 < 0.15 ? 1 : 0;
+        };
     }
 
     // TODO: too high, too flat, knobs/kettles very rare, add patterned ground stuff
     public static Noise2D knobAndKettle(long seed)
     {
-        return new OpenSimplex2D(seed).octaves(2).spread(0.04f)
+        return new OpenSimplex2D(seed).octaves(2).spread(0.03f)
             .map(y -> y > 0.3 ? y - 0.3 : y < -0.3 ? y + 0.3 : 0)
-            .scaled(-9, 9).add(BiomeNoise.hills(seed, -3, 3));
+            .scaled(-12, 10).add(BiomeNoise.hills(seed, -3, 3));
     }
 
     public static Noise2D drumlins(long seed)
     {
-        return new OpenSimplex2D(seed).octaves(3).spread(0.06f).scaled(SEA_LEVEL_Y - 12, SEA_LEVEL_Y + 24).stretchZ(2.5);
+        return new OpenSimplex2D(seed).octaves(3).spread(0.04f).scaled(SEA_LEVEL_Y - 16, SEA_LEVEL_Y + 32).stretchZ(2.5);
     }
 
     // TODO: Detail work

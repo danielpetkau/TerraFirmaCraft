@@ -13,13 +13,16 @@ import net.dries007.tfc.world.surface.SurfaceStates;
 
 public class MountainSurfaceBuilder implements SurfaceBuilder
 {
-    public static final SurfaceBuilderFactory INSTANCE = MountainSurfaceBuilder::new;
+    public static final SurfaceBuilderFactory NORMAL = seed -> new MountainSurfaceBuilder(seed, 130.0);
+    public static final SurfaceBuilderFactory COLD = seed -> new MountainSurfaceBuilder(seed, 75.0);
 
     private final Noise2D surfaceMaterialNoise;
     private final Noise2D heightNoise;
+    private final double cutOffHeight;
 
-    public MountainSurfaceBuilder(long seed)
+    public MountainSurfaceBuilder(long seed, double cutOffHeight)
     {
+        this.cutOffHeight = cutOffHeight;
         surfaceMaterialNoise = new OpenSimplex2D(seed).octaves(2).spread(0.02f);
         heightNoise = new OpenSimplex2D(seed + 71829341L).octaves(2).spread(0.1f);
     }
@@ -29,7 +32,7 @@ public class MountainSurfaceBuilder implements SurfaceBuilder
     {
         final NormalSurfaceBuilder surfaceBuilder = NormalSurfaceBuilder.ROCKY;
         final double heightNoise = this.heightNoise.noise(context.pos().getX(), context.pos().getZ()) * 4f + startY;
-        if (heightNoise > 130)
+        if (heightNoise > cutOffHeight)
         {
             final double surfaceMaterialValue = surfaceMaterialNoise.noise(context.pos().getX(), context.pos().getZ()) + 0.1f * context.random().nextFloat() - 0.05f;
             if (surfaceMaterialValue > 0.3f)

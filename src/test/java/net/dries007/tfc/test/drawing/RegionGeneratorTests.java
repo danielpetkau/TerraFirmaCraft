@@ -273,7 +273,7 @@ public class RegionGeneratorTests implements TestSetup
 
         if (biome == ICE_SHEET_EDGE || biome == ICE_SHEET_SHORE) return new Color(165, 165, 165);
 
-        if (biome == PATTERNED_KNOB_AND_KETTLE) return new Color(135, 135, 135);
+        if (biome == PATTERNED_GROUND) return new Color(135, 135, 135);
         if (biome == KNOB_AND_KETTLE) return new Color(115, 115, 115);
         if (biome == DRUMLINS || biome == BURREN_ROCHE_MOUTONEE) return new Color(135, 165, 135);
         if (biome == TUYAS) return new Color(115, 145, 115);
@@ -350,7 +350,7 @@ public class RegionGeneratorTests implements TestSetup
 
         if (biome == ICE_SHEET_EDGE || biome == ICE_SHEET_SHORE) return new Color(165, 165, 165);
 
-        if (biome == PATTERNED_KNOB_AND_KETTLE) return new Color(255, 195, 100);
+        if (biome == PATTERNED_GROUND) return new Color(255, 195, 100);
         if (biome == KNOB_AND_KETTLE) return new Color(255, 195, 100);
         if (biome == DRUMLINS || biome == BURREN_ROCHE_MOUTONEE) return new Color(135, 165, 135);
         if (biome == TUYAS) return new Color(115, 145, 115);
@@ -390,7 +390,7 @@ public class RegionGeneratorTests implements TestSetup
         if (biome == SALT_FLATS) return new Color(190, 250, 190);
         if (biome == MUD_FLATS) return new Color(150, 200, 130);
         if (biome == PLAINS || biome == BURREN_PLAINS || biome == TOWER_KARST_PLAINS || biome == DOLINE_PLAINS || biome == CENOTE_PLAINS
-            || biome == SHILIN_PLAINS || biome == PATTERNED_KNOB_AND_KETTLE || biome == KNOB_AND_KETTLE) return new Color(110, 190, 110);
+            || biome == SHILIN_PLAINS || biome == PATTERNED_GROUND || biome == KNOB_AND_KETTLE) return new Color(110, 190, 110);
 
         // Hills
         if (biome == HILLS || biome == SHILIN_HILLS || biome == TOWER_KARST_HILLS || biome == DOLINE_HILLS || biome == CENOTE_HILLS) return new Color(80, 130, 90);

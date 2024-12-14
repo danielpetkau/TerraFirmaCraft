@@ -148,12 +148,15 @@ def generate(rm: ResourceManager):
     biome(rm, 'ice_sheet_edge', 'extreme_hills')
     biome(rm, 'ice_sheet_mountains_edge', 'extreme_hills')
     biome(rm, 'ice_sheet_oceanic_mountains_edge', 'extreme_hills')
-    biome(rm, 'glaciated_mountains', 'extreme_hills')
-    biome(rm, 'glaciated_oceanic_mountains', 'extreme_hills')
     biome(rm, 'meltwater_lake', 'river')
+    biome(rm, 'ice_sheet_oceanic', 'extreme_hills', barren=True)
+    biome(rm, 'ice_sheet_shore', 'extreme_hills')
+
+    # Glaciated biomes
     biome(rm, 'glaciated_active_shield_volcano', 'extreme_hills')
     biome(rm, 'glaciated_shield_volcano', 'extreme_hills')
-    biome(rm, 'ice_sheet_shore', 'extreme_hills')
+    biome(rm, 'glaciated_mountains', 'extreme_hills')
+    biome(rm, 'glaciated_oceanic_mountains', 'extreme_hills')
 
     # Paleo/periglacial biomes
     biome(rm, 'glacially_carved_mountains', 'extreme_hills')
@@ -162,7 +165,8 @@ def generate(rm: ResourceManager):
     biome(rm, 'drumlins', 'plains')
     biome(rm, 'tuyas', 'plains')
     biome(rm, 'knob_and_kettle', 'plains')
-    biome(rm, 'patterned_knob_and_kettle', 'plains')
+    biome(rm, 'patterned_ground', 'plains')
+    biome(rm, 'stone_circles', 'plains')
     # Carvers
     rm.configured_carver('cave', 'tfc:cave', {
         'probability': 0.3,

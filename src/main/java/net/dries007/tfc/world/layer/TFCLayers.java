@@ -109,6 +109,7 @@ public class TFCLayers
     public static final int SUBGLACIAL_LAKE = idFor(TFCBiomes.SUBGLACIAL_LAKE);
 
     public static final int ICE_SHEET_EDGE = idFor(TFCBiomes.ICE_SHEET_EDGE);
+    public static final int ICE_SHEET_OCEANIC = idFor(TFCBiomes.ICE_SHEET_OCEANIC);
     public static final int ICE_SHEET_OCEANIC_MOUNTAINS_EDGE = idFor(TFCBiomes.ICE_SHEET_OCEANIC_MOUNTAINS_EDGE);
     public static final int ICE_SHEET_MOUNTAINS_EDGE = idFor(TFCBiomes.ICE_SHEET_MOUNTAINS_EDGE);
     public static final int GLACIATED_MOUNTAINS = idFor(TFCBiomes.GLACIATED_MOUNTAINS);
@@ -124,7 +125,8 @@ public class TFCLayers
     public static final int DRUMLINS = idFor(TFCBiomes.DRUMLINS);
     public static final int TUYAS = idFor(TFCBiomes.TUYAS);
     public static final int KNOB_AND_KETTLE = idFor(TFCBiomes.KNOB_AND_KETTLE);
-    public static final int PATTERNED_KNOB_AND_KETTLE = idFor(TFCBiomes.PATTERNED_KNOB_AND_KETTLE);
+    public static final int PATTERNED_GROUND = idFor(TFCBiomes.PATTERNED_GROUND);
+    public static final int STONE_CIRCLES = idFor(TFCBiomes.STONE_CIRCLES);
 
 
     public static BiomeExtension getFromLayerId(int id)
@@ -200,13 +202,12 @@ public class TFCLayers
         // Grid scale
 
         mainLayer = RegionEdgeBiomeLayer.INSTANCE.apply(random.nextLong(), mainLayer);
+        mainLayer = IceSheetEdgeLayer.INSTANCE.apply(random.nextLong(), mainLayer);
         mainLayer = ZoomLayer.NORMAL.apply(random.nextLong(), mainLayer);
 
         mainLayer = ShoreLayer.INSTANCE.apply(random.nextLong(), mainLayer);
         mainLayer = MoreShoresLayer.INSTANCE.apply(random.nextLong(), mainLayer);
-        //TODO
-        mainLayer = IceSheetEdgeLayer.INSTANCE.apply(random.nextLong(), mainLayer);
-//        mainLayer = SecondaryIceSheetEdgeLayer.INSTANCE.apply(random.nextLong(), mainLayer);
+        mainLayer = IceSheetEdgeLayer.INSTANCE.apply(random.nextLong(), mainLayer); // TODO: Do we really want to call this twice?
         mainLayer = ZoomLayer.NORMAL.apply(random.nextLong(), mainLayer);
         mainLayer = ZoomLayer.NORMAL.apply(random.nextLong(), mainLayer);
 
@@ -239,7 +240,7 @@ public class TFCLayers
     public static boolean hasShore(int value)
     {
         return value != LOWLANDS && value != SALT_MARSH && value != LOW_CANYONS && value != CANYONS && value != OCEANIC_MOUNTAINS && value != VOLCANIC_OCEANIC_MOUNTAINS
-            && value != TOWER_KARST_BAY && value != SUNKEN_SHIELD_VOLCANO;
+            && value != TOWER_KARST_BAY && value != SUNKEN_SHIELD_VOLCANO && value != GLACIALLY_CARVED_OCEANIC_MOUNTAINS && value != GLACIATED_OCEANIC_MOUNTAINS && value != ICE_SHEET_OCEANIC_MOUNTAINS_EDGE;
     }
 
     public static int shoreFor(int value)
@@ -264,13 +265,13 @@ public class TFCLayers
         {
             return OLD_SHIELD_VOLCANO_SHORE;
         }
-        if (isFlatIceSheet(value) || value == ICE_SHEET_SHIELD_VOLCANO || value == ICE_SHEET_ACTIVE_SHIELD_VOLCANO || value == ICE_SHEET_EDGE)
+        if (isFlatIceSheet(value) || value == ICE_SHEET_SHIELD_VOLCANO || value == ICE_SHEET_ACTIVE_SHIELD_VOLCANO || value == ICE_SHEET_EDGE || value == ICE_SHEET_OCEANIC)
         {
             return ICE_SHEET_SHORE;
         }
-        if (value == ICE_SHEET_OCEANIC_MOUNTAINS || value == GLACIATED_OCEANIC_MOUNTAINS || value == ICE_SHEET_MOUNTAINS || value == GLACIATED_MOUNTAINS)
+        if (value == ICE_SHEET_OCEANIC_MOUNTAINS)
         {
-            return GLACIATED_OCEANIC_MOUNTAINS;
+            return ICE_SHEET_OCEANIC_MOUNTAINS_EDGE;
         }
         if (value == GLACIALLY_CARVED_OCEANIC_MOUNTAINS || value == GLACIALLY_CARVED_MOUNTAINS)
         {

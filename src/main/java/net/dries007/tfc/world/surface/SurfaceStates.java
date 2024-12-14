@@ -7,6 +7,7 @@
 package net.dries007.tfc.world.surface;
 
 import java.util.function.Supplier;
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
@@ -18,8 +19,9 @@ import net.dries007.tfc.common.blocks.rock.Rock;
 import net.dries007.tfc.common.blocks.soil.SandBlockType;
 import net.dries007.tfc.common.blocks.soil.SoilBlockType;
 import net.dries007.tfc.common.fluids.TFCFluids;
-import net.dries007.tfc.world.biome.TFCBiomes;
-import net.dries007.tfc.world.settings.RockSettings;
+import net.dries007.tfc.util.Helpers;
+
+import static net.dries007.tfc.world.surface.SoilSurfaceState.*;
 
 public final class SurfaceStates
 {
@@ -34,10 +36,18 @@ public final class SurfaceStates
     public static final SurfaceState TUFF = context -> TFCBlocks.ROCK_BLOCKS.get(Rock.TUFF).get(Rock.BlockType.RAW).get().defaultBlockState();
     public static final SurfaceState TUFF_GRAVEL = context -> TFCBlocks.ROCK_BLOCKS.get(Rock.TUFF).get(Rock.BlockType.GRAVEL).get().defaultBlockState();
 
-    public static final SurfaceState GLACIER = context -> Blocks.LIGHT_BLUE_STAINED_GLASS.defaultBlockState(); // TODO: Replace
-    public static final SurfaceState SNOW = context -> Blocks.WHITE_STAINED_GLASS.defaultBlockState(); // TODO: Replace
-//    public static final SurfaceState GLACIER = context -> Blocks.PACKED_ICE.defaultBlockState();
-//    public static final SurfaceState SNOW = context -> Blocks.SNOW_BLOCK.defaultBlockState();
+//    public static final SurfaceState GLACIER = context -> Blocks.LIGHT_BLUE_STAINED_GLASS.defaultBlockState(); // TODO: Replace
+//    public static final SurfaceState SNOW = context -> Blocks.WHITE_STAINED_GLASS.defaultBlockState(); // TODO: Replace
+    public static final SurfaceState MORAINE = context -> (Helpers.hash(729375982L, context.pos()) & 127) > 96 ?
+        context.getRock().cobble().defaultBlockState() : context.getRock().gravel().defaultBlockState();
+    public static final SurfaceState SAND_AND_GRAVEL = context -> (Helpers.hash(728275914L, context.pos()) & 127) > 48 ?
+        context.getRock().sand().defaultBlockState() : context.getRock().gravel().defaultBlockState();
+    public static final SurfaceState GLACIER = context -> Blocks.PACKED_ICE.defaultBlockState();
+    public static final SurfaceState SNOW = context -> {
+        final BlockPos pos = context.pos();
+        final double noise = PATCH_NOISE.noise(pos.getX(), pos.getZ());
+        return noise > -0.2 ? Blocks.SNOW_BLOCK.defaultBlockState() : Blocks.PACKED_ICE.defaultBlockState();
+    };
 
     /**
      * Grass / Dirt / Gravel, or Sand / Sand / Sandstone
@@ -64,11 +74,11 @@ public final class SurfaceStates
         @Override
         public BlockState getState(SurfaceBuilderContext context)
         {
-            if (context.groundwater() > 300f && context.averageTemperature() > 15f)
+            if (context.groundWater() > 300f && context.averageTemperature() > 15f)
             {
                 return pinkSand.get().defaultBlockState();
             }
-            else if (context.groundwater() > 300f)
+            else if (context.groundWater() > 300f)
             {
                 return blackSand.get().defaultBlockState();
             }
@@ -87,11 +97,11 @@ public final class SurfaceStates
         @Override
         public BlockState getState(SurfaceBuilderContext context)
         {
-            if (context.groundwater() > 300f && context.averageTemperature() > 15f)
+            if (context.groundWater() > 300f && context.averageTemperature() > 15f)
             {
                 return pinkSandstone.get().defaultBlockState();
             }
-            else if (context.groundwater() > 300f)
+            else if (context.groundWater() > 300f)
             {
                 return blackSandstone.get().defaultBlockState();
             }

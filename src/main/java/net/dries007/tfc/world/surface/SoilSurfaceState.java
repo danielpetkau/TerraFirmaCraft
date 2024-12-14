@@ -129,7 +129,7 @@ public class SoilSurfaceState implements SurfaceState
     {
         // Bias a little towards sand regions
         // Without: pure sand < 55mm, mixed sand < 110mm. With: pure sand < 73mm, mixed sand < 126mm
-        final float rainfall = context.groundwater();
+        final float rainfall = context.groundWater();
         final int index = (int) Mth.clampedMap(rainfall, 20, 500, 0, regions.size() - 0.01f);
 
         return regions.get(index).getState(context);

@@ -46,7 +46,8 @@ public class SurfaceBuilderContext
     private double biomeWeight;
     private double slope;
     private float temperature;
-    private float groundwater;
+    private float baseGroundwater;
+    private float rainfall;
     private boolean salty;
 
     public SurfaceBuilderContext(LevelAccessor level, ChunkAccess chunk, ChunkData chunkData, RandomSource random, long seed, RockLayerSettings rockLayerSettings, int seaLevel, int minY)
@@ -79,7 +80,8 @@ public class SurfaceBuilderContext
         this.biomeWeight = biomeWeight;
         this.slope = slope;
         this.temperature = chunkData.getAverageTemp(x, z);
-        this.groundwater = chunkData.getGroundwater(x, z);
+        this.baseGroundwater = chunkData.getBaseGroundwater(x, z);
+        this.rainfall = chunkData.getRainfall(x, z);
         this.salty = salty;
 
         // We iterate down based on the actual surface height (since our capability for overhangs is much more limited than vanilla)
@@ -135,9 +137,19 @@ public class SurfaceBuilderContext
         return temperature;
     }
 
-    public float groundwater()
+    public float groundWater()
     {
-        return groundwater;
+        return baseGroundwater + rainfall;
+    }
+
+    public float baseGroundwater()
+    {
+        return baseGroundwater;
+    }
+
+    public float rainfall()
+    {
+        return rainfall;
     }
 
     public boolean salty()

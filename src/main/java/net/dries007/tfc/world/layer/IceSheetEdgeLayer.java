@@ -32,7 +32,7 @@ public enum IceSheetEdgeLayer implements AdjacentTransformLayer
 //                return ICE_SHEET_EDGE;
 //            }
 //        }
-        if (center == KNOB_AND_KETTLE || center == PATTERNED_KNOB_AND_KETTLE)
+        if (center == KNOB_AND_KETTLE || center == PATTERNED_GROUND)
         {
             if ((matcher.test(TFCLayers::isFlatIceSheet)))
             {
@@ -40,29 +40,30 @@ public enum IceSheetEdgeLayer implements AdjacentTransformLayer
             }
         }
 
-        // Ice sheet mountains cannot border ice sheet edge, add a fringing ice sheet around the edge of the mountains
-        // And add a fringing layer of glaciated mountains where there is no ice sheet edge
+        // Ice sheet mountain edges
         if (center == ICE_SHEET_OCEANIC_MOUNTAINS)
         {
-            if (matcher.test(i -> i == ICE_SHEET_EDGE))
-            {
-                return ICE_SHEET;
-            }
-            else if (matcher.test(IceSheetEdgeLayer::isNotIceSheet))
+            if (matcher.test(IceSheetEdgeLayer::isNotIceSheet))
             {
                 return ICE_SHEET_OCEANIC_MOUNTAINS_EDGE;
             }
         }
         if (center == ICE_SHEET_MOUNTAINS)
         {
-            if (matcher.test(i -> i == ICE_SHEET_EDGE))
-            {
-                return ICE_SHEET;
-            }
-            else if (matcher.test(IceSheetEdgeLayer::isNotIceSheet))
+            if (matcher.test(IceSheetEdgeLayer::isNotIceSheet))
             {
                 return ICE_SHEET_MOUNTAINS_EDGE;
             }
+        }
+
+        if (center == ICE_SHEET_EDGE && matcher.test(i -> i == ICE_SHEET_MOUNTAINS || i == ICE_SHEET_MOUNTAINS_EDGE || i == ICE_SHEET_OCEANIC_MOUNTAINS || i == ICE_SHEET_OCEANIC))
+        {
+            return KNOB_AND_KETTLE;
+        }
+
+        if (isFlatIceSheet(center) && matcher.test(i -> i == OCEAN || i == OCEAN_REEF || i == DEEP_OCEAN || i == DEEP_OCEAN_TRENCH || i == ICE_SHEET_SHORE))
+        {
+            return ICE_SHEET_OCEANIC;
         }
 
         // Glaciated mountains should have glacially carved edges to avoid cirque glaciers turning to stone near borders with lower biomes
@@ -83,7 +84,7 @@ public enum IceSheetEdgeLayer implements AdjacentTransformLayer
 
     public static boolean isNotValidIceSheetEdgeBorder(int value)
     {
-        return isNotIceSheet(value) && value != KNOB_AND_KETTLE && value != PATTERNED_KNOB_AND_KETTLE && value != ICE_SHEET_SHORE && !isOcean(value);
+        return isNotIceSheet(value) && value != KNOB_AND_KETTLE && value != PATTERNED_GROUND && value != ICE_SHEET_SHORE && !isOcean(value);
     }
 
     public static boolean isNotIceSheet(int value)
