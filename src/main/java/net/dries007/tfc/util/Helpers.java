@@ -1228,6 +1228,11 @@ public final class Helpers
         return midpoint + amplitude * (Math.abs( 4f * frequency * value + 1f - 4f * Mth.floor(frequency * value + 0.75f)) - 1f);
     }
 
+    public static double triangle(double amplitude, double midpoint, double frequency, double value)
+    {
+        return midpoint + amplitude * (Math.abs( 4.0 * frequency * value + 1.0 - 4.0 * Mth.floor(frequency * value + 0.75)) - 1.0);
+    }
+
     /**
      * @return A random integer, uniformly distributed in the range [min, max).
      */

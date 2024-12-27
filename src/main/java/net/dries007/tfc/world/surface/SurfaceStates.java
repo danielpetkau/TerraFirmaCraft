@@ -33,16 +33,16 @@ public final class SurfaceStates
     public static final SurfaceState TUFF = context -> TFCBlocks.ROCK_BLOCKS.get(Rock.TUFF).get(Rock.BlockType.RAW).get().defaultBlockState();
     public static final SurfaceState TUFF_GRAVEL = context -> TFCBlocks.ROCK_BLOCKS.get(Rock.TUFF).get(Rock.BlockType.GRAVEL).get().defaultBlockState();
 
-    public static final SurfaceState PACKED_ICE = context -> Blocks.LIGHT_BLUE_STAINED_GLASS.defaultBlockState(); // TODO: Replace
-    public static final SurfaceState BLUE_ICE = context -> Blocks.BLUE_STAINED_GLASS.defaultBlockState(); // TODO: Replace
-    public static final SurfaceState SNOW = context -> Blocks.WHITE_STAINED_GLASS.defaultBlockState(); // TODO: Replace
+//    public static final SurfaceState PACKED_ICE = context -> Blocks.LIGHT_BLUE_STAINED_GLASS.defaultBlockState(); // TODO: Replace
+//    public static final SurfaceState BLUE_ICE = context -> Blocks.BLUE_STAINED_GLASS.defaultBlockState(); // TODO: Replace
+//    public static final SurfaceState SNOW = context -> Blocks.WHITE_STAINED_GLASS.defaultBlockState(); // TODO: Replace
     public static final SurfaceState MORAINE = context -> (Helpers.hash(729375982L, context.pos()) & 127) > 96 ?
         context.getRock().cobble().defaultBlockState() : context.getRock().gravel().defaultBlockState();
     public static final SurfaceState SAND_AND_GRAVEL = context -> (Helpers.hash(728275914L, context.pos()) & 127) > 48 ?
         context.getRock().sand().defaultBlockState() : context.getRock().gravel().defaultBlockState();
-//    public static final SurfaceState PACKED_ICE = context -> Blocks.PACKED_ICE.defaultBlockState();
-//    public static final SurfaceState BLUE_ICE = context -> Blocks.BLUE_ICE.defaultBlockState();
-//    public static final SurfaceState SNOW = context -> Blocks.SNOW_BLOCK.defaultBlockState();
+    public static final SurfaceState PACKED_ICE = context -> Blocks.PACKED_ICE.defaultBlockState();
+    public static final SurfaceState BLUE_ICE = context -> Blocks.BLUE_ICE.defaultBlockState();
+    public static final SurfaceState SNOW = context -> Blocks.SNOW_BLOCK.defaultBlockState();
 
     /**
      * Grass / Dirt / Gravel, or Sand / Sand / Sandstone

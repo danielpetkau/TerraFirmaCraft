@@ -10,6 +10,7 @@ import java.util.Random;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.levelgen.synth.NoiseUtils;
 
+import net.dries007.tfc.util.Helpers;
 import net.dries007.tfc.world.BiomeNoiseSampler;
 import net.dries007.tfc.world.noise.Cellular2D;
 import net.dries007.tfc.world.noise.Noise2D;
@@ -147,6 +148,21 @@ public final class BiomeNoise
             .scaled(-0.75f, 0.7f, SEA_LEVEL_Y - minMeight, SEA_LEVEL_Y + maxHeight);
     }
 
+    /**
+     * Jointed surface of ice sheets/glaciers, considered by biome noise, not by surface builder
+     */
+    public static Noise2D glacierTexture(long seed)
+    {
+        final Noise2D warp = new OpenSimplex2D(seed + 413L).spread(0.02).scaled(-12, 12);
+        return (x, z) -> {
+            final double yOfX = Math.min(Helpers.triangle(25, 18, 0.035, x + warp.noise(x, z)), 0.0);
+            final double yOfZ = Math.min(Helpers.triangle(40, 30, 0.025, z + warp.noise(z, x)), 0.0);
+            return Math.min(yOfX, yOfZ);
+        };
+
+
+    }
+
     // Referenced from multiple locations
     public static Noise2D glacialBase(long seed)
     {
@@ -160,7 +176,7 @@ public final class BiomeNoise
 
     public static Noise2D glacialIceSurface(long seed)
     {
-        return BiomeNoise.hills(seed, 26, 34);
+        return BiomeNoise.hills(seed, 23, 38);
     }
 
     public static Noise2D glacialMontaneIceSurface(long seed)
