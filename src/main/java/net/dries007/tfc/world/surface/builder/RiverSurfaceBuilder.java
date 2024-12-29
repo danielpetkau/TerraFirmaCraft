@@ -43,7 +43,7 @@ public class RiverSurfaceBuilder extends ShoreSurfaceBuilder
             {
                 state = SurfaceStates.RIVER_SAND;
             }
-            NormalSurfaceBuilder.INSTANCE.buildSurface(context, startY, endY, state, SurfaceStates.GRAVEL, SurfaceStates.SANDSTONE_OR_GRAVEL);
+            NormalSurfaceBuilder.INSTANCE.buildSurface(context, startY, endY, state, SurfaceStates.GRAVEL, SurfaceStates.GRAVEL);
         }
     }
 }

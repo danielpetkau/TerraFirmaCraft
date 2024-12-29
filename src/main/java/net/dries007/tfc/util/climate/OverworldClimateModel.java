@@ -356,8 +356,8 @@ public class OverworldClimateModel implements ClimateModel
         if (y > SEA_LEVEL)
         {
             // -1.6 C / 10 blocks above sea level
-            final float elevationTemperature = Mth.clamp((y - SEA_LEVEL) * 0.16225f, 0, 17.822f);
-            return averageTemperature + monthTemperature - elevationTemperature + dailyTemperature;
+            final float averageElevationTemperature = Helpers.adjustAverageTemperatureByElevation(y, averageTemperature, SEA_LEVEL);
+            return averageElevationTemperature + monthTemperature + dailyTemperature;
         }
         else if (y > 0)
         {

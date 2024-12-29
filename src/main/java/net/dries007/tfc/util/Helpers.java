@@ -1385,6 +1385,14 @@ public final class Helpers
     }
 
     /**
+     * @return The average annual temperature adjusted for elevation above sea level
+     */
+    public static float adjustAverageTemperatureByElevation(int y, float averageTemperature, float seaLevel)
+    {
+        return averageTemperature - Mth.clamp((y - seaLevel) * 0.16225f, 0, 17.822f);
+    }
+
+    /**
      * Adds a tooltip based on an inventory, listing out the items inside.
      * Modified from {@link ShulkerBoxBlock#appendHoverText(ItemStack, Item.TooltipContext, List, TooltipFlag)}
      */

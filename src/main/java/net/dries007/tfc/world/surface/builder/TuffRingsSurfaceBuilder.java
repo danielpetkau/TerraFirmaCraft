@@ -80,7 +80,7 @@ public class TuffRingsSurfaceBuilder implements SurfaceBuilder
                     firstLayer = true;
                     if (y < context.getSeaLevel() - 1)
                     {
-                        surfaceDepth = context.calculateAltitudeSlopeSurfaceDepth(surfaceY, 2, -1);
+                        surfaceDepth = context.calculateAltitudeSlopeSurfaceDepth(surfaceY, -1);
                         if (surfaceDepth < -1)
                         {
                             // No surface layers
@@ -102,7 +102,7 @@ public class TuffRingsSurfaceBuilder implements SurfaceBuilder
                     }
                     else
                     {
-                        surfaceDepth = context.calculateAltitudeSlopeSurfaceDepth(surfaceY, 3, -3);
+                        surfaceDepth = context.calculateAltitudeSlopeSurfaceDepth(surfaceY, -3);
                         if (surfaceDepth < -1)
                         {
                             // No surface layers
@@ -136,11 +136,11 @@ public class TuffRingsSurfaceBuilder implements SurfaceBuilder
                             firstLayer = false;
                             if (underwaterLayer)
                             {
-                                surfaceDepth = context.calculateAltitudeSlopeSurfaceDepth(surfaceY, 4, 0);
+                                surfaceDepth = context.calculateAltitudeSlopeSurfaceDepth(surfaceY, 0);
                             }
                             else
                             {
-                                surfaceDepth = context.calculateAltitudeSlopeSurfaceDepth(surfaceY, 7, 0);
+                                surfaceDepth = context.calculateAltitudeSlopeSurfaceDepth(surfaceY, 0);
                                 surfaceState = underState;
                             }
                         }

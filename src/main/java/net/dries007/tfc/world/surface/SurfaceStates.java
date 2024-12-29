@@ -25,6 +25,8 @@ public final class SurfaceStates
     public static final SurfaceState RAW = context -> context.getRock().raw().defaultBlockState();
     public static final SurfaceState COBBLE = context -> context.getRock().cobble().defaultBlockState();
     public static final SurfaceState GRAVEL = context -> context.getRock().gravel().defaultBlockState();
+    public static final SurfaceState SAND = context -> context.getRock().sand().defaultBlockState();
+    public static final SurfaceState SANDSTONE = context -> context.getRock().sandstone().defaultBlockState();
 
     public static final SurfaceState BASALT = context -> TFCBlocks.ROCK_BLOCKS.get(Rock.BASALT).get(Rock.BlockType.RAW).get().defaultBlockState();
     public static final SurfaceState BASALT_COBBLE = context -> TFCBlocks.ROCK_BLOCKS.get(Rock.BASALT).get(Rock.BlockType.COBBLE).get().defaultBlockState();
@@ -43,6 +45,9 @@ public final class SurfaceStates
     public static final SurfaceState PACKED_ICE = context -> Blocks.PACKED_ICE.defaultBlockState();
     public static final SurfaceState BLUE_ICE = context -> Blocks.BLUE_ICE.defaultBlockState();
     public static final SurfaceState SNOW = context -> Blocks.SNOW_BLOCK.defaultBlockState();
+
+    //TODO: Replace with TFC version
+    public static final SurfaceState COARSE_DIRT = context -> Blocks.COARSE_DIRT.defaultBlockState();
 
     /**
      * Grass / Dirt / Gravel, or Sand / Sand / Sandstone

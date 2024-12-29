@@ -16,6 +16,7 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.blocks.soil.SoilBlockType;
+import net.dries007.tfc.util.Helpers;
 import net.dries007.tfc.world.noise.Noise2D;
 import net.dries007.tfc.world.noise.OpenSimplex2D;
 
@@ -25,15 +26,25 @@ public class SoilSurfaceState implements SurfaceState
 
     public static SurfaceState buildType(SoilBlockType type)
     {
+        // TODO: Split
         final ImmutableList<SurfaceState> regions = ImmutableList.of(
-            sand(),
-            transition(sand(), soil(type, SoilBlockType.Variant.SANDY_LOAM)),
+            SurfaceStates.SNOW,
+            SurfaceStates.SNOW,
+            transition(SurfaceStates.SNOW, SurfaceStates.GRAVEL),
+            SurfaceStates.GRAVEL,
+            transition(SurfaceStates.GRAVEL, SurfaceStates.COARSE_DIRT),
+            SurfaceStates.COARSE_DIRT,
+            transition(SurfaceStates.COARSE_DIRT, soil(type, SoilBlockType.Variant.SANDY_LOAM)),
+            soil(type, SoilBlockType.Variant.SANDY_LOAM),
             soil(type, SoilBlockType.Variant.SANDY_LOAM),
             transition(soil(type, SoilBlockType.Variant.SANDY_LOAM), soil(type, SoilBlockType.Variant.LOAM)),
             soil(type, SoilBlockType.Variant.LOAM),
+            soil(type, SoilBlockType.Variant.LOAM),
             transition(soil(type, SoilBlockType.Variant.LOAM), soil(type, SoilBlockType.Variant.SILTY_LOAM)),
             soil(type, SoilBlockType.Variant.SILTY_LOAM),
+            soil(type, SoilBlockType.Variant.SILTY_LOAM),
             transition(soil(type, SoilBlockType.Variant.SILTY_LOAM), soil(type, SoilBlockType.Variant.SILT)),
+            soil(type, SoilBlockType.Variant.SILT),
             soil(type, SoilBlockType.Variant.SILT)
         );
         return type == SoilBlockType.GRASS ? new SoilSurfaceState.NeedsPostProcessing(regions) : new SoilSurfaceState(regions);
@@ -41,6 +52,7 @@ public class SoilSurfaceState implements SurfaceState
 
     public static SurfaceState buildDryDirt(SoilBlockType type)
     {
+        // TODO: This is almost certainly used incorrectly, should soil type be based on geology?
         final ImmutableList<SurfaceState> regions = ImmutableList.of(
             soil(type, SoilBlockType.Variant.SANDY_LOAM),
             transition(soil(type, SoilBlockType.Variant.SANDY_LOAM), soil(type, SoilBlockType.Variant.LOAM)),
@@ -53,11 +65,13 @@ public class SoilSurfaceState implements SurfaceState
         return new SoilSurfaceState(regions);
     }
 
+    // TODO: Is this worth keeping, even?
     public static SurfaceState buildSandOrGravel(boolean sandIsSandstone)
     {
-        final SurfaceState sand = sandIsSandstone ? sandstone() : sand();
-        final SurfaceState gravel = gravel();
+        final SurfaceState sand = sandIsSandstone ? SurfaceStates.SANDSTONE : SurfaceStates.SAND;
+        final SurfaceState gravel = SurfaceStates.GRAVEL;
         return new SoilSurfaceState(ImmutableList.of(
+            sand,
             sand,
             transition(sand, gravel),
             gravel,
@@ -65,25 +79,7 @@ public class SoilSurfaceState implements SurfaceState
             gravel,
             gravel,
             gravel,
-            gravel,
             gravel
-        ));
-    }
-
-    public static SurfaceState buildSand(boolean hasSandstone)
-    {
-        final SurfaceState sand = sand();
-        final SurfaceState sandstone = hasSandstone ? sandstone() : sand();
-        return new SoilSurfaceState(ImmutableList.of(
-            sand,
-            sand,
-            sand,
-            sand,
-            sand,
-            transition(sand, sandstone),
-            sandstone,
-            sandstone,
-            sandstone
         ));
     }
 
@@ -94,21 +90,6 @@ public class SoilSurfaceState implements SurfaceState
             final double noise = PATCH_NOISE.noise(pos.getX(), pos.getZ());
             return noise > 0 ? first.getState(context) : second.getState(context);
         };
-    }
-
-    private static SurfaceState sand()
-    {
-        return context -> context.getRock().sand().defaultBlockState();
-    }
-
-    private static SurfaceState sandstone()
-    {
-        return context -> context.getRock().sandstone().defaultBlockState();
-    }
-
-    private static SurfaceState gravel()
-    {
-        return context -> context.getRock().gravel().defaultBlockState();
     }
 
     private static SurfaceState soil(SoilBlockType type, SoilBlockType.Variant variant)
@@ -129,10 +110,20 @@ public class SoilSurfaceState implements SurfaceState
     {
         // Bias a little towards sand regions
         // Without: pure sand < 55mm, mixed sand < 110mm. With: pure sand < 73mm, mixed sand < 126mm
-        final float rainfall = context.groundWater();
-        final int index = (int) Mth.clampedMap(rainfall, 20, 500, 0, regions.size() - 0.01f);
+        // TODO: Above is with 9, we now have 18, and gravel (old: sand)
 
-        return regions.get(index).getState(context);
+        final float rainfall = context.groundWater();
+        final float temperature = Helpers.adjustAverageTemperatureByElevation(context.pos().getY(), context.averageTemperature(), context.getSeaLevel()) ;
+
+        //TODO: check this: Rain-controlled surface: <65 pure gravel, <94 mixed gravel/dirt, <124 dirt, <154 mixed dirt/grass
+        final int rainIndex = (int) Mth.clampedMap(rainfall, 35, 450, 3, regions.size() - 0.01f);
+
+        // TODO: Temperature-controlled surface:
+        // -17c = Koppen EF/ET Border
+        // -12c = Koppen ET Border
+        final int tempIndex = (int) Mth.clampedMap(temperature, -19, -4, 0, regions.size() - 0.01f);
+
+        return regions.get(Math.min(rainIndex, tempIndex)).getState(context);
     }
 
     static class NeedsPostProcessing extends SoilSurfaceState

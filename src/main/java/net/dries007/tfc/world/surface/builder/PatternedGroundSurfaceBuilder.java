@@ -29,7 +29,7 @@ public class PatternedGroundSurfaceBuilder implements SurfaceBuilder
         }
         else
         {
-            surfaceBuilder.buildSurface(context, startY, endY, SurfaceStates.MUD, SurfaceStates.MUD, SurfaceStates.SANDSTONE_OR_GRAVEL, SurfaceStates.MUD, SurfaceStates.MUD);
+            surfaceBuilder.buildSurface(context, startY, endY, SurfaceStates.MUD, SurfaceStates.MUD, SurfaceStates.GRAVEL, SurfaceStates.MUD, SurfaceStates.MUD);
         }
     }
 }

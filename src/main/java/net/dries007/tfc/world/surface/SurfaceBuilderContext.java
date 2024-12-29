@@ -223,22 +223,27 @@ public class SurfaceBuilderContext
         return defaultFluidStates.contains(state);
     }
 
-
     /**
      * Calculates a surface depth value, taking into account altitude and slope
+     * Slope is applied as a multiplier, altitude limits the maximum depth
      *
      * @param y                  The y value. Values over sea level (63) are treated as lower depth
-     * @param maxDepth           The maximum surface depth
      * @param minimumReturnValue The minimum possible slope. Typically 0, -1 is used as a flag value for not placing the top surface layer on occasion.
      * @return a surface depth in the range [minimumReturnValue, maxSlope]
      */
-    public int calculateAltitudeSlopeSurfaceDepth(int y, int maxDepth, int minimumReturnValue)
+    public int calculateAltitudeSlopeSurfaceDepth(int y, int minimumReturnValue, int maxDepth)
     {
         final double slopeFactor = 1 - Mth.clamp(slope / 15d, 0, 1); // Large = low slope
-        final double altitudeFactor = y < seaLevel ?
-            Mth.clampedMap((seaLevel - y) / 15d, 0, 0.4, 1, 1.4) : // Altitudes below sea level have larger depth
-            Mth.clampedMap((y - seaLevel) / 140d, 0, 0.8, 1, 0.2); // Altitudes above sea level have slightly lower depth
+        final double seaLevelFactor = y < seaLevel ?
+            Mth.clampedMap((seaLevel - y) / 15d, 0, 0.4, 1, 1.4) : 1; // Altitudes below sea level have larger depth
+        final int maxElevationDepth = y < seaLevel + 7 ? maxDepth :
+            (int) Mth.clampedMap(y, seaLevel + 7, seaLevel + 67, maxDepth, 2);
 
-        return Mth.clamp((int) Mth.lerp(slopeFactor * altitudeFactor, minimumReturnValue, maxDepth), minimumReturnValue, maxDepth);
+        return Mth.clamp((int) Mth.lerp(slopeFactor * seaLevelFactor, minimumReturnValue, maxElevationDepth), minimumReturnValue, maxElevationDepth);
+    }
+
+    public int calculateAltitudeSlopeSurfaceDepth(int y, int minimumReturnValue)
+    {
+        return calculateAltitudeSlopeSurfaceDepth(y, minimumReturnValue, 5);
     }
 }

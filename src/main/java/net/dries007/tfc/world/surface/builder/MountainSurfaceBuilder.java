@@ -14,7 +14,6 @@ import net.dries007.tfc.world.surface.SurfaceStates;
 public class MountainSurfaceBuilder implements SurfaceBuilder
 {
     public static final SurfaceBuilderFactory NORMAL = seed -> new MountainSurfaceBuilder(seed, 130.0);
-    public static final SurfaceBuilderFactory COLD = seed -> new MountainSurfaceBuilder(seed, 75.0);
 
     private final Noise2D surfaceMaterialNoise;
     private final Noise2D heightNoise;
@@ -31,26 +30,29 @@ public class MountainSurfaceBuilder implements SurfaceBuilder
     public void buildSurface(SurfaceBuilderContext context, int startY, int endY)
     {
         final NormalSurfaceBuilder surfaceBuilder = NormalSurfaceBuilder.ROCKY;
-        final double heightNoise = this.heightNoise.noise(context.pos().getX(), context.pos().getZ()) * 4f + startY;
-        if (heightNoise > cutOffHeight)
-        {
-            final double surfaceMaterialValue = surfaceMaterialNoise.noise(context.pos().getX(), context.pos().getZ()) + 0.1f * context.random().nextFloat() - 0.05f;
-            if (surfaceMaterialValue > 0.3f)
-            {
-                surfaceBuilder.buildSurface(context, startY, endY, SurfaceStates.COBBLE, SurfaceStates.COBBLE, SurfaceStates.RAW);
-            }
-            else if (surfaceMaterialValue < -0.3f)
-            {
-                surfaceBuilder.buildSurface(context, startY, endY, SurfaceStates.GRAVEL, SurfaceStates.GRAVEL, SurfaceStates.RAW);
-            }
-            else
-            {
-                surfaceBuilder.buildSurface(context, startY, endY, SurfaceStates.RAW, SurfaceStates.RAW, SurfaceStates.RAW);
-            }
-        }
-        else
-        {
-            surfaceBuilder.buildSurface(context, startY, endY, SurfaceStates.GRASS, SurfaceStates.DIRT, SurfaceStates.SANDSTONE_OR_GRAVEL);
-        }
+        // TODO: ? final double heightNoise = this.heightNoise.noise(context.pos().getX(), context.pos().getZ()) * 4f + startY;
+        surfaceBuilder.buildSurface(context, startY, endY);
+
+        //TODO: Have something to make mountains a bit rockier?
+//        if (heightNoise > cutOffHeight)
+//        {
+//            final double surfaceMaterialValue = surfaceMaterialNoise.noise(context.pos().getX(), context.pos().getZ()) + 0.1f * context.random().nextFloat() - 0.05f;
+//            if (surfaceMaterialValue > 0.3f)
+//            {
+//                surfaceBuilder.buildSurface(context, startY, endY, SurfaceStates.COBBLE, SurfaceStates.COBBLE, SurfaceStates.RAW);
+//            }
+//            else if (surfaceMaterialValue < -0.3f)
+//            {
+//                surfaceBuilder.buildSurface(context, startY, endY, SurfaceStates.GRAVEL, SurfaceStates.GRAVEL, SurfaceStates.RAW);
+//            }
+//            else
+//            {
+//                surfaceBuilder.buildSurface(context, startY, endY, SurfaceStates.RAW, SurfaceStates.RAW, SurfaceStates.RAW);
+//            }
+//        }
+//        else
+//        {
+//            surfaceBuilder.buildSurface(context, startY, endY, SurfaceStates.GRASS, SurfaceStates.DIRT, SurfaceStates.GRAVEL);
+//        }
     }
 }

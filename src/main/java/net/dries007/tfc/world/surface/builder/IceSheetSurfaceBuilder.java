@@ -92,7 +92,7 @@ public class IceSheetSurfaceBuilder implements SurfaceBuilder
                     {
                         surfaceY = y; // Reached surface. Place top state and switch to subsurface layers
 
-                        surfaceDepth = context.calculateAltitudeSlopeSurfaceDepth(surfaceY, 3, -3);
+                        surfaceDepth = context.calculateAltitudeSlopeSurfaceDepth(surfaceY, -3);
                         if (surfaceDepth <= -1)
                         {
                             // skip placing snow on steep slopes

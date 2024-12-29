@@ -45,7 +45,7 @@ public class GrassyDunesSurfaceBuilder implements SurfaceBuilder
         final double heightVariation = grassHeightVariationNoise.noise(context.pos().getX(), context.pos().getZ());
         final double trueSlope = context.getSlope();
         context.setSlope(trueSlope * (1 - context.weight()));
-        SurfaceState sand = SoilSurfaceState.buildSand(false);
+        SurfaceState sand = SurfaceStates.SAND;
 
         if (startY > heightVariation && trueSlope < 5)
         {
