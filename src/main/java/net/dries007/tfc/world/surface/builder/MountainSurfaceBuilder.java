@@ -7,23 +7,20 @@
 package net.dries007.tfc.world.surface.builder;
 
 import net.dries007.tfc.world.noise.Noise2D;
-import net.dries007.tfc.world.noise.OpenSimplex2D;
 import net.dries007.tfc.world.surface.SurfaceBuilderContext;
-import net.dries007.tfc.world.surface.SurfaceStates;
 
 public class MountainSurfaceBuilder implements SurfaceBuilder
 {
-    public static final SurfaceBuilderFactory NORMAL = seed -> new MountainSurfaceBuilder(seed, 130.0);
+    public static final SurfaceBuilderFactory NORMAL = seed -> new MountainSurfaceBuilder(seed, (x, z)-> 0);
+    public static final SurfaceBuilderFactory OLD = seed -> new MountainSurfaceBuilder(seed, (x, z)-> 0);
+    public static final SurfaceBuilderFactory OCEANIC = seed -> new MountainSurfaceBuilder(seed, (x, z)-> 0);
+    public static final SurfaceBuilderFactory GLACIATED = seed -> new MountainSurfaceBuilder(seed, (x, z)-> 0);
 
-    private final Noise2D surfaceMaterialNoise;
-    private final Noise2D heightNoise;
-    private final double cutOffHeight;
+    private final Noise2D talusNoise;
 
-    public MountainSurfaceBuilder(long seed, double cutOffHeight)
+    public MountainSurfaceBuilder(long seed, Noise2D talusNoise)
     {
-        this.cutOffHeight = cutOffHeight;
-        surfaceMaterialNoise = new OpenSimplex2D(seed).octaves(2).spread(0.02f);
-        heightNoise = new OpenSimplex2D(seed + 71829341L).octaves(2).spread(0.1f);
+        this.talusNoise = talusNoise;
     }
 
     @Override

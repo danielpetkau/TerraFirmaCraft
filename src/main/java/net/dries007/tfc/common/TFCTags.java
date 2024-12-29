@@ -154,11 +154,12 @@ public class TFCTags
         public static final TagKey<Block> PROSPECTABLE = tag("prospectable"); // can be found with the prospector pick
 
         /**
-         * The vanilla tag {@link BlockTags#DIRT} contains all dirt, grass, and mud. These tags mostly
+         * The vanilla tag {@link BlockTags#DIRT} contains all dirt, grass, coarse dirt, and mud. These tags mostly
          * only contain the respective TFC blocks and identical ones
          */
         public static final TagKey<Block> DIRT = tag("dirt");
         public static final TagKey<Block> GRASS = tag("grass");
+        public static final TagKey<Block> COARSE_DIRT = tag("coarse_dirt");
         /** Used for non-wild crop growth. */
         public static final TagKey<Block> FARMLANDS = tag("farmlands");
         public static final TagKey<Block> PATHS = tag("paths");
@@ -576,6 +577,7 @@ public class TFCTags
         // Block Tags - Earth
         public static final TagKey<Item> DIRT = tag(Blocks.DIRT);
         public static final TagKey<Item> GRASS = tag(Blocks.GRASS);
+        public static final TagKey<Item> COARSE_DIRT = tag(Blocks.COARSE_DIRT);
         public static final TagKey<Item> MUD = tag(Blocks.MUD);
         public static final TagKey<Item> MUD_BRICKS = tag(Blocks.MUD_BRICKS);
 

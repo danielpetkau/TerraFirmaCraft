@@ -46,20 +46,20 @@ public final class SurfaceStates
     public static final SurfaceState BLUE_ICE = context -> Blocks.BLUE_ICE.defaultBlockState();
     public static final SurfaceState SNOW = context -> Blocks.SNOW_BLOCK.defaultBlockState();
 
-    //TODO: Replace with TFC version
-    public static final SurfaceState COARSE_DIRT = context -> Blocks.COARSE_DIRT.defaultBlockState();
-
-    /**
-     * Grass / Dirt / Gravel, or Sand / Sand / Sandstone
-     */
-    public static final SurfaceState GRASS = SoilSurfaceState.buildType(SoilBlockType.GRASS);
-    public static final SurfaceState DIRT = SoilSurfaceState.buildType(SoilBlockType.DIRT);
-    public static final SurfaceState MUD = SoilSurfaceState.buildType(SoilBlockType.MUD);
+    public static final SurfaceState COARSE_SANDY_LOAM = SoilSurfaceState.soil(SoilBlockType.COARSE_DIRT, SoilBlockType.Variant.SANDY_LOAM);
     public static final SurfaceState DRY_MUD = SoilSurfaceState.buildDryDirt(SoilBlockType.CRACKED_EARTH);
     public static final SurfaceState SALT_MUD = SoilSurfaceState.buildDryDirt(SoilBlockType.SALTED_EARTH);
 
-    public static final SurfaceState SAND_OR_GRAVEL = SoilSurfaceState.buildSandOrGravel(false);
-    public static final SurfaceState SANDSTONE_OR_GRAVEL = SoilSurfaceState.buildSandOrGravel(true);
+    /**
+     * Default surface builders, Climate sensitive
+     */
+    public static final SurfaceState TOP_GRASS_TO_GRAVEL = SoilSurfaceState.buildSurfaceType(SoilBlockType.GRASS, false);
+    public static final SurfaceState TOP_GRASS_TO_SAND = SoilSurfaceState.buildSurfaceType(SoilBlockType.GRASS, true);
+    public static final SurfaceState MID_DIRT_TO_GRAVEL = SoilSurfaceState.buildMidType(SoilBlockType.DIRT, false);
+    public static final SurfaceState MID_DIRT_TO_SAND = SoilSurfaceState.buildMidType(SoilBlockType.DIRT, true);
+    public static final SurfaceState UNDER_GRAVEL = SoilSurfaceState.buildUnderType();
+
+    public static final SurfaceState MUD = SoilSurfaceState.buildSurfaceType(SoilBlockType.MUD, false);
 
     public static final SurfaceState RIVER_SAND = context -> context.getSeaLevelRock().sand().defaultBlockState();
     public static final SurfaceState SHORE_SAND = context -> context.getBottomRock().sand().defaultBlockState();

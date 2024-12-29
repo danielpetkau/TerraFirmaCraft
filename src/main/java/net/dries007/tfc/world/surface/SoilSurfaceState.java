@@ -24,78 +24,127 @@ public class SoilSurfaceState implements SurfaceState
 {
     public static final Noise2D PATCH_NOISE = new OpenSimplex2D(18273952837592L).octaves(2).spread(0.04f);
 
-    public static SurfaceState buildType(SoilBlockType type)
+    public static SurfaceState buildSurfaceType(SoilBlockType type, boolean sandy)
     {
-        // TODO: Split
+        final SurfaceState dry = sandy ? SurfaceStates.SAND : SurfaceStates.GRAVEL;
         final ImmutableList<SurfaceState> regions = ImmutableList.of(
             SurfaceStates.SNOW,
             SurfaceStates.SNOW,
-            transition(SurfaceStates.SNOW, SurfaceStates.GRAVEL),
-            SurfaceStates.GRAVEL,
-            transition(SurfaceStates.GRAVEL, SurfaceStates.COARSE_DIRT),
-            SurfaceStates.COARSE_DIRT,
-            transition(SurfaceStates.COARSE_DIRT, soil(type, SoilBlockType.Variant.SANDY_LOAM)),
+            transition(SurfaceStates.SNOW, dry),
+            dry,
+            transition(dry, SurfaceStates.COARSE_SANDY_LOAM),
+            SurfaceStates.COARSE_SANDY_LOAM,
+            transition(SurfaceStates.COARSE_SANDY_LOAM, soil(type, SoilBlockType.Variant.SANDY_LOAM)),
             soil(type, SoilBlockType.Variant.SANDY_LOAM),
             soil(type, SoilBlockType.Variant.SANDY_LOAM),
-            transition(soil(type, SoilBlockType.Variant.SANDY_LOAM), soil(type, SoilBlockType.Variant.LOAM)),
+            blobTransition(soil(type, SoilBlockType.Variant.SANDY_LOAM), soil(type, SoilBlockType.Variant.LOAM)),
             soil(type, SoilBlockType.Variant.LOAM),
             soil(type, SoilBlockType.Variant.LOAM),
-            transition(soil(type, SoilBlockType.Variant.LOAM), soil(type, SoilBlockType.Variant.SILTY_LOAM)),
+            blobTransition(soil(type, SoilBlockType.Variant.LOAM), soil(type, SoilBlockType.Variant.SILTY_LOAM)),
             soil(type, SoilBlockType.Variant.SILTY_LOAM),
             soil(type, SoilBlockType.Variant.SILTY_LOAM),
-            transition(soil(type, SoilBlockType.Variant.SILTY_LOAM), soil(type, SoilBlockType.Variant.SILT)),
+            blobTransition(soil(type, SoilBlockType.Variant.SILTY_LOAM), soil(type, SoilBlockType.Variant.SILT)),
             soil(type, SoilBlockType.Variant.SILT),
             soil(type, SoilBlockType.Variant.SILT)
         );
         return type == SoilBlockType.GRASS ? new SoilSurfaceState.NeedsPostProcessing(regions) : new SoilSurfaceState(regions);
     }
 
+    public static SurfaceState buildMidType(SoilBlockType type, boolean sandy)
+    {
+        final SurfaceState dry = sandy ? SurfaceStates.SAND : SurfaceStates.GRAVEL;
+        final ImmutableList<SurfaceState> regions = ImmutableList.of(
+            SurfaceStates.PACKED_ICE,
+            blobTransition(SurfaceStates.PACKED_ICE, dry),
+            dry,
+            dry,
+            transition(dry, SurfaceStates.COARSE_SANDY_LOAM),
+            SurfaceStates.COARSE_SANDY_LOAM,
+            transition(SurfaceStates.COARSE_SANDY_LOAM, soil(type, SoilBlockType.Variant.SANDY_LOAM)),
+            soil(type, SoilBlockType.Variant.SANDY_LOAM),
+            soil(type, SoilBlockType.Variant.SANDY_LOAM),
+            blobTransition(soil(type, SoilBlockType.Variant.SANDY_LOAM), soil(type, SoilBlockType.Variant.LOAM)),
+            soil(type, SoilBlockType.Variant.LOAM),
+            soil(type, SoilBlockType.Variant.LOAM),
+            blobTransition(soil(type, SoilBlockType.Variant.LOAM), soil(type, SoilBlockType.Variant.SILTY_LOAM)),
+            soil(type, SoilBlockType.Variant.SILTY_LOAM),
+            soil(type, SoilBlockType.Variant.SILTY_LOAM),
+            blobTransition(soil(type, SoilBlockType.Variant.SILTY_LOAM), soil(type, SoilBlockType.Variant.SILT)),
+            soil(type, SoilBlockType.Variant.SILT),
+            soil(type, SoilBlockType.Variant.SILT)
+        );
+        return type == SoilBlockType.GRASS ? new SoilSurfaceState.NeedsPostProcessing(regions) : new SoilSurfaceState(regions);
+    }
+
+    public static SurfaceState buildUnderType()
+    {
+        final ImmutableList<SurfaceState> regions = ImmutableList.of(
+            SurfaceStates.RAW,
+            SurfaceStates.RAW,
+            blobTransition(SurfaceStates.RAW, SurfaceStates.GRAVEL),
+            SurfaceStates.GRAVEL,
+            SurfaceStates.GRAVEL,
+            SurfaceStates.GRAVEL,
+            SurfaceStates.GRAVEL,
+            SurfaceStates.GRAVEL,
+            SurfaceStates.GRAVEL,
+            SurfaceStates.GRAVEL,
+            SurfaceStates.GRAVEL,
+            SurfaceStates.GRAVEL,
+            SurfaceStates.GRAVEL,
+            SurfaceStates.GRAVEL,
+            SurfaceStates.GRAVEL,
+            SurfaceStates.GRAVEL,
+            SurfaceStates.GRAVEL,
+            SurfaceStates.GRAVEL
+        );
+        return new SoilSurfaceState(regions);
+    }
+
     public static SurfaceState buildDryDirt(SoilBlockType type)
     {
-        // TODO: This is almost certainly used incorrectly, should soil type be based on geology?
         final ImmutableList<SurfaceState> regions = ImmutableList.of(
+            SurfaceStates.SNOW,
+            SurfaceStates.SNOW,
+            transition(SurfaceStates.SNOW, soil(type, SoilBlockType.Variant.SANDY_LOAM)),
             soil(type, SoilBlockType.Variant.SANDY_LOAM),
-            transition(soil(type, SoilBlockType.Variant.SANDY_LOAM), soil(type, SoilBlockType.Variant.LOAM)),
+            soil(type, SoilBlockType.Variant.SANDY_LOAM),
+            soil(type, SoilBlockType.Variant.SANDY_LOAM),
+            soil(type, SoilBlockType.Variant.SANDY_LOAM),
+            soil(type, SoilBlockType.Variant.SANDY_LOAM),
+            soil(type, SoilBlockType.Variant.SANDY_LOAM),
+            blobTransition(soil(type, SoilBlockType.Variant.SANDY_LOAM), soil(type, SoilBlockType.Variant.LOAM)),
             soil(type, SoilBlockType.Variant.LOAM),
-            transition(soil(type, SoilBlockType.Variant.LOAM), soil(type, SoilBlockType.Variant.SILTY_LOAM)),
+            soil(type, SoilBlockType.Variant.LOAM),
+            blobTransition(soil(type, SoilBlockType.Variant.LOAM), soil(type, SoilBlockType.Variant.SILTY_LOAM)),
             soil(type, SoilBlockType.Variant.SILTY_LOAM),
-            transition(soil(type, SoilBlockType.Variant.SILTY_LOAM), soil(type, SoilBlockType.Variant.SILT)),
+            soil(type, SoilBlockType.Variant.SILTY_LOAM),
+            blobTransition(soil(type, SoilBlockType.Variant.SILTY_LOAM), soil(type, SoilBlockType.Variant.SILT)),
+            soil(type, SoilBlockType.Variant.SILT),
             soil(type, SoilBlockType.Variant.SILT)
         );
         return new SoilSurfaceState(regions);
     }
 
-    // TODO: Is this worth keeping, even?
-    public static SurfaceState buildSandOrGravel(boolean sandIsSandstone)
+    public static SurfaceState soil(SoilBlockType type, SoilBlockType.Variant variant)
     {
-        final SurfaceState sand = sandIsSandstone ? SurfaceStates.SANDSTONE : SurfaceStates.SAND;
-        final SurfaceState gravel = SurfaceStates.GRAVEL;
-        return new SoilSurfaceState(ImmutableList.of(
-            sand,
-            sand,
-            transition(sand, gravel),
-            gravel,
-            gravel,
-            gravel,
-            gravel,
-            gravel,
-            gravel
-        ));
+        final Supplier<Block> block = TFCBlocks.SOIL.get(type).get(variant);
+        return context -> block.get().defaultBlockState();
     }
 
     private static SurfaceState transition(SurfaceState first, SurfaceState second)
+    {
+        return context -> (Helpers.hash(729375982L, context.pos()) & 127) > 63 ?
+                first.getState(context) : second.getState(context);
+    }
+
+    private static SurfaceState blobTransition(SurfaceState first, SurfaceState second)
     {
         return context -> {
             final BlockPos pos = context.pos();
             final double noise = PATCH_NOISE.noise(pos.getX(), pos.getZ());
             return noise > 0 ? first.getState(context) : second.getState(context);
         };
-    }
-
-    private static SurfaceState soil(SoilBlockType type, SoilBlockType.Variant variant)
-    {
-        final Supplier<Block> block = TFCBlocks.SOIL.get(type).get(variant);
-        return context -> block.get().defaultBlockState();
     }
 
     private final List<SurfaceState> regions;

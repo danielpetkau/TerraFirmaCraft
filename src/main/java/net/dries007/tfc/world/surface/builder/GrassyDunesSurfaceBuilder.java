@@ -6,16 +6,8 @@
 
 package net.dries007.tfc.world.surface.builder;
 
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.Random;
-import java.util.function.Function;
-import net.minecraft.util.Mth;
-import net.minecraft.world.level.block.state.BlockState;
 
-import net.dries007.tfc.common.blocks.SandstoneBlockType;
-import net.dries007.tfc.common.blocks.TFCBlocks;
-import net.dries007.tfc.common.blocks.soil.SandBlockType;
 import net.dries007.tfc.common.blocks.soil.SoilBlockType;
 import net.dries007.tfc.world.noise.Noise2D;
 import net.dries007.tfc.world.noise.OpenSimplex2D;

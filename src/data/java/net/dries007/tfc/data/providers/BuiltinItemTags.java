@@ -558,6 +558,7 @@ public class BuiltinItemTags extends TagsProvider<Item> implements Accessors
 
         copy(TFCTags.Blocks.DIRT, DIRT);
         copy(TFCTags.Blocks.GRASS, GRASS);
+        copy(TFCTags.Blocks.COARSE_DIRT, COARSE_DIRT);
         copy(TFCTags.Blocks.MUD, MUD);
         copy(TFCTags.Blocks.MUD_BRICKS, MUD_BRICKS);
 

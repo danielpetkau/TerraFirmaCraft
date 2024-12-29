@@ -106,7 +106,7 @@ public class BadlandsSurfaceBuilder implements SurfaceBuilder
             ? startY + 5 < heightVariation + weightVariation + rainfallVariation
             : startY - 5 > heightVariation - weightVariation - rainfallVariation)
         {
-            NormalSurfaceBuilder.INSTANCE.buildSurface(context, startY, endY, SurfaceStates.GRASS, SurfaceStates.DIRT, SurfaceStates.SANDSTONE_OR_GRAVEL);
+            NormalSurfaceBuilder.INSTANCE.buildSurface(context, startY, endY, SurfaceStates.TOP_GRASS_TO_SAND, SurfaceStates.MID_DIRT_TO_SAND, SurfaceStates.UNDER_GRAVEL);
         }
         else
         {
@@ -134,7 +134,7 @@ public class BadlandsSurfaceBuilder implements SurfaceBuilder
                     // Reached surface. Place top state and switch to subsurface layers
                     if (y < context.getSeaLevel() - 1)
                     {
-                        context.setBlockState(y, SurfaceStates.SAND_OR_GRAVEL);
+                        context.setBlockState(y, SurfaceStates.GRAVEL);
                     }
                     else
                     {

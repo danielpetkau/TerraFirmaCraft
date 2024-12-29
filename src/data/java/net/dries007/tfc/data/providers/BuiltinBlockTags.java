@@ -106,7 +106,7 @@ public class BuiltinBlockTags extends TagsProvider<Block> implements Accessors
             .add(TFCBlocks.FRUIT_TREE_LEAVES);
         // Includes wooden trapdoors
         tag(BlockTags.TRAPDOORS).add(TFCBlocks.METALS, Metal.BlockType.TRAPDOOR);
-        tag(BlockTags.DIRT).addTags(GRASS, DIRT, MUD);
+        tag(BlockTags.DIRT).addTags(GRASS, DIRT, COARSE_DIRT, MUD);
         tag(BlockTags.FLOWER_POTS).add(TFCBlocks.POTTED_PLANTS);
         tag(BlockTags.ICE).add(
             TFCBlocks.SEA_ICE,
@@ -368,6 +368,7 @@ public class BuiltinBlockTags extends TagsProvider<Block> implements Accessors
             .add(TFCBlocks.SAND)
             .add2(TFCBlocks.ORE_DEPOSITS)
             .add(TFCBlocks.SOIL.get(SoilBlockType.MUD))
+            .add(TFCBlocks.SOIL.get(SoilBlockType.COARSE_DIRT))
             .add(TFCBlocks.SOIL.get(SoilBlockType.CRACKED_EARTH))
             .add(TFCBlocks.SOIL.get(SoilBlockType.SALTED_EARTH))
             .add(
@@ -480,6 +481,8 @@ public class BuiltinBlockTags extends TagsProvider<Block> implements Accessors
 
         tag(PROSPECTABLE).addTags(Tags.Blocks.ORES);
 
+        tag(COARSE_DIRT)
+            .add(TFCBlocks.SOIL.get(SoilBlockType.COARSE_DIRT));
         tag(DIRT)
             .add(Blocks.DIRT)
             .add(TFCBlocks.SOIL.get(SoilBlockType.DIRT))

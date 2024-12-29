@@ -6,13 +6,9 @@
 
 package net.dries007.tfc.world.surface.builder;
 
-import net.minecraft.util.Mth;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 
 import net.dries007.tfc.world.biome.TuffRingNoise;
-import net.dries007.tfc.world.noise.Noise2D;
-import net.dries007.tfc.world.noise.OpenSimplex2D;
 import net.dries007.tfc.world.surface.SurfaceBuilderContext;
 import net.dries007.tfc.world.surface.SurfaceState;
 import net.dries007.tfc.world.surface.SurfaceStates;
@@ -47,7 +43,7 @@ public class TuffRingsSurfaceBuilder implements SurfaceBuilder
                 }
                 else
                 {
-                    buildTuffSurface(context, startY, endY, SurfaceStates.GRASS, SurfaceStates.DIRT, SurfaceStates.TUFF, SurfaceStates.TUFF_GRAVEL);
+                    buildTuffSurface(context, startY, endY, SurfaceStates.TOP_GRASS_TO_GRAVEL, SurfaceStates.MID_DIRT_TO_GRAVEL, SurfaceStates.TUFF, SurfaceStates.TUFF_GRAVEL);
                 }
                 return;
             }

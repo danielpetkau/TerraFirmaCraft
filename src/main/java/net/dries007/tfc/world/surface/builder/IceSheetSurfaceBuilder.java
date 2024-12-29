@@ -73,9 +73,13 @@ public class IceSheetSurfaceBuilder implements SurfaceBuilder
         {
             iceDepth = 35;
         }
-        if ((hasStonyPeaks && startY > glacierSurfaceHeight + 2.5) || startY < glacierBaseHeight - 1.5)
+        if (hasStonyPeaks && startY > glacierSurfaceHeight + 2.5)
         {
-            MountainSurfaceBuilder.NORMAL.apply(seed).buildSurface(context, startY, endY);
+            MountainSurfaceBuilder.GLACIATED.apply(seed).buildSurface(context, startY, endY);
+        }
+        else if (startY < glacierBaseHeight - 1.5)
+        {
+            NormalSurfaceBuilder.INSTANCE.apply(seed).buildSurface(context, startY, endY);
         }
         else {
             for (int y = startY; y >= glacierBaseHeight - 2; --y)

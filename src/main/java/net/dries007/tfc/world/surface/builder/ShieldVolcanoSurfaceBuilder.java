@@ -7,8 +7,6 @@
 package net.dries007.tfc.world.surface.builder;
 
 
-import net.minecraft.util.Mth;
-import net.minecraft.world.entity.monster.piglin.StopHoldingItemIfNoLongerAdmiring;
 import net.minecraft.world.level.block.state.BlockState;
 
 import net.dries007.tfc.world.biome.BiomeNoise;
@@ -56,8 +54,8 @@ public class ShieldVolcanoSurfaceBuilder implements SurfaceBuilder
         }
         else
         {
-            top = SurfaceStates.GRASS;
-            mid = SurfaceStates.DIRT;
+            top = SurfaceStates.TOP_GRASS_TO_GRAVEL;
+            mid = SurfaceStates.MID_DIRT_TO_GRAVEL;
             bot = SurfaceStates.BASALT_GRAVEL;
             underwater = SurfaceStates.BASALT_GRAVEL;
         }

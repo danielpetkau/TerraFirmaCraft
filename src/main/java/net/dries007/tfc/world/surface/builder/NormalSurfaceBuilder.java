@@ -27,7 +27,7 @@ public enum NormalSurfaceBuilder implements SurfaceBuilderFactory.Invariant
     @Override
     public void buildSurface(SurfaceBuilderContext context, int startY, int endY)
     {
-        buildSurface(context, startY, endY, SurfaceStates.GRASS, SurfaceStates.DIRT, SurfaceStates.GRAVEL);
+        buildSurface(context, startY, endY, SurfaceStates.TOP_GRASS_TO_GRAVEL, SurfaceStates.MID_DIRT_TO_GRAVEL, SurfaceStates.UNDER_GRAVEL);
     }
 
     public void buildSurface(SurfaceBuilderContext context, int startY, int endY, SurfaceState topState, SurfaceState midState, SurfaceState underState)
