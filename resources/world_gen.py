@@ -136,17 +136,17 @@ def generate(rm: ResourceManager):
     biome(rm, 'plateau_lake', 'extreme_hills', boulders=True)
 
     # Full ice sheet biomes
-    biome(rm, 'ice_sheet', 'extreme_hills', barren=True)
+    biome(rm, 'ice_sheet', 'extreme_hills', barren=True, boulders=True)
     biome(rm, 'ice_sheet_mountains', 'extreme_hills', barren=True)
     biome(rm, 'ice_sheet_oceanic_mountains', 'extreme_hills', barren=True)
     biome(rm, 'ice_sheet_shield_volcano', 'extreme_hills', barren=True)
-    biome(rm, 'ice_sheet_tuyas', 'extreme_hills', barren=True, tuya_features=True)
+    biome(rm, 'ice_sheet_tuyas', 'extreme_hills', barren=True, tuya_features=True, boulders=True)
     biome(rm, 'subglacial_lake', 'extreme_hills', barren=True)
 
     # Ice sheet edge biomes
     # TODO: Make boulders substantially more common in many of these biomes, maybe special extra-large erratics that are also random stone types? But that could be confusing
-    biome(rm, 'ice_sheet_edge', 'extreme_hills')
-    biome(rm, 'ice_sheet_tuyas_edge', 'plains', tuya_features=True)
+    biome(rm, 'ice_sheet_edge', 'extreme_hills', boulders=True)
+    biome(rm, 'ice_sheet_tuyas_edge', 'plains', tuya_features=True, boulders=True)
     biome(rm, 'ice_sheet_mountains_edge', 'extreme_hills')
     biome(rm, 'ice_sheet_oceanic_mountains_edge', 'extreme_hills')
     biome(rm, 'meltwater_lake', 'river')
@@ -154,19 +154,19 @@ def generate(rm: ResourceManager):
     biome(rm, 'ice_sheet_shore', 'extreme_hills')
 
     # Glaciated biomes
-    biome(rm, 'glaciated_shield_volcano', 'extreme_hills')
+    biome(rm, 'glaciated_shield_volcano', 'extreme_hills', boulders=True)
     biome(rm, 'glaciated_mountains', 'extreme_hills')
     biome(rm, 'glaciated_oceanic_mountains', 'extreme_hills')
 
     # Paleo/periglacial biomes
     biome(rm, 'glacially_carved_mountains', 'extreme_hills')
     biome(rm, 'glacially_carved_oceanic_mountains', 'extreme_hills')
-    biome(rm, 'channeled_scablands', 'extreme_hills')
-    biome(rm, 'drumlins', 'plains')
-    biome(rm, 'tuyas', 'plains', tuya_features=True)
-    biome(rm, 'knob_and_kettle', 'plains')
-    biome(rm, 'patterned_ground', 'plains')
-    biome(rm, 'stone_circles', 'plains')
+    biome(rm, 'channeled_scablands', 'extreme_hills', boulders=True)
+    biome(rm, 'drumlins', 'plains', boulders=True)
+    biome(rm, 'tuyas', 'plains', tuya_features=True, boulders=True)
+    biome(rm, 'knob_and_kettle', 'plains', boulders=True)
+    biome(rm, 'patterned_ground', 'plains', boulders=True)
+    biome(rm, 'stone_circles', 'plains', boulders=True)
     # Carvers
     rm.configured_carver('cave', 'tfc:cave', {
         'probability': 0.3,

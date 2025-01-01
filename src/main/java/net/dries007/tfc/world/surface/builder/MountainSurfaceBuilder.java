@@ -27,29 +27,8 @@ public class MountainSurfaceBuilder implements SurfaceBuilder
     public void buildSurface(SurfaceBuilderContext context, int startY, int endY)
     {
         final NormalSurfaceBuilder surfaceBuilder = NormalSurfaceBuilder.ROCKY;
-        // TODO: ? final double heightNoise = this.heightNoise.noise(context.pos().getX(), context.pos().getZ()) * 4f + startY;
         surfaceBuilder.buildSurface(context, startY, endY);
 
         //TODO: Have something to make mountains a bit rockier?
-//        if (heightNoise > cutOffHeight)
-//        {
-//            final double surfaceMaterialValue = surfaceMaterialNoise.noise(context.pos().getX(), context.pos().getZ()) + 0.1f * context.random().nextFloat() - 0.05f;
-//            if (surfaceMaterialValue > 0.3f)
-//            {
-//                surfaceBuilder.buildSurface(context, startY, endY, SurfaceStates.COBBLE, SurfaceStates.COBBLE, SurfaceStates.RAW);
-//            }
-//            else if (surfaceMaterialValue < -0.3f)
-//            {
-//                surfaceBuilder.buildSurface(context, startY, endY, SurfaceStates.GRAVEL, SurfaceStates.GRAVEL, SurfaceStates.RAW);
-//            }
-//            else
-//            {
-//                surfaceBuilder.buildSurface(context, startY, endY, SurfaceStates.RAW, SurfaceStates.RAW, SurfaceStates.RAW);
-//            }
-//        }
-//        else
-//        {
-//            surfaceBuilder.buildSurface(context, startY, endY, SurfaceStates.GRASS, SurfaceStates.DIRT, SurfaceStates.GRAVEL);
-//        }
     }
 }

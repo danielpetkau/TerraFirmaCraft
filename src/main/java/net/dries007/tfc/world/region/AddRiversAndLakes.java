@@ -153,8 +153,26 @@ public enum AddRiversAndLakes implements RegionTask
         final Region.Point point = region.at(gridX, gridZ);
         if (point != null && point.land() && point.distanceToOcean >= 2 && point.distanceToEdge >= 2 && TFCLayers.hasLake(point.biome))
         {
-            point.biome = TFCLayers.lakeFor(point.biome);
-            point.rainfall += 0.09f * (500f - point.rainfall); // Small, localized rainfall increase around lakes of ~45mm max
+            final int biome = TFCLayers.lakeFor(point.biome);
+            // Meltwater lake surface builder creates artifacts when
+            if (biome == TFCLayers.MELTWATER_LAKE)
+            {
+                final int index = point.index;
+                // Safe because lakes are not placed near edges of cells
+                if (TFCLayers.safeMeltwaterLakeBorder(region.atOffset(index, -1, 0).biome)
+                    && TFCLayers.safeMeltwaterLakeBorder(region.atOffset(index, 0, -1).biome)
+                    && TFCLayers.safeMeltwaterLakeBorder(region.atOffset(index, 1, 0).biome)
+                    && TFCLayers.safeMeltwaterLakeBorder(region.atOffset(index, 0, 1).biome))
+                {
+                    point.biome = TFCLayers.lakeFor(point.biome);
+                    point.rainfall += 0.09f * (500f - point.rainfall); // Small, localized rainfall increase around lakes of ~45mm max
+                }
+            }
+            else
+            {
+                point.biome = TFCLayers.lakeFor(point.biome);
+                point.rainfall += 0.09f * (500f - point.rainfall); // Small, localized rainfall increase around lakes of ~45mm max
+            }
         }
     }
 

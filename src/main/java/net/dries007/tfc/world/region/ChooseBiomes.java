@@ -29,7 +29,7 @@ public enum ChooseBiomes implements RegionTask
     private static final int[][] PALEO_ICE_SHEET_ALTITUDE_BIOMES = {
         {PATTERNED_GROUND, PATTERNED_GROUND, KNOB_AND_KETTLE, KNOB_AND_KETTLE, KNOB_AND_KETTLE, DRUMLINS, TUYAS, LOWLANDS, LOWLANDS}, // Low
         {PATTERNED_GROUND, KNOB_AND_KETTLE, DRUMLINS, DRUMLINS, DRUMLINS, DRUMLINS, TUYAS, TUYAS}, // Mid
-        {DRUMLINS, DRUMLINS, DRUMLINS, BADLANDS, BADLANDS, CHANNELED_SCABLANDS, CHANNELED_SCABLANDS, CHANNELED_SCABLANDS, PLATEAU, ICE_SHEET_MOUNTAINS}, // High
+        {DRUMLINS, DRUMLINS, DRUMLINS, BADLANDS, BADLANDS, PLATEAU, PLATEAU, PLATEAU, PLATEAU, ICE_SHEET_MOUNTAINS}, // High
     };
     private static final int[] KNOB_AND_KETTLE_BIOMES = {KNOB_AND_KETTLE, PATTERNED_GROUND, PATTERNED_GROUND};
     private static final int[] ISLAND_BIOMES = {PLAINS, HILLS, ROLLING_HILLS, VOLCANIC_OCEANIC_MOUNTAINS, VOLCANIC_OCEANIC_MOUNTAINS};
@@ -39,7 +39,7 @@ public enum ChooseBiomes implements RegionTask
     @Override
     public void apply(RegionGenerator.Context context)
     {
-        // TODO: Instead of placing standard biomes, checking them, and replacing them, just place the correct ones in the first place by maintaining more of the above lists, and checking climate etc. while placing
+        // TODO: Add channeled scabland placement
         final Region region = context.region;
         final Area blobArea = context.generator().biomeArea.get();
         final long rngSeed = context.random.nextLong();
@@ -88,7 +88,7 @@ public enum ChooseBiomes implements RegionTask
                     {
                         point.biome = GLACIATED_MOUNTAINS;
                     }
-                    else if (temp < maxIceSheetTemp + 12) // TODO: Tweak numbers, random chance of mountains this far south not being glacially carved?
+                    else if (temp < maxIceSheetTemp + 10) // TODO: Tweak numbers, random chance of mountains this far south not being glacially carved?
                     {
                         point.biome = GLACIALLY_CARVED_MOUNTAINS;
                     }
@@ -118,10 +118,6 @@ public enum ChooseBiomes implements RegionTask
                 else if (temp < maxIceSheetTemp + 6) // TODO: Tweak numbers
                 {
                     point.biome = randomSeededFrom(rngSeed, areaSeed, PALEO_ICE_SHEET_ALTITUDE_BIOMES[point.discreteBiomeAltitude()]);
-                }
-                else if (temp < maxIceSheetTemp + 8 && point.discreteBiomeAltitude() == 2) // TODO: Tweak numbers
-                {
-                    point.biome = CHANNELED_SCABLANDS;
                 }
                 else
                 {
@@ -185,8 +181,7 @@ public enum ChooseBiomes implements RegionTask
             }
 
             // Special Biome Glaciation
-            // TODO: Balance values, should be similar to MOUNTAIN glaciation
-            final float maxIceSheetTemp = -10f + 0.006f * rainfall;
+            final float maxIceSheetTemp = -14f + 0.006f * rainfall;
             if (point.land() && temperature < maxIceSheetTemp)
             {
                 final int biome = point.biome;

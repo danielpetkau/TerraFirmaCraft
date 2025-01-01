@@ -284,7 +284,22 @@ public class TFCLayers
     public static boolean hasLake(int value)
     {
         return (!isOcean(value) && value != BADLANDS && value != ACTIVE_SHIELD_VOLCANO && value != DORMANT_SHIELD_VOLCANO
-            && value != EXTINCT_SHIELD_VOLCANO && value != ANCIENT_SHIELD_VOLCANO);
+            && value != EXTINCT_SHIELD_VOLCANO && value != ANCIENT_SHIELD_VOLCANO && value != ICE_SHEET_MOUNTAINS
+            && value != ICE_SHEET_MOUNTAINS_EDGE && value != ICE_SHEET_OCEANIC_MOUNTAINS && value != ICE_SHEET_OCEANIC_MOUNTAINS_EDGE
+            && value != ICE_SHEET_SHIELD_VOLCANO && value != ICE_SHEET_SHORE && value != GLACIATED_SHIELD_VOLCANO
+            && value != GLACIATED_MOUNTAINS && value != GLACIATED_OCEANIC_MOUNTAINS && value != GLACIALLY_CARVED_MOUNTAINS
+            && value != GLACIALLY_CARVED_OCEANIC_MOUNTAINS);
+    }
+
+    // Only checks biomes that are expected to be near meltwater lakes
+    public static boolean safeMeltwaterLakeBorder(int value)
+    {
+        return (value != ICE_SHEET_MOUNTAINS && value != ICE_SHEET_MOUNTAINS_EDGE && value != ICE_SHEET_OCEANIC_MOUNTAINS
+            && value != ICE_SHEET_OCEANIC_MOUNTAINS_EDGE && value != CHANNELED_SCABLANDS && value != DRUMLINS && value != TUYAS
+            && value != ICE_SHEET_SHIELD_VOLCANO && value != ICE_SHEET_SHORE && value != GLACIATED_SHIELD_VOLCANO
+            && value != GLACIATED_MOUNTAINS && value != GLACIATED_OCEANIC_MOUNTAINS && value != GLACIALLY_CARVED_MOUNTAINS
+            && value != GLACIALLY_CARVED_OCEANIC_MOUNTAINS && value != BADLANDS && value != PLATEAU && value != INVERTED_BADLANDS
+            && value != BURREN_BADLANDS && value != BURREN_BADLANDS_TALL && value != BURREN_PLATEAU && value != BURREN_ROCHE_MOUTONEE);
     }
 
     public static int lakeFor(int value)
@@ -316,19 +331,6 @@ public class TFCLayers
         if (isFlatIceSheet(value))
         {
             return SUBGLACIAL_LAKE;
-        }
-        // No lakes for ice sheet mountain biomes
-        if (value == ICE_SHEET_MOUNTAINS)
-        {
-            return ICE_SHEET_MOUNTAINS;
-        }
-        if (value == ICE_SHEET_OCEANIC_MOUNTAINS)
-        {
-            return ICE_SHEET_OCEANIC_MOUNTAINS;
-        }
-        if (value == ICE_SHEET_SHIELD_VOLCANO)
-        {
-            return ICE_SHEET_SHIELD_VOLCANO;
         }
         if (value == ICE_SHEET_EDGE)
         {
