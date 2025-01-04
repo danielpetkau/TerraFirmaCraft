@@ -87,6 +87,15 @@ public enum IceSheetEdgeLayer implements AdjacentTransformLayer
             }
         }
 
+        // Prevent borders between ice sheet oceanic mountain edges that could cause icy-cliffs
+        if (center == PLATEAU || center == BADLANDS || center == BURREN_BADLANDS || center == BURREN_BADLANDS_TALL)
+        {
+            if (matcher.test(i -> i == ICE_SHEET_OCEANIC_MOUNTAINS_EDGE))
+            {
+                return GLACIATED_OCEANIC_MOUNTAINS;
+            }
+        }
+
         return center;
     }
 

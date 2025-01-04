@@ -257,13 +257,14 @@ public interface Noise2D
     default Noise2D cliffMap(Noise2D compare, Noise2D addend)
     {
         return (x, z) -> {
-            if (Noise2D.this.noise(x, z) > compare.noise(x, z))
+            final double noise = Noise2D.this.noise(x, z);
+            if (noise > compare.noise(x, z))
             {
-                return Noise2D.this.noise(x, z) + addend.noise(x, z);
+                return noise + addend.noise(x, z);
             }
             else
             {
-                return Noise2D.this.noise(x, z);
+                return noise;
             }
         };
     }
