@@ -96,7 +96,7 @@ public enum IceSheetEdgeLayer implements AdjacentTransformLayer
         }
 
         // Prevent borders between ice sheet oceanic mountain edges that could cause icy-cliffs
-        if (center == PLATEAU || center == BADLANDS || center == BURREN_BADLANDS || center == BURREN_BADLANDS_TALL)
+        if (center == PLATEAU || center == BADLANDS || center == BURREN_BADLANDS || center == BURREN_BADLANDS_TALL || center == GLACIATED_SHIELD_VOLCANO)
         {
             if (matcher.test(i -> i == ICE_SHEET_OCEANIC_MOUNTAINS_EDGE))
             {
@@ -105,7 +105,7 @@ public enum IceSheetEdgeLayer implements AdjacentTransformLayer
         }
 
         // Similar to above, tall ice sheets can create icy cliffs at edges of moraines
-        if (center == ICE_SHEET || center == ICE_SHEET_TUYAS)
+        if (center == ICE_SHEET || center == ICE_SHEET_TUYAS || center == ICE_SHEET_SHIELD_VOLCANO)
         {
             if (matcher.test(i -> i == ICE_SHEET_OCEANIC_MOUNTAINS_EDGE))
             {

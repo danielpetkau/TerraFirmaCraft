@@ -201,13 +201,12 @@ public class TFCLayers
         // Grid scale
 
         mainLayer = RegionEdgeBiomeLayer.INSTANCE.apply(random.nextLong(), mainLayer);
-        mainLayer = IceSheetEdgeLayer.INSTANCE.apply(random.nextLong(), mainLayer);
         mainLayer = ZoomLayer.NORMAL.apply(random.nextLong(), mainLayer);
 
         // 4x4 Chunk Scale
         mainLayer = ShoreLayer.INSTANCE.apply(random.nextLong(), mainLayer);
         mainLayer = MoreShoresLayer.INSTANCE.apply(random.nextLong(), mainLayer);
-        mainLayer = IceSheetEdgeLayer.INSTANCE.apply(random.nextLong(), mainLayer); // TODO: Do we really want to call this twice?
+        mainLayer = IceSheetEdgeLayer.INSTANCE.apply(random.nextLong(), mainLayer);
         mainLayer = ZoomLayer.NORMAL.apply(random.nextLong(), mainLayer);
         mainLayer = ZoomLayer.NORMAL.apply(random.nextLong(), mainLayer);
 

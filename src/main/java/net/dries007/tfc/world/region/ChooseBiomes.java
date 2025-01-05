@@ -56,18 +56,17 @@ public enum ChooseBiomes implements RegionTask
                 final float temp = point.temperature;
                 if (point.coastalMountain())
                 {
-                    // TODO: Balance values, based on -17 being the year-round-freeze avg temp
-                    // Different temperature limits used because biomes at at different elevations
+                    // Different temperature limits used because biomes at different elevations
                     final float maxIceSheetTemp = -16f + 0.006f * point.rainfall;
                     if (temp < maxIceSheetTemp + 2)
                     {
                         point.biome = ICE_SHEET_OCEANIC_MOUNTAINS;
                     }
-                    else if (temp < maxIceSheetTemp + 6) // TODO: Tweak numbers
+                    else if (temp < maxIceSheetTemp + 6) //
                     {
                         point.biome = GLACIATED_OCEANIC_MOUNTAINS;
                     }
-                    else if (temp < maxIceSheetTemp + 10) // TODO: Tweak numbers, random chance of mountains this far south not being glacially carved?
+                    else if (temp < maxIceSheetTemp + 10) //
                     {
                         point.biome = GLACIALLY_CARVED_OCEANIC_MOUNTAINS;
                     }
@@ -83,11 +82,11 @@ public enum ChooseBiomes implements RegionTask
                     {
                         point.biome = ICE_SHEET_MOUNTAINS;
                     }
-                    else if (temp < maxIceSheetTemp + 4) // TODO: Tweak numbers
+                    else if (temp < maxIceSheetTemp + 4)
                     {
                         point.biome = GLACIATED_MOUNTAINS;
                     }
-                    else if (temp < maxIceSheetTemp + 10) // TODO: Tweak numbers, random chance of mountains this far south not being glacially carved?
+                    else if (temp < maxIceSheetTemp + 10)
                     {
                         point.biome = GLACIALLY_CARVED_MOUNTAINS;
                     }
@@ -99,7 +98,6 @@ public enum ChooseBiomes implements RegionTask
             }
             else if (point.land())
             {
-                // TODO: Balance values
                 final float maxIceSheetTemp = -17f + 0.006f * point.rainfall;
                 final float temp = point.temperature;
                 if (temp < maxIceSheetTemp)
@@ -114,7 +112,7 @@ public enum ChooseBiomes implements RegionTask
                 {
                     point.biome = randomSeededFrom(rngSeed, areaSeed, KNOB_AND_KETTLE_BIOMES);
                 }
-                else if (temp < maxIceSheetTemp + 6) // TODO: Tweak numbers
+                else if (temp < maxIceSheetTemp + 6)
                 {
                     point.biome = randomSeededFrom(rngSeed, areaSeed, PALEO_ICE_SHEET_ALTITUDE_BIOMES[point.discreteBiomeAltitude()]);
                 }

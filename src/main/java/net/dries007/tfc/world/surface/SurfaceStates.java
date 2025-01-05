@@ -42,10 +42,6 @@ public final class SurfaceStates
         context.getRock().cobble().defaultBlockState() : context.getRock().gravel().defaultBlockState();
     public static final SurfaceState SAND_AND_GRAVEL = context -> (Helpers.hash(728275914L, context.pos()) & 127) > 48 ?
         context.getRock().sand().defaultBlockState() : context.getRock().gravel().defaultBlockState();
-    //TODO:
-//    public static final SurfaceState PACKED_ICE = context -> Blocks.LIGHT_BLUE_STAINED_GLASS.defaultBlockState();
-//    public static final SurfaceState BLUE_ICE = context -> Blocks.BLUE_STAINED_GLASS.defaultBlockState();
-//    public static final SurfaceState SNOW = context -> Blocks.WHITE_STAINED_GLASS.defaultBlockState();
 
     public static final SurfaceState PACKED_ICE = context -> Blocks.PACKED_ICE.defaultBlockState();
     public static final SurfaceState BLUE_ICE = context -> Blocks.BLUE_ICE.defaultBlockState();

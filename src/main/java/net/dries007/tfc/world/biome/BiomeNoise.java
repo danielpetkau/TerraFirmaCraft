@@ -67,7 +67,7 @@ public final class BiomeNoise
      * Creates a variant of badlands with stacked pillar like structures, as opposed to relief carved.
      * Inspired by imagery of Bryce Canyon, Utah.
      */
-    public static Noise2D bryceCanyon(long seed) // TODO: consider hooking up to global connected canyon noise systems
+    public static Noise2D bryceCanyon(long seed)
     {
         final Random generator = new Random(seed);
 
@@ -308,7 +308,7 @@ public final class BiomeNoise
             }
             else
             {
-                return f2f1 < 0.12 ? SEA_LEVEL_Y - 1 : f2f1 < 0.18 ? SEA_LEVEL_Y - 2 : SEA_LEVEL_Y - 3;
+                return f2f1 < 0.12 ? SEA_LEVEL_Y - 1 : f2f1 < 0.22 ? SEA_LEVEL_Y - 2 : SEA_LEVEL_Y - 3;
             }
         };
     }

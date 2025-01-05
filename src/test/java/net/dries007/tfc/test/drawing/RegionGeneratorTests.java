@@ -273,7 +273,7 @@ public class RegionGeneratorTests implements TestSetup
 
         if (biome == ICE_SHEET_EDGE || biome == ICE_SHEET_SHORE) return new Color(165, 165, 165);
 
-        if (biome == PATTERNED_GROUND || biome == INVERTED_PATTERNED_GROUND) return new Color(135, 135, 135);
+        if (biome == PATTERNED_GROUND || biome == INVERTED_PATTERNED_GROUND || biome == STONE_CIRCLES) return new Color(135, 135, 135);
         if (biome == KNOB_AND_KETTLE) return new Color(115, 115, 115);
         if (biome == DRUMLINS || biome == BURREN_ROCHE_MOUTONEE) return new Color(135, 165, 135);
         if (biome == TUYAS) return new Color(115, 145, 115);
@@ -349,6 +349,7 @@ public class RegionGeneratorTests implements TestSetup
 
         if (biome == ICE_SHEET_EDGE || biome == ICE_SHEET_SHORE || biome == ICE_SHEET_TUYAS_EDGE) return new Color(165, 165, 165);
 
+        if (biome == STONE_CIRCLES) return new Color(255, 235, 140);
         if (biome == PATTERNED_GROUND) return new Color(255, 215, 110);
         if (biome == INVERTED_PATTERNED_GROUND) return new Color(255, 195, 100);
         if (biome == KNOB_AND_KETTLE) return new Color(235, 175, 80);
@@ -389,7 +390,7 @@ public class RegionGeneratorTests implements TestSetup
         if (biome == SALT_FLATS) return new Color(190, 250, 190);
         if (biome == MUD_FLATS) return new Color(150, 200, 130);
         if (biome == PLAINS || biome == BURREN_PLAINS || biome == TOWER_KARST_PLAINS || biome == DOLINE_PLAINS || biome == CENOTE_PLAINS
-            || biome == SHILIN_PLAINS || biome == PATTERNED_GROUND || biome == KNOB_AND_KETTLE) return new Color(110, 190, 110);
+            || biome == SHILIN_PLAINS || biome == PATTERNED_GROUND || biome == INVERTED_PATTERNED_GROUND || biome == STONE_CIRCLES || biome == KNOB_AND_KETTLE) return new Color(110, 190, 110);
 
         // Hills
         if (biome == HILLS || biome == SHILIN_HILLS || biome == TOWER_KARST_HILLS || biome == DOLINE_HILLS || biome == CENOTE_HILLS) return new Color(80, 130, 90);
@@ -418,8 +419,10 @@ public class RegionGeneratorTests implements TestSetup
 
         // Ice Sheets - Ice sheet influenced biomes are distributed among other biomes in this view
         if (biome == ICE_SHEET || biome == ICE_SHEET_TUYAS) return new Color(255, 255, 255);
-        if (biome == ICE_SHEET_MOUNTAINS || biome == ICE_SHEET_SHIELD_VOLCANO
-            || biome == GLACIATED_MOUNTAINS) return new Color(250, 160, 250);
+        if (biome == ICE_SHEET_MOUNTAINS || biome == ICE_SHEET_MOUNTAINS_EDGE || biome == ICE_SHEET_SHIELD_VOLCANO || biome == GLACIATED_SHIELD_VOLCANO
+            || biome == GLACIATED_MOUNTAINS || biome == GLACIALLY_CARVED_MOUNTAINS) return new Color(250, 160, 250);
+        if (biome == ICE_SHEET_OCEANIC_MOUNTAINS || biome == ICE_SHEET_OCEANIC_MOUNTAINS_EDGE
+            || biome == GLACIATED_OCEANIC_MOUNTAINS || biome == GLACIALLY_CARVED_OCEANIC_MOUNTAINS) return new Color(250, 180, 250);
         if (biome == ICE_SHEET_EDGE) return new Color(185, 185, 185);
 
         return Color.BLACK;
