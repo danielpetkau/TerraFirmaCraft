@@ -269,26 +269,6 @@ public interface Noise2D
         };
     }
 
-    /**
-     * Used to generate varying-height cliffs starting at various noise values
-     * @param compare value above which cliffs should be added
-     * @param addend cliff height noise
-     * @param scale how much to scale this noise by if cliffs are added
-     */
-    default Noise2D fenglinCliffMap(Noise2D compare, Noise2D addend, Noise2D scale)
-    {
-        return (x, z) -> {
-            if (Noise2D.this.noise(x, z) > compare.noise(x, z))
-            {
-                return Noise2D.this.lazyProduct(scale).noise(x, z) + addend.noise(x, z);
-            }
-            else
-            {
-                return Noise2D.this.noise(x, z);
-            }
-        };
-    }
-
     default Noise2D stretchZ(double stretch)
     {
         return (x, z) -> this.noise(x, z / stretch);

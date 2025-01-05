@@ -156,6 +156,7 @@ import net.dries007.tfc.common.component.Bowl;
 import net.dries007.tfc.common.component.TFCComponents;
 import net.dries007.tfc.common.component.food.FoodCapability;
 import net.dries007.tfc.common.component.forge.ForgingBonus;
+import net.dries007.tfc.common.component.forge.ForgingBonusComponent;
 import net.dries007.tfc.common.component.glass.GlassWorking;
 import net.dries007.tfc.common.component.heat.HeatCapability;
 import net.dries007.tfc.common.component.heat.IHeat;
@@ -381,7 +382,7 @@ public final class ForgeEventHandler
     public static void onBreakSpeed(PlayerEvent.BreakSpeed event)
     {
         // Apply mining speed modifiers from forging bonuses
-        final ForgingBonus bonus = ForgingBonus.get(event.getEntity().getMainHandItem());
+        final ForgingBonus bonus = ForgingBonusComponent.get(event.getEntity().getMainHandItem());
         if (bonus != ForgingBonus.NONE)
         {
             event.setNewSpeed(event.getNewSpeed() * bonus.efficiency());
@@ -820,7 +821,7 @@ public final class ForgeEventHandler
         final Entity attackerEntity = event.getSource().getEntity();
         if (attackerEntity instanceof LivingEntity livingEntity)
         {
-            amount *= ForgingBonus.get(livingEntity.getMainHandItem()).damage();
+            amount *= ForgingBonusComponent.get(livingEntity.getMainHandItem()).damage();
         }
 
         // Physical Damage Type Modifiers
@@ -1146,11 +1147,12 @@ public final class ForgeEventHandler
 
     public static void onServerChat(ServerChatEvent event)
     {
-        // Apply intoxication after six hours
-        final long intoxicatedTicks = IPlayerInfo.get(event.getPlayer()).getIntoxication() - 6 * ICalendar.TICKS_IN_HOUR;
-        if (intoxicatedTicks > 0)
+        // Apply intoxication effects at >20% intoxication
+        final float intoxicationChance = Mth.clampedMap(
+            IPlayerInfo.get(event.getPlayer()).getIntoxication(),
+            0.2f, 1f, 0f, 0.7f);
+        if (intoxicationChance > 0)
         {
-            final float intoxicationChance = Mth.clamp((float) (intoxicatedTicks - 6 * ICalendar.TICKS_IN_HOUR) / PlayerInfo.MAX_INTOXICATED_TICKS, 0, 0.7f);
             final RandomSource random = event.getPlayer().getRandom();
             final String originalMessage = event.getMessage().getString();
             final String[] words = originalMessage.split(" ");
@@ -1208,7 +1210,7 @@ public final class ForgeEventHandler
             if (state.getBlock() instanceof TFCLecternBlock && LecternBlock.tryPlaceBook(event.getEntity(), level, event.getPos(), state, stack))
             {
                 event.setCanceled(true);
-                event.setCancellationResult(InteractionResult.SUCCESS);
+                event.setCancellationResult(InteractionResult.sidedSuccess(level.isClientSide));
             }
         }
 
@@ -1294,8 +1296,8 @@ public final class ForgeEventHandler
         if (event.getHand() == InteractionHand.MAIN_HAND && event.getItemStack().isEmpty())
         {
             // Cannot be cancelled, only fired on client.
-            InteractionResult result = Drinkable.attemptDrink(event.getLevel(), event.getEntity(), false);
-            if (result == InteractionResult.SUCCESS)
+            final InteractionResult result = Drinkable.attemptDrink(event.getLevel(), event.getEntity(), false);
+            if (result.consumesAction())
             {
                 PacketDistributor.sendToServer(PlayerDrinkPacket.PACKET);
             }
@@ -1418,7 +1420,7 @@ public final class ForgeEventHandler
                     oldCart.discard();
                     player.level().addFreshEntity(minecart);
                 }
-                event.setCancellationResult(InteractionResult.SUCCESS);
+                event.setCancellationResult(InteractionResult.sidedSuccess(player.level().isClientSide));
             }
         }
     }
