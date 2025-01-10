@@ -265,7 +265,7 @@ public class TFCLayers
         {
             return OLD_SHIELD_VOLCANO_SHORE;
         }
-        if (isFlatIceSheet(value)  || value == ICE_SHEET_EDGE || value == ICE_SHEET_OCEANIC)
+        if (isFlatIceSheet(value) || value == ICE_SHEET_EDGE || value == ICE_SHEET_OCEANIC)
         {
             return ICE_SHEET_SHORE;
         }

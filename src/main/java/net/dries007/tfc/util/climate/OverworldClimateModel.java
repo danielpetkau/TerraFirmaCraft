@@ -385,6 +385,7 @@ public class OverworldClimateModel implements ClimateModel
 
     /**
      * Calculates the daily variation temperature at a given time. Influenced by both random variation day by day, and the time of day.
+     *
      * @return A value in the range {@code [-4.0, 4.0]}
      */
     protected float calculateDailyTemperature(long calendarTime)

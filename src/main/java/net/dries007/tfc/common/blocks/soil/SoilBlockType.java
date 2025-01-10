@@ -42,8 +42,7 @@ public enum SoilBlockType
     SALTED_EARTH((self, variant) -> new Block(Block.Properties.of().mapColor(MapColor.SNOW).sound(SoundType.PACKED_MUD).strength(2.3f).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops())),
     MUD_BRICKS((self, variant) -> new Block(BlockBehaviour.Properties.of().mapColor(MapColor.DIRT).sound(SoundType.MUD_BRICKS).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(2.6f))),
     DRYING_BRICKS((self, variant) -> new DryingBricksBlock(ExtendedProperties.of(MapColor.DIRT).noCollission().noOcclusion().instabreak().sound(SoundType.STEM).randomTicks().blockEntity(TFCBlockEntities.TICK_COUNTER), variant.mudBrick())),
-    MUDDY_ROOTS((self, variant) -> new RotatedPillarBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.MUDDY_MANGROVE_ROOTS).strength(4f)))
-    ;
+    MUDDY_ROOTS((self, variant) -> new RotatedPillarBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.MUDDY_MANGROVE_ROOTS).strength(4f)));
 
     public static final SoilBlockType[] VALUES = values();
 
@@ -70,15 +69,15 @@ public enum SoilBlockType
     private SoilBlockType transform()
     {
         return switch (this)
-            {
-                case DIRT -> GRASS;
-                case GRASS, GRASS_PATH, FARMLAND, ROOTED_DIRT, MUD, MUD_BRICKS, DRYING_BRICKS, MUDDY_ROOTS -> DIRT;
-                case CLAY -> CLAY_GRASS;
-                case CLAY_GRASS -> CLAY;
-                case CRACKED_EARTH -> CRACKED_EARTH;
-                case SALTED_EARTH -> SALTED_EARTH;
-                case COARSE_DIRT -> COARSE_DIRT;
-            };
+        {
+            case DIRT -> GRASS;
+            case GRASS, GRASS_PATH, FARMLAND, ROOTED_DIRT, MUD, MUD_BRICKS, DRYING_BRICKS, MUDDY_ROOTS -> DIRT;
+            case CLAY -> CLAY_GRASS;
+            case CLAY_GRASS -> CLAY;
+            case CRACKED_EARTH -> CRACKED_EARTH;
+            case SALTED_EARTH -> SALTED_EARTH;
+            case COARSE_DIRT -> COARSE_DIRT;
+        };
     }
 
     public enum Variant implements RegistrySoilVariant
@@ -105,12 +104,12 @@ public enum SoilBlockType
         public TFCItems.ItemId mudBrick()
         {
             return switch (this)
-                {
-                    case SILT -> TFCItems.SILT_MUD_BRICK;
-                    case LOAM -> TFCItems.LOAM_MUD_BRICK;
-                    case SANDY_LOAM -> TFCItems.SANDY_LOAM_MUD_BRICK;
-                    case SILTY_LOAM -> TFCItems.SILTY_LOAM_MUD_BRICK;
-                };
+            {
+                case SILT -> TFCItems.SILT_MUD_BRICK;
+                case LOAM -> TFCItems.LOAM_MUD_BRICK;
+                case SANDY_LOAM -> TFCItems.SANDY_LOAM_MUD_BRICK;
+                case SILTY_LOAM -> TFCItems.SILTY_LOAM_MUD_BRICK;
+            };
         }
     }
 }

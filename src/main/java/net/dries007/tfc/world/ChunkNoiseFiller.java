@@ -525,7 +525,7 @@ public class ChunkNoiseFiller extends ChunkHeightFiller
     }
 
     /**
-     * @param y The y position
+     * @param y                The y position
      * @param heightNoiseValue The calculated average height noise, from {@link BiomeNoiseSampler#height()}
      * @return The density noise for the given y position, where positive noise is solid, in the range [0, 1]
      */

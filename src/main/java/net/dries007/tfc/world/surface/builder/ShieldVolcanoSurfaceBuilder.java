@@ -175,7 +175,7 @@ public class ShieldVolcanoSurfaceBuilder implements SurfaceBuilder
                         if (firstLayer)
                         {
                             firstLayer = false;
-                            surfaceDepth = context.calculateAltitudeSlopeSurfaceDepth(surfaceY,  0);
+                            surfaceDepth = context.calculateAltitudeSlopeSurfaceDepth(surfaceY, 0);
                             if (underwaterLayer)
                             {
                                 surfaceState = underState;

@@ -653,7 +653,9 @@ public class BuiltinBlockTags extends TagsProvider<Block> implements Accessors
             return add(Arrays.stream(blocks));
         }
 
-        /** Adds every TFC-added block matching the given predicate */
+        /**
+         * Adds every TFC-added block matching the given predicate
+         */
         BlockTagAppender addEveryTFC(Predicate<Block> predicate)
         {
             return add(TFCBlocks.BLOCKS.getEntries().stream().filter(e -> predicate.test(e.get())));
@@ -702,7 +704,7 @@ public class BuiltinBlockTags extends TagsProvider<Block> implements Accessors
 
         <T, V extends IdHolder<? extends Block>> BlockTagAppender addOnly(Map<T, V> blocks, Predicate<T> key)
         {
-            blocks.forEach((k, v) -> { if (key.test(k)) add(v); });
+            blocks.forEach((k, v) -> {if (key.test(k)) add(v);});
             return this;
         }
 

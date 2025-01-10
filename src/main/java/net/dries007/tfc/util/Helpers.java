@@ -210,6 +210,7 @@ public final class Helpers
 
     /**
      * Creates a map of each enum constant to the value as provided by the value mapper.
+     *
      * @return A {@code Map<E, V>}, with consistent iteration order.
      */
     public static <E extends Enum<E>, V> Map<E, V> mapOf(Class<E> enumClass, Function<E, V> valueMapper)
@@ -219,6 +220,7 @@ public final class Helpers
 
     /**
      * Creates a map of each enum constant to the value as provided by the value mapper, only using enum constants that match the provided predicate.
+     *
      * @return A {@code Map<E, V>}, with consistent iteration order.
      */
     public static <E extends Enum<E>, V> Map<E, V> mapOf(Class<E> enumClass, Predicate<E> keyPredicate, Function<E, V> valueMapper)
@@ -473,6 +475,7 @@ public final class Helpers
     /**
      * Damages {@code stack} without a level present. Note that this <strong>is not correct!</strong> as it doesn't account for enchantments,
      * but in this case it is the closest approximation we can do.
+     *
      * @deprecated Prefer using any other overload than this
      */
     @Deprecated
@@ -813,6 +816,7 @@ public final class Helpers
     /**
      * Inserts one item of the provided {@code stack} to the inventory of the block entity {@code entity}. Note that this method
      * will not modify the input stack or consume another item!
+     *
      * @return {@code true} if the insertion was successful
      */
     public static boolean insertOne(InventoryBlockEntity<?> entity, ItemStack stack)
@@ -930,6 +934,7 @@ public final class Helpers
 
     /**
      * Plays the standard sound that is used when a block of a given state is placed.
+     *
      * @param state The state corresponding to the block or sound type that was placed.
      */
     public static void playPlaceSound(@Nullable Player player, LevelAccessor level, BlockPos pos, BlockState state)
@@ -939,6 +944,7 @@ public final class Helpers
 
     /**
      * Plays the standard sound that is used when a block of a given sound type is placed.
+     *
      * @param player The player which is ignored on server, but plays for on client. This should either be invoked on server with {@code null}, or
      *               invoked on both sides with the same {@code player}.
      * @implNote The exact volume and pitch are copied from the sound in {@link BlockItem#place}.
@@ -1051,6 +1057,7 @@ public final class Helpers
      * Given a list containing {@code [a0, ... aN]} and an element {@code aN+1}, returns a new, immutable list containing {@code [a0, ... aN, aN+1]},
      * in the most efficient manner that we can manage (a single data copy). This takes advantage that {@link ImmutableList}, along with its
      * builder, will not create copies if the builder is sized perfectly.
+     *
      * @return A new list containing the same elements plus the element to be appended.
      */
     public static <T> List<T> immutableAdd(List<T> list, T element)
@@ -1069,6 +1076,7 @@ public final class Helpers
     /**
      * Given a list containing {@code [a0, ... aN]} and an element {@code ai}, returns a new, immutable list containing {@code [a0, ... ai-1
      * , ai+1, ... aN]} in the most efficient manner (a single data copy).
+     *
      * @return A new list containing one fewer element than the original list
      * @throws IndexOutOfBoundsException if
      */
@@ -1098,6 +1106,7 @@ public final class Helpers
      * Creates a new immutable list containing {@code n} new, separate instances of {@code T} produced by the given {@code factory}. This is unlike
      * {@link Collections#nCopies(int, Object)} in that it produces separate instance, and consumes memory proportional to O(n). However, in
      * the event the underlying elements are interior mutable, this creates a safe to modify list.
+     *
      * @see Collections#nCopies(int, Object)
      */
     public static <T> List<T> immutableCopies(int n, Supplier<T> factory)
@@ -1127,6 +1136,7 @@ public final class Helpers
 
     /**
      * Copies the contents of the inventory {@code inventory} into a list, clears the inventory, and returns the list.
+     *
      * @see #copyTo
      */
     public static List<ItemStack> copyToAndClear(IItemHandlerModifiable inventory)
@@ -1235,12 +1245,12 @@ public final class Helpers
      */
     public static float triangle(float amplitude, float midpoint, float frequency, float value)
     {
-        return midpoint + amplitude * (Math.abs( 4f * frequency * value + 1f - 4f * Mth.floor(frequency * value + 0.75f)) - 1f);
+        return midpoint + amplitude * (Math.abs(4f * frequency * value + 1f - 4f * Mth.floor(frequency * value + 0.75f)) - 1f);
     }
 
     public static double triangle(double amplitude, double midpoint, double frequency, double value)
     {
-        return midpoint + amplitude * (Math.abs( 4.0 * frequency * value + 1.0 - 4.0 * Mth.floor(frequency * value + 0.75)) - 1.0);
+        return midpoint + amplitude * (Math.abs(4.0 * frequency * value + 1.0 - 4.0 * Mth.floor(frequency * value + 0.75)) - 1.0);
     }
 
     /**

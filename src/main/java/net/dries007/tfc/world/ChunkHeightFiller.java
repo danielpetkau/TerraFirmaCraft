@@ -231,6 +231,7 @@ public class ChunkHeightFiller
     /**
      * Adjusts {@link #riverBlendWeights} to bias towards river caves, creating sharper cutoffs and preventing caves
      * from pinching off rivers.
+     *
      * @return The initial weight of the river cave type.
      */
     private double adjustWeightsForRiverCaves()

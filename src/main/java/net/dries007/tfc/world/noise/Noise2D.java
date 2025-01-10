@@ -131,65 +131,6 @@ public interface Noise2D
     }
 
     /**
-     * A domain-warp designed to warp the location of noise peaks without distorting their shapes
-     * From an input value, procedurally determines a displacement vector
-     *
-     * @param warp              noise map to generate offsets from, designed to be used with a cellular hash map
-     * @param velocityScale     first-order distance scaling
-     * @param accelScale        second-order distance scaling
-     * @return this noise function, with a cellular domain warp effect
-     */
-    default Noise2D hotSpotWarp(Noise2D warp, int velocityScale, double accelScale)
-    {
-        return (x, z) -> {
-            // Random vector
-            final double ux = warp.noise(x, z);
-            // Random magnitude from pev vector by multiplying and taking modulo, random direction based on magnitude
-            final double uz = (Math.abs(ux * 16) % 1 > 0.5 ? 1 : -1) * (ux * 256) % 1;
-
-            // Increase magnitude of vector to ensure islands in the same chain don't generate on top of each other
-            final int sx = ux > 0 ? 1 : -1;
-            final int sz = uz > 0 ? 1 : -1;
-            final double vx = (ux + sx) * velocityScale;
-            final double vz = (uz + sz) * velocityScale;
-
-            // Perpendicular acceleration vector to create curved chains
-            final double ax = -(vz) * accelScale;
-            final double az = vx * accelScale;
-
-            return Noise2D.this.noise(x + vx + ax, z + vz + az);
-        };
-    }
-
-    default Noise2D mapAges(Noise2D young, Noise2D old, Noise2D oldest)
-    {
-        return (x, z) -> {
-            if (this.max(young).max(old).max(oldest).noise(x, z) <= -0.8)
-            {
-                return 0;
-            }
-            else if (this.noise(x, z) > young.noise(x, z) && this.noise(x, z) > old.noise(x, z) && this.noise(x, z) > oldest.noise(x, z))
-            {
-                return 1;
-            }
-            else if (young.noise(x, z) > this.noise(x, z) && young.noise(x, z) > old.noise(x, z) && young.noise(x, z) > oldest.noise(x, z))
-            {
-                return 2;
-            }
-            else if (old.noise(x, z) > young.noise(x, z) && old.noise(x, z) > this.noise(x, z) && old.noise(x, z) > oldest.noise(x, z))
-            {
-                return 3;
-            }
-            else if (oldest.noise(x, z) > young.noise(x, z) && oldest.noise(x, z) > old.noise(x, z) && oldest.noise(x, z) > this.noise(x, z))
-            {
-                return 4;
-            }
-            else
-                return 0;
-        };
-    }
-
-    /**
      * Creates clamped noise by cutting off values above or below a threshold
      *
      * @param min the minimum noise value
@@ -251,8 +192,9 @@ public interface Noise2D
 
     /**
      * Used to generate varying-height cliffs starting at various noise values
+     *
      * @param compare value above which cliffs should be added
-     * @param addend cliff height noise
+     * @param addend  cliff height noise
      */
     default Noise2D cliffMap(Noise2D compare, Noise2D addend)
     {

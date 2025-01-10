@@ -12,8 +12,8 @@ import net.dries007.tfc.world.surface.SurfaceStates;
 
 public class FlatsSurfaceBuilder implements SurfaceBuilder
 {
-    public static final SurfaceBuilderFactory MUDDY = seed -> new FlatsSurfaceBuilder(seed, SurfaceStates.DRY_MUD_BASE, SurfaceStates.DRY_MUD_BASE, SurfaceStates.MUD);
-    public static final SurfaceBuilderFactory SALTY = seed -> new FlatsSurfaceBuilder(seed, SurfaceStates.SALT_BASE, SurfaceStates.DRY_MUD_BASE, SurfaceStates.MUD);
+    public static final SurfaceBuilderFactory MUDDY = seed -> new FlatsSurfaceBuilder(seed, SurfaceStates.DRY_MUD, SurfaceStates.DRY_MUD, SurfaceStates.MUD);
+    public static final SurfaceBuilderFactory SALTY = seed -> new FlatsSurfaceBuilder(seed, SurfaceStates.SALTED_EARTH, SurfaceStates.DRY_MUD, SurfaceStates.MUD);
 
     private final SurfaceState top;
     private final SurfaceState mid;

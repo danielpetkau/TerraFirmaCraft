@@ -60,7 +60,7 @@ public enum AnnotateClimate implements RegionTask
 
             // Rain delta is adjusted so that rainfall increase scales with temperature increase
             final float rainDelta = Mth.clampedMap(point.temperature - oldTemp, -2f, 2f, 0f, 0.25f);
-            point.rainfall = Mth.lerp(rainDelta, point.rainfall, biasTargetRainfall);
+            point.rainfall = Math.clamp(Mth.lerp(rainDelta, point.rainfall, biasTargetRainfall), 0, 500);
 
             //  Reduce rainfall variance near cell borders
             final float edgeBiasScale = Mth.clampedMap(point.distanceToEdge, 0, 12, 1, 0);

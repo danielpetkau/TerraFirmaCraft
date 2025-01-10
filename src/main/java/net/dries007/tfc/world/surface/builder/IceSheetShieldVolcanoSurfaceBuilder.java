@@ -19,8 +19,8 @@ import static net.dries007.tfc.world.TFCChunkGenerator.*;
 
 public class IceSheetShieldVolcanoSurfaceBuilder implements SurfaceBuilder
 {
-    public static final SurfaceBuilderFactory ICE_SHEET = seed -> new IceSheetShieldVolcanoSurfaceBuilder(seed, BiomeNoise.glaciatedShieldVolcano(seed, BiomeNoise.hotSpotIntensity(seed)), BiomeNoise.iceSheetBaseLevel(seed).max(BiomeNoise.shieldVolcanoIceSheetSurface(seed, BiomeNoise.hotSpotIntensity(seed))), false, true, SEA_LEVEL_Y);
-    public static final SurfaceBuilderFactory GLACIATED = seed -> new IceSheetShieldVolcanoSurfaceBuilder(seed, BiomeNoise.glaciatedShieldVolcano(seed, BiomeNoise.hotSpotIntensity(seed)), BiomeNoise.iceSheetBaseLevel(seed).max(BiomeNoise.shieldVolcanoGlacierSurface(seed, BiomeNoise.hotSpotIntensity(seed))), false, true, SEA_LEVEL_Y + 30);
+    public static final SurfaceBuilderFactory ICE_SHEET = seed -> new IceSheetShieldVolcanoSurfaceBuilder(seed, BiomeNoise.glaciatedShieldVolcano(seed, BiomeNoise.hotSpotIntensity(seed)), BiomeNoise.iceSheetSurfaceHeight(seed).max(BiomeNoise.shieldVolcanoIceSheetSurface(seed, BiomeNoise.hotSpotIntensity(seed))), false, true, SEA_LEVEL_Y);
+    public static final SurfaceBuilderFactory GLACIATED = seed -> new IceSheetShieldVolcanoSurfaceBuilder(seed, BiomeNoise.glaciatedShieldVolcano(seed, BiomeNoise.hotSpotIntensity(seed)), BiomeNoise.iceSheetSurfaceHeight(seed).max(BiomeNoise.shieldVolcanoGlacierSurface(seed, BiomeNoise.hotSpotIntensity(seed))), false, true, SEA_LEVEL_Y + 30);
 
 
     private final long seed;
@@ -65,7 +65,8 @@ public class IceSheetShieldVolcanoSurfaceBuilder implements SurfaceBuilder
         {
             ShieldVolcanoSurfaceBuilder.DORMANT.apply(seed).buildSurface(context, startY, endY);
         }
-        else {
+        else
+        {
             int surfaceDepth = -1;
             int surfaceY = 0;
 

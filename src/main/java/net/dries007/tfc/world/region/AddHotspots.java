@@ -33,8 +33,8 @@ public enum AddHotspots implements RegionTask
         // If a location reaches a value of at least exceeding a threshold value, a hot spot is placed in the region
         for (final var point : region.points())
         {
-             final Cellular2D.Cell cell = plateRegions.cell(point.x, point.z);
-             final double edgeDist = Math.abs(cell.f1() - cell.f2());
+            final Cellular2D.Cell cell = plateRegions.cell(point.x, point.z);
+            final double edgeDist = Math.abs(cell.f1() - cell.f2());
 
             double val = hotspotIntensity.noise(shift(point.x), shift(point.z));
             if (val > threshold && edgeDist > 0.05)
@@ -73,7 +73,7 @@ public enum AddHotspots implements RegionTask
                                     next.setLand();
                             }
                             // This adds an extra layer outside where the hotspot exceeds the threshold as a buffer against oceans
-                            else if (!next.land() && intensityNoise.noise(shift(next.x) - dx, shift(next.z) - dz ) > expansionThreshold)
+                            else if (!next.land() && intensityNoise.noise(shift(next.x) - dx, shift(next.z) - dz) > expansionThreshold)
                             {
                                 // Do not set land on the outer layer
                                 next.hotSpotAge = lastAge;

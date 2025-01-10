@@ -26,7 +26,7 @@ public final class BiomeNoise
 {
 
     /**
-     * Basic noise map used by several biomes with connected ridge-noise valleys
+     * Signed version f connected valley noise, usable for creating asymmetrical features in valleys
      */
     public static Noise2D connectedValleyBaseNoise(long seed)
     {
@@ -34,9 +34,9 @@ public final class BiomeNoise
     }
 
     /**
-     * Ridge-noise form of connectedValleyBaseNoise
+     * Basic noise map used by several biomes with connected ridge-noise valleys
      */
-    public static Noise2D connectedValleyAbsNoise(long seed)
+    public static Noise2D connectedValleyNoise(long seed)
     {
         return connectedValleyBaseNoise(seed).abs();
     }
@@ -148,64 +148,81 @@ public final class BiomeNoise
     }
 
     /**
-     * Jointed surface of ice sheets/glaciers, considered by biome noise, not by surface builder
+     * Jointed surface of ice sheets/glaciers, should be added to biome noise, should not be included in surface builders
      */
-    public static Noise2D glacierTexture(long seed)
+    public static Noise2D glacialSurfaceTexture(long seed)
     {
         final Noise2D warp = new OpenSimplex2D(seed + 413L).spread(0.02).scaled(-12, 12);
         return (x, z) -> {
             final double yOfX = Math.min(Helpers.triangle(25, 18, 0.035, x + warp.noise(x, z)), 0.0);
+            // Reversed order of x, and z in the .noise() call is intentional here
             final double yOfZ = Math.min(Helpers.triangle(40, 30, 0.025, z + warp.noise(z, x)), 0.0);
             return Math.min(yOfX, yOfZ);
         };
-
-
     }
 
-    // Referenced from multiple locations
+    /**
+     * The standard height for the base of an ice sheet
+     */
     public static Noise2D glacialBase(long seed)
     {
         return knobAndKettle(seed).addConstant(1.5);
     }
 
+    /**
+     * The standard height for the base of an ice sheet in biomes near oceans
+     */
     public static Noise2D glacialOceanicBase(long seed)
     {
         return hills(seed, -12, -2);
     }
 
-    public static Noise2D iceSheetBaseLevel(long seed)
+    /**
+     * The standard height for the top of an ice sheet, without texturing
+     */
+    public static Noise2D iceSheetSurfaceHeight(long seed)
     {
         return BiomeNoise.hills(seed, 23, 38);
     }
 
-    public static Noise2D montaneIceSheetBaseLevel(long seed)
+    /**
+     * The standard height for the top of an ice sheet in mountainous biomes, without texturing
+     */
+    public static Noise2D montaneIceSheetSurfaceHeight(long seed)
     {
         return BiomeNoise.hills(seed, 40, 48);
     }
 
-    public static Noise2D oceanicIceSheetBaseLevel(long seed)
+    /**
+     * The standard height for the top of an ice sheet in oceanic biomes, without texturing
+     */
+    public static Noise2D oceanicIceSheetSurfaceHeight(long seed)
     {
         return BiomeNoise.hills(seed, 18, 26);
     }
 
-    public static Noise2D glacialCirquesIceSurface(long seed)
+    /**
+     * The standard height for the top of glaciers in glacial cirque biomes
+     * This function is at the correct height for oceanic glacial mountains. It is shifted up for standard glacial mountains
+     */
+    public static Noise2D glacialCirquesIceSurfaceHeight(long seed)
     {
-        return connectedValleyAbsNoise(seed)
+        return connectedValleyNoise(seed)
             .map(y ->
                 y < 0.38 ? -100 :
-                y < 0.43 ? Mth.map(y, 0.38, 0.43, -50, 0) :
-                    Mth.map(y, 0.43, 1, 0, 32))
+                    y < 0.43 ? Mth.map(y, 0.38, 0.43, -50, 0) :
+                        Mth.map(y, 0.43, 1, 0, 32))
             .add(BiomeNoise.hills(seed, 15, 23)
-            .add(BiomeNoise.glacialCirquesCliffsScale(seed)));
+                .add(BiomeNoise.glacialCirquesCliffsScale(seed)));
     }
 
     /**
-     * Should mirror the upper surface of {@link BiomeNoise#glacialCirquesIceSurface(long)}, but 3 blocks highers
+     * Should mirror the upper surface of {@link BiomeNoise#glacialCirquesIceSurfaceHeight(long)}, but 3 blocks highers
      * Reverses slope instead of plunging vertically at edges of glaciers to avoid creating cliffs that block the mouths of cirques
      */
     public static Noise2D glacialCirquesCliffsStartHeight(long seed)
     {
-        return connectedValleyAbsNoise(seed)
+        return connectedValleyNoise(seed)
             .map(y -> y < 0.43
                 ? Mth.map(y, 0, 0.43, 32, 0)
                 : Mth.map(y, 0.43, 1, 0, 32))
@@ -218,20 +235,23 @@ public final class BiomeNoise
 
     }
 
+    /**
+     * U-shaped valleys for glacial mountains
+     */
     public static Noise2D glacialValleyShapeNoise(long seed)
     {
         return connectedValleyBaseNoise(seed).map(y -> Math.min(6 * y * y, 0.75 + 0.25 * y)).add(new OpenSimplex2D(seed + 5287L).octaves(4).spread(0.06).scaled(-0.2, 0.2));
     }
 
     /**
-     * By default, this function is at the correct height for oceanic glacial mountains. It is shifted up for standard glacial mountains
+     * This function is at the correct height for oceanic glacial mountains. It is shifted up for standard glacial mountains
      */
     public static Noise2D glacialCirques(long seed)
     {
 
         // Noise for the large, continuous valleys
         final Noise2D shape = glacialValleyShapeNoise(seed);
-        final Noise2D shapeMap = connectedValleyAbsNoise(seed);
+        final Noise2D shapeMap = connectedValleyNoise(seed);
 
         // Glacial mountain noise is based on cellular noise. Cells are either bowl-shaped cirques, or cone-shaped horns
         final double cellScale = 0.010;
@@ -241,7 +261,7 @@ public final class BiomeNoise
 
         // Cliffs in valleys
         final Noise2D cliffScale = new OpenSimplex2D(seed + 785267L).spread(0.01).scaled(-12, 15).clamped(0, 10);
-        final Noise2D cliffStartHeight = oceanicIceSheetBaseLevel(seed).addConstant(-8);
+        final Noise2D cliffStartHeight = oceanicIceSheetSurfaceHeight(seed).addConstant(-8);
 
         final Noise2D cirques = (x, z) -> {
             Cellular2D.Cell cell = cells.cell(x, z);
@@ -271,27 +291,30 @@ public final class BiomeNoise
                 final double shapeAtPoint = shapeMap.noise(x, z);
                 final double valleyCloseness = Math.min(shapeAtPoint - shapeAtCenter, 0);
 
-                return y + Mth.clampedMap(f2f1,0, 0.1, 0, valleyCloseness);
+                return y + Mth.clampedMap(f2f1, 0, 0.1, 0, valleyCloseness);
             }
         };
         return cirques.scaled(0, 1, 12, 64).lazyProduct(shape).addConstant(SEA_LEVEL_Y - 15).cliffMap(cliffStartHeight, cliffScale).cliffMap(glacialCirquesCliffsStartHeight(seed), glacialCirquesCliffsScale(seed));
     }
 
-    // Polygonal incisions 1 block deep, mimics patterned ground caused by permafrost
+    /**
+     * Polygonal incisions 1 block deep to superimpose on terrain
+     * Inspired by polygonal ground due to frost action
+     */
     public static Noise2D patternedGround(long seed)
     {
         Cellular2D cells = new Cellular2D(seed, 0.25f).spread(0.05);
         return (x, z) -> {
             Cellular2D.Cell cell = cells.cell(x, z);
 
-            final double f1 = cell.f1();
-            final double f2 = cell.f2();
-
-            return f2 - f1 < 0.12 ? -1 : 0;
+            return cell.f2() - cell.f1() < 0.12 ? -1 : 0;
         };
     }
 
-    // Raised edge forms of patterned ground also form
+    /**
+     * Polygonal ridges 1 block high to superimpose on terrain
+     * Inspired by polygonal ground due to frost action
+     */
     public static Noise2D invertedPatternedGround(long seed)
     {
         final Noise2D base = BiomeNoise.hills(seed, -4, 3);
@@ -300,9 +323,7 @@ public final class BiomeNoise
         return (x, z) -> {
             final double height = base.noise(x, z);
             Cellular2D.Cell cell = cells.cell(x, z);
-            final double f1 = cell.f1();
-            final double f2 = cell.f2();
-            final double f2f1 = f2 - f1;
+            final double f2f1 = cell.f2() - cell.f1();
             if (height >= SEA_LEVEL_Y)
             {
                 return height + (f2f1 < 0.12 ? 1 : 0);
@@ -314,7 +335,9 @@ public final class BiomeNoise
         };
     }
 
-    // Simple f2 - f1 cellular noise
+    /**
+     * Simple f2 - f1 cellular noise, with slightly fuzzy edges
+     */
     public static Noise2D seaIceNoise(long seed)
     {
         final Cellular2D cells = new Cellular2D(seed, 0.21f).spread(0.03);
@@ -322,14 +345,14 @@ public final class BiomeNoise
         return (x, z) -> {
             Cellular2D.Cell cell = cells.cell(x, z);
 
-            final double f1 = cell.f1();
-            final double f2 = cell.f2();
-
-            return f2 - f1 + wiggle.noise(x, z);
+            return cell.f2() - cell.f1() + wiggle.noise(x, z);
         };
     }
 
-    // Ring-shaped protrusions 1 block high, based on those found in the Svalbard Archipelago and other polar climates
+    /**
+     * Lifted rings to superimpose on terrain
+     * Based on sorted circles found in the Svalbard Archipelago and other polar climates
+     */
     public static Noise2D stoneCircles(long seed)
     {
         Cellular2D cells = new Cellular2D(seed, 0.26f).spread(0.09);
@@ -342,6 +365,9 @@ public final class BiomeNoise
         };
     }
 
+    /**
+     * Flat land with scattered ponds and small mounds
+     */
     public static Noise2D knobAndKettle(long seed)
     {
         return new OpenSimplex2D(seed).octaves(2).spread(0.03f)
@@ -349,6 +375,9 @@ public final class BiomeNoise
             .scaled(-12, 10).add(BiomeNoise.hills(seed, -3, 3));
     }
 
+    /**
+     * Medium hills stretched in the north-south axis
+     */
     public static Noise2D drumlins(long seed)
     {
         return new OpenSimplex2D(seed).octaves(3).spread(0.04f).scaled(SEA_LEVEL_Y - 16, SEA_LEVEL_Y + 32).stretchZ(2.5);
@@ -525,6 +554,7 @@ public final class BiomeNoise
 
         return baseTerrainNoise.add(cenotes);
     }
+
     /**
      * Multi-tiered sinkholes inspired by the Xiaozhai Tiankeng
      * Essentially applies two "cenotes" of different sizes on top of each other
@@ -573,6 +603,7 @@ public final class BiomeNoise
     /**
      * If {@code base} is higher than {@code compare}, this will return the sum {@code base * (1 - addend) + addend}. Otherwise, this
      * will return the value of {@code base}.
+     *
      * @return A new noise function
      */
     public static Noise2D fenglinCliffMap(Noise2D baseNoise, Noise2D compareNoise, Noise2D addendNoise)
@@ -756,7 +787,9 @@ public final class BiomeNoise
         return new OpenSimplex2D(seed).octaves(4).spread(0.17f).scaled(SEA_LEVEL_Y, SEA_LEVEL_Y + 1.8f);
     }
 
-    // Shield volcanoes with minimal erosion, recent lava flows on surface, no/small calderas
+    /**
+     * Shield volcanoes with minimal erosion, recent lava flows on surface, no/small calderas
+     */
     public static Noise2D activeShieldVolcano(long seed, Noise2D hotspot)
     {
         final double edgeElev = SEA_LEVEL_Y + 1;
@@ -766,8 +799,8 @@ public final class BiomeNoise
 
         final Noise2D volcano = hotspot.map(y ->
             y < 0.75 ? Mth.map(y, 0, 0.75, edgeElev, calderaEdgeElev) // Slope upwards to mountain top or crater rim
-            : y < 0.78 ? Mth.map(y, 0.75, 0.78, calderaEdgeElev, cliffEdgeElev) // Cliff at edge of crater
-            : Mth.map(y, 0.78, 1, cliffEdgeElev, calderaCenterElev)); // Interior of crater
+                : y < 0.78 ? Mth.map(y, 0.75, 0.78, calderaEdgeElev, cliffEdgeElev) // Cliff at edge of crater
+                : Mth.map(y, 0.78, 1, cliffEdgeElev, calderaCenterElev)); // Interior of crater
 
         final Noise2D flows = lavaFlow(seed).map(y -> y < 0.45 ? 0 : 1);
         final OpenSimplex2D warp = new OpenSimplex2D(seed).octaves(4).spread(0.03f).scaled(-100f, 100f);
@@ -782,7 +815,9 @@ public final class BiomeNoise
 
     }
 
-    // Shield volcanoes with some erosion, no recent lava flows, large calderas with open sides
+    /**
+     * Shield volcanoes with some erosion, no recent lava flows, large calderas with open sides
+     */
     public static Noise2D dormantShieldVolcano(long seed, Noise2D hotspot)
     {
         final double seaElev = SEA_LEVEL_Y + 9;
@@ -808,6 +843,9 @@ public final class BiomeNoise
         return volcano.add(surface);
     }
 
+    /**
+     * Shield volcanoes with increased erosion, no recent lava flows, large calderas with open sides
+     */
     public static Noise2D extinctShieldVolcano(long seed, Noise2D hotspot)
     {
         final double seaElev = SEA_LEVEL_Y + 6;
@@ -833,7 +871,9 @@ public final class BiomeNoise
         return volcano.add(surface);
     }
 
-    // Shield volcanoes with large calderas with open sides, and rough surfaces to fill with glaciers
+    /**
+     * Shield volcanoes with large calderas with open sides, and rough surfaces to fill with glaciers
+     */
     public static Noise2D glaciatedShieldVolcano(long seed, Noise2D hotspot)
     {
         final double seaElev = SEA_LEVEL_Y + 15;
@@ -859,18 +899,23 @@ public final class BiomeNoise
         return volcano.add(surface);
     }
 
-    // Surface for Ice Sheet Shield Volcanoes - Heights added to iceSheetBaseLevel for smooth transition to ice sheet biomes
+    /**
+     * Ice surface for Ice Sheet Shield Volcanoes
+     * Heights added to iceSheetBaseLevel for smooth transition to ice sheet biomes
+     */
     public static Noise2D shieldVolcanoIceSheetSurface(long seed, Noise2D hotspot)
     {
         final double edgeElev = 0;
         final double calderaCenterElev = 51;
 
         return hotspot.map(y ->
-            y < 0.9 ? Mth.map(y, 0.0, 0.9, edgeElev, calderaCenterElev) : calderaCenterElev) // Interior of crater
-            .add(iceSheetBaseLevel(seed));
+                y < 0.9 ? Mth.map(y, 0.0, 0.9, edgeElev, calderaCenterElev) : calderaCenterElev) // Interior of crater
+            .add(iceSheetSurfaceHeight(seed));
     }
 
-    // Surface for Glaciated Shield Volcanoes
+    /**
+     * Ice surface for Glaciated Shield Volcanoes
+     */
     public static Noise2D shieldVolcanoGlacierSurface(long seed, Noise2D hotspot)
     {
         final Noise2D base = new OpenSimplex2D(seed).octaves(3).spread(0.05f).scaled(-5, 5);
@@ -880,18 +925,20 @@ public final class BiomeNoise
         final double calderaCenterElev = SEA_LEVEL_Y + 98;
 
         return hotspot.map(y ->
-            y < 0.40 ? lowElev
-                : y < 0.58 ? Mth.map(y, 0.40, 0.58, lowElev, edgeElev) // Crater edge to base
-                : y < 0.72 ? Mth.map(y, 0.58, 0.72, edgeElev, calderaRimElev) // Crater edge to base
-                : y < 0.9 ? Mth.map(y, 0.72, 0.9, calderaRimElev, calderaCenterElev) : calderaCenterElev) // Interior of crater
+                y < 0.40 ? lowElev
+                    : y < 0.58 ? Mth.map(y, 0.40, 0.58, lowElev, edgeElev) // Crater edge to base
+                    : y < 0.72 ? Mth.map(y, 0.58, 0.72, edgeElev, calderaRimElev) // Crater edge to base
+                    : y < 0.9 ? Mth.map(y, 0.72, 0.9, calderaRimElev, calderaCenterElev) : calderaCenterElev) // Interior of crater
             .add(base);
     }
 
-    // Shield volcanoes with some erosion, no recent lava flows, large calderas with open sides
+    /**
+     * Shield volcanoes with large calderas flooded by the ocean
+     */
     public static Noise2D sunkenShieldVolcano(long seed, Noise2D hotspot)
     {
         final Noise2D volcano = hotspot.map(y ->
-                y < 0.25 ? 50
+            y < 0.25 ? 50
                 : y < 0.45 ? Mth.map(y, 0.25, 0.45, 50, SEA_LEVEL_Y)
                 : y < 0.6 ? Mth.map(y, 0.45, 0.6, SEA_LEVEL_Y, 95)
                 : y < 0.62 ? Mth.map(y, 0.6, 0.62, 94, 80)
@@ -910,7 +957,9 @@ public final class BiomeNoise
         return volcano.lazyProduct(scale).add(surface);
     }
 
-    // Shield volcanoes with heavily eroded calderas
+    /**
+     * Shield volcanoes with heavily eroded calderas
+     */
     public static Noise2D ancientShieldVolcano(long seed, double minElev, double maxElev, Noise2D hotspot)
     {
         final Noise2D volcano = hotspot.map(y ->
@@ -934,12 +983,17 @@ public final class BiomeNoise
         return volcano.lazyProduct(scale).min(valleys).add(surface);
     }
 
+    /**
+     * Ridged noise used to place simulated lava flows on surfaces
+     */
     public static Noise2D lavaFlow(long seed)
     {
         return new OpenSimplex2D(seed + 23891L).ridged().spread(0.01);
     }
 
-    // Currently erupting location in a hotspot chain, used for biome noise and regional hotspot placement
+    /**
+     * Currently erupting location in a hotspot chain, used for biome noise and regional hotspot placement
+     */
     public static Noise2D activeHotSpots(long seed)
     {
         final double horizontalScale = 0.003;
@@ -954,31 +1008,72 @@ public final class BiomeNoise
         return hotspots;
     }
 
-    // Second location in a hotspot chain
+    /**
+     * Second location in a hotspot chain, used for biome noise and regional hotspot placement
+     */
     public static Noise2D dormantHotSpots(long seed)
     {
-        return activeHotSpots(seed).hotSpotWarp(plateRegions(seed), 1024, 0).map(y -> Math.max(y - 0.1, 0) * 1.111);
+        return hotSpotWarp(activeHotSpots(seed), plateRegions(seed), 1024, 0).map(y -> Math.max(y - 0.1, 0) * 1.111);
     }
 
-    // Third location in a hotspot chain
+    /**
+     * Third location in a hotspot chain, used for biome noise and regional hotspot placement
+     */
     public static Noise2D extinctHotSpots(long seed)
     {
-        return activeHotSpots(seed).hotSpotWarp(plateRegions(seed), 2048, 0.25).map(y -> Math.max(y - 0.2, 0) * 1.25);
+        return hotSpotWarp(activeHotSpots(seed), plateRegions(seed), 2048, 0.25).map(y -> Math.max(y - 0.2, 0) * 1.25);
     }
 
-    // Fourth location in a hotspot chain
+    /**
+     * Fourth location in a hotspot chain, used for biome noise and regional hotspot placement
+     */
     public static Noise2D ancientHotSpots(long seed)
     {
-        return activeHotSpots(seed).hotSpotWarp(plateRegions(seed), 3072, 0.5).map(y -> Math.max(y - 0.3, 0) * 1.4286);
+        return hotSpotWarp(activeHotSpots(seed), plateRegions(seed), 3072, 0.5).map(y -> Math.max(y - 0.3, 0) * 1.4286);
     }
 
-    // Intensity of hotspots, regardless of age
+    /**
+     * All hotspot locations combined into one map
+     */
     public static Noise2D hotSpotIntensity(long seed)
     {
         return activeHotSpots(seed).max(dormantHotSpots(seed)).max(extinctHotSpots(seed)).max(ancientHotSpots(seed));
     }
 
-    // This takes noise maps of each of the age categories of hotspots, and maps which one is dominant at every location in the world
+    /**
+     * A domain-warp designed to warp the location of noise peaks without distorting their shapes
+     * From an input value, procedurally determines a displacement vector
+     *
+     * @param warp          noise map to generate offsets from, designed to be used with a cellular hash map
+     * @param velocityScale first-order distance scaling
+     * @param accelScale    second-order distance scaling
+     * @return this noise function, with a cellular domain warp effect
+     */
+    public static Noise2D hotSpotWarp(Noise2D noiseToWarp, Noise2D warp, int velocityScale, double accelScale)
+    {
+        return (x, z) -> {
+            // Random vector
+            final double ux = warp.noise(x, z);
+            // Random magnitude from pev vector by multiplying and taking modulo, random direction based on magnitude
+            final double uz = (Math.abs(ux * 16) % 1 > 0.5 ? 1 : -1) * (ux * 256) % 1;
+
+            // Increase magnitude of vector to ensure islands in the same chain don't generate on top of each other
+            final int sx = ux > 0 ? 1 : -1;
+            final int sz = uz > 0 ? 1 : -1;
+            final double vx = (ux + sx) * velocityScale;
+            final double vz = (uz + sz) * velocityScale;
+
+            // Perpendicular acceleration vector to create curved chains
+            final double ax = -(vz) * accelScale;
+            final double az = vx * accelScale;
+
+            return noiseToWarp.noise(x + vx + ax, z + vz + az);
+        };
+    }
+
+    /**
+     * This takes noise maps of each of the age categories of hotspots, and maps which one is dominant at every location in the world
+     */
     public static Noise2D hotSpotAge(long seed)
     {
         Noise2D active = activeHotSpots(seed);
@@ -986,10 +1081,45 @@ public final class BiomeNoise
         Noise2D extinct = extinctHotSpots(seed);
         Noise2D ancient = ancientHotSpots(seed);
 
-        return active.mapAges(dormant, extinct, ancient);
+        return mapAges(active, dormant, extinct, ancient);
     }
 
-    // No related to the region generator cells, used for hot spot directions
+    public static Noise2D mapAges(Noise2D activeNoise, Noise2D youngNoise, Noise2D oldNoise, Noise2D oldestNoise)
+    {
+        return (x, z) -> {
+            final double active = activeNoise.noise(x, z);
+            final double young = youngNoise.noise(x, z);
+            final double old = oldNoise.noise(x, z);
+            final double oldest = oldestNoise.noise(x, z);
+
+            if (Math.max(Math.max(active, young), Math.max(old, oldest)) <= -0.8)
+            {
+                return 0;
+            }
+            else if (active > young && active > old && active > oldest)
+            {
+                return 1;
+            }
+            else if (young > active && young > old && young > oldest)
+            {
+                return 2;
+            }
+            else if (old > young && old > oldest && old > active)
+            {
+                return 3;
+            }
+            else if (oldest > young && oldest > old && oldest > active)
+            {
+                return 4;
+            }
+            else
+                return 0;
+        };
+    }
+
+    /**
+     * Not related to the region generator cells, this is used to randomize hotspot track directions within large scale regions
+     */
     public static Cellular2D plateRegions(long seed)
     {
         return new Cellular2D(seed).spread(0.00590625f / Units.CELL_WIDTH_IN_GRID);

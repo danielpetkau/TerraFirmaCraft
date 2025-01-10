@@ -141,7 +141,8 @@ public class RegionGeneratorTests implements TestSetup
                 ? green.apply(point.distanceToOcean / 20f)
                 : cellColor(region);
             case ANNOTATE_BASE_LAND_HEIGHT -> continentColor(point);
-            case ADD_MOUNTAINS -> {
+            case ADD_MOUNTAINS ->
+            {
                 if (!point.mountain()) yield continentColor(point);
                 yield point.baseLandHeight <= 2
                     ? new Color(240, 110, 50)
@@ -162,7 +163,8 @@ public class RegionGeneratorTests implements TestSetup
             case KOPPEN, KOPPEN_AFTER_RIVERS -> point.land()
                 ? koppenClimateColor(KoppenClimateClassification.classify(point.temperature, point.rainfall, point.rainfallVariance))
                 : continentColor(point);
-            case CHOOSE_ROCKS -> {
+            case CHOOSE_ROCKS ->
+            {
                 final double value = new Random(point.rock >> 2).nextDouble();
                 yield switch (point.rock & 0b11)
                 {
@@ -173,7 +175,8 @@ public class RegionGeneratorTests implements TestSetup
                     default -> throw new RuntimeException("value: " + point.rock);
                 };
             }
-            case ANNOTATE_KARST_SURFACE -> {
+            case ANNOTATE_KARST_SURFACE ->
+            {
                 if (!point.land())
                 {
                     yield blue.apply(point.isSurfaceRockKarst ? 0 : 30);
@@ -191,7 +194,8 @@ public class RegionGeneratorTests implements TestSetup
             case ANNOTATE_BIOMES_BY_HEIGHT -> heightBiomeColor(point.biome);
             case ANNOTATE_KARST_BIOMES -> karstBiomeColor(point.biome);
             case ANNOTATE_GLACIAL_BIOMES -> glaciatedBiomeColor(point.biome);
-            case ADD_RIVERS_AND_LAKES -> {
+            case ADD_RIVERS_AND_LAKES ->
+            {
                 if (point.river()) yield new Color(120, 120, 240);
                 if (point.shore()) yield new Color(120, 120, 240);
                 if (point.lake()) yield new Color(150, 160, 255);
@@ -199,11 +203,11 @@ public class RegionGeneratorTests implements TestSetup
             }
             case KAOLINITE_CAN_SPAWN -> point.temperature > 18f && point.rainfall > 300 && point.land()
                 ? point.biome == HIGHLANDS || point.biome == PLATEAU || point.biome == OLD_MOUNTAINS || point.biome == ROLLING_HILLS || point.biome == TOWER_KARST_HILLS
-                || point.biome == TOWER_KARST_HIGHLANDS || point.biome == EXTREME_DOLINE_PLATEAU || point.biome ==EXTREME_DOLINE_MOUNTAINS || point.biome == DOLINE_ROLLING_HILLS
-                || point.biome == DOLINE_HIGHLANDS || point.biome ==DOLINE_PLATEAU || point.biome == CENOTE_ROLLING_HILLS || point.biome == CENOTE_HIGHLANDS || point.biome == CENOTE_PLATEAU
+                || point.biome == TOWER_KARST_HIGHLANDS || point.biome == EXTREME_DOLINE_PLATEAU || point.biome == EXTREME_DOLINE_MOUNTAINS || point.biome == DOLINE_ROLLING_HILLS
+                || point.biome == DOLINE_HIGHLANDS || point.biome == DOLINE_PLATEAU || point.biome == CENOTE_ROLLING_HILLS || point.biome == CENOTE_HIGHLANDS || point.biome == CENOTE_PLATEAU
                 || point.biome == SHILIN_HIGHLANDS || point.biome == SHILIN_PLATEAU || point.biome == SHILIN_HILLS
                 ? Color.MAGENTA
-                    : Color.PINK
+                : Color.PINK
                 : continentColor(point);
         };
     }
@@ -266,7 +270,7 @@ public class RegionGeneratorTests implements TestSetup
         if (biome == ANCIENT_SHIELD_VOLCANO || biome == SUNKEN_SHIELD_VOLCANO) return new Color(255, 155, 0);
 
         if (biome == ICE_SHEET || biome == SUBGLACIAL_LAKE) return new Color(255, 255, 255);
-        if (biome == ICE_SHEET_TUYAS ) return new Color(235, 235, 235);
+        if (biome == ICE_SHEET_TUYAS) return new Color(235, 235, 235);
         if (biome == ICE_SHEET_MOUNTAINS) return new Color(255, 195, 195);
         if (biome == ICE_SHEET_OCEANIC_MOUNTAINS) return new Color(255, 195, 255);
         if (biome == ICE_SHEET_SHIELD_VOLCANO) return new Color(255, 215, 185);
@@ -342,7 +346,7 @@ public class RegionGeneratorTests implements TestSetup
         if (biome == RIVER) return new Color(0, 200, 255);
 
         if (biome == ICE_SHEET || biome == SUBGLACIAL_LAKE) return new Color(255, 255, 255);
-        if (biome == ICE_SHEET_TUYAS ) return new Color(235, 235, 235);
+        if (biome == ICE_SHEET_TUYAS) return new Color(235, 235, 235);
         if (biome == ICE_SHEET_MOUNTAINS) return new Color(255, 195, 195);
         if (biome == ICE_SHEET_OCEANIC_MOUNTAINS) return new Color(255, 195, 255);
         if (biome == ICE_SHEET_SHIELD_VOLCANO) return new Color(255, 195, 145);
@@ -472,13 +476,13 @@ public class RegionGeneratorTests implements TestSetup
     private Color hotspot(int age)
     {
         if (age == 4)
-            return new Color (190, 180, 0);
+            return new Color(190, 180, 0);
         if (age == 3)
-            return new Color (220, 110, 0);
+            return new Color(220, 110, 0);
         if (age == 2)
-            return new Color (240, 20, 0);
+            return new Color(240, 20, 0);
         if (age == 1)
-            return new Color (240, 0, 180);
+            return new Color(240, 0, 180);
 
         return new Color(150, 240, 150);
     }

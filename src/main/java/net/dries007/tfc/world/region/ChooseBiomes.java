@@ -162,7 +162,7 @@ public enum ChooseBiomes implements RegionTask
                 if (rainfall <= 55)
                 {
                     if (point.biome == LOWLANDS || point.biome == LOW_CANYONS) point.biome = SALT_FLATS;
-                    else if (point.biome == HILLS || point.biome == ROLLING_HILLS || point.biome == PLATEAU ) point.biome = DUNE_SEA;
+                    else if (point.biome == HILLS || point.biome == ROLLING_HILLS || point.biome == PLATEAU) point.biome = DUNE_SEA;
                 }
                 else if (point.biome == LOWLANDS || point.biome == LOW_CANYONS) point.biome = randomSeededFrom(rngSeed, areaSeed, DRY_LOWLANDS_REPLACEMENT_BIOMES);
                 else if (point.biome == HILLS || point.biome == ROLLING_HILLS) point.biome = GRASSY_DUNES;

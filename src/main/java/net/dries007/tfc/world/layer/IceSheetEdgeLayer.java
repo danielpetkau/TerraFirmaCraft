@@ -27,7 +27,7 @@ public enum IceSheetEdgeLayer implements AdjacentTransformLayer
         {
             if ((matcher.test(i -> i == ICE_SHEET_TUYAS)))
             {
-            return ICE_SHEET_TUYAS_EDGE;
+                return ICE_SHEET_TUYAS_EDGE;
             }
             else if ((matcher.test(TFCLayers::isFlatIceSheet)))
             {

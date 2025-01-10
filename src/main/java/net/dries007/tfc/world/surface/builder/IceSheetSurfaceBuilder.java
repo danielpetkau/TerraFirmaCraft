@@ -17,15 +17,15 @@ import net.dries007.tfc.world.surface.SurfaceStates;
 
 public class IceSheetSurfaceBuilder implements SurfaceBuilder
 {
-    public static final SurfaceBuilderFactory NORMAL = seed -> new IceSheetSurfaceBuilder(seed, BiomeNoise.glacialBase(seed), BiomeNoise.iceSheetBaseLevel(seed), true, false);
-    public static final SurfaceBuilderFactory EDGE = seed -> new IceSheetSurfaceBuilder(seed, BiomeNoise.glacialBase(seed).addConstant(1.6), BiomeNoise.iceSheetBaseLevel(seed), true, false);
-    public static final SurfaceBuilderFactory EDGE_LAKE = seed -> new IceSheetSurfaceBuilder(seed, BiomeNoise.lake(seed), BiomeNoise.iceSheetBaseLevel(seed), false, false);
-    public static final SurfaceBuilderFactory HIDDEN_LAKE = seed -> new IceSheetSurfaceBuilder(seed, BiomeNoise.glacialOceanicBase(seed), BiomeNoise.iceSheetBaseLevel(seed), false, false);
-    public static final SurfaceBuilderFactory ICE_SHEET_MOUNTAINS = seed -> new IceSheetSurfaceBuilder(seed, BiomeNoise.glacialCirques(seed).addConstant(39), BiomeNoise.montaneIceSheetBaseLevel(seed).max(BiomeNoise.glacialCirquesIceSurface(seed).addConstant(39)), false, true);
-    public static final SurfaceBuilderFactory GLACIATED_MOUNTAINS = seed -> new IceSheetSurfaceBuilder(seed, BiomeNoise.glacialCirques(seed).addConstant(39), BiomeNoise.glacialCirquesIceSurface(seed).addConstant(39), false, true);
-    public static final SurfaceBuilderFactory OCEANIC = seed -> new IceSheetSurfaceBuilder(seed, BiomeNoise.glacialOceanicBase(seed), BiomeNoise.oceanicIceSheetBaseLevel(seed), false, false);
-    public static final SurfaceBuilderFactory ICE_SHEET_OCEANIC_MOUNTAINS = seed -> new IceSheetSurfaceBuilder(seed, BiomeNoise.glacialCirques(seed), BiomeNoise.oceanicIceSheetBaseLevel(seed).max(BiomeNoise.glacialCirquesIceSurface(seed)), false, true);
-    public static final SurfaceBuilderFactory GLACIATED_OCEANIC_MOUNTAINS = seed -> new IceSheetSurfaceBuilder(seed, BiomeNoise.glacialCirques(seed), BiomeNoise.glacialCirquesIceSurface(seed), false, true);
+    public static final SurfaceBuilderFactory NORMAL = seed -> new IceSheetSurfaceBuilder(seed, BiomeNoise.glacialBase(seed), BiomeNoise.iceSheetSurfaceHeight(seed), true, false);
+    public static final SurfaceBuilderFactory EDGE = seed -> new IceSheetSurfaceBuilder(seed, BiomeNoise.glacialBase(seed).addConstant(1.6), BiomeNoise.iceSheetSurfaceHeight(seed), true, false);
+    public static final SurfaceBuilderFactory EDGE_LAKE = seed -> new IceSheetSurfaceBuilder(seed, BiomeNoise.lake(seed), BiomeNoise.iceSheetSurfaceHeight(seed), false, false);
+    public static final SurfaceBuilderFactory HIDDEN_LAKE = seed -> new IceSheetSurfaceBuilder(seed, BiomeNoise.glacialOceanicBase(seed), BiomeNoise.iceSheetSurfaceHeight(seed), false, false);
+    public static final SurfaceBuilderFactory ICE_SHEET_MOUNTAINS = seed -> new IceSheetSurfaceBuilder(seed, BiomeNoise.glacialCirques(seed).addConstant(39), BiomeNoise.montaneIceSheetSurfaceHeight(seed).max(BiomeNoise.glacialCirquesIceSurfaceHeight(seed).addConstant(39)), false, true);
+    public static final SurfaceBuilderFactory GLACIATED_MOUNTAINS = seed -> new IceSheetSurfaceBuilder(seed, BiomeNoise.glacialCirques(seed).addConstant(39), BiomeNoise.glacialCirquesIceSurfaceHeight(seed).addConstant(39), false, true);
+    public static final SurfaceBuilderFactory OCEANIC = seed -> new IceSheetSurfaceBuilder(seed, BiomeNoise.glacialOceanicBase(seed), BiomeNoise.oceanicIceSheetSurfaceHeight(seed), false, false);
+    public static final SurfaceBuilderFactory ICE_SHEET_OCEANIC_MOUNTAINS = seed -> new IceSheetSurfaceBuilder(seed, BiomeNoise.glacialCirques(seed), BiomeNoise.oceanicIceSheetSurfaceHeight(seed).max(BiomeNoise.glacialCirquesIceSurfaceHeight(seed)), false, true);
+    public static final SurfaceBuilderFactory GLACIATED_OCEANIC_MOUNTAINS = seed -> new IceSheetSurfaceBuilder(seed, BiomeNoise.glacialCirques(seed), BiomeNoise.glacialCirquesIceSurfaceHeight(seed), false, true);
 
     private final long seed;
     private final Noise2D iceSurfaceNoise;
@@ -72,7 +72,8 @@ public class IceSheetSurfaceBuilder implements SurfaceBuilder
         {
             NormalSurfaceBuilder.INSTANCE.apply(seed).buildSurface(context, startY, endY);
         }
-        else {
+        else
+        {
             int surfaceDepth = -1;
             int surfaceY;
 

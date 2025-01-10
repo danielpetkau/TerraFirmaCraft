@@ -158,7 +158,7 @@ public class SoilSurfaceState implements SurfaceState
     private static SurfaceState transition(SurfaceState first, SurfaceState second)
     {
         return context -> (Helpers.hash(729375982L, context.pos()) & 127) > 63 ?
-                first.getState(context) : second.getState(context);
+            first.getState(context) : second.getState(context);
     }
 
     private static SurfaceState blobTransition(SurfaceState first, SurfaceState second)
@@ -181,7 +181,7 @@ public class SoilSurfaceState implements SurfaceState
     public BlockState getState(SurfaceBuilderContext context)
     {
         final float rainfall = context.groundWater();
-        final float temperature = Helpers.adjustAverageTemperatureByElevation(context.pos().getY(), context.averageTemperature(), context.getSeaLevel()) ;
+        final float temperature = Helpers.adjustAverageTemperatureByElevation(context.pos().getY(), context.averageTemperature(), context.getSeaLevel());
 
         // Rain-controlled surface: <64 pure gravel, <91 mixed gravel/dirt, <118 dirt, <145 mixed dirt/grass, otherwise grass
         final int rainIndex = (int) Mth.clampedMap(rainfall, 35, 450, 3, regions.size() - 0.01f);

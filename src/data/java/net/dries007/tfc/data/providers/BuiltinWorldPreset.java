@@ -106,7 +106,7 @@ public final class BuiltinWorldPreset
         .put(MARBLE, SandBlockType.WHITE)
         .build();
 
-    private static final Map<Rock, Boolean> ROCK_SET_KARST = ImmutableMap.<Rock,Boolean>builder()
+    private static final Map<Rock, Boolean> ROCK_SET_KARST = ImmutableMap.<Rock, Boolean>builder()
         .put(GRANITE, Boolean.FALSE)
         .put(DIORITE, Boolean.FALSE)
         .put(GABBRO, Boolean.FALSE)
@@ -202,7 +202,7 @@ public final class BuiltinWorldPreset
             List.of(SEDIMENTARY, UPLIFT)
         )).getOrThrow();
     }
-    
+
     private static List<String> namesOf(Rock... rocks)
     {
         return Stream.of(rocks).map(Rock::getSerializedName).toList();
@@ -212,7 +212,7 @@ public final class BuiltinWorldPreset
     {
         return new LayerData(layerId, layers.entrySet().stream().collect(Collectors.toMap(e -> e.getKey().getSerializedName(), Map.Entry::getValue)));
     }
-    
+
     private static RockSettings rockOf(Rock rock)
     {
         final var blocks = TFCBlocks.ROCK_BLOCKS.get(rock);
