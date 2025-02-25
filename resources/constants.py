@@ -853,7 +853,7 @@ OXIDIZED_METAL_NAMES: dict[str, str] = {
 
 # This is here because it's used all over, and it's easier to import with all constants
 def lang(key: str, *args) -> str:
-    return ((key % args) if len(args) > 0 else key).replace('_', ' ').replace('/', ' ').title()
+    return ((key % args) if len(args) > 0 else key).replace('_', ' ').replace('/', ' ').strip().title()
 
 
 def lang_enum(name: str, values: Sequence[str]) -> Dict[str, str]:
