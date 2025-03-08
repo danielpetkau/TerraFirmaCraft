@@ -605,6 +605,11 @@ def generate(rm: ResourceManager):
     rm.block_model('blast_furnace/unlit', {'side': 'tfc:block/devices/blast_furnace/side', 'end': 'tfc:block/devices/blast_furnace/top', 'particle': 'tfc:block/devices/blast_furnace/side'}, 'block/cube_column')
     rm.block_model('blast_furnace/lit', {'side': 'tfc:block/devices/blast_furnace/side_lit', 'end': 'tfc:block/devices/blast_furnace/top_lit', 'particle': 'tfc:block/devices/blast_furnace/side_lit'}, 'block/cube_column')
 
+    block = rm.blockstate('reinforced_fire_bricks', 'tfc:block/reinforced_fire_bricks').with_lang(lang('reinforced fire bricks'))
+    block.with_block_loot('tfc:reinforced_fire_bricks')
+    rm.item_model(block.res, parent='tfc:block/reinforced_fire_bricks', no_textures=True)
+    rm.block_model('reinforced_fire_bricks', {'side': 'tfc:block/reinforced_fire_bricks', 'end': 'tfc:block/fire_bricks', 'particle': 'tfc:block/reinforced_fire_bricks'}, 'block/cube_column')
+
     rm.blockstate('placed_item', 'tfc:block/empty').with_lang(lang('placed items'))
     rm.blockstate('scraping', 'tfc:block/scraping').with_lang(lang('scraped item'))
     rm.custom_block_model('scraping', 'tfc:scraping', {})

@@ -428,7 +428,7 @@ public class BuiltinBlockTags extends TagsProvider<Block> implements Accessors
         tag(CHARCOAL_FORGE_INSULATION).addTag(INSULATION);
         tag(CHARCOAL_FORGE_INVISIBLE).add(TFCBlocks.CRUCIBLE);
         tag(BLOOMERY_INSULATION).addTag(INSULATION);
-        tag(BLAST_FURNACE_INSULATION).add(TFCBlocks.FIRE_BRICKS);
+        tag(BLAST_FURNACE_INSULATION).add(TFCBlocks.REINFORCED_FIRE_BRICKS);
         tag(SCRAPING_SURFACE).addTag(BlockTags.LOGS);
         tag(GLASS_POURING_TABLE).add(TFCBlocks.METALS.get(Metal.BRASS).get(Metal.BlockType.BLOCK));
         tag(GLASS_BASIN_BLOCKS).add(TFCBlocks.METALS.get(Metal.BRASS).get(Metal.BlockType.BLOCK));
