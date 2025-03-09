@@ -21,6 +21,11 @@ import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexBuffer;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import com.mojang.math.Axis;
+import net.dries007.tfc.common.TFCTags;
+import net.dries007.tfc.common.blocks.MoltenBlock;
+import net.dries007.tfc.common.blocks.TFCBlocks;
+import net.dries007.tfc.common.blocks.devices.CharcoalForgeBlock;
+import net.dries007.tfc.common.blocks.devices.FirepitBlock;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.ParticleStatus;
@@ -65,6 +70,8 @@ import net.dries007.tfc.util.calendar.Calendars;
 import net.dries007.tfc.util.climate.Climate;
 import net.dries007.tfc.util.climate.ClimateModel;
 import net.dries007.tfc.util.tracker.WeatherHelpers;
+
+import static net.dries007.tfc.common.blocks.devices.FirepitBlock.LIT;
 
 /**
  * Overrides {@link DimensionSpecialEffects.OverworldEffects} in order to provide additional features and modifications of the weather
@@ -601,8 +608,10 @@ public class LevelRendererExtension extends DimensionSpecialEffects.OverworldEff
                         );
 
                         final ParticleOptions options = !fluid.is(FluidTags.LAVA)
-                            && !state.is(Blocks.MAGMA_BLOCK)
+                            && !state.is(TFCTags.Blocks.SMOKES_IN_RAIN)
                             && !CampfireBlock.isLitCampfire(state)
+                            && !(state.is(TFCBlocks.FIREPIT.get()) && state.getValue(FirepitBlock.LIT))
+                            && !(state.is(TFCBlocks.CHARCOAL_FORGE.get()) && state.getValue(CharcoalForgeBlock.HEAT) > 0)
                             ? ParticleTypes.RAIN
                             : ParticleTypes.SMOKE;
                         level.addParticle(options, cursor.getX() + offsetX, cursor.getY() + offsetY, cursor.getZ() + offsetZ, 0.0, 0.0, 0.0);
