@@ -38,13 +38,13 @@ public class RiverSurfaceBuilder extends ShoreSurfaceBuilder
             SurfaceState state = SurfaceStates.GRAVEL;
             if (context.getSlope() < 2)
             {
-                state = SurfaceStates.GRASS;
+                state = SurfaceStates.TOP_GRASS_TO_GRAVEL;
             }
             else if (context.getSlope() < 5)
             {
                 state = SurfaceStates.RIVER_SAND;
             }
-            NormalSurfaceBuilder.INSTANCE.buildSurface(context, startY, endY, state, SurfaceStates.GRAVEL, SurfaceStates.SANDSTONE_OR_GRAVEL);
+            NormalSurfaceBuilder.INSTANCE.buildSurface(context, startY, endY, state, SurfaceStates.GRAVEL, SurfaceStates.GRAVEL);
         }
     }
 }

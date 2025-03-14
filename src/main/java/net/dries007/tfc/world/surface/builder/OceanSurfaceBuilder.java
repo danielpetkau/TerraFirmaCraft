@@ -14,12 +14,13 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.BlockColumn;
 import net.minecraft.world.level.levelgen.SurfaceSystem;
-import net.minecraft.world.level.levelgen.XoroshiroRandomSource;
 import net.minecraft.world.level.levelgen.synth.NormalNoise;
 
 import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.util.climate.OverworldClimateModel;
+import net.dries007.tfc.world.biome.BiomeNoise;
 import net.dries007.tfc.world.Seed;
+import net.dries007.tfc.world.noise.Noise2D;
 import net.dries007.tfc.world.surface.SurfaceBuilderContext;
 
 public class OceanSurfaceBuilder implements SurfaceBuilder
@@ -29,6 +30,7 @@ public class OceanSurfaceBuilder implements SurfaceBuilder
     private final NormalNoise icebergPillarNoise;
     private final NormalNoise icebergPillarRoofNoise;
     private final NormalNoise icebergSurfaceNoise;
+    private final Noise2D patternedNoise;
 
     /**
      * {@link net.minecraft.data.worldgen.NoiseData} for values
@@ -41,6 +43,7 @@ public class OceanSurfaceBuilder implements SurfaceBuilder
         this.icebergPillarNoise = NormalNoise.create(random, new NormalNoise.NoiseParameters(-6, 1.0D, 1.0D, 1.0D, 1.0D));
         this.icebergPillarRoofNoise = NormalNoise.create(random, new NormalNoise.NoiseParameters(-3, 1.0D));
         this.icebergSurfaceNoise = NormalNoise.create(random, new NormalNoise.NoiseParameters(-6, 1.0D, 1.0D, 1.0D));
+        this.patternedNoise = BiomeNoise.seaIceNoise(seed.next());
     }
 
     @Override
@@ -57,6 +60,7 @@ public class OceanSurfaceBuilder implements SurfaceBuilder
     {
         final BlockState packedIce = Blocks.PACKED_ICE.defaultBlockState();
         final BlockState snow = Blocks.SNOW_BLOCK.defaultBlockState();
+        final BlockState seaIce = TFCBlocks.SEA_ICE.get().defaultBlockState();
 
         final int seaLevel = context.getSeaLevel();
         final int x = context.pos().getX();
@@ -124,6 +128,37 @@ public class OceanSurfaceBuilder implements SurfaceBuilder
                     {
                         context.setBlockState(y, packedIce);
                     }
+                }
+            }
+        }
+        else
+        {
+            final boolean placeIce;
+            final double iceStart = 1.5;
+            final double solidIceStart = -0.5;
+
+            // Skip sampling the cellular noise if cold enough for solid ice/too warm for ice
+            if (maxAnnualTemperature < solidIceStart)
+            {
+                placeIce = true;
+            }
+            else if (maxAnnualTemperature > iceStart)
+            {
+                placeIce = false;
+            }
+            else
+            {
+                final double tempFactor = Mth.clampedMap(maxAnnualTemperature, iceStart, solidIceStart, 0.3, 0.04);
+                placeIce = this.patternedNoise.noise(x, z) > tempFactor;
+            }
+
+            if (placeIce)
+            {
+                final int y = seaLevel - 1;
+                final BlockState state = context.getBlockState(y);
+                if (state.getBlock() == TFCBlocks.SALT_WATER.get() || state.getBlock() == Blocks.WATER)
+                {
+                    context.setBlockState(y, seaIce);
                 }
             }
         }

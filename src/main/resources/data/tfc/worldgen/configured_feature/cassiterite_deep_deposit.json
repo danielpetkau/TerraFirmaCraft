@@ -48,6 +48,10 @@
         "with": "tfc:deposit/cassiterite/chalk"
       },
       {
+        "replace": "tfc:rock/raw/tuff",
+        "with": "tfc:deposit/cassiterite/tuff"
+      },
+      {
         "replace": "tfc:rock/raw/rhyolite",
         "with": "tfc:deposit/cassiterite/rhyolite"
       },

@@ -48,6 +48,10 @@
         "with": "tfc:deposit/native_copper/chalk"
       },
       {
+        "replace": "tfc:rock/raw/tuff",
+        "with": "tfc:deposit/native_copper/tuff"
+      },
+      {
         "replace": "tfc:rock/raw/rhyolite",
         "with": "tfc:deposit/native_copper/rhyolite"
       },

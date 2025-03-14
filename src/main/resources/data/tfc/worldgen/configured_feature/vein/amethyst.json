@@ -83,6 +83,16 @@
       },
       {
         "replace": [
+          "tfc:rock/raw/tuff"
+        ],
+        "with": [
+          {
+            "block": "tfc:ore/amethyst/tuff"
+          }
+        ]
+      },
+      {
+        "replace": [
           "tfc:rock/raw/quartzite"
         ],
         "with": [

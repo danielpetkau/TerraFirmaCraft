@@ -219,7 +219,7 @@
       "entity": "tfc:penguin",
       "scale": 0.7,
       "name": "企鹅",
-      "text": "企鹅生活在$(l:the_world/climate#temperature)温度$()不高于 -14°C、$(l:the_world/climate#rainfall)降雨量$()不小于 75mm 的寒冷海滩上。"
+      "text": "The penguin spawns on only the coldest beaches, ice sheet edges, and sea ice with $(l:the_world/climate#temperature)temperature$() of at most -14°C and $(l:the_world/climate#rainfall)rainfall$() of at least 75mm."
     },
     {
       "type": "patchouli:entity",

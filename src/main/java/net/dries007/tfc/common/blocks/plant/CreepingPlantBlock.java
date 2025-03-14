@@ -62,6 +62,12 @@ public abstract class CreepingPlantBlock extends PlantBlock implements Direction
             {
                 return plant;
             }
+
+            @Override
+            public boolean canCreepOn(LevelReader level, BlockPos pos, BlockState state, Direction direction)
+            {
+                return !Helpers.isBlock(state, TFCTags.Blocks.CREEPING_PLANT_NOT_PLANTABLE_ON) && super.canCreepOn(level, pos, state, direction);
+            }
         };
     }
 

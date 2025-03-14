@@ -30,6 +30,26 @@
     "#tfc:in_biome/top_layer_modification"
   ],
   "spawners": {
+    "creature": [
+      {
+        "type": "tfc:polar_bear",
+        "weight": 1,
+        "minCount": 1,
+        "maxCount": 1
+      },
+      {
+        "type": "tfc:penguin",
+        "weight": 10,
+        "minCount": 2,
+        "maxCount": 5
+      },
+      {
+        "type": "tfc:turtle",
+        "weight": 10,
+        "minCount": 2,
+        "maxCount": 5
+      }
+    ],
     "water_ambient": [
       {
         "type": "tfc:isopod",

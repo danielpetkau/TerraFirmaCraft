@@ -156,8 +156,9 @@ public class ChunkHeightFiller
         {
             // First, calculate cliff "influence" factor (between 0 = no cliffs, 1.0 = full cliffs)
             // This is computed from a global influence noise, plus a factor from the initial height - higher areas have larger cliff influence
+            final int cliffHeightAdjustment = shoreBiomeAt.getCliffBaseHeight();
             final double cliffInfluence = Mth.clamp(
-                shoreSampler.noise(blockX, blockZ) + Mth.map(height, seaLevel, seaLevel + 20, 0, 0.6),
+                shoreSampler.noise(blockX, blockZ) + Mth.map(height, seaLevel + cliffHeightAdjustment, seaLevel + cliffHeightAdjustment + 20, 0, 0.6),
                 0.0, 1.0
             );
             final double adjustedCliffInfluence = 1.0 - (1.0 - cliffInfluence) * (1.0 - cliffInfluence);
@@ -175,10 +176,10 @@ public class ChunkHeightFiller
             final double adjustedNormalWeight = 1.0 - adjustedShoreWeight;
 
             // Calculate the adjusted height, using this re-weighting
-            // Only apply if we are above sea level, by taking a max here
+            // Only apply if we are above the cliff base height (sea level by default), by taking a max here
             final double adjustedHeight = Math.max(
                 (adjustedShoreWeight / shoreWeight) * shoreHeight + (adjustedNormalWeight / normalWeight) * normalHeight,
-                seaLevel
+                seaLevel + cliffHeightAdjustment
             );
 
             if (adjustedHeight < height)
@@ -230,6 +231,7 @@ public class ChunkHeightFiller
     /**
      * Adjusts {@link #riverBlendWeights} to bias towards river caves, creating sharper cutoffs and preventing caves
      * from pinching off rivers.
+     *
      * @return The initial weight of the river cave type.
      */
     private double adjustWeightsForRiverCaves()

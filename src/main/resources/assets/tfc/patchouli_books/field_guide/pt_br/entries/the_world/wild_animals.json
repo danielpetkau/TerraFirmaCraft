@@ -219,7 +219,7 @@
       "entity": "tfc:penguin",
       "scale": 0.7,
       "name": "Pinguim",
-      "text": "O pinguim aparece apenas nas praias mais frias, com $(l:the_world/climate#temperature)temperatura$() no máximo -14°C e $(l:the_world/climate#rainfall)chuva$() de pelo menos 75 mm."
+      "text": "The penguin spawns on only the coldest beaches, ice sheet edges, and sea ice with $(l:the_world/climate#temperature)temperature$() of at most -14°C and $(l:the_world/climate#rainfall)rainfall$() of at least 75mm."
     },
     {
       "type": "patchouli:entity",

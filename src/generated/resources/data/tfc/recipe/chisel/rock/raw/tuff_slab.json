@@ -1,0 +1,13 @@
+{
+  "type": "tfc:chisel",
+  "ingredient": [
+    "tfc:rock/raw/tuff",
+    "tfc:rock/hardened/tuff"
+  ],
+  "item_output": {
+    "count": 1,
+    "id": "tfc:rock/raw/tuff_slab"
+  },
+  "mode": "tfc:slab",
+  "result": "tfc:rock/raw/tuff_slab"
+}

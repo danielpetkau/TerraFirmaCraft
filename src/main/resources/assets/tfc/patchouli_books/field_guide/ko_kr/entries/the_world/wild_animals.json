@@ -219,7 +219,7 @@
       "entity": "tfc:penguin",
       "scale": 0.7,
       "name": "§l펭귄",
-      "text": "펭귄은 $(l:the_world/climate#temperature)기온$()이 -14°C 이하이고, $(l:the_world/climate#rainfall)강수량$()이 75mm 이상인 가장 추운 해변에만 생성됩니다."
+      "text": "The penguin spawns on only the coldest beaches, ice sheet edges, and sea ice with $(l:the_world/climate#temperature)temperature$() of at most -14°C and $(l:the_world/climate#rainfall)rainfall$() of at least 75mm."
     },
     {
       "type": "patchouli:entity",

@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Test;
 import net.dries007.tfc.test.TestSetup;
 import net.dries007.tfc.world.biome.BiomeNoise;
 import net.dries007.tfc.world.noise.Noise2D;
+import net.dries007.tfc.world.noise.OpenSimplex2D;
 
 import static net.dries007.tfc.world.TFCChunkGenerator.*;
 import static net.dries007.tfc.world.biome.BiomeNoise.*;
@@ -36,8 +37,8 @@ public class BiomeNoiseTest implements TestSetup
         .dimensions(400)
         .size(400);
     private final Artist.Noise<Noise2D> noise = Artist.<Noise2D>forNoise(instance -> Artist.NoisePixel.coerceFloat(instance::noise))
-        .dimensions(400)
-        .size(400);
+        .dimensions(1600)
+        .size(1600);
 
     @Test
     public void testRollingHills()
@@ -97,5 +98,17 @@ public class BiomeNoiseTest implements TestSetup
     public void testFengcong()
     {
         terrain.draw("noise_fengcong", fengcong(seed(), BiomeNoise.hills(seed(), 22, 32)));
+    }
+
+    @Test
+    public void testShieldVolcano()
+    {
+        terrain.draw("noise_shield_volcanoes", hotSpotIntensity(1234L).scaled(SEA_LEVEL_Y - 10, SEA_LEVEL_Y + 50));
+    }
+
+    @Test
+    public void testCirque()
+    {
+        terrain.draw("noise_cirques", glacialCirques(seed()));
     }
 }

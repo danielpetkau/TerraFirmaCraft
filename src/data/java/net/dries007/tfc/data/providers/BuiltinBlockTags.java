@@ -106,7 +106,7 @@ public class BuiltinBlockTags extends TagsProvider<Block> implements Accessors
             .add(TFCBlocks.FRUIT_TREE_LEAVES);
         // Includes wooden trapdoors
         tag(BlockTags.TRAPDOORS).add(TFCBlocks.METALS, Metal.BlockType.TRAPDOOR);
-        tag(BlockTags.DIRT).addTags(GRASS, DIRT, MUD);
+        tag(BlockTags.DIRT).addTags(GRASS, DIRT, COARSE_DIRT, MUD);
         tag(BlockTags.FLOWER_POTS).add(TFCBlocks.POTTED_PLANTS);
         tag(BlockTags.ICE).add(
             TFCBlocks.SEA_ICE,
@@ -376,6 +376,7 @@ public class BuiltinBlockTags extends TagsProvider<Block> implements Accessors
             .add(TFCBlocks.SAND)
             .add2(TFCBlocks.ORE_DEPOSITS)
             .add(TFCBlocks.SOIL.get(SoilBlockType.MUD))
+            .add(TFCBlocks.SOIL.get(SoilBlockType.COARSE_DIRT))
             .add(TFCBlocks.SOIL.get(SoilBlockType.CRACKED_EARTH))
             .add(TFCBlocks.SOIL.get(SoilBlockType.SALTED_EARTH))
             .add(
@@ -489,6 +490,8 @@ public class BuiltinBlockTags extends TagsProvider<Block> implements Accessors
 
         tag(PROSPECTABLE).addTags(Tags.Blocks.ORES);
 
+        tag(COARSE_DIRT)
+            .add(TFCBlocks.SOIL.get(SoilBlockType.COARSE_DIRT));
         tag(DIRT)
             .add(Blocks.DIRT)
             .add(TFCBlocks.SOIL.get(SoilBlockType.DIRT))
@@ -528,6 +531,7 @@ public class BuiltinBlockTags extends TagsProvider<Block> implements Accessors
         tag(SEA_BUSH_PLANTABLE_ON).addTags(BlockTags.DIRT, Tags.Blocks.GRAVELS, Tags.Blocks.SANDS);
         tag(HALOPHYTE_PLANTABLE_ON).addTag(BlockTags.DIRT);
         tag(CREEPING_STONE_PLANTABLE_ON).addTags(Tags.Blocks.STONES, STONES_SMOOTH, Tags.Blocks.COBBLESTONES);
+        tag(CREEPING_PLANT_NOT_PLANTABLE_ON).add(Blocks.PACKED_ICE, Blocks.SNOW_BLOCK, Blocks.BLUE_ICE, TFCBlocks.SEA_ICE.get(), Blocks.POWDER_SNOW);
 
         tag(RABBIT_RAIDABLE)
             .add(Blocks.CARROTS)
@@ -581,6 +585,11 @@ public class BuiltinBlockTags extends TagsProvider<Block> implements Accessors
             TFCBlocks.PLANTS.get(Plant.SEA_LAVENDER),
             TFCBlocks.PLANTS.get(Plant.CORDGRASS));
         tag(SINGLE_BLOCK_REPLACEABLE); // todo
+        tag(POWDER_SNOW_REPLACEABLE).add(
+            Blocks.SNOW_BLOCK,
+            Blocks.PACKED_ICE,
+            Blocks.PACKED_ICE,
+            TFCBlocks.SEA_ICE.get());
         tag(TIDE_POOL_BLOCKS).add(
             TFCBlocks.GROUNDCOVER.get(GroundcoverBlockType.CLAM),
             TFCBlocks.GROUNDCOVER.get(GroundcoverBlockType.MOLLUSK),
@@ -645,7 +654,9 @@ public class BuiltinBlockTags extends TagsProvider<Block> implements Accessors
             return add(Arrays.stream(blocks));
         }
 
-        /** Adds every TFC-added block matching the given predicate */
+        /**
+         * Adds every TFC-added block matching the given predicate
+         */
         BlockTagAppender addEveryTFC(Predicate<Block> predicate)
         {
             return add(TFCBlocks.BLOCKS.getEntries().stream().filter(e -> predicate.test(e.get())));
@@ -694,7 +705,7 @@ public class BuiltinBlockTags extends TagsProvider<Block> implements Accessors
 
         <T, V extends IdHolder<? extends Block>> BlockTagAppender addOnly(Map<T, V> blocks, Predicate<T> key)
         {
-            blocks.forEach((k, v) -> { if (key.test(k)) add(v); });
+            blocks.forEach((k, v) -> {if (key.test(k)) add(v);});
             return this;
         }
 

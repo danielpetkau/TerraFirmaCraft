@@ -35,7 +35,7 @@ import net.dries007.tfc.util.registry.RegistryRock;
  */
 public enum Rock implements RegistryRock
 {
-    GRANITE(RockDisplayCategory.FELSIC_IGNEOUS_INTRUSIVE, MapColor.STONE),
+    GRANITE(RockDisplayCategory.FELSIC_IGNEOUS_INTRUSIVE, MapColor.RAW_IRON),
     DIORITE(RockDisplayCategory.INTERMEDIATE_IGNEOUS_INTRUSIVE, MapColor.METAL),
     GABBRO(RockDisplayCategory.MAFIC_IGNEOUS_INTRUSIVE, MapColor.COLOR_GRAY),
     SHALE(RockDisplayCategory.SEDIMENTARY, MapColor.COLOR_GRAY),
@@ -45,6 +45,7 @@ public enum Rock implements RegistryRock
     DOLOMITE(RockDisplayCategory.SEDIMENTARY, MapColor.COLOR_GRAY),
     CHERT(RockDisplayCategory.SEDIMENTARY, MapColor.TERRACOTTA_ORANGE),
     CHALK(RockDisplayCategory.SEDIMENTARY, MapColor.QUARTZ),
+    TUFF(RockDisplayCategory.SEDIMENTARY, MapColor.TERRACOTTA_GRAY),
     RHYOLITE(RockDisplayCategory.FELSIC_IGNEOUS_EXTRUSIVE, MapColor.TERRACOTTA_LIGHT_GRAY),
     BASALT(RockDisplayCategory.MAFIC_IGNEOUS_EXTRUSIVE, MapColor.COLOR_BLACK),
     ANDESITE(RockDisplayCategory.INTERMEDIATE_IGNEOUS_EXTRUSIVE, MapColor.TERRACOTTA_CYAN),

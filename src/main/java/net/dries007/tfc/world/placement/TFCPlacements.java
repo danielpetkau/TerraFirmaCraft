@@ -27,11 +27,13 @@ public final class TFCPlacements
     public static final Id<BoundedCarvingMaskPlacement> CARVING_MASK = register("carving_mask", () -> BoundedCarvingMaskPlacement.CODEC);
     public static final Id<ClimatePlacement> CLIMATE = register("climate", () -> ClimatePlacement.CODEC);
     public static final Id<VolcanoPlacement> VOLCANO = register("volcano", () -> VolcanoPlacement.CODEC);
+    public static final Id<TuffRingPlacement> TUFF_RING = register("tuff_cone", () -> TuffRingPlacement.CODEC);
+    public static final Id<TuyaPlacement> TUYA = register("tuya", () -> TuyaPlacement.CODEC);
     public static final Id<NearFluidPlacement> NEAR_FLUID = register("near_fluid", () -> NearFluidPlacement.CODEC);
     public static final Id<ShallowWaterPlacement> SHALLOW_WATER = register("shallow_water", () -> ShallowWaterPlacement.CODEC);
     public static final Id<OnTopPlacement> ON_TOP = register("on_top", () -> OnTopPlacement.CODEC);
     public static final Id<BiomePlacement> BIOME = register("biome", () -> BiomePlacement.CODEC);
-    public static final Id<NoSolidNeighborsPlacement> NO_SOLID_NEIGHBORS = register("no_solid_neighbors", ()-> NoSolidNeighborsPlacement.CODEC);
+    public static final Id<NoSolidNeighborsPlacement> NO_SOLID_NEIGHBORS = register("no_solid_neighbors", () -> NoSolidNeighborsPlacement.CODEC);
 
     private static <C extends PlacementModifier> Id<C> register(String name, PlacementModifierType<C> codec)
     {

@@ -15,6 +15,7 @@
     },
     {
       "type": "tfc:climate",
+      "min_temperature": -17,
       "min_groundwater": 125
     },
     {

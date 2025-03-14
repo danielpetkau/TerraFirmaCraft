@@ -14,7 +14,6 @@ import net.dries007.tfc.util.IArtist;
 import net.dries007.tfc.world.Seed;
 import net.dries007.tfc.world.biome.BiomeExtension;
 import net.dries007.tfc.world.biome.TFCBiomes;
-import net.dries007.tfc.world.chunkdata.ForestType;
 import net.dries007.tfc.world.layer.framework.AreaFactory;
 import net.dries007.tfc.world.layer.framework.TypedAreaFactory;
 import net.dries007.tfc.world.noise.OpenSimplex2D;
@@ -24,7 +23,7 @@ import net.dries007.tfc.world.region.Units;
 
 public class TFCLayers
 {
-    private static final BiomeExtension[] BIOME_LAYERS = new BiomeExtension[64];
+    private static final BiomeExtension[] BIOME_LAYERS = new BiomeExtension[128];
     private static final MutableInt BIOME_LAYER_INDEX = new MutableInt(0);
 
     /**
@@ -74,6 +73,7 @@ public class TFCLayers
     public static final int BURREN_PLATEAU = idFor(TFCBiomes.BURREN_PLATEAU);
     public static final int BURREN_BADLANDS = idFor(TFCBiomes.BURREN_BADLANDS);
     public static final int BURREN_BADLANDS_TALL = idFor(TFCBiomes.BURREN_BADLANDS_TALL);
+    public static final int BURREN_ROCHE_MOUTONEE = idFor(TFCBiomes.BURREN_ROCHE_MOUTONEE);
     public static final int BURREN_PLAINS = idFor(TFCBiomes.BURREN_PLAINS);
     public static final int SHILIN_PLAINS = idFor(TFCBiomes.SHILIN_PLAINS);
     public static final int SHILIN_CANYONS = idFor(TFCBiomes.SHILIN_CANYONS);
@@ -94,6 +94,40 @@ public class TFCLayers
     public static final int CENOTE_PLATEAU = idFor(TFCBiomes.CENOTE_PLATEAU);
     public static final int EXTREME_DOLINE_PLATEAU = idFor(TFCBiomes.EXTREME_DOLINE_PLATEAU);
     public static final int EXTREME_DOLINE_MOUNTAINS = idFor(TFCBiomes.EXTREME_DOLINE_MOUNTAINS);
+    public static final int ACTIVE_SHIELD_VOLCANO = idFor(TFCBiomes.ACTIVE_SHIELD_VOLCANO);
+    public static final int DORMANT_SHIELD_VOLCANO = idFor(TFCBiomes.DORMANT_SHIELD_VOLCANO);
+    public static final int EXTINCT_SHIELD_VOLCANO = idFor(TFCBiomes.EXTINCT_SHIELD_VOLCANO);
+    public static final int ANCIENT_SHIELD_VOLCANO = idFor(TFCBiomes.ANCIENT_SHIELD_VOLCANO);
+    public static final int SUNKEN_SHIELD_VOLCANO = idFor(TFCBiomes.SUNKEN_SHIELD_VOLCANO);
+    public static final int SHIELD_VOLCANO_SHORE = idFor(TFCBiomes.SHIELD_VOLCANO_SHORE);
+    public static final int OLD_SHIELD_VOLCANO_SHORE = idFor(TFCBiomes.OLD_SHIELD_VOLCANO_SHORE);
+    public static final int ICE_SHEET = idFor(TFCBiomes.ICE_SHEET);
+    public static final int ICE_SHEET_MOUNTAINS = idFor(TFCBiomes.ICE_SHEET_MOUNTAINS);
+    public static final int ICE_SHEET_OCEANIC_MOUNTAINS = idFor(TFCBiomes.ICE_SHEET_OCEANIC_MOUNTAINS);
+    public static final int ICE_SHEET_SHIELD_VOLCANO = idFor(TFCBiomes.ICE_SHEET_SHIELD_VOLCANO);
+    public static final int ICE_SHEET_TUYAS = idFor(TFCBiomes.ICE_SHEET_TUYAS);
+    public static final int SUBGLACIAL_LAKE = idFor(TFCBiomes.SUBGLACIAL_LAKE);
+
+    public static final int ICE_SHEET_EDGE = idFor(TFCBiomes.ICE_SHEET_EDGE);
+    public static final int ICE_SHEET_TUYAS_EDGE = idFor(TFCBiomes.ICE_SHEET_TUYAS_EDGE);
+    public static final int ICE_SHEET_OCEANIC = idFor(TFCBiomes.ICE_SHEET_OCEANIC);
+    public static final int ICE_SHEET_OCEANIC_MOUNTAINS_EDGE = idFor(TFCBiomes.ICE_SHEET_OCEANIC_MOUNTAINS_EDGE);
+    public static final int ICE_SHEET_MOUNTAINS_EDGE = idFor(TFCBiomes.ICE_SHEET_MOUNTAINS_EDGE);
+    public static final int GLACIATED_MOUNTAINS = idFor(TFCBiomes.GLACIATED_MOUNTAINS);
+    public static final int GLACIATED_OCEANIC_MOUNTAINS = idFor(TFCBiomes.GLACIATED_OCEANIC_MOUNTAINS);
+    public static final int MELTWATER_LAKE = idFor(TFCBiomes.MELTWATER_LAKE);
+    public static final int GLACIATED_SHIELD_VOLCANO = idFor(TFCBiomes.GLACIATED_SHIELD_VOLCANO);
+    public static final int ICE_SHEET_SHORE = idFor(TFCBiomes.ICE_SHEET_SHORE);
+
+    public static final int GLACIALLY_CARVED_MOUNTAINS = idFor(TFCBiomes.GLACIALLY_CARVED_MOUNTAINS);
+    public static final int GLACIALLY_CARVED_OCEANIC_MOUNTAINS = idFor(TFCBiomes.GLACIALLY_CARVED_OCEANIC_MOUNTAINS);
+    public static final int DRUMLINS = idFor(TFCBiomes.DRUMLINS);
+    public static final int TUYAS = idFor(TFCBiomes.TUYAS);
+    public static final int KNOB_AND_KETTLE = idFor(TFCBiomes.KNOB_AND_KETTLE);
+    public static final int PATTERNED_GROUND = idFor(TFCBiomes.PATTERNED_GROUND);
+    public static final int INVERTED_PATTERNED_GROUND = idFor(TFCBiomes.INVERTED_PATTERNED_GROUND);
+    public static final int STONE_CIRCLES = idFor(TFCBiomes.STONE_CIRCLES);
+
 
     public static BiomeExtension getFromLayerId(int id)
     {
@@ -169,8 +203,11 @@ public class TFCLayers
         mainLayer = RegionEdgeBiomeLayer.INSTANCE.apply(seed.next(), mainLayer);
         mainLayer = ZoomLayer.NORMAL.apply(seed.next(), mainLayer);
 
+
+        // 4x4 Chunk Scale
         mainLayer = ShoreLayer.INSTANCE.apply(seed.next(), mainLayer);
         mainLayer = MoreShoresLayer.INSTANCE.apply(seed.next(), mainLayer);
+        mainLayer = IceSheetEdgeLayer.INSTANCE.apply(seed.next(), mainLayer);
         mainLayer = ZoomLayer.NORMAL.apply(seed.next(), mainLayer);
         mainLayer = ZoomLayer.NORMAL.apply(seed.next(), mainLayer);
 
@@ -202,7 +239,9 @@ public class TFCLayers
 
     public static boolean hasShore(int value)
     {
-        return value != LOWLANDS && value != SALT_MARSH && value != LOW_CANYONS && value != CANYONS && value != OCEANIC_MOUNTAINS && value != VOLCANIC_OCEANIC_MOUNTAINS && value != TOWER_KARST_BAY;
+        return value != LOWLANDS && value != SALT_MARSH && value != LOW_CANYONS && value != CANYONS && value != OCEANIC_MOUNTAINS && value != VOLCANIC_OCEANIC_MOUNTAINS
+            && value != TOWER_KARST_BAY && value != SUNKEN_SHIELD_VOLCANO && value != GLACIALLY_CARVED_OCEANIC_MOUNTAINS && value != GLACIATED_OCEANIC_MOUNTAINS && value != ICE_SHEET_OCEANIC_MOUNTAINS_EDGE
+            && value != ICE_SHEET_SHIELD_VOLCANO && value != GLACIATED_SHIELD_VOLCANO;
     }
 
     public static int shoreFor(int value)
@@ -219,12 +258,37 @@ public class TFCLayers
         {
             return TOWER_KARST_BAY;
         }
+        if (value == ACTIVE_SHIELD_VOLCANO)
+        {
+            return SHIELD_VOLCANO_SHORE;
+        }
+        if (value == DORMANT_SHIELD_VOLCANO || value == EXTINCT_SHIELD_VOLCANO || value == ANCIENT_SHIELD_VOLCANO)
+        {
+            return OLD_SHIELD_VOLCANO_SHORE;
+        }
+        if (isFlatIceSheet(value) || value == ICE_SHEET_EDGE || value == ICE_SHEET_OCEANIC)
+        {
+            return ICE_SHEET_SHORE;
+        }
+        if (value == ICE_SHEET_OCEANIC_MOUNTAINS)
+        {
+            return ICE_SHEET_OCEANIC_MOUNTAINS_EDGE;
+        }
+        if (value == GLACIALLY_CARVED_OCEANIC_MOUNTAINS || value == GLACIALLY_CARVED_MOUNTAINS)
+        {
+            return GLACIATED_OCEANIC_MOUNTAINS;
+        }
         return SHORE;
     }
 
     public static boolean hasLake(int value)
     {
-        return !isOcean(value) && value != BADLANDS;
+        return (!isOcean(value) && value != BADLANDS && value != ACTIVE_SHIELD_VOLCANO && value != DORMANT_SHIELD_VOLCANO
+            && value != EXTINCT_SHIELD_VOLCANO && value != ANCIENT_SHIELD_VOLCANO && value != ICE_SHEET_MOUNTAINS
+            && value != ICE_SHEET_MOUNTAINS_EDGE && value != ICE_SHEET_OCEANIC_MOUNTAINS && value != ICE_SHEET_OCEANIC_MOUNTAINS_EDGE
+            && value != ICE_SHEET_SHIELD_VOLCANO && value != ICE_SHEET_SHORE && value != GLACIATED_SHIELD_VOLCANO
+            && value != GLACIATED_MOUNTAINS && value != GLACIATED_OCEANIC_MOUNTAINS && value != GLACIALLY_CARVED_MOUNTAINS
+            && value != GLACIALLY_CARVED_OCEANIC_MOUNTAINS);
     }
 
     public static int lakeFor(int value)
@@ -253,6 +317,14 @@ public class TFCLayers
         {
             return PLATEAU_LAKE;
         }
+        if (isFlatIceSheet(value))
+        {
+            return SUBGLACIAL_LAKE;
+        }
+        if (value == ICE_SHEET_EDGE)
+        {
+            return MELTWATER_LAKE;
+        }
         return LAKE;
     }
 
@@ -274,6 +346,11 @@ public class TFCLayers
     public static boolean isFlats(int value)
     {
         return value == MUD_FLATS || value == SALT_FLATS;
+    }
+
+    public static boolean isFlatIceSheet(int value)
+    {
+        return value == ICE_SHEET || value == ICE_SHEET_TUYAS || value == SUBGLACIAL_LAKE;
     }
 
     public static int idFor(BiomeExtension extension)

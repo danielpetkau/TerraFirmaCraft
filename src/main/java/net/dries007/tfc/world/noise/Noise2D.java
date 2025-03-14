@@ -151,6 +151,14 @@ public interface Noise2D
     }
 
     /**
+     * Sum of a noise and a constant.
+     */
+    default Noise2D addConstant(double constant)
+    {
+        return (x, y) -> Noise2D.this.noise(x, y) + constant;
+    }
+
+    /**
      * Minimum of two noises.
      */
     default Noise2D min(Noise2D other)
@@ -180,5 +188,36 @@ public interface Noise2D
     default Noise2D map(DoubleUnaryOperator mappingFunction)
     {
         return (x, y) -> mappingFunction.applyAsDouble(Noise2D.this.noise(x, y));
+    }
+
+    /**
+     * Used to generate varying-height cliffs starting at various noise values
+     *
+     * @param compare value above which cliffs should be added
+     * @param addend  cliff height noise
+     */
+    default Noise2D cliffMap(Noise2D compare, Noise2D addend)
+    {
+        return (x, z) -> {
+            final double noise = Noise2D.this.noise(x, z);
+            if (noise > compare.noise(x, z))
+            {
+                return noise + addend.noise(x, z);
+            }
+            else
+            {
+                return noise;
+            }
+        };
+    }
+
+    default Noise2D stretchZ(double stretch)
+    {
+        return (x, z) -> this.noise(x, z / stretch);
+    }
+
+    default Noise2D stretchX(double stretch)
+    {
+        return (x, z) -> this.noise(x / stretch, z);
     }
 }

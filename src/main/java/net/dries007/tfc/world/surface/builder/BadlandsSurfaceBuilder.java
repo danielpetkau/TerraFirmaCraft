@@ -103,13 +103,13 @@ public class BadlandsSurfaceBuilder implements SurfaceBuilder
     {
         final double heightVariation = grassHeightVariationNoise.noise(context.pos().getX(), context.pos().getZ());
         final double weightVariation = (1.0 - context.weight()) * 23.0;
-        final double rainfallVariation = Mth.clampedMap(context.groundwater(), 100, 500, 0, 22);
+        final double rainfallVariation = Mth.clampedMap(context.groundWater(), 100, 500, 0, 22);
 
         if (inverted
             ? startY + 5 < heightVariation + weightVariation + rainfallVariation
             : startY - 5 > heightVariation - weightVariation - rainfallVariation)
         {
-            NormalSurfaceBuilder.INSTANCE.buildSurface(context, startY, endY, SurfaceStates.GRASS, SurfaceStates.DIRT, SurfaceStates.SANDSTONE_OR_GRAVEL);
+            NormalSurfaceBuilder.INSTANCE.buildSurface(context, startY, endY, SurfaceStates.TOP_GRASS_TO_SAND, SurfaceStates.MID_DIRT_TO_SAND, SurfaceStates.UNDER_GRAVEL);
         }
         else
         {
@@ -137,7 +137,7 @@ public class BadlandsSurfaceBuilder implements SurfaceBuilder
                     // Reached surface. Place top state and switch to subsurface layers
                     if (y < context.getSeaLevel() - 1)
                     {
-                        context.setBlockState(y, SurfaceStates.SAND_OR_GRAVEL);
+                        context.setBlockState(y, SurfaceStates.SAND);
                     }
                     else
                     {

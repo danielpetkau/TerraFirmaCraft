@@ -27,12 +27,12 @@ public enum NormalSurfaceBuilder implements SurfaceBuilderFactory.Invariant
     @Override
     public void buildSurface(SurfaceBuilderContext context, int startY, int endY)
     {
-        buildSurface(context, startY, endY, SurfaceStates.GRASS, SurfaceStates.DIRT, SurfaceStates.SANDSTONE_OR_GRAVEL);
+        buildSurface(context, startY, endY, SurfaceStates.TOP_GRASS_TO_GRAVEL, SurfaceStates.MID_DIRT_TO_GRAVEL, SurfaceStates.UNDER_GRAVEL);
     }
 
     public void buildSurface(SurfaceBuilderContext context, int startY, int endY, SurfaceState topState, SurfaceState midState, SurfaceState underState)
     {
-        buildSurface(context, startY, endY, topState, midState, underState, SurfaceStates.SAND_OR_GRAVEL, SurfaceStates.SANDSTONE_OR_GRAVEL);
+        buildSurface(context, startY, endY, topState, midState, underState, SurfaceStates.GRAVEL, SurfaceStates.GRAVEL);
     }
 
     public void buildSurface(SurfaceBuilderContext context, int startY, int endY, SurfaceState topState, SurfaceState midState, SurfaceState underState, SurfaceState underWaterState, SurfaceState thinUnderWaterState)
@@ -57,7 +57,7 @@ public enum NormalSurfaceBuilder implements SurfaceBuilderFactory.Invariant
                     firstLayer = true;
                     if (y < context.getSeaLevel() - 1)
                     {
-                        surfaceDepth = context.calculateAltitudeSlopeSurfaceDepth(surfaceY, 2, -1);
+                        surfaceDepth = context.calculateAltitudeSlopeSurfaceDepth(surfaceY, -1);
                         if (surfaceDepth < -1)
                         {
                             // No surface layers
@@ -78,7 +78,7 @@ public enum NormalSurfaceBuilder implements SurfaceBuilderFactory.Invariant
                     }
                     else
                     {
-                        surfaceDepth = context.calculateAltitudeSlopeSurfaceDepth(surfaceY, 3, subsurfaceMinDepth);
+                        surfaceDepth = context.calculateAltitudeSlopeSurfaceDepth(surfaceY, subsurfaceMinDepth);
                         if (surfaceDepth < -1)
                         {
                             // No surface layers
@@ -110,12 +110,12 @@ public enum NormalSurfaceBuilder implements SurfaceBuilderFactory.Invariant
                             firstLayer = false;
                             if (underwaterLayer)
                             {
-                                surfaceDepth = context.calculateAltitudeSlopeSurfaceDepth(surfaceY, 4, 0);
+                                surfaceDepth = context.calculateAltitudeSlopeSurfaceDepth(surfaceY, 0);
                                 surfaceState = thinUnderWaterState;
                             }
                             else
                             {
-                                surfaceDepth = context.calculateAltitudeSlopeSurfaceDepth(surfaceY, 7, 0);
+                                surfaceDepth = context.calculateAltitudeSlopeSurfaceDepth(surfaceY, 0);
                                 surfaceState = underState;
                             }
                         }

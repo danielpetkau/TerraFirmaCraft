@@ -74,6 +74,13 @@
         ]
       },
       {
+        "rock": "tfc:rock/raw/tuff",
+        "blocks": [
+          "tfc:rock/cobble/tuff",
+          "tfc:rock/mossy_cobble/tuff"
+        ]
+      },
+      {
         "rock": "tfc:rock/raw/rhyolite",
         "blocks": [
           "tfc:rock/cobble/rhyolite",

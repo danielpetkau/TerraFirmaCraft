@@ -1,0 +1,9 @@
+{
+  "__comment__": "This file was automatically created by mcresources",
+  "replace": false,
+  "values": [
+    "#tfc:feature/icebergs",
+    "#tfc:feature/shield_volcanoes",
+    "#tfc:feature/surface_flood_fill_lakes"
+  ]
+}

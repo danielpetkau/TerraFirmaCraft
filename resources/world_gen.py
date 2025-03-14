@@ -53,8 +53,10 @@ def generate(rm: ResourceManager):
     rm.placed_feature_tag('feature/icebergs', 'tfc:iceberg_packed', 'tfc:iceberg_blue', 'tfc:iceberg_packed_rare', 'tfc:iceberg_blue_rare')
     rm.placed_feature_tag('feature/boulders', 'tfc:raw_boulder', 'tfc:cobble_boulder', 'tfc:mossy_boulder', 'tfc:raw_boulder_small_patch', 'tfc:cobble_boulder_small_patch', 'tfc:mossy_boulder_small_patch')
     rm.placed_feature_tag('feature/soil_discs', 'tfc:clay_disc_with_indicator', 'tfc:water_clay_disc_with_indicator', 'tfc:peat_disc', 'tfc:powder_snow', 'tfc:rooted_dirt')
-    rm.placed_feature_tag('feature/volcanoes', 'tfc:volcano_rivulet', 'tfc:volcano_caldera', 'tfc:random_volcano_fissure', 'tfc:pumice_patch')
+    rm.placed_feature_tag('feature/volcanoes', 'tfc:volcano_rivulet', 'tfc:volcano_caldera', 'tfc:random_volcano_fissure', 'tfc:pumice_patch', 'tfc:lava_surface_spring')
+    rm.placed_feature_tag('feature/tuyas', 'tfc:tuya_rivulet', 'tfc:tuya_caldera', 'tfc:random_tuya_fissure', 'tfc:pumice_patch', 'tfc:lava_surface_spring')
     rm.placed_feature_tag('feature/surface_flood_fill_lakes', 'tfc:flood_fill_lake')
+    rm.placed_feature_tag('feature/shield_volcanoes', 'tfc:pumice_shield_volcano_patch')
 
     # Biomes
     biome(rm, 'badlands', 'mesa', lake_features=False)
@@ -110,11 +112,20 @@ def generate(rm: ResourceManager):
     biome(rm, 'doline_plateau', 'extreme_hills')
     biome(rm, 'cenote_plateau', 'extreme_hills')
     biome(rm, 'tower_karst_lake', 'river', lake_features=False, ocean_features='both')
-    biome(rm, 'tower_karst_bay', 'river', lake_features=False, ocean_features='both')
+    biome(rm, 'tower_karst_bay', 'beach', lake_features=False, ocean_features='both')
     biome(rm, 'extreme_doline_mountains', 'extreme_hills')
     biome(rm, 'burren_badlands', 'mesa')
     biome(rm, 'doline_rolling_hills', 'plains')
     biome(rm, 'cenote_rolling_hills', 'plains')
+    biome(rm, 'burren_roche_moutonee', 'extreme_hills')
+
+    biome(rm, 'active_shield_volcano', 'extreme_hills', volcano_features=True, shield_volcano_features=True)
+    biome(rm, 'dormant_shield_volcano', 'extreme_hills', hot_spring_features=True, shield_volcano_features=True)
+    biome(rm, 'extinct_shield_volcano', 'extreme_hills', hot_spring_features='empty', shield_volcano_features=True)
+    biome(rm, 'ancient_shield_volcano', 'extreme_hills', shield_volcano_features=True)
+    biome(rm, 'sunken_shield_volcano', 'extreme_hills', shield_volcano_features=True)
+    biome(rm, 'shield_volcano_shore', 'beach', ocean_features=True, shield_volcano_features=True)
+    biome(rm, 'old_shield_volcano_shore', 'beach', ocean_features=True, shield_volcano_features=True)
 
     biome(rm, 'mountain_lake', 'extreme_hills')
     biome(rm, 'volcanic_mountain_lake', 'extreme_hills', volcano_features=True)
@@ -123,6 +134,37 @@ def generate(rm: ResourceManager):
     biome(rm, 'volcanic_oceanic_mountain_lake', 'river', ocean_features='both', volcano_features=True)
     biome(rm, 'plateau_lake', 'extreme_hills', boulders=True)
 
+    # Full ice sheet biomes
+    biome(rm, 'ice_sheet', 'extreme_hills', barren=True, boulders=True)
+    biome(rm, 'ice_sheet_mountains', 'extreme_hills', barren=True)
+    biome(rm, 'ice_sheet_oceanic_mountains', 'extreme_hills', barren=True, ocean_features='both')
+    biome(rm, 'ice_sheet_shield_volcano', 'extreme_hills', barren=True)
+    biome(rm, 'ice_sheet_tuyas', 'extreme_hills', barren=True, tuya_features=True, boulders=True)
+    biome(rm, 'subglacial_lake', 'extreme_hills', barren=True)
+
+    # Ice sheet edge biomes
+    biome(rm, 'ice_sheet_edge', 'extreme_hills', boulders=True)
+    biome(rm, 'ice_sheet_tuyas_edge', 'plains', tuya_features=True, boulders=True)
+    biome(rm, 'ice_sheet_mountains_edge', 'extreme_hills')
+    biome(rm, 'ice_sheet_oceanic_mountains_edge', 'extreme_hills', ocean_features='both')
+    biome(rm, 'meltwater_lake', 'river')
+    biome(rm, 'ice_sheet_oceanic', 'beach', barren=True)
+    biome(rm, 'ice_sheet_shore', 'beach', ocean_features='both')
+
+    # Glaciated biomes
+    biome(rm, 'glaciated_shield_volcano', 'extreme_hills', boulders=True)
+    biome(rm, 'glaciated_mountains', 'extreme_hills')
+    biome(rm, 'glaciated_oceanic_mountains', 'extreme_hills', ocean_features='both')
+
+    # Paleo/periglacial biomes
+    biome(rm, 'glacially_carved_mountains', 'extreme_hills')
+    biome(rm, 'glacially_carved_oceanic_mountains', 'extreme_hills', ocean_features='both')
+    biome(rm, 'drumlins', 'plains', boulders=True)
+    biome(rm, 'tuyas', 'plains', tuya_features=True, boulders=True)
+    biome(rm, 'knob_and_kettle', 'plains', boulders=True)
+    biome(rm, 'patterned_ground', 'plains', boulders=True)
+    biome(rm, 'inverted_patterned_ground', 'plains', boulders=True)
+    biome(rm, 'stone_circles', 'plains', boulders=True)
     # Carvers
     rm.configured_carver('cave', 'tfc:cave', {
         'probability': 0.3,
@@ -210,22 +252,70 @@ def generate(rm: ResourceManager):
         rm.placed_feature('iceberg_%s_rare' % block, 'tfc:iceberg_%s_rare' % block, decorate_chance(30), decorate_square(), decorate_climate(max_temp=-18))
 
     rm.configured_feature('powder_snow', 'tfc:powder_snow', {'state': utils.block_state('minecraft:powder_snow')})
-    rm.placed_feature('powder_snow', 'tfc:powder_snow', decorate_chance(15), decorate_square(), decorate_heightmap('world_surface_wg'), decorate_climate(max_temp=-17), decorate_flat_enough(flatness=0.6))
+    rm.placed_feature('powder_snow', 'tfc:powder_snow', decorate_chance(2), decorate_square(), decorate_heightmap('world_surface_wg'), decorate_climate(max_temp=-15))
 
     rm.configured_feature('flood_fill_lake', 'tfc:flood_fill_lake', {
         'state': 'minecraft:water',
         'replace_fluids': [],
     })
 
-    rm.placed_feature('flood_fill_lake', 'tfc:flood_fill_lake', decorate_chance(5), decorate_square(), decorate_heightmap('world_surface_wg'), decorate_climate(min_water=125), decorate_biome())
+    rm.placed_feature('flood_fill_lake', 'tfc:flood_fill_lake', decorate_chance(5), decorate_square(), decorate_heightmap('world_surface_wg'), decorate_climate(min_water=125, min_temp=-17), decorate_biome())
     rm.placed_feature('underground_flood_fill_lake', 'tfc:flood_fill_lake', decorate_chance(3), decorate_square(), decorate_range(-56, 63))
 
+    # Underground springs, no restrictions
     for spring_cfg in (('water', 110), ('lava', 50)):
         rm.configured_feature('%s_spring' % spring_cfg[0], 'tfc:spring', {
             'state': utils.block_state('minecraft:%s[falling=true]' % spring_cfg[0]),
             'valid_blocks': ['tfc:rock/raw/%s' % rock for rock in ROCKS.keys()]
         })
-        rm.placed_feature('%s_spring' % spring_cfg[0], 'tfc:%s_spring' % spring_cfg[0], decorate_count(spring_cfg[1]), decorate_square(), decorate_range(-64, 180, bias='biased_to_bottom'))
+        rm.placed_feature('%s_spring' % spring_cfg[0], 'tfc:%s_spring' % spring_cfg[0], decorate_count(spring_cfg[1]), decorate_square(), decorate_range(-64, 63, bias='uniform'))
+
+    # Lava in stone, only present in volcanic biomes
+    rm.configured_feature('lava_spring', 'tfc:spring', {
+        'state': utils.block_state('minecraft:lava[falling=true]'),
+        'valid_blocks': ['tfc:rock/raw/%s' % rock for rock in ROCKS.keys()]
+    })
+    rm.placed_feature('lava_spring', 'tfc:lava_spring', decorate_count(30), decorate_square(), decorate_range(-64, 63, bias='biased_to_bottom'))
+
+
+    # Above ground springs
+
+    # Water in stone, not present at ice sheet temperatures or extremely dry biomes
+    rm.configured_feature('water_surface_spring', 'tfc:spring', {
+        'state': utils.block_state('minecraft:water[falling=true]'),
+        'valid_blocks': ['tfc:rock/raw/%s' % rock for rock in ROCKS.keys()]
+    })
+    rm.placed_feature('water_surface_spring', 'tfc:water_surface_spring', decorate_count(60), decorate_square(), decorate_range(64, 180, bias='biased_to_bottom'), decorate_climate(min_temp=-16, min_water=65))
+
+    # Extra water in stone, only present in very wet biomes
+    rm.configured_feature('extra_water_surface_spring', 'tfc:spring', {
+        'state': utils.block_state('minecraft:water[falling=true]'),
+        'valid_blocks': ['tfc:rock/raw/%s' % rock for rock in ROCKS.keys()]
+    })
+    rm.placed_feature('extra_water_surface_spring', 'tfc:extra_water_surface_spring', decorate_count(30), decorate_square(), decorate_range(64, 180, bias='uniform'), decorate_climate(min_temp=-16, min_water=390))
+
+    # Water in blue ice, at the bases of ice-sheets, not at cirque heights
+    rm.configured_feature('ice_sheet_spring', 'tfc:spring', {
+        'state': utils.block_state('minecraft:water[falling=true]'),
+        'valid_blocks': ['minecraft:blue_ice']
+    })
+    rm.placed_feature('ice_sheet_spring', 'tfc:ice_sheet_spring', decorate_count(50), decorate_square(), decorate_range(64, 96, bias='uniform'))
+
+    # Water in blue ice, at the bases of cirque glaciers, in biomes with glaciated cirques but no ice sheets
+    rm.configured_feature('glacial_spring', 'tfc:spring', {
+        'state': utils.block_state('minecraft:water[falling=true]'),
+        'valid_blocks': ['minecraft:packed_ice']
+    })
+    rm.placed_feature('glacial_oceanic_spring', 'tfc:glacial_spring', decorate_count(200), decorate_square(), decorate_range(80, 92, bias='uniform'), decorate_biome())
+    rm.placed_feature('glacial_spring', 'tfc:glacial_spring', decorate_count(200), decorate_square(), decorate_range(110, 122, bias='uniform'), decorate_biome())
+
+    # Lava in stone, only present in volcanic biomes
+    rm.configured_feature('lava_surface_spring', 'tfc:spring', {
+        'state': utils.block_state('minecraft:lava[falling=true]'),
+        'valid_blocks': ['tfc:rock/raw/%s' % rock for rock in ROCKS.keys()]
+    })
+    rm.placed_feature('lava_surface_spring', 'tfc:lava_surface_spring', decorate_count(70), decorate_square(), decorate_range(64, 220, bias='uniform'), decorate_biome())
+
 
     rm.configured_feature('peat_disc', 'tfc:soil_disc', {
         'min_radius': 5,
@@ -310,7 +400,7 @@ def generate(rm: ResourceManager):
         rm.placed_feature(name, 'tfc:%s' % name, decorate_heightmap('ocean_floor_wg'), decorate_flat_enough(flatness=0.2))
         configured_placed_feature(rm, 'tfc:%s_patch' % name, 'minecraft:random_patch', {'tries': 6, 'xz_spread': 5, 'y_spread': 1, 'feature': 'tfc:%s' % name}, decorate_chance(36), decorate_square())
 
-
+    # Volcano Features
     rm.configured_feature('volcano_rivulet', 'tfc:rivulet', {'state': 'tfc:rock/magma/basalt'})
     rm.configured_feature('volcano_caldera', 'tfc:flood_fill_lake', {
         'overfill': True,
@@ -349,6 +439,45 @@ def generate(rm: ResourceManager):
         })
         rm.placed_feature(name, 'tfc:' + name, ('tfc:volcano', {'center': True}), decorate_heightmap('world_surface_wg'))
 
+    # Tuya volcanic features
+    rm.configured_feature('tuya_rivulet', 'tfc:rivulet', {'state': 'tfc:rock/magma/basalt'})
+    rm.configured_feature('tuya_caldera', 'tfc:flood_fill_lake', {
+        'overfill': True,
+        'replace_fluids': ['minecraft:water'],
+        'state': 'minecraft:lava'
+    })
+
+    # higher values of distance actually restrict the features closer to the volcano center
+    rm.placed_feature('tuya_rivulet', 'tfc:tuya_rivulet', decorate_count(2), decorate_square(), ('tfc:tuya', {'distance': 0.84}))
+    rm.placed_feature('tuya_caldera', 'tfc:tuya_caldera', ('tfc:tuya', {'center': True}), decorate_heightmap('world_surface_wg'))
+
+    configured_placed_feature(rm, 'random_tuya_fissure', 'minecraft:simple_random_selector', {
+        'features': count_weighted_list(
+            ('tfc:topaz_tuya_fissure', 3),
+            ('tfc:diamond_tuya_fissure', 1),
+            ('tfc:tuya_fissure', 4)
+        )
+    })
+
+    for ore in ('diamond', 'topaz', ''):
+        name = join_not_empty('_', ore, 'tuya_fissure')
+        rm.configured_feature(name, 'tfc:fissure', {
+            'wall_state': 'tfc:rock/raw/basalt',
+            'fluid_state': 'minecraft:lava',
+            'count': 3,
+            'radius': 6,
+            'decoration': {
+                'blocks': [{
+                    'replace': ['tfc:rock/raw/%s' % rock],
+                    'with': [{'block': 'tfc:ore/%s/%s' % (ore, rock)}]
+                } for rock in rocks],
+                'radius': 3,
+                'count': 6,
+                'rarity': 3
+            } if ore != '' else None,
+        })
+        rm.placed_feature(name, 'tfc:' + name, ('tfc:tuya', {'center': True}), decorate_heightmap('world_surface_wg'))
+
     # six different variants: both filled + not, and both sapphire, emerald, and no decoration
     for ore in ('sapphire', 'emerald', ''):
         for variant, fill_state, count in (('empty', 'minecraft:air', 2), ('', 'tfc:fluid/spring_water', 5)):
@@ -367,6 +496,7 @@ def generate(rm: ResourceManager):
             })
 
     igneous_rocks = expand_rocks(['igneous_extrusive', 'igneous_intrusive'])
+    # TODO: Need to stop lava hot springs generating on top of sea ice. As a temporary measure, I added a climate restriction
     configured_placed_feature(rm, 'lava_hot_spring', 'tfc:hot_spring', {
         'fluid_state': 'minecraft:lava',
         'radius': 10,
@@ -378,7 +508,7 @@ def generate(rm: ResourceManager):
                 {'block': 'tfc:rock/hardened/%s' % rock, 'weight': 2}
             ]
         } for rock in igneous_rocks]
-    }, decorate_chance(20), decorate_square())
+    }, decorate_chance(20), decorate_square(), decorate_climate(min_temp=-14))
 
     rm.configured_feature('random_empty_hot_spring', 'minecraft:simple_random_selector', {
         'features': count_weighted_list(
@@ -553,7 +683,7 @@ def generate(rm: ResourceManager):
     rm.biome_tag('cenotes', 'tfc:cenote_plains', 'tfc:cenote_canyons', 'tfc:cenote_hills', 'tfc:cenote_highlands', 'tfc:cenote_plateau')
     rm.biome_tag('shilins', 'tfc:shilin_plains', 'tfc:shilin_canyons', 'tfc:shilin_hills', 'tfc:shilin_highlands', 'tfc:shilin_plateau')
     rm.biome_tag('burrens', 'tfc:burren_plains', 'tfc:burren_badlands', 'tfc:burren_badlands_tall', 'tfc:burren_plateau')
-    rm.biome_tag('karsts', '#tfc:tower_karsts', '#tfc:dolines', '#tfc:cenotes', '#tfc:shilins', '#tfc:burrens', '#tfc:karsts')
+    rm.biome_tag('karsts', '#tfc:tower_karsts', '#tfc:dolines', '#tfc:cenotes', '#tfc:shilins', '#tfc:burrens')
     rm.biome_tag('kaolin_clay_spawns_in', 'tfc:plateau', 'tfc:highlands', 'tfc:old_mountains', 'tfc:rolling_hills', 'tfc:tower_karst_hills', 'tfc:tower_karst_highlands', 'tfc:extreme_doline_plateau', 'tfc:extreme_doline_mountains', 'tfc:doline_rolling_hills', 'tfc:doline_highlands', 'tfc:doline_plateau', 'tfc:cenote_rolling_hills', 'tfc:cenote_highlands', 'tfc:cenote_plateau', 'tfc:shilin_hills', 'tfc:shilin_highlands', 'tfc:shilin_plateau')
 
     configured_placed_feature(rm, ('vein', 'gravel'), 'tfc:disc_vein', {
@@ -881,6 +1011,7 @@ def generate(rm: ResourceManager):
     configured_patch_feature(rm, 'rotten_flesh', patch_config('tfc:groundcover/rotten_flesh[fluid=empty]', 1, 10, 10), decorate_chance(100), decorate_square(), decorate_climate(-30, 30, 0, 400), biome_check=False)
     configured_patch_feature(rm, 'bone', patch_config('tfc:groundcover/bone[fluid=empty]', 1, 10, 10), decorate_chance(100), decorate_square(), decorate_climate(-30, 30, 0, 400), biome_check=False)
     configured_patch_feature(rm, 'pumice', patch_config('tfc:groundcover/pumice[fluid=empty]', 1, 10, 10), decorate_chance(3), decorate_square(), ('tfc:volcano', {'distance': 0.8}), biome_check=False)
+    configured_patch_feature(rm, 'pumice_shield_volcano', patch_config('tfc:groundcover/pumice[fluid=empty]', 1, 10, 10), decorate_chance(3), decorate_square(), decorate_biome())
 
     # Loose Rocks - Both Surface + Underground
     configured_placed_feature(rm, 'loose_rock', 'tfc:loose_rock', {}, decorate_heightmap('ocean_floor_wg'))
@@ -1484,7 +1615,13 @@ LAKE_CREATURES: Dict[str, Dict[str, Any]] = {
     'manatee': spawner('tfc:manatee', min_count=1, max_count=2)
 }
 
+ICE_SHEET_OCEANIC_CREATURES: Dict[str, Dict[str, Any]] = {
+    'polar_bear': spawner('tfc:polar_bear', min_count=1, max_count=1, weight=1),
+    'penguin': spawner('tfc:penguin', min_count=2, max_count=5)
+}
+
 SHORE_CREATURES: Dict[str, Dict[str, Any]] = {
+    'polar_bear': spawner('tfc:polar_bear', min_count=1, max_count=1, weight=1),
     'penguin': spawner('tfc:penguin', min_count=2, max_count=5, weight=10),
     'turtle': spawner('tfc:turtle', min_count=2, max_count=5, weight=10)
 }
@@ -1539,7 +1676,7 @@ VANILLA_MONSTERS: Dict[str, Dict[str, Any]] = {
 }
 
 
-def biome(rm: ResourceManager, name: str, category: str, boulders: bool = False, ocean_features: Union[bool, Literal['both']] = False, lake_features: Union[bool, Literal['default']] = 'default', volcano_features: bool = False, reef_features: bool = False, barren: bool = False, hot_spring_features: Union[bool, Literal['empty']] = False):
+def biome(rm: ResourceManager, name: str, category: str, boulders: bool = False, ocean_features: Union[bool, Literal['both']] = False, lake_features: Union[bool, Literal['default']] = 'default', volcano_features: bool = False, shield_volcano_features: bool = False, tuya_features: bool = False, reef_features: bool = False, barren: bool = False, hot_spring_features: Union[bool, Literal['empty']] = False):
     spawners = {}
     soil_discs = []
     large_features = []
@@ -1568,9 +1705,11 @@ def biome(rm: ResourceManager, name: str, category: str, boulders: bool = False,
             surface_decorations.append('tfc:plant/beachgrass_patch')
             surface_decorations.append('tfc:plant/sea_palm_patch')
 
+        # Not just beaches, as penguins should spawn on ice out at sea as well
+        spawners['creature'] = [entity for entity in SHORE_CREATURES.values()]
+
         if category == 'beach':
             surface_decorations.append('#tfc:feature/shore_decorations')
-            spawners['creature'] = [entity for entity in SHORE_CREATURES.values()]
         else:
             surface_decorations.append('#tfc:feature/ocean_decorations')
 
@@ -1578,6 +1717,9 @@ def biome(rm: ResourceManager, name: str, category: str, boulders: bool = False,
         spawners['water_creature'] = [entity for entity in OCEAN_CREATURES.values()]
         spawners['underground_water_creature'] = [entity for entity in UNDERGROUND_WATER_CREATURES.values()]
         costs['tfc:octopoteuthis'] = {'energy_budget': 0.12, 'charge': 1.0}
+
+    if ('ice_sheet' in name) and ('oceanic' in name):
+        spawners['creature'] = [entity for entity in ICE_SHEET_OCEANIC_CREATURES.values()]
 
     if category in ('river', 'lake'):
         soil_discs.append('#tfc:feature/ore_deposits')
@@ -1617,8 +1759,20 @@ def biome(rm: ResourceManager, name: str, category: str, boulders: bool = False,
         surface_decorations.append('#tfc:feature/land_plants')
         spawners['creature'] = [entity for entity in LAND_CREATURES.values()]
 
+    if ('glaciated' in name) or ('mountains_edge' in name):
+        if 'oceanic' in name:
+            large_features.append('tfc:glacial_oceanic_spring')
+        else:
+            large_features.append('tfc:glacial_spring')
+
     if volcano_features:
         large_features.append('#tfc:feature/volcanoes')
+
+    if tuya_features:
+        large_features.append('#tfc:feature/tuyas')
+
+    if shield_volcano_features:
+        large_features.append('#tfc:feature/shield_volcanoes')
 
     if hot_spring_features:  # can be True, 'empty'
         if hot_spring_features == 'empty':

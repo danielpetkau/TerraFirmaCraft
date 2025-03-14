@@ -28,11 +28,12 @@ public class BurrenSurfaceBuilder implements SurfaceBuilder
     {
         if (crevices.noise(context.pos().getX(), context.pos().getZ()) + 0.3 * context.weight() <= 0.40)
         {
-            NormalSurfaceBuilder.ROCKY.buildSurface(context, startY, endY);
+            NormalSurfaceBuilder.ROCKY.buildSurface(context, startY, endY, SurfaceStates.TOP_GRASS_TO_GRAVEL, SurfaceStates.RAW, SurfaceStates.RAW);
         }
         else
         {
-            NormalSurfaceBuilder.ROCKY.buildSurface(context, startY, endY, SurfaceStates.RAW, SurfaceStates.RAW, SurfaceStates.RAW);
+            NormalSurfaceBuilder.ROCKY.buildSurface(context, startY, endY, SurfaceStates.SNOWY_RAW, SurfaceStates.RAW, SurfaceStates.RAW);
+
         }
     }
 }

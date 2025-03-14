@@ -356,8 +356,8 @@ public class OverworldClimateModel implements ClimateModel
         if (y > SEA_LEVEL)
         {
             // -1.6 C / 10 blocks above sea level
-            final float elevationTemperature = Mth.clamp((y - SEA_LEVEL) * 0.16225f, 0, 17.822f);
-            return averageTemperature + monthTemperature - elevationTemperature + dailyTemperature;
+            final float averageElevationTemperature = Helpers.adjustAverageTemperatureByElevation(y, averageTemperature, SEA_LEVEL);
+            return averageElevationTemperature + monthTemperature + dailyTemperature;
         }
         else if (y > 0)
         {
@@ -380,11 +380,12 @@ public class OverworldClimateModel implements ClimateModel
      */
     protected float calculateMonthlyTemperature(int z, float monthTemperatureModifier)
     {
-        return monthTemperatureModifier * (temperatureScale == 0 ? 0 : Helpers.triangle(-3f, 15f, 1f / (2f * temperatureScale), z));
+        return monthTemperatureModifier * (temperatureScale == 0 ? 0 : Helpers.triangle(-9f, 9f, 1f / (2f * temperatureScale), z));
     }
 
     /**
      * Calculates the daily variation temperature at a given time. Influenced by both random variation day by day, and the time of day.
+     *
      * @return A value in the range {@code [-4.0, 4.0]}
      */
     protected float calculateDailyTemperature(long calendarTime)

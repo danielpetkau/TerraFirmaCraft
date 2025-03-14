@@ -32,6 +32,12 @@
   "spawners": {
     "creature": [
       {
+        "type": "tfc:polar_bear",
+        "weight": 1,
+        "minCount": 1,
+        "maxCount": 1
+      },
+      {
         "type": "tfc:penguin",
         "weight": 10,
         "minCount": 2,

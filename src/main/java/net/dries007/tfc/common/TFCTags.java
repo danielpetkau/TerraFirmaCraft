@@ -155,11 +155,12 @@ public class TFCTags
         public static final TagKey<Block> PROSPECTABLE = tag("prospectable"); // can be found with the prospector pick
 
         /**
-         * The vanilla tag {@link BlockTags#DIRT} contains all dirt, grass, and mud. These tags mostly
+         * The vanilla tag {@link BlockTags#DIRT} contains all dirt, grass, coarse dirt, and mud. These tags mostly
          * only contain the respective TFC blocks and identical ones
          */
         public static final TagKey<Block> DIRT = tag("dirt");
         public static final TagKey<Block> GRASS = tag("grass");
+        public static final TagKey<Block> COARSE_DIRT = tag("coarse_dirt");
         /** Used for non-wild crop growth. */
         public static final TagKey<Block> FARMLANDS = tag("farmlands");
         public static final TagKey<Block> PATHS = tag("paths");
@@ -181,6 +182,7 @@ public class TFCTags
         public static final TagKey<Block> SEA_BUSH_PLANTABLE_ON = tag("sea_bush_plantable_on");
         public static final TagKey<Block> HALOPHYTE_PLANTABLE_ON = tag("halophyte_plantable_on");
         public static final TagKey<Block> CREEPING_STONE_PLANTABLE_ON = tag("creeping_stone_plantable_on");
+        public static final TagKey<Block> CREEPING_PLANT_NOT_PLANTABLE_ON = tag("creeping_plant_not_plantable_on");
 
         /** Crops that rabbits will eat / break. Includes cabbage and carrots. */
         public static final TagKey<Block> RABBIT_RAIDABLE = tag("rabbit_raidable");
@@ -574,6 +576,7 @@ public class TFCTags
         // Block Tags - Earth
         public static final TagKey<Item> DIRT = tag(Blocks.DIRT);
         public static final TagKey<Item> GRASS = tag(Blocks.GRASS);
+        public static final TagKey<Item> COARSE_DIRT = tag(Blocks.COARSE_DIRT);
         public static final TagKey<Item> MUD = tag(Blocks.MUD);
         public static final TagKey<Item> MUD_BRICKS = tag(Blocks.MUD_BRICKS);
 
@@ -604,10 +607,6 @@ public class TFCTags
 
     public static class Entities
     {
-        public static final TagKey<EntityType<?>> TURTLE_FRIENDS = tag("turtle_friends");
-        public static final TagKey<EntityType<?>> SPAWNS_ON_COLD_BLOCKS = tag("spawns_on_cold_blocks"); // if ice is a valid spawn
-        public static final TagKey<EntityType<?>> BUBBLE_COLUMN_IMMUNE = tag("bubble_column_immune");
-        public static final TagKey<EntityType<?>> NEEDS_LARGE_FISHING_BAIT = tag("needs_large_fishing_bait");
         public static final TagKey<EntityType<?>> HUNTS_LAND_PREY = tag("hunts_land_prey");
         public static final TagKey<EntityType<?>> HUNTED_BY_LAND_PREDATORS = tag("hunted_by_land_predators");
         public static final TagKey<EntityType<?>> OCEAN_PREDATORS = tag("ocean_predators");
@@ -627,6 +626,10 @@ public class TFCTags
 
         /** Monsters in vanilla that we restrict to spawning underground */
         public static final TagKey<EntityType<?>> MONSTERS = tag("monsters");
+        public static final TagKey<EntityType<?>> SPAWNS_ON_COLD_BLOCKS = tag("spawns_on_cold_blocks"); // if ice is a valid spawn
+        public static final TagKey<EntityType<?>> TURTLE_FRIENDS = tag("turtle_friends");
+        public static final TagKey<EntityType<?>> BUBBLE_COLUMN_IMMUNE = tag("bubble_column_immune");
+        public static final TagKey<EntityType<?>> NEEDS_LARGE_FISHING_BAIT = tag("needs_large_fishing_bait");
 
 
         private static TagKey<EntityType<?>> tag(String id)

@@ -155,6 +155,21 @@
       },
       {
         "replace": [
+          "tfc:rock/raw/tuff"
+        ],
+        "with": [
+          {
+            "block": "tfc:rock/mossy_cobble/tuff",
+            "weight": 8
+          },
+          {
+            "block": "tfc:rock/cobble/tuff",
+            "weight": 2
+          }
+        ]
+      },
+      {
+        "replace": [
           "tfc:rock/raw/rhyolite"
         ],
         "with": [

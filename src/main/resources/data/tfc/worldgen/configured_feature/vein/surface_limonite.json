@@ -141,6 +141,25 @@
             "block": "tfc:ore/rich_limonite/chalk"
           }
         ]
+      },
+      {
+        "replace": [
+          "tfc:rock/raw/tuff"
+        ],
+        "with": [
+          {
+            "weight": 35,
+            "block": "tfc:ore/poor_limonite/tuff"
+          },
+          {
+            "weight": 40,
+            "block": "tfc:ore/normal_limonite/tuff"
+          },
+          {
+            "weight": 25,
+            "block": "tfc:ore/rich_limonite/tuff"
+          }
+        ]
       }
     ],
     "indicator": {

@@ -6,6 +6,8 @@
 
 package net.dries007.tfc.world.surface.builder;
 
+
+import java.util.Random;
 import net.dries007.tfc.common.blocks.soil.SoilBlockType;
 import net.dries007.tfc.world.Seed;
 import net.dries007.tfc.world.noise.Noise2D;
@@ -35,14 +37,14 @@ public class GrassyDunesSurfaceBuilder implements SurfaceBuilder
         final double trueSlope = context.getSlope();
 
         context.setSlope(trueSlope * (1 - context.weight()));
+
         if (startY > heightVariation && trueSlope < 5)
         {
-            SurfaceState grass = SoilSurfaceState.buildDryDirt(SoilBlockType.GRASS);
-            NormalSurfaceBuilder.INSTANCE.buildSurface(context, startY, endY, grass, SAND, SAND, SAND, SAND);
+            NormalSurfaceBuilder.INSTANCE.buildSurface(context, startY, endY, TOP_GRASS_TO_SAND, SAND, SAND, SAND, SAND);
         }
         else
         {
-            NormalSurfaceBuilder.INSTANCE.buildSurface(context, startY, endY, SAND, SAND, SAND, SAND, SAND);
+            NormalSurfaceBuilder.INSTANCE.buildSurface(context, startY, endY, SNOWY_SAND, SAND, SAND, SAND, SAND);
         }
     }
 }

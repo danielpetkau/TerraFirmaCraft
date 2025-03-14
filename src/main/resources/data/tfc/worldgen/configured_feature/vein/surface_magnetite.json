@@ -141,6 +141,25 @@
             "block": "tfc:ore/rich_magnetite/chalk"
           }
         ]
+      },
+      {
+        "replace": [
+          "tfc:rock/raw/tuff"
+        ],
+        "with": [
+          {
+            "weight": 35,
+            "block": "tfc:ore/poor_magnetite/tuff"
+          },
+          {
+            "weight": 40,
+            "block": "tfc:ore/normal_magnetite/tuff"
+          },
+          {
+            "weight": 25,
+            "block": "tfc:ore/rich_magnetite/tuff"
+          }
+        ]
       }
     ],
     "indicator": {

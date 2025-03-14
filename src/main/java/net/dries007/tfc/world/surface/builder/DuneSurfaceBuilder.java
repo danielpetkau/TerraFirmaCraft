@@ -7,8 +7,7 @@
 package net.dries007.tfc.world.surface.builder;
 
 import net.dries007.tfc.world.surface.SurfaceBuilderContext;
-
-import static net.dries007.tfc.world.surface.SurfaceStates.*;
+import net.dries007.tfc.world.surface.SurfaceStates;
 
 public enum DuneSurfaceBuilder implements SurfaceBuilderFactory.Invariant
 {
@@ -18,6 +17,6 @@ public enum DuneSurfaceBuilder implements SurfaceBuilderFactory.Invariant
     public void buildSurface(SurfaceBuilderContext context, int startY, int endY)
     {
         context.setSlope(context.getSlope() * (1 - context.weight()));
-        NormalSurfaceBuilder.INSTANCE.buildSurface(context, startY, endY, SAND, SAND, SAND, SAND, SAND);
+        NormalSurfaceBuilder.INSTANCE.buildSurface(context, startY, endY, SurfaceStates.SNOWY_SAND,  SurfaceStates.SAND,  SurfaceStates.SAND,  SurfaceStates.SAND,  SurfaceStates.SAND);
     }
 }

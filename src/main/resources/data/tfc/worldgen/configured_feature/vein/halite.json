@@ -81,6 +81,16 @@
             "block": "tfc:ore/halite/chalk"
           }
         ]
+      },
+      {
+        "replace": [
+          "tfc:rock/raw/tuff"
+        ],
+        "with": [
+          {
+            "block": "tfc:ore/halite/tuff"
+          }
+        ]
       }
     ]
   }

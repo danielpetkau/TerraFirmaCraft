@@ -64,6 +64,12 @@
         ]
       },
       {
+        "rock": "tfc:rock/raw/tuff",
+        "blocks": [
+          "tfc:rock/raw/tuff"
+        ]
+      },
+      {
         "rock": "tfc:rock/raw/rhyolite",
         "blocks": [
           "tfc:rock/raw/rhyolite"

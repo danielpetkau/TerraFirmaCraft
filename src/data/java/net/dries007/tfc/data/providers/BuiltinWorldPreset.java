@@ -93,6 +93,7 @@ public final class BuiltinWorldPreset
         .put(DOLOMITE, SandBlockType.BLACK)
         .put(CHERT, SandBlockType.YELLOW)
         .put(CHALK, SandBlockType.WHITE)
+        .put(TUFF, SandBlockType.BLACK)
         .put(RHYOLITE, SandBlockType.RED)
         .put(BASALT, SandBlockType.RED)
         .put(ANDESITE, SandBlockType.RED)
@@ -105,7 +106,7 @@ public final class BuiltinWorldPreset
         .put(MARBLE, SandBlockType.WHITE)
         .build();
 
-    private static final Map<Rock, Boolean> ROCK_SET_KARST = ImmutableMap.<Rock,Boolean>builder()
+    private static final Map<Rock, Boolean> ROCK_SET_KARST = ImmutableMap.<Rock, Boolean>builder()
         .put(GRANITE, Boolean.FALSE)
         .put(DIORITE, Boolean.FALSE)
         .put(GABBRO, Boolean.FALSE)
@@ -116,6 +117,7 @@ public final class BuiltinWorldPreset
         .put(DOLOMITE, Boolean.TRUE)
         .put(CHERT, Boolean.FALSE)
         .put(CHALK, Boolean.TRUE)
+        .put(TUFF, Boolean.FALSE)
         .put(RHYOLITE, Boolean.FALSE)
         .put(BASALT, Boolean.FALSE)
         .put(ANDESITE, Boolean.FALSE)
@@ -200,7 +202,7 @@ public final class BuiltinWorldPreset
             List.of(SEDIMENTARY, UPLIFT)
         )).getOrThrow();
     }
-    
+
     private static List<String> namesOf(Rock... rocks)
     {
         return Stream.of(rocks).map(Rock::getSerializedName).toList();
@@ -210,7 +212,7 @@ public final class BuiltinWorldPreset
     {
         return new LayerData(layerId, layers.entrySet().stream().collect(Collectors.toMap(e -> e.getKey().getSerializedName(), Map.Entry::getValue)));
     }
-    
+
     private static RockSettings rockOf(Rock rock)
     {
         final var blocks = TFCBlocks.ROCK_BLOCKS.get(rock);

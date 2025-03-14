@@ -83,6 +83,16 @@
       },
       {
         "replace": [
+          "tfc:rock/raw/tuff"
+        ],
+        "with": [
+          {
+            "block": "tfc:ore/opal/tuff"
+          }
+        ]
+      },
+      {
+        "replace": [
           "tfc:rock/raw/rhyolite"
         ],
         "with": [

@@ -1,0 +1,26 @@
+{
+  "type": "tfc:advanced_shaped_crafting",
+  "key": {
+    "C": {
+      "tag": "c:tools/chisel"
+    },
+    "X": {
+      "item": "tfc:brick/tuff"
+    }
+  },
+  "pattern": [
+    " C",
+    "XX"
+  ],
+  "remainder": {
+    "modifiers": [
+      {
+        "type": "tfc:damage_crafting_remainder"
+      }
+    ]
+  },
+  "result": {
+    "count": 1,
+    "id": "tfc:rock/pressure_plate/tuff"
+  }
+}

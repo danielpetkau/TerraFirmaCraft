@@ -81,6 +81,23 @@ public final class VolcanoNoise implements CenterOrDistanceNoise
         return baseHeight;
     }
 
+    // Alternate version of modifyHeight used for shield volcanoes that weighs the base noise more heavily
+    public double modifyShieldVolcanoHeight(double x, double z, double baseHeight, int rarity, int baseVolcanoHeight, int scaleVolcanoHeight)
+    {
+        final Cellular2D.Cell cell = sampleCell(x, z, rarity);
+        if (cell != null)
+        {
+            final float f1 = (float) cell.f1();
+            final float easing = Mth.clamp(VolcanoNoise.calculateEasing(f1) + (float) jitterNoise.noise(x, z), 0, 1);
+            final float shape = VolcanoNoise.calculateShape(1 - easing);
+            final float volcanoAdditionalHeight = shape * scaleVolcanoHeight;
+            final float volcanoHeight = (SEA_LEVEL_Y + baseVolcanoHeight + volcanoAdditionalHeight);
+            final float weight = 10f * Mth.clamp((float) cell.f2() - f1, 0f, 0.1f);
+            return Mth.lerp(easing * weight, baseHeight, (0.2 * volcanoHeight + 0.8 * Math.max(volcanoHeight, baseHeight + 0.6f * volcanoAdditionalHeight)));
+        }
+        return baseHeight;
+    }
+
     /**
      * Calculate the closeness value to a volcano, in the range [0, 1]. 1 = Center of a volcano, 0 = Nowhere near.
      */

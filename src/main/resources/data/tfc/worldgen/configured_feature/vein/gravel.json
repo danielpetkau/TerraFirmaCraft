@@ -113,6 +113,16 @@
       },
       {
         "replace": [
+          "tfc:rock/raw/tuff"
+        ],
+        "with": [
+          {
+            "block": "tfc:rock/gravel/tuff"
+          }
+        ]
+      },
+      {
+        "replace": [
           "tfc:rock/raw/rhyolite"
         ],
         "with": [

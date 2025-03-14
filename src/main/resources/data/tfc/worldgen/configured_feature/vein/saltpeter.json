@@ -79,6 +79,16 @@
             "block": "tfc:ore/saltpeter/chalk"
           }
         ]
+      },
+      {
+        "replace": [
+          "tfc:rock/raw/tuff"
+        ],
+        "with": [
+          {
+            "block": "tfc:ore/saltpeter/tuff"
+          }
+        ]
       }
     ]
   }

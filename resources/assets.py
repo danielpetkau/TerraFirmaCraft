@@ -623,6 +623,8 @@ def generate(rm: ResourceManager):
         # Regular Dirt
         block = rm.blockstate(('dirt', soil), variants={'': [{'model': 'tfc:block/dirt/%s' % soil}]}, use_default_model=False)
         block.with_block_model().with_item_model().with_block_loot('tfc:dirt/%s' % soil).with_lang(lang('%s Dirt', soil))
+        block = rm.blockstate(('coarse_dirt', soil), variants={'': [{'model': 'tfc:block/coarse_dirt/%s' % soil}]}, use_default_model=False)
+        block.with_block_model().with_item_model().with_block_loot('tfc:coarse_dirt/%s' % soil).with_lang(lang('Coarse %s', soil))
         block = rm.blockstate(('cracked_earth', soil), variants={'': [{'model': 'tfc:block/cracked_earth/%s' % soil}]}, use_default_model=False)
         block.with_block_model().with_item_model().with_block_loot('tfc:cracked_earth/%s' % soil).with_lang(lang('%s Cracked Mud', soil))
         block = rm.blockstate(('salted_earth', soil), variants={'': [{'model': 'tfc:block/salted_earth/%s' % soil}]}, use_default_model=False)

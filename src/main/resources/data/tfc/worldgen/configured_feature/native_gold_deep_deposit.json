@@ -48,6 +48,10 @@
         "with": "tfc:deposit/native_gold/chalk"
       },
       {
+        "replace": "tfc:rock/raw/tuff",
+        "with": "tfc:deposit/native_gold/tuff"
+      },
+      {
         "replace": "tfc:rock/raw/rhyolite",
         "with": "tfc:deposit/native_gold/rhyolite"
       },

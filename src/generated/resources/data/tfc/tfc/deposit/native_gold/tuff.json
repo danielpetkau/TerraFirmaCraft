@@ -1,0 +1,11 @@
+{
+  "ingredient": {
+    "item": "tfc:deposit/native_gold/tuff"
+  },
+  "loot_table": "tfc:deposit/tuff_native_gold",
+  "model_stages": [
+    "tfc:item/pan/native_gold/tuff_full",
+    "tfc:item/pan/native_gold/tuff_half",
+    "tfc:item/pan/native_gold/result"
+  ]
+}

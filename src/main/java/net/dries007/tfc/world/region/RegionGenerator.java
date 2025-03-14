@@ -9,6 +9,8 @@ package net.dries007.tfc.world.region;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiConsumer;
+
+import net.dries007.tfc.world.biome.BiomeNoise;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.levelgen.XoroshiroRandomSource;
@@ -52,9 +54,13 @@ public final class RegionGenerator
     public final Cellular2D cellNoise;
     public final Noise2D continentNoise;
     public final Noise2D temperatureNoise;
+    public final Noise2D oceanicInfluenceNoise;
     public final Noise2D rainfallNoise;
     public final Noise2D rainfallVarianceNoise;
     public final Settings settings;
+    public final Noise2D hotSpotAgeNoise;
+    public final Noise2D hotSpotIntensityNoise;
+    public final Cellular2D plateRegionNoise;
 
     public final ThreadLocal<Area> biomeArea;
     public final ThreadLocal<Area> rockArea;
@@ -64,6 +70,7 @@ public final class RegionGenerator
     private final FastConcurrentCache<RegionPartition> partitionCache;
 
     private final ChunkDataGenerator chunkDataGenerator;
+
 
     public RegionGenerator(Settings settings, Seed seed)
     {
@@ -91,6 +98,9 @@ public final class RegionGenerator
                 .spread(0.15f)
                 .scaled(-3f, 3f));
 
+        this.oceanicInfluenceNoise = new OpenSimplex2D(seed.next())
+            .spread(0.02f);
+
         this.rainfallNoise = baseNoise(true, settings.rainfallScale(), settings.rainfallConstant())
             .scaled(0f, 500f)
             .add(new OpenSimplex2D(seed.next())
@@ -102,6 +112,10 @@ public final class RegionGenerator
             .octaves(2)
             .spread(0.3f)
             .scaled(-.2f, 0.2f);
+
+        this.hotSpotAgeNoise = BiomeNoise.hotSpotAge(seed.seed()).spread(128);
+        this.hotSpotIntensityNoise = BiomeNoise.hotSpotIntensity(seed.seed()).spread(128);
+        this.plateRegionNoise = BiomeNoise.plateRegions(seed.seed()).spread(128);
 
         final AreaFactory biomeAreaFactory = TFCLayers.createUniformLayer(seed, 2);
         final AreaFactory rockAreaFactory = TFCLayers.createUniformLayer(seed, 3);
@@ -255,6 +269,7 @@ public final class RegionGenerator
         ANNOTATE_DISTANCE_TO_CELL_EDGE(AnnotateDistanceToCellEdge.INSTANCE),
         FLOOD_FILL_SMALL_OCEANS(FloodFillSmallOceans.INSTANCE),
         ADD_ISLANDS(AddIslands.INSTANCE),
+        ADD_HOTSPOTS(AddHotspots.INSTANCE),
         ANNOTATE_DISTANCE_TO_OCEAN(AnnotateDistanceToOcean.INSTANCE),
         ANNOTATE_BASE_LAND_HEIGHT(AnnotateBaseLandHeight.INSTANCE),
         ANNOTATE_DISTANCE_TO_WEST_COAST(AnnotateDistanceToWestCoast.INSTANCE),
