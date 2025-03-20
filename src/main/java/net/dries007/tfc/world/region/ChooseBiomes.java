@@ -18,8 +18,8 @@ public enum ChooseBiomes implements RegionTask
     private static final int[] OCEANIC_MOUNTAIN_ALTITUDE_BIOMES = {VOLCANIC_MOUNTAINS, VOLCANIC_OCEANIC_MOUNTAINS, VOLCANIC_OCEANIC_MOUNTAINS, OCEANIC_MOUNTAINS, OCEANIC_MOUNTAINS, ROLLING_HILLS};
     private static final int[][] ALTITUDE_BIOMES = {
         {PLAINS, PLAINS, HILLS, HILLS, ROLLING_HILLS, LOW_CANYONS, LOWLANDS, LOWLANDS}, // Low
-        {PLAINS, HILLS, ROLLING_HILLS, HIGHLANDS, BUTTES, MESAS, BADLANDS, PLATEAU, CANYONS, LOW_CANYONS}, // Mid
-        {HIGHLANDS, HIGHLANDS, HIGHLANDS, HIGHLANDS, ROLLING_HILLS, ROLLING_HILLS, BADLANDS, STAIR_STEP_CANYONS, STAIR_STEP_CANYONS, PLATEAU, PLATEAU, MESAS, OLD_MOUNTAINS, OLD_MOUNTAINS, OLD_MOUNTAINS}, // High
+        {PLAINS, HILLS, ROLLING_HILLS, ROLLING_HILLS, ROLLING_HILLS, HIGHLANDS, BUTTES, MESAS, BADLANDS, PLATEAU, CANYONS, CANYONS, LOW_CANYONS}, // Mid
+        {HIGHLANDS, HIGHLANDS, HIGHLANDS, HIGHLANDS, ROLLING_HILLS, ROLLING_HILLS, BADLANDS, BADLANDS, STAIR_STEP_CANYONS, PLATEAU, PLATEAU, PLATEAU, PLATEAU, OLD_MOUNTAINS, OLD_MOUNTAINS, OLD_MOUNTAINS, OLD_MOUNTAINS}, // High
     };
     private static final int[][] ICE_SHEET_ALTITUDE_BIOMES = {
         {ICE_SHEET, ICE_SHEET, ICE_SHEET, ICE_SHEET, ICE_SHEET, ICE_SHEET_TUYAS}, // Low
@@ -38,7 +38,7 @@ public enum ChooseBiomes implements RegionTask
     };
     private static final int[][] SEMI_ARID_ALTITUDE_BIOMES = {
         {PLAINS, HILLS, HILLS, GRASSY_DUNES, GRASSY_DUNES, GRASSY_DUNES, GRASSY_DUNES, LOW_CANYONS, LOWLANDS, LOWLANDS, MUD_FLATS}, // Low
-        {PLAINS, HILLS, ROLLING_HILLS, ROLLING_HILLS, HIGHLANDS, HIGHLANDS, INVERTED_BADLANDS, BADLANDS, BADLANDS, PLATEAU, CANYONS, LOW_CANYONS, WHORLED_CANYONS, BUTTES, MESAS, MESAS, HOODOOS}, // Mid
+        {PLAINS, HILLS, ROLLING_HILLS, ROLLING_HILLS, HIGHLANDS, HIGHLANDS, BADLANDS, BADLANDS, PLATEAU, CANYONS, LOW_CANYONS, WHORLED_CANYONS, BUTTES, MESAS, MESAS, HOODOOS}, // Mid
         {HIGHLANDS, HIGHLANDS, MESAS, HOODOOS, ROLLING_HILLS, ROLLING_HILLS, BADLANDS, BADLANDS, PLATEAU, ROCKY_PLATEAU, STAIR_STEP_CANYONS, STAIR_STEP_CANYONS, OLD_MOUNTAINS, OLD_MOUNTAINS, WHORLED_CANYONS}, // High
     };
     private static final int[] KNOB_AND_KETTLE_BIOMES = {KNOB_AND_KETTLE, PATTERNED_GROUND, INVERTED_PATTERNED_GROUND};
@@ -196,7 +196,6 @@ public enum ChooseBiomes implements RegionTask
             if (rainfall > maxRainfallForBadlands)
             {
                 if (point.biome == BADLANDS) point.biome = HIGHLANDS;
-                else if (point.biome == INVERTED_BADLANDS) point.biome = ROLLING_HILLS;
             }
 
             // Special Biome Glaciation
@@ -279,7 +278,7 @@ public enum ChooseBiomes implements RegionTask
             return TOWER_KARST_CANYONS;
         else if (biome == HILLS || biome == ROLLING_HILLS || biome == BADLANDS)
             return TOWER_KARST_HILLS;
-        else if (biome == HIGHLANDS || biome == INVERTED_BADLANDS)
+        else if (biome == HIGHLANDS)
             return TOWER_KARST_HIGHLANDS;
         else if (biome == PLATEAU)
             return EXTREME_DOLINE_PLATEAU;
@@ -297,7 +296,7 @@ public enum ChooseBiomes implements RegionTask
             return SHILIN_CANYONS;
         if (biome == ROLLING_HILLS || biome == BADLANDS)
             return SHILIN_HILLS;
-        if (biome == PLATEAU || biome == INVERTED_BADLANDS)
+        if (biome == PLATEAU)
             return SHILIN_PLATEAU;
         if (biome == HIGHLANDS)
             return SHILIN_HIGHLANDS;
@@ -312,7 +311,7 @@ public enum ChooseBiomes implements RegionTask
             return BURREN_BADLANDS;
         if (biome == DRUMLINS)
             return BURREN_ROCHE_MOUTONEE;
-        if (biome == INVERTED_BADLANDS || biome == HIGHLANDS)
+        if (biome == HIGHLANDS)
             return BURREN_BADLANDS_TALL;
         if (biome == PLATEAU)
             return BURREN_PLATEAU;
