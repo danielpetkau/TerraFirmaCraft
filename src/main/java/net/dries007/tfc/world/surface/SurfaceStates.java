@@ -55,8 +55,22 @@ public final class SurfaceStates
     public static final SurfaceState SALTED_EARTH = SoilSurfaceState.buildDryDirt(SoilBlockType.SALTED_EARTH);
 
     public static final SurfaceState RIVER_SAND = context -> context.getSeaLevelRock().sand().defaultBlockState();
-    public static final SurfaceState SHORE_SAND = context -> context.getBottomRock().sand().defaultBlockState();
-    public static final SurfaceState SHORE_SANDSTONE = context -> context.getBottomRock().sandstone().defaultBlockState();
+    public static final SurfaceState YELLOW_SAND = context -> TFCBlocks.SAND.get(SandBlockType.YELLOW).get().defaultBlockState();
+    public static final SurfaceState YELLOW_SANDSTONE = context -> TFCBlocks.SANDSTONE.get(SandBlockType.YELLOW).get(SandstoneBlockType.RAW).get().defaultBlockState();
+    public static final SurfaceState RED_SAND = context -> TFCBlocks.SAND.get(SandBlockType.RED).get().defaultBlockState();
+    public static final SurfaceState RED_SANDSTONE = context -> TFCBlocks.SANDSTONE.get(SandBlockType.RED).get(SandstoneBlockType.RAW).get().defaultBlockState();
+    public static final SurfaceState BROWN_SAND = context -> TFCBlocks.SAND.get(SandBlockType.BROWN).get().defaultBlockState();
+    public static final SurfaceState BROWN_SANDSTONE = context -> TFCBlocks.SANDSTONE.get(SandBlockType.BROWN).get(SandstoneBlockType.RAW).get().defaultBlockState();
+    public static final SurfaceState WHITE_SAND = context -> TFCBlocks.SAND.get(SandBlockType.WHITE).get().defaultBlockState();
+    public static final SurfaceState WHITE_SANDSTONE = context -> TFCBlocks.SANDSTONE.get(SandBlockType.WHITE).get(SandstoneBlockType.RAW).get().defaultBlockState();
+    public static final SurfaceState BLACK_SAND = context -> TFCBlocks.SAND.get(SandBlockType.BLACK).get().defaultBlockState();
+    public static final SurfaceState BLACK_SANDSTONE = context -> TFCBlocks.SANDSTONE.get(SandBlockType.BLACK).get(SandstoneBlockType.RAW).get().defaultBlockState();
+    public static final SurfaceState GREEN_SAND = context -> TFCBlocks.SAND.get(SandBlockType.GREEN).get().defaultBlockState();
+    public static final SurfaceState GREEN_SANDSTONE = context -> TFCBlocks.SANDSTONE.get(SandBlockType.GREEN).get(SandstoneBlockType.RAW).get().defaultBlockState();
+    public static final SurfaceState PINK_SAND = context -> TFCBlocks.SAND.get(SandBlockType.PINK).get().defaultBlockState();
+    public static final SurfaceState PINK_SANDSTONE = context -> TFCBlocks.SANDSTONE.get(SandBlockType.PINK).get(SandstoneBlockType.RAW).get().defaultBlockState();
+
+
     public static final SurfaceState SHORE_MUD = context -> TFCBlocks.SOIL.get(SoilBlockType.MUD).get(SoilBlockType.Variant.SANDY_LOAM).get().defaultBlockState();
 
     /**
@@ -89,11 +103,12 @@ public final class SurfaceStates
     public static final SurfaceState SNOWY_BASALT_MORAINE = SoilSurfaceState.buildSnowableSurface(SNOW, BASALT_MORAINE);
     public static final SurfaceState SNOWY_SAND_AND_GRAVEL = SoilSurfaceState.buildSnowableSurface(SNOW, SAND_AND_GRAVEL);
 
-
     public static final SurfaceState RARE_SHORE_SAND = new SurfaceState()
     {
         private final Supplier<Block> pinkSand = TFCBlocks.SAND.get(SandBlockType.PINK);
+        private final Supplier<Block> greenSand = TFCBlocks.SAND.get(SandBlockType.GREEN);
         private final Supplier<Block> blackSand = TFCBlocks.SAND.get(SandBlockType.BLACK);
+        private final Supplier<Block> whiteSand = TFCBlocks.SAND.get(SandBlockType.WHITE);
 
         @Override
         public BlockState getState(SurfaceBuilderContext context)
@@ -102,13 +117,17 @@ public final class SurfaceStates
             {
                 return pinkSand.get().defaultBlockState();
             }
-            else if (context.groundWater() > 300f)
+            else if ((context.getSeaLevelRock().mafic().isPresent() ? context.getSeaLevelRock().mafic().get() : false))
             {
+                if (context.groundWater() > 300f)
+                {
+                    return greenSand.get().defaultBlockState();
+                }
                 return blackSand.get().defaultBlockState();
             }
             else
             {
-                return context.getBottomRock().sand().defaultBlockState();
+                return whiteSand.get().defaultBlockState();
             }
         }
     };
@@ -116,7 +135,9 @@ public final class SurfaceStates
     public static final SurfaceState RARE_SHORE_SANDSTONE = new SurfaceState()
     {
         private final Supplier<Block> pinkSandstone = TFCBlocks.SANDSTONE.get(SandBlockType.PINK).get(SandstoneBlockType.RAW);
+        private final Supplier<Block> greenSandstone = TFCBlocks.SANDSTONE.get(SandBlockType.GREEN).get(SandstoneBlockType.RAW);
         private final Supplier<Block> blackSandstone = TFCBlocks.SANDSTONE.get(SandBlockType.BLACK).get(SandstoneBlockType.RAW);
+        private final Supplier<Block> whiteSandstone = TFCBlocks.SANDSTONE.get(SandBlockType.WHITE).get(SandstoneBlockType.RAW);
 
         @Override
         public BlockState getState(SurfaceBuilderContext context)
@@ -125,13 +146,17 @@ public final class SurfaceStates
             {
                 return pinkSandstone.get().defaultBlockState();
             }
-            else if (context.groundWater() > 300f)
+            else if ((context.getSeaLevelRock().mafic().isPresent() ? context.getSeaLevelRock().mafic().get() : false))
             {
+                if (context.groundWater() > 300f)
+                {
+                    return greenSandstone.get().defaultBlockState();
+                }
                 return blackSandstone.get().defaultBlockState();
             }
             else
             {
-                return context.getBottomRock().sandstone().defaultBlockState();
+                return whiteSandstone.get().defaultBlockState();
             }
         }
     };

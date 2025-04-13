@@ -19,6 +19,7 @@ import net.dries007.tfc.world.Seed;
 import net.dries007.tfc.world.TFCChunkGenerator;
 import net.dries007.tfc.world.noise.Noise2D;
 import net.dries007.tfc.world.river.RiverBlendType;
+import net.dries007.tfc.world.shore.ShoreBlendType;
 import net.dries007.tfc.world.surface.builder.SurfaceBuilderFactory;
 import net.dries007.tfc.world.surface.builder.TuffRingsSurfaceBuilder;
 import net.dries007.tfc.world.surface.builder.TuyasSurfaceBuilder;
@@ -41,6 +42,7 @@ public class BiomeBuilder
     private AquiferLookahead aquiferSurfaceHeight;
     private BiomeBlendType biomeBlendType;
     private RiverBlendType riverBlendType;
+    private ShoreBlendType shoreBlendType;
     private boolean salty;
     private boolean volcanic;
     private boolean hasTuyas;
@@ -63,6 +65,7 @@ public class BiomeBuilder
         };
         biomeBlendType = BiomeBlendType.LAND;
         riverBlendType = RiverBlendType.NONE;
+        shoreBlendType = ShoreBlendType.NONE;
         salty = false;
         volcanic = false;
         hasTuffRings = false;
@@ -133,6 +136,12 @@ public class BiomeBuilder
         this.riverBlendType = type;
         if (type == RiverBlendType.CAVE)
             this.sandyRiverShores = false;
+        return this;
+    }
+
+    public BiomeBuilder type(ShoreBlendType type)
+    {
+        this.shoreBlendType = type;
         return this;
     }
 
@@ -236,6 +245,6 @@ public class BiomeBuilder
     {
         assert surfaceBuilderFactory != null : "missing surface builder";
 
-        return new BiomeExtension(key, noiseFactory, surfaceBuilderFactory, aquiferSurfaceHeight, biomeBlendType, riverBlendType, salty, volcanic, hasTuffRings, hasTuyas, volcanoFrequency, volcanoBasaltHeight, tuffRingFrequency, tuyaFrequency, spawnable, rivers, shore, cliffBaseHeight, sandyRiverShores);
+        return new BiomeExtension(key, noiseFactory, surfaceBuilderFactory, aquiferSurfaceHeight, biomeBlendType, riverBlendType, shoreBlendType, salty, volcanic, hasTuffRings, hasTuyas, volcanoFrequency, volcanoBasaltHeight, tuffRingFrequency, tuyaFrequency, spawnable, rivers, shore, cliffBaseHeight, sandyRiverShores);
     }
 }

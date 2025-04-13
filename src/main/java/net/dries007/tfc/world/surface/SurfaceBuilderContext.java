@@ -125,6 +125,11 @@ public class SurfaceBuilderContext
         return rockData.getRock(cursor.getX(), seaLevel, cursor.getZ());
     }
 
+    public RockSettings getApproxSecondRock()
+    {
+        return rockData.getRock(cursor.getX(), Math.max(cursor.getY() - 64, -64), cursor.getZ());
+    }
+
     public RockSettings getBottomRock()
     {
         return rockData.getRock(cursor.getX(), -64, cursor.getZ());

@@ -140,8 +140,8 @@
                 "mafic": true,
                 "mossy_loose": "tfc:rock/mossy_loose/basalt",
                 "raw": "tfc:rock/raw/basalt",
-                "sand": "tfc:sand/red",
-                "sandstone": "tfc:raw_sandstone/red",
+                "sand": "tfc:sand/black",
+                "sandstone": "tfc:raw_sandstone/black",
                 "spike": "tfc:rock/spike/basalt"
               },
               "chalk": {
@@ -166,8 +166,8 @@
                 "mafic": false,
                 "mossy_loose": "tfc:rock/mossy_loose/chert",
                 "raw": "tfc:rock/raw/chert",
-                "sand": "tfc:sand/yellow",
-                "sandstone": "tfc:raw_sandstone/yellow",
+                "sand": "tfc:sand/red",
+                "sandstone": "tfc:raw_sandstone/red",
                 "spike": "tfc:rock/spike/chert"
               },
               "claystone": {
@@ -192,8 +192,8 @@
                 "mafic": false,
                 "mossy_loose": "tfc:rock/mossy_loose/conglomerate",
                 "raw": "tfc:rock/raw/conglomerate",
-                "sand": "tfc:sand/green",
-                "sandstone": "tfc:raw_sandstone/green",
+                "sand": "tfc:sand/brown",
+                "sandstone": "tfc:raw_sandstone/brown",
                 "spike": "tfc:rock/spike/conglomerate"
               },
               "dacite": {
@@ -218,8 +218,8 @@
                 "mafic": false,
                 "mossy_loose": "tfc:rock/mossy_loose/diorite",
                 "raw": "tfc:rock/raw/diorite",
-                "sand": "tfc:sand/white",
-                "sandstone": "tfc:raw_sandstone/white",
+                "sand": "tfc:sand/red",
+                "sandstone": "tfc:raw_sandstone/red",
                 "spike": "tfc:rock/spike/diorite"
               },
               "dolomite": {
@@ -231,8 +231,8 @@
                 "mafic": false,
                 "mossy_loose": "tfc:rock/mossy_loose/dolomite",
                 "raw": "tfc:rock/raw/dolomite",
-                "sand": "tfc:sand/black",
-                "sandstone": "tfc:raw_sandstone/black",
+                "sand": "tfc:sand/white",
+                "sandstone": "tfc:raw_sandstone/white",
                 "spike": "tfc:rock/spike/dolomite"
               },
               "gabbro": {
@@ -257,8 +257,8 @@
                 "mafic": false,
                 "mossy_loose": "tfc:rock/mossy_loose/gneiss",
                 "raw": "tfc:rock/raw/gneiss",
-                "sand": "tfc:sand/green",
-                "sandstone": "tfc:raw_sandstone/green",
+                "sand": "tfc:sand/yellow",
+                "sandstone": "tfc:raw_sandstone/yellow",
                 "spike": "tfc:rock/spike/gneiss"
               },
               "granite": {
@@ -270,8 +270,8 @@
                 "mafic": false,
                 "mossy_loose": "tfc:rock/mossy_loose/granite",
                 "raw": "tfc:rock/raw/granite",
-                "sand": "tfc:sand/brown",
-                "sandstone": "tfc:raw_sandstone/brown",
+                "sand": "tfc:sand/yellow",
+                "sandstone": "tfc:raw_sandstone/yellow",
                 "spike": "tfc:rock/spike/granite"
               },
               "limestone": {
@@ -309,8 +309,8 @@
                 "mafic": false,
                 "mossy_loose": "tfc:rock/mossy_loose/phyllite",
                 "raw": "tfc:rock/raw/phyllite",
-                "sand": "tfc:sand/brown",
-                "sandstone": "tfc:raw_sandstone/brown",
+                "sand": "tfc:sand/yellow",
+                "sandstone": "tfc:raw_sandstone/yellow",
                 "spike": "tfc:rock/spike/phyllite"
               },
               "quartzite": {
@@ -322,8 +322,8 @@
                 "mafic": false,
                 "mossy_loose": "tfc:rock/mossy_loose/quartzite",
                 "raw": "tfc:rock/raw/quartzite",
-                "sand": "tfc:sand/yellow",
-                "sandstone": "tfc:raw_sandstone/yellow",
+                "sand": "tfc:sand/white",
+                "sandstone": "tfc:raw_sandstone/white",
                 "spike": "tfc:rock/spike/quartzite"
               },
               "rhyolite": {
@@ -335,8 +335,8 @@
                 "mafic": false,
                 "mossy_loose": "tfc:rock/mossy_loose/rhyolite",
                 "raw": "tfc:rock/raw/rhyolite",
-                "sand": "tfc:sand/red",
-                "sandstone": "tfc:raw_sandstone/red",
+                "sand": "tfc:sand/yellow",
+                "sandstone": "tfc:raw_sandstone/yellow",
                 "spike": "tfc:rock/spike/rhyolite"
               },
               "schist": {
@@ -348,8 +348,8 @@
                 "mafic": false,
                 "mossy_loose": "tfc:rock/mossy_loose/schist",
                 "raw": "tfc:rock/raw/schist",
-                "sand": "tfc:sand/green",
-                "sandstone": "tfc:raw_sandstone/green",
+                "sand": "tfc:sand/yellow",
+                "sandstone": "tfc:raw_sandstone/yellow",
                 "spike": "tfc:rock/spike/schist"
               },
               "shale": {
@@ -361,8 +361,8 @@
                 "mafic": false,
                 "mossy_loose": "tfc:rock/mossy_loose/shale",
                 "raw": "tfc:rock/raw/shale",
-                "sand": "tfc:sand/black",
-                "sandstone": "tfc:raw_sandstone/black",
+                "sand": "tfc:sand/brown",
+                "sandstone": "tfc:raw_sandstone/brown",
                 "spike": "tfc:rock/spike/shale"
               },
               "slate": {
@@ -374,8 +374,8 @@
                 "mafic": false,
                 "mossy_loose": "tfc:rock/mossy_loose/slate",
                 "raw": "tfc:rock/raw/slate",
-                "sand": "tfc:sand/brown",
-                "sandstone": "tfc:raw_sandstone/brown",
+                "sand": "tfc:sand/yellow",
+                "sandstone": "tfc:raw_sandstone/yellow",
                 "spike": "tfc:rock/spike/slate"
               },
               "tuff": {
@@ -387,8 +387,8 @@
                 "mafic": false,
                 "mossy_loose": "tfc:rock/mossy_loose/tuff",
                 "raw": "tfc:rock/raw/tuff",
-                "sand": "tfc:sand/black",
-                "sandstone": "tfc:raw_sandstone/black",
+                "sand": "tfc:sand/green",
+                "sandstone": "tfc:raw_sandstone/green",
                 "spike": "tfc:rock/spike/tuff"
               }
             },

@@ -21,7 +21,7 @@ public class ShoreSurfaceBuilder implements SurfaceBuilder
 
     protected ShoreSurfaceBuilder(Seed seed)
     {
-        this.variantNoise = new OpenSimplex2D(seed.next()).octaves(2).spread(0.003f).abs();
+        this.variantNoise = new OpenSimplex2D(seed.seed()).octaves(5).spread(0.0003f).abs();
     }
 
     @Override
@@ -32,14 +32,30 @@ public class ShoreSurfaceBuilder implements SurfaceBuilder
         context.setSlope(slope * (slope + 0.2));
 
         final float variantNoiseValue = (float) variantNoise.noise(context.pos().getX(), context.pos().getZ());
-        if (variantNoiseValue > 0.6f)
+        if (variantNoiseValue > 0.65f)
         {
             NormalSurfaceBuilder.ROCKY.buildSurface(context, startY, endY, SurfaceStates.RARE_SHORE_SAND, SurfaceStates.RARE_SHORE_SAND, SurfaceStates.RARE_SHORE_SANDSTONE);
         }
         else
         {
-            SurfaceState top = context.groundWater() > 400 && variantNoiseValue > 0.4f ? SurfaceStates.SHORE_MUD : SurfaceStates.SHORE_SAND;
-            NormalSurfaceBuilder.ROCKY.buildSurface(context, startY, endY, top, top, SurfaceStates.SHORE_SANDSTONE);
+            final SurfaceState top;
+            final SurfaceState sandstone;
+            if (variantNoiseValue > 0.4)
+            {
+                top = SurfaceStates.RED_SAND;
+                sandstone = SurfaceStates.RED_SANDSTONE;
+            }
+            else if (variantNoiseValue > 0.22)
+            {
+                top = SurfaceStates.BROWN_SAND;
+                sandstone = SurfaceStates.BROWN_SANDSTONE;
+            }
+            else
+            {
+                top = SurfaceStates.YELLOW_SAND;
+                sandstone = SurfaceStates.YELLOW_SANDSTONE;
+            }
+            NormalSurfaceBuilder.ROCKY.buildSurface(context, startY, endY, top, top, sandstone);
         }
     }
 }
