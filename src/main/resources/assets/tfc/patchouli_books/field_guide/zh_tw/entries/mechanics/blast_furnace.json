@@ -57,7 +57,7 @@
     },
     {
       "type": "patchouli:text",
-      "text": "最後，用$(l:getting_started/firepit#firestarter)起火器$()或$(thing)打火石$()點燃高爐方塊就可以開始鍊鋼了。高爐會緩慢加熱礦石，同時要注意不斷鼓風和新增木炭。當高爐內的溫度足以熔化礦石時，礦石就會熔化並轉化為$(l:mechanics/steel)生鐵$()。"
+      "text": "Finally, to get started, light the blast furnace with a $(l:getting_started/firepit#firestarter)Fire Starter$(), a $(thing)Flint and Pyrite$(), or a $(thing)Flint and Steel$(). It will begin to heat the ores inside. Make sure that the blast furnace continues to have fuel, and use the bellows to add air to the blast furnace after its internal temperature has reached the maximum for charcoal. After the ores inside heat up, they will melt and convert into $(l:mechanics/steel)Pig Iron$()."
     },
     {
       "type": "patchouli:text",

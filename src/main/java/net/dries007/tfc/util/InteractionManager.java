@@ -40,7 +40,6 @@ import net.neoforged.neoforge.event.entity.player.UseItemOnBlockEvent;
 import org.jetbrains.annotations.NotNull;
 
 import net.dries007.tfc.common.TFCTags;
-import net.dries007.tfc.common.blockentities.LogPileBlockEntity;
 import net.dries007.tfc.common.blockentities.TFCBlockEntities;
 import net.dries007.tfc.common.blocks.CharcoalPileBlock;
 import net.dries007.tfc.common.blocks.DirectionPropertyBlock;
@@ -65,7 +64,6 @@ import net.dries007.tfc.util.data.KnappingType;
 import net.dries007.tfc.util.events.DouseFireEvent;
 import net.dries007.tfc.util.events.StartFireEvent;
 
-import static net.minecraft.world.level.block.state.properties.BlockStateProperties.*;
 import static net.neoforged.neoforge.event.entity.player.PlayerInteractEvent.*;
 
 /**
@@ -432,7 +430,7 @@ public final class InteractionManager
 
         register(ItemAbilities.FIRESTARTER_LIGHT, Target.BLOCKS, (stack, context) -> {
             final Player player = context.getPlayer();
-            if (StartFireEvent.startFire(context.getLevel(), context.getClickedPos(), context.getLevel().getBlockState(context.getClickedPos()), context.getClickedFace(), player, stack))
+            if (StartFireEvent.startFireWithSound(context.getLevel(), context.getClickedPos(), context.getLevel().getBlockState(context.getClickedPos()), context.getClickedFace(), player, stack))
             {
                 if (player != null && !player.isCreative())
                     stack.hurtAndBreak(1, player, LivingEntity.getSlotForHand(context.getHand()));

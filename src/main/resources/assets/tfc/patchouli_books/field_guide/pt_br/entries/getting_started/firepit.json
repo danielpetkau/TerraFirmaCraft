@@ -112,6 +112,11 @@
     {
       "type": "patchouli:text",
       "text": "Os combustíveis de fogo têm diferentes níveis de pureza. A adição de combustíveis impuros aos incêndios os torna mais esfumaçados. Se o fogo queimar muito, a fumaça começará a voar muito alto no ar. Os combustíveis mais puros são troncos, sendo o pinheiro o log menos puro. Combustíveis como pinhas e folhas caídas não são quentes o suficiente para cozinhar muito e são muito impuras."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "tfc:crafting/flint_and_pyrite",
+      "text": "A more advanced firestarter can be formed using flint and pyrite, or later flint and steel."
     }
   ],
   "read_by_default": true,

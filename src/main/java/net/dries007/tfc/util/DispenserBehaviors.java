@@ -171,7 +171,7 @@ public final class DispenserBehaviors
             final Direction facing = source.state().getValue(DispenserBlock.FACING);
             final BlockPos pos = source.pos().relative(facing);
             final BlockState state = level.getBlockState(pos);
-            if (TFCConfig.SERVER.dispenserEnableLighting.get() && StartFireEvent.startFire(level, pos, state, facing.getOpposite(), null, stack, StartFireEvent.FireStrength.STRONG))
+            if (TFCConfig.SERVER.dispenserEnableLighting.get() && StartFireEvent.startFire(level, pos, state, facing.getOpposite(), null, stack, StartFireEvent.FireStrength.STRONG, 1))
             {
                 stack.hurtAndBreak(1, level, null, i -> {});
                 return stack;

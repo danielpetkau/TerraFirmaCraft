@@ -57,7 +57,7 @@
     },
     {
       "type": "patchouli:text",
-      "text": "Наконец, чтобы начать, зажгите высокую печь с помощью $(l:getting_started/firepit#firestarter)Кремня и стали$() или $(thing)Огниво$(). Она начнет нагревать руды внутри. Убедитесь, что в высокой печи продолжает быть топливо, и используйте мех, чтобы добавить воздух в высокую печь после того, как ее внутренняя температура достигнет максимума для угля. После нагрева руды внутри они расплавятся и превратятся в $(l:mechanics/steel)Чугун$()."
+      "text": "Finally, to get started, light the blast furnace with a $(l:getting_started/firepit#firestarter)Fire Starter$(), a $(thing)Flint and Pyrite$(), or a $(thing)Flint and Steel$(). It will begin to heat the ores inside. Make sure that the blast furnace continues to have fuel, and use the bellows to add air to the blast furnace after its internal temperature has reached the maximum for charcoal. After the ores inside heat up, they will melt and convert into $(l:mechanics/steel)Pig Iron$()."
     },
     {
       "type": "patchouli:text",

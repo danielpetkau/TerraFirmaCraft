@@ -112,6 +112,11 @@
     {
       "type": "patchouli:text",
       "text": "Паливо має різний рівень чистоти. Додавання нечистого палива до багаття робить його більш димним. Якщо вогонь горить дуже погано, дим почне здійматись дуже високо в повітря. Найчистішим паливом є колоди. Хвойні - не зовсім чисті. Соснові шишки та опале листя не дають високої температури щоб готувати багато їжі, та й є дуже брудними."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "tfc:crafting/flint_and_pyrite",
+      "text": "A more advanced firestarter can be formed using flint and pyrite, or later flint and steel."
     }
   ],
   "read_by_default": true,

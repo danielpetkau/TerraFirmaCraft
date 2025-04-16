@@ -112,6 +112,11 @@
     {
       "type": "patchouli:text",
       "text": "모닥불의 연료들은 각각 다른 순도를 가지고 있습니다. 불순물이 많은 연료를 사용하면 연기가 더 많이 나게 됩니다. 불순물이 굉장히 많아지면, 연기가 공기를 타고 매우 높이 올라갑니다. 가장 순도가 높은 연료는 통나무로, 그 중에서도 소나무가 가장 순도가 높습니다. 솔방울과 낙엽같은 연료들은 본격적인 요리를 하기에는 온도가 낮고, 굉장히 불순물이 많습니다."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "tfc:crafting/flint_and_pyrite",
+      "text": "A more advanced firestarter can be formed using flint and pyrite, or later flint and steel."
     }
   ],
   "read_by_default": true,

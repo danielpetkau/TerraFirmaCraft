@@ -6,14 +6,28 @@
 
 package net.dries007.tfc.util.events;
 
+import net.dries007.tfc.common.TFCTags;
+import net.dries007.tfc.common.blockentities.AbstractFirepitBlockEntity;
+import net.dries007.tfc.common.blockentities.TFCBlockEntities;
+import net.dries007.tfc.common.blocks.TFCBlocks;
+import net.dries007.tfc.common.blocks.devices.FirepitBlock;
+import net.dries007.tfc.util.Helpers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.FireChargeItem;
+import net.minecraft.world.item.FlintAndSteelItem;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseFireBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 import net.neoforged.bus.api.Event;
 import net.neoforged.bus.api.ICancellableEvent;
 import net.neoforged.neoforge.common.NeoForge;
@@ -21,6 +35,9 @@ import org.jetbrains.annotations.Nullable;
 
 import net.dries007.tfc.util.InteractionManager;
 import net.dries007.tfc.util.advancements.TFCAdvancements;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This event is used for lighting things with fire. It can be cancelled to handle lighting of an external device or source.
@@ -32,12 +49,32 @@ import net.dries007.tfc.util.advancements.TFCAdvancements;
  */
 public final class StartFireEvent extends Event implements ICancellableEvent
 {
-    public static boolean startFire(Level level, BlockPos pos, BlockState state, Direction direction, @Nullable Player player, ItemStack stack)
+    // Replicate vanilla fire starting sounds that do not fire
+    public static boolean startFireWithSound(Level level, BlockPos pos, BlockState state, Direction direction, @Nullable Player player, ItemStack stack)
     {
-        return startFire(level, pos, state, direction, player, stack, FireStrength.STRONG);
+        final boolean startFire = startFire(level, pos, state, direction, player, stack, FireStrength.STRONG, 1.0);
+        if (startFire)
+        {
+            if (stack.getItem() instanceof FlintAndSteelItem)
+            {
+                level.playSound(player, pos, SoundEvents.FLINTANDSTEEL_USE, SoundSource.BLOCKS, 1.0F, level.getRandom().nextFloat() * 0.4F + 0.8F);
+            }
+            else if (stack.getItem() instanceof FireChargeItem)
+            {
+                level.playSound(null, pos, SoundEvents.FIRECHARGE_USE, SoundSource.BLOCKS, 1.0F, (level.getRandom().nextFloat() - level.getRandom().nextFloat()) * 0.2F + 1.0F);
+            }
+
+        }
+        return startFire;
     }
 
-    public static boolean startFire(Level level, BlockPos pos, BlockState state, Direction direction, @Nullable Player player, ItemStack stack, FireStrength strength)
+    public static boolean startFire(Level level, BlockPos pos, BlockState state, Direction direction, @Nullable Player player, ItemStack stack)
+    {
+        return startFire(level, pos, state, direction, player, stack, FireStrength.STRONG, 1.0);
+    }
+
+    // Pass in a firepitBaseChance of -1 to disable firepit creation for a given firestarter
+    public static boolean startFire(Level level, BlockPos pos, BlockState state, Direction direction, @Nullable Player player, ItemStack stack, FireStrength strength, double firepitBaseChance)
     {
         final StartFireEvent event = new StartFireEvent(level, pos, state, direction, player, stack, strength);
         final boolean cancelled = NeoForge.EVENT_BUS.post(event).isCanceled();
@@ -49,6 +86,70 @@ public final class StartFireEvent extends Event implements ICancellableEvent
 
         if (!cancelled && event.isStrong())
         {
+            final BlockPos abovePos = pos.above();
+            // Check conditions for creating a firepit if a valid firestarter
+            if (FirepitBlock.canSurvive(level, abovePos) && firepitBaseChance != -1)
+            {
+                final List<ItemEntity> items = level.getEntitiesOfClass(ItemEntity.class, new AABB(abovePos.getX() - 0.5, abovePos.getY(), abovePos.getZ() - 0.5, abovePos.getX() + 1.5, abovePos.getY() + 1, abovePos.getZ() + 1.5));
+                final List<ItemEntity> usableItems = new ArrayList<>();
+
+                int sticks = 0, kindling = 0;
+                ItemEntity logEntity = null;
+
+                for (ItemEntity entity : items)
+                {
+                    ItemStack foundStack = entity.getItem();
+                    Item foundItem = foundStack.getItem();
+                    int itemCount = foundStack.getCount();
+                    if (Helpers.isItem(foundItem, TFCTags.Items.FIREPIT_STICKS))
+                    {
+                        sticks += itemCount;
+                        usableItems.add(entity);
+                    }
+                    else if (Helpers.isItem(foundItem, TFCTags.Items.FIREPIT_KINDLING))
+                    {
+                        kindling += itemCount;
+                        usableItems.add(entity);
+                    }
+                    else if (logEntity == null && Helpers.isItem(foundItem, TFCTags.Items.FIREPIT_LOGS))
+                    {
+                        logEntity = entity;
+                    }
+                }
+                if (sticks >= 3 && logEntity != null)
+                {
+                    final float kindlingModifier = Math.min(0.1F * (float) kindling, 0.5F);
+                    if (level.random.nextFloat() < firepitBaseChance + kindlingModifier)
+                    {
+                        usableItems.forEach(Entity::kill);
+                        logEntity.kill();
+
+                        ItemStack initialLog = logEntity.getItem().copy();
+                        initialLog.setCount(1);
+
+                        final BlockState firepitState;
+                        if (player != null)
+                        {
+                            firepitState = TFCBlocks.FIREPIT.get().defaultBlockState().setValue(FirepitBlock.AXIS, player.getDirection().getAxis());
+                        }
+                        else
+                        {
+                            firepitState = TFCBlocks.FIREPIT.get().defaultBlockState().setValue(FirepitBlock.AXIS, Direction.Axis.X);
+                        }
+                        level.setBlock(abovePos, firepitState, 3);
+                        level.getBlockEntity(abovePos, TFCBlockEntities.FIREPIT.get()).ifPresent(firepit -> {
+                            firepit.getInventory().setStackInSlot(AbstractFirepitBlockEntity.SLOT_FUEL_CONSUME, initialLog);
+                            firepit.light(firepitState);
+                        });
+                        if (player instanceof ServerPlayer serverPlayer)
+                        {
+                            TFCAdvancements.FIREPIT_CREATED.trigger(serverPlayer, firepitState);
+                        }
+                        return true;
+                    }
+                    return false;
+                }
+            }
             // If the block we are targeting is a non-solid block, we delete the block and replace it with fire
             // Otherwise with solid blocks, we place fire on the face we were targeting
             if (state.isCollisionShapeFullBlock(level, pos))

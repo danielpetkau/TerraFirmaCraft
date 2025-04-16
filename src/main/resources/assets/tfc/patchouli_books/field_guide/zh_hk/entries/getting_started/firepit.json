@@ -112,6 +112,11 @@
     {
       "type": "patchouli:text",
       "text": "不同燃料的雜質含量並不一致。添加不純淨的燃料會使篝火產生更多煙塵。如果使用的燃料雜質含量越多，篝火產生的煙塵會飄得越高。所有燃料中，原木的雜質含量最少，而原木中雜質含量最多的種類是松木。松果和落葉之類的燃料雜質含量非常高以至於無法產生足夠的熱量來烹飪食物。"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "tfc:crafting/flint_and_pyrite",
+      "text": "A more advanced firestarter can be formed using flint and pyrite, or later flint and steel."
     }
   ],
   "read_by_default": true,

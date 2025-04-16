@@ -213,6 +213,7 @@ public final class TFCItems
     public static final ItemId DIRTY_JUTE_NET = register("dirty_jute_net");
     public static final ItemId FIRE_CLAY = register("fire_clay");
     public static final ItemId FIRESTARTER = register("firestarter", () -> new FirestarterItem(new Properties().durability(8)));
+    public static final ItemId FLINT_AND_PYRITE = register("flint_and_pyrite", () -> new FlintAndPyriteItem(new Properties().durability(128)));
     public static final ItemId GOAT_HORN = register("goat_horn");
     public static final ItemId GLOW_ARROW = register("glow_arrow", () -> new GlowArrowItem(new Properties()));
     public static final ItemId GLUE = register("glue");

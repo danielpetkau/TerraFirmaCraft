@@ -943,6 +943,11 @@ public interface CraftingRecipes extends Recipes
             .pattern(" S", "S ")
             .shaped(TFCItems.FIRESTARTER);
         recipe()
+            .input('F', Items.FLINT)
+            .input('P', TFCItems.ORES.get(Ore.PYRITE))
+            .pattern(" F", "P ")
+            .shaped(TFCItems.FLINT_AND_PYRITE);
+        recipe()
             .input(ingredientOf(Metal.BRASS, Metal.ItemType.ROD))
             .input(TFCTags.Items.GEM_POWDERS)
             .shapeless(TFCItems.GEM_SAW);

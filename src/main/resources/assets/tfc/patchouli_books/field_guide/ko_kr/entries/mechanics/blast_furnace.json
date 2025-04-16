@@ -57,7 +57,7 @@
     },
     {
       "type": "patchouli:text",
-      "text": "이제 시작하려면 용광로를 $(l:getting_started/firepit#firestarter)불피우개$()나 $(thing)부싯돌과 부시$()로 켜야 합니다. 그러면 안에 있는 광석들이 가열되기 시작합니다. 용광로의 온도가 숯의 최대 온도까지 도달한 후에는 계속 풀무질을 해야 합니다. 안의 광석들이 충분히 가열되면 광석들이 녹아 $(l:mechanics/steel)선철$()이 만들어집니다."
+      "text": "Finally, to get started, light the blast furnace with a $(l:getting_started/firepit#firestarter)Fire Starter$(), a $(thing)Flint and Pyrite$(), or a $(thing)Flint and Steel$(). It will begin to heat the ores inside. Make sure that the blast furnace continues to have fuel, and use the bellows to add air to the blast furnace after its internal temperature has reached the maximum for charcoal. After the ores inside heat up, they will melt and convert into $(l:mechanics/steel)Pig Iron$()."
     },
     {
       "type": "patchouli:text",

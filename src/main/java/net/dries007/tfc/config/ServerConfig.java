@@ -34,6 +34,7 @@ public class ServerConfig extends BaseConfig
     public final Supplier<Boolean> enableTimeStopWhenServerEmpty;
     public final Supplier<Boolean> enableFireArrowSpreading;
     public final Supplier<Double> fireStarterChance;
+    public final Supplier<Double> flintAndPyriteChance;
     public final Supplier<Boolean> enableInfestations;
     public final Supplier<Boolean> enableLightning;
     public final Supplier<Boolean> enableLightningStrippingLogs;
@@ -297,6 +298,7 @@ public class ServerConfig extends BaseConfig
         ).define("enableTimeStopWhenServerEmpty", true);
         enableFireArrowSpreading = builder.comment("Enable fire arrows and fireballs to spread fire and light blocks.").define("enableFireArrowSpreading", true);
         fireStarterChance = builder.comment("Base probability for a firestarter to start a fire. May change based on circumstances").define("fireStarterChance", 0.5, 0, 1);
+        flintAndPyriteChance = builder.comment("Base probability for flint and pyrite to start a fire. May change based on circumstances").define("fireStarterChance", 0.25, 0, 1);
         enableInfestations = builder.comment("Enable rat infestations for improperly stored food.").define("enableInfestations", true);
         enableLightning = builder.comment("If false, vanilla lightning will not strike.").define("enableLightning", true);
         enableLightningStrippingLogs = builder.comment("If true, lightning has a chance of stripping bark off of trees.").define("enableLightningStrippingLogs", true);

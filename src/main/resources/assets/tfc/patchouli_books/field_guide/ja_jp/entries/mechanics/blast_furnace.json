@@ -57,7 +57,7 @@
     },
     {
       "type": "patchouli:text",
-      "text": "精錬を開始するには、$(l:getting_started/firepit#firestarter)火起こし器$() または $(thing)火打石と打ち金$() を使って高炉に点火します。時間の経過とともに内部の鉱石が加熱され始めます。 高炉に燃料が残っていることを確認し、高炉の内部温度が木炭の最高燃焼温度に達した後、ふいごを使用して高炉に空気を供給します。 中の鉱石が十分に加熱されると溶けて $(l:mechanics/steel)銑鉄$() に変わります。"
+      "text": "Finally, to get started, light the blast furnace with a $(l:getting_started/firepit#firestarter)Fire Starter$(), a $(thing)Flint and Pyrite$(), or a $(thing)Flint and Steel$(). It will begin to heat the ores inside. Make sure that the blast furnace continues to have fuel, and use the bellows to add air to the blast furnace after its internal temperature has reached the maximum for charcoal. After the ores inside heat up, they will melt and convert into $(l:mechanics/steel)Pig Iron$()."
     },
     {
       "type": "patchouli:text",

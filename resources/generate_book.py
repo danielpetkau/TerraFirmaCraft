@@ -16,6 +16,7 @@ Where <lang> is your language, i.e. en_us. This will do several things
 
 === Style Guide ===
 
+
 - Entries and categories are named in easy to understand resource location IDs, matching the actual in-game name wherever possible
 - The book is written, generally, in second-person as guide (i.e. using 'you' pronouns)
 - It SHOULD contain all information that someone would NEED to play TFC, to a reasonable degree of competence.
@@ -532,7 +533,7 @@ def make_book(rm: ResourceManager, i18n: I18n, local_instance: bool = False, rev
                 block_spotlight('', '', 'tfc:pot'),
             ),
             text('Firepit fuels have different levels of purity. Adding impure fuels to fires makes them more smokey. If the fire burns very impurely, smoke will start to fly very high in the air. The most pure fuels are logs, with pine being the least pure log. Fuels like pinecones and fallen leaves do not hot enough to do much cooking, and are very impure.'),
-            empty_last_page()
+            crafting('tfc:crafting/flint_and_pyrite', text_contents='A more advanced firestarter can be formed using flint and pyrite, or later flint and steel.'),
         )),
         entry('pottery', 'Pottery', 'tfc:ceramic/vessel', pages=(
             text('$(thing)Clay$() is an incredibly useful and balanced material which can be used for pottery. It can prove challenging to locate at first. Clay is usually hidden by grass, but it is often found in two locations. In areas with at least 175mm $(l:the_world/climate#rainfall)Annual Rainfall$(), clay can be found in patches all over the place, usually marked by the presence of certain $(thing)Plants$().').link('minecraft:clay'),
@@ -1129,7 +1130,7 @@ def make_book(rm: ResourceManager, i18n: I18n, local_instance: bool = False, rev
             image('tfc:textures/gui/book/gui/blast_furnace.png', text_contents='The Blast Furnace Interface', border=False),
             text('You will also need a $(l:mechanics/bellows)Bellows$() in order for the Blast Furnace to reach a temperature which will melt iron. This can be placed on any of the four sides of the blast furnace.'),
             multiblock('', 'A full size blast furnace with bellows and crucible attached.', True, multiblock_id='tfc:full_blast_furnace'),
-            text('Finally, to get started, light the blast furnace with a $(l:getting_started/firepit#firestarter)Fire Starter$() or a $(thing)Flint and Steel$(). It will begin to heat the ores inside. Make sure that the blast furnace continues to have fuel, and use the bellows to add air to the blast furnace after its internal temperature has reached the maximum for charcoal. After the ores inside heat up, they will melt and convert into $(l:mechanics/steel)Pig Iron$().'),
+            text('Finally, to get started, light the blast furnace with a $(l:getting_started/firepit#firestarter)Fire Starter$(), a $(thing)Flint and Pyrite$(), or a $(thing)Flint and Steel$(). It will begin to heat the ores inside. Make sure that the blast furnace continues to have fuel, and use the bellows to add air to the blast furnace after its internal temperature has reached the maximum for charcoal. After the ores inside heat up, they will melt and convert into $(l:mechanics/steel)Pig Iron$().'),
             text('This liquid metal will drip into any metal fluid container placed immediately below the blast furnace, such as a $(l:mechanics/crucible)Crucible$(). It can be cast into ingot molds from the output slot of the crucible and worked into $(l:mechanics/steel)Steel$().'),
         )),
         entry('steel', 'Steel', 'tfc:metal/ingot/steel', pages=(
