@@ -80,9 +80,36 @@ public final class TFCBiomes
     public static final BiomeExtension VOLCANIC_OCEANIC_MOUNTAINS = register("volcanic_oceanic_mountains", builder().heightmap(seed -> BiomeNoise.mountains(seed, -24, 50)).surface(NormalSurfaceBuilder.ROCKY).aquiferHeightOffset(-8).salty().volcanoes(2, -12, 50, 20).type(RiverBlendType.CAVE)); // Volcanic oceanic islands. Slightly smaller and lower but with very plentiful volcanoes
 
     // Shores
-    // TODO: Return heightmap to BiomeNoise::shore when done using for sea stacks
-    public static final BiomeExtension SHORE = register("shore", builder().heightmap(seed -> BiomeNoise.hills(seed, 20, 30)).surface(SeaCliffSurfaceBuilder.SANDY).aquiferHeightOffset(-40).type(BiomeBlendType.LAND).salty().shore().type(RiverBlendType.WIDE).noRivers().noSandyRiverShores().type(ShoreBlendType.SEA_STACKS)); // Standard shore / beach. Material will vary based on location
-    public static final BiomeExtension TIDAL_FLATS = register("tidal_flats", builder().heightmap(BiomeNoise::tidalFlats).surface(SeaCliffSurfaceBuilder.SANDY).aquiferHeightOffset(-16).type(BiomeBlendType.LAND).salty().shore().type(RiverBlendType.WIDE).noRivers().noSandyRiverShores().type(ShoreBlendType.SEA_STACKS).setShoreBaseHeight(-1));
+    // Each shore type is paired with a secondary shore type, which is sometimes applied
+    // TODO: Consider sandstone variants of some biomes
+    // TODO: Actually implement gravel beaches
+    // Standard shore / beach. Material will vary based on location
+    public static final BiomeExtension SHORE = register("shore", builder().heightmap(BiomeNoise::shore).surface(ShoreSurfaceBuilder.SANDY).aquiferHeightOffset(-16).type(BiomeBlendType.LAND).salty().shore().type(RiverBlendType.WIDE).noRivers().noSandyRiverShores().type(ShoreBlendType.SANDY).setShoreBaseHeight(-4));
+    // TODO: Figure out identity of this biome
+    public static final BiomeExtension TIDAL_FLATS = register("tidal_flats", builder().heightmap(BiomeNoise::shore).surface(ShoreSurfaceBuilder.SANDY).aquiferHeightOffset(-16).type(BiomeBlendType.OCEAN).salty().shore().type(RiverBlendType.WIDE).noRivers().noSandyRiverShores().type(ShoreBlendType.SANDY).setShoreBaseHeight(-4));
+
+    // Inspired by Bay of Fundy, 12 Apostles, etc. -- High biome shore
+    // TODO: Fix stalagmites
+    public static final BiomeExtension SEA_STACKS = register("sea_stacks", builder().heightmap(seed -> BiomeNoise.hills(seed, 10, 25)).surface(SeaCliffSurfaceBuilder.SANDY).aquiferHeightOffset(-40).type(BiomeBlendType.LAND).salty().shore().type(RiverBlendType.TALL_CANYON).noRivers().noSandyRiverShores().type(ShoreBlendType.SEA_STACKS).setShoreBaseHeight(-6));
+    public static final BiomeExtension SEA_STUMPS = register("sea_stumps", builder().heightmap(seed -> BiomeNoise.hills(seed, 10, 25)).surface(SeaCliffSurfaceBuilder.SANDY).aquiferHeightOffset(-40).type(BiomeBlendType.LAND).salty().shore().type(RiverBlendType.TALL_CANYON).noRivers().noSandyRiverShores().type(ShoreBlendType.SEA_STACKS).setShoreBaseHeight(-6));
+
+    // Multiple tiers, each similar to sea stacks -- High to montane biome shore
+    public static final BiomeExtension TERRACE_UPPER = register("terrace_upper", builder().heightmap(seed -> BiomeNoise.hills(seed, 20, 30)).surface(SeaCliffSurfaceBuilder.SANDY).aquiferHeightOffset(-40).type(BiomeBlendType.LAND).salty().shore().type(RiverBlendType.WIDE).noRivers().noSandyRiverShores().type(ShoreBlendType.UPPER_TERRACE));
+    public static final BiomeExtension TERRACE_LOWER = register("terrace_lower", builder().heightmap(seed -> BiomeNoise.hills(seed, 7, 15)).surface(SeaCliffSurfaceBuilder.SANDY).aquiferHeightOffset(-40).type(BiomeBlendType.LAND).salty().shore().type(RiverBlendType.WIDE).noRivers().noSandyRiverShores().type(ShoreBlendType.LOWER_TERRACE));
+
+    // Vegetated zone below shore cliffs -- Mid-high biome shore
+    public static final BiomeExtension SETBACK_CLIFFS = register("setback_cliffs", builder().heightmap(seed -> BiomeNoise.hills(seed, 20, 30)).surface(SeaCliffSurfaceBuilder.SANDY).aquiferHeightOffset(-40).type(BiomeBlendType.LAND).salty().shore().type(RiverBlendType.WIDE).noRivers().noSandyRiverShores().type(ShoreBlendType.SEA_STACKS));
+
+    // Vegetated coastal Dunes -- Low biome beach
+    public static final BiomeExtension COASTAL_DUNES = register("coastal_dunes", builder().heightmap(seed -> BiomeNoise.hills(seed, 20, 30)).surface(SeaCliffSurfaceBuilder.SANDY).aquiferHeightOffset(-40).type(BiomeBlendType.LAND).salty().shore().type(RiverBlendType.WIDE).noRivers().noSandyRiverShores().type(ShoreBlendType.SEA_STACKS));
+
+    // TODO: Make flood fill lakes salty and very common in this biome
+    // Chaotic rock formations, tide pools, and blowholes
+    public static final BiomeExtension ROCKY_SHORES = register("rocky_shores", builder().heightmap(seed -> BiomeNoise.hills(seed, 20, 30)).surface(SeaCliffSurfaceBuilder.SANDY).aquiferHeightOffset(-40).type(BiomeBlendType.LAND).salty().shore().type(RiverBlendType.WIDE).noRivers().noSandyRiverShores().type(ShoreBlendType.SEA_STACKS));
+
+    // Similar Rocky Shores, but with beaches mixed in
+    public static final BiomeExtension EMBAYMENTS = register("embayments", builder().heightmap(BiomeNoise::shore).surface(SeaCliffSurfaceBuilder.SANDY).aquiferHeightOffset(-40).type(BiomeBlendType.LAND).salty().shore().type(RiverBlendType.WIDE).noRivers().noSandyRiverShores().type(ShoreBlendType.SANDY)); //
+
 
     // Water
     public static final BiomeExtension LAKE = register("lake", builder().heightmap(BiomeNoise::lake).surface(NormalSurfaceBuilder.INSTANCE).aquiferHeightOffset(-16).type(BiomeBlendType.LAKE).type(RiverBlendType.WIDE).noRivers());

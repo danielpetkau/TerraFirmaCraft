@@ -15,7 +15,9 @@ import org.jetbrains.annotations.Nullable;
 
 import net.dries007.tfc.world.biome.BiomeBlendType;
 import net.dries007.tfc.world.biome.BiomeExtension;
+import net.dries007.tfc.world.biome.BiomeNoise;
 import net.dries007.tfc.world.biome.BiomeSourceExtension;
+import net.dries007.tfc.world.noise.Noise2D;
 import net.dries007.tfc.world.region.RegionPartition;
 import net.dries007.tfc.world.region.RiverEdge;
 import net.dries007.tfc.world.region.Units;
@@ -26,6 +28,8 @@ import net.dries007.tfc.world.river.RiverInfo;
 import net.dries007.tfc.world.river.RiverNoiseSampler;
 import net.dries007.tfc.world.shore.ShoreBlendType;
 import net.dries007.tfc.world.shore.ShoreNoiseSampler;
+
+import static net.dries007.tfc.world.TFCChunkGenerator.*;
 
 public class ChunkHeightFiller
 {
@@ -47,11 +51,12 @@ public class ChunkHeightFiller
     protected final Map<ShoreBlendType, ShoreNoiseSampler> shoreNoiseSamplers;
     protected final double[] shoreBlendWeights; // Indexed by ShoreBlendType.ordinal
     protected final int seaLevel;
+    protected final Noise2D tideHeightNoise;
 
     protected int blockX, blockZ; // Absolute x/z positions
     protected int localX, localZ; // Chunk-local x/z
 
-    public ChunkHeightFiller(Object2DoubleMap<BiomeExtension>[] sampledBiomeWeights, BiomeSourceExtension biomeSource, Map<BiomeExtension, BiomeNoiseSampler> biomeNoiseSamplers, Map<RiverBlendType, RiverNoiseSampler> riverNoiseSamplers, Map<ShoreBlendType, ShoreNoiseSampler> shoreNoiseSamplers, int seaLevel)
+    public ChunkHeightFiller(Object2DoubleMap<BiomeExtension>[] sampledBiomeWeights, BiomeSourceExtension biomeSource, Map<BiomeExtension, BiomeNoiseSampler> biomeNoiseSamplers, Map<RiverBlendType, RiverNoiseSampler> riverNoiseSamplers, Map<ShoreBlendType, ShoreNoiseSampler> shoreNoiseSamplers, int seaLevel, Noise2D tideHeightNoise)
     {
         this.biomeNoiseSamplers = biomeNoiseSamplers;
         this.columnBiomeNoiseSamplers = new Object2DoubleOpenHashMap<>();
@@ -65,6 +70,7 @@ public class ChunkHeightFiller
         this.shoreNoiseSamplers = shoreNoiseSamplers;
         this.shoreBlendWeights = new double[ShoreBlendType.SIZE];
         this.seaLevel = seaLevel;
+        this.tideHeightNoise = tideHeightNoise;
     }
 
     /**
@@ -100,7 +106,7 @@ public class ChunkHeightFiller
     {
         columnBiomeNoiseSamplers.clear();
 
-        double height = 0, normalHeight = 0, shoreHeight = 0, oceanHeight = 0;
+        double height = 0, normalHeight = 0, shoreHeight = 0, shoreBaseHeight = 0, oceanHeight = 0;
         double shoreWeight = 0, oceanWeight = 0;
 
         BiomeExtension biomeAt = null, normalBiomeAt = null, shoreBiomeAt = null, oceanBiomeAt = null;
@@ -131,6 +137,7 @@ public class ChunkHeightFiller
             {
                 shoreHeight += biomeHeight;
                 shoreWeight += biomeWeight;
+                shoreBaseHeight += biomeWeight * biome.getShoreBaseHeight();
                 if (maxShoreWeight < biomeWeight)
                 {
                     shoreBiomeAt = biome;
@@ -159,19 +166,18 @@ public class ChunkHeightFiller
         }
 
         biomeAt = normalBiomeAt;
+        computeInitialShoreWeights(biomeWeights);
+
+        final double landWeight = 1 - oceanWeight - shoreWeight;
+        if (shoreWeight > 0.25 && shoreBiomeAt != null)
+        {
+            height = adjustHeightForShoreContributions(height, oceanWeight, landWeight, shoreWeight, maxShoreWeight, shoreBiomeAt, shoreHeight, normalHeight);
+            if (shoreWeight > 0.5) biomeAt = shoreBiomeAt;
+        }
+
         if (biomeAt == null)
         {
             biomeAt = oceanBiomeAt;
-        }
-        // TODO: May need to mess with this boundary to get overhanging cliffs and such
-
-        computeInitialShoreWeights(biomeWeights);
-
-        if (shoreWeight > 0.5 && shoreBiomeAt != null)
-        {
-            final double landWeight = 1 - oceanWeight - shoreWeight;
-            height = adjustHeightForShoreContributions(height, oceanWeight, landWeight, shoreWeight, shoreBiomeAt, shoreHeight, normalHeight);
-            biomeAt = shoreBiomeAt;
         }
 
         assert biomeAt != null;
@@ -212,7 +218,7 @@ public class ChunkHeightFiller
         }
     }
 
-    private double adjustHeightForShoreContributions(final double height, final double oceanWeight, final double landWeight, final double shoreWeight, final BiomeExtension biome, final double shoreHeight, final double normalHeight)
+    private double adjustHeightForShoreContributions(final double height, final double oceanWeight, final double landWeight, final double shoreWeight, final double thisWeight, final BiomeExtension biome, final double shoreHeight, final double normalHeight)
     {
 
         // Iterate through blend types, and sample once
@@ -228,7 +234,7 @@ public class ChunkHeightFiller
             }
             else if (weight > 0)
             {
-                final double newShoreHeight = sampler.setColumnAndSampleHeight(height, blockX, blockZ, oceanWeight, landWeight, shoreWeight, biome, shoreHeight, normalHeight);
+                final double newShoreHeight = sampler.setColumnAndSampleHeight(height, blockX, blockZ, oceanWeight, landWeight, shoreWeight, thisWeight, biome, shoreHeight, normalHeight);
                 shoreBlendHeight += weight * newShoreHeight;
             }
         }

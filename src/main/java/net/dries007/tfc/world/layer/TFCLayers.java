@@ -51,6 +51,14 @@ public class TFCLayers
     public static final int CANYONS = idFor(TFCBiomes.CANYONS);
     public static final int SHORE = idFor(TFCBiomes.SHORE);
     public static final int TIDAL_FLATS = idFor(TFCBiomes.TIDAL_FLATS);
+    public static final int SEA_STACKS = idFor(TFCBiomes.SEA_STACKS);
+    public static final int SEA_STUMPS = idFor(TFCBiomes.SEA_STUMPS);
+    public static final int TERRACE_UPPER = idFor(TFCBiomes.TERRACE_UPPER);
+    public static final int TERRACE_LOWER = idFor(TFCBiomes.TERRACE_LOWER);
+    public static final int SETBACK_CLIFFS = idFor(TFCBiomes.SETBACK_CLIFFS);
+    public static final int COASTAL_DUNES = idFor(TFCBiomes.COASTAL_DUNES);
+    public static final int ROCKY_SHORES = idFor(TFCBiomes.ROCKY_SHORES);
+    public static final int EMBAYMENTS = idFor(TFCBiomes.EMBAYMENTS);
     public static final int LAKE = idFor(TFCBiomes.LAKE);
     public static final int RIVER = idFor(TFCBiomes.RIVER);
     public static final int MOUNTAIN_LAKE = idFor(TFCBiomes.MOUNTAIN_LAKE);
@@ -282,6 +290,26 @@ public class TFCLayers
         if (value == GLACIALLY_CARVED_OCEANIC_MOUNTAINS || value == GLACIALLY_CARVED_MOUNTAINS)
         {
             return GLACIATED_OCEANIC_MOUNTAINS;
+        }
+        if (value == OLD_MOUNTAINS || value == EXTREME_DOLINE_MOUNTAINS)
+        {
+            return TERRACE_UPPER;
+        }
+        if (value == PLATEAU || value == PLATEAU_WIDE || value == DOLINE_PLATEAU || value == EXTREME_DOLINE_PLATEAU || value == BURREN_PLATEAU || value == SHILIN_PLATEAU)
+        {
+            return SEA_STACKS;
+        }
+        if (value == HIGHLANDS || value == CENOTE_HIGHLANDS || value == DOLINE_HIGHLANDS || value == SHILIN_HIGHLANDS || value == TOWER_KARST_HIGHLANDS)
+        {
+            return ROCKY_SHORES;
+        }
+        if (value == ROLLING_HILLS || value == DOLINE_ROLLING_HILLS || value == CENOTE_ROLLING_HILLS)
+        {
+            return EMBAYMENTS;
+        }
+        if (value == HILLS || value == CENOTE_HILLS || value == DOLINE_HILLS || value == SHILIN_HILLS || value == TOWER_KARST_HILLS || value == GRASSY_DUNES || value == DUNE_SEA)
+        {
+            return COASTAL_DUNES;
         }
         return SHORE;
     }

@@ -76,6 +76,8 @@ public class Cellular2D implements Noise2D
         int closestCellX = 0;
         int closestCellY = 0;
 
+        // TODO: Need to remove changes to this file before merge, I expect
+
         int xPrimed = (xr - 1) * primeX;
         int yPrimedBase = (yr - 1) * primeY;
 

@@ -43,6 +43,15 @@ public final class BiomeNoise
     }
 
     /**
+     * As temporal tides are infeasible, vary the heights of beaches relative to sea level such that
+     * some beaches represent high tide conditions, and others low-tide conditions
+     */
+    public static Noise2D shoreTideLevelNoise(long seed)
+    {
+        return new OpenSimplex2D(seed).octaves(4).spread(0.01f).scaled(SEA_LEVEL_Y - 3, SEA_LEVEL_Y +3);
+    }
+
+    /**
      * Generates a flat base with twisting carved canyons using many smaller terraces.
      * Inspired by imagery of Drumheller, Alberta
      */

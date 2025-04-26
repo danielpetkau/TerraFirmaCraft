@@ -16,7 +16,7 @@ public interface ShoreNoiseSampler
 {
     ShoreNoiseSampler NONE = new ShoreNoiseSampler() {};
 
-    default double setColumnAndSampleHeight(double heightIn, int x, int z, double oceanWeight, double landWeight, double shoreWeight, BiomeExtension biome, double shoreHeight, double normalHeight)
+    default double setColumnAndSampleHeight(double heightIn, int x, int z, double oceanWeight, double landWeight, double shoreWeight, double thisWeight, BiomeExtension biome, double shoreHeight, double normalHeight)
     {
         return heightIn;
     }

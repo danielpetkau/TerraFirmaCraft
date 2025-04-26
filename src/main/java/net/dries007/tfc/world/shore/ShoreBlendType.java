@@ -16,6 +16,8 @@ public enum ShoreBlendType
     CLASSIC(ShoreNoise::classic), // Matches 1.20 beaches, simple cliffs with noisy sand below
     SANDY(ShoreNoise::sandyBeach), // Typical monoslope
     EMBAYMENTS(ShoreNoise::embayments),
+    UPPER_TERRACE(ShoreNoise::upperTerrace),
+    LOWER_TERRACE(ShoreNoise::lowerTerrace),
     SEA_STACKS(ShoreNoise::seaStacks); // Monoslopes mixed with protruding rocks
 
     public static final ShoreBlendType[] ALL = values();

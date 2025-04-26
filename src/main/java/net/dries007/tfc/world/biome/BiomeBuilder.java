@@ -76,7 +76,7 @@ public class BiomeBuilder
         spawnable = false;
         rivers = true;
         shore = false;
-        shoreBaseHeight = 0; // Above/below sea level
+        shoreBaseHeight = SEA_LEVEL_Y; // TODO: This is quickly becoming a bit redundant, and could just be moved to the shore blend type
         sandyRiverShores = true;
     }
 
@@ -171,7 +171,7 @@ public class BiomeBuilder
 
     public BiomeBuilder setShoreBaseHeight(int shoreBaseHeight)
     {
-        this.shoreBaseHeight = shoreBaseHeight;
+        this.shoreBaseHeight = SEA_LEVEL_Y + shoreBaseHeight;
         return this;
     }
 

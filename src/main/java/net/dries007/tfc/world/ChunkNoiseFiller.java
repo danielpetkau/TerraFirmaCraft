@@ -120,10 +120,11 @@ public class ChunkNoiseFiller extends ChunkHeightFiller
         ChunkBaseBlockSource baseBlockSource,
         ChunkNoiseSamplingSettings settings,
         int seaLevel,
+        Noise2D tideHeightNoise,
         Beardifier beardifier
     )
     {
-        super(sampledBiomeWeights, biomeSource, biomeNoiseSamplers, riverNoiseSamplers, shoreSamplers, seaLevel);
+        super(sampledBiomeWeights, biomeSource, biomeNoiseSamplers, riverNoiseSamplers, shoreSamplers, seaLevel, tideHeightNoise);
 
         this.chunk = chunk;
         this.chunkMinX = chunk.getPos().getMinBlockX();
