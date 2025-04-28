@@ -1286,7 +1286,7 @@ public final class BiomeNoise
      */
     public static Noise2D shoreTideLevelNoise(Seed seed)
     {
-        return new OpenSimplex2D(seed.seed()).octaves(4).spread(0.01f).scaled(SEA_LEVEL_Y - 3, SEA_LEVEL_Y + 3);
+        return new OpenSimplex2D(seed.seed()).octaves(3).spread(0.01f).scaled(SEA_LEVEL_Y - 3, SEA_LEVEL_Y + 3).add(new OpenSimplex2D(seed.seed()).spread(0.03));
     }
 
     public static BiomeNoiseSampler undergroundLakes(long seed, Noise2D heightNoise)

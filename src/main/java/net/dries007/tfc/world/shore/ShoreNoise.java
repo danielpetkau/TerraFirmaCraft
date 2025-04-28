@@ -45,6 +45,139 @@ public final class ShoreNoise
         };
     }
 
+    // TODO:
+    // Cliffs at a distance from the shore with dunes below
+    public static ShoreNoiseSampler setbackCliffs(Seed seed)
+    {
+        return new ShoreNoiseSampler()
+        {
+
+            final OpenSimplex2D warpNoise = new OpenSimplex2D(seed.seed()).scaled(-10, 10).spread(0.06);
+            final Noise2D duneNoise = new OpenSimplex2D(seed.seed()).spread(0.04).abs().scaled(-2, 6).warped(warpNoise);
+            final Noise3D cliffNoise = BiomeNoise.cliffNoise(seed);
+
+            final double cliffBaseWeight = 0.25;
+            final double cliffTopWeight = 0.45;
+
+            double duneHeight;
+            double landWeight;
+            int x;
+            int z;
+
+            @Override
+            public double setColumnAndSampleHeight(double heightIn, int x, int z, double oceanWeight, double landWeight, double shoreWeight, double thisWeight, BiomeExtension biome, double shoreHeight, double normalHeight)
+            {
+                this.landWeight = landWeight;
+                this.x = x;
+                this.z = z;
+
+                final double sandHeight = ShoreNoise.simpleBeach(seed, x, z, heightIn, landWeight, oceanWeight);
+                final double fullDuneHeight = duneNoise.noise(x, z) + sandHeight;
+
+                if (landWeight >= cliffBaseWeight)
+                {
+                    this.duneHeight = fullDuneHeight;
+                    return Mth.clampedMap(landWeight, cliffBaseWeight, cliffTopWeight, duneHeight, heightIn);
+                }
+                else if (oceanWeight == 0)
+                {
+                    this.duneHeight = fullDuneHeight;
+                }
+                else
+                {
+                    this.duneHeight = Mth.clampedMap(oceanWeight, 0, 0.4, fullDuneHeight, sandHeight);
+                }
+
+                return fullDuneHeight;
+            }
+
+            @Override
+            public double noise(int yIn, double noiseIn)
+            {
+                if (yIn <= duneHeight) return 0;
+                if (landWeight > cliffBaseWeight)
+                {
+                    // TODO: Better system
+                    return cliffNoise.noise(x, yIn, z) - landWeight;
+                }
+                return Mth.clampedMap(yIn, duneHeight, duneHeight + 10, 0, 3);
+            }
+        };
+    }
+
+    // Small sea dunes
+    public static ShoreNoiseSampler dunes(Seed seed)
+    {
+        return new ShoreNoiseSampler()
+        {
+
+            final OpenSimplex2D warpNoise = new OpenSimplex2D(seed.seed()).scaled(-10, 10).spread(0.05);
+            final Noise2D duneNoise = new OpenSimplex2D(seed.seed()).spread(0.03).abs().scaled(-2, 8).warped(warpNoise);
+
+            double duneHeight;
+            double sandHeight;
+            double oceanWeight;
+            double thisWeight;
+
+            @Override
+            public double setColumnAndSampleHeight(double heightIn, int x, int z, double oceanWeight, double landWeight, double shoreWeight, double thisWeight, BiomeExtension biome, double shoreHeight, double normalHeight)
+            {
+                this.sandHeight = ShoreNoise.simpleBeach(seed, x, z, heightIn, landWeight, oceanWeight);
+                this.oceanWeight = oceanWeight;
+                this.thisWeight = thisWeight;
+                final double tideLevelAtOcean = BiomeNoise.shoreTideLevelNoise(seed).noise(x, z) - 4;
+
+                final double fullDuneHeight = duneNoise.noise(x, z) + sandHeight;
+                if (oceanWeight > 0)
+                {
+                    this.duneHeight = Mth.clampedMap(oceanWeight, 0, 0.25, fullDuneHeight,tideLevelAtOcean);
+                }
+                else
+                {
+                    this.duneHeight = fullDuneHeight;
+                }
+                this.duneHeight = Mth.clampedMap(thisWeight, 0.5, 1, sandHeight, duneHeight);
+
+
+                return duneHeight;
+            }
+
+            @Override
+            public double noise(int yIn, double noiseIn)
+            {
+                if (yIn <= duneHeight) return 0;
+
+                return 0.7;
+            }
+        };
+    }
+
+    // TODO:
+    // Complex rocks and tidepools
+    public static ShoreNoiseSampler rockyShores(Seed seed)
+    {
+        return new ShoreNoiseSampler()
+        {
+            double sandHeight;
+
+            @Override
+            public double setColumnAndSampleHeight(double heightIn, int x, int z, double oceanWeight, double landWeight, double shoreWeight, double thisWeight, BiomeExtension biome, double shoreHeight, double normalHeight)
+            {
+                this.sandHeight = ShoreNoise.simpleBeach(seed, x, z, heightIn, landWeight, oceanWeight);
+
+                return sandHeight;
+            }
+
+            @Override
+            public double noise(int yIn, double noiseIn)
+            {
+                if (yIn <= sandHeight) return 0;
+
+                return 0.7;
+            }
+        };
+    }
+
     // Typical monoslope beaches interspersed with rocky outcrops
     // TODO:
     public static ShoreNoiseSampler embayments(Seed seed)

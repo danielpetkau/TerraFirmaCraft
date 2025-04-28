@@ -32,9 +32,13 @@ public enum MoreShoresLayer implements AdjacentTransformLayer
         {
             return TFCLayers.TERRACE_LOWER;
         }
-        if (matcher.test(layer -> layer == TFCLayers.SETBACK_CLIFFS || layer == TFCLayers.COASTAL_DUNES) && center == TFCLayers.OCEAN)
+        if (matcher.test(layer -> layer == TFCLayers.COASTAL_DUNES))
         {
-            return TFCLayers.SHORE;
+            return TFCLayers.COASTAL_DUNES;
+        }
+        if (matcher.test(layer -> layer == TFCLayers.SETBACK_CLIFFS) && center == TFCLayers.OCEAN)
+        {
+            return TFCLayers.SETBACK_CLIFFS;
         }
         return center;
     }
