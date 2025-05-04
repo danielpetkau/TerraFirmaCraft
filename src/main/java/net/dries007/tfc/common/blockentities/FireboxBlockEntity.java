@@ -7,7 +7,9 @@ import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -144,6 +146,8 @@ public class FireboxBlockEntity extends TickableInventoryBlockEntity<ItemStackHa
     private static void performHeating(Level level, FireboxBlockEntity firebox, Object2IntMap<BlockPos> filled)
     {
         filled.forEach((testPos, distance) -> {
+            if (level instanceof ServerLevel server && level.random.nextFloat() < 0.01f)
+                server.sendParticles(ParticleTypes.FLAME, testPos.getX() + 0.5, testPos.getY() + 0.5, testPos.getZ() + 0.5, 1, 0, 0, 0, 0.01);
             if (level.getBlockEntity(testPos) instanceof PlacedItemBlockEntity placedItem)
             {
                 final IItemHandler inv = placedItem.getInventory();

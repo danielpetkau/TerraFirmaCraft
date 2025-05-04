@@ -50,6 +50,7 @@ import net.minecraft.client.renderer.entity.SalmonRenderer;
 import net.minecraft.client.renderer.entity.TropicalFishRenderer;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
@@ -58,6 +59,7 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.dimension.BuiltinDimensionTypes;
 import net.minecraft.world.level.material.Fluid;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
@@ -67,6 +69,7 @@ import net.neoforged.neoforge.client.event.ModelEvent;
 import net.neoforged.neoforge.client.event.RegisterClientReloadListenersEvent;
 import net.neoforged.neoforge.client.event.RegisterClientTooltipComponentFactoriesEvent;
 import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
+import net.neoforged.neoforge.client.event.RegisterDimensionSpecialEffectsEvent;
 import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
@@ -85,6 +88,7 @@ import net.dries007.tfc.client.extensions.SheetPileExtension;
 import net.dries007.tfc.client.model.ContainedFluidModel;
 import net.dries007.tfc.client.model.DoubleIngotPileBlockModel;
 import net.dries007.tfc.client.model.IngotPileBlockModel;
+import net.dries007.tfc.client.model.PlantBlockModel;
 import net.dries007.tfc.client.model.ScrapingBlockModel;
 import net.dries007.tfc.client.model.SheetPileBlockModel;
 import net.dries007.tfc.client.model.TrimmedItemModel;
@@ -135,6 +139,8 @@ import net.dries007.tfc.client.model.entity.WindmillBladeLatticeModel;
 import net.dries007.tfc.client.model.entity.WindmillBladeModel;
 import net.dries007.tfc.client.model.entity.WindmillBladeRusticModel;
 import net.dries007.tfc.client.model.entity.YakModel;
+import net.dries007.tfc.client.overworld.LevelRendererExtension;
+import net.dries007.tfc.client.overworld.StarsReloadListener;
 import net.dries007.tfc.client.particle.AnimatedParticle;
 import net.dries007.tfc.client.particle.BubbleParticle;
 import net.dries007.tfc.client.particle.FallingLeafParticle;
@@ -205,6 +211,7 @@ import net.dries007.tfc.client.screen.CharcoalForgeScreen;
 import net.dries007.tfc.client.screen.ClimateScreen;
 import net.dries007.tfc.client.screen.CreateTFCWorldScreen;
 import net.dries007.tfc.client.screen.CrucibleScreen;
+import net.dries007.tfc.client.screen.FireboxScreen;
 import net.dries007.tfc.client.screen.FirepitScreen;
 import net.dries007.tfc.client.screen.GrillScreen;
 import net.dries007.tfc.client.screen.KnappingScreen;
@@ -222,6 +229,7 @@ import net.dries007.tfc.common.blockentities.TFCBlockEntities;
 import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.blocks.TooltipBlock;
 import net.dries007.tfc.common.blocks.plant.KrummholzBlock;
+import net.dries007.tfc.common.blocks.plant.Plant;
 import net.dries007.tfc.common.blocks.rock.Rock;
 import net.dries007.tfc.common.blocks.rock.RockCategory;
 import net.dries007.tfc.common.blocks.soil.ConnectedGrassBlock;
@@ -276,6 +284,7 @@ public final class ClientEventHandler
         bus.addListener(ClientEventHandler::registerLayerDefinitions);
         bus.addListener(ClientEventHandler::registerPresetEditors);
         bus.addListener(ClientEventHandler::registerExtensions);
+        bus.addListener(ClientEventHandler::registerDimensionEffects);
         bus.addListener(IngameOverlays::registerOverlays);
 
         mod.registerExtensionPoint(IConfigScreenFactory.class, ConfigurationScreen::new);
@@ -460,6 +469,8 @@ public final class ClientEventHandler
 
         ItemBlockRenderTypes.setRenderLayer(TFCBlocks.COMPOSTER.get(), cutout);
         ItemBlockRenderTypes.setRenderLayer(TFCBlocks.BLOOMERY.get(), cutout);
+        ItemBlockRenderTypes.setRenderLayer(TFCBlocks.FIRE_BRICK_SHELF.get(), cutout);
+        ItemBlockRenderTypes.setRenderLayer(TFCBlocks.FIREPROOF_DOOR.get(), cutout);
         ItemBlockRenderTypes.setRenderLayer(TFCBlocks.ICE_PILE.get(), translucent);
 
         ItemBlockRenderTypes.setRenderLayer(TFCBlocks.LARGE_VESSEL.get(), cutout);
@@ -500,6 +511,7 @@ public final class ClientEventHandler
         event.register(TFCContainerTypes.POT.get(), PotScreen::new);
         event.register(TFCContainerTypes.POWDERKEG.get(), PowderkegScreen::new);
         event.register(TFCContainerTypes.CHARCOAL_FORGE.get(), CharcoalForgeScreen::new);
+        event.register(TFCContainerTypes.FIREBOX.get(), FireboxScreen::new);
         event.register(TFCContainerTypes.NEST_BOX.get(), NestBoxScreen::new);
         event.register(TFCContainerTypes.CRUCIBLE.get(), CrucibleScreen::new);
         event.register(TFCContainerTypes.BARREL.get(), BarrelScreen::new);
@@ -545,10 +557,10 @@ public final class ClientEventHandler
         }
         event.registerEntityRenderer(TFCEntities.COD.get(), CodRenderer::new);
         event.registerEntityRenderer(TFCEntities.FRESHWATER_FISH.get(Fish.SALMON).get(), SalmonRenderer::new);
-        event.registerEntityRenderer(TFCEntities.FRESHWATER_FISH.get(Fish.LARGEMOUTH_BASS).get(), ctx -> new SalmonLikeRenderer(ctx, "largemouth_bass"));
-        event.registerEntityRenderer(TFCEntities.FRESHWATER_FISH.get(Fish.SMALLMOUTH_BASS).get(), ctx -> new SalmonLikeRenderer(ctx, "smallmouth_bass"));
-        event.registerEntityRenderer(TFCEntities.FRESHWATER_FISH.get(Fish.LAKE_TROUT).get(), ctx -> new SalmonLikeRenderer(ctx, "lake_trout"));
-        event.registerEntityRenderer(TFCEntities.FRESHWATER_FISH.get(Fish.RAINBOW_TROUT).get(), ctx -> new SalmonLikeRenderer(ctx, "rainbow_trout"));
+        event.registerEntityRenderer(TFCEntities.FRESHWATER_FISH.get(Fish.LARGEMOUTH_BASS).get(),  ctx -> new SimpleMobRenderer.Builder<>(ctx, CodModel::new, "largemouth_bass").flops().build());
+        event.registerEntityRenderer(TFCEntities.FRESHWATER_FISH.get(Fish.SMALLMOUTH_BASS).get(),  ctx -> new SimpleMobRenderer.Builder<>(ctx, CodModel::new, "smallmouth_bass").flops().build());
+        event.registerEntityRenderer(TFCEntities.FRESHWATER_FISH.get(Fish.LAKE_TROUT).get(),  ctx -> new SimpleMobRenderer.Builder<>(ctx, CodModel::new, "lake_trout").flops().build());
+        event.registerEntityRenderer(TFCEntities.FRESHWATER_FISH.get(Fish.RAINBOW_TROUT).get(),  ctx -> new SimpleMobRenderer.Builder<>(ctx, CodModel::new, "rainbow_trout").flops().build());
         event.registerEntityRenderer(TFCEntities.FRESHWATER_FISH.get(Fish.CRAPPIE).get(), ctx -> new SimpleMobRenderer.Builder<>(ctx, CodModel::new, "crappie").flops().build());
         event.registerEntityRenderer(TFCEntities.FRESHWATER_FISH.get(Fish.BLUEGILL).get(), ctx -> new SimpleMobRenderer.Builder<>(ctx, BluegillModel::new, "bluegill").flops().build());
         event.registerEntityRenderer(TFCEntities.TROPICAL_FISH.get(), TropicalFishRenderer::new);
@@ -659,6 +671,10 @@ public final class ClientEventHandler
         }
         event.registerLayerDefinition(RenderHelpers.layerId("bluegill"), BluegillModel::createBodyLayer);
         event.registerLayerDefinition(RenderHelpers.layerId("crappie"), CodModel::createBodyLayer);
+        event.registerLayerDefinition(RenderHelpers.layerId("smallmouth_bass"), CodModel::createBodyLayer);
+        event.registerLayerDefinition(RenderHelpers.layerId("largemouth_bass"), CodModel::createBodyLayer);
+        event.registerLayerDefinition(RenderHelpers.layerId("rainbow_trout"), CodModel::createBodyLayer);
+        event.registerLayerDefinition(RenderHelpers.layerId("lake_trout"), CodModel::createBodyLayer);
         event.registerLayerDefinition(RenderHelpers.layerId("jellyfish"), JellyfishModel::createBodyLayer);
         event.registerLayerDefinition(RenderHelpers.layerId("lobster"), LobsterModel::createBodyLayer);
         event.registerLayerDefinition(RenderHelpers.layerId("crayfish"), LobsterModel::createBodyLayer);
@@ -756,6 +772,7 @@ public final class ClientEventHandler
         event.register(Helpers.identifier("double_ingot_pile"), DoubleIngotPileBlockModel.INSTANCE);
         event.register(Helpers.identifier("sheet_pile"), SheetPileBlockModel.INSTANCE);
         event.register(Helpers.identifier("scraping"), ScrapingBlockModel.INSTANCE);
+        event.register(Helpers.identifier("plant"), PlantBlockModel.Loader.INSTANCE);
     }
 
     public static void registerColorHandlerBlocks(RegisterColorHandlersEvent.Block event)
@@ -764,6 +781,7 @@ public final class ClientEventHandler
         final BlockColor tallGrassColor = (state, level, pos, tintIndex) -> TFCColors.getTallGrassColor(pos, tintIndex);
         final BlockColor foliageColor = (state, level, pos, tintIndex) -> TFCColors.getFoliageColor(pos, tintIndex);
         final BlockColor grassBlockColor = (state, level, pos, tintIndex) -> state.getValue(ConnectedGrassBlock.SNOWY) || tintIndex != 1 ? -1 : grassColor.getColor(state, level, pos, tintIndex);
+        final BlockColor waterBlockColor = (state, level, pos, tintIndex) -> TFCColors.getWaterColor(pos);
 
         TFCBlocks.SOIL.get(SoilBlockType.GRASS).values().forEach(reg -> event.register(grassBlockColor, reg.get()));
         TFCBlocks.SOIL.get(SoilBlockType.CLAY_GRASS).values().forEach(reg -> event.register(grassBlockColor, reg.get()));
@@ -773,13 +791,15 @@ public final class ClientEventHandler
         TFCBlocks.PLANTS.forEach((plant, reg) -> {
             if (plant.isBlockTinted())
                 event.register(
-                    plant.isTallGrass() ?
-                        tallGrassColor :
-                        plant.isSeasonal() ?
-                            (state, level, pos, tintIndex) -> TFCColors.getSeasonalFoliageColor(pos, tintIndex, 145) :
-                            plant.isFoliage() ?
-                                foliageColor :
-                                grassColor, reg.get());
+                    plant.usesWaterTint() ?
+                        waterBlockColor :
+                        plant.isTallGrass() ?
+                            tallGrassColor :
+                            plant.isSeasonal() ?
+                                (state, level, pos, tintIndex) -> TFCColors.getSeasonalFoliageColor(pos, tintIndex, 145) :
+                                plant.isFoliage() ?
+                                    foliageColor :
+                                    grassColor, reg.get());
         });
         TFCBlocks.POTTED_PLANTS.forEach((plant, reg) -> {
             if (plant.isFlowerpotTinted())
@@ -810,7 +830,7 @@ public final class ClientEventHandler
 
         TFCBlocks.WILD_CROPS.forEach((crop, reg) -> event.register(grassColor, reg.get()));
 
-        event.register((state, level, pos, tintIndex) -> TFCColors.getWaterColor(pos), TFCBlocks.SALT_WATER.get(), TFCBlocks.SEA_ICE.get(), TFCBlocks.RIVER_WATER.get());
+        event.register(waterBlockColor, TFCBlocks.SALT_WATER.get(), TFCBlocks.SEA_ICE.get(), TFCBlocks.RIVER_WATER.get());
         event.register(blockColor(0x5FB5B8), TFCBlocks.SPRING_WATER.get());
     }
 
@@ -870,6 +890,8 @@ public final class ClientEventHandler
         event.registerReloadListener(new ColorMapReloadListener(TFCColors::setFoliageColors, TFCColors.FOLIAGE_COLORS_LOCATION));
         event.registerReloadListener(new ColorMapReloadListener(TFCColors::setFoliageFallColors, TFCColors.FOLIAGE_FALL_COLORS_LOCATION));
         event.registerReloadListener(new ColorMapReloadListener(TFCColors::setFoliageWinterColors, TFCColors.FOLIAGE_WINTER_COLORS_LOCATION));
+
+        event.registerReloadListener(new StarsReloadListener());
     }
 
     public static void registerParticleFactories(RegisterParticleProvidersEvent event)
@@ -952,5 +974,10 @@ public final class ClientEventHandler
     private static <T> void registerCustomItemRenderer(RegisterClientExtensionsEvent event, @Nullable Supplier<? extends ItemLike> item, Function<T, BlockEntityWithoutLevelRenderer> renderer)
     {
         if (item != null) event.registerItem(ItemRendererExtension.cached(() -> renderer.apply((T) item.get().asItem())), item.get().asItem());
+    }
+
+    public static void registerDimensionEffects(RegisterDimensionSpecialEffectsEvent event)
+    {
+        event.register(BuiltinDimensionTypes.OVERWORLD_EFFECTS, LevelRendererExtension.INSTANCE);
     }
 }

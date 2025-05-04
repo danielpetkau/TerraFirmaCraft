@@ -493,7 +493,8 @@ public final class BlockEntityTooltips
         {
             for (ItemStack stack : Helpers.iterate(placedItem.getInventory()))
             {
-                tooltip.accept(stack.getHoverName());
+                if (!stack.isEmpty())
+                    tooltip.accept(stack.getHoverName());
             }
         }
     };

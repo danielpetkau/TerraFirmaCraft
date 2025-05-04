@@ -174,6 +174,10 @@ public final class TFCCreativeTabs
                 Metal.BlockType.EXPOSED_BLOCK_STAIRS,
                 Metal.BlockType.WEATHERED_BLOCK_STAIRS,
                 Metal.BlockType.OXIDIZED_BLOCK_STAIRS,
+                Metal.BlockType.GRATE,
+                Metal.BlockType.EXPOSED_GRATE,
+                Metal.BlockType.WEATHERED_GRATE,
+                Metal.BlockType.OXIDIZED_GRATE,
                 Metal.BlockType.BARS,
                 Metal.BlockType.CHAIN,
                 Metal.BlockType.TRAPDOOR,
@@ -548,6 +552,9 @@ public final class TFCCreativeTabs
         out.accept(TFCBlocks.BARREL_RACK);
         out.accept(TFCBlocks.FIRE_BRICKS);
         out.accept(TFCBlocks.REINFORCED_FIRE_BRICKS);
+        out.accept(TFCBlocks.FIRE_BRICK_SHELF);
+        out.accept(TFCBlocks.FIREPROOF_DOOR);
+        out.accept(TFCBlocks.FIREBOX);
         out.accept(TFCBlocks.FIRE_CLAY_BLOCK);
 
         out.accept(TFCBlocks.AGGREGATE);
