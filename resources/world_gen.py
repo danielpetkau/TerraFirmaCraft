@@ -46,7 +46,8 @@ def generate(rm: ResourceManager):
     ])
     rm.placed_feature_tag('feature/forest_plants', *['tfc:%s_patch' % d for d in FOREST_DECORATORS])
     rm.placed_feature_tag('feature/ocean_plants', *['tfc:plant/%s_patch' % plant for plant, data in PLANTS.items() if data.type in OCEAN_PLANT_TYPES and not data.clay])
-    rm.placed_feature_tag('feature/shore_decorations', 'tfc:tide_pool', 'tfc:big_tide_pool', *['tfc:%s_patch' % v for v in SHORE_DECORATORS])
+    rm.placed_feature_tag('feature/shore_decorations', *['tfc:%s_patch' % v for v in SHORE_DECORATORS])
+    rm.placed_feature_tag('feature/tide_pool_decorations', 'tfc:tide_pool', 'tfc:big_tide_pool')
     rm.placed_feature_tag('feature/ocean_decorations', 'tfc:plant/giant_kelp_patch', 'tfc:plant/winged_kelp', 'tfc:plant/leafy_kelp', 'tfc:clam_patch', 'tfc:mollusk_patch', 'tfc:mussel_patch')
     rm.placed_feature_tag('feature/clay_indicators', 'tfc:plant/athyrium_fern_patch', 'tfc:plant/canna_patch', 'tfc:plant/goldenrod_patch', 'tfc:plant/pampas_grass_patch', 'tfc:plant/perovskia_patch', 'tfc:plant/water_canna_patch')
     rm.placed_feature_tag('feature/surface_grasses', *['tfc:plant/%s_patch' % p for p, data in PLANTS.items() if data.type == 'short_grass'])
@@ -1733,6 +1734,8 @@ def biome(rm: ResourceManager, name: str, category: str, boulders: bool = False,
 
         if category == 'beach':
             surface_decorations.append('#tfc:feature/shore_decorations')
+            if name == "rocky_shore" or name == "tidal_flats":
+                surface_decorations.append('#tfc:feature/tide_pool_decorations')
         else:
             surface_decorations.append('#tfc:feature/ocean_decorations')
 
