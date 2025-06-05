@@ -411,6 +411,8 @@
   "tfc.tooltip.sewing.stitch": "Stitch",
   "tfc.tooltip.sewing.remove_stitch": "Remove Stitch",
   "tfc.tooltip.sewing.select_recipe": "Select Recipe",
+  "tfc.tooltip.firebox.time_to_heat": "Time to heat %s blocks: %s",
+  "tfc.tooltip.firebox.heated": "Heated %s blocks",
   "trim_material.tfc.amethyst": "Amethyst Material",
   "trim_material.tfc.diamond": "Diamond Material",
   "trim_material.tfc.emerald": "Emerald Material",

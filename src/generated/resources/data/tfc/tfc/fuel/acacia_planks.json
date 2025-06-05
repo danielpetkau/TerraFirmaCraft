@@ -1,8 +1,8 @@
 {
-  "duration": 260,
+  "duration": 400,
   "ingredient": {
     "item": "tfc:wood/planks/acacia"
   },
   "purity": 0.95,
-  "temperature": 1050.0
+  "temperature": 700.0
 }

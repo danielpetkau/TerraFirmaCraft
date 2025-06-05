@@ -69,7 +69,7 @@ public class BuiltinFuels extends DataManagerProvider<Fuel> implements Accessors
         add("leaves", Ingredient.of(ItemTags.LEAVES), 600, 100, 0.25f);
     }
 
-    private void add(Wood wood, int duration, float temperature, float purity)
+    private void add(Wood wood, float temperature, int duration, float purity)
     {
         final Map<Wood.BlockType, TFCBlocks.Id<Block>> blocks = TFCBlocks.WOODS.get(wood);
         add(wood.getSerializedName() + "_logs", Ingredient.of(logsTagOf(Registries.ITEM, wood)), duration, temperature, purity);

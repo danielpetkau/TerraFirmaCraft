@@ -1,8 +1,8 @@
 {
-  "duration": 244,
+  "duration": 400,
   "ingredient": {
     "item": "tfc:wood/planks/aspen"
   },
   "purity": 0.95,
-  "temperature": 1050.0
+  "temperature": 661.0
 }

@@ -1,8 +1,8 @@
 {
-  "duration": 762,
+  "duration": 2000,
   "ingredient": {
     "tag": "tfc:hickory_logs"
   },
   "purity": 0.8,
-  "temperature": 2000.0
+  "temperature": 762.0
 }

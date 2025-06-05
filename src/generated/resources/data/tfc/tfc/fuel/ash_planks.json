@@ -1,8 +1,8 @@
 {
-  "duration": 278,
+  "duration": 500,
   "ingredient": {
     "item": "tfc:wood/planks/ash"
   },
   "purity": 0.95,
-  "temperature": 1300.0
+  "temperature": 746.0
 }

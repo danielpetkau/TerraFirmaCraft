@@ -11,6 +11,7 @@ import net.dries007.tfc.common.component.heat.Heat;
 import net.dries007.tfc.common.container.FireboxContainer;
 import net.dries007.tfc.config.TFCConfig;
 import net.dries007.tfc.util.Helpers;
+import net.dries007.tfc.util.calendar.Calendars;
 
 public class FireboxScreen extends BlockEntityScreen<FireboxBlockEntity, FireboxContainer>
 {
@@ -22,8 +23,8 @@ public class FireboxScreen extends BlockEntityScreen<FireboxBlockEntity, Firebox
     {
         super(container, playerInventory, name, TEXTURE);
 
-        inventoryLabelY += 20;
-        imageHeight += 20;
+        inventoryLabelY += 36;
+        imageHeight += 36;
     }
 
     @Override
@@ -36,6 +37,17 @@ public class FireboxScreen extends BlockEntityScreen<FireboxBlockEntity, Firebox
         if (temperature > 0)
         {
             graphics.blitSprite(THERMOMETER_INDICATOR, leftPos + 8, topPos + 76 - temperature, 15, 5);
+            final long left = blockEntity.getTimeLeft();
+            if (left == -1 || blockEntity.getHeatingCount() == 0)
+                return;
+            if (left > 0)
+            {
+                graphics.drawString(font, Component.translatable("tfc.tooltip.firebox.time_to_heat", blockEntity.getHeatingCount(), Calendars.CLIENT.getTimeDelta(left)), leftPos + 20, topPos + 95, 0x404040, false);
+            }
+            else
+            {
+                graphics.drawString(font, Component.translatable("tfc.tooltip.firebox.heated", blockEntity.getHeatingCount()), leftPos + 20, topPos + 95, 0x404040, false);
+            }
         }
     }
 
@@ -43,13 +55,14 @@ public class FireboxScreen extends BlockEntityScreen<FireboxBlockEntity, Firebox
     protected void renderTooltip(GuiGraphics graphics, int mouseX, int mouseY)
     {
         super.renderTooltip(graphics, mouseX, mouseY);
-        if (RenderHelpers.isInside(mouseX, mouseY, leftPos + 8, topPos + 76 - 51, 15, 51))
+        final var text = TFCConfig.CLIENT.heatTooltipStyle.get().formatColored(blockEntity.getTemperature());
+        if (text != null)
         {
-            final var text = TFCConfig.CLIENT.heatTooltipStyle.get().formatColored(blockEntity.getTemperature());
-            if (text != null)
+            if (RenderHelpers.isInside(mouseX, mouseY, leftPos + 8, topPos + 76 - 51, 15, 51))
             {
                 graphics.renderTooltip(font, text, mouseX, mouseY);
             }
         }
+
     }
 }

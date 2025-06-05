@@ -1,8 +1,8 @@
 {
-  "duration": 241,
+  "duration": 400,
   "ingredient": {
     "item": "tfc:wood/planks/willow"
   },
   "purity": 0.95,
-  "temperature": 1050.0
+  "temperature": 653.0
 }

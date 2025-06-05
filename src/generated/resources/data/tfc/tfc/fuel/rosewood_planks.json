@@ -1,8 +1,8 @@
 {
-  "duration": 256,
+  "duration": 600,
   "ingredient": {
     "item": "tfc:wood/planks/rosewood"
   },
   "purity": 0.95,
-  "temperature": 1550.0
+  "temperature": 690.0
 }

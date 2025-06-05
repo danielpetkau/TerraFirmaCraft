@@ -415,6 +415,8 @@
   "tfc.tooltip.sewing.stitch": "Стежок",
   "tfc.tooltip.sewing.remove_stitch": "Убрать стежок",
   "tfc.tooltip.sewing.select_recipe": "Выбрать рецепт",
+  "tfc.tooltip.firebox.time_to_heat": "Time to heat %s blocks: %s",
+  "tfc.tooltip.firebox.heated": "Heated %s blocks",
   "trim_material.tfc.amethyst": "Аметистовая",
   "trim_material.tfc.diamond": "Алмазная",
   "trim_material.tfc.emerald": "Изумрудная",

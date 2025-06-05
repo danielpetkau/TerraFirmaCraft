@@ -1,8 +1,8 @@
 {
-  "duration": 730,
+  "duration": 1250,
   "ingredient": {
     "tag": "tfc:palm_logs"
   },
   "purity": 0.95,
-  "temperature": 1250.0
+  "temperature": 730.0
 }

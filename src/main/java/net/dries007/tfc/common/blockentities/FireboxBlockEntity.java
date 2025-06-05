@@ -1,9 +1,9 @@
 package net.dries007.tfc.common.blockentities;
 
 import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Queue;
-import it.unimi.dsi.fastutil.objects.Object2IntMap;
-import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
@@ -16,6 +16,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.DoorBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.ItemStackHandler;
@@ -30,6 +31,7 @@ import net.dries007.tfc.common.container.FireboxContainer;
 import net.dries007.tfc.common.recipes.HeatingRecipe;
 import net.dries007.tfc.util.Helpers;
 import net.dries007.tfc.util.calendar.Calendars;
+import net.dries007.tfc.util.calendar.ICalendar;
 import net.dries007.tfc.util.calendar.ICalendarTickable;
 import net.dries007.tfc.util.data.Fuel;
 
@@ -77,47 +79,54 @@ public class FireboxBlockEntity extends TickableInventoryBlockEntity<ItemStackHa
 
         if (level.getGameTime() % 200 == 0)
         {
+            final int oldCap = box.heatingCount;
             box.operableBlocks = floodfill(level, pos.above(), box);
+            if (oldCap != box.operableBlocks.size())
+            {
+                box.heatingCount = box.operableBlocks.size();
+                box.heatingTimestamp = Calendars.SERVER.getTicks();
+                box.markForSync();
+            }
         }
-        performHeating(level, box, box.operableBlocks);
+        if (box.temperature == 0 || box.heatingCount < 4)
+            box.heatingTimestamp = Calendars.SERVER.getTicks();
+        if (box.getTimeLeft() <= 0)
+            performHeating(level, box, box.operableBlocks);
     }
 
-    private static Object2IntMap<BlockPos> floodfill(Level level, BlockPos pos, FireboxBlockEntity firebox)
+    private static List<BlockPos> floodfill(Level level, BlockPos pos, FireboxBlockEntity firebox)
     {
         record Path(BlockPos pos, int cost) {}
 
         if (level.isClientSide || firebox.temperature <= 0f)
         {
-            return new Object2IntOpenHashMap<>();
+            return new ArrayList<>();
         }
 
         final BlockPos.MutableBlockPos cursor = new BlockPos.MutableBlockPos();
-        final Object2IntMap<BlockPos> filled = new Object2IntOpenHashMap<>();
+        final List<BlockPos> positions = new ArrayList<>(!firebox.operableBlocks.isEmpty() ? firebox.operableBlocks.size() : 16);
         final Queue<Path> queue = new ArrayDeque<>();
 
-        filled.put(pos, 0);
+        positions.add(pos);
         queue.add(new Path(pos, 0));
 
-        int maxCost = -1, capacity = firebox.getCapacity();
+        int capacity = firebox.getTotalHeatableBlocks();
 
         while (!queue.isEmpty())
         {
             final Path current = queue.remove();
 
             capacity--;
-            if (capacity >= 0 && current.cost > maxCost)
+            if (capacity <= 0)
             {
-                maxCost = current.cost;
-            }
-            if (capacity <= 0 && current.cost > maxCost)
-            {
+                positions.clear();
                 break;
             }
 
             for (Direction direction : NOT_DOWN)
             {
                 cursor.setWithOffset(current.pos, direction);
-                if (!filled.containsKey(cursor))
+                if (!positions.contains(cursor.immutable()))
                 {
                     final BlockState state = level.getBlockState(cursor);
                     if (!isValidExterior(level, cursor, state, direction))
@@ -127,53 +136,52 @@ public class FireboxBlockEntity extends TickableInventoryBlockEntity<ItemStackHa
                             final BlockPos posNext = cursor.immutable();
 
                             queue.add(new Path(posNext, current.cost + 1));
-                            filled.put(posNext, cursor.distManhattan(pos));
+                            positions.add(posNext);
                         }
                         else
                         {
-                            filled.clear();
+                            positions.clear();
                             break;
                         }
                     }
                 }
             }
         }
-        final Object2IntMap<BlockPos> filteredMap = new Object2IntOpenHashMap<>();
-        filled.object2IntEntrySet().stream().filter(entry -> level.getBlockEntity(entry.getKey()) instanceof PlacedItemBlockEntity).forEach(entry -> filteredMap.put(entry.getKey(), entry.getIntValue()));
-        return filteredMap;
+        return positions;
     }
 
-    private static void performHeating(Level level, FireboxBlockEntity firebox, Object2IntMap<BlockPos> filled)
+    private static void performHeating(Level level, FireboxBlockEntity firebox, List<BlockPos> filled)
     {
-        filled.forEach((testPos, distance) -> {
-            if (level instanceof ServerLevel server && level.random.nextFloat() < 0.01f)
-                server.sendParticles(ParticleTypes.FLAME, testPos.getX() + 0.5, testPos.getY() + 0.5, testPos.getZ() + 0.5, 1, 0, 0, 0, 0.01);
-            if (level.getBlockEntity(testPos) instanceof PlacedItemBlockEntity placedItem)
+        filled.forEach(testPos -> {
+            if (level.getBlockEntity(testPos) instanceof PlacedItemBlockEntity)
             {
-                final IItemHandler inv = placedItem.getInventory();
-                for (int i = 0; i < inv.getSlots(); i++)
+                if (level instanceof ServerLevel server && level.random.nextFloat() < 0.01f)
+                    server.sendParticles(ParticleTypes.FLAME, testPos.getX() + 0.5, testPos.getY() + 0.5, testPos.getZ() + 0.5, 1, 0, 0, 0, 0.01);
+                if (level.getBlockEntity(testPos) instanceof PlacedItemBlockEntity placedItem)
                 {
-                    final ItemStack item = inv.getStackInSlot(i);
-                    final IHeat heat = HeatCapability.get(item);
-                    if (heat != null)
+                    final IItemHandler inv = placedItem.getInventory();
+                    for (int i = 0; i < inv.getSlots(); i++)
                     {
-                        final float temp = firebox.temperature - Mth.clampedMap(distance, 0, 8, 0, firebox.temperature);
-                        HeatCapability.addTemp(heat, temp);
-                        if (level.getGameTime() % 20 == 0)
+                        final ItemStack item = inv.getStackInSlot(i);
+                        final IHeat heat = HeatCapability.get(item);
+                        if (heat != null)
                         {
-                            final HeatingRecipe recipe = HeatingRecipe.getRecipe(item);
-                            if (recipe != null && recipe.matches(item) && recipe.isValidTemperature(heat.getTemperature()))
+                            HeatCapability.addTemp(heat, firebox.temperature);
+                            if (level.getGameTime() % 20 == 0)
                             {
-                                final ItemStack output = recipe.assembleItem(item);
-                                item.setCount(0);
-                                inv.insertItem(i, output, false);
-                                placedItem.markForSync();
+                                final HeatingRecipe recipe = HeatingRecipe.getRecipe(item);
+                                if (recipe != null && recipe.matches(item) && recipe.isValidTemperature(heat.getTemperature()))
+                                {
+                                    final ItemStack output = recipe.assembleItem(item);
+                                    item.setCount(0);
+                                    inv.insertItem(i, output, false);
+                                    placedItem.markForSync();
+                                }
                             }
                         }
                     }
                 }
-        }
-        });
+            }});
     }
 
     private static boolean isValidInterior(BlockState state)
@@ -183,17 +191,17 @@ public class FireboxBlockEntity extends TickableInventoryBlockEntity<ItemStackHa
 
     private static boolean isValidExterior(Level level, BlockPos.MutableBlockPos cursor, BlockState state, Direction direction)
     {
-        return (Helpers.isBlock(state, TFCTags.Blocks.HEAT_INSULATION) || (Helpers.isBlock(state, TFCTags.Blocks.HEAT_PASSABLE) && direction == Direction.UP)) && state.isFaceSturdy(level, cursor, direction.getOpposite());
+        return (Helpers.isBlock(state, TFCTags.Blocks.HEAT_INSULATION) || (Helpers.isBlock(state, TFCTags.Blocks.HEAT_PASSABLE) && direction == Direction.UP)) && (state.isFaceSturdy(level, cursor, direction.getOpposite()) || state.getBlock() instanceof DoorBlock);
     }
 
     public static final int SLOTS = 16;
     private static final Direction[] NOT_DOWN = {Direction.NORTH, Direction.SOUTH, Direction.EAST, Direction.WEST, Direction.UP};
 
-    private long lastPlayerTick;
-    private int burnTicks, airTicks;
+    private long lastPlayerTick, heatingTimestamp;
+    private int burnTicks, airTicks, heatingCount;
     private float temperature, burnTemperature;
     private boolean needsSlotUpdate = true;
-    private Object2IntMap<BlockPos> operableBlocks = new Object2IntOpenHashMap<>();
+    private List<BlockPos> operableBlocks = new ArrayList<>();
 
     public FireboxBlockEntity(BlockPos pos, BlockState state)
     {
@@ -203,14 +211,47 @@ public class FireboxBlockEntity extends TickableInventoryBlockEntity<ItemStackHa
         burnTemperature = 0;
         burnTicks = 0;
         airTicks = 0;
+        heatingCount = 0;
+        heatingTimestamp = Calendars.SERVER.getTicks();
     }
 
     /**
-     * @return the total number of blocks that this firebox can heat.
+     * @return the total number of blocks that this firebox is heating
      */
-    private int getCapacity()
+    public int getHeatingCount()
     {
-        return (int) (temperature / Heat.maxVisibleTemperature() * 32);
+        return heatingCount;
+    }
+
+    /**
+     * @return the total number of blocks that this firebox could possibly heat at this temperature.
+     */
+    public int getTotalHeatableBlocks()
+    {
+        return temperature > 700 ? 128 : 64;
+    }
+
+    public int getTimeToHeat()
+    {
+        final int maxBlocks = getTotalHeatableBlocks();
+        final int hour = ICalendar.CALENDAR_TICKS_IN_HOUR;
+
+        return (int) Math.max(3 * hour, ((3 * hour) + Mth.clampedMap(heatingCount, 0, maxBlocks, 0, hour * 24) - Mth.clampedMap(temperature, 700, Heat.maxVisibleTemperature(), 0, hour * 4)));
+    }
+
+    public long getTimeLeft()
+    {
+        assert level != null;
+        if (heatingTimestamp == 0)
+        {
+            return -1;
+        }
+        return getTimeToHeat() - (Calendars.get(level).getTicks() - heatingTimestamp);
+    }
+
+    public boolean isHeating()
+    {
+        return operableBlocks.size() > 4;
     }
 
     public void extinguish(BlockState state)
@@ -302,8 +343,10 @@ public class FireboxBlockEntity extends TickableInventoryBlockEntity<ItemStackHa
         temperature = nbt.getFloat("temperature");
         burnTicks = nbt.getInt("burnTicks");
         airTicks = nbt.getInt("airTicks");
+        heatingCount = nbt.getInt("heatingCount");
         burnTemperature = nbt.getFloat("burnTemperature");
         lastPlayerTick = nbt.getLong("lastPlayerTick");
+        heatingTimestamp = nbt.getLong("heatingTimestamp");
         super.loadAdditional(nbt, provider);
     }
 
@@ -313,8 +356,10 @@ public class FireboxBlockEntity extends TickableInventoryBlockEntity<ItemStackHa
         nbt.putFloat("temperature", temperature);
         nbt.putInt("burnTicks", burnTicks);
         nbt.putInt("airTicks", airTicks);
+        nbt.putInt("heatingCount", heatingCount);
         nbt.putFloat("burnTemperature", burnTemperature);
         nbt.putLong("lastPlayerTick", lastPlayerTick);
+        nbt.putLong("heatingTimestamp", heatingTimestamp);
         super.saveAdditional(nbt, provider);
     }
 

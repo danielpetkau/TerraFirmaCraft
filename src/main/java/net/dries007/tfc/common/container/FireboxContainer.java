@@ -10,7 +10,7 @@ public class FireboxContainer extends BlockEntityContainer<FireboxBlockEntity>
 {
     public static FireboxContainer create(FireboxBlockEntity firebox, Inventory playerInventory, int windowId)
     {
-        return new FireboxContainer(firebox, windowId).init(playerInventory, 20);
+        return new FireboxContainer(firebox, windowId).init(playerInventory, 36);
     }
 
     public FireboxContainer(FireboxBlockEntity blockEntity, int windowId)

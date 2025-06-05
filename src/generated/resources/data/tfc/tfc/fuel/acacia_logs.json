@@ -1,8 +1,8 @@
 {
-  "duration": 650,
+  "duration": 1000,
   "ingredient": {
     "tag": "tfc:acacia_logs"
   },
   "purity": 0.95,
-  "temperature": 1000.0
+  "temperature": 650.0
 }

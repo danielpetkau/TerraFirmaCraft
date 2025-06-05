@@ -1,8 +1,8 @@
 {
-  "duration": 655,
+  "duration": 1000,
   "ingredient": {
     "tag": "tfc:mangrove_logs"
   },
   "purity": 0.95,
-  "temperature": 1000.0
+  "temperature": 655.0
 }
