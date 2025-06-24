@@ -189,7 +189,7 @@ public final class ShoreNoise
             public double setColumnAndSampleHeight(double heightIn, int x, int z, double oceanWeight, double landWeight, double shoreWeight, double thisWeight, BiomeExtension biome, double shoreHeight, double normalHeight)
             {
                 tideLevel = BiomeNoise.shoreTideLevelNoise(seed).noise(x, z);
-                sandHeight = ShoreNoise.simpleBeach(seed, tideLevel, heightIn, landWeight, oceanWeight);
+                sandHeight = ShoreNoise.simpleBeach(tideLevel, heightIn, landWeight, oceanWeight);
                 this.x = x;
                 this.z = z;
                 this.oceanWeight = oceanWeight;
@@ -252,10 +252,8 @@ public final class ShoreNoise
             private final Noise2D punchbowlCarvingNoise = (x, z) -> {
                 Cellular2D.Cell cell = cellularNoise.cell(x, z);
                 final double punchBowlRarity = 0.25;
-                final double centerX = cell.x();
-                final double centerZ = cell.y();
-                final double shelfiness = rockShelfIntensity.noise(centerX, centerZ);
-                if (cell.noise() > punchBowlRarity && shelfiness <= 0.75) return 1;
+                final double punchBowlDiameter = 0.5;
+                if (cell.noise() > punchBowlRarity && cell.f2() >= punchBowlDiameter) return 1;
                 return cell.f1();
             };
             private final Noise2D punchbowlSizeNoise = new OpenSimplex2D(seed.seed()).octaves(3).spread(0.06).clampedScaled(-0.7, 0.7, -0.05, 0.15);
@@ -314,25 +312,28 @@ public final class ShoreNoise
             public double noise(int yIn, double noiseIn)
             {
                 if (yIn <= oceanEdgeHeight) return 0;
+                if (yIn >= height) return 0.7;
 
+                final double cliffProgress;
+
+
+                final double edgeIntensity;
                 final double punchbowlRadius = punchbowlCarvingNoise.noise(x, z);
+                double returnNoise = 0;
+                if (height <= lowShelfHeight)
+                {
+                    cliffProgress = widthFunction(true, yIn - oceanEdgeHeight, lowShelfHeight - oceanEdgeHeight, lowShelfEdge + 0.11, lowShelfEdge);
+                    returnNoise = 0.4 + 3 * (cliffProgress - shelfProgress);
+                }
+
                 if (punchbowlRadius < 0.25)
                 {
                     final double intensityShift = punchbowlSizeNoise.noise(x, z);
-                    final double edgeIntensity = widthFunction(true, yIn - oceanEdgeHeight, topShelfHeight - oceanEdgeHeight, 0.25 - intensityShift, 0.12 - intensityShift);
-                    // TODO: Add some snaky tunnel noise to hydraulically connect punchbowls?
-                    return 3 * (edgeIntensity - punchbowlRadius);
+                    edgeIntensity = widthFunction(true, yIn - oceanEdgeHeight, topShelfHeight - oceanEdgeHeight, 0.25 - intensityShift, 0.12 - intensityShift);
+                    returnNoise = Math.max(returnNoise, 3 * (edgeIntensity - punchbowlRadius));
                 }
 
-                if (height <= lowShelfHeight)
-                {
-                    final double cliffProgress = widthFunction(true, yIn - oceanEdgeHeight, lowShelfHeight - oceanEdgeHeight, lowShelfEdge + 0.11, lowShelfEdge);
-                    return 0.4 + 3 * (cliffProgress - shelfProgress);
-                }
-
-                if (yIn <= height) return 0;
-
-                return 0.7;
+                return returnNoise;
             }
         };
     }
@@ -599,10 +600,10 @@ public final class ShoreNoise
     private static double simpleBeach(Seed seed, int x, int z, double heightIn, double landWeight, double oceanWeight)
     {
         final double tideLevel = BiomeNoise.shoreTideLevelNoise(seed).noise(x, z);
-        return simpleBeach(seed, tideLevel, heightIn, landWeight, oceanWeight);
+        return simpleBeach(tideLevel, heightIn, landWeight, oceanWeight);
     }
 
-    private static double simpleBeach(Seed seed, double tideLevel, double heightIn, double landWeight, double oceanWeight)
+    private static double simpleBeach(double tideLevel, double heightIn, double landWeight, double oceanWeight)
     {
 
         // Basic heights that the shore height will approach at edges with other biomes
@@ -616,7 +617,9 @@ public final class ShoreNoise
         }
         else
         {
-            final double landDerivedHeight = Mth.clampedMap(landWeight, 0.4, 0, Math.min(heightIn, simpleShoreLandHeight), simpleShoreSelfHeight);
+            final double landDerivedHeight = landWeight < 0.3
+                ? Mth.map(landWeight, 0.3, 0, Math.min(heightIn, simpleShoreLandHeight), simpleShoreSelfHeight)
+                : Mth.clampedMap(landWeight, 0.3, 0.5, Math.min(heightIn, simpleShoreLandHeight), heightIn);
             return Mth.clampedMap(oceanWeight, 0, 0.1, landDerivedHeight, simpleShoreSelfHeight);
         }
     }
