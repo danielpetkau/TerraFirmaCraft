@@ -290,7 +290,7 @@ public final class PlayerInfo extends net.minecraft.world.food.FoodData implemen
             if (difficulty == Difficulty.PEACEFUL)
             {
                 // Copied from vanilla's food stats, so we consume food in peaceful mode (would normally be part of the super.tick call)
-                if (food.getExhaustionLevel() > 4.0F)
+                if (food.getExhaustionLevel() > 4.0F && getSaturationLevel() <= 0)
                 {
                     setFoodLevel(Math.max(getFoodLevel() - 1, 0));
                 }

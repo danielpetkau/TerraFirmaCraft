@@ -603,6 +603,10 @@ public interface CraftingRecipes extends Recipes
             .input('T', Items.REDSTONE_TORCH)
             .pattern(" T ", "TRT", "SSS")
             .shaped(Items.COMPARATOR);
+        replace("brick_stairs")
+            .input('B', Items.BRICKS)
+            .pattern("B  ", "BB ", "BBB")
+            .shaped(Items.BRICK_STAIRS, 8);
         replace("daylight_detector")
             .input('L', TFCItems.LENS)
             .input('R', Tags.Items.DUSTS_REDSTONE)
