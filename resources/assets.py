@@ -2,6 +2,7 @@
 #  See the project README.md and LICENSE.txt for more information.
 
 import itertools
+from typing import List
 
 from mcresources import ResourceManager, ItemContext, utils, block_states, loot_tables, atlases, BlockContext
 from mcresources.type_definitions import ResourceIdentifier, Json, JsonObject
@@ -1312,7 +1313,11 @@ def generate(rm: ResourceManager):
     # Plants
     shears_or_knife = loot_tables.any_of(match_tag_1_21_plus(TAG_SHARP), match_tag_1_21_plus(TAG_SHEARS))
     for plant, plant_data in PLANTS.items():
-        rm.lang('block.tfc.plant.%s' % plant, lang(plant))
+        plant_lang = lang(plant)
+        if 'tulip' in plant or 'snapdragon' in plant:
+            parts = plant.split('_')
+            plant_lang = lang(parts[1] + '_' + parts[0])
+        rm.lang('block.tfc.plant.%s' % plant, plant_lang)
         p = 'tfc:plant/%s' % plant
         lower_only = loot_tables.block_state_property(p + '[part=lower]')
         if plant_data.type == 'short_grass' or plant_data.type == 'beach_grass':
@@ -1531,7 +1536,7 @@ def generate(rm: ResourceManager):
                                 loot_tables.block_state_property('tfc:plant/%s_branch[up=true,%s=true]' % (fruit, direction))
                                 for direction in ('west', 'east', 'north', 'south')
                             ]),
-                            match_tag_1_21_plus('tfc:axes')
+                            match_tag_1_21_plus('minecraft:axes')
                         )
                     }, {
                         'name': 'minecraft:stick',
@@ -1604,7 +1609,7 @@ def generate(rm: ResourceManager):
 
             stick_with_hammer = {
                 'name': 'minecraft:stick',
-                'conditions': [match_tag_1_21_plus('tfc:hammers')],
+                'conditions': [match_tag_1_21_plus('c:tools/hammer')],
                 'functions': [loot_tables.set_count(1, 4)]
             }
             if variant == 'wood' or variant == 'stripped_wood':
@@ -1676,7 +1681,7 @@ def generate(rm: ResourceManager):
                 ({'snowy': True, 'bottom': True}, {'model': 'minecraft:block/snow_height2'})
             ).with_lang(lang('%s krummholz', wood))
             block.with_block_loot(loot_tables.alternatives(
-                {'name': 'tfc:plant/%s_krummholz' % wood, 'conditions': [loot_tables.block_state_property('tfc:plant/%s_krummholz[tip=true]' % wood), match_tag_1_21_plus('tfc:axes')]},
+                {'name': 'tfc:plant/%s_krummholz' % wood, 'conditions': [loot_tables.block_state_property('tfc:plant/%s_krummholz[tip=true]' % wood), match_tag_1_21_plus('minecraft:axes')]},
                 {'name': 'tfc:wood/sapling/%s' % wood, 'conditions': [loot_tables.random_chance(0.02)]},
                 '1-3 minecraft:stick'
             ))
@@ -2301,6 +2306,12 @@ def generate(rm: ResourceManager):
         permutations=dict((mat + '_tfc', 'tfc:color_palettes/trims/%s' % mat) for mat in TRIM_MATERIALS)
     ))
 
+    for but in BUTTERFLIES:
+        particle(rm, but, ['tfc:butterfly/' + but + '_' + str(i) for i in range(1, 5)])
+
+
+def particle(rm: ResourceManager, name: str, textures: List[str]):
+    rm.write(('assets', rm.domain, 'particles', name), {'textures': textures})
 
 def flower_pot_cross(rm: ResourceManager, simple_name: str, name: str, model: str, texture: str, loot: str):
     rm.blockstate(name, model='tfc:block/%s' % model).with_lang(lang('potted %s', simple_name)).with_block_loot(loot, 'minecraft:flower_pot')

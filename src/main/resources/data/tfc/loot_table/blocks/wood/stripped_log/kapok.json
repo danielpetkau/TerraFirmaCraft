@@ -16,7 +16,7 @@
                 {
                   "condition": "minecraft:match_tool",
                   "predicate": {
-                    "items": "#tfc:hammers"
+                    "items": "#c:tools/hammer"
                   }
                 }
               ],

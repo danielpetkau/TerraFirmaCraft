@@ -7,6 +7,8 @@
 package net.dries007.tfc.client.particle;
 
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 import java.util.function.Function;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.particles.BlockParticleOption;
@@ -19,6 +21,7 @@ import net.minecraft.network.codec.StreamCodec;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
+import net.dries007.tfc.util.Helpers;
 import net.dries007.tfc.util.registry.RegistryHolder;
 
 import static net.dries007.tfc.TerraFirmaCraft.*;
@@ -43,7 +46,7 @@ public final class TFCParticles
     public static final Id<ParticleType<BlockParticleOption>> FALLING_LEAF = register("falling_leaf", BlockParticleOption::codec, BlockParticleOption::streamCodec);
     public static final Id<SimpleParticleType> FEATHER = register("feather");
     public static final Id<SimpleParticleType> SPARK = register("spark");
-    public static final Id<SimpleParticleType> BUTTERFLY = register("butterfly");
+    public static final Map<Butterfly, Id<SimpleParticleType>> BUTTERFLIES = Helpers.mapOf(Butterfly.class, b -> register(b.name().toLowerCase(Locale.ROOT)));
     public static final Id<SimpleParticleType> SMOKE_0 = register("smoke_0");
     public static final Id<SimpleParticleType> SMOKE_1 = register("smoke_1");
     public static final Id<SimpleParticleType> SMOKE_2 = register("smoke_2");

@@ -23,7 +23,7 @@
                 {
                   "condition": "minecraft:match_tool",
                   "predicate": {
-                    "items": "#tfc:axes"
+                    "items": "#minecraft:axes"
                   }
                 }
               ]

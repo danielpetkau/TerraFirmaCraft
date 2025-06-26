@@ -912,7 +912,7 @@ public final class ClientEventHandler
         event.registerSpriteSet(TFCParticles.FALLING_LEAF.get(), set -> new FallingLeafParticle.Provider(set, true));
         event.registerSpriteSet(TFCParticles.FEATHER.get(), set -> new LeafParticle.Provider(set, false));
         event.registerSpriteSet(TFCParticles.SPARK.get(), SparkParticle.Provider::new);
-        event.registerSpriteSet(TFCParticles.BUTTERFLY.get(), AnimatedParticle.Provider::new);
+        TFCParticles.BUTTERFLIES.values().forEach(fly -> event.registerSpriteSet(fly.get(), AnimatedParticle.Provider::new));
         event.registerSpriteSet(TFCParticles.FLUID_DRIP.get(), set -> FluidDripParticle.provider(set, FluidDripParticle.FluidHangParticle::new));
         event.registerSpriteSet(TFCParticles.FLUID_FALL.get(), set -> FluidDripParticle.provider(set, FluidDripParticle.FluidFallAndLandParticle::new));
         event.registerSpriteSet(TFCParticles.FLUID_LAND.get(), set -> FluidDripParticle.provider(set, FluidDripParticle.FluidLandParticle::new));

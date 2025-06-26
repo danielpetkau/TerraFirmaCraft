@@ -22,6 +22,8 @@ import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
+import net.dries007.tfc.client.ClimateRenderCache;
+import net.dries007.tfc.client.particle.Butterfly;
 import net.dries007.tfc.client.particle.TFCParticles;
 import net.dries007.tfc.common.TFCTags;
 import net.dries007.tfc.common.blocks.ExtendedProperties;
@@ -206,9 +208,13 @@ public abstract class PlantBlock extends TFCBushBlock
     @Override
     public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random)
     {
-        if (random.nextInt(400) == 0 && Helpers.isBlock(state, BlockTags.FLOWERS) && Calendars.CLIENT.getCalendarMonthOfYear().getSeason() == Season.SPRING)
+        if (random.nextInt(20) == 0 && Helpers.isBlock(state, BlockTags.FLOWERS) && Calendars.CLIENT.getCalendarMonthOfYear().getSeason() == Season.SPRING)
         {
-            level.addParticle(TFCParticles.BUTTERFLY.get(), pos.getX() + random.nextFloat(), pos.getY() + random.nextFloat(), pos.getZ() + random.nextFloat(), 0, 0, 0);
+            final Butterfly but = Butterfly.getRandomButterfly(ClimateRenderCache.INSTANCE.getTemperature(), ClimateRenderCache.INSTANCE.getAverageGroundwater(), random);
+            if (but != null)
+            {
+                level.addParticle(TFCParticles.BUTTERFLIES.get(but).get(), pos.getX() + random.nextFloat(), pos.getY() + random.nextFloat(), pos.getZ() + random.nextFloat(), 0, 0, 0);
+            }
         }
     }
 
