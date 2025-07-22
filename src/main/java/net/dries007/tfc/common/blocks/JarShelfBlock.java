@@ -146,13 +146,14 @@ public class JarShelfBlock extends JarsBlock
 
         final BlockPos above = pos.above();
         final BlockState aboveState = level.getBlockState(above);
-        final boolean notHoldingJar = !Helpers.isItem(player.getItemInHand(InteractionHand.MAIN_HAND), TFCTags.Items.JARS) && !Helpers.isItem(player.getItemInHand(InteractionHand.OFF_HAND), TFCTags.Items.JARS);
+        final boolean holdingJar = Helpers.isItem(player.getItemInHand(InteractionHand.MAIN_HAND), TFCTags.Items.JARS) || Helpers.isItem(player.getItemInHand(InteractionHand.OFF_HAND), TFCTags.Items.JARS);
         final boolean filledSlotAbove = aboveState.getBlock() instanceof JarsBlock && aboveState.getValue(ITEM_PROPERTIES[slot]);
-        if (notHoldingJar || filledSlotAbove) {
-            IHighlightHandler.drawBox(stack, TOP_SHAPE, buffers, pos, rendererPosition, 0f, 0f, 0f, 0.4f);
-            return true;
+        
+        IHighlightHandler.drawBox(stack, TOP_SHAPE, buffers, pos, rendererPosition, 0f, 0f, 0f, 0.4f);
+        if (holdingJar && !filledSlotAbove) {
+            IHighlightHandler.drawBox(stack, SHAPES[slot], buffers, above, rendererPosition, 1f, 0f, 0f, 1f);
         }
-        IHighlightHandler.drawBox(stack, SHAPES[slot], buffers, above, rendererPosition, 1f, 0f, 0f, 1f);
-        return lookingAtJar;
+
+        return true;
     }
 }
