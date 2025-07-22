@@ -122,7 +122,7 @@ public class JarsBlock extends BottomSupportedDeviceBlock implements IHighlightH
     public JarsBlock(ExtendedProperties properties, boolean buildCache)
     {
         super(properties, InventoryRemoveBehavior.DROP, SHAPE_1);
-        registerDefaultState(getStateDefinition().any().setValue(ITEM_0, true).setValue(ITEM_1, true).setValue(ITEM_2, true).setValue(ITEM_3, true));
+        registerDefaultState(getStateDefinition().any().setValue(ITEM_0, false).setValue(ITEM_1, false).setValue(ITEM_2, false).setValue(ITEM_3, false));
         this.cachedShapes = buildCache ? makeShapes(getStateDefinition().getPossibleStates()) : new HashMap<>();
     }
 
