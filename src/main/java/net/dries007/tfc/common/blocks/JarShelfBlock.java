@@ -142,6 +142,7 @@ public class JarShelfBlock extends JarsBlock
         final boolean lookingAtJar = BOUNDS[slot].move(pos).contains(rayTrace.getLocation());
         if (lookingAtJar) {
             super.drawHighlight(level, pos, player, rayTrace, stack, buffers, rendererPosition);
+            return true;
         }
 
         final BlockPos above = pos.above();
