@@ -16,6 +16,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.material.WaterFluid;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.common.NeoForgeMod;
@@ -43,7 +44,9 @@ public class RiverWaterFluid extends WaterFluid implements FlowingFluidExtension
     @Override
     public boolean isSame(Fluid fluid)
     {
-        return super.isSame(fluid) || fluid == TFCFluids.RIVER_WATER.get();
+        return super.isSame(fluid) || fluid == TFCFluids.RIVER_WATER.get()
+            || fluid == TFCFluids.SALT_WATER.getSource() || fluid == TFCFluids.SALT_WATER.getFlowing()
+            || fluid == Fluids.WATER || fluid == Fluids.FLOWING_WATER;
     }
 
     @Override
