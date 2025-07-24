@@ -183,7 +183,14 @@ public abstract class SeasonalPlantBlock extends BushBlock implements IForgeBloc
     @Nullable
     public BlockPathTypes getBlockPathType(BlockState state, BlockGetter level, BlockPos pos, @Nullable Mob entity)
     {
-        return Helpers.isBlock(this, TFCTags.Blocks.THORNY_BUSHES)? BlockPathTypes.DAMAGE_OTHER : BlockPathTypes.OPEN;
+        return Helpers.isBlock(this, TFCTags.Blocks.THORNY_BUSHES)? BlockPathTypes.DAMAGE_OTHER : null;
+    }
+
+    @Override
+    @Nullable
+    public BlockPathTypes getAdjacentBlockPathType(BlockState state, BlockGetter level, BlockPos pos, @Nullable Mob Entity, BlockPathTypes originalType)
+    {
+        return Helpers.isBlock(this, TFCTags.Blocks.THORNY_BUSHES)? BlockPathTypes.DANGER_OTHER : null;
     }
 
     @Override
