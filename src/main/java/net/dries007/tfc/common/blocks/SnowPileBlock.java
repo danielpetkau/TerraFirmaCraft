@@ -24,6 +24,7 @@ import net.minecraft.world.level.block.SnowLayerBlock;
 import net.minecraft.world.level.block.SnowyDirtBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.HitResult;
 import org.jetbrains.annotations.Nullable;
 
@@ -162,6 +163,14 @@ public class SnowPileBlock extends SnowLayerBlock implements IForgeBlockExtensio
     {
         super.playerDestroy(level, player, pos, state, entity, stack);
         removePileOrSnow(level, pos, state, -1, entity instanceof PileBlockEntity pile ? Optional.of(pile) : Optional.empty());
+    }
+
+    @Override
+    public boolean onDestroyedByPlayer(BlockState state, Level level, BlockPos pos, Player player, boolean willHarvest, FluidState fluid)
+    {
+        playerWillDestroy(level, pos, state, player);
+        removePileOrSnow(level, pos, state);
+        return true; // Cause drops and other stuff to occur
     }
 
     @Override
