@@ -124,7 +124,7 @@ public class RockSpikeBlock extends Block implements IFluidLoggable, IFallableBl
     @Override
     public @Nullable BlockPathTypes getBlockPathType(BlockState state, BlockGetter level, BlockPos pos, @Nullable Mob mob)
     {
-        return BlockPathTypes.TRAPDOOR;
+        return BlockPathTypes.BLOCKED;
     }
 
     @Override
