@@ -29,7 +29,8 @@ public class TFCMagmaBlock extends MagmaBlock implements IForgeBlockExtension
     }
 
     @Override
-    public ExtendedProperties getExtendedProperties() {
+    public ExtendedProperties getExtendedProperties()
+    {
         return properties;
     }
 

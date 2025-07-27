@@ -161,25 +161,30 @@ public final class DispenserBehaviors
         }
     };
 
-    public static final OptionalDispenseItemBehavior TFC_FLINT_AND_STEEL_BEHAVIOR = new OptionalDispenseItemBehavior() {
+    public static final DispenseItemBehavior TFC_FLINT_AND_STEEL_BEHAVIOR = new DispenseItemBehavior() {
+        private final DispenseItemBehavior fallbackBehavior = DispenserBlockAccessor.accessor$getDispenserRegistry().get(Items.FLINT_AND_STEEL);
 
         @Override
-        protected ItemStack execute(BlockSource source, ItemStack stack)
+        public ItemStack dispense(BlockSource source, ItemStack stack)
         {
             final Level level = source.getLevel();
             final Direction facing = source.getBlockState().getValue(DispenserBlock.FACING);
             final BlockPos pos = source.getPos().relative(facing);
             final BlockState state = level.getBlockState(pos);
+
+            // Must get the dispenser facing before executing, in case it triggers an explosion that removes the dispenser
+            final Direction dir = source.getBlockState().getValue(DispenserBlock.FACING);
             if (TFCConfig.SERVER.dispenserEnableLighting.get() && StartFireEvent.startFire(level, pos, state, facing.getOpposite(), null, stack, StartFireEvent.FireStrength.STRONG))
             {
                 if (stack.hurt(1, level.getRandom(), null))
                 {
                     stack.setCount(0);
                 }
+                source.getLevel().levelEvent(1000, source.getPos(), 0); // playSound
+                source.getLevel().levelEvent(2000, source.getPos(), dir.get3DDataValue()); //playAnimation
                 return stack;
             }
-            setSuccess(false);
-            return stack;
+            return fallbackBehavior.dispense(source, stack);
         }
     };
 
@@ -222,10 +227,11 @@ public final class DispenserBehaviors
         TFCItems.CHEST_MINECARTS.values().forEach(reg -> DispenserBlock.registerBehavior(reg.get(), MINECART_BEHAVIOR));
 
         DispenserBlock.registerBehavior(Items.EGG, new DefaultDispenseItemBehavior());
-        DispenserBlock.registerBehavior(Items.FLINT_AND_STEEL, new MultipleItemBehavior(TFC_FLINT_AND_STEEL_BEHAVIOR, DispenserBlockAccessor.accessor$getDispenserRegistry().get(Items.FLINT_AND_STEEL)));
+        DispenserBlock.registerBehavior(Items.FLINT_AND_STEEL, TFC_FLINT_AND_STEEL_BEHAVIOR);
         DispenserBlock.registerBehavior(TFCItems.HANDSTONE.get(), HANDSTONE_BEHAVIOR);
     }
 
+    @Deprecated
     public static class MultipleItemBehavior implements DispenseItemBehavior
     {
         private final OptionalDispenseItemBehavior primary;

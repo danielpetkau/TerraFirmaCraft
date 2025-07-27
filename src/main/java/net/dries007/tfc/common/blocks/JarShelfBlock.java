@@ -10,7 +10,6 @@ import java.util.Map;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.mojang.blaze3d.vertex.PoseStack;
-
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -140,7 +139,8 @@ public class JarShelfBlock extends JarsBlock
     {
         final int slot = PlacedItemBlockEntity.getSlotSelected(rayTrace);
         final boolean lookingAtJar = BOUNDS[slot].move(pos).contains(rayTrace.getLocation());
-        if (lookingAtJar) {
+        if (lookingAtJar)
+        {
             return super.drawHighlight(level, pos, player, rayTrace, stack, buffers, rendererPosition);
         }
 
@@ -148,9 +148,10 @@ public class JarShelfBlock extends JarsBlock
         final BlockState aboveState = level.getBlockState(above);
         final boolean holdingJar = Helpers.isItem(player.getItemInHand(InteractionHand.MAIN_HAND), TFCTags.Items.JARS) || Helpers.isItem(player.getItemInHand(InteractionHand.OFF_HAND), TFCTags.Items.JARS);
         final boolean filledSlotAbove = aboveState.getBlock() instanceof JarsBlock && aboveState.getValue(ITEM_PROPERTIES[slot]);
-        
+
         IHighlightHandler.drawBox(stack, TOP_SHAPE, buffers, pos, rendererPosition, 0f, 0f, 0f, 0.4f);
-        if (holdingJar && !filledSlotAbove) {
+        if (holdingJar && !filledSlotAbove)
+        {
             IHighlightHandler.drawBox(stack, SHAPES[slot], buffers, above, rendererPosition, 1f, 0f, 0f, 1f);
         }
 

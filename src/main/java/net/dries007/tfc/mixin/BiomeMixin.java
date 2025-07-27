@@ -76,8 +76,11 @@ public abstract class BiomeMixin implements BiomeBridge
      */
     @OnlyIn(Dist.CLIENT)
     @Inject(method = "getPrecipitationAt", at = @At("HEAD"), cancellable = true)
-    private void getPrecipitationFromClimate(BlockPos pos, CallbackInfoReturnable<Biome.Precipitation> cir) {
+    private void getPrecipitationFromClimate(BlockPos pos, CallbackInfoReturnable<Biome.Precipitation> cir)
+    {
         Minecraft minecraft = Minecraft.getInstance();
+        if (minecraft.level == null)
+            return;
         cir.setReturnValue(Climate.getPrecipitation(minecraft.level, pos));
         cir.cancel();
     }
