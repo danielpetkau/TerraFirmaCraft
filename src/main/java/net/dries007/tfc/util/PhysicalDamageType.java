@@ -67,7 +67,7 @@ public enum PhysicalDamageType implements StringRepresentable
             final PhysicalDamageType.Multiplier naturalMultiplier = EntityDamageResistance.get(entityUnderAttack);
             if (naturalMultiplier != null)
             {
-                resistance += naturalMultiplier.value(type);
+                resistance += naturalMultiplier.value(type, source);
             }
         }
 
@@ -76,9 +76,10 @@ public enum PhysicalDamageType implements StringRepresentable
             final PhysicalDamageType.Multiplier armorMultiplier = getResistanceForItem(stack);
             if (armorMultiplier != null)
             {
-                resistance += armorMultiplier.value(type);
+                resistance += armorMultiplier.value(type, source);
             }
         }
+
         return (float) Math.pow(Math.E, -0.01 * resistance);
     }
 
@@ -203,8 +204,13 @@ public enum PhysicalDamageType implements StringRepresentable
         float piercing();
         float slashing();
 
-        default float value(@Nullable PhysicalDamageType type)
+        // Passing source so we can check if it bypasses.
+        default float value(@Nullable PhysicalDamageType type, DamageSource source)
         {
+            if (source.is(BYPASSES_DAMAGE_RESISTANCES)) {
+                return 0;
+            }
+
             if (type == null)
             {
                 // No damage type = use the highest of all resistances.
