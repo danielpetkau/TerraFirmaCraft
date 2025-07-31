@@ -6,6 +6,7 @@
 
 package net.dries007.tfc.common.blocks;
 
+import java.util.Optional;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.player.Player;
@@ -21,6 +22,7 @@ import net.minecraft.world.level.material.FluidState;
 import org.jetbrains.annotations.Nullable;
 
 import net.dries007.tfc.common.TFCTags;
+import net.dries007.tfc.common.blockentities.PileBlockEntity;
 import net.dries007.tfc.common.blockentities.TFCBlockEntities;
 import net.dries007.tfc.util.Helpers;
 
@@ -72,25 +74,20 @@ public class SnowPileBlock extends SnowLayerBlock implements IForgeBlockExtensio
 
     public static void removePileOrSnow(LevelAccessor level, BlockPos pos, BlockState state)
     {
-        removePileOrSnow(level, pos, state, -1);
+        removePileOrSnow(level, pos, state, Optional.empty());
     }
 
-
     /**
-     * @param expectedLayers The expected number of snow layers. -1 = no expectation, just remove a single layer. 0 = remove all snow layers.
+     * @param snowPile If {@code null}, then there is no provided block entity and one should be queried from the world. If not-null, this
+     *                 represents the block entity present in the world, possibly empty.
      */
-    public static void removePileOrSnow(LevelAccessor level, BlockPos pos, BlockState state, int expectedLayers)
+    public static void removePileOrSnow(LevelAccessor level, BlockPos pos, BlockState state, @Nullable Optional<PileBlockEntity> snowPile)
     {
         final int layers = state.getValue(SnowLayerBlock.LAYERS);
-        if (expectedLayers >= layers)
-        {
-            // If we expect more layers than actually exist, don't remove anything
-            return;
-        }
-        if (layers > 1 && expectedLayers != 0)
+        if (layers > 1)
         {
             // Remove layers, but keep the snow block intact
-            level.setBlock(pos, state.setValue(SnowLayerBlock.LAYERS, expectedLayers == -1 ? layers - 1 : expectedLayers), Block.UPDATE_ALL);
+            level.setBlock(pos, state.setValue(SnowLayerBlock.LAYERS, layers - 1), Block.UPDATE_ALL);
         }
         else if (state.getBlock() == Blocks.SNOW)
         {
@@ -100,27 +97,25 @@ public class SnowPileBlock extends SnowLayerBlock implements IForgeBlockExtensio
         else
         {
             // Otherwise, remove a snow pile, restoring the internal states
-            level.getBlockEntity(pos, TFCBlockEntities.PILE.get()).ifPresent(pile -> {
-                if (!level.isClientSide())
+            if (snowPile == null) snowPile = level.getBlockEntity(pos, TFCBlockEntities.PILE.get());
+            snowPile.ifPresent(pile -> {
+                final BlockPos above = pos.above();
+
+                level.setBlock(pos, pile.getInternalState(), Block.UPDATE_CLIENTS | Block.UPDATE_KNOWN_SHAPE);
+                if (pile.getAboveState() != null && level.isEmptyBlock(above))
                 {
-                    final BlockPos above = pos.above();
+                    level.setBlock(above, pile.getAboveState(), Block.UPDATE_CLIENTS | Block.UPDATE_KNOWN_SHAPE);
+                }
 
-                    level.setBlock(pos, pile.getInternalState(), Block.UPDATE_CLIENTS | Block.UPDATE_KNOWN_SHAPE);
-                    if (pile.getAboveState() != null && level.isEmptyBlock(above))
-                    {
-                        level.setBlock(above, pile.getAboveState(), Block.UPDATE_CLIENTS | Block.UPDATE_KNOWN_SHAPE);
-                    }
+                // Update neighbors shapes from the bottom block (this is important to get grass blocks to adjust to snowy/non-snowy states)
+                pile.getInternalState().updateNeighbourShapes(level, pos, Block.UPDATE_CLIENTS);
+                level.getBlockState(above).updateNeighbourShapes(level, above, Block.UPDATE_CLIENTS);
 
-                    // Update neighbors shapes from the bottom block (this is important to get grass blocks to adjust to snowy/non-snowy states)
-                    pile.getInternalState().updateNeighbourShapes(level, pos, Block.UPDATE_CLIENTS);
-                    level.getBlockState(above).updateNeighbourShapes(level, above, Block.UPDATE_CLIENTS);
-
-                    // Block ticks after both blocks are placed
-                    level.blockUpdated(pos, pile.getInternalState().getBlock());
-                    if (pile.getAboveState() != null)
-                    {
-                        level.blockUpdated(above, pile.getAboveState().getBlock());
-                    }
+                // Block ticks after both blocks are placed
+                level.blockUpdated(pos, pile.getInternalState().getBlock());
+                if (pile.getAboveState() != null)
+                {
+                    level.blockUpdated(above, pile.getAboveState().getBlock());
                 }
             });
         }
@@ -149,8 +144,13 @@ public class SnowPileBlock extends SnowLayerBlock implements IForgeBlockExtensio
     @Override
     public boolean onDestroyedByPlayer(BlockState state, Level level, BlockPos pos, Player player, boolean willHarvest, FluidState fluid)
     {
-        playerWillDestroy(level, pos, state, player);
-        removePileOrSnow(level, pos, state);
+        final Optional<PileBlockEntity> snowPile = level.getBlockEntity(pos, TFCBlockEntities.PILE.get()); // Store the blockentity before it is removed
+        super.onDestroyedByPlayer(state, level, pos, player, willHarvest, fluid);
+
+        if (!level.isClientSide())
+        {
+            removePileOrSnow(level, pos, state, snowPile);
+        }
         return true; // Cause drops and other stuff to occur
     }
 
