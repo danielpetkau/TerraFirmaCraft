@@ -246,9 +246,6 @@ public class TFCChunkGenerator extends ChunkGenerator implements ChunkGeneratorE
     @Override
     public void applyCarvers(WorldGenRegion level, long seed, RandomState state, BiomeManager biomeManager, StructureManager structureFeatureManager, ChunkAccess chunk, GenerationStep.Carving step)
     {
-        // TODO: Remove this line
-        if (true) return;
-
         // Skip water carving, only do air carving, since we use aquifers
         if (step != GenerationStep.Carving.AIR)
         {
@@ -263,8 +260,7 @@ public class TFCChunkGenerator extends ChunkGenerator implements ChunkGeneratorE
         final ChunkBaseBlockSource baseBlockSource = createBaseBlockSourceForChunk(chunk);
         final TFCAquifer aquifer = getOrCreateAquifer(chunk, settings, baseBlockSource);
 
-        @SuppressWarnings("ConstantConditions")
-        final CarvingContext context = new CarvingContext(stupidMojangChunkGenerator, null, chunk.getHeightAccessorForGeneration(), null, state, this.noiseSettings.value().surfaceRule());
+        @SuppressWarnings("ConstantConditions") final CarvingContext context = new CarvingContext(stupidMojangChunkGenerator, null, chunk.getHeightAccessorForGeneration(), null, state, this.noiseSettings.value().surfaceRule());
         final CarvingMask carvingMask = ((ProtoChunk) chunk).getOrCreateCarvingMask(step);
 
         for (int offsetX = -8; offsetX <= 8; ++offsetX)
@@ -274,8 +270,7 @@ public class TFCChunkGenerator extends ChunkGenerator implements ChunkGeneratorE
                 final ChunkPos offsetChunkPos = new ChunkPos(chunkPos.x + offsetX, chunkPos.z + offsetZ);
                 final ChunkAccess offsetChunk = level.getChunk(offsetChunkPos.x, offsetChunkPos.z);
 
-                @SuppressWarnings("deprecation")
-                final Iterable<Holder<ConfiguredWorldCarver<?>>> iterable = offsetChunk
+                @SuppressWarnings("deprecation") final Iterable<Holder<ConfiguredWorldCarver<?>>> iterable = offsetChunk
                     .carverBiome(() -> customBiomeSource.getBiome(QuartPos.fromBlock(offsetChunkPos.getMinBlockX()), QuartPos.fromBlock(offsetChunkPos.getMinBlockZ())).value().getGenerationSettings())
                     .getCarvers(step);
 
@@ -482,8 +477,6 @@ public class TFCChunkGenerator extends ChunkGenerator implements ChunkGeneratorE
     @Override
     public void addDebugScreenInfo(List<String> list, RandomState state, BlockPos pos)
     {
-        // TODO: Probably remove
-//        list.add("Shore: " + createShoreSamplerForChunk().noise(pos.getX(), pos.getZ()));
     }
 
     /**

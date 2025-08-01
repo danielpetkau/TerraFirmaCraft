@@ -54,7 +54,6 @@ public class OceanSurfaceBuilder implements SurfaceBuilder
     @Override
     public void buildSurface(SurfaceBuilderContext context, int startY, int endY)
     {
-        // TODO: NEED to put the logic for sand distribution in ONE PLACE, can't just copy the code from the shore surface builder everywhere
         ShoreSurfaceBuilder.OCEAN.apply(seed);
         frozenOceanExtension(context, startY, endY);
     }

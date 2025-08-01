@@ -47,7 +47,6 @@ public class CreepingPlantFeature extends Feature<CreepingPlantConfig>
                     if (x * x + z + z < radius * radius && context.random().nextFloat() < context.config().integrity())
                     {
                         cursor.setWithOffset(pos, x, y, z);
-                        // TODO: The tide height check should not be hard-coded, should be a part of the config
                         if (EnvironmentHelpers.isWorldgenReplaceable(level, cursor) && cursor.getY() > context.config().heightAboveTide() + 0.5 + maxTideHeight.noise(cursor.getX(), cursor.getZ()))
                         {
                             final BlockState newState = CreepingPlantBlock.updateStateFromSides(level, cursor, state);

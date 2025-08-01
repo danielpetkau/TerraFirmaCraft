@@ -26,7 +26,6 @@ public class RiverSurfaceBuilder implements SurfaceBuilder
     public void buildSurface(SurfaceBuilderContext context, int startY, int endY)
     {
         final BiomeExtension biome = context.originalBiome();
-        // TODO: Verify this still works to make shore surface states dominate riverine ones
         if (biome.isShore())
         {
             biome.createSurfaceBuilder(seed).buildSurface(context, startY, endY);

@@ -20,7 +20,7 @@ public class ShoreSurfaceBuilder implements SurfaceBuilder
     public static final SurfaceBuilderFactory NORMAL = seed -> new ShoreSurfaceBuilder(seed, SurfaceStates.SHORE_SURFACE, SurfaceStates.SHORE_UNDERLAYER, 6, false, false, false, false);
     public static final SurfaceBuilderFactory SANDY = seed -> new ShoreSurfaceBuilder(seed, SurfaceStates.SHORE_SAND, SurfaceStates.SHORE_SANDSTONE, 6, false, true, false, false);
     public static final SurfaceBuilderFactory FORCE_RARE_SAND = seed -> new ShoreSurfaceBuilder(seed, SurfaceStates.RARE_SHORE_SAND, SurfaceStates.RARE_SHORE_SANDSTONE, 6, false, true, false, false);
-    public static final SurfaceBuilderFactory GRAVELLY = seed -> new ShoreSurfaceBuilder(seed, SurfaceStates.SECOND_GRAVEL, SurfaceStates.RAW, 6, false, false, false, false);
+    public static final SurfaceBuilderFactory GRAVELLY = seed -> new ShoreSurfaceBuilder(seed, SurfaceStates.GRAVEL, SurfaceStates.RAW, 6, false, false, false, false);
     public static final SurfaceBuilderFactory OCEAN = seed -> new ShoreSurfaceBuilder(seed, SurfaceStates.SHORE_SURFACE, SurfaceStates.SHORE_UNDERLAYER, 6, true, false, false, false);
     public static final SurfaceBuilderFactory SEA_CLIFFS = seed -> new ShoreSurfaceBuilder(seed, SurfaceStates.SHORE_SURFACE, SurfaceStates.SHORE_UNDERLAYER, 2, false, false, false, false);
     public static final SurfaceBuilderFactory VOLCANIC = seed -> new ShoreSurfaceBuilder(seed, SurfaceStates.VOLCANIC_SHORE_SAND, SurfaceStates.VOLCANIC_SHORE_SANDSTONE, 6, false, true, true, false);

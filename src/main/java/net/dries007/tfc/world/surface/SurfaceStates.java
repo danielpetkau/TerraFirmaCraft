@@ -34,7 +34,6 @@ public final class SurfaceStates
     public static final SurfaceState RAW = context -> context.getRock().raw().defaultBlockState();
     public static final SurfaceState COBBLE = context -> context.getRock().cobble().defaultBlockState();
     public static final SurfaceState GRAVEL = context -> context.getRock().gravel().defaultBlockState();
-    public static final SurfaceState SECOND_GRAVEL = context -> context.getApproxSecondRock().gravel().defaultBlockState();
     public static final SurfaceState SAND = context -> context.getRock().sand().defaultBlockState();
     public static final SurfaceState SANDSTONE = context -> context.getRock().sandstone().defaultBlockState();
 
@@ -200,7 +199,7 @@ public final class SurfaceStates
             final int z = pos.getZ();
             final float variantNoiseValue = (float) sandGravelBeachNoise().noise(x, z);
             final double gravelCutoff = Mth.clampedMap(context.averageTemperature(), -15, 25, -0.7, 0.7);
-            return (variantNoiseValue > gravelCutoff ? SECOND_GRAVEL : SHORE_SAND).getState(context);
+            return (variantNoiseValue > gravelCutoff ? GRAVEL : SHORE_SAND).getState(context);
         }
     };
 
