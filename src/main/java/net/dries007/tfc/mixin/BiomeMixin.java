@@ -10,12 +10,15 @@ import java.util.Optional;
 import java.util.function.Supplier;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.dries007.tfc.util.climate.Climate;
+import net.dries007.tfc.util.climate.ClimateModels;
+import net.dries007.tfc.util.tracker.WorldTracker;
 import net.dries007.tfc.world.biome.BiomeBridge;
 import net.dries007.tfc.world.biome.BiomeExtension;
 import org.jetbrains.annotations.NotNull;
@@ -78,10 +81,10 @@ public abstract class BiomeMixin implements BiomeBridge
     @Inject(method = "getPrecipitationAt", at = @At("HEAD"), cancellable = true)
     private void getPrecipitationFromClimate(BlockPos pos, CallbackInfoReturnable<Biome.Precipitation> cir)
     {
-        Minecraft minecraft = Minecraft.getInstance();
-        if (minecraft.level == null)
+        ClientLevel level = Minecraft.getInstance().level;
+        if (level == null || WorldTracker.get(level).getClimateModel().type() == ClimateModels.BIOME_BASED.get())
             return;
-        cir.setReturnValue(Climate.getPrecipitation(minecraft.level, pos));
+        cir.setReturnValue(Climate.getPrecipitation(level, pos));
         cir.cancel();
     }
 }
