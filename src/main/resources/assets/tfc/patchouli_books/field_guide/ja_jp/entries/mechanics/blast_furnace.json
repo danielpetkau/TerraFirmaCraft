@@ -26,7 +26,7 @@
     },
     {
       "type": "patchouli:text",
-      "text": "高炉の煙突は最大 5 層まであり、各層を完成させるには 4 つの $(thing)耐火レンガ$() と 12 枚の $(thing)錬鉄の金属板$() が必要です。 層が増えると高炉の総容量が増加し、一度により多くの鋼を製錬できるようになります。 各煙突層は最大 5 つまであり、高炉はさらに 4 つの鉱石を保持できます。"
+      "text": "The blast furnace's chimney can be up to five layers - each layer requiring eight $(thing)Reinforced Fire Bricks$() to complete. Having more layers increases the total capacity of the blast furnace, allowing it to smelt more steel at once. Each chimney layer, up to a maximum of five, allows the blast furnace to hold four additional ore items."
     },
     {
       "type": "patchouli:text",

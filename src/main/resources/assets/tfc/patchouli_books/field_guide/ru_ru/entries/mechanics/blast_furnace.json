@@ -26,7 +26,7 @@
     },
     {
       "type": "patchouli:text",
-      "text": "Дымоход высокой печи может состоять до пяти слоев - каждый слой требует четырех $(thing)Огнеупорных кирпичей$() и двенадцати $(thing)Кованых железных листов$(), чтобы завершить. Наличие большего количества слоев увеличивает общую вместимость высокой печи, позволяя плавить больше стали за один раз. Каждый слой дымохода, до максимума пяти, позволяет высокой печи вмещать на четыре дополнительных предмета руды."
+      "text": "The blast furnace's chimney can be up to five layers - each layer requiring eight $(thing)Reinforced Fire Bricks$() to complete. Having more layers increases the total capacity of the blast furnace, allowing it to smelt more steel at once. Each chimney layer, up to a maximum of five, allows the blast furnace to hold four additional ore items."
     },
     {
       "type": "patchouli:text",

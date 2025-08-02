@@ -26,7 +26,7 @@
     },
     {
       "type": "patchouli:text",
-      "text": "Димар може мати до п'яти шарів заввишки. Кожен шар повинен містити 4 блоки $(thing)вогнетривкої цегли$() та дванадцять $(thing)листів ковкого заліза$(). Наявність більшої кількості шарів збільшує загальну потужність доменної печі, дозволяючи їй виплавляти більше сталі одночасно. Кожен шар димової труби, щонайбільше п’ять, дозволяє доменній печі вміщувати чотири додаткові елементи руди."
+      "text": "The blast furnace's chimney can be up to five layers - each layer requiring eight $(thing)Reinforced Fire Bricks$() to complete. Having more layers increases the total capacity of the blast furnace, allowing it to smelt more steel at once. Each chimney layer, up to a maximum of five, allows the blast furnace to hold four additional ore items."
     },
     {
       "type": "patchouli:text",

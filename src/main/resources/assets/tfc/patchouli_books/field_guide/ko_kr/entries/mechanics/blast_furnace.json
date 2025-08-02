@@ -26,7 +26,7 @@
     },
     {
       "type": "patchouli:text",
-      "text": "용광로의 굴뚝은 최대 5블록까지 높일 수 있습니다. 각 층을 완성하기 위해서는 4개의 $(thing)내화벽돌$()과 12개의 $(thing)연철 판$()이 있어야 합니다. 층을 높일수록 용광로의 용량을 증가시키며, 한 번에 더 많이 강철을 제작할 수 있게 합니다. 최대 5층까지의 각각의 층마다 용광로에 광석 4개 분량의 용량을 추가합니다."
+      "text": "The blast furnace's chimney can be up to five layers - each layer requiring eight $(thing)Reinforced Fire Bricks$() to complete. Having more layers increases the total capacity of the blast furnace, allowing it to smelt more steel at once. Each chimney layer, up to a maximum of five, allows the blast furnace to hold four additional ore items."
     },
     {
       "type": "patchouli:text",

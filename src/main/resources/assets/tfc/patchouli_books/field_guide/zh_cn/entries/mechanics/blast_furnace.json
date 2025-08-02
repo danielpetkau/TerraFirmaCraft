@@ -26,7 +26,7 @@
     },
     {
       "type": "patchouli:text",
-      "text": "高炉的烟囱最多可以搭建 5 层，每层烟囱需要额外 4 块$(thing)耐火砖块$()和 12 张$(thing)锻铁薄板$()。每额外搭建一层烟囱，高炉就可以同时多烧炼 4 个物品，从而提升工作效率。"
+      "text": "The blast furnace's chimney can be up to five layers - each layer requiring eight $(thing)Reinforced Fire Bricks$() to complete. Having more layers increases the total capacity of the blast furnace, allowing it to smelt more steel at once. Each chimney layer, up to a maximum of five, allows the blast furnace to hold four additional ore items."
     },
     {
       "type": "patchouli:text",

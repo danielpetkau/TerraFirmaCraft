@@ -26,7 +26,7 @@
     },
     {
       "type": "patchouli:text",
-      "text": "The blast furnace's chimney can be up to five layers - each layer requiring four $(thing)Fire Bricks$() and twelve $(thing)Wrought Iron Sheets$() to complete. Having more layers increases the total capacity of the blast furnace, allowing it to smelt more steel at once. Each chimney layer, up to a maximum of five, allows the blast furnace to hold four additional ore items."
+      "text": "The blast furnace's chimney can be up to five layers - each layer requiring eight $(thing)Reinforced Fire Bricks$() to complete. Having more layers increases the total capacity of the blast furnace, allowing it to smelt more steel at once. Each chimney layer, up to a maximum of five, allows the blast furnace to hold four additional ore items."
     },
     {
       "type": "patchouli:text",
