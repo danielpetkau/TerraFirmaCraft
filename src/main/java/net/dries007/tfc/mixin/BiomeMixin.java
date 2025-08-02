@@ -46,7 +46,11 @@ public abstract class BiomeMixin implements BiomeBridge
 
 
     /**
-     * 
+     * Replace {@link Biome#getPrecipitationAt(BlockPos)} with a method that takes our climate model into account
+     * <p>
+     * We only do this on the client, where we can get the client level.
+     * This is safe to do even for levels that use biome based precipitation, because
+     * {@link WeatherHelpers#getPrecipitationAt(Level, BlockPos, Biome.Precipitation)} checks for us what type of climate the level uses.
      */
     @OnlyIn(Dist.CLIENT)
     @ModifyReturnValue(method = "getPrecipitationAt", at = @At("RETURN"))
