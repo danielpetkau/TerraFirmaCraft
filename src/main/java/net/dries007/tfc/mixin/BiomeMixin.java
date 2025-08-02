@@ -6,17 +6,14 @@
 
 package net.dries007.tfc.mixin;
 
-import java.util.Optional;
-import java.util.function.Supplier;
-
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.CommonLevelAccessor;
-import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.biome.Biome;
-
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import net.dries007.tfc.common.component.CachedMut;
-import net.dries007.tfc.util.climate.Climate;
+import net.dries007.tfc.util.tracker.WeatherHelpers;
 import net.dries007.tfc.world.biome.BiomeBridge;
 import net.dries007.tfc.world.biome.BiomeExtension;
 import net.dries007.tfc.world.biome.TFCBiomes;
@@ -26,7 +23,9 @@ import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Redirect;
+
+import com.llamalad7.mixinextras.injector.ModifyReturnValue;
+import com.llamalad7.mixinextras.sugar.Local;
 
 @Mixin(Biome.class)
 public abstract class BiomeMixin implements BiomeBridge
@@ -43,5 +42,16 @@ public abstract class BiomeMixin implements BiomeBridge
             tfc$cachedExtension.load(TFCBiomes.findExtension(level, (Biome) (Object) this));
         }
         return tfc$cachedExtension.value();
+    }
+
+
+    /**
+     * 
+     */
+    @OnlyIn(Dist.CLIENT)
+    @ModifyReturnValue(method = "getPrecipitationAt", at = @At("RETURN"))
+    private Biome.Precipitation getPrecipitaitionFromClimate(Biome.Precipitation original, @Local BlockPos pos)
+    {
+        return WeatherHelpers.getPrecipitationAt(Minecraft.getInstance().level, pos, original);
     }
 }
