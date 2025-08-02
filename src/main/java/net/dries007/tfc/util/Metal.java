@@ -238,7 +238,7 @@ public enum Metal implements StringRepresentable, RegistryMetal
         private static Function<RegistryMetal, Block> grate(Age age)
         {
             return metal -> {
-                final BlockBehaviour.Properties prop = blockProperties(metal).noOcclusion().sound(SoundType.COPPER_GRATE).noOcclusion().isValidSpawn(TFCBlocks::neverEntity).isRedstoneConductor(TFCBlocks::never).isSuffocating(TFCBlocks::never).isViewBlocking(TFCBlocks::never);
+                final BlockBehaviour.Properties prop = blockProperties(metal).noOcclusion().sound(SoundType.COPPER_GRATE).noOcclusion().isValidSpawn(TFCBlocks::neverEntity).isRedstoneConductor(TFCBlocks::never).isSuffocating(TFCBlocks::never).isViewBlocking(TFCBlocks::never).lightLevel(TFCBlocks.lavaLoggedBlockEmission());
                 return metal.weatheredParts()
                     ? new WeatheringGrateBlock(prop, age, metal.weatheringResistance())
                     : new GrateBlock(prop);

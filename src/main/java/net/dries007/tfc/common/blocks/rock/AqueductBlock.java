@@ -140,11 +140,6 @@ public class AqueductBlock extends HorizontalDirectionalBlock implements IFluidL
         }
     }
 
-    private static int getLightEmission(BlockState state)
-    {
-        return state.getValue(((AqueductBlock) state.getBlock()).getFluidProperty()).is(Fluids.LAVA) ? 15 : 0;
-    }
-
     public AqueductBlock(Properties properties)
     {
         super(properties);

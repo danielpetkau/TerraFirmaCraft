@@ -6,6 +6,7 @@
     "#c:cobblestones",
     "#c:sandstone/blocks",
     "minecraft:bricks",
+    "tfc:fire_bricks",
     "tfc:fire_bricks"
   ]
 }

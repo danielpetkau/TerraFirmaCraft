@@ -77,7 +77,8 @@ public class BuiltinBlockTags extends TagsProvider<Block> implements Accessors
             .add(TFCBlocks.ROCK_BLOCKS, Rock.BlockType.MOSSY_BRICKS)
             .add(TFCBlocks.ROCK_BLOCKS, Rock.BlockType.CHISELED)
             .add(Blocks.BRICKS)
-            .add(TFCBlocks.FIRE_BRICKS);
+            .add(TFCBlocks.FIRE_BRICKS)
+            .add(TFCBlocks.REINFORCED_FIRE_BRICKS);
         tag(BlockTags.WOODEN_BUTTONS).add(TFCBlocks.WOODS, Wood.BlockType.BUTTON);
         tag(BlockTags.STONE_BUTTONS).add(TFCBlocks.ROCK_BLOCKS, Rock.BlockType.BUTTON);
         tag(BlockTags.WOODEN_DOORS).add(TFCBlocks.WOODS, Wood.BlockType.DOOR);
@@ -239,6 +240,7 @@ public class BuiltinBlockTags extends TagsProvider<Block> implements Accessors
                 TFCBlocks.PLAIN_ALABASTER_BRICKS,
                 TFCBlocks.PLAIN_POLISHED_ALABASTER,
                 TFCBlocks.FIRE_BRICKS,
+                TFCBlocks.REINFORCED_FIRE_BRICKS,
                 TFCBlocks.QUERN,
                 TFCBlocks.CRUCIBLE,
                 TFCBlocks.BLOOMERY,
@@ -422,6 +424,7 @@ public class BuiltinBlockTags extends TagsProvider<Block> implements Accessors
         tag(INSULATION)
             .addTags(Tags.Blocks.STONES, STONES_SMOOTH, BlockTags.STONE_BRICKS, Tags.Blocks.COBBLESTONES, Tags.Blocks.SANDSTONE_BLOCKS)
             .add(Blocks.BRICKS)
+            .add(TFCBlocks.FIRE_BRICKS)
             .add(TFCBlocks.FIRE_BRICKS);
 
         tag(LAMPS).add(TFCBlocks.METALS, Metal.BlockType.LAMP);
@@ -441,8 +444,8 @@ public class BuiltinBlockTags extends TagsProvider<Block> implements Accessors
         tag(CHARCOAL_FORGE_INSULATION).addTag(INSULATION);
         tag(CHARCOAL_FORGE_INVISIBLE).add(TFCBlocks.CRUCIBLE);
         tag(BLOOMERY_INSULATION).addTag(INSULATION);
-        tag(BLAST_FURNACE_INSULATION).add(TFCBlocks.REINFORCED_FIRE_BRICKS);
-        tag(HEAT_INSULATION).add(TFCBlocks.FIRE_BRICKS).add(Blocks.BRICKS).add(Blocks.BRICK_STAIRS).add(Blocks.BRICK_SLAB).add(Blocks.TINTED_GLASS).add(TFCBlocks.FIREPROOF_DOOR);
+        tag(BLAST_FURNACE_INSULATION).add(TFCBlocks.REINFORCED_FIRE_BRICKS).add(TFCBlocks.REINFORCED_FIRE_BRICKS);
+        tag(HEAT_INSULATION).add(TFCBlocks.FIRE_BRICKS).add(TFCBlocks.REINFORCED_FIRE_BRICKS).add(Blocks.BRICKS).add(Blocks.BRICK_STAIRS).add(Blocks.BRICK_SLAB).add(Blocks.TINTED_GLASS).add(TFCBlocks.FIREPROOF_DOOR);
         tag(HEAT_PASSABLE)
             .add(TFCBlocks.METALS, Metal.BlockType.GRATE)
             .add(TFCBlocks.METALS, Metal.BlockType.EXPOSED_GRATE)
