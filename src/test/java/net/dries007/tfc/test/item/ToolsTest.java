@@ -34,8 +34,6 @@ public class ToolsTest implements TestSetup
                 final IItemSize sizeManager = ItemSizeManager.get(stack);
                 final Size size = sizeManager.getSize(stack);
                 final Weight weight = sizeManager.getWeight(stack);
-
-                System.out.println(holder.getId().toString() + ": " + size.toString() + ", " + weight.toString());
                 
                 return !(size == Size.LARGE && weight == Weight.MEDIUM)
                     && !(size == Size.VERY_LARGE && weight == Weight.VERY_HEAVY);
