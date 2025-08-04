@@ -15,7 +15,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -58,6 +57,7 @@ import net.dries007.tfc.data.providers.BuiltinFluidHeat;
 import net.dries007.tfc.data.providers.BuiltinFluidTags;
 import net.dries007.tfc.data.providers.BuiltinFoods;
 import net.dries007.tfc.data.providers.BuiltinItemHeat;
+import net.dries007.tfc.data.providers.BuiltinItemSizes;
 import net.dries007.tfc.data.providers.BuiltinItemTags;
 import net.dries007.tfc.data.providers.BuiltinKnappingTypes;
 import net.dries007.tfc.data.providers.BuiltinRecipes;
@@ -118,6 +118,7 @@ public interface TestSetup
             new BuiltinFluidHeat(output, provider).run(lookup);
             final var itemHeat = new BuiltinItemHeat(output, provider, now);
             itemHeat.run(lookup);
+            new BuiltinItemSizes(output, provider).run(lookup);
             new BuiltinKnappingTypes(output, provider).run(lookup); // Must run before recipes
 
             final RecipeManager recipeManager = new RecipeManager(lookup);
