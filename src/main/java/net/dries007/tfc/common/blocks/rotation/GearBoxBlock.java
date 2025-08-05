@@ -69,7 +69,7 @@ public class GearBoxBlock extends DeviceBlock implements DirectionPropertyBlock,
                 level.setBlockAndUpdate(pos, state.cycle(property));
                 level.getBlockEntity(pos, TFCBlockEntities.GEAR_BOX.get()).ifPresent(box -> box.updateDirection(hitResult.getDirection(), !prev));
                 Helpers.playPlaceSound(player, level, pos, state);
-                return ItemInteractionResult.sidedSuccess(level.isClientSide());
+                return ItemInteractionResult.sidedSuccess(level.isClientSide);
             }
             else
             {
