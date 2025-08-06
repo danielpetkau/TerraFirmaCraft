@@ -39,6 +39,7 @@ import net.dries007.tfc.common.blockentities.InventoryBlockEntity;
 import net.dries007.tfc.common.blockentities.PitKilnBlockEntity;
 import net.dries007.tfc.common.blocks.ExtendedProperties;
 import net.dries007.tfc.common.blocks.TFCBlockStateProperties;
+import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.util.Helpers;
 
 public class PitKilnBlock extends DeviceBlock
@@ -124,6 +125,12 @@ public class PitKilnBlock extends DeviceBlock
                     kiln.addStraw(held.split(1), stage + 1);
                     Helpers.playPlaceSound(null, level, pos, SoundType.GRASS);
                 }
+                else if (stage <= STRAW_END - 4 && item == TFCBlocks.THATCH.asItem())
+                {
+                    level.setBlock(pos, state.setValue(STAGE, stage + 4), 10);
+                    kiln.addStraw(held.split(1), stage + 4);
+                    Helpers.playPlaceSound(null, level, pos, SoundType.GRASS);
+                }
                 else if (stage >= STRAW_END && stage < LIT - 1 && Helpers.isItem(item, TFCTags.Items.PIT_KILN_LOGS))
                 {
                     level.setBlock(pos, state.setValue(STAGE, stage + 1), 10);
@@ -137,15 +144,18 @@ public class PitKilnBlock extends DeviceBlock
                         NonNullList<ItemStack> logItems = kiln.getLogs();
                         NonNullList<ItemStack> strawItems = kiln.getStraws();
                         ItemStack dropStack;
+                        final int stagesToRemove;
                         if (stage >= LOG_START)
                         {
                             dropStack = logItems.get(stage - LOG_START).copy();
                             kiln.deleteLog(stage - LOG_START);
+                            stagesToRemove = 1;
                         }
                         else
                         {
                             dropStack = strawItems.get(stage).copy();
                             kiln.deleteStraw(stage);
+                            stagesToRemove = item == TFCBlocks.THATCH.asItem() ? 4 : 1;
                         }
                         if (!dropStack.isEmpty())
                         {
@@ -157,7 +167,7 @@ public class PitKilnBlock extends DeviceBlock
                         }
                         else
                         {
-                            level.setBlock(pos, state.setValue(STAGE, stage - 1), 10);
+                            level.setBlock(pos, state.setValue(STAGE, stage - stagesToRemove), 10);
                         }
                     }
                 }

@@ -41,6 +41,7 @@ import net.dries007.tfc.common.blocks.EntityBlockExtension;
 import net.dries007.tfc.common.blocks.ExtendedProperties;
 import net.dries007.tfc.common.blocks.IForgeBlockExtension;
 import net.dries007.tfc.common.blocks.TFCBlockStateProperties;
+import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.util.Helpers;
 
 public class PlacedItemBlock extends DeviceBlock implements IForgeBlockExtension, EntityBlockExtension
@@ -181,7 +182,7 @@ public class PlacedItemBlock extends DeviceBlock implements IForgeBlockExtension
         if (placedItem != null)
         {
             final ItemStack held = player.getItemInHand(hand);
-            if (Helpers.isItem(held.getItem(), TFCTags.Items.PIT_KILN_STRAW) && !held.isEmpty() && PitKilnBlockEntity.isValid(level, pos))
+            if ((Helpers.isItem(held.getItem(), TFCTags.Items.PIT_KILN_STRAW) || (held.getItem() == TFCBlocks.THATCH.asItem())) && !held.isEmpty() && PitKilnBlockEntity.isValid(level, pos))
             {
                 if (!level.isClientSide())
                 {
