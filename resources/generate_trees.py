@@ -222,7 +222,7 @@ STACKED = 'stacked'
 
 # The data version used by DFU
 # Keep this up-to-date with the version in SharedConstants.VERSION
-DATA_VERSION = 3953
+DATA_VERSION = 3955
 
 TEMPLATES_DIR = './resources/structure_templates'
 STRUCTURES_DIR = './src/main/resources/data/tfc/structure'

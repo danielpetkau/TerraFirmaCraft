@@ -2,21 +2,21 @@ import groovy.json.JsonOutput
 import groovy.json.JsonSlurper
 
 plugins {
-    id("net.neoforged.moddev") version "2.0.1-beta"
+    id("net.neoforged.moddev") version "2.0.91"
     id("net.neoforged.licenser") version "0.7.2"
 }
 
 
 // Toolchain versions
-val minecraftVersion: String = "1.21"
-val neoForgeVersion: String = "21.0.167"
-val parchmentVersion: String = "2024.07.07"
-val parchmentMinecraftVersion: String = "1.21"
+val minecraftVersion: String = "1.21.1"
+val neoForgeVersion: String = "21.1.197"
+val parchmentVersion: String = "2024.11.17"
+val parchmentMinecraftVersion: String = "1.21.1"
 
 // Dependency versions
-val emiVersion: String = "1.1.10+1.21"
-val jeiVersion: String = "19.5.2.66"
-val patchouliVersion: String = "1.21-87-NEOFORGE-SNAPSHOT"
+val emiVersion: String = "1.1.22+1.21.1"
+val jeiVersion: String = "19.22.1.316"
+val patchouliVersion: String = "1.21.1-92-NEOFORGE"
 
 val modId: String = "tfc"
 val modVersion: String = System.getenv("VERSION") ?: "0.0.0-indev"
@@ -100,11 +100,11 @@ dependencies {
     implementation("vazkii.patchouli:Patchouli:$patchouliVersion")
 
     // Jade / The One Probe
-    implementation(group = "curse.maven", name = "jade-324717", version = "5529595")
-    compileOnly(group = "mcjty.theoneprobe", name = "theoneprobe", version = "1.21_neo-12.0.3-5")
+    implementation(group = "curse.maven", name = "jade-324717", version = "6853386")
+    compileOnly(group = "mcjty.theoneprobe", name = "theoneprobe", version = "1.21_neo-12.0.4-6")
 
     // ModernFix - useful at runtime for significant memory savings in TFC in dev (see i.e. wall block shape caches)
-    runtimeOnly(group = "curse.maven", name = "modernfix-790626", version = "5659985")
+    runtimeOnly(group = "curse.maven", name = "modernfix-790626", version = "6766126")
 
     // Data
     "dataImplementation"(sourceSets["main"].output)
@@ -117,7 +117,7 @@ dependencies {
 }
 
 neoForge {
-    version.set(neoForgeVersion)
+    version = neoForgeVersion
     addModdingDependenciesTo(sourceSets["data"])
     validateAccessTransformers = true
 
