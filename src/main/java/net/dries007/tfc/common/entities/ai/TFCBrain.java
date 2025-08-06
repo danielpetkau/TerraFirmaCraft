@@ -9,8 +9,12 @@ package net.dries007.tfc.common.entities.ai;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 import com.google.common.collect.ImmutableSet;
+
+import net.dries007.tfc.common.blocks.devices.NestBoxBlock;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.core.registries.Registries;
@@ -62,7 +66,14 @@ public class TFCBrain
     public static final RegistryObject<SensorType<NearestNestBoxSensor>> NEST_BOX_SENSOR = registerSensorType("nearest_nest_box", NearestNestBoxSensor::new);
     public static final RegistryObject<SensorType<PackLeaderSensor>> PACK_LEADER_SENSOR = registerSensorType("pack_leader", PackLeaderSensor::new);
 
-    public static final RegistryObject<PoiType> NEST_BOX_POI = registerPoi("nest_box", () -> new PoiType(getBlockStates(TFCBlocks.NEST_BOX.get()), 1, 1));
+    public static final RegistryObject<PoiType> NEST_BOX_POI = registerPoi("nest_box", () -> new PoiType(
+        getBlockStates(TFCBlocks.NEST_BOX.get())
+            .stream()
+            // do not pathfind towards full nest boxes
+            .filter(blockState -> !blockState.getValue(NestBoxBlock.FULL))
+            .collect(Collectors.toUnmodifiableSet()),
+        1, 1)
+    );
 
     private static Set<BlockState> getBlockStates(Block block)
     {

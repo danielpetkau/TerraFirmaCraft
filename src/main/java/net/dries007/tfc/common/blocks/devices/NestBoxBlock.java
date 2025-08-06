@@ -6,6 +6,8 @@
 
 package net.dries007.tfc.common.blocks.devices;
 
+import net.dries007.tfc.common.blocks.TFCBlockStateProperties;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
@@ -13,7 +15,10 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
@@ -24,11 +29,15 @@ import net.dries007.tfc.util.Helpers;
 
 public class NestBoxBlock extends BottomSupportedDeviceBlock
 {
+    public static final BooleanProperty FULL = TFCBlockStateProperties.FULL;
+
     private static final VoxelShape SHAPE = box(2, 0, 2, 14, 5, 14);
 
     public NestBoxBlock(ExtendedProperties properties)
     {
         super(properties, InventoryRemoveBehavior.DROP, SHAPE);
+
+        this.registerDefaultState(stateDefinition.any().setValue(FULL, false));
     }
 
     @Override
@@ -55,5 +64,11 @@ public class NestBoxBlock extends BottomSupportedDeviceBlock
         {
             sitter.stopRiding();
         }
+    }
+
+    @Override
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
+    {
+        super.createBlockStateDefinition(builder.add(FULL));
     }
 }

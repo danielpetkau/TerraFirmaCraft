@@ -8,6 +8,7 @@ package net.dries007.tfc.common.blockentities;
 
 import java.util.Optional;
 
+import net.dries007.tfc.common.blocks.devices.NestBoxBlock;
 import net.dries007.tfc.util.events.AnimalProductEvent;
 
 import net.minecraft.core.BlockPos;
@@ -48,7 +49,7 @@ public class NestBoxBlockEntity extends TickableInventoryBlockEntity<ItemStackHa
             Entity sitter = Seat.getSittingEntity(level, pos);
             if (sitter instanceof OviparousAnimal bird)
             {
-                if (bird.isReadyForAnimalProduct())
+                if (bird.isReadyForAnimalProduct() && !nest.isFull())
                 {
                     if (bird.getRandom().nextInt(7) == 0)
                     {
@@ -124,8 +125,15 @@ public class NestBoxBlockEntity extends TickableInventoryBlockEntity<ItemStackHa
     @Override
     public void setAndUpdateSlots(int slot)
     {
+        assert level != null;
+
         super.setAndUpdateSlots(slot);
         markForSync();
+
+        // update blockstate for birds to not pathfinds towards full nestboxes
+        BlockPos pos = this.getBlockPos();
+        BlockState newBlockState = level.getBlockState(pos).setValue(NestBoxBlock.FULL, isFull());
+        this.level.setBlockAndUpdate(pos, newBlockState);
     }
 
     @Nullable
@@ -133,5 +141,10 @@ public class NestBoxBlockEntity extends TickableInventoryBlockEntity<ItemStackHa
     public AbstractContainerMenu createMenu(int windowID, Inventory inv, Player player)
     {
         return NestBoxContainer.create(this, inv, windowID);
+    }
+
+    private boolean isFull()
+    {
+        return Helpers.isFull(inventory);
     }
 }
