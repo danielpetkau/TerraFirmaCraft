@@ -216,10 +216,4 @@ public class PitKilnBlock extends DeviceBlock
         }
         return ItemStack.EMPTY;
     }
-
-    @Override
-    protected void beforeRemove(InventoryBlockEntity<?> entity)
-    {
-        // No-op - we don't want to call ejectInventory()
-    }
 }

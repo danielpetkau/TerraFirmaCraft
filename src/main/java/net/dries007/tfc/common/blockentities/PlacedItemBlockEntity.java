@@ -190,7 +190,8 @@ public class PlacedItemBlockEntity extends InventoryBlockEntity<ItemStackHandler
     }
 
     /**
-     * Ejects any inventory slots that are not supported by the {@code newState}. This should be used over {@link #ejectInventory()}
+     * Ejects any inventory slots that are not supported by the {@code newState}. This should be used over
+     * {@link #ejectInventory()} if the state change might leave some slots still available.
      */
     public void ejectInventoryIfNeeded(BlockState newState)
     {
@@ -212,17 +213,6 @@ public class PlacedItemBlockEntity extends InventoryBlockEntity<ItemStackHandler
                 }
             }
         }
-    }
-
-    /**
-     * Use {@link #ejectInventoryIfNeeded(BlockState)} instead.
-     */
-    @Override
-    @DoNotCall
-    @Deprecated
-    public void ejectInventory()
-    {
-        throw new AssertionError();
     }
 
     public float getRotations(int slot)
