@@ -13,7 +13,7 @@
       "type": "patchouli:spotlight",
       "item": "tfc:compost",
       "link_recipes": false,
-      "text": "Compost is the product of the $(l:mechanics/composter)Composter$(). $(br)$(li)$(b)Nitrogen: 20$()$(li)$(d)Potassium: 20$()"
+      "text": "Компост является продуктом $(l:mechanics/composter)компостера$(). $(br)$(li)$(b)Азот: 20$()$(li)$(d)Калий: 20$()"
     },
     {
       "type": "patchouli:spotlight",

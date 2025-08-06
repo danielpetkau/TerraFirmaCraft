@@ -219,7 +219,7 @@
       "entity": "tfc:penguin",
       "scale": 0.7,
       "name": "Пингвин",
-      "text": "The penguin spawns on only the coldest beaches, ice sheet edges, and sea ice with $(l:the_world/climate#temperature)temperature$() of at most -14°C and $(l:the_world/climate#rainfall)rainfall$() of at least 75mm."
+      "text": "Пингвин появляется только на самых холодных пляжах, краях ледяных щитов и морском льде, где $(l:the_world/climate#temperature)температура$() не более -14°C и $(l:the_world/climate#rainfall)осадки$() не менее 75 мм."
     },
     {
       "type": "patchouli:entity",

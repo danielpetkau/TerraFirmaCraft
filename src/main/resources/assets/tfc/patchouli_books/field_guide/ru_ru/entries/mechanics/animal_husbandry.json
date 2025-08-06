@@ -61,7 +61,7 @@
     {
       "type": "tfc:welding_recipe",
       "recipe": "tfc:welding/metal/shears/bronze",
-      "text": "Shears can be made by $(l:mechanics/anvils#welding)welding$() two $(thing)knife blades$() together. Whichever knife blade has the lowest forging bonus will transfer that bonus (if any) to the shears."
+      "text": "Ножницы можно сделать путём $(l:mechanics/anvils#welding)сварки$() двух $(thing)лезвий ножа$() вместе. Лезвие ножа с наименьшим бонусом ковки передаст этот бонус (если он имеется) ножницам."
     },
     {
       "type": "patchouli:text",
@@ -88,7 +88,7 @@
       "type": "tfc:knapping_recipe",
       "anchor": "horses",
       "recipe": "tfc:knapping/saddle",
-      "text": "Saddles may be knapped from leather."
+      "text": "Седла можно изготовить из кожи."
     },
     {
       "type": "patchouli:text",

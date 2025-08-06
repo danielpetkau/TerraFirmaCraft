@@ -58,13 +58,13 @@
     },
     {
       "type": "patchouli:text",
-      "text": "The $(l:mechanics/decay#large_vessels)Large Vessel$() is created in a similar way. It can be placed, and has nine slots for items. View the linked chapter for more information.",
-      "title": "Large Vessel"
+      "text": "$(l:mechanics/decay#large_vessels)Большой сосуд$() создаётся аналогичным образом. Его можно разместить, и он имеет девять слотов для предметов. Для получения дополнительной информации ознакомьтесь со связанной главой.",
+      "title": "Большой сосуд"
     },
     {
       "type": "tfc:knapping_recipe",
       "recipe": "tfc:knapping/ceramic/unfired_large_vessel",
-      "text": "Knapping a Clay Large Vessel."
+      "text": "Лепка большого глиняного сосуда."
     },
     {
       "type": "patchouli:text",

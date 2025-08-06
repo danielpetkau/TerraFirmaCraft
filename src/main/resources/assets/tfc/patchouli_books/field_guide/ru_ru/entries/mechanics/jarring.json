@@ -10,11 +10,11 @@
     },
     {
       "type": "patchouli:text",
-      "text": "In a pot, boil $(thing)Sugar$() with 2-4 pieces of $(thing)Fruit$(). When the recipe is done, $(item)$(k:key.use)$() with the empty jar with lid to create a $(thing)Sealed Jar of Jam$(). If you use a regular $(thing)Empty Jar$(), you can still retrieve the jam, but will be unable to $(thing)Can$() it."
+      "text": "В кастрюле прокипятите $(thing)сахар$() вместе с 2-4 штуками $(thing)фрукт$(). Когда рецепт будет готов, используйте $(item)$(k:key.use)$() пустую банку с крышкой, чтобы создать $(thing)запечатанную банку варенья$(). Если же вы используете обычную $(thing)пустую банку$(), варенье всё равно можно извлечь, но его нельзя будет $(thing)консервировать$()."
     },
     {
       "type": "patchouli:text",
-      "text": "To complete the canning process, put the sealed jar of jam into the pot, and boil it with $(thing)Water$(). This gives it the $(thing)Canned$() trait, which will make it last for a long time, until it is unsealed."
+      "text": "Чтобы завершить процесс консервирования, поместите запечатанную банку варенья в кастрюлю и прокипятите её с $(thing)водой$(). Это придаст ей свойство $(thing)консервированная$(), благодаря которому она будет храниться долго, пока не будет вскрыта."
     },
     {
       "type": "patchouli:crafting",

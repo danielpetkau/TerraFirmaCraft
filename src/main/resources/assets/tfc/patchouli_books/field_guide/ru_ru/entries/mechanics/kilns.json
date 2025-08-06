@@ -1,12 +1,12 @@
 {
   "__comment__": "This file was automatically created by mcresources",
-  "name": "Kilns",
+  "name": "Печи",
   "category": "tfc:mechanics",
   "icon": "tfc:firebox",
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "The $(thing)Kiln$() is a structure used for smelting large amounts of items within a player-defined area. The Kiln is constructed from a $(thing)Firebox$(), at least one $(thing)Grate$(), and fireproof materials."
+      "text": "Структура $(thing)кирпичная печь$() используется для плавки большого количества предметов в области, определённой игроком. Кирпичная печь строится из $(thing)топки$(), по крайней мере одной $(thing)решётки$() и огнеупорных материалов."
     },
     {
       "type": "patchouli:crafting",
@@ -15,20 +15,20 @@
     },
     {
       "type": "patchouli:text",
-      "text": "The $(thing)Firebox$() interface has a temperature indicator and 16 slots. These slots are all used for fuel. Any fuel may be used. In an open space, the Firebox will not heat anything. Below Bright Red, it can heat 64 blocks, and above that 128. The time a firebox takes to heat a volume is proportional to the number of blocks and the temperature it is seeking to reach."
+      "text": "Интерфейс $(thing)топки$() имеет индикатор температуры и 16 слотов. Все слоты используются для топлива. Можно использовать любое топливо. В открытом пространстве топка не будет ничего нагревать. При температуре ниже ярко-красного она может нагреть 64 блока, а при более высокой — 128 блоков. Время нагрева объёма топки пропорционально количеству блоков и целевой температуре."
     },
     {
       "type": "patchouli:text",
-      "text": "Fireboxes heat starting with the block above them. Firebox heat can pass through non-occluding blocks, as well as Grates. Therefore, it is recommended to place a grate on top of your firebox to allow heat to pass up into your structure, and provide maintenance access from below."
+      "text": "Топки нагревают блоки, начиная с того, что находится непосредственно над ними. Тепло топки может проходить сквозь блоки, не создающие преград, а также сквозь решётки. Поэтому рекомендуется установить решётку над топкой, чтобы тепло поднималось внутрь вашей постройки, а доступ для обслуживания был возможен снизу."
     },
     {
       "type": "patchouli:text",
-      "text": "The exterior of a Kiln must be made of fireproof blocks. These include Bricks, Fire Bricks, Tinted Glass, and Fireproof Doors. If the structure is broken during heating, then the heating will be lost and must start over once the seal is re-made. The timer will also restart if the temperature increases or decreases from the initial setpoint."
+      "text": "Внешняя часть топки должна быть выполнена из огнеупорных блоков. К ним относятся кирпичи, огнеупорные кирпичи, тонированное стекло и огнеупорные двери. Если конструкция нарушится во время нагрева, процесс нагрева прервётся и начнётся заново после восстановления герметичности. Таймер также сбросится, если температура отклонится от первоначально заданного значения."
     },
     {
       "type": "patchouli:crafting",
       "recipe": "tfc:crafting/fireproof_door",
-      "text": "The Fireproof Door may be made from Cast Iron Sheets."
+      "text": "Огнеупорная дверь может быть изготовлена из листов серого чугуна."
     }
   ],
   "read_by_default": true
