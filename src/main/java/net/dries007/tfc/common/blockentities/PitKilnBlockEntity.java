@@ -57,7 +57,7 @@ public class PitKilnBlockEntity extends PlacedItemBlockEntity
                 {
                     // consume contents, don't cook items, convert to placed item
                     pitKiln.emptyFuelContents();
-                    convertPitKilnToPlacedItem(level, pos);
+                    convertPitKilnToPlacedItem(level, pos, true);
                     return;
                 }
             }
@@ -66,7 +66,7 @@ public class PitKilnBlockEntity extends PlacedItemBlockEntity
             {
                 // consume contents, don't cook items, convert to placed item
                 pitKiln.emptyFuelContents();
-                convertPitKilnToPlacedItem(level, pos);
+                convertPitKilnToPlacedItem(level, pos, true);
                 return;
             }
 
@@ -83,14 +83,17 @@ public class PitKilnBlockEntity extends PlacedItemBlockEntity
                 level.setBlockAndUpdate(pos.above(), Blocks.AIR.defaultBlockState());
                 pitKiln.markForSync();
 
-                convertPitKilnToPlacedItem(level, pos);
+                convertPitKilnToPlacedItem(level, pos, true);
             }
         }
     }
 
-    public static void convertPitKilnToPlacedItem(Level level, BlockPos pos)
+    public static void convertPitKilnToPlacedItem(Level level, BlockPos pos, boolean playSound)
     {
-        Helpers.playSound(level, pos, SoundEvents.FIRE_EXTINGUISH);
+        if (playSound)
+        {
+            Helpers.playSound(level, pos, SoundEvents.FIRE_EXTINGUISH);
+        }
         level.getBlockEntity(pos, TFCBlockEntities.PIT_KILN.get()).ifPresent(pitKiln -> {
             // Remove inventory items
             // This happens here to stop the block dropping its items in onBreakBlock()

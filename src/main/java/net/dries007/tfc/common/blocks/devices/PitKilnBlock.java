@@ -163,7 +163,7 @@ public class PitKilnBlock extends DeviceBlock
                         }
                         if (stage == stagesToRemove - 1)
                         {
-                            PitKilnBlockEntity.convertPitKilnToPlacedItem(level, pos);
+                            PitKilnBlockEntity.convertPitKilnToPlacedItem(level, pos, false);
                         }
                         else
                         {
