@@ -344,6 +344,7 @@
   "tfc.tooltip.farmland.temperature_too_high": " - §4太高！§r（<%s°C）",
   "tfc.tooltip.farmland.just_right": " - §2良好§r",
   "tfc.tooltip.farmland.nutrients": "§b(N) 含氮：§r%s%%，§6(P) 含磷：§r%s%%，§d(K) 含鉀：§r%s%%",
+  "tfc.tooltip.farmland.accumulated_rainfall": "Accumulated Rainfall: %s + %s",
   "tfc.tooltip.fruit_tree.done_growing": "該方塊已生長完畢",
   "tfc.tooltip.fruit_tree.growing": "該方塊在合適的條件下可以生長。",
   "tfc.tooltip.fruit_tree.sapling_wrong_month": "當前季節不適合種植。",

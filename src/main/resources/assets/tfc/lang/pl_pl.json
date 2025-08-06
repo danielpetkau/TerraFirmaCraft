@@ -337,6 +337,7 @@
   "tfc.tooltip.farmland.temperature_too_high": " - §4za wysoka! §r(<%s°c)",
   "tfc.tooltip.farmland.just_right": "- §2odpowiednie§r",
   "tfc.tooltip.farmland.nutrients": "§b(n) azot: §r%s%%, §6(p) fosfor: §r%s%%, §d(k) potas: §r%s%%",
+  "tfc.tooltip.farmland.accumulated_rainfall": "Accumulated Rainfall: %s + %s",
   "tfc.tooltip.fruit_tree.done_growing": "Ten blok dojrzał",
   "tfc.tooltip.fruit_tree.growing": "Ten blok może rosnąć.",
   "tfc.tooltip.fruit_tree.sapling_wrong_month": "Zła pora roku na wyhodowanie tego.",

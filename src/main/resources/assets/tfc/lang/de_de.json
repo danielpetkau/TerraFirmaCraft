@@ -338,6 +338,7 @@
   "tfc.tooltip.farmland.temperature_too_high": " - §4Zu hoch! §r(<%s°C)",
   "tfc.tooltip.farmland.just_right": " - §2Gut§r",
   "tfc.tooltip.farmland.nutrients": "§b(N) Stickstoff: §r%s%%, §6(P) Phosphor: §r%s%%, §d(K) Kalium: §r%s%%",
+  "tfc.tooltip.farmland.accumulated_rainfall": "Accumulated Rainfall: %s + %s",
   "tfc.tooltip.fruit_tree.done_growing": "Dieser Block ist fertig mit wachsen",
   "tfc.tooltip.fruit_tree.growing": "Dieser Block könnte unter den richtigen Bedingungen wachsen",
   "tfc.tooltip.fruit_tree.sapling_wrong_month": "Falsche Jahreszeit für Baumwachstum",

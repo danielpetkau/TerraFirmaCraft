@@ -342,6 +342,7 @@
   "tfc.tooltip.farmland.temperature_too_high": " - §4Слишком высокая! §r(<%s°C)",
   "tfc.tooltip.farmland.just_right": " - §2Хорошая§r",
   "tfc.tooltip.farmland.nutrients": "§b(А) Азот: §r%s%%, §6(Ф) Фосфор: §r%s%%, §d(K) Калий: §r%s%%",
+  "tfc.tooltip.farmland.accumulated_rainfall": "Accumulated Rainfall: %s + %s",
   "tfc.tooltip.fruit_tree.done_growing": "Этот блок закончил свой рост",
   "tfc.tooltip.fruit_tree.growing": "Этот блок будет расти при благоприятных условиях",
   "tfc.tooltip.fruit_tree.sapling_wrong_month": "Это дерево не растёт, неблагоприятный сезон",

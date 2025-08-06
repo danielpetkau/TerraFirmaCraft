@@ -79,7 +79,7 @@
     },
     {
       "type": "patchouli:text",
-      "text": "Для использования коробки передач ее стороны должны быть настроены. $(item)$(k:key.use)$() держа в руках $(thing)Молоток$() на любой стороне коробки передач, чтобы включить вход/выход через эту сторону.$(br2)Обратите внимание, что из-за их внутренней структуры, коробки передач могут иметь активные стороны только на двух разных осях вращения одновременно."
+      "text": "In order to use a gearbox, its sides must be configured. $(item)$(k:key.use)$() while holding a $(thing)Hammer$() on any face of the gearbox to enable input/output through that face. Using a hammer on a gearbox while sneaking will toggle the opposite side of the gearbox instead.$(br2)Note that due to their internal structure, gear boxes can only have faces enabled on two different axes of rotation at the same time."
     },
     {
       "type": "patchouli:crafting",
