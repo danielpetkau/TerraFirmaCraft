@@ -76,9 +76,9 @@ public final class Forging extends ComponentView<ForgingComponent>
     {
         final List<ForgeStep> steps = component.steps.steps();
         return rule.matches(
-            steps.isEmpty() ? null : steps.getLast(),
-            steps.size() <= 1 ? null : steps.get(steps.size() - 1),
-            steps.size() <= 2 ? null : steps.get(steps.size() - 2)
+            steps.isEmpty() ? null : steps.get(steps.size() - 1),
+            steps.size() <= 1 ? null : steps.get(steps.size() - 2),
+            steps.size() <= 2 ? null : steps.get(steps.size() - 3)
         );
     }
 
