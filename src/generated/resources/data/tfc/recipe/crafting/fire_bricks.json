@@ -3,10 +3,10 @@
   "category": "misc",
   "key": {
     "X": {
-      "item": "tfc:mortar"
+      "item": "tfc:ceramic/fire_brick"
     },
     "Y": {
-      "item": "tfc:ceramic/fire_brick"
+      "item": "tfc:mortar"
     }
   },
   "pattern": [

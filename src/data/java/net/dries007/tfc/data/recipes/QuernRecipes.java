@@ -46,7 +46,9 @@ public interface QuernRecipes extends Recipes
             TFCBlocks.ROCK_BLOCKS.get(Rock.CHALK).get(Rock.BlockType.LOOSE),
             TFCBlocks.ROCK_BLOCKS.get(Rock.CHALK).get(Rock.BlockType.MOSSY_LOOSE),
             TFCBlocks.ROCK_BLOCKS.get(Rock.MARBLE).get(Rock.BlockType.LOOSE),
-            TFCBlocks.ROCK_BLOCKS.get(Rock.MARBLE).get(Rock.BlockType.MOSSY_LOOSE)
+            TFCBlocks.ROCK_BLOCKS.get(Rock.MARBLE).get(Rock.BlockType.MOSSY_LOOSE),
+            TFCBlocks.PLANTS.get(Plant.MUSSELS).get(),
+            TFCBlocks.PLANTS.get(Plant.BARNACLES).get()
         ), TFCItems.POWDERS.get(Powder.FLUX), 2);
         add("from_borax", TFCItems.ORES.get(Ore.BORAX), TFCItems.POWDERS.get(Powder.FLUX), 6);
         add(Ingredient.of(

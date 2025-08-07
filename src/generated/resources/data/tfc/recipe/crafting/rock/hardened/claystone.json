@@ -3,10 +3,10 @@
   "category": "misc",
   "key": {
     "X": {
-      "item": "tfc:mortar"
+      "item": "tfc:rock/raw/claystone"
     },
     "Y": {
-      "item": "tfc:rock/raw/claystone"
+      "item": "tfc:mortar"
     }
   },
   "pattern": [

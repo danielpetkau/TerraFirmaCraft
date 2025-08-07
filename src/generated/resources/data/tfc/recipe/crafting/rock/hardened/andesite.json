@@ -3,10 +3,10 @@
   "category": "misc",
   "key": {
     "X": {
-      "item": "tfc:mortar"
+      "item": "tfc:rock/raw/andesite"
     },
     "Y": {
-      "item": "tfc:rock/raw/andesite"
+      "item": "tfc:mortar"
     }
   },
   "pattern": [

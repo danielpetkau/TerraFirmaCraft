@@ -1055,7 +1055,7 @@ public interface CraftingRecipes extends Recipes
             .inputIsPrimary(TFCTags.Items.TOOLS_HAMMER)
             .input(notRotten(Ingredient.of(TFCBlocks.PUMPKIN)))
             .damageInputs()
-            .shapeless(TFCItems.FOOD.get(Food.PUMPKIN_CHUNKS));
+            .shapeless(TFCItems.FOOD.get(Food.PUMPKIN_CHUNKS), 4);
         recipe()
             .inputIsPrimary(TFCTags.Items.TOOLS_KNIFE)
             .input(notRotten(Food.PUMPKIN_CHUNKS))
@@ -1334,7 +1334,7 @@ public interface CraftingRecipes extends Recipes
 
         void bricksWithMortar(ItemLike brick, ItemLike bricks, int count)
         {
-            input('X', TFCItems.MORTAR).input('Y', brick).pattern("XYX", "YXY", "XYX").shaped(bricks, count);
+            input('Y', TFCItems.MORTAR).input('X', brick).pattern("XYX", "YXY", "XYX").shaped(bricks, count);
         }
 
         void to3x3(Ingredient input, ItemLike storage)
