@@ -213,6 +213,7 @@ def generate(rm: ResourceManager):
             'firepit_sticks',
             'pit_kiln_logs',
             'pit_kiln_straw',
+            'pit_kiln_4_straw',
             'compost_browns/low',
             'compost_browns/medium',
             'compost_browns/high',

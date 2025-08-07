@@ -182,7 +182,7 @@ public class PlacedItemBlock extends DeviceBlock implements IForgeBlockExtension
         if (placedItem != null)
         {
             final ItemStack held = player.getItemInHand(hand);
-            if ((Helpers.isItem(held.getItem(), TFCTags.Items.PIT_KILN_STRAW) || (held.getItem() == TFCBlocks.THATCH.asItem())) && !held.isEmpty() && PitKilnBlockEntity.isValid(level, pos))
+            if (!held.isEmpty() && (Helpers.isItem(held.getItem(), TFCTags.Items.PIT_KILN_STRAW) || Helpers.isItem(held.getItem(), TFCTags.Items.PIT_KILN_4_STRAW)) && PitKilnBlockEntity.isValid(level, pos))
             {
                 if (!level.isClientSide())
                 {

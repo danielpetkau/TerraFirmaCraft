@@ -119,16 +119,11 @@ public class PitKilnBlock extends DeviceBlock
                 final ItemStack held = player.getItemInHand(hand);
                 final Item item = held.getItem();
                 final int stage = state.getValue(STAGE);
-                if (stage < STRAW_END && Helpers.isItem(item, TFCTags.Items.PIT_KILN_STRAW))
+                final int strawValue = strawValue(item);
+                if (stage <= STRAW_END - strawValue && (Helpers.isItem(item, TFCTags.Items.PIT_KILN_STRAW) || Helpers.isItem(item, TFCTags.Items.PIT_KILN_4_STRAW)))
                 {
-                    level.setBlock(pos, state.setValue(STAGE, stage + 1), 10);
-                    kiln.addStraw(held.split(1), stage + 1);
-                    Helpers.playPlaceSound(null, level, pos, SoundType.GRASS);
-                }
-                else if (stage <= STRAW_END - 4 && item == TFCBlocks.THATCH.asItem())
-                {
-                    level.setBlock(pos, state.setValue(STAGE, stage + 4), 10);
-                    kiln.addStraw(held.split(1), stage + 4);
+                    level.setBlock(pos, state.setValue(STAGE, stage + strawValue), 10);
+                    kiln.addStraw(held.split(1), stage + strawValue);
                     Helpers.playPlaceSound(null, level, pos, SoundType.GRASS);
                 }
                 else if (stage >= STRAW_END && stage < LIT - 1 && Helpers.isItem(item, TFCTags.Items.PIT_KILN_LOGS))
@@ -155,7 +150,7 @@ public class PitKilnBlock extends DeviceBlock
                         {
                             dropStack = strawItems.get(stage).copy();
                             kiln.deleteStraw(stage);
-                            stagesToRemove = dropStack.getItem() == TFCBlocks.THATCH.asItem() ? 4 : 1;
+                            stagesToRemove = strawValue(dropStack);
                         }
                         if (!dropStack.isEmpty())
                         {
@@ -222,5 +217,16 @@ public class PitKilnBlock extends DeviceBlock
     protected float getDestroyProgress(BlockState state, Player player, BlockGetter level, BlockPos pos)
     {
         return state.getValue(STAGE) == LIT ? 0F : super.getDestroyProgress(state, player, level, pos);
+    }
+
+    public static int strawValue(ItemStack stack)
+    {
+        return stack.getCount() * strawValue(stack.getItem());
+    }
+
+    public static int strawValue(Item item)
+    {
+        return Helpers.isItem(item, TFCTags.Items.PIT_KILN_4_STRAW) ? 4
+            : Helpers.isItem(item, TFCTags.Items.PIT_KILN_STRAW) ? 1 : 0;
     }
 }

@@ -512,7 +512,7 @@ public final class BlockEntityTooltips
             }
             else
             {
-                tooltip.accept(Component.translatable("tfc.jade.straws", kiln.getStraws().stream().filter(s1 -> !s1.isEmpty()).mapToInt(s1 -> s1.getItem() == TFCBlocks.THATCH.asItem() ? 4 : 1).sum()));
+                tooltip.accept(Component.translatable("tfc.jade.straws", kiln.getStraws().stream().filter(s1 -> !s1.isEmpty()).mapToInt(s1 -> PitKilnBlock.strawValue(s1)).sum()));
                 tooltip.accept(Component.translatable("tfc.jade.logs", kiln.getLogs().stream().filter(s -> !s.isEmpty()).toList().size()));
             }
         }

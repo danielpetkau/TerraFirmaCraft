@@ -498,6 +498,7 @@ public class TFCTags
         public static final TagKey<Item> FIREPIT_LOGS = tag("firepit_logs");
         public static final TagKey<Item> LOG_PILE_LOGS = tag("log_pile_logs");
         public static final TagKey<Item> PIT_KILN_STRAW = tag("pit_kiln_straw");
+        public static final TagKey<Item> PIT_KILN_4_STRAW = tag("pit_kiln_4_straw");
         public static final TagKey<Item> PIT_KILN_LOGS = tag("pit_kiln_logs");
         /** Axes that are 60% efficient at destroying logs */
         public static final TagKey<Item> INEFFICIENT_LOGGING_AXES = tag("inefficient_logging_axes");

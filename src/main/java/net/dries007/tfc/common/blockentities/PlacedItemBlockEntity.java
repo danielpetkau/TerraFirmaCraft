@@ -44,7 +44,7 @@ public class PlacedItemBlockEntity extends InventoryBlockEntity<ItemStackHandler
             // This happens here to stop the block dropping its items in onBreakBlock()
             List<ItemStack> items = Helpers.copyToAndClear(placedItem.inventory);
 
-            int stage = strawStack.getItem() == TFCBlocks.THATCH.asItem() ? 3 : 0;
+            int stage = PitKilnBlock.strawValue(strawStack.getItem()) - 1;
 
             // Replace the block
             level.setBlockAndUpdate(pos, TFCBlocks.PIT_KILN.get().defaultBlockState().setValue(PitKilnBlock.STAGE, stage));

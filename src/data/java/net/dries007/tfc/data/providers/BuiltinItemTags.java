@@ -427,7 +427,7 @@ public class BuiltinItemTags extends TagsProvider<Item> implements Accessors
             .addOnly(pivot(TFCBlocks.WOODS, Wood.BlockType.LOG), tannin::contains)
             .addOnly(pivot(TFCBlocks.WOODS, Wood.BlockType.WOOD), tannin::contains);
 
-        tag(ItemTags.LOGS_THAT_BURN).add(TFCItems.STICK_BUNDLE, TFCItems.STICK_BUNDLE, TFCItems.DRIED_CACTUS_WOOD);
+        tag(ItemTags.LOGS_THAT_BURN).add(TFCItems.STICK_BUNDLE, TFCItems.DRIED_CACTUS_WOOD);
         tag(FIREPIT_KINDLING)
             .addTags(ItemTags.LEAVES, BOOKS)
             .add(TFCItems.STRAW, Items.PAPER);
@@ -435,6 +435,7 @@ public class BuiltinItemTags extends TagsProvider<Item> implements Accessors
         tag(FIREPIT_LOGS).addTag(ItemTags.LOGS_THAT_BURN);
         tag(LOG_PILE_LOGS).addTag(ItemTags.LOGS).add(TFCItems.STICK_BUNDLE, TFCItems.DRIED_CACTUS_WOOD, TFCItems.CACTUS_WOOD);
         tag(PIT_KILN_STRAW).add(TFCItems.STRAW);
+        tag(PIT_KILN_4_STRAW).add(TFCBlocks.THATCH);
         tag(PIT_KILN_LOGS).addTags(ItemTags.LOGS_THAT_BURN);
         tag(INEFFICIENT_LOGGING_AXES).add(TFCItems.ROCK_TOOLS, RockCategory.ItemType.AXE);
         tag(CAN_BE_LIT_ON_TORCH).addTag(Tags.Items.RODS_WOODEN);
