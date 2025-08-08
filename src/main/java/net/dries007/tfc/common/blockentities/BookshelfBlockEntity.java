@@ -7,6 +7,7 @@
 package net.dries007.tfc.common.blockentities;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.entity.ChiseledBookShelfBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -16,5 +17,11 @@ public class BookshelfBlockEntity extends ChiseledBookShelfBlockEntity
     public BookshelfBlockEntity(BlockPos pos, BlockState state)
     {
         super(pos, state);
+    }
+
+    @Override
+    public BlockEntityType<?> getType()
+    {
+        return TFCBlockEntities.BOOKSHELF.get();
     }
 }

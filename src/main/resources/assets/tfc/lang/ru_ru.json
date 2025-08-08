@@ -1114,6 +1114,7 @@
   "tfc.config.client.timeDeltaTooltipStyle": "Стиль всплывающих подсказок изменения времени",
   "tfc.config.common.defaultCalendarStartDay": "День начала календаря по умолчанию",
   "tfc.config.common.defaultMonthLength": "Длина месяца по умолчанию",
+  "tfc.config.common.defaultCalendarDayLength": "Default Calendar Day Length",
   "tfc.config.common.defaultWorldPreset": "Предустановка мира по умолчанию",
   "tfc.config.common.enableDatapackTests": "Включить тесты datapack",
   "tfc.config.server.acaciaSaplingGrowthDays": "Дней роста саженца акации",

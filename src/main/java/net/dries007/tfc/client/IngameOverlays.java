@@ -103,11 +103,7 @@ public enum IngameOverlays
     public static void checkGuiOverlays(RenderGuiLayerEvent.Pre event)
     {
         final ResourceLocation id = event.getName();
-        if (id.equals(VANILLA_EXP) || id.equals(VANILLA_JUMP))
-        {
-            event.setCanceled(true);
-        }
-        else if (enableThisOrThat(id, TFCConfig.CLIENT.enableHungerBar.get(), FOOD.id, VANILLA_FOOD) || enableThisOrThat(id, TFCConfig.CLIENT.enableHealthBar.get(), HEALTH.id, VANILLA_HEALTH) || enableThisOrThat(id, TFCConfig.CLIENT.enableHealthBar.get(), MOUNT_HEALTH.id, VANILLA_MOUNT_HEALTH))
+        if (enableThisOrThat(id, TFCConfig.CLIENT.enableHungerBar.get(), FOOD.id, VANILLA_FOOD) || enableThisOrThat(id, TFCConfig.CLIENT.enableHealthBar.get(), HEALTH.id, VANILLA_HEALTH) || enableThisOrThat(id, TFCConfig.CLIENT.enableHealthBar.get(), MOUNT_HEALTH.id, VANILLA_MOUNT_HEALTH))
         {
             event.setCanceled(true);
         }
@@ -115,13 +111,7 @@ public enum IngameOverlays
         {
             event.setCanceled(true);
         }
-        if (!TFCConfig.CLIENT.enableExperienceBar.get() && id.equals(VANILLA_EXP))
-        {
-            event.setCanceled(true);
-        }
-        final boolean isShowingExperience = TFCConfig.CLIENT.enableExperienceBar.get();
-        final boolean isStyleLeftHotbar = (TFCConfig.CLIENT.disabledExperienceBarStyle.get() == DisabledExperienceBarStyle.LEFT_HOTBAR);
-        if (!(isShowingExperience || !isStyleLeftHotbar))
+        if (!TFCConfig.CLIENT.enableExperienceBar.get() && (id.equals(VANILLA_EXP) || id.equals(VANILLA_JUMP)))
         {
             event.setCanceled(true);
         }
@@ -282,6 +272,7 @@ public enum IngameOverlays
             }
             else
             {
+                // todo: fishing rendering over xp bar isn't working
                 final int x = graphics.guiWidth() / 2 - 91;
                 final int y = graphics.hashCode() - 29;
                 final int amount = Mth.ceil(Mth.clampedMap(hook.pullExhaustion, 0, 100, 0, 183));

@@ -1915,6 +1915,7 @@ DEFAULT_LANG = {
 
     'tfc.config.common.defaultCalendarStartDay': 'Default Calendar Start Day',
     'tfc.config.common.defaultMonthLength': 'Default Month Length',
+    'tfc.config.common.defaultCalendarDayLength': 'Default Calendar Day Length',
     'tfc.config.common.defaultWorldPreset': 'Default World Preset',
     'tfc.config.common.enableDatapackTests': 'Enable Datapack Tests',
 
