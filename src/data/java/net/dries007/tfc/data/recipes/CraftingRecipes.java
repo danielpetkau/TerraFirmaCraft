@@ -932,7 +932,7 @@ public interface CraftingRecipes extends Recipes
             .input('E', notRotten(Ingredient.of(Items.EGG)))
             .input('F', TFCTags.Items.FLOUR)
             .pattern(" M ", "SES", "FFF")
-            .shaped(Items.CAKE);
+            .shaped(TFCBlocks.CAKE);
         recipe()
             .input('L', TFCTags.Items.LUMBER)
             .input('D', ItemTags.DIRT)
