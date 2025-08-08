@@ -7,6 +7,7 @@
 package net.dries007.tfc.data.providers;
 
 import java.lang.reflect.Field;
+import java.util.Comparator;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
@@ -393,7 +394,7 @@ public class BuiltinItemTags extends TagsProvider<Item> implements Accessors
         tag(GLASS_BATCHES_NOT_T1).add(TFCItems.HEMATITIC_GLASS_BATCH, TFCItems.OLIVINE_GLASS_BATCH, TFCItems.VOLCANIC_GLASS_BATCH);
         tag(GLASS_BLOWPIPES).add(TFCItems.BLOWPIPE_WITH_GLASS, TFCItems.CERAMIC_BLOWPIPE_WITH_GLASS);
         tag(BLOWPIPES).addTags(TOOLS_BLOWPIPE, GLASS_BLOWPIPES);
-        tag(GLASS_POWDERS).add(GlassOperation.POWDERS.get().keySet().stream().sorted()); // Sorted to make generation deterministic
+        tag(GLASS_POWDERS).add(GlassOperation.POWDERS.get().keySet().stream().sorted(Comparator.comparing(item -> Item.getId(item)))); // Sorted to make generation deterministic
         tag(GLASS_BOTTLES).add(
             TFCItems.SILICA_GLASS_BOTTLE,
             TFCItems.HEMATITIC_GLASS_BOTTLE,
