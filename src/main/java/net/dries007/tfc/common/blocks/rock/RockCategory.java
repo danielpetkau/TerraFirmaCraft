@@ -61,7 +61,7 @@ public enum RockCategory implements StringRepresentable
         AXE_HEAD,
         HAMMER(rock -> new ToolItem(rock.tier(),  TFCTags.Blocks.MINEABLE_WITH_HAMMER, tool(rock, 1f, -3.0f))),
         HAMMER_HEAD,
-        HOE(rock -> new TFCHoeItem(rock.tier(), tool(rock, -1f, -3.0f))),
+        HOE(rock -> new TFCHoeItem(rock.tier(), tool(rock, 0.5f, -3.0f))),
         HOE_HEAD,
         JAVELIN(rock -> new JavelinItem(rock.tier(), tool(rock, 0.7f, -2.2f))),
         JAVELIN_HEAD,
