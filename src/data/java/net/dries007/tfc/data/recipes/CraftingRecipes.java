@@ -112,7 +112,6 @@ public interface CraftingRecipes extends Recipes
             "leather_horse_armor",
             "leather_leggings",
             "lectern",
-            "loom",
             "melon",
             "melon_seeds",
             "mojang_banner_pattern",
