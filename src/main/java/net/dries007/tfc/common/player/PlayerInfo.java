@@ -114,6 +114,7 @@ public final class PlayerInfo extends net.minecraft.world.food.FoodData implemen
     @Override
     public float getIntoxication()
     {
+        if (intoxicationTick == Long.MIN_VALUE) return 0;
         return (float) Math.max(0, intoxicationTick - calendar().getTicks()) / TFCConfig.SERVER.maxIntoxicationTicks.get();
     }
 
