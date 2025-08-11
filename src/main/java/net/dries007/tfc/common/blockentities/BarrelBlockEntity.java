@@ -484,6 +484,7 @@ public class BarrelBlockEntity extends TickableInventoryBlockEntity<BarrelBlockE
         assert level != null;
 
         final @Nullable SealedBarrelRecipe oldRecipe = RecipeHelpers.unbox(recipe.value());
+        recipe.unload();
         final @Nullable SealedBarrelRecipe newRecipe = getRecipe(); // Trigger the update
 
         if (oldRecipe != null && newRecipe != null && oldRecipe != newRecipe)
