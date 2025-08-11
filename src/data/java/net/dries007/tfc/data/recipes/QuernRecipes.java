@@ -11,7 +11,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
-
+import net.dries007.tfc.common.TFCTags;
 import net.dries007.tfc.common.blocks.GroundcoverBlockType;
 import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.blocks.plant.Plant;
@@ -31,25 +31,7 @@ public interface QuernRecipes extends Recipes
     default void quernRecipes()
     {
         add(notRotten(TFCItems.FOOD.get(Food.OLIVE)), TFCItems.OLIVE_PASTE, 2);
-        add(Ingredient.of(
-            TFCItems.FOOD.get(Food.SHELLFISH),
-            TFCBlocks.GROUNDCOVER.get(GroundcoverBlockType.MOLLUSK),
-            TFCBlocks.GROUNDCOVER.get(GroundcoverBlockType.CLAM),
-            TFCBlocks.GROUNDCOVER.get(GroundcoverBlockType.MUSSEL),
-            TFCBlocks.GROUNDCOVER.get(GroundcoverBlockType.SEA_URCHIN),
-            Items.TURTLE_SCUTE,
-            Items.ARMADILLO_SCUTE,
-            TFCBlocks.ROCK_BLOCKS.get(Rock.LIMESTONE).get(Rock.BlockType.LOOSE),
-            TFCBlocks.ROCK_BLOCKS.get(Rock.LIMESTONE).get(Rock.BlockType.MOSSY_LOOSE),
-            TFCBlocks.ROCK_BLOCKS.get(Rock.DOLOMITE).get(Rock.BlockType.LOOSE),
-            TFCBlocks.ROCK_BLOCKS.get(Rock.DOLOMITE).get(Rock.BlockType.MOSSY_LOOSE),
-            TFCBlocks.ROCK_BLOCKS.get(Rock.CHALK).get(Rock.BlockType.LOOSE),
-            TFCBlocks.ROCK_BLOCKS.get(Rock.CHALK).get(Rock.BlockType.MOSSY_LOOSE),
-            TFCBlocks.ROCK_BLOCKS.get(Rock.MARBLE).get(Rock.BlockType.LOOSE),
-            TFCBlocks.ROCK_BLOCKS.get(Rock.MARBLE).get(Rock.BlockType.MOSSY_LOOSE),
-            TFCBlocks.PLANTS.get(Plant.MUSSELS).get(),
-            TFCBlocks.PLANTS.get(Plant.BARNACLES).get()
-        ), TFCItems.POWDERS.get(Powder.FLUX), 2);
+        add(Ingredient.of(TFCTags.Items.FLUXSTONE), TFCItems.POWDERS.get(Powder.FLUX), 2);
         add("from_borax", TFCItems.ORES.get(Ore.BORAX), TFCItems.POWDERS.get(Powder.FLUX), 6);
         add(Ingredient.of(
             TFCItems.ORES.get(Ore.CINNABAR),

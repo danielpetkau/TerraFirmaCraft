@@ -2,6 +2,13 @@
   "type": "tfc:advanced_shapeless_crafting",
   "ingredients": [
     {
+      "type": "tfc:fluid_content",
+      "fluid": {
+        "amount": 100,
+        "fluid": "minecraft:water"
+      }
+    },
+    {
       "type": "tfc:and",
       "children": [
         {
@@ -11,15 +18,15 @@
           "type": "tfc:not_rotten"
         }
       ]
-    },
-    {
-      "type": "tfc:fluid_content",
-      "fluid": {
-        "amount": 100,
-        "fluid": "minecraft:water"
-      }
     }
   ],
+  "primary_ingredient": {
+    "type": "tfc:fluid_content",
+    "fluid": {
+      "amount": 100,
+      "fluid": "minecraft:water"
+    }
+  },
   "result": {
     "modifiers": [
       {

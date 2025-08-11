@@ -22,7 +22,6 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 import net.neoforged.neoforge.common.NeoForgeMod;
 import net.neoforged.neoforge.common.Tags;
-import net.neoforged.neoforge.common.crafting.CompoundIngredient;
 import net.neoforged.neoforge.common.crafting.SizedIngredient;
 import net.neoforged.neoforge.fluids.crafting.SizedFluidIngredient;
 
@@ -277,7 +276,8 @@ public interface BarrelRecipes extends Recipes
         barrel("clean_jute_net")
             .input(TFCItems.DIRTY_JUTE_NET)
             .input(Fluids.WATER, 100)
-            .output(TFCItems.JUTE_NET);
+            .output(TFCItems.JUTE_NET)
+            .instant();
 
         // Instant Fluid Mixing
         barrel()

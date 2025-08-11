@@ -1,7 +1,9 @@
 {
-  "type": "minecraft:crafting_shapeless",
-  "category": "misc",
+  "type": "tfc:advanced_shapeless_crafting",
   "ingredients": [
+    {
+      "tag": "c:tools/knife"
+    },
     {
       "type": "tfc:and",
       "children": [
@@ -12,11 +14,18 @@
           "type": "tfc:not_rotten"
         }
       ]
-    },
-    {
-      "tag": "c:tools/knife"
     }
   ],
+  "primary_ingredient": {
+    "tag": "c:tools/knife"
+  },
+  "remainder": {
+    "modifiers": [
+      {
+        "type": "tfc:damage_crafting_remainder"
+      }
+    ]
+  },
   "result": {
     "count": 4,
     "id": "tfc:food/melon_slice"

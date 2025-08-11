@@ -23,22 +23,19 @@ public enum DamageCraftingRemainderModifier implements ItemStackModifier
     @SuppressWarnings("deprecation") // For damageItem(), but we don't have access to a level here
     public ItemStack apply(ItemStack stack, ItemStack input, Context context)
     {
-        for (ItemStack craftingStack : RecipeHelpers.getCraftingInput())
+        if (input.isDamageableItem())
         {
-            if (craftingStack.isDamageableItem())
+            final @Nullable Player player = RecipeHelpers.getCraftingPlayer();
+            if (player != null)
             {
-                final @Nullable Player player = RecipeHelpers.getCraftingPlayer();
-                if (player != null)
-                {
-                    Helpers.damageItem(craftingStack, player.level());
-                }
-                else
-                {
-                    Helpers.damageItem(craftingStack);
-                }
+                Helpers.damageItem(input, player.level());
+            }
+            else
+            {
+                Helpers.damageItem(input);
             }
         }
-        if (input.isDamageableItem() || input.has(DataComponents.UNBREAKABLE) || input.hasCraftingRemainingItem())
+        if (input.has(DataComponents.MAX_DAMAGE) && input.has(DataComponents.DAMAGE)) // stack.isDamageableItem(), without unbreakable check
         {
             return input.copy();
         }

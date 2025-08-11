@@ -6,8 +6,8 @@
 
 package net.dries007.tfc.test.item;
 
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.fluids.FluidStack;
@@ -17,6 +17,7 @@ import org.junit.jupiter.api.Test;
 
 import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.blocks.rock.Ore;
+import net.dries007.tfc.common.blocks.rock.Rock;
 import net.dries007.tfc.common.capabilities.ItemCapabilities;
 import net.dries007.tfc.common.component.food.FoodCapability;
 import net.dries007.tfc.common.component.food.IFood;
@@ -38,44 +39,46 @@ import static net.dries007.tfc.test.TestAssertions.*;
 
 public class VesselTest implements TestSetup
 {
+    private final Item testItem = TFCBlocks.ROCK_BLOCKS.get(Rock.CHERT).get(Rock.BlockType.LOOSE).asItem();
+
     @Test
     public void testInsertAndExtractItems()
     {
         final ItemStack stack = new ItemStack(TFCItems.VESSEL);
-        final ItemStack stick5 = new ItemStack(Items.STICK, 5);
-        final ItemStack stick11 = new ItemStack(Items.STICK, 11);
-        final ItemStack stick16 = new ItemStack(Items.STICK, 16);
-        final ItemStack stick32 = new ItemStack(Items.STICK, 32);
+        final ItemStack stack5 = new ItemStack(testItem, 5);
+        final ItemStack stack11 = new ItemStack(testItem, 11);
+        final ItemStack stack16 = new ItemStack(testItem, 16);
+        final ItemStack stack32 = new ItemStack(testItem, 32);
         final Vessel vessel = Vessel.get(stack);
 
         assertNotNull(vessel);
 
-        assertEquals(ItemStack.EMPTY, vessel.insertItem(0, stick5, true)); // Simulate insert less than capacity
+        assertEquals(ItemStack.EMPTY, vessel.insertItem(0, stack5, true)); // Simulate insert less than capacity
         assertEquals(ItemStack.EMPTY, vessel.getStackInSlot(0));
 
-        assertEquals(ItemStack.EMPTY, vessel.insertItem(0, stick5, false)); // Actually insert less than capacity
-        assertEquals(stick5, vessel.getStackInSlot(0)); // The stack in slot should equal
-        assertNotSame(stick5, vessel.getStackInSlot(0)); // But they should not be the same instance (mutable guarding)
+        assertEquals(ItemStack.EMPTY, vessel.insertItem(0, stack5, false)); // Actually insert less than capacity
+        assertEquals(stack5, vessel.getStackInSlot(0)); // The stack in slot should equal
+        assertNotSame(stack5, vessel.getStackInSlot(0)); // But they should not be the same instance (mutable guarding)
 
-        assertEquals(stick5, vessel.insertItem(0, stick16, true)); // Insert over capacity (with content inside)
-        assertEquals(stick5, vessel.insertItem(0, stick16, false));
-        assertEquals(stick16, vessel.getStackInSlot(0));
-        assertNotSame(stick16, vessel.getStackInSlot(0));
+        assertEquals(stack5, vessel.insertItem(0, stack16, true)); // Insert over capacity (with content inside)
+        assertEquals(stack5, vessel.insertItem(0, stack16, false));
+        assertEquals(stack16, vessel.getStackInSlot(0));
+        assertNotSame(stack16, vessel.getStackInSlot(0));
 
-        assertEquals(stick5, vessel.extractItem(0, 5, true)); // Extract less than contained
-        assertEquals(stick5, vessel.extractItem(0, 5, false));
-        assertEquals(stick11, vessel.getStackInSlot(0));
+        assertEquals(stack5, vessel.extractItem(0, 5, true)); // Extract less than contained
+        assertEquals(stack5, vessel.extractItem(0, 5, false));
+        assertEquals(stack11, vessel.getStackInSlot(0));
 
-        assertEquals(stick11, vessel.extractItem(0, 64, true)); // Extract more than contained
-        assertEquals(stick11, vessel.extractItem(0, 64, false));
+        assertEquals(stack11, vessel.extractItem(0, 64, true)); // Extract more than contained
+        assertEquals(stack11, vessel.extractItem(0, 64, false));
         assertEquals(ItemStack.EMPTY, vessel.getStackInSlot(0));
 
-        assertEquals(stick16, vessel.insertItem(1, stick32, true)); // Insert over capacity (with empty inside)
-        assertEquals(stick16, vessel.insertItem(1, stick32, false));
-        assertEquals(stick16, vessel.getStackInSlot(1));
+        assertEquals(stack16, vessel.insertItem(1, stack32, true)); // Insert over capacity (with empty inside)
+        assertEquals(stack16, vessel.insertItem(1, stack32, false));
+        assertEquals(stack16, vessel.getStackInSlot(1));
 
-        assertEquals(stick16, vessel.extractItem(1, 16, true)); // Extract exactly equal to contained
-        assertEquals(stick16, vessel.extractItem(1, 16, false)); // Extract exactly equal to contained
+        assertEquals(stack16, vessel.extractItem(1, 16, true)); // Extract exactly equal to contained
+        assertEquals(stack16, vessel.extractItem(1, 16, false)); // Extract exactly equal to contained
         assertEquals(ItemStack.EMPTY, vessel.getStackInSlot(1));
     }
 
@@ -94,22 +97,22 @@ public class VesselTest implements TestSetup
     public void testItemHandlerLocksWhenHot()
     {
         final ItemStack stack = new ItemStack(TFCItems.VESSEL);
-        final ItemStack stick = new ItemStack(Items.STICK, 5);
+        final ItemStack stack5 = new ItemStack(testItem, 5);
         final Vessel vessel = Vessel.get(stack);
 
         assertNotNull(vessel);
 
-        vessel.insertItem(0, stick, false);
+        vessel.insertItem(0, stack5, false);
         vessel.setTemperature(10f); // The vessel is hot
 
-        assertEquals(stick, vessel.getStackInSlot(0)); // The content should still be there
+        assertEquals(stack5, vessel.getStackInSlot(0)); // The content should still be there
         assertEquals(ItemStack.EMPTY, vessel.extractItem(0, 64, true)); // But extraction is not allowed
-        assertEquals(stick, vessel.insertItem(1, stick, true)); // And neither is insertion
+        assertEquals(stack5, vessel.insertItem(1, stack5, true)); // And neither is insertion
 
         assertEquals(ItemStack.EMPTY, vessel.extractItem(0, 64, false)); // Even when not simulating
-        assertEquals(stick, vessel.insertItem(1, stick, false));
+        assertEquals(stack5, vessel.insertItem(1, stack5, false));
 
-        assertEquals(stick, vessel.getStackInSlot(0)); // The vessel should have been unmodified
+        assertEquals(stack5, vessel.getStackInSlot(0)); // The vessel should have been unmodified
         assertEquals(ItemStack.EMPTY, vessel.getStackInSlot(1));
     }
 

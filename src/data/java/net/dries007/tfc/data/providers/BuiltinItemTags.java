@@ -7,6 +7,7 @@
 package net.dries007.tfc.data.providers;
 
 import java.lang.reflect.Field;
+import java.util.Comparator;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
@@ -307,6 +308,24 @@ public class BuiltinItemTags extends TagsProvider<Item> implements Accessors
             .add(TFCItems.MOLDS)
             .add(TFCItems.FIRE_INGOT_MOLD)
             .add(TFCItems.BELL_MOLD);
+        tag(FLUXSTONE)
+            .add(TFCItems.FOOD.get(Food.SHELLFISH))
+            .add(TFCBlocks.GROUNDCOVER.get(GroundcoverBlockType.MOLLUSK))
+            .add(TFCBlocks.GROUNDCOVER.get(GroundcoverBlockType.CLAM))
+            .add(TFCBlocks.GROUNDCOVER.get(GroundcoverBlockType.MUSSEL))
+            .add(TFCBlocks.GROUNDCOVER.get(GroundcoverBlockType.SEA_URCHIN))
+            .add(Items.TURTLE_SCUTE)
+            .add(Items.ARMADILLO_SCUTE)
+            .add(TFCBlocks.ROCK_BLOCKS.get(Rock.LIMESTONE).get(Rock.BlockType.LOOSE))
+            .add(TFCBlocks.ROCK_BLOCKS.get(Rock.LIMESTONE).get(Rock.BlockType.MOSSY_LOOSE))
+            .add(TFCBlocks.ROCK_BLOCKS.get(Rock.DOLOMITE).get(Rock.BlockType.LOOSE))
+            .add(TFCBlocks.ROCK_BLOCKS.get(Rock.DOLOMITE).get(Rock.BlockType.MOSSY_LOOSE))
+            .add(TFCBlocks.ROCK_BLOCKS.get(Rock.CHALK).get(Rock.BlockType.LOOSE))
+            .add(TFCBlocks.ROCK_BLOCKS.get(Rock.CHALK).get(Rock.BlockType.MOSSY_LOOSE))
+            .add(TFCBlocks.ROCK_BLOCKS.get(Rock.MARBLE).get(Rock.BlockType.LOOSE))
+            .add(TFCBlocks.ROCK_BLOCKS.get(Rock.MARBLE).get(Rock.BlockType.MOSSY_LOOSE))
+            .add(TFCBlocks.PLANTS.get(Plant.MUSSELS).get())
+            .add(TFCBlocks.PLANTS.get(Plant.BARNACLES).get());
 
         // Vanilla Tool Tags
         tag(ItemTags.SWORDS).add(TFCItems.METAL_ITEMS, Metal.ItemType.SWORD);
@@ -393,7 +412,7 @@ public class BuiltinItemTags extends TagsProvider<Item> implements Accessors
         tag(GLASS_BATCHES_NOT_T1).add(TFCItems.HEMATITIC_GLASS_BATCH, TFCItems.OLIVINE_GLASS_BATCH, TFCItems.VOLCANIC_GLASS_BATCH);
         tag(GLASS_BLOWPIPES).add(TFCItems.BLOWPIPE_WITH_GLASS, TFCItems.CERAMIC_BLOWPIPE_WITH_GLASS);
         tag(BLOWPIPES).addTags(TOOLS_BLOWPIPE, GLASS_BLOWPIPES);
-        tag(GLASS_POWDERS).add(GlassOperation.POWDERS.get().keySet().stream());
+        tag(GLASS_POWDERS).add(GlassOperation.POWDERS.get().keySet().stream().sorted(Comparator.comparing(item -> Item.getId(item)))); // Sorted to make generation deterministic
         tag(GLASS_BOTTLES).add(
             TFCItems.SILICA_GLASS_BOTTLE,
             TFCItems.HEMATITIC_GLASS_BOTTLE,

@@ -493,6 +493,7 @@ public class TFCTags
         /** Used by patchouli */
         public static final TagKey<Item> ORE_DEPOSITS = tag("ore_deposits");
         public static final TagKey<Item> TANNIN_LOGS = tag("tannin_logs");
+        public static final TagKey<Item> FLUXSTONE = tag("fluxstone");
 
         // Device Required Items
         public static final TagKey<Item> FIREPIT_KINDLING = tag("firepit_kindling");

@@ -112,7 +112,6 @@ public interface CraftingRecipes extends Recipes
             "leather_horse_armor",
             "leather_leggings",
             "lectern",
-            "loom",
             "melon",
             "melon_seeds",
             "mojang_banner_pattern",
@@ -926,13 +925,13 @@ public interface CraftingRecipes extends Recipes
             .shaped(TFCBlocks.FIRE_BRICK_SHELF, 4);
         recipe().useTool(TFCTags.Items.TOOLS_KNIFE, Items.BONE, TFCItems.BONE_NEEDLE);
         recipe().bricksWithMortar(Items.BRICK, Items.BRICKS, 4);
-        replace("cake")
+        recipe()
             .input('M', FluidContentIngredient.of(Fluids.WATER, 100))
             .input('S', TFCTags.Items.SWEETENERS)
             .input('E', notRotten(Ingredient.of(Items.EGG)))
             .input('F', TFCTags.Items.FLOUR)
             .pattern(" M ", "SES", "FFF")
-            .shaped(Items.CAKE);
+            .shaped(TFCBlocks.CAKE);
         recipe()
             .input('L', TFCTags.Items.LUMBER)
             .input('D', ItemTags.DIRT)
@@ -1013,8 +1012,9 @@ public interface CraftingRecipes extends Recipes
             .pattern(" XX", " XX", "X  ")
             .shaped(Items.LEAD);
         recipe()
+            .inputIsPrimary(TFCTags.Items.TOOLS_KNIFE)
             .input(notRotten(Ingredient.of(TFCBlocks.MELON)))
-            .input(TFCTags.Items.TOOLS_KNIFE)
+            .damageInputs()
             .shapeless(TFCItems.FOOD.get(Food.MELON_SLICE), 4);
         recipe()
             .input('L', TFCTags.Items.LUMBER)
@@ -1167,6 +1167,11 @@ public interface CraftingRecipes extends Recipes
         recipe()
             .input(TFCBlocks.PLANTS.get(Plant.BARREL_CACTUS))
             .shapeless(TFCItems.CACTUS_WOOD);
+        recipe().useTool(
+            TFCTags.Items.TOOLS_HAMMER,
+            Ingredient.of(TFCTags.Items.FLUXSTONE),
+            TFCItems.POWDERS.get(Powder.FLUX), 2
+        );
     }
 
     /**
@@ -1265,8 +1270,8 @@ public interface CraftingRecipes extends Recipes
 
         for (int n = 1; n <= 8; n++)
             recipe("" + n)
+                .inputIsPrimary(FluidContentIngredient.of(Fluids.WATER, 100))
                 .input(notRotten(flour), n)
-                .input(FluidContentIngredient.of(Fluids.WATER, 100))
                 .copyOldestFood()
                 .shapeless(TFCItems.FOOD.get(dough), n);
     }
@@ -1330,6 +1335,11 @@ public interface CraftingRecipes extends Recipes
         void useTool(TagKey<Item> tool, ItemLike input, ItemLike output)
         {
             input(input).inputIsPrimary(tool).damageInputs().shapeless(output);
+        }
+
+        void useTool(TagKey<Item> tool, Ingredient input, ItemLike output, int count)
+        {
+            input(input).inputIsPrimary(tool).damageInputs().shapeless(output, count);
         }
 
         void bricksWithMortar(ItemLike brick, ItemLike bricks, int count)

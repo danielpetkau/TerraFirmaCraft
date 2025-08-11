@@ -94,7 +94,8 @@ public class BuiltinItemSizes extends DataManagerProvider<ItemSizeDefinition> im
             Ingredient.of(TFCTags.Items.TOOLS_KNIFE),
             Ingredient.of(Tags.Items.TOOLS_SHEAR),
             Ingredient.of(TFCTags.Items.TOOLS_GLASSWORKING),
-            Ingredient.of(TFCTags.Items.TOOLS_BLOWPIPE)
+            Ingredient.of(TFCTags.Items.TOOLS_BLOWPIPE),
+            Ingredient.of(TFCItems.FIRESTARTER.get())
         ), Size.LARGE, Weight.MEDIUM);
         add("tools", ingredientOf(
             Ingredient.of(Tags.Items.TOOLS_FISHING_ROD),
