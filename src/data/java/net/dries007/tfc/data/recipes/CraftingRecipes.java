@@ -1289,7 +1289,7 @@ public interface CraftingRecipes extends Recipes
 
         for (int n = 1; n <= 8; n++)
             recipe("" + n)
-                .input(FluidContentIngredient.of(Fluids.WATER, 100))
+                .inputIsPrimary(FluidContentIngredient.of(Fluids.WATER, 100))
                 .input(notRotten(flour), n)
                 .copyOldestFood()
                 .shapeless(TFCItems.FOOD.get(dough), n);
