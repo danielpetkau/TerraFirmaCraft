@@ -1311,9 +1311,11 @@ public final class ForgeEventHandler
         if (event.getHand() == InteractionHand.MAIN_HAND && event.getItemStack().isEmpty())
         {
             // Cannot be cancelled, only fired on client.
-            final InteractionResult result = Drinkable.attemptDrink(event.getLevel(), event.getEntity(), false);
+            Player player = event.getEntity();
+            final InteractionResult result = Drinkable.attemptDrink(event.getLevel(), player, false);
             if (result.consumesAction())
             {
+                player.swing(InteractionHand.MAIN_HAND);
                 PacketDistributor.sendToServer(PlayerDrinkPacket.PACKET);
             }
         }
