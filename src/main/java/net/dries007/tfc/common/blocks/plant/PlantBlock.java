@@ -227,7 +227,7 @@ public abstract class PlantBlock extends TFCBushBlock
     @Override
     protected void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random)
     {
-        final var ageProp = getPlant().getAgeProperty();
+        final IntegerProperty ageProp = getPlant().getAgeProperty();
         if (ageProp != null)
         {
             final int age = state.getValue(ageProp);
