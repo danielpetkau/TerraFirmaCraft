@@ -45,7 +45,7 @@ public class AxleBlockEntityRenderer implements BlockEntityRenderer<AxleBlockEnt
 
         switch (axis) {
             case X -> stack.mulPose(Axis.YP.rotationDegrees(90));
-            case Y -> stack.mulPose(Axis.XP.rotationDegrees(90));
+            case Y -> stack.mulPose(Axis.XP.rotationDegrees(-90));
             case Z -> {}
         }
 

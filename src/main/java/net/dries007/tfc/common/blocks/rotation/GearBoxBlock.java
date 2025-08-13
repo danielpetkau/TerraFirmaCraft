@@ -57,17 +57,13 @@ public class GearBoxBlock extends DeviceBlock implements DirectionPropertyBlock,
     {
         if (Helpers.isItem(player.getItemInHand(hand), TFCTags.Items.TOOLS_HAMMER))
         {
-            Direction direction = hitResult.getDirection();
-            if (player.isShiftKeyDown())
-            {
-                direction = direction.getOpposite();
-            }
+            Direction direction = player.isShiftKeyDown() ? hitResult.getDirection().getOpposite() : hitResult.getDirection();
             final BooleanProperty property = DirectionPropertyBlock.getProperty(direction);
             final boolean prev = state.getValue(property);
             if (prev || canEnable(state, property))
             {
                 level.setBlockAndUpdate(pos, state.cycle(property));
-                level.getBlockEntity(pos, TFCBlockEntities.GEAR_BOX.get()).ifPresent(box -> box.updateDirection(hitResult.getDirection(), !prev));
+                level.getBlockEntity(pos, TFCBlockEntities.GEAR_BOX.get()).ifPresent(box -> box.updateDirection(direction, !prev));
                 Helpers.playPlaceSound(player, level, pos, state);
                 return ItemInteractionResult.sidedSuccess(level.isClientSide);
             }

@@ -64,7 +64,7 @@ public class GearBoxBlockEntity extends TFCBlockEntity implements RotatingBlockE
 
                 // Otherwise, we must be on a perpendicular axis
                 // The convention gets reversed, relative to the source direction.
-                // If the source (outgoing convention) and rotation direction are the same, the need to _not_ be the same as the exit, and vice versa
+                // If the source (outgoing convention) and rotation direction are the same, they need to _not_ be the same as the exit, and vice versa
                 final Direction outputDirection = sourceDirection == sourceRotation.direction()
                     ? exitDirection.getOpposite()
                     : exitDirection;
