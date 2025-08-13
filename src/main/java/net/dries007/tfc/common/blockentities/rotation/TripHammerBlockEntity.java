@@ -55,11 +55,8 @@ public class TripHammerBlockEntity extends TickableInventoryBlockEntity<ItemStac
                 // instanceof AnvilBlock is a check that this isn't a rock anvil block, which are incompatible
                 if (level.getBlockEntity(anvilPos) instanceof AnvilBlockEntity anvil && level.getBlockState(anvilPos).getBlock() instanceof AnvilBlock)
                 {
-                    if (!anvil.workRemotely(ForgeStep.HIT_LIGHT, 12, true))
-                    {
-                        level.playSound(null, pos, TFCSounds.ANVIL_HIT.get(), SoundSource.BLOCKS, 0.4f, 0.2f);
-                    }
-                    else
+                    level.playSound(null, pos, TFCSounds.ANVIL_HIT.get(), SoundSource.BLOCKS, 0.4f, 0.2f);
+                    if (anvil.workRemotely(ForgeStep.HIT_LIGHT, 12, true))
                     {
                         Helpers.damageItem(item, level);
                         anvil.markForSync();
