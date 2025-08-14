@@ -131,6 +131,15 @@
       "text": "The wildebeest spawns in open plains at any $(l:the_world/climate#temperature)temperature$() above 13°C, and $(l:the_world/climate#rainfall)rainfall$() between 90 and 380mm."
     },
     {
+      "type": "patchouli:entity",
+      "entity": "tfc:bison",
+      "scale": 0.7,
+      "text": "The bison spawns in open plains at any $(l:the_world/climate#temperature)temperature$() above -10°C and below 15°C, and $(l:the_world/climate#rainfall)rainfall$() between 160 and 420mm."
+    },
+    {
+      "type": "patchouli:empty"
+    },
+    {
       "type": "patchouli:text",
       "anchor": "prey",
       "text": "$(thing)피식자$() 동물들은 플레이어와 포식자 동물들을 두려워합니다. 그들은 위험을 잘 피하지만, 반격하지는 못합니다. 일부 피식자 동물들은 농작물을 먹는 것을 좋아합니다.",

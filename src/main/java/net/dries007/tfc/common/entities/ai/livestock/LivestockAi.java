@@ -31,7 +31,7 @@ import net.minecraft.world.entity.schedule.Activity;
 import net.dries007.tfc.common.entities.ai.FastGateBehavior;
 import net.dries007.tfc.common.entities.ai.SetLookTarget;
 import net.dries007.tfc.common.entities.ai.TFCBrain;
-import net.dries007.tfc.common.entities.ai.prey.AvoidPredatorBehavior;
+import net.dries007.tfc.common.entities.ai.prey.AvoidPredatorAndRammersBehavior;
 import net.dries007.tfc.common.entities.ai.prey.PreyAi;
 import net.dries007.tfc.common.entities.livestock.TFCAnimal;
 
@@ -89,7 +89,7 @@ public class LivestockAi
     {
         brain.addActivity(Activity.IDLE, 0, ImmutableList.of(
             SetLookTarget.create(EntityType.PLAYER, 6.0F, UniformInt.of(30, 60)), // looks at player, but its only try it every so often -- "Run Sometimes"
-            AvoidPredatorBehavior.create(true),
+            AvoidPredatorAndRammersBehavior.create(true),
             new BreedBehavior<>(1.0F), // custom TFC breed behavior
             new AnimalPanic<>(2.0F), // if memory of being hit, runs away
             new FollowTemptation(e -> e.isBaby() ? 1.5F : 1.25F), // sets the walk and look targets to whomever it has a memory of being tempted by

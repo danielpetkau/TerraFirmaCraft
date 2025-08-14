@@ -8,7 +8,6 @@ package net.dries007.tfc.common.entities.ai.prey;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.TimeUtil;
 import net.minecraft.util.valueproviders.UniformInt;
@@ -23,7 +22,6 @@ import net.minecraft.world.entity.schedule.Activity;
 
 import com.mojang.datafixers.util.Pair;
 
-import net.dries007.tfc.TerraFirmaCraft;
 import net.dries007.tfc.client.TFCSounds;
 import net.dries007.tfc.common.entities.ai.FastGateBehavior;
 import net.dries007.tfc.common.entities.ai.SetLookTarget;
@@ -33,22 +31,29 @@ import net.dries007.tfc.common.entities.prey.RammingPrey;
 public class RammingPreyAi
 {
     public static final int RAM_PREPARE_TIME = 20;
-    public static final int RAM_MIN_DISTANCE = 3;
     public static final int RAM_MAX_DISTANCE = 9;
     private static final float SPEED_MULTIPLIER_WHEN_PREPARING_TO_RAM = 1.6F;
-    private static final float SPEED_MULTIPLIER_WHEN_RAMMING = 3.0F;
     public static final float ADULT_RAM_KNOCKBACK_FORCE = 2.5F;
     public static final float BABY_RAM_KNOCKBACK_FORCE = 1.0F;
-    private static final UniformInt TIME_BETWEEN_RAMS_MALE = UniformInt.of(600, 1200);
-    private static final UniformInt TIME_BETWEEN_RAMS_FEMALE = UniformInt.of(1000, 2000);
-    private static final TargetingConditions RAM_TARGET_CONDITIONS = TargetingConditions.forCombat().selector((target) -> {
-        return (target.level().getWorldBorder().isWithinBounds(target.getBoundingBox()));
+    private static final UniformInt TIME_BETWEEN_RAMS_MALE = UniformInt.of(600, 1000);
+    private static final UniformInt TIME_BETWEEN_RAMS_FEMALE = UniformInt.of(1000, 1600);
+    protected static final TargetingConditions RAM_TARGET_CONDITIONS = TargetingConditions.forCombat().selector((target) ->
+    {
+        return (target.level().getWorldBorder().isWithinBounds(target.getBoundingBox()) && !(target instanceof RammingPrey));
     });
+    protected static final TargetingConditions RAM_TARGET_CONDITIONS_ADULT_MALE = TargetingConditions.forCombat().selector((target) ->
+    {
+        return (target.level().getWorldBorder().isWithinBounds(target.getBoundingBox())
+            && !(target instanceof RammingPrey && (!((RammingPrey) target).isMale() || target.isBaby() || (target.getHealth() / target.getMaxHealth() < 0.7)))
+        );
+    });
+
 
     private static final UniformInt RETREAT_DURATION = TimeUtil.rangeOfSeconds(7, 22);
 
     public static void initMemories(RammingPrey rammingPrey, RandomSource random) {
-        rammingPrey.getBrain().setMemory(MemoryModuleType.RAM_COOLDOWN_TICKS, (rammingPrey.isMale() ? TIME_BETWEEN_RAMS_MALE : TIME_BETWEEN_RAMS_FEMALE).sample(random));
+        Brain<RammingPrey> brain = rammingPrey.getBrain();
+        brain.setMemory(MemoryModuleType.RAM_COOLDOWN_TICKS, (rammingPrey.isMale() ? TIME_BETWEEN_RAMS_MALE : TIME_BETWEEN_RAMS_FEMALE).sample(random));
     }
 
     public static Brain<?> makeBrain(Brain<? extends RammingPrey> brain)
@@ -60,7 +65,7 @@ public class RammingPreyAi
 
         brain.setCoreActivities(ImmutableSet.of(Activity.CORE));
         brain.setDefaultActivity(Activity.IDLE);
-        brain.useDefaultActivity();
+        brain.useDefaultActivity();;
 
         return brain;
     }
@@ -82,7 +87,7 @@ public class RammingPreyAi
     {
         brain.addActivity(Activity.IDLE, ImmutableList.of(
             Pair.of(0, SetLookTarget.create(EntityType.PLAYER, 6.0F, UniformInt.of(30, 60))), // looks at player, but its only try it every so often -- "Run Sometimes"
-            Pair.of(1, AvoidPredatorBehavior.create(true)), //Excludes players, as these animals should not fear the player
+            Pair.of(1, AvoidPredatorsBehavior.create(true)), //Excludes players, as these animals should not fear the player
             Pair.of(2, BabyFollowAdult.create(UniformInt.of(5, 16), 1.25F)), // babies follow any random adult around
             Pair.of(3, createIdleMovementBehaviors())
         ));
@@ -123,17 +128,17 @@ public class RammingPreyAi
             Pair.of(0, new RamTargetTFC(
                 (rammingPrey) -> {
                     return rammingPrey.isMale() ? TIME_BETWEEN_RAMS_MALE : TIME_BETWEEN_RAMS_FEMALE;
-                }, RAM_TARGET_CONDITIONS, 3.0F, (rammingPrey) -> {
+                }, 3.0F, (rammingPrey) -> {
                     return rammingPrey.isBaby() ? BABY_RAM_KNOCKBACK_FORCE : ADULT_RAM_KNOCKBACK_FORCE;
                 }, (rammingPrey) -> TFCSounds.RAMMING_IMPACT.get())
             ),
-            Pair.of(1, new PrepareRamNearestTargetTFC<>((rammingPrey) -> {
-                return rammingPrey.isMale() ? TIME_BETWEEN_RAMS_MALE.getMinValue() : TIME_BETWEEN_RAMS_FEMALE.getMinValue();
-            }, RAM_MIN_DISTANCE, RAM_MAX_DISTANCE, SPEED_MULTIPLIER_WHEN_PREPARING_TO_RAM, RAM_TARGET_CONDITIONS, RAM_PREPARE_TIME, (rammingPrey) -> {
+            Pair.of(1, new PrepareRamNearestTargetTFC<>((rammingPrey) -> 10, SPEED_MULTIPLIER_WHEN_PREPARING_TO_RAM,
+                RAM_PREPARE_TIME, (rammingPrey) -> {
                 return rammingPrey.getAttackSound().get();
             }))
         ), ImmutableSet.of(
-            Pair.of(MemoryModuleType.RAM_COOLDOWN_TICKS, MemoryStatus.VALUE_ABSENT)));
+            Pair.of(MemoryModuleType.RAM_COOLDOWN_TICKS, MemoryStatus.VALUE_ABSENT)
+        ));
     }
 
     public static void updateActivity(RammingPrey prey)

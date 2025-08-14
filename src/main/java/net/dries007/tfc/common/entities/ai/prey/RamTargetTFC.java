@@ -15,11 +15,9 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -38,17 +36,15 @@ public class RamTargetTFC extends Behavior<RammingPrey>
     public static final int TIME_OUT_DURATION = 200;
     public static final float RAM_SPEED_FORCE_FACTOR = 1.65F;
     private final Function<RammingPrey, UniformInt> getTimeBetweenRams;
-    private final TargetingConditions ramTargeting;
     private final float speed;
     private final ToDoubleFunction<RammingPrey> getKnockbackForce;
     private Vec3 ramDirection;
     private final Function<RammingPrey, SoundEvent> getImpactSound;
 
-    public RamTargetTFC(Function<RammingPrey, UniformInt> getTimeBetweenRams, TargetingConditions ramTargeting, float speed, ToDoubleFunction<RammingPrey> getKnockbackForce, Function<RammingPrey, SoundEvent> getImpactSound)
+    public RamTargetTFC(Function<RammingPrey, UniformInt> getTimeBetweenRams, float speed, ToDoubleFunction<RammingPrey> getKnockbackForce, Function<RammingPrey, SoundEvent> getImpactSound)
     {
         super(ImmutableMap.of(MemoryModuleType.RAM_COOLDOWN_TICKS, MemoryStatus.VALUE_ABSENT, MemoryModuleType.RAM_TARGET, MemoryStatus.VALUE_PRESENT), 200);
         this.getTimeBetweenRams = getTimeBetweenRams;
-        this.ramTargeting = ramTargeting;
         this.speed = speed;
         this.getKnockbackForce = getKnockbackForce;
         this.getImpactSound = getImpactSound;
@@ -77,8 +73,9 @@ public class RamTargetTFC extends Behavior<RammingPrey>
     protected void tick(ServerLevel level, RammingPrey rammingPrey, long time)
     {
         Brain<?> brain = rammingPrey.getBrain();
+        final TargetingConditions ramTargeting = rammingPrey.isMale() && !rammingPrey.isBaby() ? RammingPreyAi.RAM_TARGET_CONDITIONS_ADULT_MALE : RammingPreyAi.RAM_TARGET_CONDITIONS;
         //Generate list of nearby entities meeting the Targeting conditions
-        List<LivingEntity> list = level.getNearbyEntities(LivingEntity.class, this.ramTargeting, rammingPrey, rammingPrey.getBoundingBox().inflate(rammingPrey.getRammingReach()));
+        List<LivingEntity> list = level.getNearbyEntities(LivingEntity.class, ramTargeting, rammingPrey, rammingPrey.getBoundingBox().inflate(rammingPrey.getRammingReach()));
         //Damages any targetable entities that come within the animal's bounding box
         if (!list.isEmpty())
         {

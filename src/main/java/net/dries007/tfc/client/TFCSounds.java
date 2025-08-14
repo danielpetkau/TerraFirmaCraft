@@ -106,6 +106,7 @@ public final class TFCSounds
     public static final EntityId DEER = registerEntity("deer", false, false);
     public static final EntityId BOAR = registerEntity("boar", true, false);
     public static final EntityId WILDEBEEST = registerEntity("wildebeest", true, false);
+    public static final EntityId BISON = registerEntity("bison", true, false);
     public static final EntityId MOOSE = registerEntity("moose", true, false);
     public static final EntityId GROUSE = registerEntity("grouse", false, false);
     public static final EntityId PHEASANT = registerEntity("pheasant", false, false);

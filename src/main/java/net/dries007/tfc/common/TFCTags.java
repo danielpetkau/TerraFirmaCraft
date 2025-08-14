@@ -633,6 +633,7 @@ public class TFCTags
         public static final TagKey<EntityType<?>> HUNTED_BY_CATS = tag("hunted_by_cats");
         public static final TagKey<EntityType<?>> HUNTED_BY_DOGS = tag("hunted_by_dogs");
         public static final TagKey<EntityType<?>> SMALL_FISH = tag("small_fish");
+        public static final TagKey<EntityType<?>> RAMMING_ANIMALS = tag("ramming_animals");
 
         // ===== Data Generated ====== //
 

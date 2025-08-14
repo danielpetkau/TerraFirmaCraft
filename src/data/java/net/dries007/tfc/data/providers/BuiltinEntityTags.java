@@ -82,5 +82,13 @@ public class BuiltinEntityTags extends EntityTypeTagsProvider
                 TFCEntities.ORCA.get(),
                 TFCEntities.DOLPHIN.get()
             );
+
+        tag(RAMMING_ANIMALS)
+            .add(
+                TFCEntities.BOAR.get(),
+                TFCEntities.BISON.get(),
+                TFCEntities.MOOSE.get(),
+                TFCEntities.WILDEBEEST.get()
+            );
     }
 }

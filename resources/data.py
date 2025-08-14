@@ -49,6 +49,7 @@ def generate(rm: ResourceManager):
     mob_loot(rm, 'fox', 'tfc:food/fox', hide_size='small', bones=1)
     mob_loot(rm, 'boar', 'tfc:food/pork', 5, 10, 'small', hide_chance=0.8, bones=3, not_predated=True)
     mob_loot(rm, 'wildebeest', 'tfc:food/beef', 8, 14, 'small', hide_chance=0.8, bones=3, not_predated=True)
+    mob_loot(rm, 'bison', 'tfc:food/beef', 12, 20, 'large', bones=10, not_predated=True)
     mob_loot(rm, 'bongo', 'tfc:food/venison', 6, 10, 'medium', bones=6, not_predated=True)
     mob_loot(rm, 'gazelle', 'tfc:food/venison', 3, 8, 'medium', bones=6, not_predated=True)
     mob_loot(rm, 'deer', 'tfc:food/venison', 4, 10, 'medium', bones=6, not_predated=True)
