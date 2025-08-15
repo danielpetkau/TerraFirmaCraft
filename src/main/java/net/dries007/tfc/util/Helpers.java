@@ -751,6 +751,47 @@ public final class Helpers
     }
 
     /**
+     * Removes / Consumes item entities from 2 lists up to a maximum number of items (taking into account the count of each item)
+     * Passes each item stack, with stack size = 1, to the provided consumer
+     * 
+     * This alternates consuming items from the 2 lists, starting with set1
+     * If one of the sets runs out, it starts only taking items from the other set
+     */
+    public static void alternatingConsumeItemsFromEntitiesIndividually(Collection<ItemEntity> set1, Collection<ItemEntity> set2, int maximum, Consumer<ItemStack> consumer)
+    {
+        int consumed = 0;
+        Iterator<ItemEntity> iter1 = set1.iterator();
+        Iterator<ItemEntity> iter2 = set2.iterator();
+        @Nullable ItemEntity fromSet1 = iter1.hasNext() ? iter1.next() : null;
+        @Nullable ItemEntity fromSet2 = iter2.hasNext() ? iter2.next() : null;
+        while (consumed < maximum && (fromSet1 != null || fromSet2 != null))
+        {
+            if (fromSet1 != null)
+            {
+                consumer.accept(fromSet1.getItem().split(1));
+                consumed++;
+                if (fromSet1.getItem().isEmpty())
+                {
+                    fromSet1.discard();
+                    fromSet1 = iter1.hasNext() ? iter1.next() : null;
+                }
+                if (consumed == maximum) break;
+            }
+
+            if (fromSet2 != null)
+            {
+                consumer.accept(fromSet2.getItem().split(1));
+                consumed++;
+                if (fromSet2.getItem().isEmpty())
+                {
+                    fromSet2.discard();
+                    fromSet2 = iter2.hasNext() ? iter2.next() : null;
+                }
+            }
+        }
+    }
+
+    /**
      * Removes / Consumes item entities from a list up to a maximum number of items (taking into account the count of each item)
      * Passes each item stack, with stack size = 1, to the provided consumer
      *

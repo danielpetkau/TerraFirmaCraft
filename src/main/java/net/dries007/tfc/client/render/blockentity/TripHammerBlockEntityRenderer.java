@@ -6,12 +6,10 @@
 
 package net.dries007.tfc.client.render.blockentity;
 
-import java.util.HashMap;
 import java.util.Map;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
-import net.minecraft.Util;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
@@ -64,7 +62,7 @@ public class TripHammerBlockEntityRenderer implements BlockEntityRenderer<TripHa
         stack.mulPose(Axis.YP.rotationDegrees(180f - 90f * state.getValue(TripHammerBlock.FACING).get2DDataValue()));
         stack.translate(-0.5f, -0.5f, -0.5f);
 
-        final float angle = rotation == null ? 0 : 360f - hammer.getRealRotationDegrees(rotation, partialTick);
+        final float angle = rotation == null ? 0 : hammer.getRealRotationDegrees(rotation, partialTick);
         final float pivotStart = 130f;
         final float pivotMiddle = 180f;
         final float pivotEnd = 183f;
