@@ -48,7 +48,7 @@ public abstract class DelegateIngredient extends Ingredient
                     // We force them to copy here which *should*, if this is called late enough, cause the capabilities to be present
                     // This is needed for almost all delegate ingredients, which are querying a capability underneath the hood.
                     .map(ItemStack::copy)
-                    .map(this::testDefaultItem)
+                    .flatMap(this::multiTestDefaultItem)
                     .filter(Objects::nonNull)
                     .toArray(ItemStack[]::new);
             }
@@ -140,6 +140,19 @@ public abstract class DelegateIngredient extends Ingredient
             })
             .filter(Objects::nonNull)
             .toArray(ItemStack[]::new);
+    }
+
+    /**
+     * Tests if an item stack is valid for the default items, and applies specific traits (usually desirable to show in JEI) if possible.
+     * Allows for multiple stack to be returned for cases where there are multiple valid states for each default item.
+     * <p>
+     * Null entries will be filtered out after invocation.
+     * @return A stream of item stacks, possibly modified from the original stack, that are valid for this ingredient.
+     */
+    protected Stream<ItemStack> multiTestDefaultItem(ItemStack stack)
+    {
+        final ItemStack tested = testDefaultItem(stack);
+        return tested == null ? Stream.empty() : Stream.of(tested);
     }
 
     /**

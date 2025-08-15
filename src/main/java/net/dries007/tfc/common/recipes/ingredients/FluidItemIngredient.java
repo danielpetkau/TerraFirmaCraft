@@ -7,6 +7,8 @@
 package net.dries007.tfc.common.recipes.ingredients;
 
 import java.util.Objects;
+import java.util.stream.Stream;
+
 import com.google.gson.JsonObject;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.item.ItemStack;
@@ -76,6 +78,30 @@ public class FluidItemIngredient extends DelegateIngredient
                 }))
             .filter(Objects::nonNull)
             .toArray(ItemStack[]::new);
+    }
+
+    @Override
+    protected Stream<ItemStack> multiTestDefaultItem(ItemStack stack)
+    {
+        return fluid.ingredient()
+                .all()
+                .map(fluid -> {
+                    final ItemStack itemStack = stack.copy();
+                    final IFluidHandlerItem fluidHandler = Helpers.getCapability(itemStack, Capabilities.FLUID_ITEM);
+                    if (fluidHandler != null)
+                    {
+                        // Attempt to fill with the current fluid
+                        fluidHandler.fill(new FluidStack(fluid, Integer.MAX_VALUE), IFluidHandler.FluidAction.EXECUTE);
+
+                        // The attempt to drain, and ensure the content matches the filled fluid, and is of amount > the required amount.
+                        final FluidStack content = fluidHandler.drain(Integer.MAX_VALUE, IFluidHandler.FluidAction.SIMULATE);
+                        if (content.getFluid() == fluid && content.getAmount() >= this.fluid.amount())
+                        {
+                            return fluidHandler.getContainer();
+                        }
+                    }
+                    return null;
+                });
     }
 
     @Override
