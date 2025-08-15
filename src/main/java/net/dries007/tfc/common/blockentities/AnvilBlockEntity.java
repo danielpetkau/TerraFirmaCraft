@@ -19,7 +19,6 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.MenuProvider;
-import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -85,7 +84,27 @@ public class AnvilBlockEntity extends InventoryBlockEntity<AnvilBlockEntity.Anvi
      */
     public MenuProvider planProvider()
     {
-        return new SimpleMenuProvider(this::createPlanContainer, getDisplayName());
+        return new MenuProvider()
+        {
+            @Override
+            public Component getDisplayName()
+            {
+                return AnvilBlockEntity.this.getDisplayName();
+            }
+
+            @Nullable
+            @Override
+            public AbstractContainerMenu createMenu(int containerId, Inventory playerInventory, Player player)
+            {
+                return createPlanContainer(containerId, playerInventory, player);
+            }
+
+            @Override
+            public boolean shouldTriggerClientSideContainerClosingOnOpen()
+            {
+                return false;
+            }
+        };
     }
 
     /**
@@ -101,6 +120,12 @@ public class AnvilBlockEntity extends InventoryBlockEntity<AnvilBlockEntity.Anvi
     public AbstractContainerMenu createMenu(int containerId, Inventory inventory, Player player)
     {
         return AnvilContainer.create(this, player.getInventory(), containerId);
+    }
+
+    @Override
+    public boolean shouldTriggerClientSideContainerClosingOnOpen()
+    {
+        return false;
     }
 
     @Nullable

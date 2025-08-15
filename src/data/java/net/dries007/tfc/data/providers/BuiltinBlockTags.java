@@ -686,7 +686,7 @@ public class BuiltinBlockTags extends TagsProvider<Block> implements Accessors
     @Override
     protected BlockTagAppender tag(TagKey<Block> tag)
     {
-        return new BlockTagAppender(getOrCreateRawBuilder(tag), modId);
+        return new BlockTagAppender(getOrCreateRawBuilder(tag));
     }
 
     @Override
@@ -707,9 +707,9 @@ public class BuiltinBlockTags extends TagsProvider<Block> implements Accessors
     @SuppressWarnings("UnusedReturnValue")
     static class BlockTagAppender extends TagAppender<Block> implements Accessors
     {
-        BlockTagAppender(TagBuilder builder, String modId)
+        BlockTagAppender(TagBuilder builder)
         {
-            super(builder, modId);
+            super(builder);
         }
 
         BlockTagAppender add(Block... blocks)

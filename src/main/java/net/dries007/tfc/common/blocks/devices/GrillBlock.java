@@ -125,12 +125,6 @@ public class GrillBlock extends FirepitBlock implements IHighlightHandler
             {
                 if (!level.isClientSide)
                 {
-                    if (state.getValue(LIT))
-                    {
-                        TFCDamageTypes.grill(player, 1f);
-                        Helpers.playSound(level, pos, TFCSounds.ITEM_COOL.get());
-                        return ItemInteractionResult.sidedSuccess(level.isClientSide);
-                    }
                     if (!state.getValue(LIT) && !state.getValue(LIT) && grill.getAsh() > 0)
                     {
                         ItemHandlerHelper.giveItemToPlayer(player, new ItemStack(TFCItems.POWDERS.get(Powder.WOOD_ASH).get(), grill.getAsh()));
@@ -142,6 +136,12 @@ public class GrillBlock extends FirepitBlock implements IHighlightHandler
                     {
                         ItemHandlerHelper.giveItemToPlayer(player, new ItemStack(TFCItems.WROUGHT_IRON_GRILL.get()));
                         AbstractFirepitBlockEntity.convertTo(level, pos, state, grill, TFCBlocks.FIREPIT.get());
+                    }
+                    if (state.getValue(LIT))
+                    {
+                        TFCDamageTypes.grill(player, 1f);
+                        Helpers.playSound(level, pos, TFCSounds.ITEM_COOL.get());
+                        return ItemInteractionResult.sidedSuccess(level.isClientSide);
                     }
                 }
                 return ItemInteractionResult.sidedSuccess(level.isClientSide);

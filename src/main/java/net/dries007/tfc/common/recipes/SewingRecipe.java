@@ -15,11 +15,9 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
-import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
 
 import net.dries007.tfc.common.container.SewingTableContainer;
@@ -99,7 +97,7 @@ public class SewingRecipe implements ISimpleRecipe<SewingTableContainer.Input>
 
     public int getSquare(int index)
     {
-        return squares.charAt(index) - '0';
+        return squares.charAt(index) == '#' ? 1 : 0;
     }
 
     @Override

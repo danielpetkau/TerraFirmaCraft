@@ -362,6 +362,7 @@ public class BuiltinItemTags extends TagsProvider<Item> implements Accessors
             .add(TFCItems.ROCK_TOOLS, RockCategory.ItemType.HAMMER);
         tag(TOOLS_SAW).add(TFCItems.METAL_ITEMS, Metal.ItemType.SAW);
         tag(TOOLS_SCYTHE).add(TFCItems.METAL_ITEMS, Metal.ItemType.SCYTHE);
+        tag(TOOLS_PROPICK).add(TFCItems.METAL_ITEMS, Metal.ItemType.PROPICK);
         tag(TOOLS_KNIFE)
             .add(TFCItems.METAL_ITEMS, Metal.ItemType.KNIFE)
             .add(TFCItems.ROCK_TOOLS, RockCategory.ItemType.KNIFE);
@@ -379,6 +380,7 @@ public class BuiltinItemTags extends TagsProvider<Item> implements Accessors
             TOOLS_HAMMER,
             TOOLS_SAW,
             TOOLS_SCYTHE,
+            TOOLS_PROPICK,
             TOOLS_KNIFE,
             TOOLS_CHISEL,
             TOOLS_GLASSWORKING,
@@ -603,7 +605,7 @@ public class BuiltinItemTags extends TagsProvider<Item> implements Accessors
     @Override
     protected ItemTagAppender tag(TagKey<Item> tag)
     {
-        return new ItemTagAppender(getOrCreateRawBuilder(tag), modId);
+        return new ItemTagAppender(getOrCreateRawBuilder(tag));
     }
 
     @Override
@@ -663,9 +665,9 @@ public class BuiltinItemTags extends TagsProvider<Item> implements Accessors
     @SuppressWarnings("UnusedReturnValue")
     static class ItemTagAppender extends TagAppender<Item> implements Accessors
     {
-        ItemTagAppender(TagBuilder builder, String modId)
+        ItemTagAppender(TagBuilder builder)
         {
-            super(builder, modId);
+            super(builder);
         }
 
         ItemTagAppender add(ItemLike... items)
