@@ -107,7 +107,7 @@ public class WildebeestModel extends HierarchicalAnimatedModel<RammingPrey>
             }
             else
             {
-                animateWalk(WILDEBEEST_WALK, limbSwing, limbSwingAmount, 1F, 3 * speed);
+                animateWalk(WILDEBEEST_WALK, limbSwing, limbSwingAmount, 3F, 4 * speed);
             }
         }
 
@@ -115,8 +115,8 @@ public class WildebeestModel extends HierarchicalAnimatedModel<RammingPrey>
         {
             //Note for re-use: telegraph animations should be 1 second long, or the float here should be multiplied by their length
             //animate(entity.telegraphAnimation, BOAR_PREPARE_CHARGE, entity.getTelegraphAnimationProgress());
-            this.head.xRot = (entity.getTelegraphAttackTick() + 50) * Constants.DEG_TO_RAD * -1;
-            this.neck.xRot = entity.getTelegraphAttackTick() * Constants.DEG_TO_RAD * -1;
+            this.head.xRot = (entity.getTelegraphAttackTick() + 50) * Constants.DEG_TO_RAD;
+            this.neck.xRot = entity.getTelegraphAttackTick() * Constants.DEG_TO_RAD;
         }
         else
         {

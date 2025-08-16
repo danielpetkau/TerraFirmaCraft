@@ -92,6 +92,8 @@ import net.dries007.tfc.client.model.ScrapingBlockModel;
 import net.dries007.tfc.client.model.TrimmedItemModel;
 import net.dries007.tfc.client.model.entity.AlpacaModel;
 import net.dries007.tfc.client.model.entity.BearModel;
+import net.dries007.tfc.client.model.entity.BisonModel;
+import net.dries007.tfc.client.model.entity.BlackBearModel;
 import net.dries007.tfc.client.model.entity.BluegillModel;
 import net.dries007.tfc.client.model.entity.BoarModel;
 import net.dries007.tfc.client.model.entity.BongoModel;
@@ -103,6 +105,7 @@ import net.dries007.tfc.client.model.entity.DirewolfModel;
 import net.dries007.tfc.client.model.entity.DogModel;
 import net.dries007.tfc.client.model.entity.DuckModel;
 import net.dries007.tfc.client.model.entity.GazelleModel;
+import net.dries007.tfc.client.model.entity.GrizzlyBearModel;
 import net.dries007.tfc.client.model.entity.GrouseModel;
 import net.dries007.tfc.client.model.entity.HorseChestLayer;
 import net.dries007.tfc.client.model.entity.HorseshoeCrabModel;
@@ -119,6 +122,7 @@ import net.dries007.tfc.client.model.entity.OrcaModel;
 import net.dries007.tfc.client.model.entity.PeafowlModel;
 import net.dries007.tfc.client.model.entity.PenguinModel;
 import net.dries007.tfc.client.model.entity.PheasantModel;
+import net.dries007.tfc.client.model.entity.PolarBearModel;
 import net.dries007.tfc.client.model.entity.QuailModel;
 import net.dries007.tfc.client.model.entity.RatModel;
 import net.dries007.tfc.client.model.entity.SabertoothModel;
@@ -573,9 +577,9 @@ public final class ClientEventHandler
         event.registerEntityRenderer(TFCEntities.TURTLE.get(), ctx -> new SimpleMobRenderer.Builder<>(ctx, TFCTurtleModel::new, "turtle").build());
         event.registerEntityRenderer(TFCEntities.PENGUIN.get(), PenguinRenderer::new);
         event.registerEntityRenderer(TFCEntities.FROG.get(), FrogRenderer::new);
-        event.registerEntityRenderer(TFCEntities.POLAR_BEAR.get(), ctx -> new SimpleMobRenderer.Builder<>(ctx, BearModel::new, "polar_bear").shadow(0.9f).scale(1.3f).build());
-        event.registerEntityRenderer(TFCEntities.GRIZZLY_BEAR.get(), ctx -> new SimpleMobRenderer.Builder<>(ctx, BearModel::new, "grizzly_bear").shadow(0.9f).scale(1.1f).build());
-        event.registerEntityRenderer(TFCEntities.BLACK_BEAR.get(), ctx -> new SimpleMobRenderer.Builder<>(ctx, BearModel::new, "black_bear").shadow(0.9f).scale(0.9f).build());
+        event.registerEntityRenderer(TFCEntities.POLAR_BEAR.get(), ctx -> new SimpleMobRenderer.Builder<>(ctx, PolarBearModel::new, "polar_bear").shadow(0.9f).build());
+        event.registerEntityRenderer(TFCEntities.GRIZZLY_BEAR.get(), ctx -> new SimpleMobRenderer.Builder<>(ctx, GrizzlyBearModel::new, "grizzly_bear").shadow(0.9f).scale(1.1f).build());
+        event.registerEntityRenderer(TFCEntities.BLACK_BEAR.get(), ctx -> new SimpleMobRenderer.Builder<>(ctx, BlackBearModel::new, "black_bear").shadow(0.9f).scale(0.9f).build());
         event.registerEntityRenderer(TFCEntities.COUGAR.get(), ctx -> new SimpleMobRenderer.Builder<>(ctx, CougarModel::new, "cougar").shadow(0.8f).build());
         event.registerEntityRenderer(TFCEntities.PANTHER.get(), ctx -> new SimpleMobRenderer.Builder<>(ctx, CougarModel::new, "panther").shadow(0.8f).build());
         event.registerEntityRenderer(TFCEntities.LION.get(), ctx -> new SimpleMobRenderer.Builder<>(ctx, LionModel::new, "lion").shadow(0.8f).build());
@@ -618,7 +622,7 @@ public final class ClientEventHandler
         event.registerEntityRenderer(TFCEntities.BOAR.get(), ctx -> new SimpleMobRenderer.Builder<>(ctx, BoarModel::new, "boar").build());
         event.registerEntityRenderer(TFCEntities.WILDEBEEST.get(), ctx -> new SimpleMobRenderer.Builder<>(ctx, WildebeestModel::new, "wildebeest").build());
         event.registerEntityRenderer(TFCEntities.MOOSE.get(), ctx -> new SimpleMobRenderer.Builder<>(ctx, MooseModel::new, "moose").shadow(1.0f).scale(0.8f).build());
-
+        event.registerEntityRenderer(TFCEntities.BISON.get(), ctx -> new SimpleMobRenderer.Builder<>(ctx, BisonModel::new, "bison").build());
 
         // BEs
         event.registerBlockEntityRenderer(TFCBlockEntities.FIREPIT.get(), ctx -> new FirepitBlockEntityRenderer<>());
@@ -681,9 +685,9 @@ public final class ClientEventHandler
         event.registerLayerDefinition(RenderHelpers.layerId("manatee"), ManateeModel::createBodyLayer);
         event.registerLayerDefinition(RenderHelpers.layerId("turtle"), TFCTurtleModel::createBodyLayer);
         event.registerLayerDefinition(RenderHelpers.layerId("penguin"), PenguinModel::createBodyLayer);
-        event.registerLayerDefinition(RenderHelpers.layerId("polar_bear"), BearModel::createBodyLayer);
-        event.registerLayerDefinition(RenderHelpers.layerId("grizzly_bear"), BearModel::createBodyLayer);
-        event.registerLayerDefinition(RenderHelpers.layerId("black_bear"), BearModel::createBodyLayer);
+        event.registerLayerDefinition(RenderHelpers.layerId("polar_bear"), PolarBearModel::createBodyLayer);
+        event.registerLayerDefinition(RenderHelpers.layerId("grizzly_bear"), GrizzlyBearModel::createBodyLayer);
+        event.registerLayerDefinition(RenderHelpers.layerId("black_bear"), BlackBearModel::createBodyLayer);
         event.registerLayerDefinition(RenderHelpers.layerId("cougar"), CougarModel::createBodyLayer);
         event.registerLayerDefinition(RenderHelpers.layerId("panther"), CougarModel::createBodyLayer);
         event.registerLayerDefinition(RenderHelpers.layerId("lion"), LionModel::createBodyLayer);
@@ -720,6 +724,7 @@ public final class ClientEventHandler
         event.registerLayerDefinition(RenderHelpers.layerId("cat_collar"), () -> LayerDefinition.create(OcelotModel.createBodyMesh(new CubeDeformation(0.01f)), 64, 32));
         event.registerLayerDefinition(RenderHelpers.layerId("boar"), BoarModel::createBodyLayer);
         event.registerLayerDefinition(RenderHelpers.layerId("wildebeest"), WildebeestModel::createBodyLayer);
+        event.registerLayerDefinition(RenderHelpers.layerId("bison"), BisonModel::createBodyLayer);
         event.registerLayerDefinition(RenderHelpers.layerId("javelin"), JavelinModel::createBodyLayer);
         event.registerLayerDefinition(RenderHelpers.layerId("chest_minecart"), MinecartModel::createBodyLayer);
         event.registerLayerDefinition(RenderHelpers.layerId("holding_minecart"), MinecartModel::createBodyLayer);
@@ -867,7 +872,19 @@ public final class ClientEventHandler
         }
 
         TFCItems.MOLDS.values().forEach(reg -> event.register(ContainedFluidModel.COLOR, reg.get()));
-        event.register(ContainedFluidModel.COLOR, TFCItems.WOODEN_BUCKET.get(), TFCItems.BELL_MOLD.get(), TFCItems.FIRE_INGOT_MOLD.get(), TFCItems.JUG.get(), TFCItems.SILICA_GLASS_BOTTLE.get(), TFCItems.HEMATITIC_GLASS_BOTTLE.get(), TFCItems.VOLCANIC_GLASS_BOTTLE.get(), TFCItems.OLIVINE_GLASS_BOTTLE.get());
+        event.register(
+            ContainedFluidModel.COLOR,
+            TFCItems.WOODEN_BUCKET.get(),
+            TFCItems.RED_STEEL_BUCKET.get(),
+            TFCItems.BLUE_STEEL_BUCKET.get(),
+            TFCItems.BELL_MOLD.get(),
+            TFCItems.FIRE_INGOT_MOLD.get(),
+            TFCItems.JUG.get(),
+            TFCItems.SILICA_GLASS_BOTTLE.get(),
+            TFCItems.HEMATITIC_GLASS_BOTTLE.get(),
+            TFCItems.VOLCANIC_GLASS_BOTTLE.get(),
+            TFCItems.OLIVINE_GLASS_BOTTLE.get()
+        );
     }
 
     public static void registerClientReloadListeners(RegisterClientReloadListenersEvent event)

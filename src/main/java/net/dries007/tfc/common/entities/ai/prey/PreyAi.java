@@ -77,7 +77,7 @@ public class PreyAi
     {
         brain.addActivity(Activity.IDLE, ImmutableList.of(
             Pair.of(0, SetLookTarget.create(EntityType.PLAYER, 6.0F, UniformInt.of(30, 60))), // looks at player, but its only try it every so often -- "Run Sometimes"
-            Pair.of(1, AvoidPredatorBehavior.create(false)),
+            Pair.of(1, AvoidPredatorAndRammersBehavior.create(false)),
             Pair.of(2, BabyFollowAdult.create(UniformInt.of(5, 16), 1.25F)), // babies follow any random adult around
             Pair.of(3, createIdleMovementBehaviors())
         ));

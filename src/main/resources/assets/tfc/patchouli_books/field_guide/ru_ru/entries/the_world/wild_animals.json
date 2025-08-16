@@ -131,6 +131,15 @@
       "text": "Гну появляется на открытых равнинах при любой $(l:the_world/climate#temperature)температуре$() выше 13°C и $(l:the_world/climate#rainfall)осадках$() от 90 до 380мм."
     },
     {
+      "type": "patchouli:entity",
+      "entity": "tfc:bison",
+      "scale": 0.7,
+      "text": "The bison spawns in open plains at any $(l:the_world/climate#temperature)temperature$() above -10°C and below 15°C, and $(l:the_world/climate#rainfall)rainfall$() between 160 and 420mm."
+    },
+    {
+      "type": "patchouli:empty"
+    },
+    {
       "type": "patchouli:text",
       "anchor": "prey",
       "text": "$(thing)Жертвы$() боятся игроков и хищников. Они искусны в бегстве от опасности, но в целом не могут сражаться. Некоторые животные-жертвы любят перекусывать культурами.",

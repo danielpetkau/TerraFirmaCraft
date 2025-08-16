@@ -17,6 +17,7 @@ import net.minecraft.world.item.Tier;
 import net.dries007.tfc.common.Lore;
 import net.dries007.tfc.common.TFCTags;
 import net.dries007.tfc.common.TFCTiers;
+import net.dries007.tfc.common.items.HammerItem;
 import net.dries007.tfc.common.items.JavelinItem;
 import net.dries007.tfc.common.items.TFCHoeItem;
 import net.dries007.tfc.common.items.ToolItem;
@@ -59,7 +60,7 @@ public enum RockCategory implements StringRepresentable
     {
         AXE(rock -> new AxeItem(rock.tier(), tool(rock, 1.5f, -3.2f))),
         AXE_HEAD,
-        HAMMER(rock -> new ToolItem(rock.tier(),  TFCTags.Blocks.MINEABLE_WITH_HAMMER, tool(rock, 1f, -3.0f))),
+        HAMMER(rock -> new HammerItem(rock.tier(), tool(rock, 1f, -3.0f))),
         HAMMER_HEAD,
         HOE(rock -> new TFCHoeItem(rock.tier(), tool(rock, 0.5f, -3.0f))),
         HOE_HEAD,

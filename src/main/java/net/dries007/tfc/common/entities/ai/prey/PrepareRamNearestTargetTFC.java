@@ -6,15 +6,11 @@
 
 package net.dries007.tfc.common.entities.ai.prey;
 
-import java.util.Comparator;
-import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.ToIntFunction;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Lists;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
@@ -24,40 +20,32 @@ import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.behavior.Behavior;
 import net.minecraft.world.entity.ai.behavior.EntityTracker;
+import net.minecraft.world.entity.ai.behavior.PrepareRamNearestTarget;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.memory.MemoryStatus;
 import net.minecraft.world.entity.ai.memory.WalkTarget;
-import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.pathfinder.Path;
-import net.minecraft.world.level.pathfinder.WalkNodeEvaluator;
 import net.minecraft.world.phys.Vec3;
 
+import net.dries007.tfc.common.entities.TFCEntities;
 import net.dries007.tfc.common.entities.ai.predator.PredatorAi;
 import net.dries007.tfc.common.entities.prey.RammingPrey;
 
 public class PrepareRamNearestTargetTFC<E extends PathfinderMob> extends Behavior<E>
 {
-    public static final int TIME_OUT_DURATION = 160;
     private final ToIntFunction<E> getCooldownOnFail;
-    private final int minRamDistance;
-    private final int maxRamDistance;
     private final float walkSpeed;
-    private final TargetingConditions ramTargeting;
     private final int ramPrepareTime;
     private final Function<E, SoundEvent> getPrepareRamSound;
     private Optional<Long> reachedRamPositionTimestamp = Optional.empty();
     private Optional<net.minecraft.world.entity.ai.behavior.PrepareRamNearestTarget.RamCandidate> ramCandidate = Optional.empty();
 
-    public PrepareRamNearestTargetTFC(ToIntFunction<E> coolDownOnFail, int minRamDistance, int maxRamDistance, float walkSpeed, TargetingConditions ramTargeting, int ramPrepareTime, Function<E, SoundEvent> prepareRamSound)
+    public PrepareRamNearestTargetTFC(ToIntFunction<E> coolDownOnFail, float walkSpeed, int ramPrepareTime, Function<E, SoundEvent> prepareRamSound)
     {
         super(ImmutableMap.of(MemoryModuleType.LOOK_TARGET, MemoryStatus.REGISTERED, MemoryModuleType.RAM_COOLDOWN_TICKS, MemoryStatus.VALUE_ABSENT, MemoryModuleType.NEAREST_VISIBLE_LIVING_ENTITIES, MemoryStatus.VALUE_PRESENT, MemoryModuleType.RAM_TARGET, MemoryStatus.VALUE_ABSENT), 160);
         this.getCooldownOnFail = coolDownOnFail;
-        this.minRamDistance = minRamDistance;
-        this.maxRamDistance = maxRamDistance;
         this.walkSpeed = walkSpeed;
-        this.ramTargeting = ramTargeting;
         this.ramPrepareTime = ramPrepareTime;
         this.getPrepareRamSound = prepareRamSound;
     }
@@ -65,9 +53,11 @@ public class PrepareRamNearestTargetTFC<E extends PathfinderMob> extends Behavio
     protected void start(ServerLevel level, PathfinderMob rammingPrey, long time)
     {
         Brain<?> brain = rammingPrey.getBrain();
+        final TargetingConditions ramTargeting = ((RammingPrey) rammingPrey).isMale() && !rammingPrey.isBaby() ? RammingPreyAi.RAM_TARGET_CONDITIONS_ADULT_MALE : RammingPreyAi.RAM_TARGET_CONDITIONS;
+
         brain.getMemory(MemoryModuleType.NEAREST_VISIBLE_LIVING_ENTITIES).flatMap((nearestVisibleLivingEntities) -> {
-            return nearestVisibleLivingEntities.findClosest((nearestVisisbleEntity) -> {
-                return this.ramTargeting.test(rammingPrey, nearestVisisbleEntity);
+            return nearestVisibleLivingEntities.findClosest((nearestVisibleEntity) -> {
+                return ramTargeting.test(rammingPrey, nearestVisibleEntity);
             });
         }).ifPresent((target) -> {
             this.chooseRamPosition(rammingPrey, target);
@@ -157,63 +147,9 @@ public class PrepareRamNearestTargetTFC<E extends PathfinderMob> extends Behavio
         return Vec3.atBottomCenterOf(pos2).add(d1, 0.0D, d2);
     }
 
-    private Optional<BlockPos> calculateRammingStartPosition(PathfinderMob rammingPrey, LivingEntity target)
-    {
-        BlockPos blockpos = target.blockPosition();
-        if (!this.isWalkableBlock(rammingPrey, blockpos))
-        {
-            return Optional.empty();
-        }
-        else
-        {
-            List<BlockPos> list = Lists.newArrayList();
-            BlockPos.MutableBlockPos blockpos$mutableblockpos = blockpos.mutable();
-
-            for (Direction direction : Direction.Plane.HORIZONTAL)
-            {
-                blockpos$mutableblockpos.set(blockpos);
-
-                for (int i = 0; i < this.maxRamDistance; ++i)
-                {
-                    if (!this.isWalkableBlock(rammingPrey, blockpos$mutableblockpos.move(direction)))
-                    {
-                        blockpos$mutableblockpos.move(direction.getOpposite());
-                        break;
-                    }
-                }
-
-                if (blockpos$mutableblockpos.distManhattan(blockpos) >= this.minRamDistance)
-                {
-                    list.add(blockpos$mutableblockpos.immutable());
-                }
-            }
-
-            PathNavigation pathnavigation = rammingPrey.getNavigation();
-            return list.stream().sorted(Comparator.comparingDouble(rammingPrey.blockPosition()::distSqr)).filter((blockPos) -> {
-                Path path = pathnavigation.createPath(blockPos, 0);
-                return path != null && path.canReach();
-            }).findFirst();
-        }
-    }
-
-    private boolean isWalkableBlock(PathfinderMob rammingPrey, BlockPos pos)
-    {
-        return rammingPrey.getNavigation().isStableDestination(pos) && rammingPrey.getPathfindingMalus(WalkNodeEvaluator.getPathTypeStatic(rammingPrey, pos.mutable())) == 0.0F;
-    }
-
     private void chooseRamPosition(PathfinderMob rammingPrey, LivingEntity target)
     {
-        //Modified from Vanilla behavior. If the rammingPrey is berserking, it will use its current position as the start position.
-        this.ramCandidate = this.calculateRammingStartPosition(rammingPrey, target).map((blockPos) -> {
-            if (PredatorAi.hasNearbyAttacker(rammingPrey))
-            {
-                return new net.minecraft.world.entity.ai.behavior.PrepareRamNearestTarget.RamCandidate(rammingPrey.blockPosition(), target.blockPosition(), target);
-            }
-            else
-            {
-                this.reachedRamPositionTimestamp = Optional.empty();
-                return new net.minecraft.world.entity.ai.behavior.PrepareRamNearestTarget.RamCandidate(blockPos, target.blockPosition(), target);
-            }
-        });
+        //Modified from Vanilla behavior. Just use the current position as the starting position
+        this.ramCandidate = Optional.of(new PrepareRamNearestTarget.RamCandidate(rammingPrey.blockPosition(), target.blockPosition(), target));
     }
 }

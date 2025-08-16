@@ -346,26 +346,24 @@ public class BloomeryBlockEntity extends TickableBlockEntity implements ICalenda
         {
             // Then iterate through the list of item entities again, and count all possible items we can add, which match the recipe
             // We include both inputs and catalysts
-            boolean hasSeenCatalyst = false, hasSeenInput = false;
+            final List<ItemEntity> foundCatalysts = new ArrayList<>();
             final List<ItemEntity> foundInputs = new ArrayList<>();
             for (ItemEntity entity : itemEntities)
             {
                 final ItemStack stack = entity.getItem();
                 if (cachedRecipe.matchesInput(stack))
                 {
-                    hasSeenInput = true;
                     foundInputs.add(entity);
                 }
                 else if (cachedRecipe.matchesCatalyst(stack))
                 {
-                    hasSeenCatalyst = true;
-                    foundInputs.add(entity);
+                    foundCatalysts.add(entity);
                 }
             }
-            if (hasSeenCatalyst && hasSeenInput || (!inputStacks.isEmpty() && (hasSeenCatalyst || hasSeenInput)))
+            if (!foundCatalysts.isEmpty() && !foundInputs.isEmpty() || (!inputStacks.isEmpty() && (!foundCatalysts.isEmpty() || foundInputs.isEmpty())))
             {
                 // Now, insert as many items individually as we can, up to capacity
-                Helpers.consumeItemsFromEntitiesIndividually(foundInputs, capacity - inputStacks.size(), inputStacks::add);
+                Helpers.alternatingConsumeItemsFromEntitiesIndividually(foundCatalysts, foundInputs, capacity - inputStacks.size(), inputStacks::add);
             }
             markForSync();
         }

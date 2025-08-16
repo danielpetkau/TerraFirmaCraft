@@ -213,6 +213,9 @@ public class TFCTags
         /** Blocks that most animals will be able to move through without getting slowed, as would a player. */
         public static final TagKey<Block> ANIMAL_IGNORED_PLANTS = tag("animal_ignored_plants");
 
+        /** Blocks that bears will use their ice-sliding animation on. */
+        public static final TagKey<Block> BEAR_CRAWLS_ON = tag("bear_crawls_on");
+
         /** Used in the Field Guide to display indicators in a multiblock */
         public static final TagKey<Block> CLAY_INDICATORS = tag("clay_indicators");
 
@@ -454,6 +457,7 @@ public class TFCTags
         public static final TagKey<Item> TOOLS_HAMMER = commonTag("tools/hammer");
         public static final TagKey<Item> TOOLS_SAW = commonTag("tools/saw");
         public static final TagKey<Item> TOOLS_SCYTHE = commonTag("tools/scythe");
+        public static final TagKey<Item> TOOLS_PROPICK = commonTag("tools/propick");
         public static final TagKey<Item> TOOLS_KNIFE = commonTag("tools/knife");
         public static final TagKey<Item> TOOLS_CHISEL = commonTag("tools/chisel");
         public static final TagKey<Item> TOOLS_GLASSWORKING = commonTag("tools/glassworking");
@@ -633,6 +637,7 @@ public class TFCTags
         public static final TagKey<EntityType<?>> HUNTED_BY_CATS = tag("hunted_by_cats");
         public static final TagKey<EntityType<?>> HUNTED_BY_DOGS = tag("hunted_by_dogs");
         public static final TagKey<EntityType<?>> SMALL_FISH = tag("small_fish");
+        public static final TagKey<EntityType<?>> RAMMING_ANIMALS = tag("ramming_animals");
 
         // ===== Data Generated ====== //
 

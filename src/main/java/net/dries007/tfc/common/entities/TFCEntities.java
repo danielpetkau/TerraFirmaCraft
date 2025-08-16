@@ -151,8 +151,8 @@ public class TFCEntities
     public static final Id<Penguin> PENGUIN = register("penguin", EntityType.Builder.of(Penguin::new, MobCategory.CREATURE).sized(0.3F, 0.6F).clientTrackingRange(10));
     public static final Id<TFCFrog> FROG = register("frog", EntityType.Builder.of(TFCFrog::new, MobCategory.CREATURE).sized(0.5F, 0.5F).clientTrackingRange(10));
 
-    public static final Id<Predator> POLAR_BEAR = register("polar_bear", EntityType.Builder.of(Predator::createBear, MobCategory.CREATURE).immuneTo(Blocks.POWDER_SNOW).sized(1.4F, 1.6F).clientTrackingRange(10));
-    public static final Id<Predator> GRIZZLY_BEAR = register("grizzly_bear", EntityType.Builder.of(Predator::createBear, MobCategory.CREATURE).immuneTo(Blocks.POWDER_SNOW).sized(1.3F, 1.4F).clientTrackingRange(10));
+    public static final Id<Predator> POLAR_BEAR = register("polar_bear", EntityType.Builder.of(Predator::createBear, MobCategory.CREATURE).immuneTo(Blocks.POWDER_SNOW).sized(1.4F, 1.4F).clientTrackingRange(10));
+    public static final Id<Predator> GRIZZLY_BEAR = register("grizzly_bear", EntityType.Builder.of(Predator::createBear, MobCategory.CREATURE).immuneTo(Blocks.POWDER_SNOW).sized(1.4F, 1.6F).clientTrackingRange(10));
     public static final Id<Predator> BLACK_BEAR = register("black_bear", EntityType.Builder.of(Predator::createBear, MobCategory.CREATURE).immuneTo(Blocks.POWDER_SNOW).sized(1.2F, 1.3F).clientTrackingRange(10));
     public static final Id<FelinePredator> COUGAR = register("cougar", EntityType.Builder.of(FelinePredator::createCougar, MobCategory.CREATURE).sized(1.0F, 1.1F).clientTrackingRange(10));
     public static final Id<FelinePredator> PANTHER = register("panther", EntityType.Builder.of(FelinePredator::createCougar, MobCategory.CREATURE).sized(1.0F, 1.1F).clientTrackingRange(10));
@@ -191,6 +191,7 @@ public class TFCEntities
     public static final Id<RammingPrey> BOAR = register("boar", EntityType.Builder.of(TFCEntities::makeBoar, MobCategory.CREATURE).sized(0.9F, 0.9F).clientTrackingRange(10));
     public static final Id<RammingPrey> MOOSE = register("moose", EntityType.Builder.of(TFCEntities::makeMoose, MobCategory.CREATURE).sized(1.8F, 2.2F).clientTrackingRange(10));
     public static final Id<RammingPrey> WILDEBEEST = register("wildebeest", EntityType.Builder.of(TFCEntities::makeWildebeest, MobCategory.CREATURE).sized(1.0F, 1.4F).clientTrackingRange(10));
+    public static final Id<RammingPrey> BISON = register("bison", EntityType.Builder.of(TFCEntities::makeBison, MobCategory.CREATURE).sized(1.0F, 1.4F).clientTrackingRange(10));
 
     public static final Id<Pest> RAT = register("rat", EntityType.Builder.of(TFCEntities::makeRat, MobCategory.CREATURE).sized(0.4f, 0.3f).eyeHeight(0.13F).clientTrackingRange(8));
 
@@ -265,6 +266,7 @@ public class TFCEntities
         event.put(BOAR.get(), RammingPrey.createAttributes().build());
         event.put(WILDEBEEST.get(), RammingPrey.createMediumAttributes().build());
         event.put(MOOSE.get(), RammingPrey.createLargeAttributes().build());
+        event.put(BISON.get(), RammingPrey.createLargeAttributes().build());
         event.put(GROUSE.get(), OviparousAnimal.createAttributes().build());
         event.put(PHEASANT.get(), OviparousAnimal.createAttributes().build());
         event.put(TURKEY.get(), OviparousAnimal.createAttributes().build());
@@ -415,6 +417,10 @@ public class TFCEntities
     public static RammingPrey makeMoose(EntityType<? extends RammingPrey> animal, Level level)
     {
         return new RammingPrey(animal, level, TFCSounds.MOOSE, 0.75d);
+    }
+    public static RammingPrey makeBison(EntityType<? extends RammingPrey> animal, Level level)
+    {
+        return new RammingPrey(animal, level, TFCSounds.BISON, 0.75d);
     }
 
     public static Prey makeBongo(EntityType<? extends Prey> animal, Level level)

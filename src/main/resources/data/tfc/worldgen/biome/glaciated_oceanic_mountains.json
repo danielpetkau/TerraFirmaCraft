@@ -160,8 +160,14 @@
       {
         "type": "tfc:wildebeest",
         "weight": 2,
-        "minCount": 1,
-        "maxCount": 2
+        "minCount": 3,
+        "maxCount": 6
+      },
+      {
+        "type": "tfc:bison",
+        "weight": 2,
+        "minCount": 3,
+        "maxCount": 6
       },
       {
         "type": "tfc:moose",

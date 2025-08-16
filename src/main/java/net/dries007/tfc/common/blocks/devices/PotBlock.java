@@ -71,11 +71,6 @@ public class PotBlock extends FirepitBlock
         {
             if (!pot.isBoiling() && stack.isEmpty() && player.isShiftKeyDown())
             {
-                if (state.getValue(LIT))
-                {
-                    TFCDamageTypes.pot(player, 1f);
-                    Helpers.playSound(level, pos, TFCSounds.ITEM_COOL.get());
-                }
                 if (!state.getValue(LIT) && !pot.isBoiling() && !state.getValue(LIT) && pot.getAsh() > 0)
                 {
                     ItemHandlerHelper.giveItemToPlayer(player, new ItemStack(TFCItems.POWDERS.get(Powder.WOOD_ASH).get(), pot.getAsh()));
@@ -87,6 +82,11 @@ public class PotBlock extends FirepitBlock
                 {
                     ItemHandlerHelper.giveItemToPlayer(player, new ItemStack(TFCItems.POT.get()));
                     AbstractFirepitBlockEntity.convertTo(level, pos, state, pot, TFCBlocks.FIREPIT.get());
+                }
+                if (state.getValue(LIT))
+                {
+                    TFCDamageTypes.pot(player, 1f);
+                    Helpers.playSound(level, pos, TFCSounds.ITEM_COOL.get());
                 }
                 return ItemInteractionResult.sidedSuccess(level.isClientSide);
             }

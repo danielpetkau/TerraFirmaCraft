@@ -8,7 +8,6 @@ package net.dries007.tfc.common.blockentities.rotation;
 
 import com.mojang.math.Constants;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
@@ -28,9 +27,6 @@ import net.dries007.tfc.common.blocks.devices.AnvilBlock;
 import net.dries007.tfc.common.component.forge.ForgeStep;
 import net.dries007.tfc.util.Helpers;
 import net.dries007.tfc.util.rotation.Rotation;
-
-import static net.dries007.tfc.TerraFirmaCraft.*;
-
 
 public class TripHammerBlockEntity extends TickableInventoryBlockEntity<ItemStackHandler>
 {
@@ -59,14 +55,8 @@ public class TripHammerBlockEntity extends TickableInventoryBlockEntity<ItemStac
                 // instanceof AnvilBlock is a check that this isn't a rock anvil block, which are incompatible
                 if (level.getBlockEntity(anvilPos) instanceof AnvilBlockEntity anvil && level.getBlockState(anvilPos).getBlock() instanceof AnvilBlock)
                 {
-                    if (!anvil.workRemotely(ForgeStep.HIT_LIGHT, 12, true))
-                    {
-                        if (!anvil.getInventory().getStackInSlot(AnvilBlockEntity.SLOT_INPUT_MAIN).isEmpty())
-                        {
-                            level.playSound(null, pos, TFCSounds.ANVIL_HIT.get(), SoundSource.BLOCKS, 0.4f, 0.2f);
-                        }
-                    }
-                    else
+                    level.playSound(null, pos, TFCSounds.ANVIL_HIT.get(), SoundSource.BLOCKS, 0.4f, 0.2f);
+                    if (anvil.workRemotely(ForgeStep.HIT_LIGHT, 12, true))
                     {
                         Helpers.damageItem(item, level);
                         anvil.markForSync();

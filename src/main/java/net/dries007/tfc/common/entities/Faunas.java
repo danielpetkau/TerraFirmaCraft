@@ -104,6 +104,7 @@ public class Faunas
     public static final Id<TFCOcelot> OCELOT = registerAnimal(TFCEntities.OCELOT);
     public static final Id<RammingPrey> BOAR = registerAnimal(TFCEntities.BOAR);
     public static final Id<RammingPrey> WILDEBEEST = registerAnimal(TFCEntities.WILDEBEEST);
+    public static final Id<RammingPrey> BISON = registerAnimal(TFCEntities.BISON);
     public static final Id<Prey> BONGO = registerAnimal(TFCEntities.BONGO);
     public static final Id<Prey> CARIBOU = registerAnimal(TFCEntities.CARIBOU);
     public static final Id<Prey> DEER = registerAnimal(TFCEntities.DEER);
@@ -161,6 +162,7 @@ public class Faunas
         registerSpawnPlacement(event, OCELOT);
         registerSpawnPlacement(event, BOAR);
         registerSpawnPlacement(event, WILDEBEEST);
+        registerSpawnPlacement(event, BISON);
         registerSpawnPlacement(event, MOOSE);
         registerSpawnPlacement(event, BONGO);
         registerSpawnPlacement(event, CARIBOU);

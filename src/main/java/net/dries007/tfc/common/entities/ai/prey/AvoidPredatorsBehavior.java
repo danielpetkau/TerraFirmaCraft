@@ -7,7 +7,6 @@
 package net.dries007.tfc.common.entities.ai.prey;
 
 import java.util.function.Predicate;
-
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.entity.Mob;
@@ -19,7 +18,7 @@ import net.minecraft.world.entity.player.Player;
 import net.dries007.tfc.common.TFCTags;
 import net.dries007.tfc.util.Helpers;
 
-public class AvoidPredatorBehavior
+public class AvoidPredatorsBehavior
 {
     public static OneShot<Mob> create(boolean playersExempt)
     {

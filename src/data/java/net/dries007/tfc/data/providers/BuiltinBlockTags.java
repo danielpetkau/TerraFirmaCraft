@@ -651,6 +651,8 @@ public class BuiltinBlockTags extends TagsProvider<Block> implements Accessors
             TFCBlocks.PLANTS.get(Plant.PEROVSKIA),
             TFCBlocks.PLANTS.get(Plant.WATER_CANNA));
 
+        tag(BEAR_CRAWLS_ON).add(TFCBlocks.SEA_ICE).add(Blocks.ICE).add(Blocks.POWDER_SNOW);
+
         // Vanilla "corals" includes coral fans, + "coral_plants" (which includes corals), we mirror the same
         tag(SALT_WATER_CORAL_PLANTS).add(TFCBlocks.CORAL, Coral.BlockType.CORAL);
         tag(SALT_WATER_CORALS)
@@ -686,7 +688,7 @@ public class BuiltinBlockTags extends TagsProvider<Block> implements Accessors
     @Override
     protected BlockTagAppender tag(TagKey<Block> tag)
     {
-        return new BlockTagAppender(getOrCreateRawBuilder(tag), modId);
+        return new BlockTagAppender(getOrCreateRawBuilder(tag));
     }
 
     @Override
@@ -707,9 +709,9 @@ public class BuiltinBlockTags extends TagsProvider<Block> implements Accessors
     @SuppressWarnings("UnusedReturnValue")
     static class BlockTagAppender extends TagAppender<Block> implements Accessors
     {
-        BlockTagAppender(TagBuilder builder, String modId)
+        BlockTagAppender(TagBuilder builder)
         {
-            super(builder, modId);
+            super(builder);
         }
 
         BlockTagAppender add(Block... blocks)
