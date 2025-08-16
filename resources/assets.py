@@ -132,6 +132,8 @@ def generate(rm: ResourceManager):
                 return _lhs, _rhs
             if _lhs == 'cobble':
                 _lhs = 'cobblestone'
+            if _lhs == 'mossy_cobble':
+                _lhs = 'mossy_cobblestone'
             if _lhs == 'chiseled':
                 return _rhs, _lhs + ' bricks'
             return _rhs, _lhs
@@ -242,6 +244,8 @@ def generate(rm: ResourceManager):
                     block.with_item_model()
                     block.with_lang(lang('%s %s %s', grade, rock, ore))
                     block.with_block_loot('tfc:ore/%s_%s' % (grade, ore))
+
+                    rm.block('tfc:ore/%s_%s/%s/prospected' % (grade, ore, rock)).with_lang(lang(ore))
             else:
                 block = rm.blockstate(('ore', ore, rock), 'tfc:block/ore/%s/%s' % (ore, rock))
                 if rock == 'claystone' or rock == 'shale':
@@ -262,6 +266,13 @@ def generate(rm: ResourceManager):
                 else:
                     block.with_lang(lang('%s %s', rock, ore))
                 rm.block_loot('tfc:ore/%s/%s' % (ore, rock), 'tfc:ore/%s' % ore)
+
+                name = lang(ore)
+                if ore == 'diamond':
+                    name = lang('kimberlite')
+                if ore == 'pyrite':
+                    name = lang('native gold?')
+                rm.block('tfc:ore/%s/%s/prospected' % (ore, rock)).with_lang(name)
 
     # Loose Ore Items
     for ore, ore_data in ORES.items():
