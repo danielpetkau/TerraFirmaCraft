@@ -178,25 +178,23 @@ public class PowderkegBlockEntity extends TickableInventoryBlockEntity<Powderkeg
     public static class PowderkegInventory extends InventoryItemHandler
     {
         private final PowderkegBlockEntity powderkeg;
-        private final InventoryItemHandler inventory;
 
         PowderkegInventory(InventoryBlockEntity<?> entity)
         {
             super(entity, SLOTS);
             powderkeg = (PowderkegBlockEntity) entity;
-            inventory = new InventoryItemHandler(entity, SLOTS);
         }
 
         @Override
         public ItemStack insertItem(int slot, ItemStack stack, boolean simulate)
         {
-            return canModify() ? inventory.insertItem(slot, stack, simulate) : stack;
+            return canModify() ? super.insertItem(slot, stack, simulate) : stack;
         }
 
         @Override
         public ItemStack extractItem(int slot, int amount, boolean simulate)
         {
-            return canModify() ? inventory.extractItem(slot, amount, simulate) : ItemStack.EMPTY;
+            return canModify() ? super.extractItem(slot, amount, simulate) : ItemStack.EMPTY;
         }
 
         private boolean canModify()
