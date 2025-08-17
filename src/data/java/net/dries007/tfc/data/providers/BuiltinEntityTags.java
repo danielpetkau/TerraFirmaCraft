@@ -55,7 +55,22 @@ public class BuiltinEntityTags extends EntityTypeTagsProvider
                 TFCEntities.DOLPHIN.get()
             );
 
+        tag(SMALL_FISH)
+            .add(
+                TFCEntities.COD.get(),
+                TFCEntities.PUFFERFISH.get(),
+                TFCEntities.TROPICAL_FISH.get(),
+                TFCEntities.FRESHWATER_FISH.get(Fish.SALMON).get(),
+                TFCEntities.FRESHWATER_FISH.get(Fish.RAINBOW_TROUT).get(),
+                TFCEntities.FRESHWATER_FISH.get(Fish.LAKE_TROUT).get(),
+                TFCEntities.FRESHWATER_FISH.get(Fish.BLUEGILL).get(),
+                TFCEntities.FRESHWATER_FISH.get(Fish.LARGEMOUTH_BASS).get(),
+                TFCEntities.FRESHWATER_FISH.get(Fish.SMALLMOUTH_BASS).get(),
+                TFCEntities.FRESHWATER_FISH.get(Fish.CRAPPIE).get()
+            );
+
         tag(BUBBLE_COLUMN_IMMUNE)
+            .addTags(SMALL_FISH)
             .add(
                 TFCEntities.ORCA.get(),
                 TFCEntities.DOLPHIN.get(),
@@ -64,17 +79,7 @@ public class BuiltinEntityTags extends EntityTypeTagsProvider
                 TFCEntities.ISOPOD.get(),
                 TFCEntities.LOBSTER.get(),
                 TFCEntities.HORSESHOE_CRAB.get(),
-                TFCEntities.COD.get(),
-                TFCEntities.PUFFERFISH.get(),
-                TFCEntities.TROPICAL_FISH.get(),
-                TFCEntities.JELLYFISH.get(),
-                TFCEntities.FRESHWATER_FISH.get(Fish.SALMON).get(),
-                TFCEntities.FRESHWATER_FISH.get(Fish.RAINBOW_TROUT).get(),
-                TFCEntities.FRESHWATER_FISH.get(Fish.LAKE_TROUT).get(),
-                TFCEntities.FRESHWATER_FISH.get(Fish.BLUEGILL).get(),
-                TFCEntities.FRESHWATER_FISH.get(Fish.LARGEMOUTH_BASS).get(),
-                TFCEntities.FRESHWATER_FISH.get(Fish.SMALLMOUTH_BASS).get(),
-                TFCEntities.FRESHWATER_FISH.get(Fish.CRAPPIE).get()
+                TFCEntities.JELLYFISH.get()
             );
 
         tag(NEEDS_LARGE_FISHING_BAIT)
@@ -89,6 +94,48 @@ public class BuiltinEntityTags extends EntityTypeTagsProvider
                 TFCEntities.BISON.get(),
                 TFCEntities.MOOSE.get(),
                 TFCEntities.WILDEBEEST.get()
+            );
+
+        tag(PESTS)
+            .add(
+                TFCEntities.RAT.get(),
+                TFCEntities.JERBOA.get(),
+                TFCEntities.LEMMING.get(),
+                TFCEntities.MONGOOSE.get()
+            );
+
+        tag(BIRD_PREY)
+            .add(
+                TFCEntities.TURKEY.get(),
+                TFCEntities.PHEASANT.get(),
+                TFCEntities.GROUSE.get(),
+                TFCEntities.CHICKEN.get(),
+                TFCEntities.PENGUIN.get(),
+                TFCEntities.QUAIL.get(),
+                TFCEntities.DUCK.get()
+            );
+
+        tag(HUNTED_BY_CATS)
+            .addTags(
+                SMALL_FISH,
+                BIRD_PREY
+            )
+            .add(
+                TFCEntities.RAT.get(),
+                TFCEntities.JERBOA.get(),
+                TFCEntities.LEMMING.get()
+            );
+
+        tag(HUNTED_BY_DOGS)
+            //TODO:
+//            .addTags(
+//                HUNTED_BY_LAND_PREDATORS
+//            )
+            .add(
+                TFCEntities.RAT.get(),
+                TFCEntities.JERBOA.get(),
+                TFCEntities.LEMMING.get(),
+                TFCEntities.MONGOOSE.get()
             );
     }
 }

@@ -94,6 +94,11 @@ public class BuiltinFauna extends DataManagerProvider<Fauna>
         add(Faunas.DONKEY, b -> b.groundwater(130, 400).minTemperature(-15).maxForest(2));
         add(Faunas.MULE, b -> b.groundwater(130, 400).minTemperature(-15).maxForest(2));
         add(Faunas.HORSE, b -> b.groundwater(130, 400).minTemperature(-15).maxForest(2));
+
+        add(Faunas.RAT, b -> b.minTemperature(-4));
+        add(Faunas.JERBOA, b -> b.groundwater(0, 160).minTemperature(-10));
+        add(Faunas.LEMMING, b -> b.temperature(-12, -2));
+        add(Faunas.MONGOOSE, b -> b.groundwater(150, 500).minTemperature(12));
     }
     
     private void add(Faunas.Id<?> fauna, UnaryOperator<Fauna.Builder> builder)

@@ -326,6 +326,7 @@ public class TFCTags
         public static final TagKey<Item> DAIRY = commonTag("foods/dairy");
         public static final TagKey<Item> SALADS = commonTag("foods/salad");
         public static final TagKey<Item> SOUPS = Tags.Items.FOODS_SOUP;
+        public static final TagKey<Item> SANDWICHES = commonTag("foods/sandwiches");
         /** Includes only unsealed preserves with fruit in them (not empty jars) */
         public static final TagKey<Item> PRESERVES = tag("foods/preserves");
         /** Includes only sealed jars with fruit in them */
@@ -638,6 +639,7 @@ public class TFCTags
         public static final TagKey<EntityType<?>> HUNTED_BY_DOGS = tag("hunted_by_dogs");
         public static final TagKey<EntityType<?>> SMALL_FISH = tag("small_fish");
         public static final TagKey<EntityType<?>> RAMMING_ANIMALS = tag("ramming_animals");
+        public static final TagKey<EntityType<?>> BIRD_PREY = tag("bird_prey");
 
         // ===== Data Generated ====== //
 

@@ -887,7 +887,7 @@ MISC_FOODS = ('beet', 'cabbage', 'carrot', 'garlic', 'green_bean', 'green_bell_p
 MEATS = ('beef', 'pork', 'chicken', 'quail', 'mutton', 'bear', 'horse_meat', 'pheasant', 'turkey', 'peafowl', 'grouse', 'venison', 'wolf', 'rabbit', 'hyena', 'duck', 'chevon', 'gran_feline', 'camelidae', 'cod', 'tropical_fish', 'turtle', 'calamari', 'shellfish', *SIMPLE_FRESHWATER_FISH, 'frog_legs', 'fox')
 NUTRIENTS = ('grain', 'fruit', 'vegetables', 'protein', 'dairy')
 
-SPAWN_EGG_ENTITIES = ('isopod', 'lobster', 'crayfish', 'cod', 'pufferfish', 'tropical_fish', 'jellyfish', 'orca', 'dolphin', 'manatee', 'penguin', 'frog', 'turtle', 'horseshoe_crab', 'polar_bear', 'grizzly_bear', 'black_bear', 'cougar', 'panther', 'lion', 'sabertooth', 'squid', 'octopoteuthis', 'pig', 'cow', 'goat', 'yak', 'alpaca', 'musk_ox', 'sheep', 'chicken', 'duck', 'quail', 'rabbit', 'fox', 'boar', 'donkey', 'mule', 'horse', 'deer', 'moose', 'boar', 'rat', 'cat', 'dog', 'wolf', 'panda', 'grouse', 'pheasant', 'turkey', 'ocelot', 'direwolf', 'hyena', 'tiger', 'crocodile', 'bongo', 'caribou', 'gazelle', 'wildebeest', 'bison', 'peafowl', *SIMPLE_FRESHWATER_FISH)
+SPAWN_EGG_ENTITIES = ('isopod', 'lobster', 'crayfish', 'cod', 'pufferfish', 'tropical_fish', 'jellyfish', 'orca', 'dolphin', 'manatee', 'penguin', 'frog', 'turtle', 'horseshoe_crab', 'polar_bear', 'grizzly_bear', 'black_bear', 'cougar', 'panther', 'lion', 'sabertooth', 'squid', 'octopoteuthis', 'pig', 'cow', 'goat', 'yak', 'alpaca', 'musk_ox', 'sheep', 'chicken', 'duck', 'quail', 'rabbit', 'fox', 'boar', 'donkey', 'mule', 'horse', 'deer', 'moose', 'boar', 'rat', 'cat', 'dog', 'wolf', 'panda', 'grouse', 'pheasant', 'turkey', 'ocelot', 'direwolf', 'hyena', 'tiger', 'crocodile', 'bongo', 'caribou', 'gazelle', 'wildebeest', 'bison', 'peafowl', 'jerboa', 'lemming', 'mongoose', *SIMPLE_FRESHWATER_FISH)
 BUCKETABLE_FISH = ('cod', 'pufferfish', 'tropical_fish', 'jellyfish', *SIMPLE_FRESHWATER_FISH)
 
 BLOCK_ENTITIES = ('log_pile', 'burning_log_pile', 'placed_item', 'pit_kiln', 'charcoal_forge', 'quern', 'scraping', 'crucible', 'bellows', 'composter', 'chest', 'trapped_chest', 'barrel', 'loom', 'sluice', 'tool_rack', 'sign', 'lamp', 'berry_bush', 'crop', 'firepit', 'pot', 'grill', 'pile', 'farmland', 'tick_counter', 'nest_box', 'bloomery', 'bloom', 'anvil', 'ingot_pile', 'blast_furnace', 'large_vessel', 'powderkeg', 'bowl', 'hot_poured_glass', 'glass_basin', 'axle', 'hand_wheel', 'sewing_table', 'shelf', 'thatch_bed', 'trip_hammer', 'windmill', 'firebox')
@@ -1107,6 +1107,15 @@ DEFAULT_LANG = {
     'subtitles.entity.tfc.rat.death': 'Rat dies',
     'subtitles.entity.tfc.rat.ambient': 'Rat squeaks',
     'subtitles.entity.tfc.rat.hurt': 'Rat squeals',
+    'subtitles.entity.tfc.jerboa.death': 'Jerboa dies',
+    'subtitles.entity.tfc.jerboa.ambient': 'Jerboa squeaks',
+    'subtitles.entity.tfc.jerboa.hurt': 'Jerboa squeals',
+    'subtitles.entity.tfc.lemming.death': 'Lemming dies',
+    'subtitles.entity.tfc.lemming.ambient': 'Lemming squeaks',
+    'subtitles.entity.tfc.lemming.hurt': 'Lemming squeals',
+    'subtitles.entity.tfc.mongoose.death': 'Mongoose dies',
+    'subtitles.entity.tfc.mongoose.ambient': 'Mongoose squeaks',
+    'subtitles.entity.tfc.mongoose.hurt': 'Mongoose squeals',
     'subtitles.entity.tfc.rooster.cry': 'Rooster calls',
     'subtitles.entity.tfc.dog.ambient': 'Dog Barks',
     'subtitles.entity.tfc.dog.hurt': 'Dog Yelps',
@@ -1570,6 +1579,9 @@ DEFAULT_LANG = {
     'entity.tfc.peafowl.male': 'Peacock',
     'entity.tfc.peafowl.female': 'Peahen',
     'entity.tfc.rat': 'Rat',
+    'entity.tfc.jerboa': 'Jerboa',
+    'entity.tfc.lemming': 'Lemming',
+    'entity.tfc.mongoose': 'Mongoose',
     'entity.tfc.cat': 'Cat',
     'entity.tfc.cat.female': 'Female Cat',
     'entity.tfc.cat.male': 'Male Cat',

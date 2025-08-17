@@ -146,8 +146,11 @@ public class BuiltinItemTags extends TagsProvider<Item> implements Accessors
         tag(DAIRY).add(Food.CHEESE);
         tag(SALADS).add(TFCItems.SALADS);
         tag(SOUPS).add(TFCItems.SOUPS);
+        tag(SANDWICHES).add(Food.BARLEY_BREAD_JAM_SANDWICH, Food.BARLEY_BREAD_SANDWICH, Food.MAIZE_BREAD_JAM_SANDWICH, Food.MAIZE_BREAD_SANDWICH,
+            Food.OAT_BREAD_JAM_SANDWICH, Food.OAT_BREAD_SANDWICH, Food.RYE_BREAD_JAM_SANDWICH, Food.RYE_BREAD_SANDWICH,
+            Food.RICE_BREAD_JAM_SANDWICH, Food.RICE_BREAD_SANDWICH, Food.WHEAT_BREAD_SANDWICH, Food.WHEAT_BREAD);
         tag(JAM).add(TFCItems.JAM);
-        tag(FOODS).addTag(JAM).add(TFCItems.FOOD);
+        tag(FOODS).addTag(JAM).add(TFCItems.FOOD).addTag(SOUPS).addTag(SALADS).addTag(SANDWICHES);
         tag(PRESERVES).add(TFCItems.UNSEALED_FRUIT_PRESERVES);
         tag(SEALED_PRESERVES).add(TFCItems.FRUIT_PRESERVES);
         tag(JARS)

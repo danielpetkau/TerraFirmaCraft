@@ -44,6 +44,7 @@ import net.dries007.tfc.common.entities.livestock.horse.TFCMule;
 import net.dries007.tfc.common.entities.predator.AmphibiousPredator;
 import net.dries007.tfc.common.entities.predator.FelinePredator;
 import net.dries007.tfc.common.entities.predator.Predator;
+import net.dries007.tfc.common.entities.prey.Pest;
 import net.dries007.tfc.common.entities.prey.Prey;
 import net.dries007.tfc.common.entities.prey.RammingPrey;
 import net.dries007.tfc.common.entities.prey.TFCFox;
@@ -117,6 +118,11 @@ public class Faunas
     public static final Id<TFCDonkey> DONKEY = registerAnimal(TFCEntities.DONKEY);
     public static final Id<TFCMule> MULE = registerAnimal(TFCEntities.MULE);
     public static final Id<TFCHorse> HORSE = registerAnimal(TFCEntities.HORSE);
+
+    public static final Id<Pest> RAT = registerAnimal(TFCEntities.RAT);
+    public static final Id<Pest> JERBOA = registerAnimal(TFCEntities.JERBOA);
+    public static final Id<Pest> LEMMING = registerAnimal(TFCEntities.LEMMING);
+    public static final Id<Pest> MONGOOSE = registerAnimal(TFCEntities.MONGOOSE);
 
     public static void registerSpawnPlacements(RegisterSpawnPlacementsEvent event)
     {

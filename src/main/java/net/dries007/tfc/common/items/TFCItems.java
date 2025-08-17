@@ -314,6 +314,9 @@ public final class TFCItems
     public static final ItemId TURKEY_EGG = registerSpawnEgg(TFCEntities.TURKEY, 0x758db3, 0xf16b7a);
     public static final ItemId PEAFOWL_EGG = registerSpawnEgg(TFCEntities.PEAFOWL, 0x034bb3, 0x3c9d52);
     public static final ItemId RAT_EGG = registerSpawnEgg(TFCEntities.RAT, 0xd7c18e, 12623485);
+    public static final ItemId LEMMING_EGG = registerSpawnEgg(TFCEntities.LEMMING, 0xd7c18e, 12623485);
+    public static final ItemId JERBOA_EGG = registerSpawnEgg(TFCEntities.JERBOA, 0xd7c18e, 12623485);
+    public static final ItemId MONGOOSE_EGG = registerSpawnEgg(TFCEntities.MONGOOSE, 0xd7c18e, 12623485);
     public static final ItemId DONKEY_EGG = registerSpawnEgg(TFCEntities.DONKEY, 5457209, 8811878);
     public static final ItemId MULE_EGG = registerSpawnEgg(TFCEntities.MULE, 1769984, 5321501);
     public static final ItemId HORSE_EGG = registerSpawnEgg(TFCEntities.HORSE, 12623485, 15656192);
