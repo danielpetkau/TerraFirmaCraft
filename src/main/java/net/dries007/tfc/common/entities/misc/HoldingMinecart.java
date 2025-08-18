@@ -73,7 +73,8 @@ public class HoldingMinecart extends AbstractMinecart
     @Override
     public InteractionResult interact(Player player, InteractionHand hand)
     {
-        if (player.isSecondaryUseActive() && player.isShiftKeyDown() && !level().isClientSide)
+        // Always check the main hand, if there are items in main hand but not offhand, the interaction hand will be offhand
+        if (player.isSecondaryUseActive() && player.isShiftKeyDown() && player.getItemInHand(InteractionHand.MAIN_HAND).isEmpty() && !level().isClientSide)
         {
             ItemHandlerHelper.giveItemToPlayer(player, getPickResult());
             setHoldItem(ItemStack.EMPTY);
