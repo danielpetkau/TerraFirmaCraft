@@ -14,10 +14,10 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.items.IItemHandler;
 import org.jetbrains.annotations.Nullable;
 
-import net.dries007.tfc.common.TFCTags;
 import net.dries007.tfc.common.entities.ai.TFCBrain;
 import net.dries007.tfc.common.entities.ai.pet.MoveOntoBlockBehavior;
 import net.dries007.tfc.common.entities.prey.Pest;
@@ -40,7 +40,7 @@ public class PestFeastBehavior extends MoveOntoBlockBehavior<Pest>
         {
             for (int slot = 0; slot < itemHandler.getSlots(); slot++)
             {
-                if (Helpers.isItem(itemHandler.getStackInSlot(slot), TFCTags.Items.FOODS))
+                if (Helpers.isItem(itemHandler.getStackInSlot(slot), Tags.Items.FOODS))
                 {
                     mob.setItemSlot(EquipmentSlot.MAINHAND, itemHandler.extractItem(slot, 1, false));
                     for (int i = 1; i < 6; i++)
@@ -53,6 +53,7 @@ public class PestFeastBehavior extends MoveOntoBlockBehavior<Pest>
                 }
             }
             // we did not find anything smelly, stop trying
+
             mob.getBrain().eraseMemory(TFCBrain.SMELLY_POS.get());
         }
     }

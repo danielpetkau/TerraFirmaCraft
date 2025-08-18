@@ -194,6 +194,9 @@ public class TFCEntities
     public static final Id<RammingPrey> BISON = register("bison", EntityType.Builder.of(TFCEntities::makeBison, MobCategory.CREATURE).sized(1.0F, 1.4F).clientTrackingRange(10));
 
     public static final Id<Pest> RAT = register("rat", EntityType.Builder.of(TFCEntities::makeRat, MobCategory.CREATURE).sized(0.4f, 0.3f).eyeHeight(0.13F).clientTrackingRange(8));
+    public static final Id<Pest> LEMMING = register("lemming", EntityType.Builder.of(TFCEntities::makeRat, MobCategory.CREATURE).sized(0.4f, 0.3f).eyeHeight(0.13F).clientTrackingRange(8));
+    public static final Id<Pest> MONGOOSE = register("mongoose", EntityType.Builder.of(TFCEntities::makeRat, MobCategory.CREATURE).sized(0.6f, 0.4f).eyeHeight(0.23F).clientTrackingRange(8));
+    public static final Id<Pest> JERBOA = register("jerboa", EntityType.Builder.of(TFCEntities::makeRat, MobCategory.CREATURE).sized(0.4f, 0.4f).eyeHeight(0.23F).clientTrackingRange(8));
 
     public static final Id<TFCDonkey> DONKEY = register("donkey", EntityType.Builder.of(TFCDonkey::new, MobCategory.CREATURE).sized(1.3964844F, 1.5F).eyeHeight(1.425F).passengerAttachments(1.1125F).clientTrackingRange(10));
     public static final Id<TFCMule> MULE = register("mule", EntityType.Builder.of(TFCMule::new, MobCategory.CREATURE).sized(1.3964844F, 1.6F).eyeHeight(1.52F).passengerAttachments(1.2125F).clientTrackingRange(8));
@@ -272,6 +275,9 @@ public class TFCEntities
         event.put(TURKEY.get(), OviparousAnimal.createAttributes().build());
         event.put(PEAFOWL.get(), OviparousAnimal.createAttributes().build());
         event.put(RAT.get(), Pest.createAttributes().build());
+        event.put(LEMMING.get(), Pest.createAttributes().build());
+        event.put(MONGOOSE.get(), Pest.createAttributes().build());
+        event.put(JERBOA.get(), Pest.createAttributes().build());
         event.put(MULE.get(), AbstractChestedHorse.createBaseChestedHorseAttributes().build());
         event.put(DONKEY.get(), AbstractChestedHorse.createBaseChestedHorseAttributes().build());
         event.put(HORSE.get(), AbstractHorse.createBaseHorseAttributes().build());

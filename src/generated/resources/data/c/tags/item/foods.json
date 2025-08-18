@@ -154,6 +154,9 @@
     "tfc:food/cooked_largemouth_bass",
     "tfc:food/cooked_rainbow_trout",
     "tfc:food/cooked_salmon",
-    "tfc:food/cooked_smallmouth_bass"
+    "tfc:food/cooked_smallmouth_bass",
+    "#c:foods/soup",
+    "#c:foods/salad",
+    "#c:foods/sandwiches"
   ]
 }

@@ -123,10 +123,12 @@ import net.dries007.tfc.common.effect.TFCEffects;
 import net.dries007.tfc.common.entities.ai.prey.PestAi;
 import net.dries007.tfc.common.entities.prey.Pest;
 import net.dries007.tfc.mixin.accessor.RecipeManagerAccessor;
+import net.dries007.tfc.util.climate.OverworldClimateModel;
 import net.dries007.tfc.util.collections.IndirectHashCollection;
 import net.dries007.tfc.util.data.FluidHeat;
 import net.dries007.tfc.util.data.Support;
 import net.dries007.tfc.util.tooltip.Tooltips;
+import net.dries007.tfc.world.chunkdata.ChunkData;
 
 import static net.dries007.tfc.TerraFirmaCraft.*;
 
@@ -545,7 +547,7 @@ public final class Helpers
             {
                 return;
             }
-            Helpers.randomEntity(TFCTags.Entities.PESTS, level.random).ifPresent(type -> {
+            Helpers.choosePest(level, pos).ifPresent(type -> {
                 final Entity entity = type.create(level);
                 if (entity instanceof PathfinderMob mob && level instanceof ServerLevel serverLevel)
                 {
@@ -568,6 +570,37 @@ public final class Helpers
                 }
             });
         }
+    }
+
+    /**
+     * Chooses what tag to select a pest from depending on climate.
+     */
+    public static Optional<EntityType<?>> choosePest(Level level, BlockPos pos)
+    {
+
+        final ChunkData data = ChunkData.get(level, pos);
+        final float temperature = data.getAverageSeaLevelTemp(pos);
+        if (temperature <= -12) // Throwing a bone to the arctic survivors
+        {
+            return Optional.empty();
+        }
+        else if (temperature < -3) // Where too cold for generic pests, will always be cold biome pests
+        {
+            return Helpers.randomEntity(TFCTags.Entities.COLD_PESTS, level.random);
+        }
+        else if (level.random.nextFloat() <= 0.7) // Otherwise, 30% chance to just skip checking for climate-specific pests and spawning a rat
+        {
+            final float rainfall = data.getRainfall(pos);
+            if (rainfall < 160)
+            {
+                return Helpers.randomEntity(TFCTags.Entities.DESERT_PESTS, level.random);
+            }
+            else if (temperature > 12)
+            {
+                return Helpers.randomEntity(TFCTags.Entities.TROPICAL_PESTS, level.random);
+            }
+        }
+        return Helpers.randomEntity(TFCTags.Entities.UNIVERSAL_PESTS, level.random);
     }
 
     /**
