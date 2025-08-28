@@ -7,6 +7,7 @@
 package net.dries007.tfc.common.entities.misc;
 
 import java.util.function.IntConsumer;
+
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -32,11 +33,14 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.items.ItemHandlerHelper;
+
 import org.jetbrains.annotations.NotNull;
 
+import net.dries007.tfc.common.blockentities.PowderkegBlockEntity;
 import net.dries007.tfc.common.blocks.devices.PowderkegBlock;
 import net.dries007.tfc.common.blocks.devices.SealableDeviceBlock;
 import net.dries007.tfc.common.component.TFCComponents;
+import net.dries007.tfc.common.component.item.ItemListComponent;
 import net.dries007.tfc.common.entities.EntityHelpers;
 import net.dries007.tfc.common.entities.TFCEntities;
 import net.dries007.tfc.config.TFCConfig;
@@ -297,17 +301,11 @@ public class HoldingMinecart extends AbstractMinecart
         final ItemStack stack = getHoldItem();
         if (stack.getItem() instanceof BlockItem bi && bi.getBlock() instanceof PowderkegBlock)
         {
-            /* todo 1.21, needs saved block entity components
-            final CompoundTag tag = stack.getTagElement(Helpers.BLOCK_ENTITY_TAG);
-            if (tag != null)
+            final ItemListComponent contents = stack.get(TFCComponents.CONTENTS);
+            if (contents != null)
             {
-                final CompoundTag inventoryTag = tag.getCompound("inventory");
-                final ItemStackHandler inventory = new ItemStackHandler();
-
-                inventory.deserializeNBT(inventoryTag.getCompound("inventory"));
-
-                return PowderkegBlockEntity.getStrength(inventory);
-            }*/
+                return PowderkegBlockEntity.getStrength(contents);
+            }
         }
         return 0;
     }
