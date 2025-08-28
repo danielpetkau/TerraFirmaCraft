@@ -72,7 +72,23 @@ public class PowderkegBlockEntity extends TickableInventoryBlockEntity<Powderkeg
         {
             count += inventory.getStackInSlot(i).getCount();
         }
-        return Math.min(MAX_STRENGTH, Mth.floor(TFCConfig.SERVER.powderKegStrengthModifier.get() * count / SLOTS));
+        return getStrength(count);
+    }
+
+    public static int getStrength(ItemListComponent inventory)
+    {
+        final List<ItemStack> contents = inventory.contents();
+        int count = 0;
+        for (ItemStack stack : contents)
+        {
+            count += stack.getCount();
+        }
+        return getStrength(count);
+    }
+
+    private static int getStrength(int itemCount)
+    {
+        return Math.min(MAX_STRENGTH, Mth.floor(TFCConfig.SERVER.powderKegStrengthModifier.get() * itemCount / SLOTS));
     }
 
     private static void explode(PowderkegBlockEntity powderkeg)
