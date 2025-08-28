@@ -277,6 +277,7 @@ public class HoldingMinecart extends AbstractMinecart
             final PowderKegExplosion explosion = new PowderKegExplosion(level(), null, getX(), getY(), getZ(), strength);
             explosion.explode();
             explosion.finalizeExplosion(true);
+            explosion.sendExplosionPacketToClients();
             this.discard();
         }
     }
