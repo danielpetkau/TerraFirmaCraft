@@ -47,7 +47,6 @@ import net.dries007.tfc.common.component.glass.GlassOperation;
 import net.dries007.tfc.common.component.glass.GlassOperations;
 import net.dries007.tfc.common.entities.TFCEntities;
 import net.dries007.tfc.common.entities.aquatic.Fish;
-import net.dries007.tfc.common.fluids.FluidHelpers;
 import net.dries007.tfc.common.fluids.FluidId;
 import net.dries007.tfc.common.fluids.TFCFluids;
 import net.dries007.tfc.config.TFCConfig;
@@ -131,13 +130,13 @@ public final class TFCItems
     public static final Map<Food, ItemId> FOOD = Helpers.mapOf(Food.class, food ->
         register("food/" + food.name(), () -> new Item(new Properties()))
     );
-    public static final Map<Food, ItemId> FRUIT_PRESERVES = Helpers.mapOf(Food.class, Food::isFruit, food ->
+    public static final Map<Food, ItemId> FRUIT_PRESERVES = Helpers.mapOf(Food.class, Food::hasJam, food ->
         register("jar/" + food.name(), () -> new Item(new Properties().component(Lore.TYPE, Lore.SEALED)))
     );
-    public static final Map<Food, ItemId> UNSEALED_FRUIT_PRESERVES = Helpers.mapOf(Food.class, Food::isFruit, food ->
+    public static final Map<Food, ItemId> UNSEALED_FRUIT_PRESERVES = Helpers.mapOf(Food.class, Food::hasJam, food ->
         register("jar/" + food.name() + "_unsealed", () -> new Item(new Properties().component(Lore.TYPE, Lore.UNSEALED).craftRemainder(TFCItems.EMPTY_JAR.asItem())))
     );
-    public static final Map<Food, ItemId> JAM = Helpers.mapOf(Food.class, Food::isFruit, food ->
+    public static final Map<Food, ItemId> JAM = Helpers.mapOf(Food.class, Food::hasJam, food ->
         register(food.name() + "_jam", () -> new Item(new Properties()))
     );
     public static final Map<Nutrient, ItemId> SOUPS = Helpers.mapOf(Nutrient.class, nutrient ->
@@ -163,10 +162,14 @@ public final class TFCItems
 
     // Decorations
 
-    public static final ItemId LOAM_MUD_BRICK = register("mud_brick/loam");
-    public static final ItemId SILTY_LOAM_MUD_BRICK = register("mud_brick/silty_loam");
-    public static final ItemId SANDY_LOAM_MUD_BRICK = register("mud_brick/sandy_loam");
-    public static final ItemId SILT_MUD_BRICK = register("mud_brick/silt");
+    public static final ItemId ENTISOL_MUD_BRICK = register("mud_brick/entisol");
+    public static final ItemId ARIDISOL_MUD_BRICK = register("mud_brick/aridisol");
+    public static final ItemId OXISOL_MUD_BRICK = register("mud_brick/oxisol");
+    public static final ItemId FLUVISOL_MUD_BRICK = register("mud_brick/fluvisol");
+    public static final ItemId ANDISOL_MUD_BRICK = register("mud_brick/andisol");
+    public static final ItemId PODZOL_MUD_BRICK = register("mud_brick/podzol");
+    public static final ItemId ALFISOL_MUD_BRICK = register("mud_brick/alfisol");
+    public static final ItemId MOLLISOL_MUD_BRICK = register("mud_brick/mollisol");
 
     public static final ItemId ALABASTER_BRICK = register("alabaster_brick");
     public static final ItemId TORCH = register("torch", () -> new TorchItem(TFCBlocks.TORCH.get(), TFCBlocks.WALL_TORCH.get(), new Properties()));
@@ -219,6 +222,8 @@ public final class TFCItems
     public static final ItemId GOAT_HORN = register("goat_horn");
     public static final ItemId GLOW_ARROW = register("glow_arrow", () -> new GlowArrowItem(new Properties()));
     public static final ItemId GLUE = register("glue");
+    public static final ItemId ALFALFA = register("alfalfa");
+    public static final ItemId CANOLA = register("canola");
     public static final ItemId JUTE = register("jute");
     public static final ItemId JUTE_FIBER = register("jute_fiber");
     public static final ItemId JUTE_NET = register("jute_net");
@@ -226,6 +231,7 @@ public final class TFCItems
     public static final ItemId HANDSTONE = register("handstone", () -> new Item(new Properties().durability(250)));
     public static final ItemId MORTAR = register("mortar");
     public static final ItemId OLIVE_PASTE = register("olive_paste");
+    public static final ItemId CANOLA_PASTE = register("canola_paste");
     public static final ItemId PAPYRUS = register("papyrus");
     public static final ItemId PAPYRUS_STRIP = register("papyrus_strip");
     public static final ItemId PURE_NITROGEN = register("pure_nitrogen");

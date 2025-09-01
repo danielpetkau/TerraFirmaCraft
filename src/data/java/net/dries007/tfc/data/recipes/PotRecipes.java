@@ -56,6 +56,10 @@ public interface PotRecipes extends Recipes
             fluidOf(SimpleFluid.OLIVE_OIL_WATER),
             hours(2), 300f, true);
         pot(
+            TFCItems.CANOLA_PASTE, 5,
+            fluidOf(SimpleFluid.CANOLA_OIL_WATER),
+            hours(2), 300f, true);
+        pot(
             TFCItems.BLUBBER, 5,
             fluidOf(SimpleFluid.TALLOW),
             hours(2), 600f, true);
@@ -68,7 +72,7 @@ public interface PotRecipes extends Recipes
         soup(5);
         for (Food food : Food.values())
         {
-            if (food.isFruit())
+            if (food.hasJam())
             {
                 jam(food);
             }
@@ -105,7 +109,7 @@ public interface PotRecipes extends Recipes
         for (int n = 2; n <= 4; n++)
             add("jam_" + name + "_" + n, new JamPotRecipe(new PotRecipe(
                 Helpers.immutableAdd(Collections.nCopies(n,
-                    AndIngredient.of(Ingredient.of(TFCItems.FOOD.get(fruit)), NotRottenIngredient.INSTANCE)),
+                        AndIngredient.of(Ingredient.of(TFCItems.FOOD.get(fruit)), NotRottenIngredient.INSTANCE)),
                     Ingredient.of(TFCTags.Items.SWEETENERS)),
                 SizedFluidIngredient.of(Fluids.WATER, 100),
                 500, 300f

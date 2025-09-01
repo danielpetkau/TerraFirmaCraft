@@ -18,7 +18,6 @@ import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.levelgen.Heightmap;
 import org.jetbrains.annotations.Nullable;
 
-import net.dries007.tfc.world.Seed;
 import net.dries007.tfc.world.biome.BiomeExtension;
 import net.dries007.tfc.world.chunkdata.ChunkData;
 import net.dries007.tfc.world.chunkdata.RockData;
@@ -48,6 +47,7 @@ public class SurfaceBuilderContext
     private float temperature;
     private float baseGroundwater;
     private float rainfall;
+    private float rainVariance;
     private boolean salty;
 
     public SurfaceBuilderContext(LevelAccessor level, ChunkAccess chunk, ChunkData chunkData, RandomSource random, RockLayerSettings rockLayerSettings, int seaLevel, int minY)
@@ -81,6 +81,7 @@ public class SurfaceBuilderContext
         this.temperature = chunkData.getAverageSeaLevelTemp(x, z);
         this.baseGroundwater = chunkData.getBaseGroundwater(x, z);
         this.rainfall = chunkData.getRainfall(x, z);
+        this.rainVariance = chunkData.getRainVariance(x, z);
         this.salty = salty;
 
         // We iterate down based on the actual surface height (since our capability for overhangs is much more limited than vanilla)
@@ -154,6 +155,11 @@ public class SurfaceBuilderContext
     public float rainfall()
     {
         return rainfall;
+    }
+
+    public float rainVariance()
+    {
+        return rainVariance;
     }
 
     public boolean salty()

@@ -73,7 +73,6 @@ public class ShoreSurfaceBuilder implements SurfaceBuilder
                 }
                 else
                 {
-                    // Want to use
                     ShieldVolcanoSurfaceBuilder.SHORE.apply(seed).buildSurface(context, startY, endY);
                 }
             }
@@ -98,7 +97,7 @@ public class ShoreSurfaceBuilder implements SurfaceBuilder
         else if (hasSandyLand)
         {
             // If, in dry biomes, sand should be used instead of gravel on land
-            NormalSurfaceBuilder.INSTANCE.buildSurface(context, startY, endY, SurfaceStates.TOP_GRASS_TO_SHORE_SAND, SurfaceStates.MID_DIRT_TO_SHORE_SAND, SurfaceStates.UNDER_GRAVEL, SurfaceStates.GRAVEL, SurfaceStates.GRAVEL, surface, surface, subsurface, sandHeightAbsolute);
+            NormalSurfaceBuilder.INSTANCE.buildSurface(context, startY, endY, SurfaceStates.VOLCANIC_TOP_GRASS_TO_SHORE_SAND, SurfaceStates.VOLCANIC_MID_DIRT_TO_SHORE_SAND, SurfaceStates.UNDER_GRAVEL, SurfaceStates.GRAVEL, SurfaceStates.GRAVEL, surface, surface, subsurface, sandHeightAbsolute);
         }
         {
             // Normal land surface, with shore material at beach level in caves/below overhangs
@@ -129,16 +128,16 @@ public class ShoreSurfaceBuilder implements SurfaceBuilder
         else if (flowValue < 0.75)
         {
             if (noiseValue > 0)
-                NormalSurfaceBuilder.INSTANCE.buildSurface(context, startY, endY, SurfaceStates.SNOWY_BASALT_GRAVEL, surface, subsurface, surface, surface);
+                NormalSurfaceBuilder.INSTANCE.buildSurface(context, startY, endY, SurfaceStates.SNOWY_BASALT_GRAVEL, SurfaceStates.BASALT_GRAVEL, SurfaceStates.BASALT, SurfaceStates.BASALT_GRAVEL, surface);
             else
-                NormalSurfaceBuilder.INSTANCE.buildSurface(context, startY, endY, SurfaceStates.SNOWY_BASALT_COBBLE, surface, subsurface, surface, surface);
+                NormalSurfaceBuilder.INSTANCE.buildSurface(context, startY, endY, SurfaceStates.SNOWY_BASALT_COBBLE, SurfaceStates.BASALT_COBBLE, SurfaceStates.BASALT, SurfaceStates.BASALT_COBBLE, surface);
         }
         else
         {
             if (noiseValue > -0.6)
-                NormalSurfaceBuilder.INSTANCE.buildSurface(context, startY, endY, SurfaceStates.SNOWY_BASALT, surface, subsurface, surface, surface);
+                NormalSurfaceBuilder.INSTANCE.buildSurface(context, startY, endY, SurfaceStates.SNOWY_BASALT, SurfaceStates.BASALT, SurfaceStates.BASALT, SurfaceStates.BASALT, SurfaceStates.BASALT_COBBLE);
             else
-                NormalSurfaceBuilder.INSTANCE.buildSurface(context, startY, endY, SurfaceStates.SNOWY_BASALT_COBBLE, surface, subsurface, surface, surface);
+                NormalSurfaceBuilder.INSTANCE.buildSurface(context, startY, endY, SurfaceStates.SNOWY_BASALT_COBBLE, SurfaceStates.BASALT_COBBLE, SurfaceStates.BASALT, SurfaceStates.BASALT, SurfaceStates.BASALT_COBBLE);
         }
     }
 

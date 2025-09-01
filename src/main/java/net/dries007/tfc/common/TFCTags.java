@@ -169,10 +169,19 @@ public class TFCTags
         public static final TagKey<Block> FARMLANDS = tag("farmlands");
         public static final TagKey<Block> PATHS = tag("paths");
         public static final TagKey<Block> MUD = tag("mud");
+        public static final TagKey<Block> DUFF = tag("duff");
         public static final TagKey<Block> MUD_BRICKS = tag("mud_bricks");
         /** Includes kaolin clay, both grass and clay block variants */
         public static final TagKey<Block> CLAYS = tag("clays");
         public static final TagKey<Block> KAOLIN_CLAYS = tag("clays/kaolin");
+        public static final TagKey<Block> INCREASES_SOIL_HYDRATION = tag("increases_soil_hydration");
+        public static final TagKey<Block> DECREASES_SOIL_HYDRATION = tag("decreases_soil_hydration");
+        /** Farmland blocks by nutrient bonus */
+        public static final TagKey<Block> VERY_RICH_FARMLAND = tag("very_rich_farmland");
+        public static final TagKey<Block> RICH_FARMLAND = tag("rich_farmland");
+        public static final TagKey<Block> NORMAL_FARMLAND = tag("normal_farmland");
+        public static final TagKey<Block> POOR_FARMLAND = tag("poor_farmland");
+        public static final TagKey<Block> VERY_POOR_FARMLAND = tag("very_poor_farmland");
 
         /**
          * These are all used for various types of plants, as the block that they grow on. They can also be used during world generation,
@@ -333,6 +342,8 @@ public class TFCTags
         public static final TagKey<Item> SEALED_PRESERVES = tag("foods/sealed_preserves");
         /** Fruit extracted from an unsealed jar */
         public static final TagKey<Item> JAM = tag("foods/jam");
+        public static final TagKey<Item> JARRED_FOOD = tag("foods/jarred_food");
+        public static final TagKey<Item> SEALED_JARRED_FOOD = tag("foods/sealed_jarred_food");
         /* Includes preserves, sealed preserves, and also empty jars (with and without lid) */
         public static final TagKey<Item> JARS = tag("foods/jars");
         public static final TagKey<Item> SWEETENERS = tag("foods/sweeteners");
