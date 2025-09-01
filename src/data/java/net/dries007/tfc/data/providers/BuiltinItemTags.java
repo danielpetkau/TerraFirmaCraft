@@ -330,6 +330,12 @@ public class BuiltinItemTags extends TagsProvider<Item> implements Accessors
             .add(TFCBlocks.PLANTS.get(Plant.MUSSELS).get())
             .add(TFCBlocks.PLANTS.get(Plant.BARNACLES).get());
 
+        // Vanilla Armor Tags
+        tag(ItemTags.HEAD_ARMOR).add(TFCItems.METAL_ITEMS, Metal.ItemType.HELMET);
+        tag(ItemTags.CHEST_ARMOR).add(TFCItems.METAL_ITEMS, Metal.ItemType.CHESTPLATE);
+        tag(ItemTags.LEG_ARMOR).add(TFCItems.METAL_ITEMS, Metal.ItemType.GREAVES);
+        tag(ItemTags.FOOT_ARMOR).add(TFCItems.METAL_ITEMS, Metal.ItemType.BOOTS);
+
         // Vanilla Tool Tags
         tag(ItemTags.SWORDS).add(TFCItems.METAL_ITEMS, Metal.ItemType.SWORD);
         tag(ItemTags.AXES)
