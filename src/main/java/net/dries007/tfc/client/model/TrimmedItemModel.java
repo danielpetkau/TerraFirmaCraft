@@ -52,7 +52,7 @@ public record TrimmedItemModel(@Nullable ArmorTrim trim) implements IUnbakedGeom
         final TextureAtlasSprite overlaySprite = context.hasMaterial("overlay") ? spriteGetter.apply(context.getMaterial("overlay")) : null;
         final ResourceLocation trimLocation = context.getMaterial("trim").texture();
         final String color = trim != null ? trim.material().value().assetName() : null;
-        final TextureAtlasSprite trimSprite = trim != null ? spriteGetter.apply(new Material(RenderHelpers.BLOCKS_ATLAS, trimLocation.withSuffix("_" + color + "_tfc"))) : null;
+        final TextureAtlasSprite trimSprite = trim != null ? spriteGetter.apply(new Material(RenderHelpers.BLOCKS_ATLAS, trimLocation.withSuffix("_" + color))) : null;
 
         final var itemContext = StandaloneGeometryBakingContext.builder(context).withGui3d(false).withUseBlockLight(false).build(Helpers.resourceLocation("trim_override"));
         final var builder = CompositeModel.Baked.builder(itemContext, baseSprite, new TrimOverrideHandler(overrides, baker, itemContext), context.getTransforms());
