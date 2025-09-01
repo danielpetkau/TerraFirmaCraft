@@ -175,7 +175,7 @@ public class TFCFallingBlockEntity extends FallingBlockEntity
                 if (!onGround())
                 {
                     failedBreakCheck = false;
-                    if ((time > 100 && (posAt.getY() < 1 || posAt.getY() > 256)) || time > 600)
+                    if ((time > 100 && (posAt.getY() < level().getMinBuildHeight() || posAt.getY() > level().getMaxBuildHeight())) || time > 600)
                     {
                         attemptToDropAsItem(fallingBlockState);
                         remove(RemovalReason.DISCARDED);
@@ -253,6 +253,7 @@ public class TFCFallingBlockEntity extends FallingBlockEntity
 
     private void placeAsBlockOrDropAsItem(BlockState hitBlockState, BlockPos posAt, BlockState fallingBlockState)
     {
+        net.dries007.tfc.TerraFirmaCraft.LOGGER.info("thingy");
         if (level().setBlockAndUpdate(posAt, fallingBlockState))
         {
             afterPlacementAsBlock(hitBlockState, posAt, fallingBlockState);
