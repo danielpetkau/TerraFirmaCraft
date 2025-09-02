@@ -52,6 +52,11 @@ def copy_block_entity(*components: str):
         'include': ['minecraft:custom_name'] + list(components)
     }
 
+def apply_stack_size() -> Json:
+    return {
+        'function': 'tfc:apply_stack_size'
+    }
+
 
 def generate(rm: ResourceManager):
 
@@ -474,7 +479,7 @@ def generate(rm: ResourceManager):
     block.with_lang(lang('large vessel'))
     block.with_block_loot(({
         'name': 'tfc:ceramic/large_vessel',
-        'functions': [copy_block_entity('tfc:contents')],
+        'functions': [copy_block_entity('tfc:contents'), apply_stack_size()],
         'conditions': [loot_tables.block_state_property('tfc:ceramic/large_vessel[sealed=true]')]
     }, 'tfc:ceramic/large_vessel'))
     rm.block_model('tfc:ceramic/large_vessel_sealed', textures={
@@ -504,7 +509,7 @@ def generate(rm: ResourceManager):
         block.with_lang(lang('%s large vessel', color))
         block.with_block_loot(({
             'name': vessel,
-            'functions': [copy_block_entity('tfc:contents')],
+            'functions': [copy_block_entity('tfc:contents'), apply_stack_size()],
             'conditions': [loot_tables.block_state_property(vessel + '[sealed=true]')]
         }, vessel))
         tex = 'tfc:block/ceramic/large_vessel/glazed/%s' % color
@@ -537,7 +542,7 @@ def generate(rm: ResourceManager):
     # Uses a custom block model
     rm.blockstate('crucible').with_item_model().with_lang(lang('crucible')).with_block_loot({
         'name': 'tfc:crucible',
-        'functions': [copy_block_entity('tfc:crucible')]
+        'functions': [copy_block_entity('tfc:crucible'), apply_stack_size()]
     })
 
     block = rm.block('thatch_bed')
@@ -595,7 +600,7 @@ def generate(rm: ResourceManager):
     }).with_lang(lang('Powderkeg'))
     block.with_block_loot(({
         'name': 'tfc:powderkeg',
-        'functions': [copy_block_entity('tfc:contents')],
+        'functions': [copy_block_entity('tfc:contents'), apply_stack_size()],
         'conditions': [loot_tables.block_state_property('tfc:powderkeg[sealed=true]')]
     }, 'tfc:powderkeg'))
     block.with_item_model(overrides=[override('tfc:block/powderkeg_sealed', 'tfc:sealed')])
@@ -2007,7 +2012,7 @@ def generate(rm: ResourceManager):
         block.with_lang(lang('%s barrel', wood))
         block.with_block_loot(({
             'name': 'tfc:wood/barrel/%s' % wood,
-            'functions': [copy_block_entity('tfc:barrel')],
+            'functions': [copy_block_entity('tfc:barrel'), apply_stack_size()],
             'conditions': [loot_tables.block_state_property('tfc:wood/barrel/%s[sealed=true]' % wood)]
         }, 'tfc:wood/barrel/%s' % wood))
 

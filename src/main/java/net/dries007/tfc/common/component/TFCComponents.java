@@ -127,7 +127,7 @@ public final class TFCComponents
             final boolean needsFood = foodDef != null && foodDef.edible();
 
             final int prevSize = item.components().getOrDefault(DataComponents.MAX_STACK_SIZE, 1);
-            final int requestedSize = ItemSizeManager.getDefinition(stack).weight().stackSize;
+            final int requestedSize = ItemSizeManager.get(stack).getWeight(stack).stackSize;
 
             // Only perform the modification if we want to do any modifications, to avoid otherwise expensive operations
             // Only perform item size modifications if the original item doesn't request "1" stack size

@@ -6,10 +6,16 @@
 
 package net.dries007.tfc.common.component.size;
 
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.HitResult;
 
 /**
  * Represents a {@link Size} and {@link Weight} that can be attached to items. Item sizes can be sourced from several places, in order:
@@ -19,8 +25,12 @@ import net.minecraft.world.level.block.Block;
  *     <li>Any matching {@code item_size} that is loaded from JSON, that matches the given item</li>
  *     <li>A default size/weight combination based on a very simple heuristic using different classes of items</li>
  * </ol>
- * TFC will attempt to override the constant stack size of each item stack, using the value returned by {@link #getDefaultStackSize(ItemStack)}.
- * Containers are responsible for determining if items can fit in the container by checking the size.
+ *
+ * Right now due to how components work, IItemSize does not dynamically update stack sizes.
+ * It will call getWeight once, on reload, using the default {@link ItemStack} to set the default size.
+ * For new created stacks, you have to find a way to call {@link IItemSize#modifyWeight(ItemStack)} to update the component.
+ * See {@link net.dries007.tfc.util.loot.ApplyStackSizeFunction} for how this applies to block loot.
+ * See {@link net.dries007.tfc.common.blocks.devices.SealableDeviceBlock#getCloneItemStack(BlockState, HitResult, LevelReader, BlockPos, Player)} for the other use case.
  */
 public interface IItemSize
 {
@@ -35,11 +45,13 @@ public interface IItemSize
     Weight getWeight(ItemStack stack);
 
     /**
-     * Get the stack size of this item.
-     * This may be inconsistent for implementations that want to modify their weight in order to selectively trigger overburdening, but want to have a consistent stack size.
+     * Call this in {@link Block#getCloneItemStack(BlockState, HitResult, LevelReader, BlockPos, Player)}
+     * or in an equivalent location. This is now required to 'actually' set the weight on new stacks.
+     *
+     * This is intended as a sort of post-processing on stacks where we always control their creation.
      */
-    default int getDefaultStackSize(ItemStack stack)
+    default void modifyWeight(ItemStack stack)
     {
-        return getWeight(stack).stackSize;
+        stack.set(DataComponents.MAX_STACK_SIZE, getWeight(stack).stackSize);
     }
 }
