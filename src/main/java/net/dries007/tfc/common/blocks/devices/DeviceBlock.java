@@ -20,6 +20,7 @@ import net.dries007.tfc.common.blocks.EntityBlockExtension;
 import net.dries007.tfc.common.blocks.ExtendedBlock;
 import net.dries007.tfc.common.blocks.ExtendedProperties;
 import net.dries007.tfc.common.blocks.IForgeBlockExtension;
+import net.dries007.tfc.common.component.size.IItemSize;
 import net.dries007.tfc.util.Helpers;
 
 /**
@@ -63,6 +64,10 @@ public class DeviceBlock extends ExtendedBlock implements IForgeBlockExtension, 
             {
                 // todo: I don't think this should use saveToItem() if we're saving only via components
                 inv.saveToItem(stack, level.registryAccess());
+                if (this instanceof IItemSize size)
+                {
+                    size.modifyWeight(stack);
+                }
             }
         }
         return stack;
