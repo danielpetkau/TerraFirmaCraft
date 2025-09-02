@@ -47,7 +47,6 @@ import net.dries007.tfc.common.component.glass.GlassOperation;
 import net.dries007.tfc.common.component.glass.GlassOperations;
 import net.dries007.tfc.common.entities.TFCEntities;
 import net.dries007.tfc.common.entities.aquatic.Fish;
-import net.dries007.tfc.common.fluids.FluidHelpers;
 import net.dries007.tfc.common.fluids.FluidId;
 import net.dries007.tfc.common.fluids.TFCFluids;
 import net.dries007.tfc.config.TFCConfig;
@@ -131,13 +130,13 @@ public final class TFCItems
     public static final Map<Food, ItemId> FOOD = Helpers.mapOf(Food.class, food ->
         register("food/" + food.name(), () -> new Item(new Properties()))
     );
-    public static final Map<Food, ItemId> FRUIT_PRESERVES = Helpers.mapOf(Food.class, Food::isFruit, food ->
+    public static final Map<Food, ItemId> FRUIT_PRESERVES = Helpers.mapOf(Food.class, Food::hasJam, food ->
         register("jar/" + food.name(), () -> new Item(new Properties().component(Lore.TYPE, Lore.SEALED)))
     );
-    public static final Map<Food, ItemId> UNSEALED_FRUIT_PRESERVES = Helpers.mapOf(Food.class, Food::isFruit, food ->
+    public static final Map<Food, ItemId> UNSEALED_FRUIT_PRESERVES = Helpers.mapOf(Food.class, Food::hasJam, food ->
         register("jar/" + food.name() + "_unsealed", () -> new Item(new Properties().component(Lore.TYPE, Lore.UNSEALED).craftRemainder(TFCItems.EMPTY_JAR.asItem())))
     );
-    public static final Map<Food, ItemId> JAM = Helpers.mapOf(Food.class, Food::isFruit, food ->
+    public static final Map<Food, ItemId> JAM = Helpers.mapOf(Food.class, Food::hasJam, food ->
         register(food.name() + "_jam", () -> new Item(new Properties()))
     );
     public static final Map<Nutrient, ItemId> SOUPS = Helpers.mapOf(Nutrient.class, nutrient ->
@@ -163,10 +162,14 @@ public final class TFCItems
 
     // Decorations
 
-    public static final ItemId LOAM_MUD_BRICK = register("mud_brick/loam");
-    public static final ItemId SILTY_LOAM_MUD_BRICK = register("mud_brick/silty_loam");
-    public static final ItemId SANDY_LOAM_MUD_BRICK = register("mud_brick/sandy_loam");
-    public static final ItemId SILT_MUD_BRICK = register("mud_brick/silt");
+    public static final ItemId ENTISOL_MUD_BRICK = register("mud_brick/entisol");
+    public static final ItemId ARIDISOL_MUD_BRICK = register("mud_brick/aridisol");
+    public static final ItemId OXISOL_MUD_BRICK = register("mud_brick/oxisol");
+    public static final ItemId FLUVISOL_MUD_BRICK = register("mud_brick/fluvisol");
+    public static final ItemId ANDISOL_MUD_BRICK = register("mud_brick/andisol");
+    public static final ItemId PODZOL_MUD_BRICK = register("mud_brick/podzol");
+    public static final ItemId ALFISOL_MUD_BRICK = register("mud_brick/alfisol");
+    public static final ItemId MOLLISOL_MUD_BRICK = register("mud_brick/mollisol");
 
     public static final ItemId ALABASTER_BRICK = register("alabaster_brick");
     public static final ItemId TORCH = register("torch", () -> new TorchItem(TFCBlocks.TORCH.get(), TFCBlocks.WALL_TORCH.get(), new Properties()));
@@ -219,6 +222,8 @@ public final class TFCItems
     public static final ItemId GOAT_HORN = register("goat_horn");
     public static final ItemId GLOW_ARROW = register("glow_arrow", () -> new GlowArrowItem(new Properties()));
     public static final ItemId GLUE = register("glue");
+    public static final ItemId ALFALFA = register("alfalfa");
+    public static final ItemId CANOLA = register("canola");
     public static final ItemId JUTE = register("jute");
     public static final ItemId JUTE_FIBER = register("jute_fiber");
     public static final ItemId JUTE_NET = register("jute_net");
@@ -226,6 +231,7 @@ public final class TFCItems
     public static final ItemId HANDSTONE = register("handstone", () -> new Item(new Properties().durability(250)));
     public static final ItemId MORTAR = register("mortar");
     public static final ItemId OLIVE_PASTE = register("olive_paste");
+    public static final ItemId CANOLA_PASTE = register("canola_paste");
     public static final ItemId PAPYRUS = register("papyrus");
     public static final ItemId PAPYRUS_STRIP = register("papyrus_strip");
     public static final ItemId PURE_NITROGEN = register("pure_nitrogen");
@@ -258,71 +264,71 @@ public final class TFCItems
     public static final Map<DyeColor, ItemId> WINDMILL_BLADES = Helpers.mapOf(DyeColor.class, color ->
         register("windmill_blade/" + color.getSerializedName(), () -> new WindmillBladeItem(new Properties()))
     );
-    public static final Map<Fish, ItemId> FRESHWATER_FISH_EGGS = Helpers.mapOf(Fish.class, fish -> registerSpawnEgg(TFCEntities.FRESHWATER_FISH.get(fish), fish.getEggColor1(), fish.getEggColor2()));
+    public static final Map<Fish, ItemId> FRESHWATER_FISH_EGGS = Helpers.mapOf(Fish.class, fish -> registerSpawnEgg(TFCEntities.FRESHWATER_FISH.get(fish)));
 
-    public static final ItemId COD_EGG = registerSpawnEgg(TFCEntities.COD, 12691306, 15058059);
-    public static final ItemId PUFFERFISH_EGG = registerSpawnEgg(TFCEntities.PUFFERFISH, 16167425, 3654642);
-    public static final ItemId TROPICAL_FISH_EGG = registerSpawnEgg(TFCEntities.TROPICAL_FISH, 15690005, 16775663);
-    public static final ItemId JELLYFISH_EGG = registerSpawnEgg(TFCEntities.JELLYFISH, 0xE83D0E, 0x11F2F2);
-    public static final ItemId LOBSTER_EGG = registerSpawnEgg(TFCEntities.LOBSTER, 0xa63521, 0x312042);
-    public static final ItemId CRAYFISH_EGG = registerSpawnEgg(TFCEntities.CRAYFISH, 0x6f6652, 0x694150);
-    public static final ItemId ISOPOD_EGG = registerSpawnEgg(TFCEntities.ISOPOD, 0xb970ba, 0x969377);
-    public static final ItemId HORSESHOE_CRAB_EGG = registerSpawnEgg(TFCEntities.HORSESHOE_CRAB, 0x45e2ed, 0x45e2ed);
-    public static final ItemId DOLPHIN_EGG = registerSpawnEgg(TFCEntities.DOLPHIN, 2243405, 16382457);
-    public static final ItemId ORCA_EGG = registerSpawnEgg(TFCEntities.ORCA, 0x000000, 0xffffff);
-    public static final ItemId MANATEE_EGG = registerSpawnEgg(TFCEntities.MANATEE, 0x65786C, 0x7FCFCF);
-    public static final ItemId TURTLE_EGG = registerSpawnEgg(TFCEntities.TURTLE, 15198183, 44975);
-    public static final ItemId PENGUIN_EGG = registerSpawnEgg(TFCEntities.PENGUIN, 0xFFEA00, 0x47452C);
-    public static final ItemId FROG_EGG = registerSpawnEgg(TFCEntities.FROG, 13661252, 16762748);
-    public static final ItemId POLAR_BEAR_EGG = registerSpawnEgg(TFCEntities.POLAR_BEAR, 15921906, 9803152);
-    public static final ItemId GRIZZLY_BEAR_EGG = registerSpawnEgg(TFCEntities.GRIZZLY_BEAR, 0x964B00, 0xD2B48C);
-    public static final ItemId BLACK_BEAR_EGG = registerSpawnEgg(TFCEntities.BLACK_BEAR, 0x000000, 0x333333);
-    public static final ItemId COUGAR_EGG = registerSpawnEgg(TFCEntities.COUGAR, 0xb37f51, 0xe5c6a7);
-    public static final ItemId PANTHER_EGG = registerSpawnEgg(TFCEntities.PANTHER, 0x000000, 0xffff00);
-    public static final ItemId LION_EGG = registerSpawnEgg(TFCEntities.LION, 0xf4d988, 0x663d18);
-    public static final ItemId SABERTOOTH_EGG = registerSpawnEgg(TFCEntities.SABERTOOTH, 0xc28a30, 0xc2beb2);
-    public static final ItemId TIGER_EGG = registerSpawnEgg(TFCEntities.TIGER, 0xef9246, 0x291d1f);
-    public static final ItemId CROCODILE_EGG = registerSpawnEgg(TFCEntities.CROCODILE, 0x7a8a6c, 0xf7deb2);
-    public static final ItemId WOLF_EGG = registerSpawnEgg(TFCEntities.WOLF, 14144467, 0xc2beb2);
-    public static final ItemId HYENA_EGG = registerSpawnEgg(TFCEntities.HYENA, 0xbf9e71, 0x3f3422);
-    public static final ItemId DIREWOLF_EGG = registerSpawnEgg(TFCEntities.DIREWOLF, 0x6f3b12, 14144467);
-    public static final ItemId SQUID_EGG = registerSpawnEgg(TFCEntities.SQUID, 2243405, 7375001);
-    public static final ItemId OCTOPOTEUTHIS_EGG = registerSpawnEgg(TFCEntities.OCTOPOTEUTHIS, 611926, 8778172);
-    public static final ItemId PIG_EGG = registerSpawnEgg(TFCEntities.PIG, 15771042, 14377823);
-    public static final ItemId COW_EGG = registerSpawnEgg(TFCEntities.COW, 4470310, 10592673);
-    public static final ItemId GOAT_EGG = registerSpawnEgg(TFCEntities.GOAT, 0xDDDDDD, 0x776677);
-    public static final ItemId YAK_EGG = registerSpawnEgg(TFCEntities.YAK, 0xd7c18e, 0x6f3b12);
-    public static final ItemId ALPACA_EGG = registerSpawnEgg(TFCEntities.ALPACA, 0x00CC66, 0x006633);
-    public static final ItemId SHEEP_EGG = registerSpawnEgg(TFCEntities.SHEEP, 0xFFFFFF, 0xEEEEEE);
-    public static final ItemId MUSK_OX_EGG = registerSpawnEgg(TFCEntities.MUSK_OX, 0x6f3b12, 0xd7c18e);
-    public static final ItemId CHICKEN_EGG = registerSpawnEgg(TFCEntities.CHICKEN, 10592673, 16711680);
-    public static final ItemId DUCK_EGG = registerSpawnEgg(TFCEntities.DUCK, 0x654b17, 0x2a803e);
-    public static final ItemId QUAIL_EGG = registerSpawnEgg(TFCEntities.QUAIL, 0x8081a5, 0xDDDDDD);
-    public static final ItemId RABBIT_EGG = registerSpawnEgg(TFCEntities.RABBIT, 10051392, 7555121);
-    public static final ItemId FOX_EGG = registerSpawnEgg(TFCEntities.FOX, 14005919, 1339625);
-    public static final ItemId BOAR_EGG = registerSpawnEgg(TFCEntities.BOAR, 0x8081a5, 0x006633);
-    public static final ItemId WILDEBEEST_EGG = registerSpawnEgg(TFCEntities.WILDEBEEST, 0x3f3224, 0x83705d);
-    public static final ItemId BISON_EGG = registerSpawnEgg(TFCEntities.BISON, 0x83705d, 0x3f3224);
-    public static final ItemId OCELOT_EGG = registerSpawnEgg(TFCEntities.OCELOT, 15720061, 5653556);
-    public static final ItemId BONGO_EGG = registerSpawnEgg(TFCEntities.BONGO, 0xb35936, 0x006633);
-    public static final ItemId CARIBOU_EGG = registerSpawnEgg(TFCEntities.CARIBOU, 0x3b4547c, 0xd2c2b1);
-    public static final ItemId DEER_EGG = registerSpawnEgg(TFCEntities.DEER, 0x6f3b12, 0x006633);
-    public static final ItemId GAZELLE_EGG = registerSpawnEgg(TFCEntities.GAZELLE, 0x3c2417, 0xbf8237);
-    public static final ItemId MOOSE_EGG = registerSpawnEgg(TFCEntities.MOOSE, 0x654b17, 0xDDDDDD);
-    public static final ItemId GROUSE_EGG = registerSpawnEgg(TFCEntities.GROUSE, 0xbda878, 0xDDDDDD);
-    public static final ItemId PHEASANT_EGG = registerSpawnEgg(TFCEntities.PHEASANT, 0xe59c10, 0x004195);
-    public static final ItemId TURKEY_EGG = registerSpawnEgg(TFCEntities.TURKEY, 0x758db3, 0xf16b7a);
-    public static final ItemId PEAFOWL_EGG = registerSpawnEgg(TFCEntities.PEAFOWL, 0x034bb3, 0x3c9d52);
-    public static final ItemId RAT_EGG = registerSpawnEgg(TFCEntities.RAT, 0xd7c18e, 12623485);
-    public static final ItemId LEMMING_EGG = registerSpawnEgg(TFCEntities.LEMMING, 0xd7c18e, 12623485);
-    public static final ItemId JERBOA_EGG = registerSpawnEgg(TFCEntities.JERBOA, 0xd7c18e, 12623485);
-    public static final ItemId MONGOOSE_EGG = registerSpawnEgg(TFCEntities.MONGOOSE, 0xd7c18e, 12623485);
-    public static final ItemId DONKEY_EGG = registerSpawnEgg(TFCEntities.DONKEY, 5457209, 8811878);
-    public static final ItemId MULE_EGG = registerSpawnEgg(TFCEntities.MULE, 1769984, 5321501);
-    public static final ItemId HORSE_EGG = registerSpawnEgg(TFCEntities.HORSE, 12623485, 15656192);
-    public static final ItemId CAT_EGG = registerSpawnEgg(TFCEntities.CAT, 15714446, 9794134);
-    public static final ItemId DOG_EGG = registerSpawnEgg(TFCEntities.DOG, 14144467, 13545366);
-    public static final ItemId PANDA_EGG = registerSpawnEgg(TFCEntities.PANDA, 15198183, 1776418);
+    public static final ItemId COD_EGG = registerSpawnEgg(TFCEntities.COD);
+    public static final ItemId PUFFERFISH_EGG = registerSpawnEgg(TFCEntities.PUFFERFISH);
+    public static final ItemId TROPICAL_FISH_EGG = registerSpawnEgg(TFCEntities.TROPICAL_FISH);
+    public static final ItemId JELLYFISH_EGG = registerSpawnEgg(TFCEntities.JELLYFISH);
+    public static final ItemId LOBSTER_EGG = registerSpawnEgg(TFCEntities.LOBSTER);
+    public static final ItemId CRAYFISH_EGG = registerSpawnEgg(TFCEntities.CRAYFISH);
+    public static final ItemId ISOPOD_EGG = registerSpawnEgg(TFCEntities.ISOPOD);
+    public static final ItemId HORSESHOE_CRAB_EGG = registerSpawnEgg(TFCEntities.HORSESHOE_CRAB);
+    public static final ItemId DOLPHIN_EGG = registerSpawnEgg(TFCEntities.DOLPHIN);
+    public static final ItemId ORCA_EGG = registerSpawnEgg(TFCEntities.ORCA);
+    public static final ItemId MANATEE_EGG = registerSpawnEgg(TFCEntities.MANATEE);
+    public static final ItemId TURTLE_EGG = registerSpawnEgg(TFCEntities.TURTLE);
+    public static final ItemId PENGUIN_EGG = registerSpawnEgg(TFCEntities.PENGUIN);
+    public static final ItemId FROG_EGG = registerSpawnEgg(TFCEntities.FROG);
+    public static final ItemId POLAR_BEAR_EGG = registerSpawnEgg(TFCEntities.POLAR_BEAR);
+    public static final ItemId GRIZZLY_BEAR_EGG = registerSpawnEgg(TFCEntities.GRIZZLY_BEAR);
+    public static final ItemId BLACK_BEAR_EGG = registerSpawnEgg(TFCEntities.BLACK_BEAR);
+    public static final ItemId COUGAR_EGG = registerSpawnEgg(TFCEntities.COUGAR);
+    public static final ItemId PANTHER_EGG = registerSpawnEgg(TFCEntities.PANTHER);
+    public static final ItemId LION_EGG = registerSpawnEgg(TFCEntities.LION);
+    public static final ItemId SABERTOOTH_EGG = registerSpawnEgg(TFCEntities.SABERTOOTH);
+    public static final ItemId TIGER_EGG = registerSpawnEgg(TFCEntities.TIGER);
+    public static final ItemId CROCODILE_EGG = registerSpawnEgg(TFCEntities.CROCODILE);
+    public static final ItemId WOLF_EGG = registerSpawnEgg(TFCEntities.WOLF);
+    public static final ItemId HYENA_EGG = registerSpawnEgg(TFCEntities.HYENA);
+    public static final ItemId DIREWOLF_EGG = registerSpawnEgg(TFCEntities.DIREWOLF);
+    public static final ItemId SQUID_EGG = registerSpawnEgg(TFCEntities.SQUID);
+    public static final ItemId OCTOPOTEUTHIS_EGG = registerSpawnEgg(TFCEntities.OCTOPOTEUTHIS);
+    public static final ItemId PIG_EGG = registerSpawnEgg(TFCEntities.PIG);
+    public static final ItemId COW_EGG = registerSpawnEgg(TFCEntities.COW);
+    public static final ItemId GOAT_EGG = registerSpawnEgg(TFCEntities.GOAT);
+    public static final ItemId YAK_EGG = registerSpawnEgg(TFCEntities.YAK);
+    public static final ItemId ALPACA_EGG = registerSpawnEgg(TFCEntities.ALPACA);
+    public static final ItemId SHEEP_EGG = registerSpawnEgg(TFCEntities.SHEEP);
+    public static final ItemId MUSK_OX_EGG = registerSpawnEgg(TFCEntities.MUSK_OX);
+    public static final ItemId CHICKEN_EGG = registerSpawnEgg(TFCEntities.CHICKEN);
+    public static final ItemId DUCK_EGG = registerSpawnEgg(TFCEntities.DUCK);
+    public static final ItemId QUAIL_EGG = registerSpawnEgg(TFCEntities.QUAIL);
+    public static final ItemId RABBIT_EGG = registerSpawnEgg(TFCEntities.RABBIT);
+    public static final ItemId FOX_EGG = registerSpawnEgg(TFCEntities.FOX);
+    public static final ItemId BOAR_EGG = registerSpawnEgg(TFCEntities.BOAR);
+    public static final ItemId WILDEBEEST_EGG = registerSpawnEgg(TFCEntities.WILDEBEEST);
+    public static final ItemId BISON_EGG = registerSpawnEgg(TFCEntities.BISON);
+    public static final ItemId OCELOT_EGG = registerSpawnEgg(TFCEntities.OCELOT);
+    public static final ItemId BONGO_EGG = registerSpawnEgg(TFCEntities.BONGO);
+    public static final ItemId CARIBOU_EGG = registerSpawnEgg(TFCEntities.CARIBOU);
+    public static final ItemId DEER_EGG = registerSpawnEgg(TFCEntities.DEER);
+    public static final ItemId GAZELLE_EGG = registerSpawnEgg(TFCEntities.GAZELLE);
+    public static final ItemId MOOSE_EGG = registerSpawnEgg(TFCEntities.MOOSE);
+    public static final ItemId GROUSE_EGG = registerSpawnEgg(TFCEntities.GROUSE);
+    public static final ItemId PHEASANT_EGG = registerSpawnEgg(TFCEntities.PHEASANT);
+    public static final ItemId TURKEY_EGG = registerSpawnEgg(TFCEntities.TURKEY);
+    public static final ItemId PEAFOWL_EGG = registerSpawnEgg(TFCEntities.PEAFOWL);
+    public static final ItemId RAT_EGG = registerSpawnEgg(TFCEntities.RAT);
+    public static final ItemId LEMMING_EGG = registerSpawnEgg(TFCEntities.LEMMING);
+    public static final ItemId JERBOA_EGG = registerSpawnEgg(TFCEntities.JERBOA);
+    public static final ItemId MONGOOSE_EGG = registerSpawnEgg(TFCEntities.MONGOOSE);
+    public static final ItemId DONKEY_EGG = registerSpawnEgg(TFCEntities.DONKEY);
+    public static final ItemId MULE_EGG = registerSpawnEgg(TFCEntities.MULE);
+    public static final ItemId HORSE_EGG = registerSpawnEgg(TFCEntities.HORSE);
+    public static final ItemId CAT_EGG = registerSpawnEgg(TFCEntities.CAT);
+    public static final ItemId DOG_EGG = registerSpawnEgg(TFCEntities.DOG);
+    public static final ItemId PANDA_EGG = registerSpawnEgg(TFCEntities.PANDA);
 
     // Pottery
 
@@ -395,9 +401,9 @@ public final class TFCItems
     );
 
 
-    private static <T extends Mob> ItemId registerSpawnEgg(IdHolder<EntityType<T>> entity, int color1, int color2)
+    private static <T extends Mob> ItemId registerSpawnEgg(IdHolder<EntityType<T>> entity)
     {
-        return register("spawn_egg/" + entity.getId().getPath(), () -> new DeferredSpawnEggItem(entity.holder(), color1, color2, new Properties()));
+        return register("spawn_egg/" + entity.getId().getPath(), () -> new DeferredSpawnEggItem(entity.holder(), 0xffffff, 0xffffff, new Properties()));
     }
 
     private static ItemId register(String name)

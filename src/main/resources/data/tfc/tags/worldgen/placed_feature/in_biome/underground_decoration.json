@@ -14,7 +14,6 @@
     "tfc:calcite",
     "tfc:mega_calcite",
     "tfc:icicle",
-    "tfc:underground_loose_rocks",
-    "tfc:underground_guano_patch"
+    "tfc:underground_loose_rocks"
   ]
 }

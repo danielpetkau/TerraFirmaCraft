@@ -856,6 +856,38 @@ public final class BiomeNoise
     }
 
     /**
+     * Similar to mountains, but cliffs closer to sea level
+     */
+    public static Noise2D rockyIslands(long seed)
+    {
+        final Noise2D baseNoise = new OpenSimplex2D(seed) // A simplex noise forms the majority of the base
+            .octaves(4)
+            .spread(0.14f)
+            .map(x -> {
+                final double x0 = 0.125f * (x + 1) * (x + 1) * (x + 1); // Power scaled, flattens most areas but maximizes peaks
+                return SEA_LEVEL_Y - 15 + 50 * x0; // Scale the entire thing
+            });
+
+        // Cliff noise consists of noise that's been artificially clamped over half the domain, which is then selectively added above a base height level
+        final Noise2D cliffNoise = new OpenSimplex2D(seed + 2).octaves(2).spread(0.01f).scaled(-10, 18).map(x -> x > 0 ? x : 0);
+        final Noise2D cliffHeightNoise = new OpenSimplex2D(seed + 3).octaves(2).spread(0.01f).scaled(SEA_LEVEL_Y - 5, SEA_LEVEL_Y + 5);
+
+        return (x, z) -> {
+            double height = baseNoise.noise(x, z);
+            if (height > SEA_LEVEL_Y - 10) // Only sample each cliff noise layer if the base noise could be influenced by it
+            {
+                final double cliffHeight = cliffHeightNoise.noise(x, z) - height;
+                if (cliffHeight < 0)
+                {
+                    final double mappedCliffHeight = Mth.clampedMap(cliffHeight, 0, -1, 0, 1);
+                    height += mappedCliffHeight * cliffNoise.noise(x, z);
+                }
+            }
+            return height;
+        };
+    }
+
+    /**
      * Uses domain warping to achieve a swirly hills effect
      */
     public static Noise2D ocean(long seed, int depthMin, int depthMax)

@@ -52,6 +52,11 @@ def copy_block_entity(*components: str):
         'include': ['minecraft:custom_name'] + list(components)
     }
 
+def apply_stack_size() -> Json:
+    return {
+        'function': 'tfc:apply_stack_size'
+    }
+
 
 def generate(rm: ResourceManager):
 
@@ -474,7 +479,7 @@ def generate(rm: ResourceManager):
     block.with_lang(lang('large vessel'))
     block.with_block_loot(({
         'name': 'tfc:ceramic/large_vessel',
-        'functions': [copy_block_entity('tfc:contents')],
+        'functions': [copy_block_entity('tfc:contents'), apply_stack_size()],
         'conditions': [loot_tables.block_state_property('tfc:ceramic/large_vessel[sealed=true]')]
     }, 'tfc:ceramic/large_vessel'))
     rm.block_model('tfc:ceramic/large_vessel_sealed', textures={
@@ -504,7 +509,7 @@ def generate(rm: ResourceManager):
         block.with_lang(lang('%s large vessel', color))
         block.with_block_loot(({
             'name': vessel,
-            'functions': [copy_block_entity('tfc:contents')],
+            'functions': [copy_block_entity('tfc:contents'), apply_stack_size()],
             'conditions': [loot_tables.block_state_property(vessel + '[sealed=true]')]
         }, vessel))
         tex = 'tfc:block/ceramic/large_vessel/glazed/%s' % color
@@ -537,7 +542,7 @@ def generate(rm: ResourceManager):
     # Uses a custom block model
     rm.blockstate('crucible').with_item_model().with_lang(lang('crucible')).with_block_loot({
         'name': 'tfc:crucible',
-        'functions': [copy_block_entity('tfc:crucible')]
+        'functions': [copy_block_entity('tfc:crucible'), apply_stack_size()]
     })
 
     block = rm.block('thatch_bed')
@@ -595,7 +600,7 @@ def generate(rm: ResourceManager):
     }).with_lang(lang('Powderkeg'))
     block.with_block_loot(({
         'name': 'tfc:powderkeg',
-        'functions': [copy_block_entity('tfc:contents')],
+        'functions': [copy_block_entity('tfc:contents'), apply_stack_size()],
         'conditions': [loot_tables.block_state_property('tfc:powderkeg[sealed=true]')]
     }, 'tfc:powderkeg'))
     block.with_item_model(overrides=[override('tfc:block/powderkeg_sealed', 'tfc:sealed')])
@@ -653,18 +658,11 @@ def generate(rm: ResourceManager):
     rm.item_model('minecraft:slime_block', parent='tfc:block/glue_block', no_textures=True)
     rm.block_model('glue_block', {'particle': 'tfc:block/glue_block', 'texture': 'tfc:block/glue_block'}, parent='minecraft:block/slime_block')
     rm.blockstate('minecraft:flower_pot', model='tfc:block/flower_pot')
-    rm.block_model('flower_pot', {'dirt': 'tfc:block/dirt/loam'}, parent='minecraft:block/flower_pot')
+    rm.blockstate('minecraft:flower_pot', model='tfc:block/flower_pot')
+    rm.block_model('flower_pot', {'dirt': 'tfc:block/dirt/entisol'}, parent='minecraft:block/flower_pot')
 
     # Dirt
     for soil in SOIL_BLOCK_VARIANTS:
-        # Regular Dirt
-        block = rm.blockstate(('dirt', soil), variants={'': [{'model': 'tfc:block/dirt/%s' % soil}]}, use_default_model=False)
-        block.with_block_model().with_item_model().with_block_loot('tfc:dirt/%s' % soil).with_lang(lang('%s Dirt', soil))
-        block = rm.blockstate(('coarse_dirt', soil), variants={'': [{'model': 'tfc:block/coarse_dirt/%s' % soil}]}, use_default_model=False)
-        block.with_block_model().with_item_model().with_block_loot('tfc:coarse_dirt/%s' % soil).with_lang(lang('Coarse %s', soil))
-        for variant in ('mud', 'rooted_dirt', 'mud_bricks'):
-            rm.blockstate((variant, soil)).with_block_model().with_item_model().with_block_loot('tfc:%s/%s' % (variant, soil)).with_lang(lang('%s %s', soil, variant))
-
         rm.item_model('mud_brick/%s' % soil).with_lang(lang('%s mud brick', soil))
         mud_bricks = rm.block(('mud_bricks', soil))
         mud_bricks.make_slab()
@@ -692,6 +690,26 @@ def generate(rm: ResourceManager):
         block.with_block_loot(*loot_pools)
         rm.item_model('tfc:drying_bricks/%s' % soil, 'tfc:item/mud_brick/%s_wet' % soil)
 
+        rm.blockstate(('muddy_roots', soil), variants={
+            'axis=x': {'model': 'tfc:block/muddy_roots/%s' % soil, 'x': 90, 'y': 90},
+            'axis=y': {'model': 'tfc:block/muddy_roots/%s' % soil},
+            'axis=z': {'model': 'tfc:block/muddy_roots/%s' % soil, 'x': 90}
+        }).with_block_model({'end': 'tfc:block/mud/%s_roots_top' % soil, 'side': 'tfc:block/mud/%s_roots_side' % soil}, 'minecraft:block/cube_column').with_item_model().with_lang(lang('%s muddy roots', soil)).with_block_loot('tfc:muddy_roots/%s' % soil)
+
+        block = rm.block(('grass_path', soil))
+        block.with_lang(lang('%s path', soil))
+        block.with_block_loot('tfc:dirt/%s' % soil)
+
+
+    for soil in PLAIN_CUBE_SOIL_BLOCK_VARIANTS:
+        # Regular Dirt
+        block = rm.blockstate(('dirt', soil), variants={'': [{'model': 'tfc:block/dirt/%s' % soil}]}, use_default_model=False)
+        block.with_block_model().with_item_model().with_block_loot('tfc:dirt/%s' % soil).with_lang(lang('%s Dirt', soil))
+        block = rm.blockstate(('coarse_dirt', soil), variants={'': [{'model': 'tfc:block/coarse_dirt/%s' % soil}]}, use_default_model=False)
+        block.with_block_model().with_item_model().with_block_loot('tfc:coarse_dirt/%s' % soil).with_lang(lang('Coarse %s', soil))
+        for variant in ('mud', 'rooted_dirt', 'mud_bricks'):
+            rm.blockstate((variant, soil)).with_block_model().with_item_model().with_block_loot('tfc:%s/%s' % (variant, soil)).with_lang(lang('%s %s', soil, variant))
+
         # Clay Dirt
         block = rm.blockstate(('clay', soil), use_default_model=False)
         block.with_block_model()
@@ -702,15 +720,24 @@ def generate(rm: ResourceManager):
         block.with_lang(lang('%s Clay Dirt', soil))
         block.with_item_model()
 
-        block = rm.block(('grass_path', soil))
-        block.with_lang(lang('%s path', soil))
-        block.with_block_loot('tfc:dirt/%s' % soil)
+    for soil in COLUMN_SOIL_BLOCK_VARIANTS:
+        # Regular Dirt
+        block = rm.blockstate(('dirt', soil), variants={'': [{'model': 'tfc:block/dirt/%s' % soil}]}, use_default_model=False)
+        block.with_block_model({'end': 'tfc:block/dirt/%s_top' % soil, 'side': 'tfc:block/dirt/%s' % soil}, 'minecraft:block/cube_column').with_item_model().with_block_loot('tfc:dirt/%s' % soil).with_lang(lang('%s Dirt', soil))
+        block = rm.blockstate(('coarse_dirt', soil), variants={'': [{'model': 'tfc:block/coarse_dirt/%s' % soil}]}, use_default_model=False)
+        block.with_block_model({'end': 'tfc:block/coarse_dirt/%s_top' % soil, 'side': 'tfc:block/coarse_dirt/%s' % soil}, 'minecraft:block/cube_column').with_item_model().with_block_loot('tfc:coarse_dirt/%s' % soil).with_lang(lang('Coarse %s', soil))
+        for variant in ('mud', 'rooted_dirt', 'mud_bricks'):
+            rm.blockstate((variant, soil)).with_block_model().with_item_model().with_block_loot('tfc:%s/%s' % (variant, soil)).with_lang(lang('%s %s', soil, variant))
 
-        rm.blockstate(('muddy_roots', soil), variants={
-            'axis=x': {'model': 'tfc:block/muddy_roots/%s' % soil, 'x': 90, 'y': 90},
-            'axis=y': {'model': 'tfc:block/muddy_roots/%s' % soil},
-            'axis=z': {'model': 'tfc:block/muddy_roots/%s' % soil, 'x': 90}
-        }).with_block_model({'end': 'tfc:block/mud/%s_roots_top' % soil, 'side': 'tfc:block/mud/%s_roots_side' % soil}, 'minecraft:block/cube_column').with_item_model().with_lang(lang('%s muddy roots', soil)).with_block_loot('tfc:muddy_roots/%s' % soil)
+        # Clay Dirt
+        block = rm.blockstate(('clay', soil), use_default_model=False)
+        block.with_block_model({'end': 'tfc:block/clay/%s_top' % soil, 'side': 'tfc:block/clay/%s' % soil}, 'minecraft:block/cube_column')
+        block.with_block_loot({
+            'name': 'minecraft:clay_ball',
+            'functions': [loot_tables.set_count(1, 3)]
+        })
+        block.with_lang(lang('%s Clay Dirt', soil))
+        block.with_item_model()
 
     # Grass
     north_face = {'from': [0, 0, 0], 'to': [16, 16, 0], 'faces': {'north': {'texture': '#texture', 'cullface': 'north'}}}
@@ -722,6 +749,12 @@ def generate(rm: ResourceManager):
     rm.block_model('grass_side', textures={'overlay': 'tfc:block/grass_side', 'particle': 'tfc:block/grass_side'}, parent='block/block', elements=[north_face, north_face_overlay_tint0])
     rm.block_model('grass_snowy_side', textures={'overlay': 'tfc:block/grass_snowy_side', 'particle': '#texture'}, parent='block/block', elements=[north_face, north_face_overlay])
     rm.block_model('grass_bottom', textures={'texture': '#texture', 'particle': '#texture'}, parent='block/block', elements=[north_face])
+
+    rm.block_model('duff_top', textures={'overlay': 'tfc:block/duff_top', 'particle': 'tfc:block/duff_top'}, parent='block/block', elements=[north_face_overlay])
+    rm.block_model('duff_snowy_top', textures={'overlay': 'minecraft:block/snow', 'particle': 'minecraft:block/snow'}, parent='block/block', elements=[north_face_overlay])
+    rm.block_model('duff_side', textures={'overlay': 'tfc:block/duff_side', 'particle': 'tfc:block/duff_side'}, parent='block/block', elements=[north_face, north_face_overlay])
+    rm.block_model('duff_snowy_side', textures={'overlay': 'tfc:block/grass_snowy_side', 'particle': '#texture'}, parent='block/block', elements=[north_face, north_face_overlay])
+    rm.block_model('duff_bottom', textures={'texture': '#texture', 'particle': '#texture'}, parent='block/block', elements=[north_face])
 
     # Grass (Peat, Normal + Clay) - Helper Functions
     def grass_multipart(model: str):
@@ -751,6 +784,18 @@ def generate(rm: ResourceManager):
         for _variant in ('top', 'snowy_top', 'side', 'snowy_side', 'bottom'):
             rm.block_model((_name, _variant), {'texture': _texture}, parent='tfc:block/grass_%s' % _variant)
 
+    def grass_models_fancy(_type: str, _soil: str, _texture: str):
+        for _variant in ('top', 'snowy_top', 'side', 'snowy_side', 'bottom'):
+            if _variant == 'bottom' and _soil in COLUMN_SOIL_BLOCK_VARIANTS:
+                _texture = _texture + '_top'
+            rm.block_model(((_type, soil), _variant), {'texture': _texture}, parent='tfc:block/grass_%s' % _variant)
+
+    def duff_models_fancy(_type: str, _soil: str, _texture: str):
+        for _variant in ('top', 'snowy_top', 'side', 'snowy_side', 'bottom'):
+            if _variant == 'bottom' and _soil in COLUMN_SOIL_BLOCK_VARIANTS:
+                _texture = _texture + '_top'
+            rm.block_model(((_type, soil), _variant), {'texture': _texture}, parent='tfc:block/duff_%s' % _variant)
+
     # Peat Grass
     rm.blockstate_multipart('peat_grass', *grass_multipart('tfc:block/peat_grass')).with_block_loot('tfc:peat').with_lang(lang('Peat Grass'))
     grass_models('peat_grass', 'tfc:block/peat')
@@ -764,7 +809,16 @@ def generate(rm: ResourceManager):
             else:
                 block.with_block_loot('1-3 minecraft:clay_ball')
             block.with_lang(lang('%s %s', soil, grass_var))
-            grass_models((grass_var, soil), dirt)
+            grass_models_fancy(grass_var, soil, dirt)
+
+        for duff_var, dirt in (('duff', 'tfc:block/dirt/%s' % soil), ('clay_duff', 'tfc:block/clay/%s' % soil)):
+            block = rm.blockstate_multipart((duff_var, soil), *grass_multipart('tfc:block/%s/%s' % (duff_var, soil)))
+            if duff_var == 'duff':
+                block.with_block_loot('tfc:dirt/%s' % soil)
+            else:
+                block.with_block_loot('1-3 minecraft:clay_ball')
+            block.with_lang(lang('%s %s', soil, duff_var))
+            duff_models_fancy(duff_var, soil, dirt)
 
         # Farmland
         block = rm.blockstate(('farmland', soil))
@@ -1129,7 +1183,7 @@ def generate(rm: ResourceManager):
 
     # Crops
     for crop, crop_data in CROPS.items():
-        name = 'tfc:' + crop if crop == 'jute' or crop == 'papyrus' else 'tfc:food/%s' % crop
+        name = 'tfc:' + crop if crop == 'jute' or crop == 'papyrus' or crop == 'alfalfa' or crop == 'canola' else 'tfc:food/%s' % crop
         if crop_data.type in ('default', 'spreading', 'pickable'):
             if crop_data.type == 'spreading':
                 rm.block_model(('crop', crop + '_side'), parent='tfc:block/crop/spreading_crop_side', textures={'crop': 'tfc:block/crop/%s_side' % crop})
@@ -1480,14 +1534,17 @@ def generate(rm: ResourceManager):
         rm.item_model(('food', '%s_soup' % nutrient)).with_lang(lang('%s soup', funny_soup_name))
         rm.item_model(('food', '%s_salad' % nutrient)).with_lang(lang('%s salad', funny_salad_name))
 
-    rm.block_model('jar/empty', textures={'2': 'tfc:block/jar_no_lid'}, parent='tfc:block/jar')
+    rm.block_model('jar/empty', textures={'2': 'tfc:block/jar_no_lid'}, parent='tfc:block/jar_no_lid')
     for fruit in JAR_FRUITS:
-        rm.block_model('jar/%s' % fruit, textures={'1': 'tfc:block/jar/%s' % fruit}, parent='tfc:block/jar')
-        rm.block_model('jar/%s_unsealed' % fruit, textures={'1': 'tfc:block/jar/%s' % fruit, '2': 'tfc:block/jar_no_lid'}, parent='tfc:block/jar')
-        fixed_name = fruit.replace('_chunks', '').replace('_slice', '')
-        rm.item_model('tfc:jar/%s' % fruit, 'tfc:item/jar/%s' % fruit).with_lang(lang('jar of %s jam', fixed_name))
-        rm.item_model('tfc:jar/%s_unsealed' % fruit, 'tfc:item/jar/%s_unsealed' % fruit).with_lang(lang('jar of %s jam', fixed_name))
-        rm.item_model('%s_jam' % fruit, 'tfc:item/food/%s_jam' % fruit).with_lang(lang('%s jam', fixed_name))
+            rm.block_model('jar/%s' % fruit, textures={'1': 'tfc:block/jar/%s' % fruit}, parent='tfc:block/jar')
+            rm.block_model('jar/%s_unsealed' % fruit, textures={'1': 'tfc:block/jar/%s' % fruit, '2': 'tfc:block/jar_no_lid'}, parent='tfc:block/jar_no_lid')
+            fixed_name = fruit.replace('_chunks', '').replace('_slice', '')
+            substance_name = 'jam'
+            if fruit == 'peanut':
+                substance_name = 'butter'
+            rm.item_model('tfc:jar/%s' % fruit, 'tfc:item/jar/%s' % fruit).with_lang(lang('jar of %s %s', fixed_name, substance_name))
+            rm.item_model('tfc:jar/%s_unsealed' % fruit, 'tfc:item/jar/%s_unsealed' % fruit).with_lang(lang('jar of %s %s', fixed_name, substance_name))
+            rm.item_model('%s_jam' % fruit, 'tfc:item/food/%s_jam' % fruit).with_lang(lang('%s %s', fixed_name, substance_name))
 
     # Berry Bushes
     lifecycle_to_model = {'healthy': '', 'dormant': 'dry_', 'fruiting': 'fruiting_', 'flowering': 'flowering_'}
@@ -1955,7 +2012,7 @@ def generate(rm: ResourceManager):
         block.with_lang(lang('%s barrel', wood))
         block.with_block_loot(({
             'name': 'tfc:wood/barrel/%s' % wood,
-            'functions': [copy_block_entity('tfc:barrel')],
+            'functions': [copy_block_entity('tfc:barrel'), apply_stack_size()],
             'conditions': [loot_tables.block_state_property('tfc:wood/barrel/%s[sealed=true]' % wood)]
         }, 'tfc:wood/barrel/%s' % wood))
 
@@ -2237,7 +2294,7 @@ def generate(rm: ResourceManager):
 
     # Entity Stuff
     for creature in SPAWN_EGG_ENTITIES:
-        rm.item_model('spawn_egg/%s' % creature, parent='minecraft:item/template_spawn_egg', no_textures=True).with_lang(lang('%s Spawn Egg', creature))
+        rm.item_model('spawn_egg/%s' % creature).with_lang(lang('%s Spawn Egg', creature))
     for creature in BUCKETABLE_FISH:
         rm.item_model('bucket/%s' % creature).with_lang(lang('%s Bucket', creature))
 
@@ -2338,7 +2395,7 @@ def particle(rm: ResourceManager, name: str, textures: List[str]):
 
 def flower_pot_cross(rm: ResourceManager, simple_name: str, name: str, model: str, texture: str, loot: str):
     rm.blockstate(name, model='tfc:block/%s' % model).with_lang(lang('potted %s', simple_name)).with_block_loot(loot, 'minecraft:flower_pot')
-    rm.block_model(model, parent='minecraft:block/flower_pot_cross', textures={'plant': texture, 'dirt': 'tfc:block/dirt/loam'})
+    rm.block_model(model, parent='minecraft:block/flower_pot_cross', textures={'plant': texture, 'dirt': 'tfc:block/dirt/entisol'})
 
 
 def water_based_fluid(rm: ResourceManager, name: str):

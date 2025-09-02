@@ -28,7 +28,7 @@
     {
       "type": "patchouli:text",
       "anchor": "climate",
-      "text": "メインのインベントリ画面のもう一つのタブは、$(thing)気候$() GUIです。 これは現在の場所に関する情報を示しています。$(br2)最初の行は全体的な $(l:https://en.wikipedia.org/wiki/K%C3%B6ppen_climate_classification)気候$() を示しています。$(br2) 2 行目は、$(l:the_world/geology) 地質$() を示します。$(br2) 3 行目は、$(thing)平均気温・降水量など$() を示します。",
+      "text": "Another tab on the main inventory screen is the $(thing)Climate$() screen. This one shows information about the current location$(br2)From top to bottom, the screen displays the $(l:https://en.wikipedia.org/wiki/K%C3%B6ppen_climate_classification)Local Climate$(), the $(thing)Average Annual Temperature$(), the $(thing)Average Annual Rainfall$(), the peak rainfall, the season when the peak occurs, and the current temperature.",
       "title": "気候"
     },
     {
@@ -51,7 +51,7 @@
     {
       "type": "patchouli:text",
       "anchor": "rainfall",
-      "text": "降水量は、世界のどこにいるかによって異なる可能性があるもう 1 つの気候値です。 年間降水量はミリメートル (mm) 単位で測定され、0mm ～ 500mm の範囲になります。 降水量は、その地域で見られる植物の種類に影響を与え、また、砂、サボテン、ローム、シルト、カポックの木に至るまでの土壌の種類にも影響を与えます。",
+      "text": "Rainfall is another climate value that can vary depending on where you are in the world and the time of year. The annual rainfall is measured in millimeters (mm) and can be between 0mm - 500mm. Rainfall affects the types of flora that are found in an area, and also the types of soil.$(br)Depending on the local climate, rainfall may vary throughout the year to a peak of up to twice the local average.",
       "title": "降水量"
     },
     {

@@ -96,6 +96,10 @@ public enum Food implements StringRepresentable
     SQUASH,
     TOMATO,
     YELLOW_BELL_PEPPER,
+    CASSAVA,
+    LENTIL,
+    PEANUT(true),
+    RADISH,
     // Non-Vegetables
     CHEESE,
     COOKED_EGG,
@@ -175,7 +179,7 @@ public enum Food implements StringRepresentable
     COOKED_SMALLMOUTH_BASS,
     ;
     
-    private final boolean fruit;
+    private final boolean hasJam;
     private final String serializedName;
 
     Food()
@@ -183,10 +187,10 @@ public enum Food implements StringRepresentable
         this(false);
     }
 
-    Food(boolean fruit)
+    Food(boolean hasJam)
     {
         this.serializedName = name().toLowerCase(Locale.ROOT);
-        this.fruit = fruit;
+        this.hasJam = hasJam;
     }
 
     @Override
@@ -195,8 +199,8 @@ public enum Food implements StringRepresentable
         return serializedName;
     }
 
-    public boolean isFruit()
+    public boolean hasJam()
     {
-        return fruit;
+        return hasJam;
     }
 }

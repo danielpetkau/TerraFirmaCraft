@@ -47,7 +47,6 @@ import net.dries007.tfc.common.blocks.plant.coral.Coral;
 import net.dries007.tfc.common.blocks.plant.fruit.FruitBlocks;
 import net.dries007.tfc.common.blocks.rock.Ore;
 import net.dries007.tfc.common.blocks.rock.Rock;
-import net.dries007.tfc.common.blocks.soil.SandBlockType;
 import net.dries007.tfc.common.blocks.soil.SoilBlockType;
 import net.dries007.tfc.common.blocks.wood.Wood;
 import net.dries007.tfc.data.Accessors;
@@ -392,6 +391,8 @@ public class BuiltinBlockTags extends TagsProvider<Block> implements Accessors
             .add2(TFCBlocks.ORE_DEPOSITS)
             .add(TFCBlocks.SOIL.get(SoilBlockType.MUD))
             .add(TFCBlocks.SOIL.get(SoilBlockType.COARSE_DIRT))
+            .add(TFCBlocks.SOIL.get(SoilBlockType.DUFF))
+            .add(TFCBlocks.SOIL.get(SoilBlockType.CLAY_DUFF))
             .add(
                 TFCBlocks.WHITE_KAOLIN_CLAY,
                 TFCBlocks.PINK_KAOLIN_CLAY,
@@ -563,18 +564,35 @@ public class BuiltinBlockTags extends TagsProvider<Block> implements Accessors
 
         tag(PROSPECTABLE).addTags(Tags.Blocks.ORES);
 
+        tag(DUFF)
+            .add(TFCBlocks.SOIL.get(SoilBlockType.DUFF))
+            .add(TFCBlocks.SOIL.get(SoilBlockType.CLAY_DUFF));
         tag(COARSE_DIRT)
             .add(TFCBlocks.SOIL.get(SoilBlockType.COARSE_DIRT));
         tag(DIRT)
             .add(Blocks.DIRT)
             .add(TFCBlocks.SOIL.get(SoilBlockType.DIRT))
-            .add(TFCBlocks.SOIL.get(SoilBlockType.ROOTED_DIRT));
+            .add(TFCBlocks.SOIL.get(SoilBlockType.ROOTED_DIRT))
+            .add(TFCBlocks.SOIL.get(SoilBlockType.DUFF));
         tag(GRASS)
             .add(Blocks.GRASS_BLOCK)
             .add(TFCBlocks.SOIL.get(SoilBlockType.GRASS));
         tag(FARMLANDS)
             .add(Blocks.FARMLAND)
             .add(TFCBlocks.SOIL.get(SoilBlockType.FARMLAND));
+        tag(VERY_RICH_FARMLAND)
+            .add(TFCBlocks.SOIL.get(SoilBlockType.FARMLAND).get(SoilBlockType.Variant.MOLLISOL));
+        tag(RICH_FARMLAND)
+            .add(TFCBlocks.SOIL.get(SoilBlockType.FARMLAND).get(SoilBlockType.Variant.ANDISOL))
+            .add(TFCBlocks.SOIL.get(SoilBlockType.FARMLAND).get(SoilBlockType.Variant.FLUVISOL))
+            .add(TFCBlocks.SOIL.get(SoilBlockType.FARMLAND).get(SoilBlockType.Variant.ALFISOL));
+        tag(NORMAL_FARMLAND)
+            .add(TFCBlocks.SOIL.get(SoilBlockType.FARMLAND).get(SoilBlockType.Variant.MOLLISOL));
+        tag(POOR_FARMLAND)
+            .add(TFCBlocks.SOIL.get(SoilBlockType.FARMLAND).get(SoilBlockType.Variant.PODZOL))
+            .add(TFCBlocks.SOIL.get(SoilBlockType.FARMLAND).get(SoilBlockType.Variant.ARIDISOL));
+        tag(VERY_POOR_FARMLAND)
+            .add(TFCBlocks.SOIL.get(SoilBlockType.FARMLAND).get(SoilBlockType.Variant.OXISOL));
         tag(PATHS)
             .add(Blocks.DIRT_PATH)
             .add(TFCBlocks.SOIL.get(SoilBlockType.GRASS_PATH));
@@ -587,12 +605,20 @@ public class BuiltinBlockTags extends TagsProvider<Block> implements Accessors
         tag(CLAYS)
             .addTags(KAOLIN_CLAYS)
             .add(TFCBlocks.SOIL.get(SoilBlockType.CLAY))
-            .add(TFCBlocks.SOIL.get(SoilBlockType.CLAY_GRASS));
+            .add(TFCBlocks.SOIL.get(SoilBlockType.CLAY_GRASS))
+            .add(TFCBlocks.SOIL.get(SoilBlockType.CLAY_DUFF));
         tag(KAOLIN_CLAYS).add(
             TFCBlocks.KAOLIN_CLAY_GRASS,
             TFCBlocks.WHITE_KAOLIN_CLAY,
             TFCBlocks.PINK_KAOLIN_CLAY,
             TFCBlocks.RED_KAOLIN_CLAY);
+        tag(INCREASES_SOIL_HYDRATION).addTags(
+            CLAYS
+        ).add(Blocks.CLAY);
+        tag(DECREASES_SOIL_HYDRATION).addTags(
+            Tags.Blocks.GRAVELS,
+            Tags.Blocks.SANDS
+        );
 
         tag(TREE_GROWS_ON).addTag(BlockTags.DIRT);
         tag(WILD_CROP_GROWS_ON).addTag(BlockTags.DIRT);

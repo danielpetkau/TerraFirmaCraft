@@ -143,7 +143,6 @@ public class TFCFeatures
     public static final Id<SpringFeature> SPRING = register("spring", SpringFeature::new, SpringConfiguration.CODEC);
 
     public static final Id<SoilDiscFeature> SOIL_DISC = register("soil_disc", SoilDiscFeature::new, SoilDiscConfig.CODEC);
-    public static final Id<TFCIcebergFeature> ICEBERG = register("iceberg", TFCIcebergFeature::new, BlockStateConfiguration.CODEC);
     public static final Id<PowderSnowFeature> POWDER_SNOW = register("powder_snow", PowderSnowFeature::new, BlockStateConfiguration.CODEC);
 
     public static final Id<IfThenFeature> IF_THEN = register("if_then", IfThenFeature::new, IfThenConfig.CODEC);

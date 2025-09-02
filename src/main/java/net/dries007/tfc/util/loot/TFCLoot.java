@@ -44,6 +44,7 @@ public class TFCLoot
     public static final Id<LootNumberProviderType> ANIMAL_YIELD = numberProvider("animal_yield", MinMaxProvider.codec(AnimalYieldProvider::new));
     public static final LootFunctionId<CopyFluidFunction> COPY_FLUID = lootFunction("copy_fluid", CopyFluidFunction.CODEC);
     public static final LootFunctionId<RottenFunction> ROTTEN = lootFunction("rotten", RottenFunction.CODEC);
+    public static final LootFunctionId<ApplyStackSizeFunction> APPLY_STACK_SIZE = lootFunction("apply_stack_size", ApplyStackSizeFunction.CODEC);
 
     private static <T extends LootItemFunction> LootFunctionId<T> lootFunction(String id, MapCodec<T> codec)
     {

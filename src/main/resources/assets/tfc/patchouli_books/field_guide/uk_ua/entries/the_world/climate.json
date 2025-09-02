@@ -28,7 +28,7 @@
     {
       "type": "patchouli:text",
       "anchor": "climate",
-      "text": "Ще одна вкладка на головному екрані інвентаря – це інформація про $(thing)клімат$(). Ця інформація стосується поточного місця твого знаходження$(br2)Перший рядок вкаже загальний $(l:https://en.wikipedia.org/wiki/K%C3%B6ppen_climate_classification)клімат$() .$(br2)Другий рядок вказує на $(l:the_world/geology)тектонічний рельєф$().$(br2)Третій рядок вказує $(thing)середньорічну температуру$().",
+      "text": "Another tab on the main inventory screen is the $(thing)Climate$() screen. This one shows information about the current location$(br2)From top to bottom, the screen displays the $(l:https://en.wikipedia.org/wiki/K%C3%B6ppen_climate_classification)Local Climate$(), the $(thing)Average Annual Temperature$(), the $(thing)Average Annual Rainfall$(), the peak rainfall, the season when the peak occurs, and the current temperature.",
       "title": "Клімат"
     },
     {
@@ -51,7 +51,7 @@
     {
       "type": "patchouli:text",
       "anchor": "rainfall",
-      "text": "Кількість опадів – ще одна кліматична величина, яка може змінюватися залежно від того, де ти знаходишся. Річна кількість опадів вимірюється в міліметрах (мм) і може становити від 0 мм до 500 мм. Опади впливають на типи флори, які зустрічаються в цій місцевості, а також на типи ґрунту, від піску та кактусів до суглинку, мулу та бавовняних дерев.",
+      "text": "Rainfall is another climate value that can vary depending on where you are in the world and the time of year. The annual rainfall is measured in millimeters (mm) and can be between 0mm - 500mm. Rainfall affects the types of flora that are found in an area, and also the types of soil.$(br)Depending on the local climate, rainfall may vary throughout the year to a peak of up to twice the local average.",
       "title": "Опади"
     },
     {

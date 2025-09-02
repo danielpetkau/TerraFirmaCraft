@@ -64,18 +64,17 @@
                 }
               },
               {
-                "id": "phyllite",
+                "id": "high_grade",
                 "layers": {
                   "gneiss": "bottom",
-                  "phyllite": "bottom",
                   "schist": "bottom"
                 }
               },
               {
-                "id": "slate",
+                "id": "low_grade",
                 "layers": {
-                  "phyllite": "phyllite",
-                  "slate": "bottom"
+                  "phyllite": "high_grade",
+                  "slate": "high_grade"
                 }
               },
               {
@@ -95,22 +94,23 @@
                 "layers": {
                   "chalk": "marble",
                   "chert": "quartzite",
-                  "claystone": "slate",
-                  "conglomerate": "slate",
+                  "claystone": "low_grade",
+                  "conglomerate": "low_grade",
                   "dolomite": "marble",
                   "limestone": "marble",
-                  "shale": "slate"
+                  "shale": "low_grade"
                 }
               },
               {
                 "id": "uplift",
                 "layers": {
-                  "diorite": "sedimentary",
-                  "gabbro": "sedimentary",
-                  "granite": "sedimentary",
+                  "diorite": "low_grade",
+                  "gabbro": "low_grade",
+                  "granite": "low_grade",
                   "marble": "bottom",
+                  "phyllite": "high_grade",
                   "quartzite": "bottom",
-                  "slate": "phyllite"
+                  "slate": "high_grade"
                 }
               }
             ],

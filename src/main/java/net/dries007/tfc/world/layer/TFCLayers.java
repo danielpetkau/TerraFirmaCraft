@@ -49,6 +49,7 @@ public class TFCLayers
     public static final int OCEANIC_MOUNTAINS = idFor(TFCBiomes.OCEANIC_MOUNTAINS);
     public static final int VOLCANIC_OCEANIC_MOUNTAINS = idFor(TFCBiomes.VOLCANIC_OCEANIC_MOUNTAINS);
     public static final int CANYONS = idFor(TFCBiomes.CANYONS);
+    public static final int GUANO_ISLAND = idFor(TFCBiomes.GUANO_ISLAND);
     public static final int SHORE = idFor(TFCBiomes.SHORE);
     public static final int TIDAL_FLATS = idFor(TFCBiomes.TIDAL_FLATS);
     public static final int SEA_STACKS = idFor(TFCBiomes.SEA_STACKS);
@@ -253,7 +254,7 @@ public class TFCLayers
     {
         return value != LOWLANDS && value != SALT_MARSH && value != LOW_CANYONS && value != CANYONS && value != OCEANIC_MOUNTAINS && value != VOLCANIC_OCEANIC_MOUNTAINS
             && value != TOWER_KARST_BAY && value != SUNKEN_SHIELD_VOLCANO && value != GLACIALLY_CARVED_OCEANIC_MOUNTAINS && value != GLACIATED_OCEANIC_MOUNTAINS && value != ICE_SHEET_OCEANIC_MOUNTAINS_EDGE
-            && value != ICE_SHEET_SHIELD_VOLCANO && value != GLACIATED_SHIELD_VOLCANO;
+            && value != ICE_SHEET_SHIELD_VOLCANO && value != GLACIATED_SHIELD_VOLCANO && value != GUANO_ISLAND;
     }
 
     public static int shoreFor(int value)

@@ -28,7 +28,7 @@
     {
       "type": "patchouli:text",
       "anchor": "climate",
-      "text": "인벤토리의 또다른 탭은 $(thing)기후$() 창입니다. 이 탭에서는 자신의 위치에 대한 정보를 보여줍니다.$(br2)첫 번째 줄은 대략적인 $(l:https://ko.wikipedia.org/wiki/%EC%BE%A8%ED%8E%9C%EC%9D%98_%EA%B8%B0%ED%9B%84_%EA%B5%AC%EB%B6%84)기후$()를 나타냅니다.$(br2)두 번째 줄은 $(l:the_world/geology)지질학적 지역$()을 나타냅니다.$(br2)세 번째 줄은 $(thing)연평균 기온$()을 나타냅니다.",
+      "text": "Another tab on the main inventory screen is the $(thing)Climate$() screen. This one shows information about the current location$(br2)From top to bottom, the screen displays the $(l:https://en.wikipedia.org/wiki/K%C3%B6ppen_climate_classification)Local Climate$(), the $(thing)Average Annual Temperature$(), the $(thing)Average Annual Rainfall$(), the peak rainfall, the season when the peak occurs, and the current temperature.",
       "title": "§l기후"
     },
     {
@@ -51,7 +51,7 @@
     {
       "type": "patchouli:text",
       "anchor": "rainfall",
-      "text": "강수량은 당신이 어디에 있는지에 따라 달라지는 또 다른 기후입니다. 연강수량은 0mm - 500mm 사이의 밀리리터 (mm) 단위로 측정됩니다. 강수량은 특정 지역에서 발견되는 식물들 과 모래, 실트나 양토 등의 흙의 종류, 그리고 케이폭나무에 이르기까지 영향을 미칩니다.",
+      "text": "Rainfall is another climate value that can vary depending on where you are in the world and the time of year. The annual rainfall is measured in millimeters (mm) and can be between 0mm - 500mm. Rainfall affects the types of flora that are found in an area, and also the types of soil.$(br)Depending on the local climate, rainfall may vary throughout the year to a peak of up to twice the local average.",
       "title": "§l강수량"
     },
     {

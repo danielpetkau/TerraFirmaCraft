@@ -10,13 +10,14 @@
       "type": "minecraft:in_square"
     },
     {
+      "type": "tfc:biome"
+    },
+    {
       "type": "tfc:climate",
       "min_temperature": -30,
       "max_temperature": 10,
       "min_groundwater": 100,
-      "max_groundwater": 500,
-      "min_elevation": -64,
-      "max_elevation": 320
+      "max_groundwater": 500
     },
     {
       "type": "tfc:biome"

@@ -164,8 +164,8 @@ public final class BuiltinWorldPreset
     private static final String FELSIC = "felsic";
     private static final String INTERMEDIATE = "intermediate";
     private static final String MAFIC = "mafic";
-    private static final String MM_PHYLLITE = "phyllite";
-    private static final String MM_SLATE = "slate";
+    private static final String MM_LOW_GRADE = "low_grade";
+    private static final String MM_HIGH_GRADE = "high_grade";
     private static final String MM_MARBLE = "marble";
     private static final String MM_QUARTZITE = "quartzite";
 
@@ -193,35 +193,36 @@ public final class BuiltinWorldPreset
                     DACITE, IGNEOUS_EXTRUSIVE,
                     BASALT, IGNEOUS_EXTRUSIVE
                 )),
-                layerOf(MM_PHYLLITE, Map.of(
-                    PHYLLITE, BOTTOM,
-                    GNEISS, BOTTOM,
-                    SCHIST, BOTTOM
+                layerOf(MM_HIGH_GRADE, Map.of(
+                    SCHIST, BOTTOM,
+                    GNEISS, BOTTOM
                 )),
-                layerOf(MM_SLATE, Map.of(
-                    SLATE, BOTTOM,
-                    PHYLLITE, MM_PHYLLITE
+                layerOf(MM_LOW_GRADE, Map.of(
+                    PHYLLITE, MM_HIGH_GRADE,
+                    SLATE, MM_HIGH_GRADE
                 )),
                 layerOf(MM_MARBLE, Map.of(MARBLE, BOTTOM)),
                 layerOf(MM_QUARTZITE, Map.of(QUARTZITE, BOTTOM)),
                 layerOf(SEDIMENTARY, Map.of(
-                    SHALE, MM_SLATE,
-                    CLAYSTONE, MM_SLATE,
-                    CONGLOMERATE, MM_SLATE,
+                    SHALE, MM_LOW_GRADE,
+                    CLAYSTONE, MM_LOW_GRADE,
+                    CONGLOMERATE, MM_LOW_GRADE,
                     LIMESTONE, MM_MARBLE,
                     DOLOMITE, MM_MARBLE,
                     CHALK, MM_MARBLE,
                     CHERT, MM_QUARTZITE
                 )),
                 layerOf(UPLIFT, Map.of(
-                    SLATE, MM_PHYLLITE,
+                    SLATE, MM_HIGH_GRADE,
+                    PHYLLITE, MM_HIGH_GRADE,
                     MARBLE, BOTTOM,
                     QUARTZITE, BOTTOM,
-                    DIORITE, SEDIMENTARY,
-                    GRANITE, SEDIMENTARY,
-                    GABBRO, SEDIMENTARY
+                    DIORITE, MM_LOW_GRADE,
+                    GRANITE, MM_LOW_GRADE,
+                    GABBRO, MM_LOW_GRADE
                 ))
             ),
+            // List of layers that can be the top layer for each variety of rock region
             List.of(IGNEOUS_EXTRUSIVE),
             List.of(IGNEOUS_EXTRUSIVE, SEDIMENTARY),
             List.of(IGNEOUS_EXTRUSIVE, IGNEOUS_EXTRUSIVE_X2),

@@ -114,7 +114,7 @@
     {
       "type": "patchouli:entity",
       "entity": "tfc:boar",
-      "scale": 0.7,
+      "scale": 0.8,
       "name": "Кабан",
       "text": "Кабан появляется при $(l:the_world/climate#temperature)температуре$() ниже 25°C и выше -5°C, и $(l:the_world/climate#rainfall)осадках$() от 130 до 400мм."
     },
@@ -133,7 +133,8 @@
     {
       "type": "patchouli:entity",
       "entity": "tfc:bison",
-      "scale": 0.7,
+      "scale": 0.6,
+      "name": "Bison",
       "text": "The bison spawns in open plains at any $(l:the_world/climate#temperature)temperature$() above -10°C and below 15°C, and $(l:the_world/climate#rainfall)rainfall$() between 160 and 420mm."
     },
     {
@@ -168,7 +169,7 @@
     {
       "type": "patchouli:entity",
       "entity": "tfc:caribou",
-      "scale": 0.6,
+      "scale": 0.5,
       "name": "Карибу",
       "text": "Карибу появляется при любой $(l:the_world/climate#temperature)температуре$() ниже -9°C и $(l:the_world/climate#rainfall)осадках$() от 110 до 500мм."
     },
@@ -181,7 +182,7 @@
     {
       "type": "patchouli:entity",
       "entity": "tfc:bongo",
-      "scale": 0.9,
+      "scale": 0.7,
       "name": "Бонго",
       "text": "Бонго обитает в лесах при любой $(l:the_world/climate#temperature)температуре$() выше 15°C и $(l:the_world/climate#rainfall)осадках$() от 230 до 500мм."
     },

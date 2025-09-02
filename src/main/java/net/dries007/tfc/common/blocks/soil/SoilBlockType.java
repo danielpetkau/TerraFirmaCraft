@@ -32,9 +32,11 @@ public enum SoilBlockType
 {
     DIRT((self, variant) -> new DirtBlock(Block.Properties.of().mapColor(MapColor.DIRT).strength(1.4f).sound(SoundType.GRAVEL), self.transform(), variant)),
     GRASS((self, variant) -> new ConnectedGrassBlock(Block.Properties.of().mapColor(MapColor.GRASS).randomTicks().strength(1.8f).sound(SoundType.GRASS), self.transform(), variant)),
+    DUFF((self, variant) -> new ConnectedDuffBlock(Block.Properties.of().mapColor(MapColor.GRASS).randomTicks().strength(1.6f).sound(SoundType.GRASS), self.transform(), variant)),
     GRASS_PATH((self, variant) -> new PathBlock(Block.Properties.of().mapColor(MapColor.DIRT).strength(1.5f).sound(SoundType.GRASS), self.transform(), variant)),
     CLAY((self, variant) -> new DirtBlock(Block.Properties.of().mapColor(MapColor.DIRT).strength(1.5f).sound(SoundType.GRAVEL), self.transform(), variant)),
     CLAY_GRASS((self, variant) -> new ConnectedGrassBlock(Block.Properties.of().mapColor(MapColor.GRASS).randomTicks().strength(1.8f).sound(SoundType.GRASS), self.transform(), variant)),
+    CLAY_DUFF((self, variant) -> new ConnectedDuffBlock(Block.Properties.of().mapColor(MapColor.GRASS).randomTicks().strength(1.8f).sound(SoundType.GRASS), self.transform(), variant)),
     FARMLAND((self, variant) -> new FarmlandBlock(ExtendedProperties.of(MapColor.DIRT).strength(1.3f).sound(SoundType.GRAVEL).randomTicks().isViewBlocking(TFCBlocks::always).isSuffocating(TFCBlocks::always).blockEntity(TFCBlockEntities.FARMLAND).serverTicks(FarmlandBlockEntity::serverTick), variant)),
     ROOTED_DIRT((self, variant) -> new TFCRootedDirtBlock(Block.Properties.of().mapColor(MapColor.DIRT).strength(2.0f).sound(SoundType.ROOTED_DIRT), self.transform(), variant)),
     COARSE_DIRT((self, variant) -> new Block(Block.Properties.of().mapColor(MapColor.DIRT).sound(SoundType.GRAVEL).strength(1.6f).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops())),
@@ -70,25 +72,29 @@ public enum SoilBlockType
         return switch (this)
         {
             case DIRT -> GRASS;
-            case GRASS, GRASS_PATH, FARMLAND, ROOTED_DIRT, MUD, MUD_BRICKS, DRYING_BRICKS, MUDDY_ROOTS -> DIRT;
+            case GRASS, GRASS_PATH, FARMLAND, ROOTED_DIRT, MUD, MUD_BRICKS, DRYING_BRICKS, MUDDY_ROOTS, DUFF -> DIRT;
             case CLAY -> CLAY_GRASS;
-            case CLAY_GRASS -> CLAY;
+            case CLAY_GRASS, CLAY_DUFF -> CLAY;
             case COARSE_DIRT -> COARSE_DIRT;
         };
     }
 
     public enum Variant implements RegistrySoilVariant
     {
-        SILT,
-        LOAM,
-        SANDY_LOAM,
-        SILTY_LOAM;
+        ENTISOL,
+        ARIDISOL,
+        OXISOL,
+        FLUVISOL,
+        ANDISOL,
+        PODZOL,
+        ALFISOL,
+        MOLLISOL;
 
         private static final Variant[] VALUES = values();
 
         public static Variant valueOf(int i)
         {
-            return i >= 0 && i < VALUES.length ? VALUES[i] : SILT;
+            return i >= 0 && i < VALUES.length ? VALUES[i] : ENTISOL;
         }
 
         @Override
@@ -102,10 +108,14 @@ public enum SoilBlockType
         {
             return switch (this)
             {
-                case SILT -> TFCItems.SILT_MUD_BRICK;
-                case LOAM -> TFCItems.LOAM_MUD_BRICK;
-                case SANDY_LOAM -> TFCItems.SANDY_LOAM_MUD_BRICK;
-                case SILTY_LOAM -> TFCItems.SILTY_LOAM_MUD_BRICK;
+                case ENTISOL -> TFCItems.ENTISOL_MUD_BRICK;
+                case ARIDISOL -> TFCItems.ARIDISOL_MUD_BRICK;
+                case OXISOL -> TFCItems.OXISOL_MUD_BRICK;
+                case FLUVISOL -> TFCItems.FLUVISOL_MUD_BRICK;
+                case ANDISOL -> TFCItems.ANDISOL_MUD_BRICK;
+                case PODZOL -> TFCItems.PODZOL_MUD_BRICK;
+                case ALFISOL -> TFCItems.ALFISOL_MUD_BRICK;
+                case MOLLISOL -> TFCItems.MOLLISOL_MUD_BRICK;
             };
         }
     }

@@ -124,6 +124,8 @@
   "extra_recipe_mappings": {
     "tfc:firepit": 0,
     "tfc:torch": 6,
-    "minecraft:torch": 6
+    "minecraft:torch": 6,
+    "tfc:flint_and_pyrite": 11,
+    "tfc:ore/pyrite": 11
   }
 }

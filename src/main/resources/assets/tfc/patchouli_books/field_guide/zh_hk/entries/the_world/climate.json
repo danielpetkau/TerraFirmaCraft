@@ -28,7 +28,7 @@
     {
       "type": "patchouli:text",
       "anchor": "climate",
-      "text": "物品欄界面中的另一個選項卡是$(thing)氣候$()界面。這個頁面會顯示有關當前地理位置的信息。$(br2)第一行會顯示該地區的$(l:https://zh.wikipedia.org/wiki/%E6%9F%AF%E6%9C%AC%E6%B0%94%E5%80%99%E5%88%86%E7%B1%BB%E6%B3%95)氣候分類$()。$(br2)第二行會顯示$(l:the_world/geology)地質結構$()。$(br2)第三行則會顯示$(thing)年平均温度$()。",
+      "text": "Another tab on the main inventory screen is the $(thing)Climate$() screen. This one shows information about the current location$(br2)From top to bottom, the screen displays the $(l:https://en.wikipedia.org/wiki/K%C3%B6ppen_climate_classification)Local Climate$(), the $(thing)Average Annual Temperature$(), the $(thing)Average Annual Rainfall$(), the peak rainfall, the season when the peak occurs, and the current temperature.",
       "title": "氣候"
     },
     {
@@ -51,7 +51,7 @@
     {
       "type": "patchouli:text",
       "anchor": "rainfall",
-      "text": "降雨量是一個會根據地理位置而變化的數值。年降雨量以毫米（mm）為單位，可以在 0mm - 500mm 之間取值。地表土壤是沙子還是淤泥，植被是仙人掌還是木棉樹都由降雨量決定。",
+      "text": "Rainfall is another climate value that can vary depending on where you are in the world and the time of year. The annual rainfall is measured in millimeters (mm) and can be between 0mm - 500mm. Rainfall affects the types of flora that are found in an area, and also the types of soil.$(br)Depending on the local climate, rainfall may vary throughout the year to a peak of up to twice the local average.",
       "title": "降雨量"
     },
     {

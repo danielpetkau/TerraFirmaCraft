@@ -2,6 +2,66 @@
   "__comment__": "This file was automatically created by mcresources",
   "parent": "tfc:world/seeds",
   "criteria": {
+    "cassava": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "tfc:seeds/cassava"
+            ]
+          }
+        ]
+      }
+    },
+    "green_bean": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "tfc:seeds/green_bean"
+            ]
+          }
+        ]
+      }
+    },
+    "lentil": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "tfc:seeds/lentil"
+            ]
+          }
+        ]
+      }
+    },
+    "peanut": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "tfc:seeds/peanut"
+            ]
+          }
+        ]
+      }
+    },
+    "soybean": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "tfc:seeds/soybean"
+            ]
+          }
+        ]
+      }
+    },
     "barley": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
@@ -122,13 +182,13 @@
         ]
       }
     },
-    "green_bean": {
+    "onion": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
             "items": [
-              "tfc:seeds/green_bean"
+              "tfc:seeds/onion"
             ]
           }
         ]
@@ -146,30 +206,6 @@
         ]
       }
     },
-    "onion": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "items": [
-              "tfc:seeds/onion"
-            ]
-          }
-        ]
-      }
-    },
-    "soybean": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "items": [
-              "tfc:seeds/soybean"
-            ]
-          }
-        ]
-      }
-    },
     "squash": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
@@ -177,18 +213,6 @@
           {
             "items": [
               "tfc:seeds/squash"
-            ]
-          }
-        ]
-      }
-    },
-    "sugarcane": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "items": [
-              "tfc:seeds/sugarcane"
             ]
           }
         ]
@@ -206,25 +230,25 @@
         ]
       }
     },
-    "jute": {
+    "red_bell_pepper": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
             "items": [
-              "tfc:seeds/jute"
+              "tfc:seeds/red_bell_pepper"
             ]
           }
         ]
       }
     },
-    "papyrus": {
+    "yellow_bell_pepper": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
             "items": [
-              "tfc:seeds/papyrus"
+              "tfc:seeds/yellow_bell_pepper"
             ]
           }
         ]
@@ -254,25 +278,73 @@
         ]
       }
     },
-    "red_bell_pepper": {
+    "canola": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
             "items": [
-              "tfc:seeds/red_bell_pepper"
+              "tfc:seeds/canola"
             ]
           }
         ]
       }
     },
-    "yellow_bell_pepper": {
+    "radish": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
             "items": [
-              "tfc:seeds/yellow_bell_pepper"
+              "tfc:seeds/radish"
+            ]
+          }
+        ]
+      }
+    },
+    "alfalfa": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "tfc:seeds/alfalfa"
+            ]
+          }
+        ]
+      }
+    },
+    "jute": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "tfc:seeds/jute"
+            ]
+          }
+        ]
+      }
+    },
+    "papyrus": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "tfc:seeds/papyrus"
+            ]
+          }
+        ]
+      }
+    },
+    "sugarcane": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "tfc:seeds/sugarcane"
             ]
           }
         ]
@@ -293,9 +365,24 @@
     "show_toast": true,
     "announce_to_chat": true,
     "hidden": false,
-    "background": "tfc:textures/block/mud/silt.png"
+    "background": "tfc:textures/block/mud/fluvisol.png"
   },
   "requirements": [
+    [
+      "cassava"
+    ],
+    [
+      "green_bean"
+    ],
+    [
+      "lentil"
+    ],
+    [
+      "peanut"
+    ],
+    [
+      "soybean"
+    ],
     [
       "barley"
     ],
@@ -327,31 +414,22 @@
       "garlic"
     ],
     [
-      "green_bean"
+      "onion"
     ],
     [
       "potato"
     ],
     [
-      "onion"
-    ],
-    [
-      "soybean"
-    ],
-    [
       "squash"
-    ],
-    [
-      "sugarcane"
     ],
     [
       "tomato"
     ],
     [
-      "jute"
+      "red_bell_pepper"
     ],
     [
-      "papyrus"
+      "yellow_bell_pepper"
     ],
     [
       "pumpkin"
@@ -360,10 +438,22 @@
       "melon"
     ],
     [
-      "red_bell_pepper"
+      "canola"
     ],
     [
-      "yellow_bell_pepper"
+      "radish"
+    ],
+    [
+      "alfalfa"
+    ],
+    [
+      "jute"
+    ],
+    [
+      "papyrus"
+    ],
+    [
+      "sugarcane"
     ]
   ]
 }

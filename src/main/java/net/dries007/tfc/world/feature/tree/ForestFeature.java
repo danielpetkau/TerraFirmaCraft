@@ -123,6 +123,8 @@ public class ForestFeature extends Feature<ForestConfig>
                     feature = entry.getFeature();
                 }
             }
+            if (typeConfig.getDensity() >= 3)
+                placeSoilDisc(level, generator, random, mutablePos, entry);
             return feature.place(level, generator, random, mutablePos);
         }
         return false;
@@ -323,6 +325,15 @@ public class ForestFeature extends Feature<ForestConfig>
                 }
             }
         }
+    }
+
+    private void placeSoilDisc(WorldGenLevel level, ChunkGenerator generator, RandomSource random, BlockPos.MutableBlockPos mutablePos, ForestConfig.Entry entry)
+    {
+        // Staggers centers of soil discs relative to trees
+        mutablePos.move(random.nextInt(4) - 2, 0, random.nextInt(4) - 2);
+        mutablePos.setY(level.getHeight(Heightmap.Types.OCEAN_FLOOR, mutablePos.getX(), mutablePos.getZ()));
+
+        entry.soilDiscFeature().get().value().place(level, generator, random, mutablePos);
     }
 
     @Nullable

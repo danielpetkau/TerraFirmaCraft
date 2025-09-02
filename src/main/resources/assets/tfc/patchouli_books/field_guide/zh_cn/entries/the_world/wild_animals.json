@@ -114,7 +114,7 @@
     {
       "type": "patchouli:entity",
       "entity": "tfc:boar",
-      "scale": 0.7,
+      "scale": 0.8,
       "name": "野猪",
       "text": "野猪生活在$(l:the_world/climate#temperature)温度$()不高于 25°C，且$(l:the_world/climate#rainfall)降雨量$()在 130 到 400mm 的平原上。"
     },
@@ -133,7 +133,8 @@
     {
       "type": "patchouli:entity",
       "entity": "tfc:bison",
-      "scale": 0.7,
+      "scale": 0.6,
+      "name": "Bison",
       "text": "The bison spawns in open plains at any $(l:the_world/climate#temperature)temperature$() above -10°C and below 15°C, and $(l:the_world/climate#rainfall)rainfall$() between 160 and 420mm."
     },
     {
@@ -168,7 +169,7 @@
     {
       "type": "patchouli:entity",
       "entity": "tfc:caribou",
-      "scale": 0.6,
+      "scale": 0.5,
       "name": "Caribou",
       "text": "The caribou spawns at any $(l:the_world/climate#temperature)temperature$() below -9°C, and $(l:the_world/climate#rainfall)rainfall$() between 110 and 500mm."
     },
@@ -181,7 +182,7 @@
     {
       "type": "patchouli:entity",
       "entity": "tfc:bongo",
-      "scale": 0.9,
+      "scale": 0.7,
       "name": "Bongo",
       "text": "The bongo spawns in forests at any $(l:the_world/climate#temperature)temperature$() above 15°C, and $(l:the_world/climate#rainfall)rainfall$() between 230 and 500mm."
     },

@@ -106,12 +106,6 @@ public class CrucibleBlock extends DeviceBlock implements EntityBlockExtension, 
     }
 
     @Override
-    public int getDefaultStackSize(ItemStack stack)
-    {
-        return 1;
-    }
-
-    @Override
     public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltip, TooltipFlag tooltipFlag)
     {
         final CrucibleComponent component = stack.getOrDefault(TFCComponents.CRUCIBLE, CrucibleComponent.EMPTY);

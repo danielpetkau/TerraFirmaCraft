@@ -17,6 +17,9 @@
                 "minecraft:custom_name",
                 "tfc:crucible"
               ]
+            },
+            {
+              "function": "tfc:apply_stack_size"
             }
           ]
         }
