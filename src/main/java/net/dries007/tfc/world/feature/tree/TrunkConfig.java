@@ -21,9 +21,9 @@ public record TrunkConfig(BlockState state, int minHeight, int maxHeight, boolea
         Codec.INT.fieldOf("max_height").forGetter(c -> c.maxHeight),
         Codec.BOOL.fieldOf("wide").forGetter(c -> c.wide)
     ).apply(instance, TrunkConfig::new)).comapFlatMap(c -> {
-        if (c.minHeight >= c.maxHeight)
+        if (c.minHeight > c.maxHeight)
         {
-            return DataResult.error(() -> "Min height (provided = " + c.minHeight + ") must not be greater or equal to max height (provided = " + c.maxHeight + ")");
+            return DataResult.error(() -> "Min height (provided = " + c.minHeight + ") must not be greater than max height (provided = " + c.maxHeight + ")");
         }
         return DataResult.success(c);
     }, Function.identity());
