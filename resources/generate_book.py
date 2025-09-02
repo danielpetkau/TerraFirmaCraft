@@ -1414,7 +1414,7 @@ def make_book(rm: ResourceManager, i18n: I18n, local_instance: bool = False, rev
             multimultiblock('', *[two_tall_block_spotlight('', '', 'tfc:farmland/mollisol', 'tfc:crop/lentil[age=%d]' % i) for i in range(6)]),
             text(f'{detail_crop("canola")}Canola is a single block crop adapted to cold temperatures. Canola seeds can be planted on farmland and will produce $(thing)Canola$() and $(thing)Canola Seeds$() as a product, while enriching the soil. Canola can be used as a source of straw, or compost, and the seeds can be used for oil.', title='Canola').link('tfc:seeds/canola').link('tfc:canola').anchor('canola'),
             multimultiblock('', *[two_tall_block_spotlight('', '', 'tfc:farmland/mollisol', 'tfc:crop/lentil[age=%d]' % i) for i in range(6)]),
-            text(f'{detail_crop("radish")}Radishes are a single block crop adapted to cold temperatures. Radish seeds can be planted on farmland and will produce $(thing)Radishes$() and $(thing)Radish Seeds$() as a product, while enriching the soil. Radishes are not a very nutritious vegetable, but can be fed to many animals.', title='Radish').link('tfc:seeds/radish').link('tfc:radish').anchor('radish'),
+            text(f'{detail_crop("radish")}Radishes are a single block crop adapted to cold temperatures. Radish seeds can be planted on farmland and will produce $(thing)Radishes$() and $(thing)Radish Seeds$() as a product, while enriching the soil. Radishes are not a very nutritious vegetable, but can be fed to many animals.', title='Radish').link('tfc:seeds/radish').link('tfc:food/radish').anchor('radish'),
             multimultiblock('', *[two_tall_block_spotlight('', '', 'tfc:farmland/mollisol', 'tfc:crop/lentil[age=%d]' % i) for i in range(6)]),
 
             # Misc
