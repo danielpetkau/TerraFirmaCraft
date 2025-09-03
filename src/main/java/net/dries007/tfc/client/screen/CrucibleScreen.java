@@ -127,7 +127,7 @@ public class CrucibleScreen extends BlockEntityScreen<CrucibleBlockEntity, Cruci
         // Draw the fluid + detailed content
         final FluidAlloy alloy = blockEntity.getAlloy();
         final FluidStack alloyResult = blockEntity.getAlloyResult();
-        if (alloy.getAmount() > 0)
+        if (alloy.getAmount() > 0 && !alloyResult.isEmpty())
         {
             final TextureAtlasSprite sprite = RenderHelpers.getAndBindFluidSprite(alloyResult);
             final int fillHeight = (int) Math.ceil((float) 31 * alloy.getAmount() / blockEntity.containerInfo().fluidCapacity());
