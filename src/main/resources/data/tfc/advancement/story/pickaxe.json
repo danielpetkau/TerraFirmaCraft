@@ -7,7 +7,7 @@
       "conditions": {
         "items": [
           {
-            "items": "#tfc:pickaxes"
+            "items": "#minecraft:pickaxes"
           }
         ]
       }

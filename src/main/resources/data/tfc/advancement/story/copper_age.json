@@ -2,12 +2,12 @@
   "__comment__": "This file was automatically created by mcresources",
   "parent": "tfc:story/mold",
   "criteria": {
-    "metal_item/copper_tools": {
+    "tools/copper": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
-            "items": "#tfc:metal_item/copper_tools"
+            "items": "#tfc:tools/copper"
           }
         ]
       }
@@ -31,7 +31,7 @@
   },
   "requirements": [
     [
-      "metal_item/copper_tools"
+      "tools/copper"
     ]
   ]
 }

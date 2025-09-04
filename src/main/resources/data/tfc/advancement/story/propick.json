@@ -2,12 +2,12 @@
   "__comment__": "This file was automatically created by mcresources",
   "parent": "tfc:story/copper_age",
   "criteria": {
-    "propicks": {
+    "tools/propick": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
-            "items": "#tfc:propicks"
+            "items": "#c:tools/propick"
           }
         ]
       }
@@ -31,7 +31,7 @@
   },
   "requirements": [
     [
-      "propicks"
+      "tools/propick"
     ]
   ]
 }

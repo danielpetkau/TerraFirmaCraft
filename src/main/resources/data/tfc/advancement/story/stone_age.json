@@ -2,12 +2,12 @@
   "__comment__": "This file was automatically created by mcresources",
   "parent": "tfc:story/find_rock",
   "criteria": {
-    "stone_tools": {
+    "tools/stone": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
-            "items": "#tfc:stone_tools"
+            "items": "#tfc:tools/stone"
           }
         ]
       }
@@ -31,7 +31,7 @@
   },
   "requirements": [
     [
-      "stone_tools"
+      "tools/stone"
     ]
   ]
 }

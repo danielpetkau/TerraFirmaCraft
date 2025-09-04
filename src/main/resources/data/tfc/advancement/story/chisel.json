@@ -2,12 +2,12 @@
   "__comment__": "This file was automatically created by mcresources",
   "parent": "tfc:story/copper_age",
   "criteria": {
-    "chisels": {
+    "tools/chisel": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
-            "items": "#tfc:chisels"
+            "items": "#c:tools/chisel"
           }
         ]
       }
@@ -31,7 +31,7 @@
   },
   "requirements": [
     [
-      "chisels"
+      "tools/chisel"
     ]
   ]
 }

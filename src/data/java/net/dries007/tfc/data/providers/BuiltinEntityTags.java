@@ -130,9 +130,10 @@ public class BuiltinEntityTags extends EntityTypeTagsProvider
             );
 
         tag(HUNTED_BY_DOGS)
-            .addTags(
-                HUNTED_BY_LAND_PREDATORS
-            )
+            // todo
+//            .addTags(
+//                HUNTED_BY_LAND_PREDATORS
+//            )
             .add(
                 TFCEntities.RAT.get(),
                 TFCEntities.JERBOA.get(),

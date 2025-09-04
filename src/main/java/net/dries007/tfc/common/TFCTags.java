@@ -478,6 +478,9 @@ public class TFCTags
         /** Used in loot tables to prevent dropping of certain items */
         public static final TagKey<Item> TOOLS_SHARP = tag("tools/sharp");
         public static final TagKey<Item> TOOLS_LARGE = tag("tools/large");
+        /** Used in advancements **/
+        public static final TagKey<Item> TOOLS_STONE = tag("tools/stone");
+        public static final TagKey<Item> TOOLS_COPPER = tag("tools/copper");
 
         // Damage Types
         public static final TagKey<Item> DEALS_SLASHING_DAMAGE = tag("deals_slashing_damage");
@@ -579,6 +582,9 @@ public class TFCTags
         public static final TagKey<Item> FOX_SPAWNS_WITH = tag("fox_spawns_with");
         /** Chests, barrels, etc. that can be used as a horse saddlebag */
         public static final TagKey<Item> CARRIED_BY_HORSE = tag("carried_by_horse");
+
+        /** Used in advancements **/
+        public static final TagKey<Item> UNFIRED_POTTERY = tag("unfired_pottery");
 
 
         /**

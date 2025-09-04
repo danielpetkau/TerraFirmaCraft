@@ -11,7 +11,7 @@ def generate(rm: ResourceManager):
 
     story.advancement('root', icon('tfc:metal/hammer/wrought_iron'), 'TerraFirmaCraft Story', 'TFC\'s main progression line', None, root_trigger(), chat=False)
     story.advancement('find_rock', icon('tfc:rock/loose/schist'), 'Just a Rock', 'Pick up a stone from the ground', 'root', inventory_changed('#tfc:rock_knapping'))
-    story.advancement('stone_age', icon('tfc:stone/axe/sedimentary'), 'Paleolithic!', 'Enter the Stone Age by making a stone tool', 'find_rock', inventory_changed('#tfc:stone_tools'))
+    story.advancement('stone_age', icon('tfc:stone/axe/sedimentary'), 'Paleolithic!', 'Enter the Stone Age by making a stone tool', 'find_rock', inventory_changed('#tfc:tools/stone'))
     story.advancement('get_straw', icon('tfc:straw'), 'Grasping at Straws', 'Cut some grass with a knife to get straw', 'stone_age', inventory_changed('tfc:straw'))
     story.advancement('logging', icon('tfc:wood/log/oak'), 'Timberrr!', 'Use an axe to cut down a tree', 'get_straw', inventory_changed('#minecraft:logs'))
     story.advancement('firestarter', icon('tfc:firestarter'), 'Embers', 'Craft a firestarter from two sticks', 'logging', inventory_changed('tfc:firestarter'))
@@ -30,7 +30,7 @@ def generate(rm: ResourceManager):
     story.advancement('knap_clay', icon('tfc:ceramic/unfired_vessel'), 'Clay Forming', 'Knap clay into a new shape', 'find_clay', inventory_changed('#tfc:unfired_pottery'))
     story.advancement('pit_kiln', icon('tfc:ceramic/vessel'), 'Potter', 'Light a pit kiln on fire', 'knap_clay', generic('tfc:lit', {'ingredient': ['tfc:pit_kiln']}))
     story.advancement('mold', icon('tfc:ceramic/axe_head_mold'), 'Pouring Metal', 'Fire a mold for making a metal tool head', 'pit_kiln', inventory_changed('#tfc:fired_molds'))
-    story.advancement('copper_age', icon('tfc:metal/axe_head/copper'), 'The Copper Age', 'Enter the Copper Age by smithing a copper tool', 'mold', inventory_changed('#tfc:metal_item/copper_tools'))
+    story.advancement('copper_age', icon('tfc:metal/axe_head/copper'), 'The Copper Age', 'Enter the Copper Age by smithing a copper tool', 'mold', inventory_changed('#tfc:tools/copper'))
     story.advancement('bronze_age', icon('tfc:metal/sword/bronze'), 'The Bronze Age', 'Enter the Bronze Age by smithing a bronze item', 'copper_age', multiple(inventory_changed('#tfc:metal_item/bronze'), inventory_changed('#tfc:metal_item/bismuth_bronze'), inventory_changed('#tfc:metal_item/black_bronze')))
     story.advancement('bloomery', icon('tfc:bloomery'), 'Ironworks', 'Craft a bloomery', 'bronze_age', inventory_changed('tfc:bloomery'))
     story.advancement('iron_bloom', icon('tfc:raw_iron_bloom'), 'In Bloom', 'Create an iron bloom', 'bloomery', inventory_changed('tfc:raw_iron_bloom'))
@@ -41,10 +41,10 @@ def generate(rm: ResourceManager):
     story.advancement('blue_steel', icon('tfc:metal/ingot/blue_steel'), 'Feeling Blue', 'Make your first blue steel item', 'black_steel', inventory_changed('#tfc:metal_item/blue_steel'), frame='challenge')
     story.advancement('red_steel', icon('tfc:metal/ingot/red_steel'), 'Seeing Red', 'Make your first red steel item', 'black_steel', inventory_changed('#tfc:metal_item/red_steel'), frame='challenge')
     # Tool advancements parented to copper age
-    story.advancement('pickaxe', icon('tfc:metal/pickaxe/copper'), 'Time to Mine (Finally!)', 'Make your first metal pickaxe', 'copper_age', inventory_changed('#tfc:pickaxes'))
-    story.advancement('saw', icon('tfc:metal/saw/copper'), 'Carpenter', 'Make a metal saw', 'copper_age', inventory_changed('#tfc:saws'))
-    story.advancement('chisel', icon('tfc:metal/chisel/copper'), 'Sculptor', 'Make a metal chisel', 'copper_age', inventory_changed('#tfc:chisels'))
-    story.advancement('propick', icon('tfc:metal/propick/copper'), 'Prospector', 'Make a prospector\'s pickaxe', 'copper_age', inventory_changed('#tfc:propicks'))
+    story.advancement('pickaxe', icon('tfc:metal/pickaxe/copper'), 'Time to Mine (Finally!)', 'Make your first metal pickaxe', 'copper_age', inventory_changed('#minecraft:pickaxes'))
+    story.advancement('saw', icon('tfc:metal/saw/copper'), 'Carpenter', 'Make a metal saw', 'copper_age', inventory_changed('#c:tools/saw'))
+    story.advancement('chisel', icon('tfc:metal/chisel/copper'), 'Sculptor', 'Make a metal chisel', 'copper_age', inventory_changed('#c:tools/chisel'))
+    story.advancement('propick', icon('tfc:metal/propick/copper'), 'Prospector', 'Make a prospector\'s pickaxe', 'copper_age', inventory_changed('#c:tools/propick'))
     # Parented to chisel
     story.advancement('smooth_stone', icon('tfc:rock/smooth/chert'), 'Super Smooth', 'Chisel a piece of raw stone into a smooth stone block', 'chisel', generic('tfc:chiseled', {'ingredient': '#c:stones/smooth'}))
     story.advancement('raw_stone', icon('tfc:rock/hardened/basalt'), 'Raw Emotions', 'Isolate a piece of raw rock to make it pop off', 'smooth_stone', inventory_changed('#c:stones'))
@@ -55,7 +55,7 @@ def generate(rm: ResourceManager):
     story.advancement('shield', icon('tfc:metal/shield/copper'), 'Take Cover!', 'Craft a shield from a double sheet', 'sheet', inventory_changed('#tfc:shields'))
     # Parented to saw
     story.advancement('barrel', icon('tfc:wood/barrel/acacia'), 'Do a Barrel Roll!', 'Craft a barrel using a saw and lumber', 'saw', inventory_changed('#tfc:barrels'))
-    story.advancement('scraped_hide', icon('tfc:large_scraped_hide'), 'Soak and Scrape', 'Soak a hide in limewater and then scrape it', 'barrel', inventory_changed('#tfc:scraped_hides'))
+    story.advancement('scraped_hide', icon('tfc:large_scraped_hide'), 'Soak and Scrape', 'Soak a hide in limewater and then scrape it', 'barrel', multiple(inventory_changed('tfc:small_scraped_hide'), inventory_changed('tfc:medium_scraped_hide'), inventory_changed('tfc:large_scraped_hide')), requirements=[[m + '_scraped_hide'] for m in ('small', 'medium', 'large')])
     story.advancement('leather', icon('minecraft:leather'), 'Genuine Leather', 'Finish preparing the hide by soaking it in water then tannin', 'scraped_hide', inventory_changed('minecraft:leather'))
     story.advancement('bellows', icon('tfc:bellows'), 'Blow You Away', 'Make a bellows out of leather', 'leather', inventory_changed('tfc:bellows'))
     story.advancement('papyrus', icon('tfc:papyrus'), 'I\'m a Skeleton With Very High Standards!', 'Locate papyrus', 'barrel', inventory_changed('tfc:papyrus'))

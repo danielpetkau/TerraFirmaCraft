@@ -259,6 +259,24 @@ public class BuiltinItemTags extends TagsProvider<Item> implements Accessors
         tag(COLORED_POLISHED_ALABASTER).add(TFCBlocks.POLISHED_ALABASTER);
         tag(COLORED_VESSELS).add(TFCItems.UNFIRED_GLAZED_VESSELS);
         tag(COLORED_LARGE_VESSELS).add(TFCItems.UNFIRED_GLAZED_LARGE_VESSELS);
+        tag(UNFIRED_POTTERY)
+            .add(TFCItems.UNFIRED_GLAZED_VESSELS)
+            .add(TFCItems.UNFIRED_MOLDS)
+            .add(TFCItems.UNFIRED_BLOWPIPE)
+            .add(TFCItems.UNFIRED_BOWL)
+            .add(TFCItems.UNFIRED_BRICK)
+            .add(TFCItems.UNFIRED_BELL_MOLD)
+            .add(TFCItems.UNFIRED_FIRE_BRICK)
+            .add(TFCItems.UNFIRED_FIRE_INGOT_MOLD)
+            .add(TFCItems.UNFIRED_FLOWER_POT)
+            .add(TFCItems.UNFIRED_GLAZED_LARGE_VESSELS)
+            .add(TFCItems.UNFIRED_JUG)
+            .add(TFCItems.UNFIRED_CRUCIBLE)
+            .add(TFCItems.UNFIRED_PAN)
+            .add(TFCItems.UNFIRED_POT)
+            .add(TFCItems.UNFIRED_SPINDLE_HEAD)
+            .add(TFCItems.UNFIRED_VESSEL)
+            .add(TFCItems.UNFIRED_LARGE_VESSEL);
 
         tag(TOOL_RACKS).add(TFCBlocks.WOODS, Wood.BlockType.TOOL_RACK);
         tag(SCRIBING_TABLES).add(TFCBlocks.WOODS, Wood.BlockType.SCRIBING_TABLE);
@@ -393,6 +411,30 @@ public class BuiltinItemTags extends TagsProvider<Item> implements Accessors
             TOOLS_KNIFE,
             TOOLS_SCYTHE,
             TOOLS_SAW);
+        tag(TOOLS_STONE)
+            .add(TFCItems.ROCK_TOOLS, RockCategory.ItemType.HAMMER)
+            .add(TFCItems.ROCK_TOOLS, RockCategory.ItemType.AXE)
+            .add(TFCItems.ROCK_TOOLS, RockCategory.ItemType.HOE)
+            .add(TFCItems.ROCK_TOOLS, RockCategory.ItemType.JAVELIN)
+            .add(TFCItems.ROCK_TOOLS, RockCategory.ItemType.KNIFE)
+            .add(TFCItems.ROCK_TOOLS, RockCategory.ItemType.SHOVEL);
+        tag(TOOLS_COPPER)
+            .add(TFCItems.METAL_ITEMS.get(Metal.COPPER).get(Metal.ItemType.TUYERE))
+            .add(TFCItems.METAL_ITEMS.get(Metal.COPPER).get(Metal.ItemType.FISHING_ROD))
+            .add(TFCItems.METAL_ITEMS.get(Metal.COPPER).get(Metal.ItemType.PICKAXE))
+            .add(TFCItems.METAL_ITEMS.get(Metal.COPPER).get(Metal.ItemType.PROPICK))
+            .add(TFCItems.METAL_ITEMS.get(Metal.COPPER).get(Metal.ItemType.AXE))
+            .add(TFCItems.METAL_ITEMS.get(Metal.COPPER).get(Metal.ItemType.SHOVEL))
+            .add(TFCItems.METAL_ITEMS.get(Metal.COPPER).get(Metal.ItemType.HOE))
+            .add(TFCItems.METAL_ITEMS.get(Metal.COPPER).get(Metal.ItemType.CHISEL))
+            .add(TFCItems.METAL_ITEMS.get(Metal.COPPER).get(Metal.ItemType.HAMMER))
+            .add(TFCItems.METAL_ITEMS.get(Metal.COPPER).get(Metal.ItemType.SAW))
+            .add(TFCItems.METAL_ITEMS.get(Metal.COPPER).get(Metal.ItemType.JAVELIN))
+            .add(TFCItems.METAL_ITEMS.get(Metal.COPPER).get(Metal.ItemType.SWORD))
+            .add(TFCItems.METAL_ITEMS.get(Metal.COPPER).get(Metal.ItemType.MACE))
+            .add(TFCItems.METAL_ITEMS.get(Metal.COPPER).get(Metal.ItemType.KNIFE))
+            .add(TFCItems.METAL_ITEMS.get(Metal.COPPER).get(Metal.ItemType.SCYTHE))
+            .add(TFCItems.METAL_ITEMS.get(Metal.COPPER).get(Metal.ItemType.SHEARS));
 
         // Common `#c:tools`
         tag(Tags.Items.TOOLS).addTags(

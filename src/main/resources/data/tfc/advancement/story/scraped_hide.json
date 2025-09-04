@@ -2,12 +2,32 @@
   "__comment__": "This file was automatically created by mcresources",
   "parent": "tfc:story/barrel",
   "criteria": {
-    "scraped_hides": {
+    "small_scraped_hide": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
-            "items": "#tfc:scraped_hides"
+            "items": "tfc:small_scraped_hide"
+          }
+        ]
+      }
+    },
+    "medium_scraped_hide": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "tfc:medium_scraped_hide"
+          }
+        ]
+      }
+    },
+    "large_scraped_hide": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "tfc:large_scraped_hide"
           }
         ]
       }
@@ -31,7 +51,13 @@
   },
   "requirements": [
     [
-      "scraped_hides"
+      "small_scraped_hide"
+    ],
+    [
+      "medium_scraped_hide"
+    ],
+    [
+      "large_scraped_hide"
     ]
   ]
 }
