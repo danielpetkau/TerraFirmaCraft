@@ -6,6 +6,7 @@
 
 package net.dries007.tfc.common.blockentities;
 
+import java.util.Optional;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
@@ -20,6 +21,15 @@ public class TickCounterBlockEntity extends TFCBlockEntity
     public static void reset(Level level, BlockPos pos)
     {
         level.getBlockEntity(pos, TFCBlockEntities.TICK_COUNTER.get()).ifPresent(TickCounterBlockEntity::resetCounter);
+    }
+
+    public static void addTicks(Level level, BlockPos pos, long ticks)
+    {
+        Optional<TickCounterBlockEntity> entity = level.getBlockEntity(pos, TFCBlockEntities.TICK_COUNTER.get());
+        if (entity.isPresent())
+        {
+            entity.get().increaseCounter(ticks);
+        }
     }
 
     protected long lastUpdateTick = Integer.MIN_VALUE;
@@ -57,9 +67,21 @@ public class TickCounterBlockEntity extends TFCBlockEntity
         setChanged();
     }
 
+    /**
+     * Reduces the amount of time counted by setting the lastUpdateTick to be more recent
+     */
     public void reduceCounter(long amount)
     {
         lastUpdateTick += amount;
+        setChanged();
+    }
+
+    /**
+     * Adds to the amount of time counted by setting the lastUpdateTick farther in the past
+     */
+    public void increaseCounter(long amount)
+    {
+        lastUpdateTick -= amount;
         setChanged();
     }
 

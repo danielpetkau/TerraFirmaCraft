@@ -39,7 +39,7 @@ public class BananaSaplingBlock extends FruitTreeSaplingBlock
     }
 
     @Override
-    public void createTree(Level level, BlockPos pos, BlockState state, RandomSource random)
+    public void createTree(Level level, BlockPos pos, BlockState state, RandomSource random, long ticksToAdd)
     {
         level.setBlockAndUpdate(pos, block.get().defaultBlockState().setValue(SeasonalPlantBlock.LIFECYCLE, Lifecycle.HEALTHY));
     }

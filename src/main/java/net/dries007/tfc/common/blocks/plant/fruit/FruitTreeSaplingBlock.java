@@ -31,6 +31,7 @@ import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraft.world.ticks.TickPriority;
 import org.jetbrains.annotations.Nullable;
 
 import net.dries007.tfc.common.TFCTags;
@@ -139,7 +140,8 @@ public class FruitTreeSaplingBlock extends BushBlock implements IForgeBlockExten
         {
             if (level.getBlockEntity(pos) instanceof TickCounterBlockEntity counter)
             {
-                if (counter.getTicksSinceUpdate() > getTicksToGrow())
+                final long elapsedTicks = counter.getTicksSinceUpdate();
+                if (elapsedTicks > getTicksToGrow())
                 {
                     final int hydration = FruitTreeLeavesBlock.getHydration(level, pos);
                     final float temp = Climate.getAverageTemperature(level, pos);
@@ -149,20 +151,23 @@ public class FruitTreeSaplingBlock extends BushBlock implements IForgeBlockExten
                     }
                     else
                     {
-                        createTree(level, pos, state, random);
+                        createTree(level, pos, state, random, elapsedTicks - getTicksToGrow());
                     }
                 }
             }
         }
     }
 
-    public void createTree(Level level, BlockPos pos, BlockState state, RandomSource random)
+    public void createTree(Level level, BlockPos pos, BlockState state, RandomSource random, long ticksToAdd)
     {
         final boolean onBranch = Helpers.isBlock(level.getBlockState(pos.below()), TFCTags.Blocks.FRUIT_TREE_BRANCH);
         int internalSapling = onBranch ? 3 : state.getValue(SAPLINGS);
         if (internalSapling == 1 && random.nextBoolean()) internalSapling += 1;
         level.setBlockAndUpdate(pos, block.get().defaultBlockState().setValue(PipeBlock.DOWN, true).setValue(TFCBlockStateProperties.SAPLINGS, internalSapling).setValue(TFCBlockStateProperties.STAGE_3, onBranch ? 1 : 0));
         TickCounterBlockEntity.reset(level, pos);
+        // The following carries over time since planting the sapling block to the growth of the tree
+        TickCounterBlockEntity.addTicks(level, pos, ticksToAdd);
+        level.scheduleTick(pos, block.get(), 20, TickPriority.NORMAL);
     }
 
 
