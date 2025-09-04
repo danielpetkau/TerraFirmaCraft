@@ -7,9 +7,7 @@
 package net.dries007.tfc.test.recipes;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
 
-import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;

@@ -46,6 +46,7 @@ import net.dries007.tfc.common.blocks.wood.Wood;
 import net.dries007.tfc.common.component.food.FoodData;
 import net.dries007.tfc.common.component.food.FoodTrait;
 import net.dries007.tfc.common.component.food.FoodTraits;
+import net.dries007.tfc.common.fluids.TFCFluids;
 import net.dries007.tfc.common.items.Food;
 import net.dries007.tfc.common.items.HideItemType;
 import net.dries007.tfc.common.items.Powder;
@@ -369,10 +370,16 @@ public interface CraftingRecipes extends Recipes
                 .shapeless(blocks.apply(SoilBlockType.COARSE_DIRT), 2);
 
             for (int n = 1; n <= 8; n++)
-                recipe("" + n)
+            {
+                recipe("freshwater" + n)
                     .input(FluidContentIngredient.of(Fluids.WATER, 100))
                     .input(blocks.apply(SoilBlockType.DIRT), n)
                     .shapeless(blocks.apply(SoilBlockType.MUD), n);
+                recipe("saltwater" + n)
+                    .input(FluidContentIngredient.of(TFCFluids.SALT_WATER.getSource(), 100))
+                    .input(blocks.apply(SoilBlockType.DIRT), n)
+                    .shapeless(blocks.apply(SoilBlockType.MUD), n);
+            }
         }
 
         addTools(RockCategory.ItemType.AXE_HEAD, RockCategory.ItemType.AXE);
