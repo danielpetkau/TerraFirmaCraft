@@ -23,6 +23,9 @@ import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
 
+import net.dries007.tfc.client.ClientHelpers;
+import net.dries007.tfc.client.ClimateRenderCache;
+import net.dries007.tfc.client.overworld.SolarCalculator;
 import net.dries007.tfc.common.entities.prey.WingedPrey;
 import net.dries007.tfc.util.calendar.Calendars;
 import net.dries007.tfc.util.calendar.Month;
@@ -387,7 +390,7 @@ public class GrouseModel extends HierarchicalAnimatedModel<WingedPrey>
     public void setupAnim(WingedPrey entity, float limbSwing, float limbSwingAmount, float ageInTicks, float headYaw, float headPitch)
     {
         super.setupAnim(entity, limbSwing, limbSwingAmount, ageInTicks, headYaw, headPitch);
-        Month currentMonth = Calendars.CLIENT.getCalendarMonthOfYear();
+        Month currentMonth = Calendars.CLIENT.getHemispheralCalendarMonthOfYear(ClientHelpers.inNorthernHemisphere());
         Season season = currentMonth.getSeason();
         this.animateWalk(season == Season.FALL ? GROUSE_STRUT : GROUSE_WALK, limbSwing, limbSwing, 1f, 2.5f);
         if (!entity.onGround())

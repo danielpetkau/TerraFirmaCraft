@@ -14,10 +14,12 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.SpawnPlacementType;
 import net.minecraft.world.entity.SpawnPlacementTypes;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.neoforged.neoforge.event.entity.RegisterSpawnPlacementsEvent;
 
+import net.dries007.tfc.client.overworld.SolarCalculator;
 import net.dries007.tfc.common.entities.ai.predator.PackPredator;
 import net.dries007.tfc.common.entities.ai.prey.TFCOcelot;
 import net.dries007.tfc.common.entities.aquatic.AquaticCritter;
@@ -53,6 +55,7 @@ import net.dries007.tfc.common.entities.prey.TFCRabbit;
 import net.dries007.tfc.common.entities.prey.WingedPrey;
 import net.dries007.tfc.util.Helpers;
 import net.dries007.tfc.util.calendar.Calendars;
+import net.dries007.tfc.util.climate.Climate;
 import net.dries007.tfc.util.data.DataManager;
 import net.dries007.tfc.util.registry.IdHolder;
 import net.dries007.tfc.world.chunkdata.ChunkData;
@@ -232,7 +235,7 @@ public class Faunas
             {
                 return false;
             }
-            if (!fauna.months().isEmpty() && !fauna.months().contains(Calendars.SERVER.getCalendarMonthOfYear()))
+            if (!fauna.months().isEmpty() && !fauna.months().contains(Calendars.SERVER.getHemispheralCalendarMonthOfYear(SolarCalculator.getInNorthernHemisphere(pos, level.getLevel()))))
             {
                 return false;
             }

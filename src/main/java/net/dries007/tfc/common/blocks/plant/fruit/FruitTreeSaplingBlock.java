@@ -34,6 +34,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraft.world.ticks.TickPriority;
 import org.jetbrains.annotations.Nullable;
 
+import net.dries007.tfc.client.overworld.SolarCalculator;
 import net.dries007.tfc.common.TFCTags;
 import net.dries007.tfc.common.blockentities.TickCounterBlockEntity;
 import net.dries007.tfc.common.blocks.EntityBlockExtension;
@@ -47,7 +48,6 @@ import net.dries007.tfc.common.blocks.soil.HoeOverlayBlock;
 import net.dries007.tfc.config.TFCConfig;
 import net.dries007.tfc.util.Helpers;
 import net.dries007.tfc.util.calendar.Calendars;
-import net.dries007.tfc.util.calendar.ICalendar;
 import net.dries007.tfc.util.climate.Climate;
 import net.dries007.tfc.util.climate.ClimateRange;
 
@@ -97,7 +97,7 @@ public class FruitTreeSaplingBlock extends BushBlock implements IForgeBlockExten
         text.accept(FarmlandBlock.getHydrationTooltip(level, pos, range, false, FruitTreeLeavesBlock.getHydration(level, pos)));
         text.accept(FarmlandBlock.getAverageTemperatureTooltip(level, pos, range, false));
 
-        if (!stages[Calendars.SERVER.getCalendarMonthOfYear().ordinal()].active())
+        if (!stages[Calendars.SERVER.getHemispheralCalendarMonthOfYear(SolarCalculator.getInNorthernHemisphere(pos, level)).ordinal()].active())
         {
             text.accept(Component.translatable("tfc.tooltip.fruit_tree.sapling_wrong_month"));
         }
@@ -136,7 +136,7 @@ public class FruitTreeSaplingBlock extends BushBlock implements IForgeBlockExten
     protected void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random)
     {
         // only go through this check if we are reasonably sure the plant would actually live
-        if (stages[Calendars.SERVER.getCalendarMonthOfYear().ordinal()].active())
+        if (stages[Calendars.SERVER.getHemispheralCalendarMonthOfYear(SolarCalculator.getInNorthernHemisphere(pos, level)).ordinal()].active())
         {
             if (level.getBlockEntity(pos) instanceof TickCounterBlockEntity counter)
             {

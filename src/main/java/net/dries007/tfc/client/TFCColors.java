@@ -16,6 +16,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 import org.jetbrains.annotations.Nullable;
 
+import net.dries007.tfc.client.overworld.SolarCalculator;
 import net.dries007.tfc.util.Helpers;
 import net.dries007.tfc.util.calendar.Calendars;
 import net.dries007.tfc.util.climate.Climate;
@@ -139,7 +140,8 @@ public final class TFCColors
     {
         final Level level = ClientHelpers.getLevel();
         float temp = Climate.getAverageTemperature(level, pos);
-        float timeOfYear = Calendars.CLIENT.getCalendarFractionOfYear();
+        final float offset = ClientHelpers.inNorthernHemisphere() ? 0f : 0.5f; // Offset for Southern Hemisphere
+        float timeOfYear = (Calendars.CLIENT.getCalendarFractionOfYear() + offset) % 1f;
         final float tempClamped = temp > 12f ? 12f : Math.max(temp, -20f);
 
         final float cubedTerm = 1.5f * (float) Math.pow(tempClamped + 3f, 3f) / 4913f;

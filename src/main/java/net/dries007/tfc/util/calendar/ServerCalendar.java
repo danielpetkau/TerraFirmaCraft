@@ -148,7 +148,7 @@ public final class ServerCalendar extends Calendar
         final LocalDate date = LocalDate.now();
         final LocalDate calendarDate = LocalDate.of(
             Mth.clamp((int) getCalendarYear(), Year.MIN_VALUE, Year.MAX_VALUE),
-            getCalendarMonthOfYear().ordinal() + 1,
+            getAbsoluteCalendarMonthOfYear().ordinal() + 1,
             Mth.clamp(getCalendarDayOfMonth(), 1, 28)
         );
         if (date.isBefore(calendarDate))

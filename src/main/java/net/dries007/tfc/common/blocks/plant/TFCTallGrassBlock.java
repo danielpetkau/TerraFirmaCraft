@@ -62,7 +62,7 @@ public abstract class TFCTallGrassBlock extends ShortGrassBlock implements ITall
     protected void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random)
     {
         super.randomTick(state, level, pos, random);
-        if (PlantRegrowth.canSpread(level, random) && state.getValue(PART) == Part.LOWER)
+        if (PlantRegrowth.canSpread(level, random, pos) && state.getValue(PART) == Part.LOWER)
         {
             final BlockPos newPos = PlantRegrowth.spreadSelf(state, level, pos, random, 2, 2, 4);
             if (newPos != null && PlantRegrowth.DEFAULT_PLACEMENT_TEST.test(level.getBlockState(newPos.above()), newPos.above()))

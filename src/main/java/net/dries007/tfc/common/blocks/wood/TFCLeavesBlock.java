@@ -34,7 +34,9 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 
+import net.dries007.tfc.client.ClientHelpers;
 import net.dries007.tfc.client.ClimateRenderCache;
+import net.dries007.tfc.client.overworld.SolarCalculator;
 import net.dries007.tfc.client.particle.TFCParticles;
 import net.dries007.tfc.common.TFCTags;
 import net.dries007.tfc.common.blocks.ExtendedProperties;
@@ -48,6 +50,7 @@ import net.dries007.tfc.config.TFCConfig;
 import net.dries007.tfc.util.Helpers;
 import net.dries007.tfc.util.calendar.Calendars;
 import net.dries007.tfc.util.calendar.Season;
+import net.dries007.tfc.util.climate.ClimateModel;
 
 public class TFCLeavesBlock extends Block implements ILeavesBlock, IForgeBlockExtension, IFluidLoggable, ISlowEntities
 {
@@ -158,7 +161,7 @@ public class TFCLeavesBlock extends Block implements ILeavesBlock, IForgeBlockEx
     {
         if (!state.getValue(PERSISTENT) && random.nextInt(30) == 0)
         {
-            if (Calendars.CLIENT.getCalendarMonthOfYear().getSeason() == Season.FALL || ClimateRenderCache.INSTANCE.getWind().lengthSquared() > 0.42f * 0.42f)
+            if (Calendars.CLIENT.getHemispheralCalendarMonthOfYear(SolarCalculator.getInNorthernHemisphere(pos, level)).getSeason() == Season.FALL || ClimateRenderCache.INSTANCE.getWind().lengthSquared() > 0.42f * 0.42f)
             {
                 final BlockState belowState = level.getBlockState(pos.below());
                 if (belowState.isAir())
@@ -191,7 +194,7 @@ public class TFCLeavesBlock extends Block implements ILeavesBlock, IForgeBlockEx
             if (rand.nextFloat() < 0.01f) createDestructionEffects(state, level, pos, rand, false);
             doParticles(level, pos.getX() + rand.nextFloat(), pos.getY() + rand.nextFloat(), pos.getZ() + rand.nextFloat(), 1);
         }
-        else if (rand.nextFloat() < 0.0005f && Calendars.SERVER.getCalendarMonthOfYear().getSeason() == Season.FALL && !state.getValue(PERSISTENT))
+        else if (rand.nextFloat() < 0.0005f && Calendars.SERVER.getHemispheralCalendarMonthOfYear(SolarCalculator.getInNorthernHemisphere(pos, level)).getSeason() == Season.FALL && !state.getValue(PERSISTENT))
         {
             createDestructionEffects(state, level, pos, rand, true);
         }

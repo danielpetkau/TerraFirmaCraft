@@ -51,7 +51,7 @@ public abstract class FloatingWaterPlantBlock extends PlantBlock
     protected void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random)
     {
         super.randomTick(state, level, pos, random);
-        if (PlantRegrowth.canSpread(level, random))
+        if (PlantRegrowth.canSpread(level, random, pos))
         {
             final BlockPos newPos = PlantRegrowth.spreadSelf(state, level, pos, random, 1, 2, 1);
             if (newPos != null && level.getFluidState(newPos.below(5)).isEmpty() && !(level.getBlockState(newPos.below()).getBlock() instanceof RiverWaterBlock))

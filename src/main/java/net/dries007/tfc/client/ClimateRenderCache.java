@@ -24,6 +24,7 @@ public enum ClimateRenderCache
 {
     INSTANCE;
 
+    private float hemisphereScale;
     private float averageTemperature;
     private float temperature;
     private float averageRainfall;
@@ -57,6 +58,7 @@ public enum ClimateRenderCache
             averageGroundwater = model.getAverageGroundwater(level, pos);
             groundwater = model.getGroundwater(level, pos);
             wind = model.getWind(level, pos);
+            hemisphereScale = model.hemisphereScale();
 
             // Calculate a real rain level to interpolate from on client. This reads the level's rain level, which includes influence
             // from climate, but doesn't include local influences.
@@ -122,6 +124,11 @@ public enum ClimateRenderCache
     public float getGroundwater()
     {
         return groundwater;
+    }
+
+    public float getHemisphereScale()
+    {
+        return hemisphereScale;
     }
 
     public Vec2 getWind()

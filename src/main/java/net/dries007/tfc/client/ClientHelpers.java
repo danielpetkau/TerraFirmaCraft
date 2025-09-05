@@ -18,6 +18,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.Nullable;
 
+import net.dries007.tfc.client.overworld.SolarCalculator;
 import net.dries007.tfc.client.screen.PetCommandScreen;
 import net.dries007.tfc.common.entities.livestock.pet.TamableMammal;
 import net.dries007.tfc.util.Helpers;
@@ -85,6 +86,22 @@ public final class ClientHelpers
     public static void openPetScreen(TamableMammal mammal)
     {
         Minecraft.getInstance().setScreen(new PetCommandScreen(mammal));
+    }
+
+    /**
+     * If the player is in a Northern hemisphere
+     */
+    public static boolean inNorthernHemisphere()
+    {
+        final Level level = ClientHelpers.getLevel();
+        final Player player = ClientHelpers.getPlayer();
+        if (level != null && player != null)
+        {
+            final BlockPos pos = player.blockPosition();
+            return SolarCalculator.getInNorthernHemisphere(pos.getZ(), ClimateRenderCache.INSTANCE.getHemisphereScale());
+        }
+        // If null, default to true
+        return true;
     }
 
 }

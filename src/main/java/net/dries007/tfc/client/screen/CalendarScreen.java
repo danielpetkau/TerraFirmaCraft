@@ -15,6 +15,9 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.neoforged.neoforge.network.PacketDistributor;
 
+import net.dries007.tfc.client.ClientHelpers;
+import net.dries007.tfc.client.ClimateRenderCache;
+import net.dries007.tfc.client.overworld.SolarCalculator;
 import net.dries007.tfc.client.screen.button.PlayerInventoryTabButton;
 import net.dries007.tfc.common.container.Container;
 import net.dries007.tfc.compat.patchouli.PatchouliIntegration;
@@ -52,12 +55,14 @@ public class CalendarScreen extends TFCContainerScreen<Container>
     {
         super.renderLabels(graphics, mouseX, mouseY);
 
-        String season = I18n.get("tfc.tooltip.calendar_season", I18n.get(Calendars.CLIENT.getCalendarMonthOfYear().getTranslationKey(Month.Style.SEASON)));
+        String month = I18n.get("tfc.tooltip.calendar_month", I18n.get(Calendars.CLIENT.getAbsoluteCalendarMonthOfYear().getTranslationKey(Month.Style.LONG_MONTH)));
+        String season = I18n.get("tfc.tooltip.calendar_season", I18n.get(Calendars.CLIENT.getHemispheralCalendarMonthOfYear(ClientHelpers.inNorthernHemisphere()).getTranslationKey(Month.Style.SEASON)));
         String day = I18n.get("tfc.tooltip.calendar_day", Calendars.CLIENT.getCalendarDayOfYear().getString());
         String date = I18n.get("tfc.tooltip.calendar_date", Calendars.CLIENT.getTimeAndDate().getString());
 
-        graphics.drawString(font, season, (imageWidth - font.width(season)) / 2, 25, 0x404040, false);
-        graphics.drawString(font, day, (imageWidth - font.width(day)) / 2, 36, 0x404040, false);
-        graphics.drawString(font, date, (imageWidth - font.width(date)) / 2, 47, 0x404040, false);
+        graphics.drawString(font, month, (imageWidth - font.width(month)) / 2, 20, 0x404040, false);
+        graphics.drawString(font, season, (imageWidth - font.width(season)) / 2, 31, 0x404040, false);
+        graphics.drawString(font, day, (imageWidth - font.width(day)) / 2, 42, 0x404040, false);
+        graphics.drawString(font, date, (imageWidth - font.width(date)) / 2, 53, 0x404040, false);
     }
 }

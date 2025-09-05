@@ -138,7 +138,7 @@ public class BananaPlantBlock extends SeasonalPlantBlock implements IBushBlock, 
         if (level.getBlockEntity(pos) instanceof BerryBushBlockEntity bush)
         {
             Lifecycle currentLifecycle = state.getValue(LIFECYCLE);
-            Lifecycle expectedLifecycle = getLifecycleForCurrentMonth();
+            Lifecycle expectedLifecycle = getLifecycleForCurrentMonth(level, pos);
             // if we are not working with a plant that is or should be dormant
             if (!checkAndSetDormant(level, pos, state, currentLifecycle, expectedLifecycle))
             {

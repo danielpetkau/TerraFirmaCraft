@@ -11,6 +11,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
@@ -20,6 +21,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 
+import net.dries007.tfc.client.overworld.SolarCalculator;
 import net.dries007.tfc.common.TFCTags;
 import net.dries007.tfc.common.blocks.ExtendedProperties;
 import net.dries007.tfc.common.blocks.ISpecialPile;
@@ -28,12 +30,12 @@ import net.dries007.tfc.common.blocks.plant.TFCBushBlock;
 import net.dries007.tfc.util.Helpers;
 import net.dries007.tfc.util.calendar.Calendars;
 import net.dries007.tfc.util.calendar.Month;
-
+import net.dries007.tfc.util.climate.Climate;
 public class WildCropBlock extends TFCBushBlock implements ISpecialPile
 {
-    public static boolean isMature(LevelAccessor level)
+    public static boolean isMature(Level level, BlockPos pos)
     {
-        final int month = Calendars.get(level).getCalendarMonthOfYear().ordinal();
+        final int month = Calendars.get(level).getHemispheralCalendarMonthOfYear(SolarCalculator.getInNorthernHemisphere(pos, level)).ordinal();
         return month >= Month.JUNE.ordinal() && month <= Month.OCTOBER.ordinal();
     }
 
@@ -49,13 +51,13 @@ public class WildCropBlock extends TFCBushBlock implements ISpecialPile
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context)
     {
-        return defaultBlockState().setValue(MATURE, isMature(context.getLevel()));
+        return defaultBlockState().setValue(MATURE, isMature(context.getLevel(), context.getClickedPos()));
     }
 
     @Override
     protected void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource rand)
     {
-        if (state.getValue(MATURE) != isMature(level))
+        if (state.getValue(MATURE) != isMature(level, pos))
         {
             level.setBlockAndUpdate(pos, state.cycle(MATURE));
         }

@@ -1212,6 +1212,7 @@ DEFAULT_LANG = {
     'tfc.tooltip.anvil_tier_required': 'Requires %s Anvil',
     'tfc.tooltip.calendar_days_years': '%d, %04d',
     'tfc.tooltip.calendar_hour_minute_month_day_year': '%s %s %d, %04d',
+    'tfc.tooltip.calendar_month': 'Month : %s',
     'tfc.tooltip.calendar_season': 'Season : %s',
     'tfc.tooltip.calendar_day': 'Day : %s',
     'tfc.tooltip.calendar_birthday': '%s\'s Birthday!',

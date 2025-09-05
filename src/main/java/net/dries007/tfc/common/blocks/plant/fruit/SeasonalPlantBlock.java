@@ -41,6 +41,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.neoforged.neoforge.items.ItemHandlerHelper;
 import org.jetbrains.annotations.Nullable;
 
+import net.dries007.tfc.client.overworld.SolarCalculator;
 import net.dries007.tfc.common.TFCTags;
 import net.dries007.tfc.common.blockentities.TickCounterBlockEntity;
 import net.dries007.tfc.common.blocks.EntityBlockExtension;
@@ -209,9 +210,9 @@ public abstract class SeasonalPlantBlock extends BushBlock implements IForgeBloc
         return new ItemStack(productItem.get());
     }
 
-    protected Lifecycle getLifecycleForCurrentMonth()
+    protected Lifecycle getLifecycleForCurrentMonth(Level level, BlockPos pos)
     {
-        return getLifecycleForMonth(Calendars.SERVER.getCalendarMonthOfYear());
+        return getLifecycleForMonth(Calendars.SERVER.getHemispheralCalendarMonthOfYear(SolarCalculator.getInNorthernHemisphere(pos, level)));
     }
 
     protected Lifecycle getLifecycleForMonth(Month month)

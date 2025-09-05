@@ -16,6 +16,8 @@ import static net.dries007.tfc.util.calendar.Season.*;
 
 public enum Month implements StringRepresentable
 {
+    // Temperature modifiers are defined for the Northern Hemisphere
+    // Southern Hemisphere temperatures are calculated in the climate model
     JANUARY(-1f, WINTER),
     FEBRUARY(-0.866f, WINTER),
     MARCH(-0.5f, SPRING),
@@ -57,6 +59,25 @@ public enum Month implements StringRepresentable
     public Month next()
     {
         return this == DECEMBER ? JANUARY : VALUES[ordinal() + 1];
+    }
+
+    public Month opposite()
+    {
+        return switch (this)
+        {
+            case JANUARY -> JULY;
+            case FEBRUARY -> AUGUST;
+            case MARCH -> SEPTEMBER;
+            case APRIL -> OCTOBER;
+            case MAY -> NOVEMBER;
+            case JUNE -> DECEMBER;
+            case JULY -> JANUARY;
+            case AUGUST -> FEBRUARY;
+            case SEPTEMBER -> MARCH;
+            case OCTOBER -> APRIL;
+            case NOVEMBER -> MAY;
+            case DECEMBER -> JUNE;
+        };
     }
 
     public String getTranslationKey(Style style)

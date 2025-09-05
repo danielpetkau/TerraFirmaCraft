@@ -9,6 +9,7 @@ package net.dries007.tfc.util.climate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
 import net.neoforged.neoforge.common.NeoForge;
 
 import net.dries007.tfc.util.calendar.Calendars;
