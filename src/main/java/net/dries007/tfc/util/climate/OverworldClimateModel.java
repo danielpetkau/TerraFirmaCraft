@@ -447,10 +447,16 @@ public class OverworldClimateModel implements ClimateModel
     }
 
     /**
-     * Calculates the average monthly temperature for a location and given month.
+     * Calculates the average monthly temperature for a location and given calendar month.
+     * @param ignoreHemispheres will scale the temperature by the given month factor without inverting it if it is in a Southern Hemisphere.
+     *                          For instance, with this true, passing in the factor for June will always return the factor for Early Summer, never for Early Winter
      */
-    public float getAverageMonthlyTemperature(int z, int y, float averageTemperature, float monthFactor)
+    public float getAverageMonthlyTemperature(int z, int y, float averageTemperature, float monthFactor, boolean ignoreHemispheres)
     {
+        if (ignoreHemispheres && !SolarCalculator.getInNorthernHemisphere(z, hemisphereScale()))
+        {
+            monthFactor = -monthFactor;
+        }
         final float monthlyTemperature = calculateMonthlyTemperature(z, monthFactor);
         return adjustTemperatureByElevation(y, averageTemperature, monthlyTemperature, 0);
     }
@@ -497,7 +503,6 @@ public class OverworldClimateModel implements ClimateModel
         return monthTemperatureModifier * (temperatureScale == 0 ? 0 : Helpers.triangle(-18f, 0f, 1f / (4f * temperatureScale), z - temperatureScale / 2));
     }
 
-    // TODO: Hemispheres: Needs to be re-written for the solar calendar
     /**
      * Calculates the daily variation temperature at a given time. Influenced by both random variation day by day, and the time of day.
      *

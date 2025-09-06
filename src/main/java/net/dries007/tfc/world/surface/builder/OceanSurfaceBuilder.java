@@ -78,7 +78,7 @@ public class OceanSurfaceBuilder implements SurfaceBuilder
             return;
         }
 
-        final float maxAnnualTemperature = model.getAverageMonthlyTemperature(z, seaLevel, context.averageTemperature(), 1);
+        final float maxAnnualTemperature = model.getAverageMonthlyTemperature(z, seaLevel, context.averageTemperature(), 1, true);
         if (maxAnnualTemperature > 2)
         {
             // This is run for all climates, and needs to exist early if we possibly can.

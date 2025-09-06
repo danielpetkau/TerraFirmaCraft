@@ -17,7 +17,6 @@ import java.util.Set;
 import java.util.function.DoubleFunction;
 import java.util.stream.Collectors;
 
-import net.dries007.tfc.world.biome.BiomeNoise;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.levelgen.RandomSupport;
 import org.junit.jupiter.api.Test;
@@ -31,6 +30,7 @@ import net.dries007.tfc.world.region.Region;
 import net.dries007.tfc.world.region.RegionGenerator;
 import net.dries007.tfc.world.region.RegionGenerator.Task;
 import net.dries007.tfc.world.region.RiverEdge;
+import net.dries007.tfc.world.region.Units;
 import net.dries007.tfc.world.settings.Settings;
 
 import static net.dries007.tfc.world.layer.TFCLayers.*;
@@ -131,6 +131,7 @@ public class RegionGeneratorTests implements TestSetup
 
     private Color taskColor(DrawnTask task, Region region, int x, int y)
     {
+
         final Region.Point point = region.at(x, y);
         assert point != null;
         return switch (task)
@@ -163,7 +164,7 @@ public class RegionGeneratorTests implements TestSetup
             case RAINFALL, RAINFALL_AFTER_RIVERS -> temperatureGradient(point, point.rainfall, 0, 500);
             case RAINFALL_VARIANCE -> oceanOutlineTemperatureGradient(point, point.rainfallVariance, -1, 1);
             case KOPPEN, KOPPEN_AFTER_RIVERS -> point.land()
-                ? koppenClimateColor(KoppenClimateClassification.classify(point.temperature, point.rainfall, point.rainfallVariance))
+                ? koppenClimateColor(KoppenClimateClassification.classify(point.temperature, point.rainfall, point.rainfallVariance, isNorthernHemisphere(point.z)))
                 : continentColor(point);
             case CHOOSE_ROCKS ->
             {
@@ -212,6 +213,16 @@ public class RegionGeneratorTests implements TestSetup
                 : Color.PINK
                 : continentColor(point);
         };
+    }
+
+    private boolean isNorthernHemisphere(int z)
+    {
+        final Settings settings = BuiltinWorldPreset.defaultSettings();
+
+        final float adjustedZ = z - (settings.temperatureScale() / 2f / Units.GRID_WIDTH_IN_BLOCK);
+        final float poleToPoleDistance = 2f * settings.temperatureScale() / Units.GRID_WIDTH_IN_BLOCK;
+        final float normalizedZ = Mth.positiveModulo(adjustedZ, (poleToPoleDistance * 2));
+        return normalizedZ > poleToPoleDistance;
     }
 
     private Color cellColor(Region region)

@@ -14,6 +14,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.neoforged.neoforge.network.PacketDistributor;
 
+import net.dries007.tfc.client.ClientHelpers;
 import net.dries007.tfc.client.ClimateRenderCache;
 import net.dries007.tfc.client.screen.button.PlayerInventoryTabButton;
 import net.dries007.tfc.common.container.Container;
@@ -62,10 +63,10 @@ public class ClimateScreen extends TFCContainerScreen<Container>
 
         final TemperatureDisplayStyle style = TFCConfig.CLIENT.climateTooltipStyle.get();
 
-        drawCenteredLine(stack, Helpers.translateEnum(KoppenClimateClassification.classify(averageTemp, rainfall, rainVar)), 17);
+        drawCenteredLine(stack, Helpers.translateEnum(KoppenClimateClassification.classify(averageTemp, rainfall, rainVar, ClientHelpers.inNorthernHemisphere())), 17);
         drawCenteredLine(stack, Component.translatable("tfc.tooltip.climate_average_temperature", style.formatRange(averageTemp)), 28);
         drawCenteredLine(stack, Component.translatable("tfc.tooltip.climate_annual_rainfall", String.format("%.0f", rainfall)), 39);
-        drawCenteredLine(stack, Component.translatable(rainVar > 0 ? "tfc.tooltip.climate_peak_rainfall_summer" : "tfc.tooltip.climate_peak_rainfall_winter", String.format("%.0f", rainfall * (1 + Math.abs(rainVar)))), 50);
+        drawCenteredLine(stack, Component.translatable(rainVar > 0 ? "tfc.tooltip.climate_peak_rainfall_july" : "tfc.tooltip.climate_peak_rainfall_january", String.format("%.0f", rainfall * (1 + Math.abs(rainVar)))), 50);
         drawCenteredLine(stack, Component.translatable("tfc.tooltip.climate_current_temp", style.formatRange(currentTemp)), 61);
     }
 

@@ -171,11 +171,7 @@ public final class SolarCalculator
      */
     public static boolean getInNorthernHemisphere(BlockPos pos, Level level)
     {
-        final int hemisphereScale = (int) Climate.get(level).hemisphereScale();
-        final int equatorAdjustedZ = pos.getZ() - (hemisphereScale / 2);
-        final int hemisphereSize = (hemisphereScale * 2);
-        final int normalizedZ = equatorAdjustedZ % hemisphereSize;
-        return normalizedZ <= 0;
+        return getInNorthernHemisphere(pos.getZ(), Climate.get(level).hemisphereScale());
     }
 
     /**
@@ -183,10 +179,10 @@ public final class SolarCalculator
      */
     public static boolean getInNorthernHemisphere(int z, float hemisphereScale)
     {
-        final int equatorAdjustedZ = z - (int) (hemisphereScale / 2);
-        final int hemisphereSize = (int) (hemisphereScale * 2);
-        final int normalizedZ = equatorAdjustedZ % hemisphereSize;
-        return normalizedZ <= 0;
+        final int adjustedZ = z - (int) (hemisphereScale / 2);
+        final int poleToPoleDistance = (int) (hemisphereScale * 2);
+        final int normalizedZ = Mth.positiveModulo(adjustedZ, (poleToPoleDistance * 2));
+        return normalizedZ > poleToPoleDistance;
     }
 
     /**
