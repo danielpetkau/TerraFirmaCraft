@@ -383,7 +383,7 @@ public class BarrelBlockEntity extends TickableInventoryBlockEntity<BarrelBlockE
     public void tickPouring(Level level, BlockPos pos, boolean sealed, Direction facing)
     {
         if (!sealed
-            && inventory.tank.isEmpty()
+            && !inventory.tank.isEmpty()
             && facing != Direction.UP)
         {
             final BlockPos faucetPos = pos.relative(facing);
