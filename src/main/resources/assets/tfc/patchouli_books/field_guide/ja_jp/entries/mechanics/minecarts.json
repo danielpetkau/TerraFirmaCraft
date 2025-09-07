@@ -6,7 +6,7 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "$(thing)トロッコ$() は、プレイヤー、エンティティ、大きなブロックを輸送する手段です。 通常ならプレイヤーに $(l:getting_started/size_and_weight#overburdening)負荷超過$() がかかるアイテムをトロッコで運ぶことができます。 $(l:mechanics/decay#large_vessels)大型容器$()、$(l:mechanics/バレル)バレル$()、$(l:mechanics/powderkegs)火薬樽$()、$(l:mechanics/anvils)金床$() と $(l:mechanics/crucible)るつぼ$() は、$(item)$(k:key.use)$() と $(item)$(k:key.sneak)$() の両方を押すとカートに追加できます。 素手で $(item)$(k:key.sneak)$() を使用すると、トロッコに乗っているものを回収できます。 トロッコのクラフト レシピは $(thing)錬鉄$() または $(thing)鋼$() を使用して行うことができ、鋼鉄ベースのレシピの方が生産性が高くなります。"
+      "text": "$(thing)Minecarts$() are a means of transporting players, entities, and large blocks. Blocks that would normally $(l:getting_started/size_and_weight#overburdening)overburden$() the player can be transported in minecarts. $(l:mechanics/decay#large_vessels)Large Vessels$(), $(l:mechanics/barrels)Barrels$(), $(l:mechanics/powderkegs)Powderkegs$(), $(l:mechanics/anvils)Anvils$(), and $(l:mechanics/crucible)Crucibles$() can be added to carts by pressing both $(item)$(k:key.use)$() and $(item)$(k:key.sneak)$(). Using $(item)$(k:key.sneak)$() with an empty hand removes the block. Forging minecart items can either be done with $(thing)Iron$() or $(thing)Steel$(), with the steel-based recipes being less expensive."
     },
     {
       "type": "patchouli:crafting",
@@ -17,11 +17,6 @@
       "type": "patchouli:crafting",
       "recipe": "minecraft:detector_rail",
       "recipe2": "tfc:crafting/detector_rail"
-    },
-    {
-      "type": "patchouli:crafting",
-      "recipe": "minecraft:minecart",
-      "recipe2": "tfc:crafting/minecart"
     },
     {
       "type": "patchouli:crafting",
@@ -38,5 +33,8 @@
       "text": "$(thing)チェスト付きトロッコ$() は、スロットが 18 個しかなく、丸太のような非常に大きなアイテムを収納できないなど、通常の TFC チェストと同じように動作します。"
     }
   ],
-  "read_by_default": true
+  "read_by_default": true,
+  "extra_recipe_mappings": {
+    "minecraft:minecart": 0
+  }
 }

@@ -1,6 +1,6 @@
 {
   "values": [
-    "#tfc:turtle_food",
-    "#c:foods/grain"
+    "#c:foods/raw_fish",
+    "minecraft:spider_eye"
   ]
 }

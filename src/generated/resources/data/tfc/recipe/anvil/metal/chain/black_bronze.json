@@ -8,8 +8,8 @@
     "id": "tfc:metal/chain/black_bronze"
   },
   "rules": [
-    "hit_any",
-    "draw_third_last"
+    "draw_not_last",
+    "hit_any"
   ],
   "tier": 2
 }

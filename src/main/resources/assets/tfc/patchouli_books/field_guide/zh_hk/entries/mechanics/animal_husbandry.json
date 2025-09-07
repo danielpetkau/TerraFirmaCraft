@@ -275,6 +275,19 @@
       "scale": 0.6,
       "name": " ",
       "text": "馬"
+    },
+    {
+      "type": "patchouli:text",
+      "anchor": "frog",
+      "text": "$(thing)Frogs$() spawn in $(l:the_world/climate#temperature)temperatures$() above -13°C, and at least 150mm of $(l:the_world/climate#rainfall)rainfall$(). They are can be familiarized, after which they will lay eggs in fresh water at random. They will eat fish and spider eyes. ",
+      "title": "Frogs"
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "tfc:frog{NoAI:1b,birth:-100000000L,oldDay:9223372036854775807L,geneticSize:16}",
+      "scale": 0.8,
+      "name": " ",
+      "text": "A frog."
     }
   ],
   "read_by_default": true

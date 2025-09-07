@@ -6,7 +6,7 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "$(thing)Вагонетки$() - это средство транспортировки игроков, сущностей и крупных блоков. Блоки, которые обычно $(l:getting_started/size_and_weight#overburdening)перегружают$() игрока, могут быть транспортированы в вагонетках. $(l:mechanics/decay#large_vessels)Большие сосуды$(), $(l:mechanics/barrels)Бочки$(), $(l:mechanics/powderkegs)Пороховые бочки$(), $(l:mechanics/anvils)Наковальни$() и $(l:mechanics/crucible)Тигли$() могут быть добавлены в вагонетки, нажав одновременно $(item)$(k:key.use)$() и $(item)$(k:key.sneak)$(). Использование $(item)$(k:key.sneak)$() с пустой рукой удаляет блок. Рецепты крафта предметов для вагонеток могут быть выполнены либо с $(thing)Железом$(), либо с $(thing)Сталью$(), при этом рецепты на основе стали более продуктивны."
+      "text": "$(thing)Minecarts$() are a means of transporting players, entities, and large blocks. Blocks that would normally $(l:getting_started/size_and_weight#overburdening)overburden$() the player can be transported in minecarts. $(l:mechanics/decay#large_vessels)Large Vessels$(), $(l:mechanics/barrels)Barrels$(), $(l:mechanics/powderkegs)Powderkegs$(), $(l:mechanics/anvils)Anvils$(), and $(l:mechanics/crucible)Crucibles$() can be added to carts by pressing both $(item)$(k:key.use)$() and $(item)$(k:key.sneak)$(). Using $(item)$(k:key.sneak)$() with an empty hand removes the block. Forging minecart items can either be done with $(thing)Iron$() or $(thing)Steel$(), with the steel-based recipes being less expensive."
     },
     {
       "type": "patchouli:crafting",
@@ -17,11 +17,6 @@
       "type": "patchouli:crafting",
       "recipe": "minecraft:detector_rail",
       "recipe2": "tfc:crafting/detector_rail"
-    },
-    {
-      "type": "patchouli:crafting",
-      "recipe": "minecraft:minecart",
-      "recipe2": "tfc:crafting/minecart"
     },
     {
       "type": "patchouli:crafting",
@@ -38,5 +33,8 @@
       "text": "$(thing)Вагонетки с сундуком$() работают так же, как обычные сундуки TFC, в том смысле, что у них только 18 слотов и они не могут содержать очень крупные предметы, такие как бревна."
     }
   ],
-  "read_by_default": true
+  "read_by_default": true,
+  "extra_recipe_mappings": {
+    "minecraft:minecart": 0
+  }
 }

@@ -54,7 +54,7 @@ public class OceanSurfaceBuilder implements SurfaceBuilder
     @Override
     public void buildSurface(SurfaceBuilderContext context, int startY, int endY)
     {
-        ShoreSurfaceBuilder.OCEAN.apply(seed);
+        ShoreSurfaceBuilder.OCEAN.apply(seed).buildSurface(context, startY, endY);
         frozenOceanExtension(context, startY, endY);
     }
 

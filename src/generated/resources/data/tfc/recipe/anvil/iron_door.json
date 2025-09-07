@@ -8,9 +8,9 @@
     "id": "minecraft:iron_door"
   },
   "rules": [
-    "hit_last",
     "draw_not_last",
-    "punch_not_last"
+    "punch_not_last",
+    "hit_last"
   ],
   "tier": 3
 }

@@ -6,7 +6,7 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "$(thing)Вагонетка$() є засобом транспортування гравців, сутностей та великих блоків. Блоки та пристрої, що $(l:getting_started/size_and_weight#overburdening)перевантажують$() гравця, можна перевозити. $(l:mechanics/decay#large_vessels)Корчага$(), $(l:mechanics/barrels)діжка$(), $(l:mechanics/powderkegs)порохова бочка$(), $(l:mechanics/anvils)ковадло$(), та $(l:mechanics/crucible)тигель$() можна помістити до вагонетки, натиснувши $(item)$(k:key.use)$() із $(item)$(k:key.sneak)$(). Використовуй $(item)$(k:key.sneak)$() порожньою рукою аби забрати предмет. Для виготовлення вагонетки можна використовувати $(thing)залізо$() або $(thing)сталь$(), але рецепт зі сталі є ефективнішим."
+      "text": "$(thing)Minecarts$() are a means of transporting players, entities, and large blocks. Blocks that would normally $(l:getting_started/size_and_weight#overburdening)overburden$() the player can be transported in minecarts. $(l:mechanics/decay#large_vessels)Large Vessels$(), $(l:mechanics/barrels)Barrels$(), $(l:mechanics/powderkegs)Powderkegs$(), $(l:mechanics/anvils)Anvils$(), and $(l:mechanics/crucible)Crucibles$() can be added to carts by pressing both $(item)$(k:key.use)$() and $(item)$(k:key.sneak)$(). Using $(item)$(k:key.sneak)$() with an empty hand removes the block. Forging minecart items can either be done with $(thing)Iron$() or $(thing)Steel$(), with the steel-based recipes being less expensive."
     },
     {
       "type": "patchouli:crafting",
@@ -17,11 +17,6 @@
       "type": "patchouli:crafting",
       "recipe": "minecraft:detector_rail",
       "recipe2": "tfc:crafting/detector_rail"
-    },
-    {
-      "type": "patchouli:crafting",
-      "recipe": "minecraft:minecart",
-      "recipe2": "tfc:crafting/minecart"
     },
     {
       "type": "patchouli:crafting",
@@ -38,5 +33,8 @@
       "text": "$(thing)Вагонетки зі скринею$() працюють як і звичайні скрині TFC. Вони мають лише 18 слотів і не можуть містити дуже великі предмети, такі як колоди."
     }
   ],
-  "read_by_default": true
+  "read_by_default": true,
+  "extra_recipe_mappings": {
+    "minecraft:minecart": 0
+  }
 }

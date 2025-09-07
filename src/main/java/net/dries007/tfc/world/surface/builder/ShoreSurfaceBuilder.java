@@ -7,13 +7,17 @@
 package net.dries007.tfc.world.surface.builder;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.state.BlockState;
 
+import net.dries007.tfc.util.Helpers;
 import net.dries007.tfc.world.Seed;
 import net.dries007.tfc.world.biome.BiomeNoise;
 import net.dries007.tfc.world.noise.Noise2D;
 import net.dries007.tfc.world.surface.SurfaceBuilderContext;
 import net.dries007.tfc.world.surface.SurfaceState;
 import net.dries007.tfc.world.surface.SurfaceStates;
+
+import static net.dries007.tfc.world.TFCChunkGenerator.*;
 
 public class ShoreSurfaceBuilder implements SurfaceBuilder
 {
@@ -56,10 +60,10 @@ public class ShoreSurfaceBuilder implements SurfaceBuilder
         final int tideLevel = (int) BiomeNoise.shoreTideLevelNoise(seed).noise(x, z);
         final int sandHeightAbsolute = tideLevel + sandHeight;
 
-        if (isOcean && startY < tideLevel - 6)
+        // startY is from the water surface, not ground surface
+        if (isOcean && startY <= SEA_LEVEL_Y)
         {
-            // Always use gravel in deeper ocean water
-            NormalSurfaceBuilder.INSTANCE.buildSurface(context, startY, endY, surface, surface, subsurface, SurfaceStates.GRAVEL, SurfaceStates.GRAVEL);
+                NormalSurfaceBuilder.INSTANCE.buildSurface(context, startY, endY, SurfaceStates.OCEAN_MUD, SurfaceStates.OCEAN_MUD, SurfaceStates.OCEAN_MUD, SurfaceStates.OCEAN_MUD, SurfaceStates.OCEAN_MUD);
         }
         else if (startY <= sandHeightAbsolute)
         {

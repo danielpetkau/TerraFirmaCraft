@@ -75,7 +75,7 @@ public final class SurfaceStates
     public static final SurfaceState PINK_SAND = context -> TFCBlocks.SAND.get(SandBlockType.PINK).get().defaultBlockState();
     public static final SurfaceState PINK_SANDSTONE = context -> TFCBlocks.SANDSTONE.get(SandBlockType.PINK).get(SandstoneBlockType.RAW).get().defaultBlockState();
 
-    public static final SurfaceState SHORE_MUD = context -> TFCBlocks.SOIL.get(SoilBlockType.MUD).get(SoilBlockType.Variant.ENTISOL).get().defaultBlockState();
+    public static final SurfaceState OCEAN_MUD = context -> TFCBlocks.SOIL.get(SoilBlockType.MUD).get(SoilBlockType.Variant.FLUVISOL).get().defaultBlockState();
 
     /**
      * Default surface builders, Climate sensitive

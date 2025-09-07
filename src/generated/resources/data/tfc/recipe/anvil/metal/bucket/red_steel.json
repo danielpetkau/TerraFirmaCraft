@@ -8,9 +8,9 @@
     "id": "tfc:metal/bucket/red_steel"
   },
   "rules": [
-    "hit_last",
+    "bend_third_last",
     "bend_second_last",
-    "bend_third_last"
+    "hit_last"
   ],
   "tier": 6
 }
