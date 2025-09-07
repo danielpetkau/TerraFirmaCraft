@@ -15,6 +15,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.tags.TagsProvider;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.tags.TagBuilder;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.DyeColor;
@@ -58,6 +59,7 @@ public class BuiltinFluidTags extends TagsProvider<Fluid> implements Accessors
         // Any = including flowing
         // Fresh = Only fresh water
         // Infinite = All infinite water fluids
+        tag(FluidTags.WATER).addTag(ANY_INFINITE_WATER);
         tag(ANY_FRESH_WATER).add(Fluids.WATER, Fluids.FLOWING_WATER, TFCFluids.RIVER_WATER.get());
         tag(ANY_INFINITE_WATER)
             .addTag(ANY_FRESH_WATER)
