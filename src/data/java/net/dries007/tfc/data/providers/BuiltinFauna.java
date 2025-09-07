@@ -72,7 +72,7 @@ public class BuiltinFauna extends DataManagerProvider<Fauna>
         add(Faunas.CHICKEN, b -> b.minTemperature(14).minGroundwater(225).minForest(2));
         add(Faunas.DUCK, b -> b.temperature(-25, 30).minGroundwater(100).maxForest(2));
         add(Faunas.QUAIL, b -> b.temperature(-15, 10).minGroundwater(200));
-        add(Faunas.RABBIT, b -> b.minGroundwater(15));
+        add(Faunas.RABBIT, b -> b.minTemperature(-16).minGroundwater(15));
         add(Faunas.FOX, b -> b.groundwater(130, 400).maxTemperature(25).minForest(2));
         add(Faunas.PANDA, b -> b.temperature(18, 28).groundwater(300, 500).minForest(3).fuzzy());
         add(Faunas.BOAR, b -> b.groundwater(130, 400).temperature(-5, 25).maxForest(3));
