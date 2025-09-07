@@ -101,13 +101,13 @@ public interface TFCAnimalProperties extends GenderedRenderAnimal, BrainAnimalBe
         if (
             familiarity > 0 && // There is familiarity to decay,
             familiarityDecayTick != -1 && // And we have a record of a date
-            currentTick > familiarityDecayTick + ICalendar.TICKS_IN_DAY && // And it's been at least a day since we decayed previously
+            currentTick > familiarityDecayTick + ICalendar.CALENDAR_TICKS_IN_DAY && // And it's been at least a day since we decayed previously
             familiarity < TFCConfig.SERVER.familiarityDecayLimit.get() // And our familiarity is below the level where it won't decay
         )
         {
             // Then familiarity decays, which is based on the last time this animal was familiarized vs. the current time. Modifying
-            // the familiarity will reset the last decay tick
-            setFamiliarity(familiarity - 0.02f * (currentTick - familiarityDecayTick));
+            // the familiarity will reset the last decay tick. Decay only begins after one day of not feeding the animal.
+            setFamiliarity(familiarity - 0.02f * (currentTick - familiarityDecayTick - ICalendar.CALENDAR_TICKS_IN_DAY) / ICalendar.CALENDAR_TICKS_IN_DAY);
         }
         final Age age = getAgeType();
         if (age != getLastAge())
