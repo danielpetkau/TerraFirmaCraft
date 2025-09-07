@@ -205,6 +205,7 @@ public final class TerraFirmaCraft
         InteractionManager.registerDefaultInteractions();
         ServerCalendar.overrideDoDaylightCycleCallback();
         ChiselMode.setupOrdering();
+        TFCFluids.setupFluidInteractions();
 
         event.enqueueWork(() -> {
             DispenserBehaviors.registerDispenserBehaviors();
