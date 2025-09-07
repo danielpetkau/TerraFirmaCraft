@@ -91,6 +91,7 @@ public interface CraftingRecipes extends Recipes
             "bucket",
             "campfire",
             "chest",
+            "minecart",
             "chest_minecart",
             "coast_armor_trim_smithing_template",
             "composter",
@@ -144,6 +145,7 @@ public interface CraftingRecipes extends Recipes
             "suspicious_stew",
             "tide_armor_trim_smithing_template",
             "tinted_glass",
+            "tnt",
             "torch",
             "trapped_chest",
             "turtle_helmet",
@@ -654,14 +656,6 @@ public interface CraftingRecipes extends Recipes
             .input('I', ingredientOf(Metal.STEEL, Metal.ItemType.SHEET))
             .pattern("I I", " C ")
             .shaped(Items.HOPPER, 2);
-        replace("minecart")
-            .input('X', ingredientOf(Metal.WROUGHT_IRON, Metal.ItemType.SHEET))
-            .pattern("X X", "XXX")
-            .shaped(Items.MINECART, 2);
-        recipe()
-            .input('X', ingredientOf(Metal.STEEL, Metal.ItemType.SHEET))
-            .pattern("X X", "XXX")
-            .shaped(Items.MINECART, 4);
         replace("observer")
             .input('C', Tags.Items.COBBLESTONES_NORMAL)
             .input('R', Tags.Items.DUSTS_REDSTONE)

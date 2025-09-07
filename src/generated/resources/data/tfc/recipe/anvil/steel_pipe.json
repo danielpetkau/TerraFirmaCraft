@@ -8,8 +8,7 @@
     "id": "tfc:steel_pipe"
   },
   "rules": [
-    "draw_last",
-    "bend_not_last"
+    "draw_last"
   ],
   "tier": 4
 }

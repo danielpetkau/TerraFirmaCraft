@@ -8,9 +8,9 @@
     "id": "tfc:grill"
   },
   "rules": [
-    "punch_last",
     "punch_not_last",
-    "draw_any"
+    "draw_any",
+    "punch_last"
   ],
   "tier": 3
 }

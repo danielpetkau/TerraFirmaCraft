@@ -1278,14 +1278,12 @@ def make_book(rm: ResourceManager, i18n: I18n, local_instance: bool = False, rev
             empty_last_page(),
         )),
         entry('minecarts', 'Minecarts', 'tfc:wood/chest_minecart/kapok', pages=(
-            text('$(thing)Minecarts$() are a means of transporting players, entities, and large blocks. Blocks that would normally $(l:getting_started/size_and_weight#overburdening)overburden$() the player can be transported in minecarts. $(l:mechanics/decay#large_vessels)Large Vessels$(), $(l:mechanics/barrels)Barrels$(), $(l:mechanics/powderkegs)Powderkegs$(), $(l:mechanics/anvils)Anvils$(), and $(l:mechanics/crucible)Crucibles$() can be added to carts by pressing both $(item)$(k:key.use)$() and $(item)$(k:key.sneak)$(). Using $(item)$(k:key.sneak)$() with an empty hand removes the block. Crafting recipes for minecart items can either be done with $(thing)Iron$() or $(thing)Steel$(), with the steel-based recipes being more productive.'),
+            text('$(thing)Minecarts$() are a means of transporting players, entities, and large blocks. Blocks that would normally $(l:getting_started/size_and_weight#overburdening)overburden$() the player can be transported in minecarts. $(l:mechanics/decay#large_vessels)Large Vessels$(), $(l:mechanics/barrels)Barrels$(), $(l:mechanics/powderkegs)Powderkegs$(), $(l:mechanics/anvils)Anvils$(), and $(l:mechanics/crucible)Crucibles$() can be added to carts by pressing both $(item)$(k:key.use)$() and $(item)$(k:key.sneak)$(). Using $(item)$(k:key.sneak)$() with an empty hand removes the block. Forging minecart items can either be done with $(thing)Iron$() or $(thing)Steel$(), with the steel-based recipes being less expensive.').link('minecraft:minecart'),
             crafting('minecraft:activator_rail', 'tfc:crafting/activator_rail'),
             crafting('minecraft:detector_rail', 'tfc:crafting/detector_rail'),
-            crafting('minecraft:minecart', 'tfc:crafting/minecart'),
             crafting('minecraft:rail', 'tfc:crafting/rail'),
             crafting('minecraft:powered_rail'),
             crafting('tfc:crafting/wood/chest_minecart/kapok', text_contents='$(thing)Chest minecarts$() operate the same as regular TFC chests, in that they only have 18 slots and cannot hold very large items like logs.'),
-            empty_last_page(),
         )),
         entry('barrels', 'Barrels', 'tfc:wood/barrel/palm', pages=(
             text('The $(thing)Barrel$() is a device that can hold both items and fluids. The central slot is used to hold items. Fluids are shown in the tank on the left side, and can be added to the barrel by placing a filled $(thing)bucket$() or $(thing)jug$() in the top left slot. They can be removed by placing an empty fluid container in the same slot. Using $(item)$(k:key.use)$() on the block with a bucket also works.').link('#tfc:barrels'),

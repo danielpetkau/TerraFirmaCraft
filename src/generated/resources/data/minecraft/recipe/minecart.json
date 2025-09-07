@@ -1,17 +1,7 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "category": "misc",
-  "key": {
-    "X": {
-      "tag": "c:sheets/wrought_iron"
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:false"
     }
-  },
-  "pattern": [
-    "X X",
-    "XXX"
-  ],
-  "result": {
-    "count": 2,
-    "id": "minecraft:minecart"
-  }
+  ]
 }

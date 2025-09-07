@@ -8,9 +8,9 @@
     "id": "tfc:jar_lid"
   },
   "rules": [
-    "hit_last",
+    "punch_third_last",
     "hit_second_last",
-    "punch_third_last"
+    "hit_last"
   ],
   "tier": 0
 }
