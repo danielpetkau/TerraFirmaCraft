@@ -59,7 +59,6 @@ public class BuiltinFluidTags extends TagsProvider<Fluid> implements Accessors
         // Any = including flowing
         // Fresh = Only fresh water
         // Infinite = All infinite water fluids
-        tag(FluidTags.WATER).addTag(ANY_INFINITE_WATER);
         tag(ANY_FRESH_WATER).add(Fluids.WATER, Fluids.FLOWING_WATER, TFCFluids.RIVER_WATER.get());
         tag(ANY_INFINITE_WATER)
             .addTag(ANY_FRESH_WATER)
