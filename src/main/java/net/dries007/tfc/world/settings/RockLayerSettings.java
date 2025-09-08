@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.dries007.tfc.world.Codecs;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
@@ -211,7 +212,7 @@ public final class RockLayerSettings
     {
         static final Codec<LayerData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             Codec.STRING.fieldOf("id").forGetter(c -> c.id),
-            Codec.unboundedMap(Codec.STRING, Codec.STRING).fieldOf("layers").forGetter(c -> c.layers)
+            Codecs.orderPreservingUnboundedMapCodec(Codec.STRING, Codec.STRING).fieldOf("layers").forGetter(c -> c.layers)
         ).apply(instance, LayerData::new));
     }
 }
