@@ -208,6 +208,7 @@ public final class TerraFirmaCraft
 
         event.enqueueWork(() -> {
             DispenserBehaviors.registerDispenserBehaviors();
+            TFCFluids.registerFluidInteractions();
             IBellowsConsumer.registerDefaultOffsets();
             Wood.registerBlockSetTypes();
             TFCBrain.initializeScheduleContents();

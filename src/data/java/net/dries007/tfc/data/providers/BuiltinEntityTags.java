@@ -14,7 +14,6 @@ import net.minecraft.world.entity.EntityType;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 
 import net.dries007.tfc.TerraFirmaCraft;
-import net.dries007.tfc.common.TFCTags;
 import net.dries007.tfc.common.entities.TFCEntities;
 import net.dries007.tfc.common.entities.aquatic.Fish;
 

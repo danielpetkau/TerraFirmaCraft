@@ -7,17 +7,23 @@
 package net.dries007.tfc.common.fluids;
 
 import java.util.Map;
+
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.material.FlowingFluid;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
-import net.minecraft.world.level.material.Fluids;
 import net.neoforged.neoforge.fluids.BaseFlowingFluid;
 
 import net.dries007.tfc.common.TFCTags;
@@ -170,6 +176,43 @@ public abstract class MixingFluid extends BaseFlowingFluid
             }
         }
         spread(level, pos, state);
+    }
+
+    /**
+     * From {@link net.minecraft.world.level.material.WaterFluid#animateTick}
+     */
+    @Override
+    public void animateTick(Level level, BlockPos pos, FluidState state, RandomSource random) {
+        if (!state.isSource() && !state.getValue(FALLING)) {
+            if (random.nextInt(64) == 0) {
+                level.playLocalSound(
+                    (double)pos.getX() + 0.5,
+                    (double)pos.getY() + 0.5,
+                    (double)pos.getZ() + 0.5,
+                    SoundEvents.WATER_AMBIENT,
+                    SoundSource.BLOCKS,
+                    random.nextFloat() * 0.25F + 0.75F,
+                    random.nextFloat() + 0.5F,
+                    false
+                );
+            }
+        } else if (random.nextInt(10) == 0) {
+            level.addParticle(
+                ParticleTypes.UNDERWATER,
+                (double)pos.getX() + random.nextDouble(),
+                (double)pos.getY() + random.nextDouble(),
+                (double)pos.getZ() + random.nextDouble(),
+                0.0,
+                0.0,
+                0.0
+            );
+        }
+    }
+
+    @Nullable
+    @Override
+    public ParticleOptions getDripParticle() {
+        return ParticleTypes.DRIPPING_WATER;
     }
 
     public static class Flowing extends MixingFluid
