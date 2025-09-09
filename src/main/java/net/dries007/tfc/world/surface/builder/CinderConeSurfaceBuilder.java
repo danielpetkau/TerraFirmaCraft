@@ -12,37 +12,40 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.blocks.rock.Rock;
 import net.dries007.tfc.world.Seed;
-import net.dries007.tfc.world.biome.VolcanoNoise;
 import net.dries007.tfc.world.noise.Noise2D;
 import net.dries007.tfc.world.noise.OpenSimplex2D;
 import net.dries007.tfc.world.surface.SurfaceBuilderContext;
+import net.dries007.tfc.world.volcano.CenteredFeatureNoise;
+import net.dries007.tfc.world.volcano.CenteredFeatureNoiseSampler;
 
-public class VolcanoesSurfaceBuilder implements SurfaceBuilder
+// TODO: Needs to use the new system for querying volcano noise
+public class CinderConeSurfaceBuilder implements SurfaceBuilder
 {
     public static SurfaceBuilderFactory create(SurfaceBuilderFactory parent)
     {
-        return seed -> new VolcanoesSurfaceBuilder(parent.apply(seed), seed);
+        return seed -> new CinderConeSurfaceBuilder(parent.apply(seed), seed);
     }
 
     private final SurfaceBuilder parent;
+    private final Seed seed;
 
     private final Noise2D heightNoise;
-    private final VolcanoNoise volcanoNoise;
 
-    public VolcanoesSurfaceBuilder(SurfaceBuilder parent, Seed seed)
+    public CinderConeSurfaceBuilder(SurfaceBuilder parent, Seed seed)
     {
+        this.seed = seed;
         this.parent = parent;
-        this.volcanoNoise = new VolcanoNoise(seed);
         this.heightNoise = new OpenSimplex2D(seed.next()).octaves(2).spread(0.1f).scaled(-4, 4);
     }
 
     @Override
     public void buildSurface(SurfaceBuilderContext context, int startY, int endY)
     {
-        if (context.biome().isVolcanic())
+        if (context.biome().hasCinderCones())
         {
-            final float easing = volcanoNoise.calculateEasing(context.pos(), context.biome());
-            if (easing > 0.6f && startY > context.biome().getVolcanoBasaltHeight() + heightNoise.noise(context.pos().getX(), context.pos().getZ()))
+            final CenteredFeatureNoiseSampler sampler = CenteredFeatureNoise.cinder(seed);
+            final float easing = sampler.calculateEasing(context.pos(), context.biome());
+            if (easing > 0.6f && startY > context.biome().getCenteredFeatureRockHeight() + heightNoise.noise(context.pos().getX(), context.pos().getZ()))
             {
                 buildVolcanicSurface(context, startY, endY, easing);
                 return;

@@ -10,13 +10,14 @@ import com.mojang.serialization.MapCodec;
 import net.minecraft.world.level.levelgen.placement.PlacementModifierType;
 
 import net.dries007.tfc.world.Seed;
-import net.dries007.tfc.world.biome.VolcanoNoise;
+import net.dries007.tfc.world.volcano.CenteredFeatureNoise;
+import net.dries007.tfc.world.volcano.CenteredFeatureNoiseSampler;
 
-public class VolcanoPlacement extends CenterOrDistanceToPlacement<VolcanoNoise>
+public class CinderConePlacement extends CenterOrDistanceToPlacement<CenteredFeatureNoiseSampler>
 {
-    public static final MapCodec<VolcanoPlacement> CODEC = codec(VolcanoPlacement::new);
+    public static final MapCodec<CinderConePlacement> CODEC = codec(CinderConePlacement::new);
 
-    public VolcanoPlacement(boolean center, float distance)
+    public CinderConePlacement(boolean center, float distance)
     {
         super(center, distance);
     }
@@ -28,8 +29,8 @@ public class VolcanoPlacement extends CenterOrDistanceToPlacement<VolcanoNoise>
     }
 
     @Override
-    protected VolcanoNoise createContext(Seed seed)
+    protected CenteredFeatureNoiseSampler createContext(Seed seed)
     {
-        return new VolcanoNoise(seed);
+        return CenteredFeatureNoise.cinder(seed);
     }
 }

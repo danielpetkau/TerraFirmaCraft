@@ -23,7 +23,7 @@ import net.dries007.tfc.world.shore.ShoreBlendType;
 import net.dries007.tfc.world.surface.builder.SurfaceBuilderFactory;
 import net.dries007.tfc.world.surface.builder.TuffRingsSurfaceBuilder;
 import net.dries007.tfc.world.surface.builder.TuyasSurfaceBuilder;
-import net.dries007.tfc.world.surface.builder.VolcanoesSurfaceBuilder;
+import net.dries007.tfc.world.surface.builder.CinderConeSurfaceBuilder;
 
 import static net.dries007.tfc.world.TFCChunkGenerator.*;
 
@@ -43,13 +43,14 @@ public class BiomeBuilder
     private RiverBlendType riverBlendType;
     private ShoreBlendType shoreBlendType;
     private boolean salty;
-    private boolean volcanic;
+    private boolean hasCinderCones;
     private boolean hasTuyas;
     private boolean hasTuffRings;
-    private int volcanoFrequency;
-    private int volcanoBasaltHeight;
-    private int tuffRingFrequency;
-    private int tuyaFrequency;
+    private int centeredFeatureFrequency;
+    private int centeredFeatureRockHeight;
+    private int centeredFeatureBaseHeight;
+    private int centeredFeatureScaleHeight;
+    private boolean centeredFeatureIce;
     private boolean spawnable;
     private boolean rivers;
     private boolean shore;
@@ -66,13 +67,14 @@ public class BiomeBuilder
         riverBlendType = RiverBlendType.NONE;
         shoreBlendType = ShoreBlendType.NONE;
         salty = false;
-        volcanic = false;
+        hasCinderCones = false;
         hasTuffRings = false;
         hasTuyas = false;
-        volcanoFrequency = 0;
-        tuffRingFrequency = 0;
-        tuyaFrequency = 0;
-        volcanoBasaltHeight = 0;
+        centeredFeatureIce = false;
+        centeredFeatureFrequency = 0;
+        centeredFeatureRockHeight = 0;
+        centeredFeatureBaseHeight = 0;
+        centeredFeatureScaleHeight = 0;
         spawnable = false;
         rivers = true;
         shore = false;
@@ -181,26 +183,21 @@ public class BiomeBuilder
         return this;
     }
 
-    public BiomeBuilder volcanoes(int frequency, int baseHeight, int scaleHeight, int volcanoBasaltHeight)
+    public BiomeBuilder cinderCones(int frequency, int baseHeight, int scaleHeight, int cinderConeBasaltHeight)
     {
-        return volcanoes(frequency, baseHeight, scaleHeight, volcanoBasaltHeight, false);
+        return cinderCones(frequency, baseHeight, scaleHeight, cinderConeBasaltHeight, false);
     }
 
-    public BiomeBuilder volcanoes(int frequency, int baseHeight, int scaleHeight, int volcanoBasaltHeight, boolean additive)
+    public BiomeBuilder cinderCones(int frequency, int baseHeight, int scaleHeight, int cinderConeBasaltHeight, boolean additive)
     {
-        this.volcanic = true;
-        this.volcanoFrequency = frequency;
-        this.volcanoBasaltHeight = SEA_LEVEL_Y + volcanoBasaltHeight;
+        this.hasCinderCones = true;
+        this.centeredFeatureFrequency = frequency;
+        this.centeredFeatureRockHeight = SEA_LEVEL_Y + cinderConeBasaltHeight;
+        this.centeredFeatureBaseHeight = baseHeight;
+        this.centeredFeatureScaleHeight = scaleHeight;
 
-        assert heightNoiseFactory != null : "volcanoes must be called after setting a heightmap";
-        assert surfaceBuilderFactory != null : "volcanoes must be called after setting a surface builder";
-
-        final Function<Seed, Noise2D> baseHeightNoiseFactory = this.heightNoiseFactory;
-        this.heightNoiseFactory = seed -> BiomeNoise.addVolcanoes(seed, baseHeightNoiseFactory.apply(seed), frequency, baseHeight, scaleHeight, additive);
-
-        this.noiseFactory = seed -> BiomeNoiseSampler.fromHeightNoise(heightNoiseFactory.apply(seed));
-
-        this.surfaceBuilderFactory = VolcanoesSurfaceBuilder.create(surfaceBuilderFactory);
+        assert surfaceBuilderFactory != null : "cinder cones must be called after setting a surface builder";
+        this.surfaceBuilderFactory = CinderConeSurfaceBuilder.create(surfaceBuilderFactory);
 
         return this;
     }
@@ -208,32 +205,27 @@ public class BiomeBuilder
     public BiomeBuilder tuffRings(int frequency, int baseHeight, int scaleHeight)
     {
         this.hasTuffRings = true;
-        this.tuffRingFrequency = frequency;
+        this.centeredFeatureFrequency = frequency;
+        this.centeredFeatureBaseHeight = baseHeight;
+        this.centeredFeatureScaleHeight = scaleHeight;
 
-        assert heightNoiseFactory != null : "tuff rings must be called after setting a heightmap";
-        assert surfaceBuilderFactory != null : "volcanoes must be called after setting a surface builder";
-
-        final Function<Seed, Noise2D> baseHeightNoiseFactory = this.heightNoiseFactory;
-        this.heightNoiseFactory = seed -> BiomeNoise.addTuffRings(seed, baseHeightNoiseFactory.apply(seed), frequency, baseHeight, scaleHeight);
-        this.noiseFactory = seed -> BiomeNoiseSampler.fromHeightNoise(heightNoiseFactory.apply(seed));
+        assert surfaceBuilderFactory != null : "Tuff rings must be called after setting a surface builder";
 
         this.surfaceBuilderFactory = TuffRingsSurfaceBuilder.create(surfaceBuilderFactory);
 
         return this;
     }
 
-    public BiomeBuilder tuyas(int frequency, int baseHeight, int scaleHeight, int volcanoBasaltHeight, boolean icy)
+    public BiomeBuilder tuyas(int frequency, int baseHeight, int scaleHeight, int tuyaTuffHeight, boolean icy)
     {
         this.hasTuyas = true;
-        this.tuyaFrequency = frequency;
-        this.volcanoBasaltHeight = SEA_LEVEL_Y + volcanoBasaltHeight;
+        this.centeredFeatureFrequency = frequency;
+        this.centeredFeatureRockHeight = SEA_LEVEL_Y + tuyaTuffHeight;
+        this.centeredFeatureBaseHeight = baseHeight;
+        this.centeredFeatureScaleHeight = scaleHeight;
+        this.centeredFeatureIce = icy;
 
-        assert heightNoiseFactory != null : "volcanoes must be called after setting a heightmap";
-        assert surfaceBuilderFactory != null : "volcanoes must be called after setting a surface builder";
-
-        final Function<Seed, Noise2D> baseHeightNoiseFactory = this.heightNoiseFactory;
-        this.heightNoiseFactory = seed -> BiomeNoise.addTuyas(seed, baseHeightNoiseFactory.apply(seed), frequency, baseHeight, scaleHeight, icy);
-        this.noiseFactory = seed -> BiomeNoiseSampler.fromHeightNoise(heightNoiseFactory.apply(seed));
+        assert surfaceBuilderFactory != null : "Tuyas must be called after setting a surface builder";
 
         this.surfaceBuilderFactory = TuyasSurfaceBuilder.create(surfaceBuilderFactory);
 
@@ -244,6 +236,6 @@ public class BiomeBuilder
     {
         assert surfaceBuilderFactory != null : "missing surface builder";
 
-        return new BiomeExtension(key, noiseFactory, surfaceBuilderFactory, aquiferSurfaceHeight, biomeBlendType, riverBlendType, shoreBlendType, salty, volcanic, hasTuffRings, hasTuyas, volcanoFrequency, volcanoBasaltHeight, tuffRingFrequency, tuyaFrequency, spawnable, rivers, shore, shoreBaseHeight, sandyRiverShores);
+        return new BiomeExtension(key, noiseFactory, surfaceBuilderFactory, aquiferSurfaceHeight, biomeBlendType, riverBlendType, shoreBlendType, salty, hasCinderCones, hasTuffRings, hasTuyas, centeredFeatureFrequency, centeredFeatureRockHeight, centeredFeatureBaseHeight, centeredFeatureScaleHeight, centeredFeatureIce, spawnable, rivers, shore, shoreBaseHeight, sandyRiverShores);
     }
 }

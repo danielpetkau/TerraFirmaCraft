@@ -27,11 +27,14 @@ import net.dries007.tfc.world.river.RiverInfo;
 import net.dries007.tfc.world.river.RiverNoiseSampler;
 import net.dries007.tfc.world.shore.ShoreBlendType;
 import net.dries007.tfc.world.shore.ShoreNoiseSampler;
+import net.dries007.tfc.world.volcano.CenteredFeatureBlendType;
+import net.dries007.tfc.world.volcano.CenteredFeatureNoiseSampler;
 
 public class ChunkHeightFiller
 {
     protected static final int RIVER_TYPE_NONE = RiverBlendType.NONE.ordinal();
     protected static final int RIVER_TYPE_CAVE = RiverBlendType.CAVE.ordinal();
+    public static final int NOT_PRESENT_RETURN = Integer.MIN_VALUE;
 
     protected final Map<BiomeExtension, BiomeNoiseSampler> biomeNoiseSamplers; // Biome -> Noise Samplers
     protected final Object2DoubleMap<BiomeNoiseSampler> columnBiomeNoiseSamplers; // Per column weighted map of biome noises samplers
@@ -50,10 +53,13 @@ public class ChunkHeightFiller
     protected final int seaLevel;
     protected final Noise2D tideHeightNoise;
 
+    // Centered Features, such as volcanoes
+    protected final Map<CenteredFeatureBlendType, CenteredFeatureNoiseSampler> volcanoNoiseSamplers;
+
     protected int blockX, blockZ; // Absolute x/z positions
     protected int localX, localZ; // Chunk-local x/z
 
-    public ChunkHeightFiller(Object2DoubleMap<BiomeExtension>[] sampledBiomeWeights, BiomeSourceExtension biomeSource, Map<BiomeExtension, BiomeNoiseSampler> biomeNoiseSamplers, Map<RiverBlendType, RiverNoiseSampler> riverNoiseSamplers, Map<ShoreBlendType, ShoreNoiseSampler> shoreNoiseSamplers, int seaLevel, Noise2D tideHeightNoise)
+    public ChunkHeightFiller(Object2DoubleMap<BiomeExtension>[] sampledBiomeWeights, BiomeSourceExtension biomeSource, Map<BiomeExtension, BiomeNoiseSampler> biomeNoiseSamplers, Map<RiverBlendType, RiverNoiseSampler> riverNoiseSamplers, Map<ShoreBlendType, ShoreNoiseSampler> shoreNoiseSamplers, Map<CenteredFeatureBlendType, CenteredFeatureNoiseSampler> volcanoNoiseSamplers, int seaLevel, Noise2D tideHeightNoise)
     {
         this.biomeNoiseSamplers = biomeNoiseSamplers;
         this.columnBiomeNoiseSamplers = new Object2DoubleOpenHashMap<>();
@@ -68,6 +74,8 @@ public class ChunkHeightFiller
         this.shoreBlendWeights = new double[ShoreBlendType.SIZE];
         this.seaLevel = seaLevel;
         this.tideHeightNoise = tideHeightNoise;
+
+        this.volcanoNoiseSamplers = volcanoNoiseSamplers;
     }
 
     /**
@@ -184,6 +192,8 @@ public class ChunkHeightFiller
         }
 
         assert biomeAt != null;
+
+        height = adjustHeightForVolcanic(height);
 
         computeInitialRiverWeights(biomeWeights);
 
@@ -320,6 +330,19 @@ public class ChunkHeightFiller
             riverBlendWeights[RIVER_TYPE_NONE] = 1.0;
             return height;
         }
+    }
+
+    private double adjustHeightForVolcanic(final double heightIn)
+    {
+        double volcanoHeight = NOT_PRESENT_RETURN;
+
+        for (CenteredFeatureBlendType type : CenteredFeatureBlendType.ALL)
+        {
+            final CenteredFeatureNoiseSampler sampler = volcanoNoiseSamplers.get(type);
+            volcanoHeight = Math.max(sampler.setColumnAndSampleHeight(heightIn, blockX, blockZ, biomeSource), volcanoHeight);
+        }
+
+        return volcanoHeight == NOT_PRESENT_RETURN ? heightIn : volcanoHeight;
     }
 
     protected void updateLocalCaches(Object2DoubleMap<BiomeExtension> biomeWeights, BiomeExtension biomeAt, @Nullable RiverInfo info, double height) {}

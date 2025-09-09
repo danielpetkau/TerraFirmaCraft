@@ -27,7 +27,7 @@ public final class TFCPlacements
     public static final Id<BoundedCarvingMaskPlacement> CARVING_MASK = register("carving_mask", () -> BoundedCarvingMaskPlacement.CODEC);
     public static final Id<ClimatePlacement> CLIMATE = register("climate", () -> ClimatePlacement.CODEC);
     public static final Id<IntertidalPlacement> INTERTIDAL = register("intertidal", () -> IntertidalPlacement.CODEC);
-    public static final Id<VolcanoPlacement> VOLCANO = register("volcano", () -> VolcanoPlacement.CODEC);
+    public static final Id<CinderConePlacement> VOLCANO = register("volcano", () -> CinderConePlacement.CODEC);
     public static final Id<TuffRingPlacement> TUFF_RING = register("tuff_cone", () -> TuffRingPlacement.CODEC);
     public static final Id<TuyaPlacement> TUYA = register("tuya", () -> TuyaPlacement.CODEC);
     public static final Id<NearFluidPlacement> NEAR_FLUID = register("near_fluid", () -> NearFluidPlacement.CODEC);

@@ -12,10 +12,9 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.blocks.rock.Rock;
 import net.dries007.tfc.world.Seed;
-import net.dries007.tfc.world.biome.TuyaNoise;
-import net.dries007.tfc.world.noise.Noise2D;
-import net.dries007.tfc.world.noise.OpenSimplex2D;
 import net.dries007.tfc.world.surface.SurfaceBuilderContext;
+import net.dries007.tfc.world.volcano.CenteredFeatureNoise;
+import net.dries007.tfc.world.volcano.CenteredFeatureNoiseSampler;
 
 public class TuyasSurfaceBuilder implements SurfaceBuilder
 {
@@ -25,13 +24,12 @@ public class TuyasSurfaceBuilder implements SurfaceBuilder
     }
 
     private final SurfaceBuilder parent;
-
-    private final TuyaNoise tuyaNoise;
+    private final Seed seed;
 
     public TuyasSurfaceBuilder(SurfaceBuilder parent, Seed seed)
     {
         this.parent = parent;
-        this.tuyaNoise = new TuyaNoise(seed);
+        this.seed = seed;
     }
 
     @Override
@@ -39,7 +37,8 @@ public class TuyasSurfaceBuilder implements SurfaceBuilder
     {
         if (context.biome().hasTuyas())
         {
-            final float easing = tuyaNoise.calculateEasing(context.pos().getX(), context.pos().getZ(), context.biome().getTuyaRarity());
+            final CenteredFeatureNoiseSampler sampler = CenteredFeatureNoise.tuya(seed);
+            final float easing = sampler.calculateEasing(context.pos(), context.biome());
             if (1 - easing < 0.16f)
             {
                 buildVolcanicSurface(context, startY, endY, easing);

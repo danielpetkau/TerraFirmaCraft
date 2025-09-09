@@ -44,6 +44,8 @@ import net.dries007.tfc.world.river.RiverInfo;
 import net.dries007.tfc.world.river.RiverNoiseSampler;
 import net.dries007.tfc.world.shore.ShoreBlendType;
 import net.dries007.tfc.world.shore.ShoreNoiseSampler;
+import net.dries007.tfc.world.volcano.CenteredFeatureBlendType;
+import net.dries007.tfc.world.volcano.CenteredFeatureNoiseSampler;
 
 import static net.dries007.tfc.world.TFCChunkGenerator.*;
 
@@ -116,6 +118,7 @@ public class ChunkNoiseFiller extends ChunkHeightFiller
         Map<BiomeExtension, BiomeNoiseSampler> biomeNoiseSamplers,
         Map<RiverBlendType, RiverNoiseSampler> riverNoiseSamplers,
         Map<ShoreBlendType, ShoreNoiseSampler> shoreSamplers,
+        Map<CenteredFeatureBlendType, CenteredFeatureNoiseSampler> volcanoSamplers,
         NoiseSampler sampler,
         ChunkBaseBlockSource baseBlockSource,
         ChunkNoiseSamplingSettings settings,
@@ -124,7 +127,7 @@ public class ChunkNoiseFiller extends ChunkHeightFiller
         Beardifier beardifier
     )
     {
-        super(sampledBiomeWeights, biomeSource, biomeNoiseSamplers, riverNoiseSamplers, shoreSamplers, seaLevel, tideHeightNoise);
+        super(sampledBiomeWeights, biomeSource, biomeNoiseSamplers, riverNoiseSamplers, shoreSamplers, volcanoSamplers, seaLevel, tideHeightNoise);
 
         this.chunk = chunk;
         this.chunkMinX = chunk.getPos().getMinBlockX();

@@ -22,15 +22,15 @@ import net.minecraft.world.level.levelgen.placement.PlacementModifier;
 import net.dries007.tfc.world.Codecs;
 import net.dries007.tfc.world.Seed;
 import net.dries007.tfc.world.biome.BiomeExtension;
-import net.dries007.tfc.world.biome.CenterOrDistanceNoise;
 import net.dries007.tfc.world.biome.TFCBiomes;
+import net.dries007.tfc.world.volcano.CenteredFeatureNoiseSampler;
 
 /**
- * A placement modifier for an arbitrary {@link CenterOrDistanceNoise} instance. A subclass only
+ * A placement modifier for an arbitrary {@link CenteredFeatureNoiseSampler} instance. A subclass only
  * needs to override {@link #createContext(Seed)} to be able to provide either "generate at the center of",
  * or "generate within a distance of", these features.
  */
-public abstract class CenterOrDistanceToPlacement<T extends CenterOrDistanceNoise> extends PlacementModifier
+public abstract class CenterOrDistanceToPlacement<T extends CenteredFeatureNoiseSampler> extends PlacementModifier
 {
     public static <E extends CenterOrDistanceToPlacement<?>> MapCodec<E> codec(BiFunction<Boolean, Float, E> factory)
     {
