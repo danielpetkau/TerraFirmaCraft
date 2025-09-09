@@ -77,7 +77,7 @@ public class ClimateStructurePlacement extends RandomSpreadStructurePlacement
 
         random.setLargeFeatureWithSalt(state.getLevelSeed(), x, z, this.salt());
 
-        return settings.climate.isValid(data, pos, random);
+        return settings.climate.isValidNonHemispheral(data, pos, random);
     }
 
     @Override

@@ -14,10 +14,12 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.levelgen.placement.PlacementContext;
 import net.minecraft.world.level.levelgen.placement.PlacementModifier;
 import net.minecraft.world.level.levelgen.placement.PlacementModifierType;
 
+import net.dries007.tfc.client.overworld.SolarCalculator;
 import net.dries007.tfc.util.EnvironmentHelpers;
 import net.dries007.tfc.world.Codecs;
 import net.dries007.tfc.world.chunkdata.ChunkData;
@@ -145,12 +147,23 @@ public class ClimatePlacement extends PlacementModifier
         return TFCPlacements.CLIMATE.get();
     }
 
-    public boolean isValid(ChunkData data, BlockPos pos, RandomSource random)
+    // TODO: This bypasses the hemisphere check for usages where the Level cannot be accessed, which is required to get the Climate Model
+    //  which is in turn required to get the temperature scale, without which we don't know where the equator is.
+    public boolean isValidNonHemispheral(ChunkData data, BlockPos pos, RandomSource random)
     {
+        return isValid(data, pos, random, true);
+    }
+
+    public boolean isValid(ChunkData data, BlockPos pos, RandomSource random, boolean useNorthHemisphereRainVar)
+    {
+        // For southern hemispheres, flip rain variance
+        final float rainVar = rainVarianceAbsolute ?
+            Math.abs(data.getRainVariance(pos)) :
+            data.getRainVariance(pos) * (useNorthHemisphereRainVar ? 1f : -1f);
+
         final int y = pos.getY();
         final float temperature = EnvironmentHelpers.adjustAvgTempForElev(y, data.getAverageSeaLevelTemp(pos));
         final float groundwater = data.getGroundwater(pos);
-        final float rainVar = rainVarianceAbsolute ? Math.abs(data.getRainVariance(pos)) : data.getRainVariance(pos);
         final ForestType forestType = data.getForestType();
 
         //Empty list of Forest Types defaults to generating everywhere
@@ -173,8 +186,9 @@ public class ClimatePlacement extends PlacementModifier
     @Override
     public Stream<BlockPos> getPositions(PlacementContext context, RandomSource random, BlockPos pos)
     {
-        final ChunkData data = ChunkData.get(context.getLevel(), pos);
-        if (isValid(data, pos, random))
+        final WorldGenLevel level = context.getLevel();
+        final ChunkData data = ChunkData.get(level, pos);
+        if (isValid(data, pos, random, SolarCalculator.getInNorthernHemisphere(pos, level.getLevel())))
         {
             return Stream.of(pos);
         }
