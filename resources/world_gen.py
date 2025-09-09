@@ -424,14 +424,16 @@ def generate(rm: ResourceManager):
         'radius': 5,
         'tries': 20,
         'min_height': 2,
-        'max_height': 5
+        'max_height': 5,
+        'allow_underwater': True
     })
     rm.configured_feature('mega_calcite', 'tfc:thin_spike', {
         'state': 'tfc:calcite',
         'radius': 12,
         'tries': 70,
         'min_height': 3,
-        'max_height': 9
+        'max_height': 9,
+        'allow_underwater': True
     })
 
     rm.placed_feature('calcite', 'tfc:calcite', decorate_count(4), decorate_square(), decorate_range(-56, 60, bias='biased_to_bottom'))
@@ -442,7 +444,8 @@ def generate(rm: ResourceManager):
         'radius': 10,
         'tries': 50,
         'min_height': 2,
-        'max_height': 5
+        'max_height': 5,
+        'allow_underwater': False
     })
     rm.placed_feature('icicle', 'tfc:icicle', decorate_count(3), decorate_square(), decorate_range(-32, 100, bias='biased_to_bottom'), decorate_climate(max_temp=-4))
 
@@ -573,7 +576,7 @@ def generate(rm: ResourceManager):
                 {'block': 'tfc:rock/hardened/%s' % rock, 'weight': 2}
             ]
         } for rock in igneous_rocks]
-    }, decorate_chance(20), decorate_square(), decorate_climate(min_temp=-14))
+    }, decorate_chance(20), decorate_square(), decorate_heightmap('ocean_floor_wg'))
 
     rm.configured_feature('random_empty_hot_spring', 'minecraft:simple_random_selector', {
         'features': count_weighted_list(

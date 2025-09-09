@@ -8,6 +8,8 @@ package net.dries007.tfc.world.feature.cave;
 
 import com.mojang.serialization.Codec;
 import net.minecraft.core.BlockPos;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.state.BlockState;
@@ -45,7 +47,7 @@ public class ThinSpikeFeature extends Feature<ThinSpikeConfig>
             for (int i = 0; i < 7; i++)
             {
                 mutablePos.move(0, 1, 0);
-                if (!FluidHelpers.isAirOrEmptyFluid(level.getBlockState(mutablePos)))
+                if ((config.allowUnderwater() && !FluidHelpers.isAirOrEmptyFluid(level.getBlockState(mutablePos))) || !level.isEmptyBlock(mutablePos))
                 {
                     mutablePos.move(0, -1, 0);
                     break;
@@ -61,9 +63,10 @@ public class ThinSpikeFeature extends Feature<ThinSpikeConfig>
     {
         // Place the first spike block
         // Ensure we're not appending to an existing spike - the canSurvive() check will pass, but will result in a broken tip
+        // Ensure we're not appending to ice underwater
         pos.move(0, 1, 0);
         final BlockState stateAbove = level.getBlockState(pos);
-        if (Helpers.isBlock(stateAbove, spike.getBlock()))
+        if (Helpers.isBlock(stateAbove, spike.getBlock()) || (config.allowUnderwater() && Helpers.isBlock(stateAbove, BlockTags.ICE) && !level.getBlockState(pos.below()).isAir()))
         {
             return false;
         }
