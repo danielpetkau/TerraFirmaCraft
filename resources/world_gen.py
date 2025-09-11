@@ -608,7 +608,7 @@ def generate(rm: ResourceManager):
     forest_config(rm, 270, 500, -14.2, 8.6, -1, 0.1, False, 'douglas_fir', True, krum=True, podzol=True)
     forest_config(rm, 210, 500, 6.8, 17.6, -0.4, 0.6, False, 'hickory', True, alfisol=True)
     forest_config(rm, 300, 500, 19.4, 40, -0.55, 0.55, False, 'kapok', False)
-    forest_config(rm, 200, 500, 15.8, 28.4, -1, 1, False, 'mangrove', False, floating=True)
+    forest_config(rm, 200, 500, 15.8, 40, -1, 1, False, 'mangrove', False, floating=True)
     forest_config(rm, 200, 450, -5.8, 10.4, -0.8, 1, False, 'maple', True, alfisol=True)
     forest_config(rm, 210, 500, -0.4, 17.6, -0.5, 0.75, False, 'oak', False, alfisol=True)
     forest_config(rm, 150, 330, 17.6, 40, -0.7, 0.7, False, 'palm', False)

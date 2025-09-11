@@ -714,6 +714,7 @@ public class BuiltinBlockTags extends TagsProvider<Block> implements Accessors
                 TFCBlocks.PLANTS.get(Plant.TIMOTHY_GRASS),
                 TFCBlocks.PLANTS.get(Plant.RADDIA_GRASS),
                 TFCBlocks.PLANTS.get(Plant.RED_OAT_GRASS),
+                TFCBlocks.PLANTS.get(Plant.TURTLE_GRASS),
                 TFCBlocks.GROUNDCOVER.get(GroundcoverBlockType.HUMUS)
             )
             .addTag(FALLEN_LEAVES);

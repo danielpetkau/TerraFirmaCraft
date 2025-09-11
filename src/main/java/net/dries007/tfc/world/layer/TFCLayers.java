@@ -252,13 +252,17 @@ public class TFCLayers
 
     public static boolean hasShore(int value)
     {
-        return value != LOWLANDS && value != SALT_MARSH && value != LOW_CANYONS && value != CANYONS && value != OCEANIC_MOUNTAINS && value != VOLCANIC_OCEANIC_MOUNTAINS
+        return value != LOW_CANYONS && value != CANYONS && value != OCEANIC_MOUNTAINS && value != VOLCANIC_OCEANIC_MOUNTAINS
             && value != TOWER_KARST_BAY && value != SUNKEN_SHIELD_VOLCANO && value != GLACIALLY_CARVED_OCEANIC_MOUNTAINS && value != GLACIATED_OCEANIC_MOUNTAINS && value != ICE_SHEET_OCEANIC_MOUNTAINS_EDGE
             && value != ICE_SHEET_SHIELD_VOLCANO && value != GLACIATED_SHIELD_VOLCANO && value != GUANO_ISLAND;
     }
 
     public static int shoreFor(int value)
     {
+        if (value == LOWLANDS || value == SALT_MARSH)
+        {
+            return SALT_MARSH;
+        }
         if (value == MOUNTAINS)
         {
             return OCEANIC_MOUNTAINS;

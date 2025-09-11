@@ -117,12 +117,17 @@ public final class TreeHelpers
 
     private static boolean isValidFloatingPosition(LevelAccessor level, BlockPos.MutableBlockPos mutablePos)
     {
-        final BlockState stateAt = level.getBlockState(mutablePos);
-        if (!EnvironmentHelpers.isWorldgenReplaceable(stateAt) || !stateAt.getFluidState().isEmpty())
-            return false;
-        mutablePos.move(0, -1, 0);
-        final BlockState stateBelow = level.getBlockState(mutablePos);
-        return Helpers.isBlock(stateBelow, TFCTags.Blocks.BUSH_PLANTABLE_ON) || Helpers.isBlock(stateBelow, TFCTags.Blocks.SEA_BUSH_PLANTABLE_ON) || Helpers.isFluid(stateBelow.getFluidState(), TFCTags.Fluids.ANY_INFINITE_WATER);
+        for (int i = 0; i <= 3; i++)
+        {
+            final BlockState stateAt = level.getBlockState(mutablePos);
+            if (!EnvironmentHelpers.isWorldgenReplaceable(stateAt))
+                return false;
+            mutablePos.move(0, -1, 0);
+            final BlockState stateBelow = level.getBlockState(mutablePos);
+            if (Helpers.isBlock(stateBelow, TFCTags.Blocks.BUSH_PLANTABLE_ON) || Helpers.isBlock(stateBelow, TFCTags.Blocks.SEA_BUSH_PLANTABLE_ON) || Helpers.isFluid(stateBelow.getFluidState(), TFCTags.Fluids.ANY_INFINITE_WATER))
+                return true;
+        }
+        return false;
     }
 
     private static boolean isValidPositionPossiblyUnderwater(LevelAccessor level, BlockPos.MutableBlockPos mutablePos, TreePlacementConfig config)
@@ -257,12 +262,13 @@ public final class TreeHelpers
     /**
      * @param origin The position below the trunk center
      */
-    public static boolean placeRoots(WorldGenLevel level, BlockPos origin, RootConfig config, RandomSource random)
+    public static boolean placeRoots(WorldGenLevel level, BlockPos.MutableBlockPos trunkBasePos, RootConfig config, RandomSource random)
     {
         if (config.specialPlacer().isPresent())
         {
-            return config.specialPlacer().get().placeRoots(level, random, origin, origin.above(), config);
+            return config.specialPlacer().get().placeRoots(level, random, trunkBasePos, config);
         }
+        BlockPos origin = trunkBasePos.below();
         final BlockPos.MutableBlockPos cursor = new BlockPos.MutableBlockPos();
         final Map<Block, IWeighted<BlockState>> blocks = config.blocks();
         for (int i = 0; i < config.tries(); i++)

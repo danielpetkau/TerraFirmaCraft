@@ -45,7 +45,6 @@ public enum RegionEdgeBiomeLayer implements AdjacentTransformLayer
             }
         }
 
-
         if (center == PLATEAU || center == BADLANDS)
         {
             if (matcher.test(i -> i == LOW_CANYONS || i == LOWLANDS))

@@ -48,7 +48,7 @@ public class RandomTreeFeature extends Feature<RandomTreeConfig>
 
         if (TreeHelpers.isValidLocation(level, pos, settings, config.placement()))
         {
-            final boolean placeTree = config.rootSystem().map(roots -> TreeHelpers.placeRoots(level, pos.below(), roots, random) || !roots.required()).orElse(true);
+            final boolean placeTree = config.rootSystem().map(roots -> TreeHelpers.placeRoots(level, mutablePos, roots, random) || !roots.required()).orElse(true);
             if (placeTree)
             {
                 config.trunk().ifPresent(trunk -> {

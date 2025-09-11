@@ -81,18 +81,20 @@ public class ForestFeature extends Feature<ForestConfig>
 
     private boolean placeTree(WorldGenLevel level, ChunkGenerator generator, RandomSource random, BlockPos chunkBlockPos, ForestConfig config, ChunkData data, BlockPos.MutableBlockPos mutablePos, ForestType typeConfig)
     {
-        final int chunkX = chunkBlockPos.getX();
-        final int chunkZ = chunkBlockPos.getZ();
-
-        mutablePos.set(chunkX + random.nextInt(16), 0, chunkZ + random.nextInt(16));
-        mutablePos.setY(level.getHeight(Heightmap.Types.OCEAN_FLOOR_WG, mutablePos.getX(), mutablePos.getZ()));
-
         final ForestConfig.Entry entry = getTree(data, random, config, mutablePos, typeConfig, level);
         if (entry != null)
         {
+            final int chunkX = chunkBlockPos.getX();
+            final int chunkZ = chunkBlockPos.getZ();
+
+            mutablePos.set(chunkX + random.nextInt(16), 0, chunkZ + random.nextInt(16));
             if (entry.floating())
             {
-                mutablePos.setY(level.getHeight(Heightmap.Types.WORLD_SURFACE_WG, mutablePos.getX(), mutablePos.getZ()));
+                mutablePos.setY(level.getHeight(Heightmap.Types.WORLD_SURFACE_WG, mutablePos.getX(), mutablePos.getZ()) + random.nextInt(2));
+            }
+            else
+            {
+                mutablePos.setY(level.getHeight(Heightmap.Types.OCEAN_FLOOR_WG, mutablePos.getX(), mutablePos.getZ()));
             }
             ConfiguredFeature<?, ?> feature;
             final int oldChance = entry.oldGrowthChance();
