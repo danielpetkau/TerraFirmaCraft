@@ -13,30 +13,23 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.valueproviders.UniformInt;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.behavior.*;
-import net.minecraft.world.entity.ai.behavior.declarative.BehaviorBuilder;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.memory.MemoryStatus;
 import net.minecraft.world.entity.ai.sensing.Sensor;
 import net.minecraft.world.entity.ai.sensing.SensorType;
-import net.minecraft.world.entity.animal.axolotl.Axolotl;
-import net.minecraft.world.entity.animal.axolotl.AxolotlAi;
 import net.minecraft.world.entity.schedule.Activity;
 import net.minecraft.world.level.Level;
 
 import com.mojang.datafixers.util.Pair;
 
 import net.dries007.tfc.common.TFCTags;
-import net.dries007.tfc.common.entities.ai.FastGateBehavior;
 import net.dries007.tfc.common.entities.ai.SetLookTarget;
 import net.dries007.tfc.common.entities.ai.TFCBrain;
 import net.dries007.tfc.common.entities.aquatic.AmphibiousAnimal;
 import net.dries007.tfc.util.Helpers;
-import net.dries007.tfc.util.calendar.ICalendar;
 
 /**
  * Reference implementation of {@link Brain} based on Axolotls.
@@ -155,11 +148,6 @@ public class AmphibianAi
         return entity.getBrain()
             .getMemory(MemoryModuleType.NEAREST_VISIBLE_LIVING_ENTITIES)
             .flatMap(nearest -> nearest.findClosest(p -> Helpers.isEntity(p, TFCTags.Entities.SMALL_FISH) && p.isAlive()));
-    }
-
-    private static boolean isDayTime(Entity animal)
-    {
-        return animal.level().getDayTime() % ICalendar.TICKS_IN_DAY < 12000;
     }
 
     private static boolean canSetWalkTargetFromLookTarget(LivingEntity entity)

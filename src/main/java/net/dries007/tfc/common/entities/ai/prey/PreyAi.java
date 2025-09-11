@@ -34,7 +34,6 @@ import net.minecraft.world.entity.ai.sensing.Sensor;
 import net.minecraft.world.entity.ai.sensing.SensorType;
 import net.minecraft.world.entity.schedule.Activity;
 
-import net.dries007.tfc.common.entities.ai.FastGateBehavior;
 import net.dries007.tfc.common.entities.ai.SetLookTarget;
 import net.dries007.tfc.common.entities.prey.Prey;
 
@@ -105,14 +104,15 @@ public class PreyAi
 
     public static RunOne<Prey> createIdleMovementBehaviors()
     {
-        return new RunOne<>(ImmutableMap.of(MemoryModuleType.WALK_TARGET, MemoryStatus.VALUE_ABSENT),
-        ImmutableList.of(
-            // Chooses one of these behaviors to run. Notice that all three of these are basically the fallback walking around behaviors, and it doesn't make sense to check them all every time
-            Pair.of(RandomStroll.stroll(1.0F), 1), // picks a random place to walk to
-            Pair.of(SetWalkTargetFromLookTarget.create(1.0F, 3), 1), // walk to what it is looking at
-            Pair.of(new DoNothing(30, 60), 1) // do nothing for a certain period of time
-        ));
-
+        return new RunOne<>(
+            ImmutableMap.of(MemoryModuleType.WALK_TARGET, MemoryStatus.VALUE_ABSENT),
+            ImmutableList.of(
+                // Chooses one of these behaviors to run. Notice that all three of these are basically the fallback walking around behaviors, and it doesn't make sense to check them all every time
+                Pair.of(RandomStroll.stroll(1.0F), 1), // picks a random place to walk to
+                Pair.of(SetWalkTargetFromLookTarget.create(1.0F, 3), 1), // walk to what it is looking at
+                Pair.of(new DoNothing(30, 60), 1) // do nothing for a certain period of time
+            )
+        );
     }
 
     public static void updateActivity(Prey prey)

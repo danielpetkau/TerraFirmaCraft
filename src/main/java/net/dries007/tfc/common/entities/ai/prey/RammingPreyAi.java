@@ -7,9 +7,9 @@
 package net.dries007.tfc.common.entities.ai.prey;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import net.minecraft.util.RandomSource;
-import net.minecraft.util.TimeUtil;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -24,7 +24,6 @@ import com.mojang.datafixers.util.Pair;
 
 import net.dries007.tfc.client.TFCSounds;
 import net.dries007.tfc.common.TFCTags;
-import net.dries007.tfc.common.entities.ai.FastGateBehavior;
 import net.dries007.tfc.common.entities.ai.SetLookTarget;
 import net.dries007.tfc.common.entities.ai.predator.PredatorAi;
 import net.dries007.tfc.common.entities.prey.RammingPrey;
@@ -49,9 +48,6 @@ public class RammingPreyAi
             && !(target instanceof RammingPrey && !Helpers.isEntity(target, TFCTags.Entities.NOT_RAMMED_BY_RAMMERS) && (!((RammingPrey) target).isMale() || target.isBaby() || (target.getHealth() / target.getMaxHealth() < 0.7)))
         );
     });
-
-
-    private static final UniformInt RETREAT_DURATION = TimeUtil.rangeOfSeconds(7, 22);
 
     public static void initMemories(RammingPrey rammingPrey, RandomSource random) {
         Brain<RammingPrey> brain = rammingPrey.getBrain();
@@ -112,14 +108,17 @@ public class RammingPreyAi
         );
     }
 
-    public static FastGateBehavior<RammingPrey> createIdleMovementBehaviors()
+    public static RunOne<RammingPrey> createIdleMovementBehaviors()
     {
-        return FastGateBehavior.runOne(ImmutableList.of(
-            // Chooses one of these behaviors to run. Notice that all three of these are basically the fallback walking around behaviors, and it doesn't make sense to check them all every time
-            RandomStroll.stroll(1.0F), // picks a random place to walk to
-            SetWalkTargetFromLookTarget.create(1.0F, 3), // walk to what it is looking at
-            new DoNothing(30, 60)
-        )); // do nothing for a certain period of time
+        return new RunOne<>(
+            ImmutableMap.of(MemoryModuleType.WALK_TARGET, MemoryStatus.VALUE_ABSENT),
+            ImmutableList.of(
+                // Chooses one of these behaviors to run. Notice that all three of these are basically the fallback walking around behaviors, and it doesn't make sense to check them all every time
+                Pair.of(RandomStroll.stroll(1.0F), 1), // picks a random place to walk to
+                Pair.of(SetWalkTargetFromLookTarget.create(1.0F, 3), 1), // walk to what it is looking at
+                Pair.of(new DoNothing(30, 60), 1) // do nothing for a certain period of time
+            )
+        );
     }
 
     /**
@@ -152,5 +151,4 @@ public class RammingPreyAi
     {
         return !rammingPrey.getBrain().getMemory(MemoryModuleType.HURT_BY_ENTITY).map(entity -> entity.distanceToSqr(rammingPrey) < 400).orElse(false);
     }
-
 }
