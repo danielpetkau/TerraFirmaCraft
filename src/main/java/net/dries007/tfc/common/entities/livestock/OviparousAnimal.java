@@ -221,8 +221,23 @@ public abstract class OviparousAnimal extends ProducingAnimal implements Pluckab
         return false;
     }
 
-    @SuppressWarnings("unchecked")
+    /**
+     * @deprecated This method will unconditionally add uses to the animal, even if there is no space for the egg.
+     * Use {@link #makeEggEvent()} instead, and add the uses in the api caller.
+     */
+    @Deprecated
     public ItemStack makeEgg()
+    {
+        final AnimalProductEvent event = makeEggEvent();
+        if (!MinecraftForge.EVENT_BUS.post(event))
+        {
+            addUses(event.getUses());
+        }
+        return event.getProduct();
+    }
+
+    @SuppressWarnings("unchecked")
+    public AnimalProductEvent makeEggEvent()
     {
         final ItemStack stack = new ItemStack(Items.EGG);
         if (isFertilized())
@@ -240,12 +255,7 @@ public abstract class OviparousAnimal extends ProducingAnimal implements Pluckab
                 }
             }
         }
-        AnimalProductEvent event = new AnimalProductEvent(level(), blockPosition(), null, this, stack, ItemStack.EMPTY, 1);
-        if (!MinecraftForge.EVENT_BUS.post(event))
-        {
-            addUses(event.getUses());
-        }
-        return event.getProduct();
+        return new AnimalProductEvent(level(), blockPosition(), null, this, stack, ItemStack.EMPTY, 1);
     }
 
     @Override

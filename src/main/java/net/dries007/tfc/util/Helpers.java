@@ -920,6 +920,21 @@ public final class Helpers
     }
 
     /**
+     * @return {@code true} if every slot in the provided inventory is full.
+     */
+    public static boolean isFull(IItemHandler inventory)
+    {
+        for (int i = 0; i < inventory.getSlots(); i++)
+        {
+            if (inventory.getStackInSlot(i).getCount() < inventory.getSlotLimit(i))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
      * Attempts to spread fire, in a half dome of max {@code radius}. Larger radii check more blocks.
      */
     public static void fireSpreaderTick(ServerLevel level, BlockPos pos, RandomSource random, int radius)
