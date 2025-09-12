@@ -205,7 +205,7 @@
     {
       "type": "patchouli:text",
       "anchor": "quail",
-      "text": "$(thing)ウズラ$()は、$(l:the_world/climate#temperature)気温$()-15～15°C、$(l:the_world/climate#rainfall)降雨量$()200mm以上の寒冷な気候に生息している(l:mechanics/animal_husbandry#oviparous_animals)卵生動物$()です。食べ物は、$(thing)穀物$()、$(thing)果物$()、$(thing)野菜$()、および$(thing)種子$()を食べます。腐っていても構いません。卵は8日で孵化し、22日で大人になります。48回卵を産むことができ、28時間ごとに卵を産みます。",
+      "text": "$(thing)ウズラ$()は、$(l:the_world/climate#temperature)気温$()-15～15°C、$(l:the_world/climate#rainfall)降雨量$()200mm以上の寒冷な気候に生息している$(l:mechanics/animal_husbandry#oviparous_animals)卵生動物$()です。食べ物は、$(thing)穀物$()、$(thing)果物$()、$(thing)野菜$()、および$(thing)種子$()を食べます。腐っていても構いません。卵は8日で孵化し、22日で大人になります。48回卵を産むことができ、28時間ごとに卵を産みます。",
       "title": "ウズラ"
     },
     {

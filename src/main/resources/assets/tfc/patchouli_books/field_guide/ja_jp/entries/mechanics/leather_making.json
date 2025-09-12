@@ -54,7 +54,7 @@
       "type": "tfc:sealed_barrel_recipe",
       "anchor": "tanning",
       "recipe": "tfc:barrel/medium_leather",
-      "text": "最後に、$(thing)準備された皮$()を、$(l:mechanics/barrels#tannin)タンニン入りのバレル$()に密封する必要があります。これは、丸太を水に密封することで作成できる皮を$(thing)革$()に変換するのに役立つ酸性の化合物です。さらに8時間後、バレルから$(thing)革$()を回収することができます。"
+      "text": "最後に、$(thing)準備された皮$()を、$(l:mechanics/barrels#tannin)タンニン入りの樽$()に密封する必要があります。これは、丸太を水に密封することで作成できる皮を$(thing)革$()に変換するのに役立つ酸性の化合物です。さらに8時間後、樽から$(thing)革$()を回収することができます。"
     }
   ],
   "read_by_default": true,
