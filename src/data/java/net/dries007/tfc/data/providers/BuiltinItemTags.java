@@ -218,6 +218,11 @@ public class BuiltinItemTags extends TagsProvider<Item> implements Accessors
             TFCBlocks.GROUNDCOVER.get(GroundcoverBlockType.HUMUS),
             TFCBlocks.GROUNDCOVER.get(GroundcoverBlockType.DRIFTWOOD),
             TFCBlocks.GROUNDCOVER.get(GroundcoverBlockType.PINECONE));
+        tag(COMPOST_POISONS).add(
+            Items.BONE,
+            Items.BONE_MEAL,
+            Items.BONE_BLOCK
+        ).addTag(MEATS);
 
         tag(SMALL_FISHING_BAIT)
             .addTag(Tags.Items.SEEDS)

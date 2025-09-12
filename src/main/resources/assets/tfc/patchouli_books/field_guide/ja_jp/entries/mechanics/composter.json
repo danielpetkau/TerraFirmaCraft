@@ -87,43 +87,50 @@
     },
     {
       "type": "patchouli:spotlight",
-      "item": "tag:tfc:compost_greens_low",
+      "item": "tag:tfc:compost_greens/low",
+      "title": "Compost Greens",
       "link_recipes": false,
       "text": "植物など、一部の $(2)緑$() アイテムは堆肥化にほとんど寄与しません。 コンポスターの緑アイテムの需要を満たすには、16 個の緑のアイテムが必要です。"
     },
     {
       "type": "patchouli:spotlight",
-      "item": "tag:tfc:compost_greens",
+      "item": "tag:tfc:compost_greens/medium",
+      "title": "Compost Greens",
       "link_recipes": false,
       "text": "穀物など、いくつかの $(2)緑$() アイテムはコンポスターに適度に貢献します。 コンポスターの緑アイテムの需要を満たすには、8 個の緑のアイテムが必要です。"
     },
     {
       "type": "patchouli:spotlight",
-      "item": "tag:tfc:compost_greens_high",
+      "item": "tag:tfc:compost_greens/high",
+      "title": "Compost Greens",
       "link_recipes": false,
       "text": "果物や野菜など、一部の $(2)緑$() アイテムは堆肥化装置に多大な貢献をします。 コンポスターの緑アイテムの需要を満たすには、それらが 4 つ必要です。"
     },
     {
       "type": "patchouli:spotlight",
-      "item": "tag:tfc:compost_browns_low",
+      "item": "tag:tfc:compost_browns/low",
+      "title": "Compost Browns",
       "link_recipes": false,
       "text": "$(4)brown$() アイテムの中には、乾燥したフラムタイト、木生シダ、蔓植物などの背の高い植物や落ち葉など、コンポスターにほとんど寄与しないものもあります。 コンポスターの茶アイテムの需要を満たすには、16 個のアイテムが必要です。"
     },
     {
       "type": "patchouli:spotlight",
-      "item": "tag:tfc:compost_browns",
+      "item": "tag:tfc:compost_browns/medium",
+      "title": "Compost Browns",
       "link_recipes": false,
       "text": "木の灰やジュートなど、一部の $(4)茶$() アイテムはコンポスターに適度に貢献します。 コンポスターの茶アイテムの需要を満たすには、8 個のアイテムが必要です。"
     },
     {
       "type": "patchouli:spotlight",
-      "item": "tag:tfc:compost_browns_high",
+      "item": "tag:tfc:compost_browns/high",
+      "title": "Compost Browns",
       "link_recipes": false,
       "text": "メロン、カボチャ、枯れ草、松ぼっくり、腐葉土、流木など、一部の $(4)茶$() アイテムはコンポスターに多大な貢献をします。 コンポスターの茶アイテムの需要を満たすには、それらが 4 つ必要です。"
     },
     {
       "type": "patchouli:spotlight",
       "item": "tag:tfc:compost_poisons",
+      "title": "Compost Poisons",
       "link_recipes": false,
       "text": "一部のアイテムはあなたの堆肥を $(c)毒性化$() します。 これらには、$(c)肉$() や $(c)骨$() が含まれます。 毒堆肥を作物に使用すると、即座に枯れてしまいます。"
     }
