@@ -262,7 +262,7 @@ public class BarrelBlock extends SealableDeviceBlock
     @Override
     protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving)
     {
-        if (!(Helpers.isBlock(state, newState.getBlock())) && state.getValue(RACK) && !(newState.getBlock() instanceof BarrelRackBlock))
+        if (!(Helpers.isBlock(state, newState.getBlock())) && state.getValue(RACK) && !(newState.getBlock() instanceof BarrelRackBlock) && !isMoving)
         {
             Helpers.spawnItem(level, pos, new ItemStack(TFCBlocks.BARREL_RACK.get()));
         }
