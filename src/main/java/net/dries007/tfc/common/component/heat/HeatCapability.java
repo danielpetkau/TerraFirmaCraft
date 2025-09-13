@@ -220,7 +220,7 @@ public final class HeatCapability
     /**
      * Use this to increase the heat on an IItemHeat instance.
      *
-     * @param modifier the modifier for how much this will heat up: 0 - 1 slows down cooling, 1 = no heating or cooling, > 1 heats, 2 heats at the same rate of normal cooling, 2+ heats faster
+     * @param modifier the modifier for how much this will heat up: 0 - 1 slows down cooling, 1 = no heating or cooling, > 1 heats, 1.8 heats at the same rate of normal cooling, 1.8+ heats faster
      */
     public static void addTemp(IHeat instance, float targetTemperature, float modifier)
     {
