@@ -303,11 +303,6 @@ public final class CropHelpers
         return 1.0f;
     }
 
-    private static int minAmountRequiredToNextFillBar(IFarmland farmland, Fertilizer fertilizer, FarmlandBlockEntity.NutrientType type, int prevValue)
-    {
-        return minAmountRequiredToNextFillBar(farmland, fertilizer, type, prevValue, 1f);
-    }
-
     /**
      * We do this instead of looping because then we only call `addNutrients` once and reduce network load, since that will cause a sync.
      */

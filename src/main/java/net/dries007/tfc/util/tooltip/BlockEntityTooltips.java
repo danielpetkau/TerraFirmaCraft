@@ -59,6 +59,8 @@ import net.dries007.tfc.common.blocks.TFCTorchBlock;
 import net.dries007.tfc.common.blocks.TFCWallTorchBlock;
 import net.dries007.tfc.common.blocks.crop.CropBlock;
 import net.dries007.tfc.common.blocks.crop.DecayingBlock;
+import net.dries007.tfc.common.blocks.crop.DoubleCropBlock;
+import net.dries007.tfc.common.blocks.crop.DoubleCropBlock.Part;
 import net.dries007.tfc.common.blocks.devices.BarrelBlock;
 import net.dries007.tfc.common.blocks.devices.BellowsBlock;
 import net.dries007.tfc.common.blocks.devices.BlastFurnaceBlock;
@@ -294,9 +296,16 @@ public final class BlockEntityTooltips
     };
 
     public static final BlockEntityTooltip CROP = (level, state, pos, entity, tooltip) -> {
-        if (entity instanceof CropBlockEntity crop && state.getBlock() instanceof CropBlock)
+        if (state.getBlock() instanceof CropBlock)
         {
-            tooltip.accept(Component.translatable("tfc.jade.yield", String.format("%.0f", crop.getYield() * 100)));
+            if (state.getBlock() instanceof DoubleCropBlock && state.getValue(DoubleCropBlock.PART) == Part.TOP)
+            {
+                entity = level.getBlockEntity(pos.below());
+            }
+            if (entity != null && entity instanceof CropBlockEntity crop )
+            {
+                tooltip.accept(Component.translatable("tfc.jade.yield", String.format("%.0f", crop.getYield() * 100)));
+            }
         }
     };
 

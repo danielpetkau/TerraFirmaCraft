@@ -171,7 +171,7 @@ public abstract class DoubleCropBlock extends CropBlock
         }
         else if (stateAbove.getBlock() == this)
         {
-            level.destroyBlock(posAbove, false);
+            level.setBlock(posAbove, Blocks.AIR.defaultBlockState(), Block.UPDATE_CLIENTS | Block.UPDATE_KNOWN_SHAPE);
         }
         level.setBlockAndUpdate(pos, deadState.setValue(DeadDoubleCropBlock.PART, Part.BOTTOM));
     }
