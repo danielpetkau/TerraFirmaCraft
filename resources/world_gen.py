@@ -1757,14 +1757,14 @@ LAKE_CREATURES: Dict[str, Dict[str, Any]] = {
 ICE_SHEET_OCEANIC_CREATURES: Dict[str, Dict[str, Any]] = {
     'polar_bear': spawner('tfc:polar_bear', min_count=1, max_count=1, weight=1),
     'penguin': spawner('tfc:penguin', min_count=2, max_count=5),
-    'seal': spawner('tfc:seal', min_count=1, max_count=2)
+    'leopard_seal': spawner('tfc:leopard_seal', min_count=1, max_count=2)
 }
 
 SHORE_CREATURES: Dict[str, Dict[str, Any]] = {
     'polar_bear': spawner('tfc:polar_bear', min_count=1, max_count=1, weight=1),
     'penguin': spawner('tfc:penguin', min_count=2, max_count=5, weight=10),
     'turtle': spawner('tfc:turtle', min_count=2, max_count=5, weight=10),
-    'seal': spawner('tfc:seal', min_count=2, max_count=4)
+    'leopard_seal': spawner('tfc:leopard_seal', min_count=2, max_count=4)
 }
 
 LAND_CREATURES: Dict[str, Dict[str, Any]] = {

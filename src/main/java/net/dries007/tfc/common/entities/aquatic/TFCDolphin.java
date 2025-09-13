@@ -7,6 +7,7 @@
 package net.dries007.tfc.common.entities.aquatic;
 
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.animal.Dolphin;
@@ -39,14 +40,14 @@ public class TFCDolphin extends Dolphin implements AquaticMob
         goalSelector.addGoal(0, new BreathAirGoal(this));
         goalSelector.addGoal(0, new TryFindWaterGoal(this));
         goalSelector.addGoal(1, new GetHookedGoal(this));
+        goalSelector.addGoal(3, new MeleeAttackGoal(this, 1.2F, true));
         goalSelector.addGoal(4, new RandomSwimmingGoal(this, 1.0D, 10));
         goalSelector.addGoal(4, new RandomLookAroundGoal(this));
         goalSelector.addGoal(5, new LookAtPlayerGoal(this, Player.class, 6.0F));
         goalSelector.addGoal(5, new DolphinJumpGoal(this, 10));
-        goalSelector.addGoal(6, new MeleeAttackGoal(this, 1.2F, true));
         goalSelector.addGoal(8, new FollowBoatGoal(this));
 
-        targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, WaterAnimal.class, 1000, true, false, e -> Helpers.isEntity(e, TFCTags.Entities.HUNTED_BY_OCEAN_PREDATORS)));
+        targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, LivingEntity.class, 1000, true, false, e -> Helpers.isEntity(e, TFCTags.Entities.HUNTED_BY_OCEAN_PREDATORS)));
     }
 
     @Override

@@ -2,6 +2,6 @@
   "__comment__": "This file was automatically created by mcresources",
   "parent": "item/generated",
   "textures": {
-    "layer0": "tfc:item/spawn_egg/seal"
+    "layer0": "tfc:item/spawn_egg/leopard_seal"
   }
 }

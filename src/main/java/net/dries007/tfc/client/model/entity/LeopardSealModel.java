@@ -18,10 +18,9 @@ import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
 
-import net.dries007.tfc.common.entities.aquatic.AmphibiousAnimal;
-import net.dries007.tfc.common.entities.aquatic.Seal;
+import net.dries007.tfc.common.entities.aquatic.LeopardSeal;
 
-public class SealModel extends HierarchicalAnimatedModel<Seal>
+public class LeopardSealModel extends HierarchicalAnimatedModel<LeopardSeal>
 {
 	public static LayerDefinition createBodyLayer() {
 		MeshDefinition meshdefinition = new MeshDefinition();
@@ -258,7 +257,7 @@ public class SealModel extends HierarchicalAnimatedModel<Seal>
     private final ModelPart jaw;
     private final ModelPart jaw_2;
 
-    public SealModel(ModelPart root) {
+    public LeopardSealModel(ModelPart root) {
         super(root);
         this.whole_body_1 = root.getChild("whole_body_1");
         this.whole_body = this.whole_body_1.getChild("whole_body");
@@ -277,7 +276,7 @@ public class SealModel extends HierarchicalAnimatedModel<Seal>
     }
 
     @Override
-    public void setupAnim(Seal animal, float limbSwing, float limbSwingAmount, float ageInTicks, float headYaw, float headPitch)
+    public void setupAnim(LeopardSeal animal, float limbSwing, float limbSwingAmount, float ageInTicks, float headYaw, float headPitch)
     {
         super.setupAnim(animal, limbSwing, limbSwingAmount, ageInTicks, headYaw, headPitch);
         if (!animal.isInWater() && animal.onGround())

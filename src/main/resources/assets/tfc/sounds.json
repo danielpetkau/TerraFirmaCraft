@@ -1821,14 +1821,18 @@
     "subtitle": "subtitles.entity.tfc.seal.ambient",
     "sounds": [
       {
-        "name": "minecraft:entity.wolf.ambient"
+        "name": "minecraft:entity.wolf.ambient",
+        "type": "event"
       }
     ]
   },
   "entity.seal.hurt": {
     "subtitle": "subtitles.entity.tfc.seal.hurt",
     "sounds": [
-      "minecraft:entity.wolf.hurt"
+      {
+        "name": "minecraft:entity.wolf.hurt",
+        "type": "event"
+      }
     ]
   },
   "entity.seal.step": {
@@ -1844,7 +1848,10 @@
   "entity.seal.death": {
     "subtitle": "subtitles.entity.tfc.seal.death",
     "sounds": [
-      "minecraft:entity.wolf.death"
+      {
+        "name": "minecraft:entity.wolf.death",
+        "type": "event"
+      }
     ]
   },
   "entity.seal.attack": {

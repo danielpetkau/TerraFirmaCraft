@@ -179,6 +179,10 @@ public final class SolarCalculator
      */
     public static boolean getInNorthernHemisphere(int z, float hemisphereScale)
     {
+        if (hemisphereScale == 0)
+        {
+            return true;
+        }
         final int adjustedZ = z - (int) (hemisphereScale / 2);
         final int poleToPoleDistance = (int) (hemisphereScale * 2);
         final int normalizedZ = Mth.positiveModulo(adjustedZ, (poleToPoleDistance * 2));

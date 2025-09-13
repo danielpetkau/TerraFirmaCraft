@@ -44,7 +44,7 @@
         "maxCount": 5
       },
       {
-        "type": "tfc:seal",
+        "type": "tfc:leopard_seal",
         "weight": 1,
         "minCount": 1,
         "maxCount": 2
