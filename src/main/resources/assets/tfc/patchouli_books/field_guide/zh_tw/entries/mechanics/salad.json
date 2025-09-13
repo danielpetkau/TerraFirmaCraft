@@ -10,7 +10,7 @@
     },
     {
       "type": "patchouli:spotlight",
-      "item": "tag:tfc:salads",
+      "item": "tag:c:foods/salad",
       "title": "",
       "link_recipes": false,
       "text": "Up to five ingredients can be added in the top slots. $(thing)Bowls$() can be added in the left bottom slot. When you are done, the salad can be taken out from the right bottom slot."
