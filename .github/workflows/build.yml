@@ -46,6 +46,7 @@ jobs:
       uses: gradle/gradle-build-action@v2
       with:
         arguments: build
+        cache-disabled: 'true'
       env:
         VERSION: ${{ steps.version.outputs.result }}
     - name: Publish
