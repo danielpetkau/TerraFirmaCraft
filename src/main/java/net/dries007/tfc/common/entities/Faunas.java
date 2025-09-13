@@ -29,7 +29,7 @@ import net.dries007.tfc.common.entities.aquatic.Jellyfish;
 import net.dries007.tfc.common.entities.aquatic.Manatee;
 import net.dries007.tfc.common.entities.aquatic.Octopoteuthis;
 import net.dries007.tfc.common.entities.aquatic.Penguin;
-import net.dries007.tfc.common.entities.aquatic.Seal;
+import net.dries007.tfc.common.entities.aquatic.LeopardSeal;
 import net.dries007.tfc.common.entities.aquatic.TFCCod;
 import net.dries007.tfc.common.entities.aquatic.TFCDolphin;
 import net.dries007.tfc.common.entities.aquatic.TFCPufferfish;
@@ -75,7 +75,7 @@ public class Faunas
     public static final Id<Manatee> MANATEE = registerFish(TFCEntities.MANATEE);
     public static final Id<TFCTurtle> TURTLE = registerAnimal(TFCEntities.TURTLE);
     public static final Id<Penguin> PENGUIN = registerAnimal(TFCEntities.PENGUIN);
-    public static final Id<Seal> SEAL = registerAnimal(TFCEntities.SEAL);
+    public static final Id<LeopardSeal> LEOPARD_SEAL = registerAnimal(TFCEntities.LEOPARD_SEAL);
     public static final Id<TFCFrog> FROG = registerAnimal(TFCEntities.FROG);
     public static final Id<Predator> POLAR_BEAR = registerAnimal(TFCEntities.POLAR_BEAR);
     public static final Id<Predator> GRIZZLY_BEAR = registerAnimal(TFCEntities.GRIZZLY_BEAR);
@@ -137,7 +137,7 @@ public class Faunas
         registerSpawnPlacement(event, MANATEE);
         registerSpawnPlacement(event, TURTLE);
         registerSpawnPlacement(event, PENGUIN);
-        registerSpawnPlacement(event, SEAL);
+        registerSpawnPlacement(event, LEOPARD_SEAL);
         registerSpawnPlacement(event, FROG);
         registerSpawnPlacement(event, POLAR_BEAR);
         registerSpawnPlacement(event, GRIZZLY_BEAR);

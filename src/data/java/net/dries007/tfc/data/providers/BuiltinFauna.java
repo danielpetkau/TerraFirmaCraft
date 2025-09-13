@@ -49,7 +49,7 @@ public class BuiltinFauna extends DataManagerProvider<Fauna>
         add(Faunas.FISH.get(Fish.SMALLMOUTH_BASS), b -> b.temperature(-14, 20).groundwater(100, 400).months(FRESHWATER_FISH_MONTHS));
         add(Faunas.FISH.get(Fish.SALMON), b -> b.minTemperature(-5).months(FRESHWATER_FISH_MONTHS));
         add(Faunas.PENGUIN, b -> b.maxTemperature(-11).minGroundwater(75));
-        add(Faunas.SEAL, b -> b.maxTemperature(12).minGroundwater(105));
+        add(Faunas.LEOPARD_SEAL, b -> b.maxTemperature(-9).minGroundwater(105));
         add(Faunas.FROG, b -> b.minGroundwater(150).minTemperature(-13));
         add(Faunas.TURTLE, b -> b.minTemperature(21).minGroundwater(250));
         add(Faunas.POLAR_BEAR, b -> b.maxTemperature(-10).minGroundwater(100));

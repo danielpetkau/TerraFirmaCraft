@@ -8,6 +8,9 @@ package net.dries007.tfc.common.entities.aquatic;
 
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
@@ -23,6 +26,11 @@ public class Penguin extends AmphibiousAnimal
 {
     public final AnimationState walkingAnimation = new AnimationState();
     public final AnimationState swimmingAnimation = new AnimationState();
+
+    public static AttributeSupplier.Builder createAttributes()
+    {
+        return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 8.0D).add(Attributes.MOVEMENT_SPEED, 1.0D).add(Attributes.ATTACK_DAMAGE, 2.0D).add(Attributes.STEP_HEIGHT, 1.0);
+    }
 
     public Penguin(EntityType<? extends AmphibiousAnimal> type, Level level)
     {

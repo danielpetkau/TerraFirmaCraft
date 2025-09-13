@@ -43,7 +43,7 @@ import net.dries007.tfc.common.entities.aquatic.Jellyfish;
 import net.dries007.tfc.common.entities.aquatic.Manatee;
 import net.dries007.tfc.common.entities.aquatic.Octopoteuthis;
 import net.dries007.tfc.common.entities.aquatic.Penguin;
-import net.dries007.tfc.common.entities.aquatic.Seal;
+import net.dries007.tfc.common.entities.aquatic.LeopardSeal;
 import net.dries007.tfc.common.entities.aquatic.TFCCod;
 import net.dries007.tfc.common.entities.aquatic.TFCDolphin;
 import net.dries007.tfc.common.entities.aquatic.TFCPufferfish;
@@ -151,7 +151,7 @@ public class TFCEntities
     // Creatures
     public static final Id<TFCTurtle> TURTLE = register("turtle", EntityType.Builder.of(TFCTurtle::new, MobCategory.CREATURE).sized(0.8F, 0.3F).clientTrackingRange(10));
     public static final Id<Penguin> PENGUIN = register("penguin", EntityType.Builder.of(Penguin::new, MobCategory.CREATURE).sized(0.3F, 0.6F).clientTrackingRange(10));
-    public static final Id<Seal> SEAL = register("seal", EntityType.Builder.of(Seal::new, MobCategory.CREATURE).sized(1.2F, 0.7F).clientTrackingRange(10));
+    public static final Id<LeopardSeal> LEOPARD_SEAL = register("leopard_seal", EntityType.Builder.of(LeopardSeal::new, MobCategory.CREATURE).sized(1.2F, 0.7F).clientTrackingRange(10));
     public static final Id<TFCFrog> FROG = register("frog", EntityType.Builder.of(TFCFrog::new, MobCategory.CREATURE).sized(0.5F, 0.5F).clientTrackingRange(10));
 
     public static final Id<Predator> POLAR_BEAR = register("polar_bear", EntityType.Builder.of(Predator::createBear, MobCategory.CREATURE).immuneTo(Blocks.POWDER_SNOW).sized(1.4F, 1.4F).clientTrackingRange(10));
@@ -238,8 +238,8 @@ public class TFCEntities
         event.put(ORCA.get(), Dolphin.createAttributes().build());
         event.put(MANATEE.get(), Manatee.createAttributes().build());
         event.put(TURTLE.get(), AmphibiousAnimal.createAttributes().build());
-        event.put(PENGUIN.get(), AmphibiousAnimal.createAttributes().build());
-        event.put(SEAL.get(), AmphibiousAnimal.createAttributes().build());
+        event.put(PENGUIN.get(), Penguin.createAttributes().build());
+        event.put(LEOPARD_SEAL.get(), LeopardSeal.createAttributes().build());
         event.put(FROG.get(), TFCFrog.createAttributes().build());
         event.put(POLAR_BEAR.get(), Predator.createBearAttributes().build());
         event.put(GRIZZLY_BEAR.get(), Predator.createBearAttributes().build());
