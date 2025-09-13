@@ -158,10 +158,10 @@ public class Pest extends Prey
         if (!level().isClientSide)
         {
             setClimbing(horizontalCollision);
-        }
-        if (tickCount > 20 * 60 * 3 && random.nextInt(500) == 0 && !isPersistenceRequired())
-        {
-            discard();
+            if (tickCount > 20 * 60 * 3 && random.nextInt(500) == 0 && !isPersistenceRequired())
+            {
+                discard();
+            }
         }
     }
 
