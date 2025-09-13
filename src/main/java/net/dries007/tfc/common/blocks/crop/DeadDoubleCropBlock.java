@@ -34,6 +34,7 @@ import org.jetbrains.annotations.Nullable;
 
 import net.dries007.tfc.common.blocks.ExtendedProperties;
 import net.dries007.tfc.common.blocks.TFCBlockStateProperties;
+import net.dries007.tfc.common.blocks.crop.DoubleCropBlock.Part;
 import net.dries007.tfc.util.climate.ClimateRange;
 
 public class DeadDoubleCropBlock extends DeadCropBlock
@@ -81,7 +82,7 @@ public class DeadDoubleCropBlock extends DeadCropBlock
     }
 
     @Override
-    public ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult)
+    protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult)
     {
         return super.useItemOn(stack, state, level, state.getValue(PART) == Part.TOP ? pos.below() : pos, player, hand, hitResult);
     }

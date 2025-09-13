@@ -104,7 +104,7 @@ public abstract class DoubleCropBlock extends CropBlock
     }
 
     @Override
-    public ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult)
+    protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult)
     {
         return super.useItemOn(stack, state, level, state.getValue(PART) == Part.TOP ? pos.below() : pos, player, hand, hitResult);
     }
