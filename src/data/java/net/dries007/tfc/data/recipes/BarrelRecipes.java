@@ -76,9 +76,7 @@ public interface BarrelRecipes extends Recipes
         }
 
         barrel()
-            .input(of(Stream.of(Wood.BlockType.LOG, Wood.BlockType.WOOD)
-                .flatMap(type -> TFCBlocks.WOODS.values().stream().map(m -> m.get(type)))
-                .map(ItemStack::new)))
+            .input(TFCTags.Items.TANNIN_LOGS)
             .input(Fluids.WATER, 1000)
             .output(fluidOf(SimpleFluid.TANNIN), 1000)
             .sealed(hours(8));
