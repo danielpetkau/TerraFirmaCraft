@@ -7,6 +7,7 @@
 package net.dries007.tfc.common.blockentities;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -85,7 +86,7 @@ public class TFCChestBlockEntity extends ChestBlockEntity implements PestContain
     }
 
     @Nullable
-    private IItemHandler getInventoryHandler()
+    public IItemHandler getInventoryHandler(@Nullable Direction direction)
     {
         if (inventoryHandler != null)
         {

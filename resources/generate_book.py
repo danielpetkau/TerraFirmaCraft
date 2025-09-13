@@ -758,7 +758,7 @@ def make_book(rm: ResourceManager, i18n: I18n, local_instance: bool = False, rev
             entity('tfc:mule' + ANIMAL_NBT, 'A mule.', '', scale=0.6),
             text('$(thing)Horses$() spawn in plains with $(l:the_world/climate#temperature)temperature$() of at least -15°C, and between 130 and 400mm of $(l:the_world/climate#rainfall)rainfall$(). They are a kind of $(l:mechanics/animal_husbandry#horses)Equine$(). They eat $(thing)grains$() and $(thing)fruits$(). They have 1 child, are pregnant for 19 days, and reach adulthood in 80 days. They can have children 6 times.', title='Horses').anchor('horse'),
             entity('tfc:horse' + ANIMAL_NBT, 'A horse.', '', scale=0.6),
-            text('$(thing)Frogs$() spawn in $(l:the_world/climate#temperature)temperatures$() above -13°C, and at least 150mm of $(l:the_world/climate#rainfall)rainfall$(). They are can be familiarized, and when bred they will lay eggs in fresh water, which hatch into tadpoles. They will eat fish and spider eyes. ', title='Frogs').anchor('frog'),
+            text('$(thing)Frogs$() spawn in $(l:the_world/climate#temperature)temperatures$() above -13°C, and at least 150mm of $(l:the_world/climate#rainfall)rainfall$(). They can be familiarized, and when bred they will lay eggs in fresh water, which hatch into tadpoles. They will eat fish and spider eyes. ', title='Frogs').anchor('frog'),
             entity('tfc:frog' + ANIMAL_NBT, 'A frog.', '', scale=0.8),
         )),
         entry('pets', 'Pets', 'minecraft:lead', pages=(
@@ -946,7 +946,7 @@ def make_book(rm: ResourceManager, i18n: I18n, local_instance: bool = False, rev
         )),
         entry('salad', 'Salads', 'tfc:food/protein_salad', pages=(
             text('$(thing)Salads$() are a meal prepared in a $(thing)Bowl$() from up to five $(thing)Fruits$(), $(thing)Vegetables$(), or $(thing)Cooked Meats$().$(br2)Salads are one of the simplest meals to make, and just require a $(l:mechanics/bowls)Bowl$(). First, hold the $(thing)Bowl$() and press $(item)$(k:key.use)$() while holding $(item)$(k:key.sneak)$(). This will open the salad screen.').link(*['tfc:food/%s_salad' % g for g in ('fruit', 'dairy', 'vegetables', 'protein', 'grain')]),
-            item_spotlight('#tfc:salads', title='', text_contents='Up to five ingredients can be added in the top slots. $(thing)Bowls$() can be added in the left bottom slot. When you are done, the salad can be taken out from the right bottom slot.'),
+            item_spotlight('#c:foods/salad', title='', text_contents='Up to five ingredients can be added in the top slots. $(thing)Bowls$() can be added in the left bottom slot. When you are done, the salad can be taken out from the right bottom slot.'),
         )),
         entry('wooden_buckets', 'Wooden Buckets', 'tfc:wooden_bucket', pages=(
             text('$(thing)Wooden Buckets$() are an early game fluid container. They can contain 1000 mB of fluid. They can pick up any kind of fluid that is used for recipes, such as those in a $(l:mechanics/pot)Pot$() or $(l:mechanics/barrels)Barrel$(). However, wooden buckets cannot place source blocks. Dumping its fluid on the ground results in a small amount of fluid that quickly disappears.'),
@@ -1063,7 +1063,7 @@ def make_book(rm: ResourceManager, i18n: I18n, local_instance: bool = False, rev
         entry('grill', 'Firepit And Grill', 'tfc:grill', pages=(
             text('A $(thing)Grill$() is an item that can be added to a firepit to cook foods more efficiently. The grill is able to cook five items at once, and also gives these items the $(thing)Wood Grilled$() trait when cooking food, which provides a minor buff to the item\'s $(l:mechanics/decay)expiration date$(). In order to create a firepit with grill, first create a $(l:getting_started/firepit)Firepit$(), then use a $(thing)Wrought Iron Grill$() on the firepit.').link('tfc:wrought_iron_grill'),
             block_spotlight('A Firepit with Grill', '', 'tfc:grill'),
-            anvil_recipe('tfc:anvil/grill', 'The grill is created by working a $(thing)Wrought Iron Double Sheet$() on an $(l:mechanics/anvils)Anvil$().$(br2)On the next page, you can see the grill interface. Like the firepit, it has four slots for fuel which must be added in the top slot, a temperature indicator, and five slots for heating items instead of one.'),
+            anvil_recipe('tfc:anvil/wrought_iron_grill', 'The grill is created by working a $(thing)Wrought Iron Double Sheet$() on an $(l:mechanics/anvils)Anvil$().$(br2)On the next page, you can see the grill interface. Like the firepit, it has four slots for fuel which must be added in the top slot, a temperature indicator, and five slots for heating items instead of one.'),
             image('tfc:textures/gui/book/gui/grill.png', text_contents='The grill interface.', border=False),
         )),
         entry('pot', 'Firepit And Pot', 'tfc:pot', pages=(

@@ -91,7 +91,7 @@ public interface AnvilRecipes extends Recipes
         anvil(ingredientOf(Metal.WROUGHT_IRON, ItemType.SHEET), ItemStackProvider.of(Blocks.IRON_DOOR), 3, false, DRAW_NOT_LAST, PUNCH_NOT_LAST, HIT_LAST);
         anvil(ingredientOf(Metal.RED_STEEL, ItemType.SHEET), ItemStackProvider.of(TFCItems.RED_STEEL_BUCKET), 6, false, BEND_THIRD_LAST, BEND_SECOND_LAST, HIT_LAST);
         anvil(ingredientOf(Metal.BLUE_STEEL, ItemType.SHEET), ItemStackProvider.of(TFCItems.BLUE_STEEL_BUCKET), 6, false, BEND_THIRD_LAST, BEND_SECOND_LAST, HIT_LAST);
-        anvil(ingredientOf(Metal.WROUGHT_IRON, ItemType.DOUBLE_SHEET), ItemStackProvider.of(TFCBlocks.GRILL), 3, false, PUNCH_NOT_LAST, DRAW_ANY, PUNCH_LAST);
+        anvil(ingredientOf(Metal.WROUGHT_IRON, ItemType.DOUBLE_SHEET), ItemStackProvider.of(TFCItems.WROUGHT_IRON_GRILL), 3, false, PUNCH_NOT_LAST, DRAW_ANY, PUNCH_LAST);
         anvil(ingredientOf(Metal.BRASS, ItemType.INGOT), ItemStackProvider.of(TFCItems.BRASS_MECHANISMS, 2), 0, false, PUNCH_THIRD_LAST, HIT_SECOND_LAST, PUNCH_LAST);
         anvil(ingredientOf(Metal.TIN, ItemType.INGOT), ItemStackProvider.of(TFCItems.JAR_LID, 16), 0, false, PUNCH_THIRD_LAST, HIT_SECOND_LAST, HIT_LAST);
         anvil(ingredientOf(Metal.BRASS, ItemType.ROD), ItemStackProvider.of(TFCItems.BLOWPIPE), 0, false, HIT_THIRD_LAST, DRAW_SECOND_LAST, DRAW_LAST);

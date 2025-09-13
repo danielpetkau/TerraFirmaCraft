@@ -23,6 +23,7 @@ import net.dries007.tfc.common.blockentities.InventoryBlockEntity;
 import net.dries007.tfc.common.blockentities.LampBlockEntity;
 import net.dries007.tfc.common.blockentities.PotBlockEntity;
 import net.dries007.tfc.common.blockentities.TFCBlockEntities;
+import net.dries007.tfc.common.blockentities.TFCChestBlockEntity;
 import net.dries007.tfc.common.component.heat.IHeatConsumer;
 import net.dries007.tfc.util.Helpers;
 
@@ -60,6 +61,8 @@ public final class BlockCapabilities
         event.registerBlockEntity(FLUID, TFCBlockEntities.POT.get(), PotBlockEntity::getSidedFluidInventory);
         registerInventory(event, TFCBlockEntities.POWDERKEG);
         registerInventory(event, TFCBlockEntities.QUERN);
+        event.registerBlockEntity(ITEM, TFCBlockEntities.CHEST.get(), TFCChestBlockEntity::getInventoryHandler);
+        event.registerBlockEntity(ITEM, TFCBlockEntities.TRAPPED_CHEST.get(), TFCChestBlockEntity::getInventoryHandler);
     }
 
     private static void registerInventory(RegisterCapabilitiesEvent event, Supplier<? extends BlockEntityType<? extends InventoryBlockEntity<?>>> type)
