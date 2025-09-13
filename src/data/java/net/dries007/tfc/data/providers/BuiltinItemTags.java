@@ -291,6 +291,7 @@ public class BuiltinItemTags extends TagsProvider<Item> implements Accessors
         tag(LOOMS).add(TFCBlocks.WOODS, Wood.BlockType.LOOM);
         tag(BARRELS).add(TFCBlocks.WOODS, Wood.BlockType.BARREL);
         tag(TWIGS).add(TFCBlocks.WOODS, Wood.BlockType.TWIG);
+        tag(ItemTags.BOATS).add(TFCItems.BOATS);
         copy(TFCTags.Blocks.LAMPS, LAMPS);
         tag(Tags.Items.BUCKETS).add(
             TFCItems.WOODEN_BUCKET,

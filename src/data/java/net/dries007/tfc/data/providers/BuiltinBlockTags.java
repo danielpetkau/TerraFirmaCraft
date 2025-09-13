@@ -30,6 +30,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SlabBlock;
 import net.minecraft.world.level.block.StairBlock;
+import net.minecraft.world.level.block.WallBlock;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.common.data.ExistingFileHelper.ResourceType;
@@ -102,7 +103,7 @@ public class BuiltinBlockTags extends TagsProvider<Block> implements Accessors
         tag(BlockTags.SAND).add(TFCBlocks.SAND);
         tag(BlockTags.STAIRS).addEveryTFC(b -> b instanceof StairBlock);
         tag(BlockTags.SLABS).addEveryTFC(b -> b instanceof SlabBlock);
-        tag(BlockTags.WALLS).addEveryTFC(b -> b instanceof SlabBlock);
+        tag(BlockTags.WALLS).addEveryTFC(b -> b instanceof WallBlock);
         tag(BlockTags.LEAVES)
             .add(TFCBlocks.WOODS, Wood.BlockType.LEAVES)
             .addTags(FALLEN_LEAVES)

@@ -30,6 +30,7 @@ import net.dries007.tfc.common.TFCTags;
 import net.dries007.tfc.common.entities.ai.SetLookTarget;
 import net.dries007.tfc.common.entities.ai.TFCBrain;
 import net.dries007.tfc.common.entities.aquatic.AmphibiousAnimal;
+import net.dries007.tfc.util.EnvironmentHelpers;
 import net.dries007.tfc.util.Helpers;
 
 /**
@@ -159,7 +160,7 @@ public class AmphibianAi
         if (tracker.isPresent())
         {
             BlockPos pos = tracker.get().currentBlockPosition();
-            return level.isWaterAt(pos) == entity.isInWaterOrBubble();
+            return EnvironmentHelpers.isWaterAt(level, pos) == entity.isInWaterOrBubble();
         }
         return false;
     }
