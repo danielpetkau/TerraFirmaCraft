@@ -23,7 +23,7 @@ public interface WeldingRecipes extends Recipes
             if (metal.defaultParts())
             {
                 weld(metal, ItemType.INGOT, ItemType.INGOT, ItemType.DOUBLE_INGOT, IGNORE);
-                weld(metal, ItemType.SHEET, ItemType.INGOT, ItemType.DOUBLE_SHEET, IGNORE);
+                weld(metal, ItemType.SHEET, ItemType.SHEET, ItemType.DOUBLE_SHEET, IGNORE);
             }
             if (metal.allParts())
             {
