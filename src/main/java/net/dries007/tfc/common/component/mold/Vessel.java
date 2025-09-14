@@ -230,7 +230,7 @@ public class Vessel implements IMold, ItemContainer, FluidContainer, HeatContain
                 // At this point we know that the vessel is going to be modified, so we make a mutable copy for the period of this function
                 if (updated == null) updated = vessel.copyMut();
 
-                final ItemStack outputStack = recipe.assembleStacked(stack, containerInfo.slotCapacity());
+                final ItemStack outputStack = recipe.assembleStacked(stack, containerInfo.slotCapacity(), false);
                 final FluidStack outputFluid = recipe.assembleFluid(stack);
 
                 if (!outputFluid.isEmpty())

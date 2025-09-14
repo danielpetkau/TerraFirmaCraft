@@ -1433,7 +1433,11 @@ public interface CraftingRecipes extends Recipes
 
         Builder extraProduct(ItemLike item) {return extraProduct(item, 1);}
 
-        Builder extraProduct(ItemLike item, int count) {return addOutputModifier(new ExtraProductModifier(new ItemStack(item, count)));}
+        Builder extraProduct(ItemLike item, int count)
+        {
+            remainder.add(new ExtraProductModifier(new ItemStack(item, count)));
+            return this;
+        }
 
         Builder addTrait(Holder<FoodTrait> trait) {return addOutputModifier(AddTraitModifier.of(trait));}
 
