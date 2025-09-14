@@ -685,7 +685,7 @@ public class BuiltinItemTags extends TagsProvider<Item> implements Accessors
         tag(CLAY_KNAPPING).add(Items.CLAY_BALL);
         tag(FIRE_CLAY_KNAPPING).add(TFCItems.FIRE_CLAY);
         tag(LEATHER_KNAPPING).add(Items.LEATHER);
-        tag(GOAT_HORN_KNAPPING).add(Items.GOAT_HORN);
+        tag(GOAT_HORN_KNAPPING).add(TFCItems.GOAT_HORN);
         tag(QUERN_HANDSTONES).add(TFCItems.HANDSTONE);
         tag(SEWING_LIGHT_CLOTH).add(TFCItems.WOOL_CLOTH, TFCItems.SILK_CLOTH);
         tag(SEWING_DARK_CLOTH).add(TFCItems.BURLAP_CLOTH);

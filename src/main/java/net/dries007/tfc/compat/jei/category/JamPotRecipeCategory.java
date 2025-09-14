@@ -21,7 +21,7 @@ public class JamPotRecipeCategory extends PotRecipeCategory<PotRecipe>
 {
     public JamPotRecipeCategory(RecipeType<PotRecipe> type, IGuiHelper helper)
     {
-        super(type, helper, helper.createBlankDrawable(175, 50));
+        super(type, helper, 175, 50);
     }
 
     @Override

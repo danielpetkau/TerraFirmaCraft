@@ -23,7 +23,7 @@ public class LoomRecipeCategory extends BaseRecipeCategory<LoomRecipe>
 {
     public LoomRecipeCategory(RecipeType<LoomRecipe> type, IGuiHelper helper)
     {
-        super(type, helper, helper.createBlankDrawable(78, 26), new ItemStack(TFCItems.BURLAP_CLOTH.get()));
+        super(type, helper, 78, 26, new ItemStack(TFCItems.BURLAP_CLOTH.get()));
     }
 
     @Override

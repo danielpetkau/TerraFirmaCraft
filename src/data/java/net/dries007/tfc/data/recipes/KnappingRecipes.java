@@ -154,7 +154,7 @@ public interface KnappingRecipes extends Recipes
 
     private void goatKnapping(ResourceKey<Instrument> instrument, String... pattern)
     {
-        final ItemStack output = TFCItems.GOAT_HORN.get().getDefaultInstance();
+        final ItemStack output = Items.GOAT_HORN.getDefaultInstance();
         output.set(DataComponents.INSTRUMENT, BuiltInRegistries.INSTRUMENT.getHolderOrThrow(instrument));
         knapping(BuiltinKnappingTypes.GOAT_HORN, pattern, output, instrument.location().getPath() + "_goat_horn");
     }

@@ -35,7 +35,7 @@ public class HeatingRecipeCategory extends BaseRecipeCategory<HeatingRecipe>
 {
     public HeatingRecipeCategory(RecipeType<HeatingRecipe> type, IGuiHelper helper)
     {
-        super(type, helper, helper.createBlankDrawable(120, 38), new ItemStack(TFCBlocks.FIREPIT.get()));
+        super(type, helper, 120, 38, new ItemStack(TFCBlocks.FIREPIT.get()));
     }
 
     @Override
