@@ -262,6 +262,14 @@ public interface CraftingRecipes extends Recipes
                     .damageInputs()
                     .source(0, 2)
                     .shaped(blocks.get(Metal.BlockType.BLOCK), 8);
+                recipe()
+                    .input('B', ingredientOf(metal, Metal.BlockType.BLOCK))
+                    .pattern("BBB")
+                    .shaped(blocks.get(Metal.BlockType.BLOCK_SLAB), 6);
+                recipe()
+                    .input('B', ingredientOf(metal, Metal.BlockType.BLOCK))
+                    .pattern("B  ", "BB ", "BBB")
+                    .shaped(blocks.get(Metal.BlockType.BLOCK_STAIRS), 8);
             }
 
             if (metal.allParts())
@@ -292,6 +300,12 @@ public interface CraftingRecipes extends Recipes
                     .input('B', blocks.get(Metal.BlockType.BARS))
                     .pattern(" B ", "B B", " B ")
                     .shaped(blocks.get(Metal.BlockType.GRATE));
+                for(Wood wood : Wood.values())
+                    recipe()
+                        .input('L', TFCItems.LUMBER.get(wood))
+                        .input('C', ingredientOf(metal, Metal.BlockType.CHAIN))
+                        .pattern("C C", "LLL", "LLL")
+                        .shaped(TFCItems.HANGING_SIGNS.get(wood).get(metal), 3);
             }
         }
 
@@ -1148,7 +1162,7 @@ public interface CraftingRecipes extends Recipes
         recipe()
             .input('X', ItemTags.LOGS)
             .pattern("X", "X")
-            .shaped(TFCBlocks.WATTLE);
+            .shaped(TFCBlocks.WATTLE, 6);
         recipe()
             .input('L', TFCTags.Items.LUMBER)
             .input('C', TFCItems.WOOL_CLOTH)

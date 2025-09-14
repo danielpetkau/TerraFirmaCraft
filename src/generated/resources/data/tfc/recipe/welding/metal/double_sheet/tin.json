@@ -8,6 +8,6 @@
     "id": "tfc:metal/double_sheet/tin"
   },
   "second_input": {
-    "tag": "c:ingots/tin"
+    "tag": "c:sheets/tin"
   }
 }

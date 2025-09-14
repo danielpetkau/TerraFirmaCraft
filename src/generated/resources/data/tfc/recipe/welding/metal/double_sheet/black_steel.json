@@ -8,7 +8,7 @@
     "id": "tfc:metal/double_sheet/black_steel"
   },
   "second_input": {
-    "tag": "c:ingots/black_steel"
+    "tag": "c:sheets/black_steel"
   },
   "tier": 4
 }

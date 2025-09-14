@@ -8,6 +8,6 @@
     "id": "tfc:metal/double_sheet/cast_iron"
   },
   "second_input": {
-    "tag": "c:ingots/cast_iron"
+    "tag": "c:sheets/cast_iron"
   }
 }

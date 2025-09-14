@@ -8,6 +8,6 @@
     "id": "tfc:metal/double_sheet/zinc"
   },
   "second_input": {
-    "tag": "c:ingots/zinc"
+    "tag": "c:sheets/zinc"
   }
 }

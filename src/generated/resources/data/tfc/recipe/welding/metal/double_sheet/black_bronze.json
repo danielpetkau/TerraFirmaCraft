@@ -8,7 +8,7 @@
     "id": "tfc:metal/double_sheet/black_bronze"
   },
   "second_input": {
-    "tag": "c:ingots/black_bronze"
+    "tag": "c:sheets/black_bronze"
   },
   "tier": 1
 }

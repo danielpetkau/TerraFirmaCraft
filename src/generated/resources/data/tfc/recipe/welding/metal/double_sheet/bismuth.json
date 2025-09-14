@@ -8,6 +8,6 @@
     "id": "tfc:metal/double_sheet/bismuth"
   },
   "second_input": {
-    "tag": "c:ingots/bismuth"
+    "tag": "c:sheets/bismuth"
   }
 }

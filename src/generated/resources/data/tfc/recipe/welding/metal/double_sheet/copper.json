@@ -8,7 +8,7 @@
     "id": "tfc:metal/double_sheet/copper"
   },
   "second_input": {
-    "tag": "c:ingots/copper"
+    "tag": "c:sheets/copper"
   },
   "tier": 0
 }

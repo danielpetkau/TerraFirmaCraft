@@ -8,6 +8,6 @@
     "id": "tfc:metal/double_sheet/brass"
   },
   "second_input": {
-    "tag": "c:ingots/brass"
+    "tag": "c:sheets/brass"
   }
 }
