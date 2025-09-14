@@ -416,7 +416,7 @@ public class BuiltinItemTags extends TagsProvider<Item> implements Accessors
         tag(TOOLS_GLASSWORKING).add(TFCItems.PADDLE, TFCItems.JACKS, TFCItems.GEM_SAW);
         tag(TOOLS_BLOWPIPE).add(TFCItems.BLOWPIPE, TFCItems.CERAMIC_BLOWPIPE);
         tag(TOOLS_SHARP).addTags(
-            ItemTags.AXES,
+            ItemTags.HOES,
             TOOLS_KNIFE,
             TOOLS_SCYTHE,
             TOOLS_SAW);

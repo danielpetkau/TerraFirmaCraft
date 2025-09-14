@@ -138,6 +138,9 @@ public class BuiltinBlockTags extends TagsProvider<Block> implements Accessors
             TFCBlocks.PLANTS.get(Plant.LIANA).get(),
             TFCBlocks.PLANTS.get(Plant.LIANA_PLANT).get()
         );
+        tag(BlockTags.INFINIBURN_OVERWORLD).add(TFCBlocks.PIT_KILN);
+        tag(BlockTags.INFINIBURN_END).add(TFCBlocks.PIT_KILN);
+        tag(BlockTags.INFINIBURN_NETHER).add(TFCBlocks.PIT_KILN);
         tag(BlockTags.FENCE_GATES).add(TFCBlocks.WOODS, Wood.BlockType.FENCE_GATE);
         tag(BlockTags.BASE_STONE_OVERWORLD)
             .addTags(STONES_RAW, STONES_HARDENED);

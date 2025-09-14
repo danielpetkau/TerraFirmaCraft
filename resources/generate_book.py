@@ -1344,7 +1344,7 @@ def make_book(rm: ResourceManager, i18n: I18n, local_instance: bool = False, rev
             text('Consuming nutrients causes a crop to grow faster, and improves the yield of the crop at harvest time. That means that crops that consumed more nutrients drop more food when broken! Consuming nutrients also increases the rate at which the crop replenishes other nutrients.'),
             # Listing of all crops, their growth conditions, and how to grow them
             text('While each individual crop may have its own balance of fertilizer needs, most crops fit into four general categories: cereals, legumes, vegetables, and cover crops.$(br2)$(bold)Cereals$() consume large amounts of $(b)Nitrogen$(), but replenish $(6)Phosphorous$() and $(d)Potassium$(). They produce food rich in Grain', title='Crop Categories'),
-            text('$(bold)Legumes$() produce large amounts of $(b)Nitrogen$(), and consume $(b)Nitrogen$() and $(d)Potassium$(). They produce foods rich in Vegetable and Protein.$(br2)$(bold)Vegetables$() consume all three nutrients to produce foods rich in Vegetable.$(br2)$(bold)Cover$() crops produce all three nutrients, but their produce has only limited uses.'),
+            text('$(bold)Legumes$() produce large amounts of $(b)Nitrogen$(), and consume $(b)Phosphorous$() and $(d)Potassium$(). They produce foods rich in Vegetable and Protein.$(br2)$(bold)Vegetables$() consume all three nutrients to produce foods rich in Vegetable.$(br2)$(bold)Cover$() crops produce all three nutrients, but their produce has only limited uses.'),
 
             # Cereals
             text(f'{detail_crop("barley")}Barley is a single block crop. Barley seeds can be planted on farmland and will produce $(thing)Barley$() and $(thing)Barley Seeds$() as a product.', title='Barley').link('tfc:seeds/barley').link('tfc:food/barley').anchor('barley'),
@@ -1379,7 +1379,7 @@ def make_book(rm: ResourceManager, i18n: I18n, local_instance: bool = False, rev
             text(f'{detail_crop("lentil")}Lentils are a single block crop. Lentil seeds can be planted on farmland and will produce $(thing)Lentils$() and $(thing)Lentil Seeds$() as a product.', title='Lentils').link('tfc:seeds/lentil').link('tfc:food/lentil').anchor('lentil'),
             multimultiblock('', *[two_tall_block_spotlight('', '', 'tfc:farmland/andisol', 'tfc:crop/lentil[age=%d]' % i) for i in range(6)]),
             text(f'{detail_crop("peanut")}Peanuts are a single block crop. Peanut seeds can be planted on farmland and will produce $(thing)Peanuts$() and $(thing)Peanut Seeds$() as a product.', title='Peanuts').link('tfc:seeds/peanut').link('tfc:food/peanut').anchor('peanut'),
-            multimultiblock('', *[two_tall_block_spotlight('', '', 'tfc:farmland/oxisol', 'tfc:crop/lentil[age=%d]' % i) for i in range(6)]),
+            multimultiblock('', *[two_tall_block_spotlight('', '', 'tfc:farmland/oxisol', 'tfc:crop/peanut[age=%d]' % i) for i in range(6)]),
             text(f'{detail_crop("soybean")}Soybean is a single block crop. Soybean seeds can be planted on farmland and will produce $(thing)Soybean$() and $(thing)Soybean Seeds$() as a product.', title='Soybean').link('tfc:seeds/soybean').link('tfc:food/soybean').anchor('soybean'),
             multimultiblock('', *[two_tall_block_spotlight('', '', 'tfc:farmland/entisol', 'tfc:crop/soybean[age=%d]' % i) for i in range(7)]),
 
@@ -1415,11 +1415,11 @@ def make_book(rm: ResourceManager, i18n: I18n, local_instance: bool = False, rev
 
             # Cover
             text(f'{detail_crop("alfalfa")}Alfalfa is a single block crop adapted to cold temperatures. Alfalfa seeds can be planted on farmland and will produce $(thing)Alfalfa$() and $(thing)Alfalfa Seeds$() as a product, while enriching the soil. Alfalfa can be used as a source of straw, or compost.', title='Alfalfa').link('tfc:seeds/alfalfa').link('tfc:alfalfa').anchor('alfalfa'),
-            multimultiblock('', *[two_tall_block_spotlight('', '', 'tfc:farmland/mollisol', 'tfc:crop/lentil[age=%d]' % i) for i in range(6)]),
+            multimultiblock('', *[two_tall_block_spotlight('', '', 'tfc:farmland/mollisol', 'tfc:crop/alfalfa[age=%d]' % i) for i in range(6)]),
             text(f'{detail_crop("canola")}Canola is a single block crop adapted to cold temperatures. Canola seeds can be planted on farmland and will produce $(thing)Canola$() and $(thing)Canola Seeds$() as a product, while enriching the soil. Canola can be used as a source of straw, or compost, and the seeds can be used for oil.', title='Canola').link('tfc:seeds/canola').link('tfc:canola').anchor('canola'),
-            multimultiblock('', *[two_tall_block_spotlight('', '', 'tfc:farmland/mollisol', 'tfc:crop/lentil[age=%d]' % i) for i in range(6)]),
+            multimultiblock('', *[two_tall_block_spotlight('', '', 'tfc:farmland/mollisol', 'tfc:crop/canola[age=%d]' % i) for i in range(6)]),
             text(f'{detail_crop("radish")}Radishes are a single block crop adapted to cold temperatures. Radish seeds can be planted on farmland and will produce $(thing)Radishes$() and $(thing)Radish Seeds$() as a product, while enriching the soil. Radishes are not a very nutritious vegetable, but can be fed to many animals.', title='Radish').link('tfc:seeds/radish').link('tfc:food/radish').anchor('radish'),
-            multimultiblock('', *[two_tall_block_spotlight('', '', 'tfc:farmland/mollisol', 'tfc:crop/lentil[age=%d]' % i) for i in range(6)]),
+            multimultiblock('', *[two_tall_block_spotlight('', '', 'tfc:farmland/mollisol', 'tfc:crop/radish[age=%d]' % i) for i in range(6)]),
 
             # Misc
             text(f'{detail_crop("sugarcane")}Sugarcane is a two block tall crop. Sugarcane seeds can be planted on farmland, will grow two blocks tall, and will produce $(thing)Sugarcane$() and $(thing)Sugarcane Seeds$() as a product. Sugarcane can be used to make $(thing)Sugar$().', title='Sugarcane').link('tfc:seeds/sugarcane').link('tfc:food/sugarcane').anchor('sugarcane'),
