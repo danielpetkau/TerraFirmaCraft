@@ -58,13 +58,12 @@ public class FarmlandBlock extends Block implements ISoilBlock, HoeOverlayBlock,
 
     public static Component getHydrationTooltip(Level level, BlockPos pos, ClimateRange validRange, boolean allowWiggle)
     {
-        float accumulatedRainfall = 0;
+        final ChunkData data = ChunkData.get(level, pos);
+        final int stormHydration = (int) data.getStormHydration();
+        final int totalRainHydration = FarmlandBlock.getRainHydration(level, pos, stormHydration);
+        final int hydrationValue = FarmlandBlock.getHydrationFromRainHydration(level, pos, totalRainHydration);
         if (level.getBlockEntity(pos) instanceof IFarmland farmland)
         {
-            final ChunkData data = ChunkData.get(level, pos);
-            final int stormHydration = (int) data.getStormHydration();
-            final int totalRainHydration = FarmlandBlock.getRainHydration(level, pos, stormHydration);
-            final int hydrationValue = FarmlandBlock.getHydrationFromRainHydration(level, pos, totalRainHydration);
             final int minRainfallHydration = (int) data.getMinRainfallHydration(pos);
             final int minHydrationValue = FarmlandBlock.getHydrationFromRainHydration(level, pos, minRainfallHydration);
             final int maxRainfallHydration = (int) data.getMaxRainfallHydration(pos);
@@ -80,7 +79,7 @@ public class FarmlandBlock extends Block implements ISoilBlock, HoeOverlayBlock,
             return tooltip;
         }
 
-        return getHydrationTooltip(level, pos, validRange, allowWiggle, getHydrationFromStormHydration(level, pos, 0));
+        return getHydrationTooltip(level, pos, validRange, allowWiggle, hydrationValue);
     }
 
     public static Component getHydrationTooltip(LevelAccessor level, BlockPos pos, ClimateRange validRange, boolean allowWiggle, int hydration)

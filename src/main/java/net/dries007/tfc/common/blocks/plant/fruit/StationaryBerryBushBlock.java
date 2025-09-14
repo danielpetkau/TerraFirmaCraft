@@ -11,7 +11,6 @@ import java.util.function.Supplier;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -31,9 +30,8 @@ import net.dries007.tfc.util.Helpers;
 import net.dries007.tfc.util.calendar.Calendars;
 import net.dries007.tfc.util.calendar.ICalendar;
 import net.dries007.tfc.util.climate.Climate;
-import net.dries007.tfc.util.climate.ClimateModel;
 import net.dries007.tfc.util.climate.ClimateRange;
-import net.dries007.tfc.util.tracker.WorldTracker;
+import net.dries007.tfc.world.chunkdata.ChunkData;
 
 public class StationaryBerryBushBlock extends SeasonalPlantBlock implements HoeOverlayBlock, IBushBlock
 {
@@ -72,11 +70,24 @@ public class StationaryBerryBushBlock extends SeasonalPlantBlock implements HoeO
     @Override
     public void addHoeOverlayInfo(Level level, BlockPos pos, BlockState state, Consumer<Component> text, boolean isDebug)
     {
-        final BlockPos sourcePos = pos.below();
-        final ClimateRange range = climateRange.get();
+        final BlockPos sourcePos;
 
-        text.accept(FarmlandBlock.getHydrationTooltip(level, sourcePos, range, false));
-        text.accept(FarmlandBlock.getTemperatureTooltip(level, sourcePos, range, false));
+        final ClimateRange range = climateRange.get();
+        if (level.getBlockEntity(pos) instanceof BerryBushBlockEntity bush)
+        {
+            sourcePos = bush.getStemPos().below();
+            text.accept(FarmlandBlock.getHydrationTooltip(level, sourcePos, range, false));
+            text.accept(FarmlandBlock.getTemperatureTooltip(level, sourcePos, range, false));
+            // TODO: Remove debug and error stuff
+            text.accept(Component.literal("pos: " + pos.getX() + ", " + pos.getY() + ", " + pos.getZ()));
+            text.accept(Component.literal("stem: " + sourcePos.getX() + ", " + sourcePos.getY() + ", " + sourcePos.getZ()));
+        }
+        else
+        {
+            // TODO
+            text.accept(Component.translatable("tfc.tooltip.berry_bush.no"));
+        }
+
     }
 
     @Override
@@ -95,9 +106,9 @@ public class StationaryBerryBushBlock extends SeasonalPlantBlock implements HoeO
                 long currentCalendarTick = Calendars.SERVER.getCalendarTicks();
                 long nextCalendarTick = currentCalendarTick - deltaTicks;
 
-                final BlockPos sourcePos = pos.below();
+                final BlockPos rootPos = bush.getStemPos().below();
                 final ClimateRange range = climateRange.get();
-                final int hydration = getHydration(level, sourcePos, state, currentCalendarTick, nextCalendarTick);
+                final int hydration = getHydration(level, rootPos, state, currentCalendarTick, nextCalendarTick);
 
                 int monthsSpentDying = 0;
                 do
@@ -160,14 +171,7 @@ public class StationaryBerryBushBlock extends SeasonalPlantBlock implements HoeO
             return 100; // special case for waterlogged crops
         }
 
-        final WorldTracker tracker = WorldTracker.get(level);
-        final ClimateModel model = tracker.getClimateModel();
-        final ICalendar calendar = Calendars.get(level);
-
-        // TODO: The display of these quantities appears to be bugged with the changes to the hydration system. Revisit once hydration system finalized
-        final float rainfall = model.getRainfall(level, pos, fromTick, toTick, calendar.getCalendarDaysInMonth()); // Rainfall forms a baseline, providing up to 60% hydration
-        final int waterCost = FarmlandBlock.findMinCostWater(level, pos); // Nearby water contributes an additional 0 - 80% hydration based on proximity
-        return Mth.clamp((int) (60 * rainfall / ClimateModel.MAX_RAINFALL) + 20 * (5 - waterCost), 0, 100);
+        return FarmlandBlock.getHydrationFromStormHydration(level, pos, (int) ChunkData.get(level, pos).getStormHydration());
     }
 
     /**

@@ -27,17 +27,19 @@ public class BerryBushBlockEntity extends TFCBlockEntity implements ICalendarTic
 
     private long lastTick; // The last tick this bush was ticked via the block entity's serverTick() method. A delta of > 1 is used to detect time skips
     private long lastUpdateTick; // The last tick the bush block was ticked via IBushBlock#onUpdate()
+    private BlockPos stemPos;
 
     public BerryBushBlockEntity(BlockPos pos, BlockState state)
     {
-        this(TFCBlockEntities.BERRY_BUSH.get(), pos, state);
+        this(TFCBlockEntities.BERRY_BUSH.get(), pos, state, pos);
     }
 
-    protected BerryBushBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
+    protected BerryBushBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state, BlockPos stemPos)
     {
         super(type, pos, state);
         lastTick = Integer.MIN_VALUE;
         lastUpdateTick = Calendars.SERVER.getTicks();
+        this.stemPos = stemPos;
     }
 
     /**
@@ -53,6 +55,9 @@ public class BerryBushBlockEntity extends TFCBlockEntity implements ICalendarTic
     {
         lastUpdateTick = nbt.getLong("lastUpdateTick");
         lastTick = nbt.getLong("lastTick");
+        int[] stemArray = nbt.getIntArray("stemPos");
+        stemPos = new BlockPos(stemArray[0], stemArray[1], stemArray[2]);
+
         super.loadAdditional(nbt, provider);
     }
 
@@ -61,6 +66,7 @@ public class BerryBushBlockEntity extends TFCBlockEntity implements ICalendarTic
     {
         nbt.putLong("lastUpdateTick", lastUpdateTick);
         nbt.putLong("lastTick", lastTick);
+        nbt.putIntArray("stemPos", new int[] {stemPos.getX(), stemPos.getY(), stemPos.getZ()});
         super.saveAdditional(nbt, provider);
     }
 
@@ -96,5 +102,15 @@ public class BerryBushBlockEntity extends TFCBlockEntity implements ICalendarTic
     public void setLastBushTick(long ticks)
     {
         lastUpdateTick = ticks;
+    }
+
+    public void setStemPos(BlockPos stemPos)
+    {
+        this.stemPos = stemPos;
+    }
+
+    public BlockPos getStemPos()
+    {
+        return stemPos;
     }
 }
