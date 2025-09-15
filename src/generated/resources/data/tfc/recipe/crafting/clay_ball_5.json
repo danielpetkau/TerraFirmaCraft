@@ -18,9 +18,6 @@
       "item": "tfc:hardened_clay"
     },
     {
-      "item": "tfc:hardened_clay"
-    },
-    {
       "type": "tfc:fluid_content",
       "fluid": {
         "amount": 1000,
@@ -29,7 +26,7 @@
     }
   ],
   "result": {
-    "count": 24,
-    "id": "minecraft:clay"
+    "count": 20,
+    "id": "minecraft:clay_ball"
   }
 }

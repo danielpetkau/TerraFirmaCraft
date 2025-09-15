@@ -195,11 +195,11 @@ public interface CraftingRecipes extends Recipes
             .input(FluidContentIngredient.of(Fluids.WATER, 100))
             .shapeless(Items.CLAY_BALL, 4);
 
-        for (int n = 1; n <= 8; n++)
+        for (int n = 2; n <= 8; n++)
             recipe("" + n)
                 .input(TFCBlocks.HARDENED_CLAY, n)
                 .input(FluidContentIngredient.of(Fluids.WATER, 1000))
-                .shapeless(Items.CLAY, n * 4);
+                .shapeless(Items.CLAY_BALL, n * 4);
 
         TFCItems.GEMS.forEach((gem, item) -> recipe()
             .damageInputs()
