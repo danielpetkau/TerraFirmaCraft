@@ -7,11 +7,17 @@
 package net.dries007.tfc.data.recipes;
 
 import java.util.Optional;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Instrument;
+import net.minecraft.world.item.Instruments;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
+import org.jetbrains.annotations.Nullable;
 
 import net.dries007.tfc.common.TFCTags;
 import net.dries007.tfc.common.blocks.rock.RockCategory;
@@ -68,7 +74,7 @@ public interface KnappingRecipes extends Recipes
 
         fireClayKnapping(TFCItems.UNFIRED_CRUCIBLE, 1, "X   X", "X   X", "X   X", "X   X", "XXXXX");
         fireClayKnapping(TFCItems.UNFIRED_FIRE_BRICK, 3, "XXXXX", "     ", "XXXXX", "     ", "XXXXX");
-        fireClayKnapping(TFCItems.UNFIRED_FIRE_INGOT_MOLD, 2,"XXXX", "X  X", "X  X", "X  X", "XXXX");
+        fireClayKnapping(TFCItems.UNFIRED_FIRE_INGOT_MOLD, 2, "XXXX", "X  X", "X  X", "X  X", "XXXX");
 
         leatherKnapping(Items.LEATHER_HELMET, "XXXXX", "X   X", "X   X", "     ", "     ");
         leatherKnapping(Items.LEATHER_CHESTPLATE, "X   X", "XXXXX", "XXXXX", "XXXXX", "XXXXX");
@@ -77,7 +83,14 @@ public interface KnappingRecipes extends Recipes
         leatherKnapping(Items.SADDLE, "  X  ", "XXXXX", "XXXXX", "XXXXX", "  X  ");
         leatherKnapping(Items.LEATHER_HORSE_ARMOR, "    X", " XXXX", "XXX  ", "XX X ", "X   X");
 
-        // todo: goat horn knapping, how tf is this supposed to work with instruments and components
+        goatKnapping(Instruments.PONDER_GOAT_HORN, "XXXXX", "X X X", "X  XX", "XXX X", "XXXXX");
+        goatKnapping(Instruments.SING_GOAT_HORN, "XXXXX", "X XXX", "XX XX", "X   X", "XXXXX");
+        goatKnapping(Instruments.SEEK_GOAT_HORN, "XXXXX", "XXXXX", "X   X", "X XXX", "XXXXX");
+        goatKnapping(Instruments.FEEL_GOAT_HORN, "XXXXX", "XX  X", "XXXXX", "XX  X", "XXXXX");
+        goatKnapping(Instruments.ADMIRE_GOAT_HORN, "XXXXX", "XX XX", "XX XX", "X   X", "XXXXX");
+        goatKnapping(Instruments.CALL_GOAT_HORN, "XXXXX", "X   X", "X XXX", "XX XX", "XXXXX");
+        goatKnapping(Instruments.YEARN_GOAT_HORN, "XXXXX", "XXX X", "X  XX", "X XXX", "XXXXX");
+        goatKnapping(Instruments.DREAM_GOAT_HORN, "XXXXX", "X  XX", "X  XX", "X X X", "XXXXX");
     }
 
     private void rockKnapping(RockCategory.ItemType output, String... pattern)
@@ -139,8 +152,28 @@ public interface KnappingRecipes extends Recipes
         knapping(BuiltinKnappingTypes.LEATHER, pattern, output, 1);
     }
 
+    private void goatKnapping(ResourceKey<Instrument> instrument, String... pattern)
+    {
+        final ItemStack output = Items.GOAT_HORN.getDefaultInstance();
+        output.set(DataComponents.INSTRUMENT, BuiltInRegistries.INSTRUMENT.getHolderOrThrow(instrument));
+        knapping(BuiltinKnappingTypes.GOAT_HORN, pattern, output, instrument.location().getPath() + "_goat_horn");
+    }
+
     private void knapping(ResourceLocation knappingType, String[] pattern, ItemLike output, int count)
     {
-        add(new KnappingRecipe(KnappingType.MANAGER.getCheckedReference(knappingType), KnappingPattern.from(true, pattern), Optional.empty(), new ItemStack(output, count)));
+        knapping(knappingType, pattern, new ItemStack(output, count), null);
+    }
+
+    private void knapping(ResourceLocation knappingType, String[] pattern, ItemStack output, @Nullable String name)
+    {
+        final KnappingRecipe recipe = new KnappingRecipe(KnappingType.MANAGER.getCheckedReference(knappingType), KnappingPattern.from(true, pattern), Optional.empty(), output);
+        if (name == null)
+        {
+            add(recipe);
+        }
+        else
+        {
+            add(name, recipe);
+        }
     }
 }

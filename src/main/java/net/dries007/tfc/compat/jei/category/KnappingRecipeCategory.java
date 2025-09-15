@@ -33,7 +33,7 @@ public class KnappingRecipeCategory<T extends KnappingRecipe> extends BaseRecipe
 
     public KnappingRecipeCategory(RecipeType<T> type, IGuiHelper helper, KnappingType knappingType)
     {
-        super(type, helper, helper.createBlankDrawable(155, 82), knappingType.icon());
+        super(type, helper, 155, 82, knappingType.icon());
 
         this.knappingType = knappingType;
         this.helper = helper;

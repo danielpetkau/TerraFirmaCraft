@@ -27,13 +27,10 @@ import net.minecraft.world.entity.ai.behavior.MoveToTargetSink;
 import net.minecraft.world.entity.ai.behavior.PositionTracker;
 import net.minecraft.world.entity.ai.behavior.RandomStroll;
 import net.minecraft.world.entity.ai.behavior.RunOne;
-import net.minecraft.world.entity.ai.behavior.SetWalkTargetAwayFrom;
 import net.minecraft.world.entity.ai.behavior.SetWalkTargetFromAttackTargetIfTargetOutOfReach;
 import net.minecraft.world.entity.ai.behavior.SetWalkTargetFromLookTarget;
 import net.minecraft.world.entity.ai.behavior.StartAttacking;
 import net.minecraft.world.entity.ai.behavior.StopAttackingIfTargetInvalid;
-import net.minecraft.world.entity.ai.behavior.StrollAroundPoi;
-import net.minecraft.world.entity.ai.behavior.StrollToPoi;
 import net.minecraft.world.entity.ai.behavior.TryFindWater;
 import net.minecraft.world.entity.ai.behavior.declarative.BehaviorBuilder;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
@@ -43,12 +40,12 @@ import net.minecraft.world.entity.ai.sensing.SensorType;
 import net.minecraft.world.entity.schedule.Activity;
 import net.minecraft.world.level.Level;
 
-import net.dries007.tfc.TerraFirmaCraft;
 import net.dries007.tfc.common.TFCTags;
 import net.dries007.tfc.common.entities.ai.SetLookTarget;
 import net.dries007.tfc.common.entities.ai.TFCBrain;
 import net.dries007.tfc.common.entities.ai.predator.PredatorAi;
 import net.dries007.tfc.common.entities.aquatic.AmphibiousAnimal;
+import net.dries007.tfc.util.EnvironmentHelpers;
 import net.dries007.tfc.util.Helpers;
 
 public class PinnipedAI
@@ -176,7 +173,7 @@ public class PinnipedAI
         if (tracker.isPresent())
         {
             BlockPos pos = tracker.get().currentBlockPosition();
-            return level.isWaterAt(pos) == entity.isInWaterOrBubble();
+            return EnvironmentHelpers.isWaterAt(level, pos) == entity.isInWaterOrBubble();
         }
         return false;
     }

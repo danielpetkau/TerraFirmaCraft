@@ -37,7 +37,7 @@ public class AlloyRecipeCategory extends BaseRecipeCategory<AlloyRecipe>
 
     public AlloyRecipeCategory(RecipeType<AlloyRecipe> type, IGuiHelper helper)
     {
-        super(type, helper, helper.createBlankDrawable(170, MAX_HEIGHT), new ItemStack(TFCBlocks.CRUCIBLE.get()));
+        super(type, helper, 170, MAX_HEIGHT, new ItemStack(TFCBlocks.CRUCIBLE.get()));
     }
 
     @Override

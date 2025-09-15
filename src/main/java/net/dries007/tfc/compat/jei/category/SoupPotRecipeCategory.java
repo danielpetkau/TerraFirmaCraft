@@ -25,7 +25,7 @@ public class SoupPotRecipeCategory extends PotRecipeCategory<PotRecipe>
 {
     public SoupPotRecipeCategory(RecipeType<PotRecipe> type, IGuiHelper helper)
     {
-        super(type, helper, helper.createBlankDrawable(175, 50));
+        super(type, helper, 175, 50);
     }
 
     @Override

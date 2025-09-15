@@ -37,7 +37,7 @@ public class CastingRecipeCategory extends BaseRecipeCategory<CastingRecipe>
 
     public CastingRecipeCategory(RecipeType<CastingRecipe> type, IGuiHelper helper)
     {
-        super(type, helper, helper.createBlankDrawable(98, 26), new ItemStack(TFCItems.MOLDS.get(Metal.ItemType.INGOT).get()));
+        super(type, helper, 98, 26, new ItemStack(TFCItems.MOLDS.get(Metal.ItemType.INGOT).get()));
     }
 
     @Override

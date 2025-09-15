@@ -69,6 +69,7 @@ public class BuiltinEntityTags extends EntityTypeTagsProvider
                 TFCEntities.FRESHWATER_FISH.get(Fish.CRAPPIE).get()
             );
 
+        // noinspection unchecked
         tag(BUBBLE_COLUMN_IMMUNE)
             .addTags(SMALL_FISH)
             .add(

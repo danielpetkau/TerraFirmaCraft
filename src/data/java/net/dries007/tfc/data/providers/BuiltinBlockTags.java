@@ -30,6 +30,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SlabBlock;
 import net.minecraft.world.level.block.StairBlock;
+import net.minecraft.world.level.block.WallBlock;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.common.data.ExistingFileHelper.ResourceType;
@@ -102,7 +103,7 @@ public class BuiltinBlockTags extends TagsProvider<Block> implements Accessors
         tag(BlockTags.SAND).add(TFCBlocks.SAND);
         tag(BlockTags.STAIRS).addEveryTFC(b -> b instanceof StairBlock);
         tag(BlockTags.SLABS).addEveryTFC(b -> b instanceof SlabBlock);
-        tag(BlockTags.WALLS).addEveryTFC(b -> b instanceof SlabBlock);
+        tag(BlockTags.WALLS).addEveryTFC(b -> b instanceof WallBlock);
         tag(BlockTags.LEAVES)
             .add(TFCBlocks.WOODS, Wood.BlockType.LEAVES)
             .addTags(FALLEN_LEAVES)
@@ -137,6 +138,9 @@ public class BuiltinBlockTags extends TagsProvider<Block> implements Accessors
             TFCBlocks.PLANTS.get(Plant.LIANA).get(),
             TFCBlocks.PLANTS.get(Plant.LIANA_PLANT).get()
         );
+        tag(BlockTags.INFINIBURN_OVERWORLD).add(TFCBlocks.PIT_KILN);
+        tag(BlockTags.INFINIBURN_END).add(TFCBlocks.PIT_KILN);
+        tag(BlockTags.INFINIBURN_NETHER).add(TFCBlocks.PIT_KILN);
         tag(BlockTags.FENCE_GATES).add(TFCBlocks.WOODS, Wood.BlockType.FENCE_GATE);
         tag(BlockTags.BASE_STONE_OVERWORLD)
             .addTags(STONES_RAW, STONES_HARDENED);
@@ -412,7 +416,7 @@ public class BuiltinBlockTags extends TagsProvider<Block> implements Accessors
         tag(SUPPORTS_LANDSLIDE).addTags(FARMLANDS, PATHS);
         tag(NOT_SOLID_SUPPORTING).addTags(STONES_SMOOTH);
         tag(TOUGHNESS_1).add(TFCBlocks.CHARCOAL_PILE, TFCBlocks.CHARCOAL_FORGE);
-        tag(TOUGHNESS_2).addTag(Tags.Blocks.STONES);
+        tag(TOUGHNESS_2).addTag(Tags.Blocks.STONES).addTag(Tags.Blocks.COBBLESTONES);
         tag(TOUGHNESS_3).add(Blocks.BEDROCK);
         tag(BREAKS_WHEN_ISOLATED).addTag(STONES_RAW);
         tag(FALLEN_LEAVES).add(TFCBlocks.WOODS, Wood.BlockType.FALLEN_LEAVES);

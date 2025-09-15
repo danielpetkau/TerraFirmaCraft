@@ -21,7 +21,7 @@ public abstract class GameTestInfoMixin
      * as a {@link ResourceLocation}, and it is compared in a case-insensitive manner later. This is the best solution that doesn't require
      * removing nice display names, and allows {@code /test runthis} to function correctly.
      */
-    @Redirect(method = "spawnStructure", at = @At(value = "INVOKE", target = "Lnet/minecraft/gametest/framework/GameTestInfo;getTestName()Ljava/lang/String;"))
+    @Redirect(method = "prepareTestStructure", at = @At(value = "INVOKE", target = "Lnet/minecraft/gametest/framework/GameTestInfo;getTestName()Ljava/lang/String;"))
     private String replaceTestNameWithLowerCase(GameTestInfo info)
     {
         return info.getTestName().toLowerCase(Locale.ROOT);

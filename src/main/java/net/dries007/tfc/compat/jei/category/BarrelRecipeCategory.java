@@ -38,7 +38,7 @@ public class BarrelRecipeCategory<T extends BarrelRecipe> extends BaseRecipeCate
 
     public BarrelRecipeCategory(RecipeType<T> type, IGuiHelper helper, int width, int height, ItemStack iconType)
     {
-        super(type, helper, helper.createBlankDrawable(width, height), iconType);
+        super(type, helper, width, height, iconType);
     }
 
     @Override

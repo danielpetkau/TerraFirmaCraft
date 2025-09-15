@@ -82,20 +82,22 @@ public final class RecipeHelpers
         return CRAFTING_INPUT.get();
     }
 
-    public static NonNullList<ItemStack> getRemainderItemsWithProvider(CraftingInput input, ItemStackProvider provider)
+    public static NonNullList<ItemStack> getRemainderItemsWithProvider(CraftingInput input, ItemStackProvider provider, ItemStack primaryInput)
     {
         final NonNullList<ItemStack> results = NonNullList.withSize(input.size(), ItemStack.EMPTY);
         for (int i = 0; i < results.size(); i++)
         {
             final ItemStack stack = input.getItem(i);
-            final ItemStack outputStack = provider.getStack(stack.copyWithCount(1));
-
-            if (!outputStack.isEmpty())
+            if (ItemStack.isSameItem(primaryInput, stack))
             {
-                results.set(i, outputStack);
+                final ItemStack outputStack = provider.getStack(stack.copyWithCount(1));
+                if (!outputStack.isEmpty())
+                {
+                    results.set(i, outputStack);
+                    break;
+                }
             }
         }
-
         return results;
     }
 

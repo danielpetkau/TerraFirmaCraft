@@ -272,9 +272,8 @@ public enum IngameOverlays
             }
             else
             {
-                // todo: fishing rendering over xp bar isn't working
                 final int x = graphics.guiWidth() / 2 - 91;
-                final int y = graphics.hashCode() - 29;
+                final int y = graphics.guiHeight() - 29;
                 final int amount = Mth.ceil(Mth.clampedMap(hook.pullExhaustion, 0, 100, 0, 183));
                 graphics.blit(TEXTURE, x, y, 0, 111, 182, 5);
                 if (amount > 0)

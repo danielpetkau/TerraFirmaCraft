@@ -30,6 +30,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.common.conditions.ICondition;
 import net.neoforged.neoforge.common.crafting.SizedIngredient;
 import net.neoforged.neoforge.fluids.FluidStack;
@@ -268,6 +270,10 @@ public final class BuiltinRecipes extends VanillaRecipeProvider implements
                 blocks.get(SoilBlockType.ROOTED_DIRT).get()
             ), blocks.get(SoilBlockType.DIRT).get().defaultBlockState()));
         }
+        List.of(Blocks.DIRT, Blocks.GRAVEL, Blocks.SAND, Blocks.COBBLESTONE).forEach(b ->{
+            add(new LandslideRecipe(BlockIngredient.of(b), b.defaultBlockState()));
+        });
+
     }
 
     @Override

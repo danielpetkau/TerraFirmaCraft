@@ -26,7 +26,7 @@ public class BloomeryRecipeCategory extends BaseRecipeCategory<BloomeryRecipe>
 {
     public BloomeryRecipeCategory(RecipeType<BloomeryRecipe> type, IGuiHelper helper)
     {
-        super(type, helper, helper.createBlankDrawable(98, 26), new ItemStack(TFCBlocks.BLOOMERY.get()));
+        super(type, helper, 98, 26, new ItemStack(TFCBlocks.BLOOMERY.get()));
     }
 
     @Override

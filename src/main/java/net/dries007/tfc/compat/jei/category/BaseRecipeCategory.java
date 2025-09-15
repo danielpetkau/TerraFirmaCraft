@@ -8,12 +8,11 @@ package net.dries007.tfc.compat.jei.category;
 
 import java.util.Arrays;
 import java.util.List;
-import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.drawable.IDrawableAnimated;
 import mezz.jei.api.gui.drawable.IDrawableStatic;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.RecipeType;
-import mezz.jei.api.recipe.category.IRecipeCategory;
+import mezz.jei.api.recipe.category.AbstractRecipeCategory;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -31,7 +30,7 @@ import net.dries007.tfc.common.recipes.outputs.ItemStackProvider;
 import net.dries007.tfc.compat.jei.JEIIntegration;
 import net.dries007.tfc.util.Helpers;
 
-public abstract class BaseRecipeCategory<T> implements IRecipeCategory<T>
+public abstract class BaseRecipeCategory<T> extends AbstractRecipeCategory<T>
 {
     public static final ResourceLocation ICONS = Helpers.identifier("textures/gui/jei/icons.png");
 
@@ -85,17 +84,9 @@ public abstract class BaseRecipeCategory<T> implements IRecipeCategory<T>
     protected final IDrawableStatic arrow;
     protected final IDrawableAnimated arrowAnimated;
 
-    private final RecipeType<T> type;
-    private final Component title;
-    private final IDrawable background;
-    private final IDrawable icon;
-
-    public BaseRecipeCategory(RecipeType<T> type, IGuiHelper helper, IDrawable background, ItemStack icon)
+    public BaseRecipeCategory(RecipeType<T> type, IGuiHelper helper, int width, int height, ItemStack icon)
     {
-        this.type = type;
-        this.title = Component.translatable(TerraFirmaCraft.MOD_ID + ".jei." + type.getUid().getPath());
-        this.background = background;
-        this.icon = helper.createDrawableIngredient(JEIIntegration.ITEM_STACK, icon);
+        super(type, Component.translatable(TerraFirmaCraft.MOD_ID + ".jei." + type.getUid().getPath()), helper.createDrawableIngredient(JEIIntegration.ITEM_STACK, FoodCapability.setNonDecaying(icon)), width, height);
         this.slot = helper.getSlotDrawable();
 
         this.fire = helper.createDrawable(ICONS, 0, 0, 14, 14);
@@ -107,27 +98,5 @@ public abstract class BaseRecipeCategory<T> implements IRecipeCategory<T>
         this.arrowAnimated = helper.createAnimatedDrawable(arrowAnimated, 80, IDrawableAnimated.StartDirection.LEFT, false);
     }
 
-    @Override
-    public RecipeType<T> getRecipeType()
-    {
-        return type;
-    }
-
-    @Override
-    public Component getTitle()
-    {
-        return title;
-    }
-
-    @Override
-    public IDrawable getBackground()
-    {
-        return background;
-    }
-
-    @Override
-    public IDrawable getIcon()
-    {
-        return icon;
-    }
 }
+

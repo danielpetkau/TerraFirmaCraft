@@ -95,6 +95,14 @@ public record ItemStackProvider(
     }
 
     /**
+     * {@link ItemStackProvider#getSingleStack(ItemStack)} but for JEI
+     */
+    public ItemStack getSingleStackDisplayOnly(ItemStack input)
+    {
+        return getStack(input.copyWithCount(1), ItemStackModifier.Context.NO_RANDOM_CHANCE);
+    }
+
+    /**
      * Gets the output stack from this provider, without taking into consideration the input
      *
      * @return A new stack, possibly invalid if the provider is dependent on the input stack.

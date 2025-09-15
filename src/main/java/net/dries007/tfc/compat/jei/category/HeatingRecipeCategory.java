@@ -35,7 +35,7 @@ public class HeatingRecipeCategory extends BaseRecipeCategory<HeatingRecipe>
 {
     public HeatingRecipeCategory(RecipeType<HeatingRecipe> type, IGuiHelper helper)
     {
-        super(type, helper, helper.createBlankDrawable(120, 38), new ItemStack(TFCBlocks.FIREPIT.get()));
+        super(type, helper, 120, 38, new ItemStack(TFCBlocks.FIREPIT.get()));
     }
 
     @Override
@@ -48,16 +48,15 @@ public class HeatingRecipeCategory extends BaseRecipeCategory<HeatingRecipe>
         inputSlot.setBackground(slot, -1,-1);
 
         final List<ItemStack> outputItems = Arrays.stream(recipe.getIngredient().getItems())
-            .map(stack -> recipe.assembleStacked(stack, Integer.MAX_VALUE))
+            .map(stack -> recipe.assembleStacked(stack, Integer.MAX_VALUE, true))
             .toList();
         final FluidStack resultFluid = recipe.getDisplayOutputFluid();
 
         if (!outputItems.isEmpty() && !outputItems.stream().allMatch(ItemStack::isEmpty))
         {
             outputSlot.addItemStacks(outputItems);
-            // todo 1.21: handle chance
-            //if (recipe.getChance() < 1f)
-            //    outputSlot.addTooltipCallback((slot, tooltip) -> tooltip.add(1, Component.translatable("tfc.tooltip.chance", String.format("%.0f", recipe.getChance() * 100f)).withStyle(ChatFormatting.ITALIC)));
+//            if (recipe.getChance() < 1f)
+//                outputSlot.addTooltipCallback((slot, tooltip) -> tooltip.add(1, Component.translatable("tfc.tooltip.chance", String.format("%.0f", recipe.getChance() * 100f)).withStyle(ChatFormatting.ITALIC)));
         }
 
         if (!resultFluid.isEmpty())

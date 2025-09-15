@@ -267,6 +267,8 @@ public class TFCTags
         /**
          * These vanilla tags, historically, were required for <strong>any</strong> fluid behavior, and so may still be used that way.
          * Do not rely on them only containing water or lava, instead, reference the below tags for more specific fluid grouping.
+         *
+         * DO NOT USE THESE FOR GAME LOGIC!!!!!
          */
         public static final TagKey<Fluid> WATER_LIKE = FluidTags.WATER;
         public static final TagKey<Fluid> LAVA_LIKE = FluidTags.LAVA;

@@ -101,7 +101,7 @@ public class AdvancedShapelessRecipe extends ShapelessRecipe
     {
         return remainder.map(remainder -> {
                 RecipeHelpers.setCraftingInput(input);
-                final var remain = RecipeHelpers.getRemainderItemsWithProvider(input, remainder);
+                final var remain = RecipeHelpers.getRemainderItemsWithProvider(input, remainder, getPrimaryInput(input));
                 RecipeHelpers.clearCraftingInput();
                 return remain;
             })
@@ -132,6 +132,11 @@ public class AdvancedShapelessRecipe extends ShapelessRecipe
     public RecipeSerializer<?> getSerializer()
     {
         return TFCRecipeSerializers.ADVANCED_SHAPELESS_CRAFTING.get();
+    }
+
+    public ItemStackProvider getResult()
+    {
+        return result; // todo this doesn't actually take into account setting the crafting container.
     }
 
     @VisibleForTesting

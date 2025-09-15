@@ -87,7 +87,7 @@ public interface TestSetup
             final CompletableFuture<HolderLookup.Provider> provider = CompletableFuture.completedFuture(lookup);
             final Path path = Path.of(".");
             final PackOutput output = new PackOutput(path);
-            final GatherDataEvent event = new GatherDataEvent(null, new DataGenerator(path, null, true), new GatherDataEvent.DataGeneratorConfig(Set.of(), path, Set.of(), provider, true, true, true, true, true, true), null);
+            final GatherDataEvent event = new GatherDataEvent(null, new DataGenerator(path, null, true), new GatherDataEvent.DataGeneratorConfig(Set.of(), path, Set.of(), provider, true, true, true, true, true, true, null, null, Set.of()), null);
             final CompletableFuture<?> now = CompletableFuture.completedFuture(null);
 
             final TagMap itemTagMap = new TagMap();

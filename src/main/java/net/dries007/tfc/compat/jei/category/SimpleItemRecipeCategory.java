@@ -28,7 +28,7 @@ public abstract class SimpleItemRecipeCategory<T extends ItemRecipe> extends Bas
 {
     public SimpleItemRecipeCategory(RecipeType<T> type, IGuiHelper helper, ItemStack icon)
     {
-        super(type, helper, helper.createBlankDrawable(98, 26), icon);
+        super(type, helper, 98, 26, icon);
     }
 
     @Override

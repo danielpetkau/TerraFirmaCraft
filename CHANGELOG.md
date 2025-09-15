@@ -1,23 +1,18 @@
-Another small update with some small features and fixes.
-
 ### Changes
 
-- Added JEI recipe click areas to various TFC menus, which when clicked open the list of recipes in JEI for that device (#2730)
-- Kelp in oceans generates less tall on average, and should reach the surface of the ocean less often
+Your usual hotfix update is here. Sorry if your preferred bug didn't make it in this one, it'll make it into the next one for sure!
 
-### Fixes
-
-- Fixed Distant Horizons' distant world generation causing chunk corruption and crashes (#2661)
-- Fixed food added by addons/packs decaying in creative tabs, and JEI views
-- Fixed nutrition not working properly after death:
-  - In peaceful mode, fast passive regeneration not applying
-  - Rotten food never giving adverse effects when eaten
-  - The "Full Nutrition" advancement not triggering
-- Fixed two missing recipes in the Field Guide
-- Fixed a typo in the "Leather" advancement
-
-
-### Technical Changes
-
-TFC's noise caves are now controllable via [Density Functions](https://minecraft.fandom.com/wiki/Density_function). The defaults are located [here](https://github.com/TerraFirmaCraft/TerraFirmaCraft/tree/1.20.x/src/generated/resources/data/tfc/worldgen/density_function), for anyone who wishes to delve into the realm of noise generation.
-
+- Fix dyed candles not behaving correctly when pushed with pistons.
+- Fix several recipe and tag related issues.
+- Fix fishing not working at all.
+- Fix several issues with JEI screens not working. (#3084)
+- Fix extra products recipes not working. (wool, straw)
+- Added a view to JEI to show extra products of recipes.
+- Fix several field guide errors. (#3086) (#3102)
+- Fix axes being sharp tools. (#3094)
+- Fix hoes not being sharp tools.
+- Fix pit kilns flickering (#3095)
+- Fix goat horns not being able to be knapped (#3097)
+- Fix blocks weathering extremely quickly.
+- Fix the texture mapping on log piles.
+- Numerous behind-the-scenes updates to internals.

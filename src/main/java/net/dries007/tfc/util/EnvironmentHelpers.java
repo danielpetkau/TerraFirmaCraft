@@ -45,12 +45,17 @@ public final class EnvironmentHelpers
         final BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos();
         for (Direction direction : Direction.Plane.HORIZONTAL)
         {
-            if (!level.isWaterAt(mutablePos.setWithOffset(pos, direction)))
+            if (!isWaterAt(level, mutablePos.setWithOffset(pos, direction)))
             {
                 return true;
             }
         }
         return false;
+    }
+
+    public static boolean isWaterAt(LevelAccessor level, BlockPos pos)
+    {
+        return Helpers.isFluid(level.getFluidState(pos), TFCTags.Fluids.ANY_INFINITE_WATER);
     }
 
     public static boolean isWorldgenReplaceable(WorldGenLevel level, BlockPos pos)
