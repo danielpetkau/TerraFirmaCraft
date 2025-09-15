@@ -37,6 +37,7 @@ import org.jetbrains.annotations.Nullable;
 import net.dries007.tfc.client.overworld.SolarCalculator;
 import net.dries007.tfc.common.TFCTags;
 import net.dries007.tfc.common.blockentities.TickCounterBlockEntity;
+import net.dries007.tfc.common.blockentities.TickCountingBranchBlockEntity;
 import net.dries007.tfc.common.blocks.EntityBlockExtension;
 import net.dries007.tfc.common.blocks.ExtendedProperties;
 import net.dries007.tfc.common.blocks.IForgeBlockExtension;
@@ -50,6 +51,7 @@ import net.dries007.tfc.util.Helpers;
 import net.dries007.tfc.util.calendar.Calendars;
 import net.dries007.tfc.util.climate.Climate;
 import net.dries007.tfc.util.climate.ClimateRange;
+import net.dries007.tfc.world.chunkdata.ChunkData;
 
 public class FruitTreeSaplingBlock extends BushBlock implements IForgeBlockExtension, EntityBlockExtension, HoeOverlayBlock
 {
@@ -94,7 +96,7 @@ public class FruitTreeSaplingBlock extends BushBlock implements IForgeBlockExten
     {
         final ClimateRange range = climateRange.get();
 
-        text.accept(FarmlandBlock.getHydrationTooltip(level, pos, range, false, FruitTreeLeavesBlock.getHydration(level, pos)));
+        text.accept(FarmlandBlock.getHydrationTooltip(level, pos.below(), range, false));
         text.accept(FarmlandBlock.getAverageTemperatureTooltip(level, pos, range, false));
 
         if (!stages[Calendars.SERVER.getHemispheralCalendarMonthOfYear(SolarCalculator.getInNorthernHemisphere(pos, level)).ordinal()].active())
@@ -143,7 +145,7 @@ public class FruitTreeSaplingBlock extends BushBlock implements IForgeBlockExten
                 final long elapsedTicks = counter.getTicksSinceUpdate();
                 if (elapsedTicks > getTicksToGrow())
                 {
-                    final int hydration = FruitTreeLeavesBlock.getHydration(level, pos);
+                    final int hydration = FarmlandBlock.getHydrationFromStormHydration(level, pos.below(), (int) ChunkData.get(level, pos).getStormHydration());
                     final float temp = Climate.getAverageTemperature(level, pos);
                     if (!climateRange.get().checkBoth(hydration, temp, false))
                     {
@@ -164,9 +166,8 @@ public class FruitTreeSaplingBlock extends BushBlock implements IForgeBlockExten
         int internalSapling = onBranch ? 3 : state.getValue(SAPLINGS);
         if (internalSapling == 1 && random.nextBoolean()) internalSapling += 1;
         level.setBlockAndUpdate(pos, block.get().defaultBlockState().setValue(PipeBlock.DOWN, true).setValue(TFCBlockStateProperties.SAPLINGS, internalSapling).setValue(TFCBlockStateProperties.STAGE_3, onBranch ? 1 : 0));
-        TickCounterBlockEntity.reset(level, pos);
         // The following carries over time since planting the sapling block to the growth of the tree
-        TickCounterBlockEntity.addTicks(level, pos, ticksToAdd);
+        TickCountingBranchBlockEntity.addTicks(level, pos, ticksToAdd);
         level.scheduleTick(pos, block.get(), 20, TickPriority.NORMAL);
     }
 

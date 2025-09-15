@@ -142,14 +142,11 @@ public class FarmlandBlock extends Block implements ISoilBlock, HoeOverlayBlock,
         }
 
         final int rainBoost = getRainHydration(level, pos, stormBoost);
-        final int waterBoost = isSourceBlockPresent(level, pos) ? 40 : 0;
-
-        return Mth.clamp(waterBoost + rainBoost, 0, 100);
+        return getHydrationFromRainHydration(level, pos, rainBoost);
     }
 
     /**
      * @return A value in the range [0, 100]
-     * Mirrors getHydrationFromStormHydration
      */
     public static int getHydrationFromRainHydration(Level level, BlockPos pos, int rainBoost)
     {
@@ -228,7 +225,6 @@ public class FarmlandBlock extends Block implements ISoilBlock, HoeOverlayBlock,
 
     /**
      * @return A value in [1, 5]
-     * TODO: Probably berry bushes should not use this system anymore.
      */
     public static int findMinCostWater(LevelAccessor level, BlockPos pos)
     {

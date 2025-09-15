@@ -1289,6 +1289,7 @@ DEFAULT_LANG = {
     'tfc.tooltip.fruit_tree.growing': 'This block could grow under the right conditions.',
     'tfc.tooltip.fruit_tree.sapling_wrong_month': 'Wrong season to grow a tree.',
     'tfc.tooltip.fruit_tree.sapling_splice': 'May be spliced',
+    'tfc.tooltip.fruit_tree.check_leaves': 'Check leaves or topmost branch for climate information',
     'tfc.tooltip.berry_bush.not_underwater': 'Must be underwater to grow!',
     'tfc.tooltip.fertilizer.nitrogen': '§b(N) Nitrogen: §r%s%%',
     'tfc.tooltip.fertilizer.phosphorus': '§6(P) Phosphorus: §r%s%%',

@@ -370,6 +370,7 @@
   "tfc.tooltip.fruit_tree.growing": "该方块在合适的条件下可以生长。",
   "tfc.tooltip.fruit_tree.sapling_wrong_month": "当前季节不适合种植。",
   "tfc.tooltip.fruit_tree.sapling_splice": "可嫁接",
+  "tfc.tooltip.fruit_tree.check_leaves": "Check leaves or topmost branch for climate information",
   "tfc.tooltip.berry_bush.not_underwater": "必须要在水下才能种植！",
   "tfc.tooltip.fertilizer.nitrogen": "§b(N) 含氮：§r%s%%",
   "tfc.tooltip.fertilizer.phosphorus": "§6(P) 含磷：§r%s%%",

@@ -20,7 +20,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-import net.dries007.tfc.common.TFCTags;
 import net.dries007.tfc.common.blockentities.BerryBushBlockEntity;
 import net.dries007.tfc.common.blocks.ExtendedProperties;
 import net.dries007.tfc.common.blocks.TFCBlocks;
@@ -70,24 +69,13 @@ public class StationaryBerryBushBlock extends SeasonalPlantBlock implements HoeO
     @Override
     public void addHoeOverlayInfo(Level level, BlockPos pos, BlockState state, Consumer<Component> text, boolean isDebug)
     {
-        final BlockPos sourcePos;
-
-        final ClimateRange range = climateRange.get();
         if (level.getBlockEntity(pos) instanceof BerryBushBlockEntity bush)
         {
-            sourcePos = bush.getStemPos().below();
+            final ClimateRange range = climateRange.get();
+            final BlockPos sourcePos = bush.getStemPos().below();
             text.accept(FarmlandBlock.getHydrationTooltip(level, sourcePos, range, false));
             text.accept(FarmlandBlock.getTemperatureTooltip(level, sourcePos, range, false));
-            // TODO: Remove debug and error stuff
-            text.accept(Component.literal("pos: " + pos.getX() + ", " + pos.getY() + ", " + pos.getZ()));
-            text.accept(Component.literal("stem: " + sourcePos.getX() + ", " + sourcePos.getY() + ", " + sourcePos.getZ()));
         }
-        else
-        {
-            // TODO
-            text.accept(Component.translatable("tfc.tooltip.berry_bush.no"));
-        }
-
     }
 
     @Override
@@ -108,7 +96,7 @@ public class StationaryBerryBushBlock extends SeasonalPlantBlock implements HoeO
 
                 final BlockPos rootPos = bush.getStemPos().below();
                 final ClimateRange range = climateRange.get();
-                final int hydration = getHydration(level, rootPos, state, currentCalendarTick, nextCalendarTick);
+                final int hydration = FarmlandBlock.getHydrationFromStormHydrationOverTime(level, rootPos, (int) ChunkData.get(level, pos).getStormHydration(), currentCalendarTick, nextCalendarTick);
 
                 int monthsSpentDying = 0;
                 do
@@ -162,16 +150,6 @@ public class StationaryBerryBushBlock extends SeasonalPlantBlock implements HoeO
                 }
             }
         }
-    }
-
-    protected int getHydration(Level level, BlockPos pos, BlockState state, long fromTick, long toTick)
-    {
-        if (Helpers.isFluid(level.getFluidState(pos.above()), TFCTags.Fluids.HYDRATING))
-        {
-            return 100; // special case for waterlogged crops
-        }
-
-        return FarmlandBlock.getHydrationFromStormHydration(level, pos, (int) ChunkData.get(level, pos).getStormHydration());
     }
 
     /**

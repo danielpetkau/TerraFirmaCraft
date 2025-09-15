@@ -57,7 +57,6 @@ public final class TFCBlockEntities
     public static final Id<TickCounterBlockEntity> TICK_COUNTER = register("tick_counter", TickCounterBlockEntity::new, Stream.of(
             woodBlocks(Wood.BlockType.SAPLING),
             TFCBlocks.FRUIT_TREE_SAPLINGS.values().stream(),
-            TFCBlocks.FRUIT_TREE_GROWING_BRANCHES.values().stream(),
             Stream.of(
                 TFCBlocks.TORCH,
                 TFCBlocks.WALL_TORCH,
@@ -71,6 +70,11 @@ public final class TFCBlockEntities
             TFCBlocks.DYED_CANDLE.values().stream(),
             TFCBlocks.DYED_CANDLE_CAKES.values().stream(),
             TFCBlocks.SOIL.get(SoilBlockType.DRYING_BRICKS).values().stream()
+        ).flatMap(e -> e)
+    );
+
+    public static final Id<TickCountingBranchBlockEntity> TICK_COUNTING_BRANCH = register("tick_counting_branch", TickCountingBranchBlockEntity::new, Stream.of(
+            TFCBlocks.FRUIT_TREE_GROWING_BRANCHES.values().stream()
         ).flatMap(e -> e)
     );
 

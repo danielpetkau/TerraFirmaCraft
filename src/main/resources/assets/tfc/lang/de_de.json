@@ -362,6 +362,7 @@
   "tfc.tooltip.fruit_tree.growing": "Dieser Block könnte unter den richtigen Bedingungen wachsen",
   "tfc.tooltip.fruit_tree.sapling_wrong_month": "Falsche Jahreszeit für Baumwachstum",
   "tfc.tooltip.fruit_tree.sapling_splice": "Kann gespleißt werden",
+  "tfc.tooltip.fruit_tree.check_leaves": "Check leaves or topmost branch for climate information",
   "tfc.tooltip.berry_bush.not_underwater": "Must be underwater to grow!",
   "tfc.tooltip.fertilizer.nitrogen": "§b(N) Stickstoff: §r%s%%",
   "tfc.tooltip.fertilizer.phosphorus": "§6(P) Phosphor: §r%s%%",

@@ -56,12 +56,6 @@ public class WaterloggedBerryBushBlock extends StationaryBerryBushBlock implemen
     }
 
     @Override
-    protected int getHydration(Level level, BlockPos pos, BlockState state, long fromTick, long toTick)
-    {
-        return Helpers.isFluid(level.getFluidState(pos), TFCTags.Fluids.HYDRATING) ? 100 : 0;
-    }
-
-    @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
         super.createBlockStateDefinition(builder.add(getFluidProperty()));

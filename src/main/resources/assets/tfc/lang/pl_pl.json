@@ -361,6 +361,7 @@
   "tfc.tooltip.fruit_tree.growing": "Ten blok może rosnąć.",
   "tfc.tooltip.fruit_tree.sapling_wrong_month": "Zła pora roku na wyhodowanie tego.",
   "tfc.tooltip.fruit_tree.sapling_splice": "Można zeszczepić",
+  "tfc.tooltip.fruit_tree.check_leaves": "Check leaves or topmost branch for climate information",
   "tfc.tooltip.berry_bush.not_underwater": "Musi być pod wodą by rosnąć!",
   "tfc.tooltip.fertilizer.nitrogen": "§b(n) azot: §r%s%%",
   "tfc.tooltip.fertilizer.phosphorus": "§6(p) fosfor: §r%s%%",

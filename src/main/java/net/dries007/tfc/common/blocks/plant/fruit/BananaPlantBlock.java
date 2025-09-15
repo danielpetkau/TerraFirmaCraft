@@ -43,6 +43,7 @@ import net.dries007.tfc.util.calendar.ICalendar;
 import net.dries007.tfc.util.climate.Climate;
 import net.dries007.tfc.util.climate.ClimateRange;
 import net.dries007.tfc.util.climate.ClimateRanges;
+import net.dries007.tfc.world.chunkdata.ChunkData;
 
 public class BananaPlantBlock extends SeasonalPlantBlock implements IBushBlock, HoeOverlayBlock
 {
@@ -93,10 +94,13 @@ public class BananaPlantBlock extends SeasonalPlantBlock implements IBushBlock, 
     @Override
     public void addHoeOverlayInfo(Level level, BlockPos pos, BlockState state, Consumer<Component> text, boolean isDebug)
     {
-        final ClimateRange range = climateRange.get();
-
-        text.accept(FarmlandBlock.getHydrationTooltip(level, pos, range, false, FruitTreeLeavesBlock.getHydration(level, pos)));
-        text.accept(FarmlandBlock.getTemperatureTooltip(level, pos, range, false));
+        if (level.getBlockEntity(pos) instanceof BerryBushBlockEntity bush)
+        {
+            final ClimateRange range = climateRange.get();
+            final BlockPos sourcePos = bush.getStemPos().below();
+            text.accept(FarmlandBlock.getHydrationTooltip(level, sourcePos, range, false));
+            text.accept(FarmlandBlock.getTemperatureTooltip(level, sourcePos, range, false));
+        }
     }
 
     @Override
@@ -148,8 +152,9 @@ public class BananaPlantBlock extends SeasonalPlantBlock implements IBushBlock, 
                 long currentCalendarTick = Calendars.SERVER.getCalendarTicks();
                 long nextCalendarTick = currentCalendarTick - deltaTicks;
 
+                final BlockPos rootPos = bush.getStemPos().below();
                 final ClimateRange range = climateRange.get();
-                final int hydration = FruitTreeLeavesBlock.getHydration(level, pos);
+                final int hydration = FarmlandBlock.getHydrationFromStormHydrationOverTime(level, rootPos, (int) ChunkData.get(level, pos).getStormHydration(), currentCalendarTick, nextCalendarTick);
 
                 int stage = state.getValue(STAGE);
 
