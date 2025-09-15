@@ -7,7 +7,7 @@
       "conditions": {
         "items": [
           {
-            "items": "tfc:metal_ores"
+            "items": "#tfc:metal_ores"
           }
         ]
       }

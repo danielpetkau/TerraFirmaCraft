@@ -117,7 +117,7 @@ public interface HeatRecipes extends Recipes
         add(TFCItems.CACTUS_WOOD, TFCItems.DRIED_CACTUS_WOOD, 700);
 
         burnFood("bread", Ingredient.of(TFCTags.Items.BREAD), 700);
-        burnFood("meat", Ingredient.of(TFCTags.Items.MEATS), 900);
+        burnFood("meat", Ingredient.of(TFCTags.Items.COOKED_MEATS), 900);
 
         for (Ore ore : Ore.values())
             if (ore.isGraded())
