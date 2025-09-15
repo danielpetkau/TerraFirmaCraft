@@ -73,6 +73,7 @@ public enum IngameOverlays
     private static final ResourceLocation VANILLA_MOUNT_HEALTH = VanillaGuiLayers.VEHICLE_HEALTH;
     private static final ResourceLocation VANILLA_FOOD = VanillaGuiLayers.FOOD_LEVEL;
     private static final ResourceLocation VANILLA_EXP = VanillaGuiLayers.EXPERIENCE_BAR;
+    private static final ResourceLocation VANILLA_EXP_LEVEL = VanillaGuiLayers.EXPERIENCE_LEVEL;
     private static final ResourceLocation VANILLA_JUMP = VanillaGuiLayers.JUMP_METER;
 
     public static void registerOverlays(RegisterGuiLayersEvent event)
@@ -111,7 +112,7 @@ public enum IngameOverlays
         {
             event.setCanceled(true);
         }
-        if (!TFCConfig.CLIENT.enableExperienceBar.get() && (id.equals(VANILLA_EXP) || id.equals(VANILLA_JUMP)))
+        if (!TFCConfig.CLIENT.enableExperienceBar.get() && (id.equals(VANILLA_EXP) || id.equals(VANILLA_JUMP) || id.equals(VANILLA_EXP_LEVEL)))
         {
             event.setCanceled(true);
         }
