@@ -4,6 +4,9 @@
       "item": "tfc:ceramic/pot"
     },
     {
+      "item": "tfc:ceramic/unfired_pot"
+    },
+    {
       "item": "tfc:wrought_iron_grill"
     }
   ],
