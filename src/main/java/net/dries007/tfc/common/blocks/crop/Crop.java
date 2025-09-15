@@ -120,19 +120,27 @@ public enum Crop implements StringRepresentable
 
     Crop(float nitrogen, float phosporous, float potassium, int doubleBlockBottomStages, int doubleBlockTopStages, boolean requiresStick, @Nullable Supplier<Supplier<? extends Item>> fruit1, Supplier<Supplier<? extends Item>> fruit2)
     {
-        this(nitrogen, phosporous, potassium, requiresStick ?
+        this(nitrogen, phosporous, potassium,
+            requiresStick ?
                 self -> PickableClimbingCropBlock.create(doubleCrop(), doubleBlockBottomStages, doubleBlockTopStages, self, fruit1, fruit2) :
                 self -> DoubleCropBlock.create(doubleCrop(), doubleBlockBottomStages, doubleBlockTopStages, self),
-            self -> new DeadClimbingCropBlock(dead(), self.getClimateRange()), self -> new WildDoubleCropBlock(dead().randomTicks())
+            requiresStick ?
+                self -> new DeadClimbingCropBlock(dead(), self.getClimateRange()) :
+                self -> new DeadDoubleCropBlock(dead(), self.getClimateRange()),
+            self -> new WildDoubleCropBlock(dead().randomTicks())
         );
     }
 
     Crop(float nitrogen, float phosporous, float potassium, int doubleBlockBottomStages, int doubleBlockTopStages, boolean requiresStick)
     {
-        this(nitrogen, phosporous, potassium, requiresStick ?
+        this(nitrogen, phosporous, potassium,
+            requiresStick ?
                 self -> ClimbingCropBlock.create(doubleCrop(), doubleBlockBottomStages, doubleBlockTopStages, self) :
                 self -> DoubleCropBlock.create(doubleCrop(), doubleBlockBottomStages, doubleBlockTopStages, self),
-            self -> new DeadClimbingCropBlock(dead(), self.getClimateRange()), self -> new WildDoubleCropBlock(dead().randomTicks())
+            requiresStick ?
+                self -> new DeadClimbingCropBlock(dead(), self.getClimateRange()) :
+                self -> new DeadDoubleCropBlock(dead(), self.getClimateRange()),
+            self -> new WildDoubleCropBlock(dead().randomTicks())
         );
     }
 
