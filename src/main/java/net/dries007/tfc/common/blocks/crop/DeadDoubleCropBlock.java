@@ -6,14 +6,10 @@
 
 package net.dries007.tfc.common.blocks.crop;
 
-
-import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -27,14 +23,15 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
-import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 
+import net.dries007.tfc.common.TFCTags;
 import net.dries007.tfc.common.blocks.ExtendedProperties;
 import net.dries007.tfc.common.blocks.TFCBlockStateProperties;
 import net.dries007.tfc.common.blocks.crop.DoubleCropBlock.Part;
+import net.dries007.tfc.util.Helpers;
 import net.dries007.tfc.util.climate.ClimateRange;
 
 public class DeadDoubleCropBlock extends DeadCropBlock
@@ -97,7 +94,16 @@ public class DeadDoubleCropBlock extends DeadCropBlock
     @Override
     public boolean canSurvive(BlockState state, LevelReader level, BlockPos pos)
     {
-        return WildDoubleCropBlock.doubleBlockSurvives(state, level, pos);
+        final Part part = state.getValue(PART);
+        final BlockState belowState = level.getBlockState(pos.below());
+        if (part == Part.BOTTOM)
+        {
+            return Helpers.isBlock(belowState.getBlock(), TFCTags.Blocks.FARMLANDS);
+        }
+        else
+        {
+            return Helpers.isBlock(belowState, this) && belowState.getValue(PART) == Part.BOTTOM;
+        }
     }
 
     @Override
