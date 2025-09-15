@@ -276,6 +276,8 @@ public class ClientForgeEventHandler
             {
                 // Check what we would get if melted
                 final FluidStack fluid = recipe.assembleFluid(stack);
+                // Set the correct amount of fluid, since the recipe's result is for only 1 item
+                fluid.setAmount(fluid.getAmount() * stack.getCount());
                 if (!fluid.isEmpty())
                 {
                     final MutableComponent meltsInto = Tooltips.meltsInto(fluid, recipe.getTemperature());
