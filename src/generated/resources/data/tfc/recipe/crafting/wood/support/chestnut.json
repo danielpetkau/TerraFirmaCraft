@@ -1,5 +1,6 @@
 {
   "type": "tfc:advanced_shaped_crafting",
+  "input_column": 1,
   "key": {
     "L": {
       "tag": "tfc:chestnut_logs"
