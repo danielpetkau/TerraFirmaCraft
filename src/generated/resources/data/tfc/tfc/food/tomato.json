@@ -1,6 +1,5 @@
 {
   "decay_modifier": 3.5,
-  "fruit": 1.0,
   "hunger": 4,
   "ingredient": {
     "item": "tfc:food/tomato"
