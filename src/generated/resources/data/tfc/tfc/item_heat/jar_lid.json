@@ -1,6 +1,6 @@
 {
   "forging_temperature": 138.0,
-  "heat_capacity": 0.8571428,
+  "heat_capacity": 0.4285714,
   "ingredient": {
     "item": "tfc:jar_lid"
   },
