@@ -152,9 +152,9 @@ public class BananaPlantBlock extends SeasonalPlantBlock implements IBushBlock, 
                 long currentCalendarTick = Calendars.SERVER.getCalendarTicks();
                 long nextCalendarTick = currentCalendarTick - deltaTicks;
 
-                final BlockPos rootPos = bush.getStemPos().below();
+                final BlockPos stemPos = bush.getStemPos();
                 final ClimateRange range = climateRange.get();
-                final int hydration = FarmlandBlock.getHydrationFromStormHydrationOverTime(level, rootPos, (int) ChunkData.get(level, pos).getStormHydration(), currentCalendarTick, nextCalendarTick);
+                final int hydration = FarmlandBlock.getHydrationFromStormHydrationOverTime(level, stemPos.below(), (int) ChunkData.get(level, pos).getStormHydration(), currentCalendarTick, nextCalendarTick);
 
                 int stage = state.getValue(STAGE);
 
@@ -202,8 +202,11 @@ public class BananaPlantBlock extends SeasonalPlantBlock implements IBushBlock, 
                         if (level.isEmptyBlock(abovePos) && level.canSeeSky(abovePos))
                         {
                             level.setBlockAndUpdate(abovePos, newState);
-                            final long newBushTicks = nextCalendarTick;
-                            level.getBlockEntity(abovePos, TFCBlockEntities.BERRY_BUSH.get()).ifPresent(newBush -> newBush.setLastBushTick(newBushTicks));
+                            if (level.getBlockEntity(abovePos) instanceof BerryBushBlockEntity newBush)
+                            {
+                                newBush.setLastBushTick(nextCalendarTick);
+                                newBush.setStemPos(stemPos);
+                            }
                         }
                     }
                 }

@@ -6,14 +6,36 @@
 
 package net.dries007.tfc.common.blockentities;
 
+import java.util.Optional;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
 public class TickCountingBranchBlockEntity extends TickCounterBlockEntity
 {
+    public static void reset(Level level, BlockPos pos)
+    {
+        level.getBlockEntity(pos, TFCBlockEntities.TICK_COUNTING_BRANCH.get()).ifPresent(TickCounterBlockEntity::resetCounter);
+    }
+
+    public static void addTicks(Level level, BlockPos pos, long ticks)
+    {
+        Optional<TickCountingBranchBlockEntity> entity = level.getBlockEntity(pos, TFCBlockEntities.TICK_COUNTING_BRANCH.get());
+        if (entity.isPresent())
+        {
+            entity.get().increaseCounter(ticks);
+        }
+    }
+
+    public static void setStemPos(Level level, BlockPos pos, BlockPos stemPos)
+    {
+        Optional<TickCountingBranchBlockEntity> entity = level.getBlockEntity(pos, TFCBlockEntities.TICK_COUNTING_BRANCH.get());
+        entity.ifPresent(branchBlockEntity -> branchBlockEntity.setStemPos(stemPos));
+    }
+
     private BlockPos stemPos;
 
     public TickCountingBranchBlockEntity(BlockPos pos, BlockState state)
@@ -30,7 +52,6 @@ public class TickCountingBranchBlockEntity extends TickCounterBlockEntity
     @Override
     public void loadAdditional(CompoundTag nbt, HolderLookup.Provider provider)
     {
-        lastUpdateTick = nbt.getLong("tick");
         int[] stemArray = nbt.getIntArray("stemPos");
         stemPos = new BlockPos(stemArray[0], stemArray[1], stemArray[2]);
         super.loadAdditional(nbt, provider);
@@ -39,7 +60,6 @@ public class TickCountingBranchBlockEntity extends TickCounterBlockEntity
     @Override
     public void saveAdditional(CompoundTag nbt, HolderLookup.Provider provider)
     {
-        nbt.putLong("tick", lastUpdateTick);
         nbt.putIntArray("stemPos", new int[] {stemPos.getX(), stemPos.getY(), stemPos.getZ()});
         super.saveAdditional(nbt, provider);
     }
@@ -47,6 +67,7 @@ public class TickCountingBranchBlockEntity extends TickCounterBlockEntity
     public void setStemPos(BlockPos stemPos)
     {
         this.stemPos = stemPos;
+        setChanged();
     }
 
     public BlockPos getStemPos()

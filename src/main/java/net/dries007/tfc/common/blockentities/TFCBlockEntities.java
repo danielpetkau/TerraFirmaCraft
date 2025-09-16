@@ -56,13 +56,11 @@ public final class TFCBlockEntities
 
     public static final Id<TickCounterBlockEntity> TICK_COUNTER = register("tick_counter", TickCounterBlockEntity::new, Stream.of(
             woodBlocks(Wood.BlockType.SAPLING),
-            TFCBlocks.FRUIT_TREE_SAPLINGS.values().stream(),
             Stream.of(
                 TFCBlocks.TORCH,
                 TFCBlocks.WALL_TORCH,
                 TFCBlocks.DEAD_BERRY_BUSH,
                 TFCBlocks.DEAD_CANE,
-                TFCBlocks.BANANA_SAPLING,
                 TFCBlocks.DEAD_BANANA_PLANT,
                 TFCBlocks.JACK_O_LANTERN,
                 TFCBlocks.CANDLE
@@ -74,7 +72,11 @@ public final class TFCBlockEntities
     );
 
     public static final Id<TickCountingBranchBlockEntity> TICK_COUNTING_BRANCH = register("tick_counting_branch", TickCountingBranchBlockEntity::new, Stream.of(
-            TFCBlocks.FRUIT_TREE_GROWING_BRANCHES.values().stream()
+            TFCBlocks.FRUIT_TREE_SAPLINGS.values().stream(),
+            TFCBlocks.FRUIT_TREE_GROWING_BRANCHES.values().stream(),
+            Stream.of(
+                TFCBlocks.BANANA_SAPLING
+            )
         ).flatMap(e -> e)
     );
 
@@ -158,7 +160,7 @@ public final class TFCBlockEntities
     {
         return TFCBlocks.WOODS.values().stream().map(map -> map.get(type));
     }
-    
+
     public record Id<T extends BlockEntity>(DeferredHolder<BlockEntityType<?>, BlockEntityType<T>> holder)
         implements RegistryHolder<BlockEntityType<?>, BlockEntityType<T>> {}
 }

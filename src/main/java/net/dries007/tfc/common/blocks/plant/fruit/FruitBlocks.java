@@ -151,7 +151,7 @@ public final class FruitBlocks
                     .randomTicks()
                     .strength(0)
                     .sound(SoundType.GRASS)
-                    .blockEntity(TFCBlockEntities.TICK_COUNTER)
+                    .blockEntity(TFCBlockEntities.TICK_COUNTING_BRANCH)
                     .flammableLikeLeaves(),
                 TFCBlocks.FRUIT_TREE_GROWING_BRANCHES.get(this),
                 TFCConfig.SERVER.fruitSaplingGrowthTicks.get(this),

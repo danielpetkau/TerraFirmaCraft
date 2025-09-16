@@ -238,7 +238,7 @@ public class GrowingFruitTreeBranchBlock extends FruitTreeBranchBlock implements
         super.tick(state, level, pos, rand);
         if (level.getBlockEntity(pos) instanceof TickCountingBranchBlockEntity counter)
         {
-            long days = counter.getTicksSinceUpdate() / ICalendar.TICKS_IN_DAY;
+            long days = counter.getTicksSinceUpdate() / ICalendar.CALENDAR_TICKS_IN_DAY;
             int cycles = (int) (days / 5);
             if (cycles >= 1)
             {
