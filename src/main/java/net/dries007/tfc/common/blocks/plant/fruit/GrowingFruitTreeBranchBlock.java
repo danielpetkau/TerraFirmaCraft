@@ -96,8 +96,9 @@ public class GrowingFruitTreeBranchBlock extends FruitTreeBranchBlock implements
         FruitTreeBranchBlock body = (FruitTreeBranchBlock) this.body.get();
         BlockPos abovePos = pos.above();
         final boolean natural = state.getValue(NATURAL);
-        if (canGrowInto(level, abovePos) && abovePos.getY() < level.getMaxBuildHeight() - 1)
+        if (canGrowInto(level, abovePos) && abovePos.getY() < level.getMaxBuildHeight() - 1 && level.getBlockEntity(pos) instanceof TickCountingBranchBlockEntity activeBranch)
         {
+            final BlockPos stemPos = activeBranch.getStemPos();
             int stage = state.getValue(STAGE);
 
             // Stage tracks horizontal Manhattan distance from trunk
@@ -137,7 +138,7 @@ public class GrowingFruitTreeBranchBlock extends FruitTreeBranchBlock implements
                 if (willGrowUpward && allNeighborsEmpty(level, abovePos, null) && canGrowInto(level, pos.above(2)))
                 {
                     // Must place grown flower first in order to copy stem position from parent
-                    placeGrownFlower(level, abovePos, pos, stage, state.getValue(SAPLINGS), cyclesLeft - 1, natural);
+                    placeGrownFlower(level, abovePos, stemPos, stage, state.getValue(SAPLINGS), cyclesLeft - 1, natural);
                     placeBody(level, pos, abovePos, stage);
                 }
                 // Try and branch if near enough to the trunk
@@ -160,28 +161,28 @@ public class GrowingFruitTreeBranchBlock extends FruitTreeBranchBlock implements
                                     if (couldBranchInDirection(level, pos, mutablePos, test))
                                     {
                                         // Must place grown flower first in order to copy stem position from parent
-                                        placeGrownFlower(level, mutablePos, pos, stage + 1, state.getValue(SAPLINGS), cyclesLeft - 1, natural);
+                                        placeGrownFlower(level, mutablePos, stemPos, stage + 1, state.getValue(SAPLINGS), cyclesLeft - 1, natural);
                                         mutablePos.move(test, -1);
-                                        placeBody(level, mutablePos, mutablePos.above(), stage);
+                                        placeBody(level, mutablePos, stemPos, stage);
                                         mutablePos.move(test, 1);
                                         doubleBranch = true;
                                     }
                                 }
                                 if (!doubleBranch)
                                 {
-                                    placeGrownFlower(level, mutablePos, pos, stage + 1, state.getValue(SAPLINGS), cyclesLeft - 1, natural);
+                                    placeGrownFlower(level, mutablePos, stemPos, stage + 1, state.getValue(SAPLINGS), cyclesLeft - 1, natural);
                                 }
                             }
                             directions.remove(test);
                             branches--;
                         }
                     }
-                    placeBody(level, pos, pos, stage);
+                    placeBody(level, pos, stemPos, stage);
                 }
-                else
-                {
-                    placeBody(level, pos, pos, stage);
-                }
+            }
+            else
+            {
+                placeBody(level, pos, stemPos, stage);
             }
         }
     }
@@ -250,7 +251,7 @@ public class GrowingFruitTreeBranchBlock extends FruitTreeBranchBlock implements
     /**
      * Places the actively growing branch block
      */
-    private void placeGrownFlower(ServerLevel level, BlockPos childPos, BlockPos parentPos, int stage, int saplings, int cycles, boolean natural)
+    private void placeGrownFlower(ServerLevel level, BlockPos childPos, BlockPos stemPos, int stage, int saplings, int cycles, boolean natural)
     {
         final BlockState newState = getStateForPlacement(level, childPos).setValue(STAGE, stage).setValue(SAPLINGS, saplings).setValue(NATURAL, natural);
         level.setBlock(childPos, newState, Block.UPDATE_ALL);
@@ -258,11 +259,9 @@ public class GrowingFruitTreeBranchBlock extends FruitTreeBranchBlock implements
         {
             counter.resetCounter();
             counter.increaseCounter((long) ICalendar.CALENDAR_TICKS_IN_DAY * cycles * 5);
-            if (level.getBlockEntity(parentPos) instanceof TickCountingBranchBlockEntity parentCounter)
-            {
-                counter.setStemPos(parentCounter.getStemPos());
-                addLeaves(level, childPos, counter.getStemPos());
-            }
+
+            counter.setStemPos(stemPos);
+            addLeaves(level, childPos, stemPos);
         }
         else
         {
@@ -274,14 +273,11 @@ public class GrowingFruitTreeBranchBlock extends FruitTreeBranchBlock implements
     /**
      * Places a static branch block that will not grow
      */
-    private void placeBody(LevelAccessor level, BlockPos bodyPos, BlockPos activePos, int stage)
+    private void placeBody(LevelAccessor level, BlockPos bodyPos, BlockPos stemPos, int stage)
     {
         FruitTreeBranchBlock plant = (FruitTreeBranchBlock) this.body.get();
         level.setBlock(bodyPos, plant.getStateForPlacement(level, bodyPos).setValue(STAGE, stage), Block.UPDATE_ALL);
-        if (level.getBlockEntity(activePos) instanceof TickCountingBranchBlockEntity activeBranch)
-        {
-            addLeaves(level, bodyPos, activeBranch.getStemPos());
-        }
+        addLeaves(level, bodyPos, stemPos);
     }
 
     private void addLeaves(LevelAccessor level, BlockPos centerPos, BlockPos stemPos)
