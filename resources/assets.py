@@ -2560,11 +2560,11 @@ def slab_loot(rm: ResourceManager, loot: str) -> BlockContext:
     })
 
 def mold_model(rm: ResourceManager, mold_item_location: str, pattern: str):
-    namespace, path = mold_item_location.split(':')
-    return rm.write(
-        ('assets', namespace, 'models', 'mold', *path.split('/')), 
+    path = mold_item_location.split(':')[1]
+    return rm.custom_block_model(
+        'mold/%s' % path,
+        'tfc:mold',
         {
-            'loader': 'tfc:mold',
             'textures': {
                 '0': 'tfc:block/mold',
                 'particle': 'tfc:block/mold'
