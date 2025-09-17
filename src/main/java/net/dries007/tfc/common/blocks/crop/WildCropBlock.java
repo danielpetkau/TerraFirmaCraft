@@ -12,7 +12,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -30,7 +30,7 @@ import net.dries007.tfc.common.blocks.plant.TFCBushBlock;
 import net.dries007.tfc.util.Helpers;
 import net.dries007.tfc.util.calendar.Calendars;
 import net.dries007.tfc.util.calendar.Month;
-import net.dries007.tfc.util.climate.Climate;
+
 public class WildCropBlock extends TFCBushBlock implements ISpecialPile
 {
     public static boolean isMature(Level level, BlockPos pos)
@@ -86,6 +86,12 @@ public class WildCropBlock extends TFCBushBlock implements ISpecialPile
     protected boolean mayPlaceOn(BlockState state, BlockGetter level, BlockPos pos)
     {
         return Helpers.isBlock(level.getBlockState(pos), TFCTags.Blocks.GRASS_PLANTABLE_ON);
+    }
+
+    @Override
+    public boolean canSurvive(BlockState state, LevelReader level, BlockPos pos)
+    {
+        return Helpers.isBlock(level.getBlockState(pos.below()), TFCTags.Blocks.WILD_CROP_GROWS_ON);
     }
 
     @Override
