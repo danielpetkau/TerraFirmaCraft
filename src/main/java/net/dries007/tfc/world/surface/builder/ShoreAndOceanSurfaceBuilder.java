@@ -17,6 +17,7 @@ import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.SurfaceSystem;
 import net.minecraft.world.level.levelgen.synth.NormalNoise;
 
+import net.dries007.tfc.TerraFirmaCraft;
 import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.fluids.FluidHelpers;
 import net.dries007.tfc.util.climate.OverworldClimateModel;
@@ -41,6 +42,7 @@ public class ShoreAndOceanSurfaceBuilder implements SurfaceBuilder
     public static final SurfaceBuilderFactory ACTIVE_SHIELD_VOLCANO = seed -> new ShoreAndOceanSurfaceBuilder(seed, SurfaceStates.VOLCANIC_SHORE_SAND, SurfaceStates.VOLCANIC_SHORE_SANDSTONE, 2, false, true, ShieldVolcanoSurfaceBuilder.DORMANT.apply(seed));
     public static final SurfaceBuilderFactory MOUNTAINS = seed -> new ShoreAndOceanSurfaceBuilder(seed, SurfaceStates.GRAVEL, SurfaceStates.RAW, 2, false, false, NormalSurfaceBuilder.ROCKY);
     public static final SurfaceBuilderFactory VOLCANIC_MOUNTAINS = seed -> new ShoreAndOceanSurfaceBuilder(seed, SurfaceStates.GRAVEL, SurfaceStates.RAW, 2, false, false, SimpleSurfaceBuilder.ROCKY_VOLCANIC_SOIL.apply(seed));
+    public static final SurfaceBuilderFactory ROCKY_SHORE = seed -> new ShoreAndOceanSurfaceBuilder(seed, SurfaceStates.RAW, SurfaceStates.RAW, 6, false, false, SimpleSurfaceBuilder.ROCKY_SHORE.apply(seed));
 
     final Seed seed;
     final SurfaceState surface;
@@ -176,110 +178,114 @@ public class ShoreAndOceanSurfaceBuilder implements SurfaceBuilder
      */
     private void frozenOceanExtension(SurfaceBuilderContext context, int startY, int endY, int oceanFloorY, int seaLevel)
     {
-        final BlockState packedIce = Blocks.PACKED_ICE.defaultBlockState();
-        final BlockState snow = Blocks.SNOW_BLOCK.defaultBlockState();
-        final BlockState seaIce = TFCBlocks.SEA_ICE.get().defaultBlockState();
-
-        final int x = context.pos().getX();
-        final int z = context.pos().getZ();
-        final RandomSource random = context.random();
-
         final OverworldClimateModel model = OverworldClimateModel.getIfPresent(context.level());
         if (model == null)
         {
             return;
         }
 
+        final int x = context.pos().getX();
+        final int z = context.pos().getZ();
+
         final float maxAnnualTemperature = model.getAverageMonthlyTemperature(z, seaLevel, context.averageTemperature(), 1, true);
         if (maxAnnualTemperature > 2)
         {
-            // This is run for all climates, and needs to exist early if we possibly can.
+            // This is run for all climates, so we want to check if ice can exist as early as possible.
             return;
         }
-
-        final float temperatureFactor = Mth.clampedMap(maxAnnualTemperature, -4, 2, 0, 6);
 
         final double baseNoise = Math.min(
             Math.abs(icebergSurfaceNoise.getValue(x, 0, z) * 8.25),
             icebergPillarNoise.getValue(x * 1.28, 0, z * 1.28) * 15
         );
-        // Scale down and then phase out icebergs near shores
-        final double depthFactor = Mth.clampedMap(oceanFloorY, seaLevel - 20, seaLevel - 6, 1, 0);
-        final double adjustedBaseNoise = baseNoise * depthFactor;
 
-        if (adjustedBaseNoise > 1.8) // Place iceberg if noise is sufficient
+        if (baseNoise > 1.8) // Try to place iceberg if noise is sufficient
         {
+            // Scale down and then phase out icebergs near shores
+            final float temperatureFactor = Mth.clampedMap(maxAnnualTemperature, -4, 2, 1, 0);
+            final float depthFactor = Mth.clampedMap(oceanFloorY, seaLevel - 20, seaLevel - 6, 1, 0);
+
             final double pillarNoise = Math.abs(icebergPillarRoofNoise.getValue(x * 1.17, 0, z * 1.17) * 1.5);
-            double icebergMaxY = depthFactor * Math.min(
-                adjustedBaseNoise * adjustedBaseNoise * 1.2,
+            double icebergMaxY = temperatureFactor * depthFactor * Math.min(
+                baseNoise * baseNoise * 1.2,
                 Math.ceil(pillarNoise * 30) + 11
             );
 
-            icebergMaxY -= temperatureFactor;
-
-            final double icebergMinY;
-            if (icebergMaxY > 2)
+            // Check again whether an iceberg is expected at this position
+            if (icebergMaxY < 2)
             {
-                icebergMinY = seaLevel - icebergMaxY - 7;
-                icebergMaxY += seaLevel;
+                placeSeaIce(context, x, z, seaLevel, maxAnnualTemperature);
             }
             else
             {
-                icebergMaxY = 0;
-                icebergMinY = 0;
-            }
+                final BlockState packedIce = Blocks.PACKED_ICE.defaultBlockState();
+                final BlockState snow = Blocks.SNOW_BLOCK.defaultBlockState();
+                final RandomSource random = context.random();
 
-            final int snowDepth = 2 + random.nextInt(4);
-            final int snowBoundaryY = seaLevel + 18 + random.nextInt(10);
+                final double icebergMinY;
 
-            int placedSnow = 0;
-            for (int y = Math.max(startY, (int) icebergMaxY + 1); y >= endY; --y)
-            {
-                final BlockState state = context.getBlockState(y);
-                if ((state.isAir() && y < icebergMaxY && random.nextDouble() > 0.01)
-                    || ((state.getBlock() == TFCBlocks.SALT_WATER.get() || state.getBlock() == Blocks.WATER) && y > (int) icebergMinY && y < seaLevel && icebergMinY != 0 && random.nextDouble() > 0.15))
+                icebergMinY = seaLevel - icebergMaxY - 7;
+                icebergMaxY += seaLevel;
+
+                final int snowDepth = 2 + random.nextInt(4);
+                final int snowBoundaryY = seaLevel + 18 + random.nextInt(10);
+
+                int placedSnow = 0;
+                for (int y = Math.max(startY, (int) icebergMaxY + 1); y >= endY; --y)
                 {
-                    if (placedSnow <= snowDepth && y > snowBoundaryY)
+                    final BlockState state = context.getBlockState(y);
+                    if ((state.isAir() && y < icebergMaxY && random.nextDouble() > 0.01)
+                        || ((state.getBlock() == TFCBlocks.SALT_WATER.get() || state.getBlock() == Blocks.WATER) && y > (int) icebergMinY && y < seaLevel && icebergMinY != 0 && random.nextDouble() > 0.15))
                     {
-                        context.setBlockState(y, snow);
-                        ++placedSnow;
-                    }
-                    else
-                    {
-                        context.setBlockState(y, packedIce);
+                        if (placedSnow <= snowDepth && y > snowBoundaryY)
+                        {
+                            context.setBlockState(y, snow);
+                            ++placedSnow;
+                        }
+                        else
+                        {
+                            context.setBlockState(y, packedIce);
+                        }
                     }
                 }
             }
         }
         else // Place sea ice if no iceberg at this spot
         {
-            final boolean placeIce;
-            final double iceStart = 1.5;
-            final double solidIceStart = -0.5;
+            placeSeaIce(context, x, z, seaLevel, maxAnnualTemperature);
+        }
+    }
 
-            // Skip sampling the cellular noise if cold enough for solid ice/too warm for ice
-            if (maxAnnualTemperature < solidIceStart)
-            {
-                placeIce = true;
-            }
-            else if (maxAnnualTemperature > iceStart)
-            {
-                placeIce = false;
-            }
-            else
-            {
-                final double tempFactor = Mth.clampedMap(maxAnnualTemperature, iceStart, solidIceStart, 0.3, 0.04);
-                placeIce = this.patternedNoise.noise(x, z) > tempFactor;
-            }
+    private void placeSeaIce(SurfaceBuilderContext context, int x, int z, int seaLevel, float maxAnnualTemperature)
+    {
+        final boolean placeIce;
+        final double iceStart = 1.5;
+        final double solidIceStart = -0.5;
 
-            if (placeIce)
+        final BlockState seaIce = TFCBlocks.SEA_ICE.get().defaultBlockState();
+
+        // Skip sampling the cellular noise if cold enough for solid ice/too warm for ice
+        if (maxAnnualTemperature < solidIceStart)
+        {
+            placeIce = true;
+        }
+        else if (maxAnnualTemperature > iceStart)
+        {
+            placeIce = false;
+        }
+        else
+        {
+            final double tempFactor = Mth.clampedMap(maxAnnualTemperature, iceStart, solidIceStart, 0.3, 0.04);
+            placeIce = this.patternedNoise.noise(x, z) > tempFactor;
+        }
+
+        if (placeIce)
+        {
+            final int y = seaLevel - 1;
+            final BlockState state = context.getBlockState(y);
+            if (state.getBlock() == TFCBlocks.SALT_WATER.get() || state.getBlock() == Blocks.WATER)
             {
-                final int y = seaLevel - 1;
-                final BlockState state = context.getBlockState(y);
-                if (state.getBlock() == TFCBlocks.SALT_WATER.get() || state.getBlock() == Blocks.WATER)
-                {
-                    context.setBlockState(y, seaIce);
-                }
+                context.setBlockState(y, seaIce);
             }
         }
     }

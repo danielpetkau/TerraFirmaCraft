@@ -64,17 +64,13 @@ public class IceSheetShieldVolcanoSurfaceBuilder implements SurfaceBuilder
         }
 
         final int seaLevel = context.getSeaLevel();
-        if (startY < minFreezingHeight || (hasStonyPeaks && startY > glacierSurfaceHeight + 2.5) || (startY < glacierBaseHeight - 1.5))
+        if (startY <= seaLevel)
         {
-            // Freeze the ocean, if relevant
-            if (startY <= seaLevel)
-            {
-                ShoreAndOceanSurfaceBuilder.OLD_SHIELD_VOLCANO.apply(seed).buildSurface(context, startY, endY);
-            }
-            else
-            {
-                this.baseVolcanoSurfaceBuilder.buildSurface(context, startY, endY);
-            }
+            ShoreAndOceanSurfaceBuilder.OLD_SHIELD_VOLCANO.apply(seed);
+        }
+        else if (startY < minFreezingHeight || (hasStonyPeaks && startY > glacierSurfaceHeight + 2.5) || (startY < glacierBaseHeight - 1.5))
+        {
+            this.baseVolcanoSurfaceBuilder.buildSurface(context, startY, endY);
         }
         else
         {

@@ -79,7 +79,7 @@ public final class TFCBiomes
     public static final BiomeExtension VOLCANIC_OCEANIC_MOUNTAINS = register("volcanic_oceanic_mountains", builder().heightmap(seed -> BiomeNoise.mountains(seed, -24, 50)).surface(ShoreAndOceanSurfaceBuilder.VOLCANIC_MOUNTAINS).aquiferHeightOffset(-8).salty().volcanoes(2, -12, 50, 20).type(RiverBlendType.CAVE)); // Volcanic oceanic islands. Slightly smaller and lower but with very plentiful volcanoes
 
     // Island Only
-    public static final BiomeExtension GUANO_ISLAND = register("guano_island", builder().heightmap(BiomeNoise::rockyIslands).surface(SimpleSurfaceBuilder.ROCKY_SHORE).spawnable().type(RiverBlendType.CAVE).noSandyRiverShores().salty()); // Mimic oceanic mountains
+    public static final BiomeExtension GUANO_ISLAND = register("guano_island", builder().heightmap(BiomeNoise::rockyIslands).surface(ShoreAndOceanSurfaceBuilder.ROCKY_SHORE).spawnable().type(RiverBlendType.CAVE).noSandyRiverShores().salty()); // Mimic oceanic mountains
 
     // Shores
     // Each shore type is paired with a secondary shore type, which is sometimes applied
@@ -100,7 +100,7 @@ public final class TFCBiomes
     public static final BiomeExtension COASTAL_DUNES = register("coastal_dunes", builder().heightmap(seed -> BiomeNoise.constant(0)).surface(ShoreAndOceanSurfaceBuilder.SANDY).aquiferHeightOffset(-40).type(BiomeBlendType.LAND).salty().shore().type(RiverBlendType.WIDE_DEEP).noRivers().noSandyRiverShores().type(ShoreBlendType.DUNES));
 
     // Chaotic rock formations, tide pools, and blowholes
-    public static final BiomeExtension ROCKY_SHORES = register("rocky_shores", builder().heightmap(seed -> BiomeNoise.constant(-15)).surface(SimpleSurfaceBuilder.ROCKY_SHORE).aquiferHeightOffset(-40).type(BiomeBlendType.LAND).salty().shore().type(RiverBlendType.CANYON).noRivers().noSandyRiverShores().type(ShoreBlendType.ROCKY_SHORES));
+    public static final BiomeExtension ROCKY_SHORES = register("rocky_shores", builder().heightmap(seed -> BiomeNoise.constant(-15)).surface(ShoreAndOceanSurfaceBuilder.ROCKY_SHORE).aquiferHeightOffset(-40).type(BiomeBlendType.LAND).salty().shore().type(RiverBlendType.CANYON).noRivers().noSandyRiverShores().type(ShoreBlendType.ROCKY_SHORES));
 
     // Similar Rocky Shores, but with beaches mixed in
     public static final BiomeExtension EMBAYMENTS = register("embayments", builder().heightmap(BiomeNoise::shore).surface(ShoreAndOceanSurfaceBuilder.SEA_CLIFFS).aquiferHeightOffset(-40).type(BiomeBlendType.LAND).salty().shore().type(RiverBlendType.CANYON).noRivers().noSandyRiverShores().type(ShoreBlendType.EMBAYMENTS)); //
