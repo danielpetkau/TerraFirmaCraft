@@ -150,7 +150,7 @@ public class WildDoubleCropBlock extends WildCropBlock
     {
         if (placer instanceof Player)
         {
-            level.setBlockAndUpdate(pos.above(), defaultBlockState().setValue(PART, DoubleCropBlock.Part.TOP));
+            level.setBlockAndUpdate(pos.above(), state.setValue(PART, DoubleCropBlock.Part.TOP));
         }
     }
 
