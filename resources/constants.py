@@ -21,6 +21,7 @@ class Ore(NamedTuple):
     required_tool: str
     tag: str
     dye_color: Optional[str] = None
+    simple_blocks: bool = False
 
 
 class OreGrade(NamedTuple):
@@ -311,8 +312,8 @@ ORES: dict[str, Ore] = {
     'limonite': Ore('cast_iron', True, 'copper', 'iron', 'yellow'),
     'sphalerite': Ore('zinc', True, 'copper', 'zinc', 'gray'),
     'tetrahedrite': Ore('copper', True, 'copper', 'copper', 'gray'),
-    'bituminous_coal': Ore(None, False, 'copper', 'coal'),
-    'lignite': Ore(None, False, 'copper', 'coal'),
+    'bituminous_coal': Ore(None, False, 'copper', 'coal', simple_blocks=True),
+    'lignite': Ore(None, False, 'copper', 'coal', simple_blocks=True),
     'gypsum': Ore(None, False, 'copper', 'gypsum'),
     'graphite': Ore(None, False, 'copper', 'graphite'),
     'sulfur': Ore(None, False, 'copper', 'sulfur'),
@@ -321,7 +322,7 @@ ORES: dict[str, Ore] = {
     'saltpeter': Ore(None, False, 'copper', 'saltpeter'),
     'sylvite': Ore(None, False, 'copper', 'sylvite'),
     'borax': Ore(None, False, 'copper', 'borax'),
-    'halite': Ore(None, False, 'bronze', 'halite'),
+    'halite': Ore(None, False, 'bronze', 'halite', simple_blocks=True),
     'amethyst': Ore(None, False, 'steel', 'amethyst'),  # Mohs: 7
     'diamond': Ore(None, False, 'black_steel', 'diamond'),  # Mohs: 10
     'emerald': Ore(None, False, 'steel', 'emerald'),  # Mohs: 7.5-8

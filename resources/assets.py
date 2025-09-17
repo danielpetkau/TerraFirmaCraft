@@ -224,60 +224,61 @@ def generate(rm: ResourceManager):
 
         # Ores
         for ore, ore_data in ORES.items():
-            if ore_data.graded:
-                # Small Ores / Groundcover Blocks
-                block = rm.blockstate('tfc:ore/small_%s' % ore, variants={"": four_ways('tfc:block/groundcover/%s' % ore)}, use_default_model=False)
-                block.with_lang(lang('small %s', ore)).with_block_loot('tfc:ore/small_%s' % ore)
+            if not ore_data.simple_blocks:
+                if ore_data.graded:
+                    # Small Ores / Groundcover Blocks
+                    block = rm.blockstate('tfc:ore/small_%s' % ore, variants={"": four_ways('tfc:block/groundcover/%s' % ore)}, use_default_model=False)
+                    block.with_lang(lang('small %s', ore)).with_block_loot('tfc:ore/small_%s' % ore)
 
-                rm.item_model('tfc:ore/small_%s' % ore).with_lang(lang('small %s', ore))
+                    rm.item_model('tfc:ore/small_%s' % ore).with_lang(lang('small %s', ore))
 
-                for grade in ORE_GRADES:
-                    block = rm.blockstate(('ore', grade + '_' + ore, rock), 'tfc:block/ore/%s_%s/%s' % (grade, ore, rock))
+                    for grade in ORE_GRADES:
+                        block = rm.blockstate(('ore', grade + '_' + ore, rock), 'tfc:block/ore/%s_%s/%s' % (grade, ore, rock))
 
+                        if rock == 'claystone' or rock == 'shale':
+                            block.with_block_model({
+                                'side': 'tfc:block/rock/raw/%s' % rock,
+                                'end': 'tfc:block/rock/raw/%s_top' % rock,
+                                'overlay': 'tfc:block/ore/%s_%s' % (grade, ore),
+                                'overlay_end': 'tfc:block/ore/%s_%s' % (grade, ore)
+                            }, parent='tfc:block/ore_column')
+                        else:
+                            block.with_block_model({
+                                'all': 'tfc:block/rock/raw/%s' % rock,
+                                'overlay': 'tfc:block/ore/%s_%s' % (grade, ore),
+                            }, parent='tfc:block/ore')
+                        block.with_item_model()
+                        block.with_lang(lang('%s %s %s', grade, rock, ore))
+                        block.with_block_loot('tfc:ore/%s_%s' % (grade, ore))
+
+                        rm.block('tfc:ore/%s_%s/%s/prospected' % (grade, ore, rock)).with_lang(lang(ore))
+                else:
+                    block = rm.blockstate(('ore', ore, rock), 'tfc:block/ore/%s/%s' % (ore, rock))
                     if rock == 'claystone' or rock == 'shale':
                         block.with_block_model({
                             'side': 'tfc:block/rock/raw/%s' % rock,
                             'end': 'tfc:block/rock/raw/%s_top' % rock,
-                            'overlay': 'tfc:block/ore/%s_%s' % (grade, ore),
-                            'overlay_end': 'tfc:block/ore/%s_%s' % (grade, ore)
+                            'overlay': 'tfc:block/ore/%s' % ore,
+                            'overlay_end': 'tfc:block/ore/%s' % ore,
                         }, parent='tfc:block/ore_column')
                     else:
                         block.with_block_model({
                             'all': 'tfc:block/rock/raw/%s' % rock,
-                            'overlay': 'tfc:block/ore/%s_%s' % (grade, ore),
+                            'overlay': 'tfc:block/ore/%s' % ore
                         }, parent='tfc:block/ore')
                     block.with_item_model()
-                    block.with_lang(lang('%s %s %s', grade, rock, ore))
-                    block.with_block_loot('tfc:ore/%s_%s' % (grade, ore))
+                    if ore == 'diamond':
+                        block.with_lang(lang('%s kimberlite', rock))
+                    else:
+                        block.with_lang(lang('%s %s', rock, ore))
+                    rm.block_loot('tfc:ore/%s/%s' % (ore, rock), 'tfc:ore/%s' % ore)
 
-                    rm.block('tfc:ore/%s_%s/%s/prospected' % (grade, ore, rock)).with_lang(lang(ore))
-            else:
-                block = rm.blockstate(('ore', ore, rock), 'tfc:block/ore/%s/%s' % (ore, rock))
-                if rock == 'claystone' or rock == 'shale':
-                    block.with_block_model({
-                        'side': 'tfc:block/rock/raw/%s' % rock,
-                        'end': 'tfc:block/rock/raw/%s_top' % rock,
-                        'overlay': 'tfc:block/ore/%s' % ore,
-                        'overlay_end': 'tfc:block/ore/%s' % ore,
-                    }, parent='tfc:block/ore_column')
-                else:
-                    block.with_block_model({
-                        'all': 'tfc:block/rock/raw/%s' % rock,
-                        'overlay': 'tfc:block/ore/%s' % ore
-                    }, parent='tfc:block/ore')
-                block.with_item_model()
-                if ore == 'diamond':
-                    block.with_lang(lang('%s kimberlite', rock))
-                else:
-                    block.with_lang(lang('%s %s', rock, ore))
-                rm.block_loot('tfc:ore/%s/%s' % (ore, rock), 'tfc:ore/%s' % ore)
-
-                name = lang(ore)
-                if ore == 'diamond':
-                    name = lang('kimberlite')
-                if ore == 'pyrite':
-                    name = lang('native gold?')
-                rm.block('tfc:ore/%s/%s/prospected' % (ore, rock)).with_lang(name)
+                    name = lang(ore)
+                    if ore == 'diamond':
+                        name = lang('kimberlite')
+                    if ore == 'pyrite':
+                        name = lang('native gold?')
+                    rm.block('tfc:ore/%s/%s/prospected' % (ore, rock)).with_lang(name)
 
     # Loose Ore Items
     for ore, ore_data in ORES.items():
