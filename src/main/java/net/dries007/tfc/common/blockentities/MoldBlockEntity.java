@@ -371,13 +371,6 @@ public class MoldBlockEntity extends TickableInventoryBlockEntity<MoldBlockEntit
         }
 
         @Override
-        public ItemStack extractItem(int slot, int amount, boolean simulate)
-        {
-            System.out.println("extracting");
-            return super.extractItem(slot, amount, simulate);
-        }
-
-        @Override
         protected void onContentsChanged(int slot) {
             moldTable.markForSync();
         }
