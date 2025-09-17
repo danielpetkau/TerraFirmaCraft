@@ -146,6 +146,34 @@ public final class RiverNoise
         };
     }
 
+    // A copy of wide, but a little deeper to help with shore blending
+    public static RiverNoiseSampler wideDeep(Seed seed)
+    {
+        return new RiverNoiseSampler()
+        {
+
+            final Noise2D baseNoise = new OpenSimplex2D(seed.next()).octaves(4).spread(0.05f).scaled(-2.5f, 1.5f);
+            final Noise2D distNoise = new OpenSimplex2D(seed.next()).octaves(4).spread(0.05f).scaled(-0.15f, 0.15f);
+
+            double height;
+
+            @Override
+            public double setColumnAndSampleHeight(RiverInfo info, int x, int z, double heightIn, double caveWeight, double thisWeight)
+            {
+                final double distFac = info.normDistSq() * 0.8f + distNoise.noise(x, z);
+                final double riverHeight = 55 + distFac * 7 + baseNoise.noise(x, z);
+
+                return height = Math.min(riverHeight, heightIn);
+            }
+
+            @Override
+            public double noise(int y, double noiseIn)
+            {
+                return y > height ? 0 : noiseIn;
+            }
+        };
+    }
+
     public static RiverNoiseSampler canyon(Seed seed)
     {
         return new RiverNoiseSampler()
