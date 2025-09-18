@@ -2,12 +2,12 @@
   "__comment__": "This file was automatically created by mcresources",
   "parent": "tfc:world/root",
   "criteria": {
-    "metal_ores": {
+    "small_ore_pieces": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
-            "items": "#tfc:metal_ores"
+            "items": "#tfc:small_ore_pieces"
           }
         ]
       }
@@ -31,7 +31,7 @@
   },
   "requirements": [
     [
-      "metal_ores"
+      "small_ore_pieces"
     ]
   ]
 }

@@ -23,7 +23,7 @@ import net.dries007.tfc.config.TFCConfig;
  * <p>
  * This only executes logic on server side, on client side it simply sets the lastAverageNutrients
  */
-public class NutritionData
+public class NutritionData implements INutritionData
 {
     private final LinkedList<FoodData> records;
     private final float defaultNutritionValue, defaultDairyNutritionValue;
@@ -44,6 +44,10 @@ public class NutritionData
         calculateNutrition();
     }
 
+    /**
+     * @return The average of the nutrition values of the player
+     */
+    @Override
     public float getAverageNutrition()
     {
         return averageNutrients;
@@ -52,29 +56,46 @@ public class NutritionData
     /**
      * @return The nutrient value, in [0, 1]
      */
+    @Override
     public float getNutrient(Nutrient nutrient)
     {
         return nutrients[nutrient.ordinal()];
     }
 
+    /**
+     * @return An array of all nutrient values, each in [0, 1]
+     */
+    @Override
     public float[] getNutrients()
     {
         return nutrients;
     }
 
     /**
-     * Set the current {@code hunger} value of the player, in {@code [0, PlayerInfo.MAX_HUNGER]}. This may update
-     * the nutrition of the player.
+     * Set the current {@code hunger} value of the player, in {@code [0, PlayerInfo.MAX_HUNGER]}.
+     * This may update the nutrition of the player.
      */
-    public void setHunger(int hunger)
+    @Override
+    public void setHungerAndUpdate(int hunger)
     {
-        this.hunger = hunger;
+        setHunger(hunger);
         calculateNutrition();
     }
 
     /**
-     * Sets data from a packet, received on client side. Does not contain the full data only the important information
+     * Set the current {@code hunger} value of the player, in {@code [0, PlayerInfo.MAX_HUNGER]}.
+     * This <strong>must not</strong> update the nutrition of the player.
      */
+    @Override
+    public void setHunger(int hunger)
+    {
+        this.hunger = hunger;
+    }
+
+    /**
+     * Sets data from a packet, received on client side. Only contains the array of nutrient values of the player, since only those are needed for the client
+     */
+    @Override
     public void onClientUpdate(float[] nutrients)
     {
         System.arraycopy(nutrients, 0, this.nutrients, 0, this.nutrients.length);
@@ -82,9 +103,12 @@ public class NutritionData
     }
 
     /**
-     * Applies nutrients to the food data
+     * Applies nutrients of the food data to the player.
+     * <p>
      * If the last meal you ate had hunger, and this one didn't have hunger, we will apply the meal
      * Use case: Milk drinking. We add milk as a meal if and only if you just ate something
+     *
+     * @param data The {@link FoodData} of the eaten food
      */
     public void addNutrients(FoodData data)
     {
@@ -95,11 +119,28 @@ public class NutritionData
         }
     }
 
+    /**
+     * Redirects to {@link NutritionData#addNutrients(FoodData data)}
+     */
+    @Override
+    public void addNutrients(FoodData data, int currentHunger)
+    {
+        addNutrients(data);
+    }
+
+    /**
+     * @return The relevant data for computing nutrition values written to an NBT Tag
+     */
+    @Override
     public Tag writeToNbt()
     {
         return FoodData.LIST_CODEC.encodeStart(NbtOps.INSTANCE, records).getOrThrow();
     }
 
+    /**
+     * Reads relevant data for computing nutrition values from an NBT Tag
+     */
+    @Override
     public void readFromNbt(@Nullable Tag nbt)
     {
         records.clear();
@@ -107,6 +148,9 @@ public class NutritionData
         calculateNutrition();
     }
 
+    /**
+     * Calculates the current nutrition based on the record of last eaten meals and the current hunger of the player
+     */
     private void calculateNutrition()
     {
         // Reset
@@ -166,6 +210,9 @@ public class NutritionData
         updateAverageNutrients(); // Also calculate overall average
     }
 
+    /**
+     * Recalculates the average nutrients of the player
+     */
     private void updateAverageNutrients()
     {
         averageNutrients = 0;
@@ -176,6 +223,11 @@ public class NutritionData
         averageNutrients /= Nutrient.TOTAL;
     }
 
+    /**
+     * Applies an operator on each nutrient value, currently used for summing up the nutrients and capping them to [0, 1]
+     * @param array The nutrient array of the player
+     * @param operator An operator that maps each {@link Nutrient} to a double
+     */
     private void updateAllNutrients(float[] array, ToDoubleFunction<Nutrient> operator)
     {
         for (Nutrient nutrient : Nutrient.VALUES)

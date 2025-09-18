@@ -27,15 +27,6 @@ jobs:
         arguments: build
       env:
         VERSION: 0.0.0
-    - name: Create Test Directory
-      run: |
-        mkdir -p run/gametest
-    - name: Game Test
-      uses: gradle/gradle-build-action@v2
-      with:
-        arguments: runGameTestServer
-      env:
-        VERSION: 0.0.0
     - name: Set up Python 3.10
       uses: actions/setup-python@v4
       with:

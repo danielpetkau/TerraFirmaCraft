@@ -101,6 +101,11 @@ public class Vessel implements IMold, ItemContainer, FluidContainer, HeatContain
         return vessel.fluidContent().isEmpty() && Helpers.isEmpty(vessel.itemContent());
     }
 
+    public boolean hasFluidContent()
+    {
+        return !vessel.fluidContent().isEmpty();
+    }
+
     @Override
     public void setTemperature(float temperature)
     {

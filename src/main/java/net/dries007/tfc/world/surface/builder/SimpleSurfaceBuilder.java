@@ -8,6 +8,7 @@ package net.dries007.tfc.world.surface.builder;
 
 import net.dries007.tfc.world.surface.SurfaceBuilderContext;
 import net.dries007.tfc.world.surface.SurfaceState;
+import net.dries007.tfc.world.surface.SurfaceStates;
 
 import static net.dries007.tfc.world.surface.SurfaceStates.*;
 
@@ -16,6 +17,7 @@ public class SimpleSurfaceBuilder implements SurfaceBuilder
     public static final SurfaceBuilderFactory ROCKY_SHORE = seed -> new SimpleSurfaceBuilder(RAW, RAW, GRAVEL, true);
     public static final SurfaceBuilderFactory ROCKY_VOLCANIC_SOIL = seed -> new SimpleSurfaceBuilder(VOLCANIC_TOP_GRASS_TO_LOCAL_GRAVEL, VOLCANIC_MID_DIRT_TO_LOCAL_GRAVEL, GRAVEL, true);
     public static final SurfaceBuilderFactory VOLCANIC_SOIL = seed -> new SimpleSurfaceBuilder(VOLCANIC_TOP_GRASS_TO_LOCAL_GRAVEL, VOLCANIC_MID_DIRT_TO_LOCAL_GRAVEL, GRAVEL, true);
+    public static final SurfaceBuilderFactory OCEAN_MUD = seed -> new SimpleSurfaceBuilder(SurfaceStates.OCEAN_MUD, SurfaceStates.OCEAN_MUD, SurfaceStates.OCEAN_MUD, false);
 
     private final SurfaceState top;
     private final SurfaceState mid;

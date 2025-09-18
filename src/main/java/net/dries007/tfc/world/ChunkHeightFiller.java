@@ -109,11 +109,17 @@ public class ChunkHeightFiller
         BiomeExtension biomeAt = null, normalBiomeAt = null, shoreBiomeAt = null, oceanBiomeAt = null;
         double maxNormalWeight = 0, maxShoreWeight = 0, maxOceanWeight = 0; // Partition on biome type
 
+        boolean anySaltyBiomesNearby = false;
         for (Object2DoubleMap.Entry<BiomeExtension> entry : biomeWeights.object2DoubleEntrySet())
         {
             final double biomeWeight = entry.getDoubleValue();
             final BiomeExtension biome = entry.getKey();
             final BiomeNoiseSampler sampler = biomeNoiseSamplers.get(biome);
+
+            if (biome.isSalty())
+            {
+                anySaltyBiomesNearby = true;
+            }
 
             assert sampler != null : "Non-existent sampler for biome: " + biome.key();
 
@@ -194,7 +200,7 @@ public class ChunkHeightFiller
 
         if (useCache)
         {
-            updateLocalCaches(biomeWeights, biomeAt, info, height);
+            updateLocalCaches(biomeWeights, biomeAt, info, height, anySaltyBiomesNearby);
         }
 
         return height;
@@ -322,7 +328,7 @@ public class ChunkHeightFiller
         }
     }
 
-    protected void updateLocalCaches(Object2DoubleMap<BiomeExtension> biomeWeights, BiomeExtension biomeAt, @Nullable RiverInfo info, double height) {}
+    protected void updateLocalCaches(Object2DoubleMap<BiomeExtension> biomeWeights, BiomeExtension biomeAt, @Nullable RiverInfo info, double height, boolean couldBeSalty) {}
 
     @Nullable
     protected RiverInfo sampleRiverInfo(boolean useCache)

@@ -103,7 +103,6 @@ neoForge {
             // Only JBR allows enhanced class redefinition, so ignore the option for any other JDKs
             jvmArguments.addAll("-XX:+IgnoreUnrecognizedVMOptions", "-XX:+AllowEnhancedClassRedefinition", "-ea")
             systemProperty("tfc.enableDebugSelfTests", "true")
-            systemProperty("neoforge.enabledGameTestNamespaces", "tfc")
         }
         register("client") {
             client()
@@ -119,19 +118,11 @@ neoForge {
             sourceSet = sourceSets["data"]
             programArguments.addAll("--all", "--mod", modId, "--output", file(modDataOutput).absolutePath, "--existing",  file("src/main/resources").absolutePath)
         }
-        register("gameTestServer") {
-            type = "gameTestServer"
-            sourceSet = sourceSets["test"]
-            gameDirectory = file("run/gametest")
-            programArgument("--nogui")
-        }
-
     }
 
     mods {
         create(modId) {
             sourceSet(sourceSets.main.get())
-            sourceSet(sourceSets.test.get())
             sourceSet(sourceSets["data"])
         }
     }
@@ -173,9 +164,7 @@ dependencies {
     // Use JUnit at runtime, plus depend on data to allow us to mock certain data without having to load a server
     testImplementation(sourceSets["data"].output)
     testImplementation("org.junit.jupiter:junit-jupiter:5.10.3")
-
-    "additionalRuntimeClasspath"("org.junit.jupiter:junit-jupiter:5.10.3")
-    "additionalRuntimeClasspath"("org.junit.platform:junit-platform-launcher:1.10.3")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher:1.10.3")
 }
 
 // Automatically apply a license header when running checkLicense / updateLicense

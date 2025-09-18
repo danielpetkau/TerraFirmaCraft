@@ -108,7 +108,7 @@ def generate(rm: ResourceManager):
     world.advancement('dune', icon('tfc:plant/barrel_cactus'), 'Dune', 'Travel to a desert and find a barrel cactus', 'seeds', inventory_changed('tfc:plant/barrel_cactus'))
     world.advancement('fruit', food_icon('tfc:food/orange'), 'Healthy Diet', 'Eat every berry and tree fruit in TFC', 'root', multiple_all(*[consume_item('tfc:food/%s' % f, name=f) for f in (*BERRIES, *FRUITS)]), requirements=[[f] for f in (*BERRIES, *FRUITS)], frame='challenge')
     world.advancement('saplings', icon('tfc:wood/sapling/pine'), 'Arborist', 'Find every (non-fruit) tree sapling in TFC', 'root', multiple_all(*[inventory_changed('tfc:wood/sapling/%s' % t, name=t) for t in WOODS.keys()]), requirements=[[t] for t in WOODS.keys()])
-    world.advancement('nugget', icon('tfc:ore/small_native_copper'), 'A Weird Rock', 'Find a metal nugget on the ground', 'root', inventory_changed('#tfc:metal_ores'))
+    world.advancement('nugget', icon('tfc:ore/small_native_copper'), 'A Weird Rock', 'Find a metal nugget on the ground', 'root', inventory_changed('#tfc:small_ore_pieces'))
     world.advancement('coal', icon('tfc:ore/lignite'), 'Carboniferous', 'Find Bituminous Coal or Lignite', 'nugget', multiple_all(inventory_changed('tfc:ore/lignite'), inventory_changed('tfc:ore/bituminous_coal')))
     world.advancement('diamond', icon('tfc:ore/diamond'), 'DIAM- oh, wait', 'Find Diamonds (Kimberlite)', 'nugget', inventory_changed('tfc:ore/diamond'))
     world.advancement('graphite', icon('tfc:ore/graphite'), 'Better than Diamonds', 'Find Graphite', 'nugget', inventory_changed('tfc:ore/graphite'), frame='goal')
