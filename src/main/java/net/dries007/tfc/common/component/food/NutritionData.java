@@ -44,6 +44,9 @@ public class NutritionData implements INutritionData
         calculateNutrition();
     }
 
+    /**
+     * @return The average of the nutrition values of the player
+     */
     @Override
     public float getAverageNutrition()
     {
@@ -59,6 +62,9 @@ public class NutritionData implements INutritionData
         return nutrients[nutrient.ordinal()];
     }
 
+    /**
+     * @return An array of all nutrient values, each in [0, 1]
+     */
     @Override
     public float[] getNutrients()
     {
@@ -76,6 +82,10 @@ public class NutritionData implements INutritionData
         calculateNutrition();
     }
 
+    /**
+     * Set the current {@code hunger} value of the player, in {@code [0, PlayerInfo.MAX_HUNGER]}.
+     * This <strong>must not</strong> update the nutrition of the player.
+     */
     @Override
     public void setHunger(int hunger)
     {
@@ -83,7 +93,7 @@ public class NutritionData implements INutritionData
     }
 
     /**
-     * Sets data from a packet, received on client side. Does not contain the full data only the important information
+     * Sets data from a packet, received on client side. Only contains the array of nutrient values of the player, since only those are needed for the client
      */
     @Override
     public void onClientUpdate(float[] nutrients)
@@ -93,7 +103,8 @@ public class NutritionData implements INutritionData
     }
 
     /**
-     * Applies nutrients to the food data
+     * Applies nutrients of the food data to the player.
+     * <p>
      * If the last meal you ate had hunger, and this one didn't have hunger, we will apply the meal
      * Use case: Milk drinking. We add milk as a meal if and only if you just ate something
      */
@@ -107,12 +118,18 @@ public class NutritionData implements INutritionData
         }
     }
 
+    /**
+     * @return The relevant data for computing nutrition values written to an NBT Tag
+     */
     @Override
     public Tag writeToNbt()
     {
         return FoodData.LIST_CODEC.encodeStart(NbtOps.INSTANCE, records).getOrThrow();
     }
 
+    /**
+     * Reads relevant data for computing nutrition values from an NBT Tag
+     */
     @Override
     public void readFromNbt(@Nullable Tag nbt)
     {
@@ -121,6 +138,9 @@ public class NutritionData implements INutritionData
         calculateNutrition();
     }
 
+    /**
+     * Calculates the current nutrition based on the record of last eaten meals and the current hunger of the player
+     */
     private void calculateNutrition()
     {
         // Reset
@@ -180,6 +200,9 @@ public class NutritionData implements INutritionData
         updateAverageNutrients(); // Also calculate overall average
     }
 
+    /**
+     * Recalculates the average nutrients of the player
+     */
     private void updateAverageNutrients()
     {
         averageNutrients = 0;
@@ -190,6 +213,11 @@ public class NutritionData implements INutritionData
         averageNutrients /= Nutrient.TOTAL;
     }
 
+    /**
+     * Applies an operator on each nutrient value, currently used for summing up the nutrients and capping them to [0, 1]
+     * @param array The nutrient array of the player
+     * @param operator An operator that maps each {@link Nutrient} to a double
+     */
     private void updateAllNutrients(float[] array, ToDoubleFunction<Nutrient> operator)
     {
         for (Nutrient nutrient : Nutrient.VALUES)

@@ -1,3 +1,9 @@
+/*
+ * Licensed under the EUPL, Version 1.2.
+ * You may obtain a copy of the Licence at:
+ * https://joinup.ec.europa.eu/collection/eupl/eupl-text-eupl-12
+ */
+
 package net.dries007.tfc.common.component.food;
 
 import net.minecraft.nbt.Tag;
@@ -6,7 +12,7 @@ import org.jetbrains.annotations.Nullable;
 public interface INutritionData
 {
     /**
-     * @return The average nutrition of the player
+     * @return The average of the nutrition values of the player
      */
     float getAverageNutrition();
 
@@ -16,7 +22,7 @@ public interface INutritionData
     float getNutrient(Nutrient nutrient);
 
     /**
-     * @return An array of all nutrient values, in [0, 1]
+     * @return An array of all nutrient values, each in [0, 1]
      */
     float[] getNutrients();
 
@@ -36,17 +42,17 @@ public interface INutritionData
     void setHunger(int hunger);
 
     /**
-     * Sets data from a packet, received on client side. Does not contain the full data only the important information
+     * Sets data from a packet, received on client side. Only contains the array of nutrient values of the player, since only those are needed for the client
      */
     void onClientUpdate(float[] nutrients);
 
     /**
-     * Applies nutrients to the food data
+     * Applies nutrients of the food data to the player
      */
     void addNutrients(FoodData data);
 
     /**
-     * Applies nutrients to the food data, and incorporates the current hunger level of the player
+     * Applies nutrients of the food data to the player, and incorporates the current hunger level of the player
      */
     default void addNutrients(FoodData data, int currentHunger)
     {
@@ -54,12 +60,12 @@ public interface INutritionData
     }
 
     /**
-     * @return The relevant data written to an NBT Tag
+     * @return The relevant data for computing nutrition values written to an NBT Tag
      */
     Tag writeToNbt();
 
     /**
-     * Reads relevant data from an NBT Tag
+     * Reads relevant data for computing nutrition values from an NBT Tag
      */
     void readFromNbt(@Nullable Tag nbt);
 }
