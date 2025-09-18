@@ -207,20 +207,22 @@ public final class PlayerInfo extends net.minecraft.world.food.FoodData implemen
         addThirst(food.water());
         addIntoxication(food.intoxication());
 
+        if (food.hunger() > 0)
+        {
+            // In order to get the exact saturation we want, apply this scaling factor here
+            this.food.eat(food.hunger(), food.saturation() / (2f * food.hunger()));
+        }
+
+        // Add nutrients and update the hunger value in NutritionData
         if (!player.level().isClientSide)
         {
             nutrition.addNutrients(food);
+            nutrition.setHunger(getFoodLevel());
         }
 
         if (player instanceof ServerPlayer serverPlayer && nutrition.getAverageNutrition() >= 0.999)
         {
             TFCAdvancements.FULL_NUTRITION.trigger(serverPlayer);
-        }
-
-        if (food.hunger() > 0)
-        {
-            // In order to get the exact saturation we want, apply this scaling factor here
-            this.food.eat(food.hunger(), food.saturation() / (2f * food.hunger()));
         }
 
         modified = true;
@@ -301,8 +303,9 @@ public final class PlayerInfo extends net.minecraft.world.food.FoodData implemen
             }
         }
 
-        // Next, tick the original food stats
+        // Next, tick the original food stats and update the hunger value in NutritionData
         food.tick(player);
+        nutrition.setHunger(getFoodLevel());
 
         // Apply custom TFC regeneration
         if (player.tickCount % 10 == 0)
