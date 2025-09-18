@@ -3,7 +3,7 @@
   "category": "misc",
   "ingredients": [
     {
-      "item": "tfc:unfired_mold_table"
+      "item": "tfc:ceramic/unfired_mold_table"
     }
   ],
   "result": {

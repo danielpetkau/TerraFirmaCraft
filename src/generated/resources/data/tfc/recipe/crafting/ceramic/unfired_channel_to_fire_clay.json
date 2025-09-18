@@ -3,7 +3,7 @@
   "category": "misc",
   "ingredients": [
     {
-      "item": "tfc:unfired_channel"
+      "item": "tfc:ceramic/unfired_channel"
     }
   ],
   "result": {

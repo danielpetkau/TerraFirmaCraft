@@ -1,7 +1,7 @@
 {
   "ingredient": [
     {
-      "item": "tfc:unfired_mold_table"
+      "item": "tfc:ceramic/unfired_mold_table"
     },
     {
       "item": "tfc:mold_table"

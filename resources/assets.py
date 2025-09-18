@@ -1186,10 +1186,10 @@ def generate(rm: ResourceManager):
     for pottery in SIMPLE_UNFIRED_POTTERY:  # just the unfired item (fired is a vanilla item)
         rm.item_model(('ceramic', 'unfired_' + pottery)).with_lang(lang('Unfired %s', pottery))
 
-    rm.item('unfired_channel').with_lang(lang('unfired casting channel')).with_item_model(
+    rm.item('ceramic/unfired_channel').with_lang(lang('unfired casting channel')).with_item_model(
         {'0': 'tfc:block/fire_clay_block'}, parent='tfc:item/channel'
     )
-    rm.item('unfired_mold_table').with_lang(lang('unfired mold table')).with_item_model(
+    rm.item('ceramic/unfired_mold_table').with_lang(lang('unfired mold table')).with_item_model(
         {'0': 'tfc:block/fire_clay_block', '1': 'tfc:block/fire_clay_block'},
         parent='tfc:item/mold_table',
     )
