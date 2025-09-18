@@ -45,15 +45,18 @@ import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.neoforged.neoforge.fluids.FluidStack;
 
-public class MoldBlockEntityRenderer implements BlockEntityRenderer<MoldBlockEntity> {
+public class MoldBlockEntityRenderer implements BlockEntityRenderer<MoldBlockEntity>
+{
 
     @Override
     public void render(MoldBlockEntity mold, float partialTicks, PoseStack poseStack, MultiBufferSource buffer,
-            int combinedLight, int combinedOverlay) {
+            int combinedLight, int combinedOverlay)
+    {
         VertexConsumer builder = buffer.getBuffer(RenderType.cutout());
 
         // Render flow into the mold
-        if (mold.hasSource()) {
+        if (mold.hasSource())
+        {
             ResourceLocation texture = IClientFluidTypeExtensions.of(mold.getSourceFluid().getFluidType())
                     .getStillTexture();
             int color = RenderHelpers.getFluidColor(mold.getSourceFluid());
@@ -62,7 +65,8 @@ public class MoldBlockEntityRenderer implements BlockEntityRenderer<MoldBlockEnt
 
             RenderHelpers.renderChannelFlow(poseStack, builder, sprite, color, combinedLight, combinedOverlay,
                     mold.getFlowSource(), true);
-            if (mold.getFlowSource().getLeft() == Direction.UP) {
+            if (mold.getFlowSource().getLeft() == Direction.UP)
+            {
                 RenderHelpers.renderChannelFlowCenter(poseStack, builder, sprite, color, combinedLight,
                         combinedOverlay);
             }
@@ -70,7 +74,8 @@ public class MoldBlockEntityRenderer implements BlockEntityRenderer<MoldBlockEnt
 
         ItemStack moldStack = mold.getMoldStack();
         IMold moldItem = IMold.get(moldStack);
-        if (moldItem != null) {
+        if (moldItem != null)
+        {
             FluidStack fluidInTank = moldItem.getFluidInTank(0);
             MetalItem solidMetal = MetalItem.unknown();
 
@@ -78,7 +83,8 @@ public class MoldBlockEntityRenderer implements BlockEntityRenderer<MoldBlockEnt
             boolean shouldRenderSolid = false;
 
             // There is an output item, so render a full, solid mold
-            if (!mold.getOutputStack().isEmpty()) {
+            if (!mold.getOutputStack().isEmpty())
+            {
                 fillPercent = 1;
                 shouldRenderSolid = true;
 
@@ -87,30 +93,39 @@ public class MoldBlockEntityRenderer implements BlockEntityRenderer<MoldBlockEnt
                 // that
                 HeatingRecipe recipe = HeatingRecipe.getRecipe(mold.getOutputStack());
 
-                if (recipe != null) {
+                if (recipe != null)
+                {
                     solidMetal = getMetalItemFromFluidStack(recipe.getDisplayOutputFluid());
                 }
             }
             // There is some content in the tank
-            else if (fluidInTank.getAmount() > 0) {
+            else if (fluidInTank.getAmount() > 0)
+            {
                 fillPercent = ((float) fluidInTank.getAmount()) / moldItem.getTankCapacity(0);
-                if (moldItem.isMolten()) {
+                if (moldItem.isMolten())
+                {
                     shouldRenderSolid = false;
-                } else {
+                }
+                else
+                {
                     shouldRenderSolid = true;
                     solidMetal = getMetalItemFromFluidStack(fluidInTank);
                 }
             }
 
-            if (fillPercent > 0) {
-                if (shouldRenderSolid) {
+            if (fillPercent > 0)
+            {
+                if (shouldRenderSolid)
+                {
                     final TextureAtlasSprite metalSprite = RenderHelpers.blockTexture(solidMetal.softTextureId());
                     RenderHelpers.renderTexturedQuads(
                             poseStack, builder, metalSprite, combinedLight, combinedOverlay,
                             RenderHelpers.getYVertices(2f / 16, 1f / 16, 2f / 16, 14f / 16,
                                     (1 + fillPercent * 0.95f) / 16, 14f / 16),
                             16f * (14f / 16 - 2f / 16), 16f * (14f / 16 - 2f / 16), 0, 1, 0, true);
-                } else {
+                }
+                else
+                {
                     RenderHelpers.renderFluidFace(poseStack, fluidInTank, buffer, 2f / 16, 2f / 16, 14f / 16, 14f / 16,
                             (1 + fillPercent * 0.95f) / 16, combinedOverlay, combinedLight);
                 }
@@ -129,23 +144,31 @@ public class MoldBlockEntityRenderer implements BlockEntityRenderer<MoldBlockEnt
     }
 
     @Override
-    public AABB getRenderBoundingBox(MoldBlockEntity mold) {
-        if (mold.hasSource()) {
+    public AABB getRenderBoundingBox(MoldBlockEntity mold)
+    {
+        if (mold.hasSource())
+        {
             Vec3 worldPosition = mold.getBlockPos().getCenter();
-            if (mold.getFlowSource().getLeft() == Direction.UP) {
+            if (mold.getFlowSource().getLeft() == Direction.UP)
+            {
                 return new AABB(worldPosition.add(-1.5, -0.5, -1.5),
                         worldPosition.add(1.5, 1 + mold.getFlowSource().getRight(), 1.5));
-            } else {
+            }
+            else
+            {
                 return new AABB(worldPosition.add(-1.5, -0.5, -1.5), worldPosition.add(1.5, 1.5, 1.5));
             }
-        } else {
+        }
+        else
+        {
             return new AABB(mold.getBlockPos());
         }
     }
 
     private static final Map<Fluid, MetalItem> FLUID_TO_METAL_ITEM = new HashMap<>();
 
-    private static MetalItem getMetalItemFromFluidStack(FluidStack fluidStack) {
+    private static MetalItem getMetalItemFromFluidStack(FluidStack fluidStack)
+    {
         return FLUID_TO_METAL_ITEM.computeIfAbsent(fluidStack.getFluid(),
                 (fluid) -> {
                     // Fill an ingot mold with this fluid, and try to retrieve the ingot
@@ -153,7 +176,8 @@ public class MoldBlockEntityRenderer implements BlockEntityRenderer<MoldBlockEnt
                     ingotMold.set(TFCComponents.FLUID, new FluidComponent(new FluidStack(fluid, 9999)));
 
                     CastingRecipe castingRecipe = CastingRecipe.get(IMold.get(ingotMold));
-                    if (castingRecipe == null) {
+                    if (castingRecipe == null)
+                    {
                         return MetalItem.unknown();
                     }
 
@@ -165,14 +189,17 @@ public class MoldBlockEntityRenderer implements BlockEntityRenderer<MoldBlockEnt
 
     private static final MoldModelCache MOLD_MODEL_CACHE = IndirectHashCollection.create(new MoldModelCache(new IdentityHashMap<>()));
 
-    record MoldModelCache(Map<Item, BakedModel> values) implements IndirectHashCollection.Cache {
+    record MoldModelCache(Map<Item, BakedModel> values) implements IndirectHashCollection.Cache
+    {
         @Override
-        public void clear() {
+        public void clear()
+        {
             values.clear();
         }
 
         @Override
-        public void reload(RecipeManager manager) {
+        public void reload(RecipeManager manager)
+        {
             BuiltInRegistries.ITEM.getTagOrEmpty(TFCTags.Items.USABLE_IN_MOLD_TABLE).forEach(
                     (item) -> {
                         ResourceLocation moldLocation = BuiltInRegistries.ITEM.getKey(item.value());
@@ -183,9 +210,12 @@ public class MoldBlockEntityRenderer implements BlockEntityRenderer<MoldBlockEnt
 
                         BakedModel model = Minecraft.getInstance().getModelManager().getModel(modelLocation);
 
-                        if (model != null && model != Minecraft.getInstance().getModelManager().getMissingModel()) {
+                        if (model != null && model != Minecraft.getInstance().getModelManager().getMissingModel())
+                        {
                             values.put(item.value(), model);
-                        } else {
+                        }
+                        else
+                        {
                             TerraFirmaCraft.LOGGER.error("No mold model loaded for mold item {}", moldLocation);
                         }
                     });

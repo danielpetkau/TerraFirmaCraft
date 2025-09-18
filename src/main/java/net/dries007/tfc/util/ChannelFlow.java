@@ -40,11 +40,14 @@ import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.items.IItemHandlerModifiable;
 
-public class ChannelFlow {
-    public static void fromCrucible(LevelAccessor level, CrucibleBlockEntity source, BlockPos originChannel) {
+public class ChannelFlow
+{
+    public static void fromCrucible(LevelAccessor level, CrucibleBlockEntity source, BlockPos originChannel)
+    {
         // This checks that metal is present and molten
         Optional<IFluidHandler> iFldHandler = MoldBlockEntity.getFluidHandlerIfAppropriate(source, Optional.empty());
-        if (iFldHandler.isEmpty()) {
+        if (iFldHandler.isEmpty())
+        {
             return;
         }
 
@@ -65,7 +68,8 @@ public class ChannelFlow {
         final Set<BlockPos> molds = new HashSet<>();
 
         pendingVisit.add(originChannel);
-        while (pendingVisit.size() > 0) {
+        while (pendingVisit.size() > 0)
+        {
             BlockPos current = pendingVisit.pop();
             if (channelsAndMolds.containsValue(current))
                 continue;
@@ -109,12 +113,14 @@ public class ChannelFlow {
                 });
 
         // Early exit if no (valid) molds are connected
-        if (molds.size() == 0) {
+        if (molds.size() == 0)
+        {
             return;
         }
 
         // Add a numeric index to the molds
-        for (BlockPos mold : molds) {
+        for (BlockPos mold : molds)
+        {
             channelsAndMolds.put(counter, mold);
             counter++;
         }
@@ -128,22 +134,24 @@ public class ChannelFlow {
         // one-way (flow can only go INTO the mold)
         // This means that the flow from source to mold will
         // never cross another mold in the net.
-        for (BlockPos channel : channelsAndMolds.values()) {
+        for (BlockPos channel : channelsAndMolds.values())
+        {
             if (!neighbors.containsKey(channel))
                 continue; // Molds dont have neighbors
 
-            for (BlockPos neighborChannelOrMold : neighbors.get(channel)) {
+            for (BlockPos neighborChannelOrMold : neighbors.get(channel))
+            {
                 int x = channelsAndMolds.inverse().get(channel);
 
                 // Might not be there if the mold table was removed
                 // because it was not ready to accept flow
-                if (!channelsAndMolds.containsValue(neighborChannelOrMold)) {
+                if (!channelsAndMolds.containsValue(neighborChannelOrMold))
                     continue;
-                }
 
                 int y = channelsAndMolds.inverse().get(neighborChannelOrMold);
                 graph[x][y] = 1;
-                if (heuristic[x][y] == 0) {
+                if (heuristic[x][y] == 0)
+                {
                     heuristic[x][y] = heuristic[y][x] = Math.sqrt(channel.distSqr(neighborChannelOrMold));
                 }
             }
@@ -153,9 +161,10 @@ public class ChannelFlow {
         final Map<BlockPos, Pair<Direction, Byte>> flowSource = new HashMap<>();
 
         // *** Saves the number of paths that go through each channel */
-        final Map<BlockPos, Integer> nFlows = new HashMap<>();
+        final Map<BlockPos, Integer> numFlows = new HashMap<>();
 
-        for (BlockPos mold : molds) {
+        for (BlockPos mold : molds)
+        {
             List<BlockPos> path = aStar(
                     graph,
                     heuristic,
@@ -164,7 +173,8 @@ public class ChannelFlow {
                     .map(channelsAndMolds::get).toList(); // index to BlockPos
             // goal (mold) to start (first channel)
 
-            for (int i = 0; i < path.size() - 1; i++) {
+            for (int i = 0; i < path.size() - 1; i++)
+            {
                 BlockPos currentChannel = path.get(i);
                 BlockPos channelSource = path.get(i + 1);
                 BlockPos relative = channelSource.offset(currentChannel.multiply(-1));
@@ -173,17 +183,18 @@ public class ChannelFlow {
                         relative.getZ() / distance);
                 flowSource.put(currentChannel,
                         Pair.of(Direction.fromDelta(normal.getX(), normal.getY(), normal.getZ()), (byte) distance));
-                nFlows.put(channelSource, nFlows.getOrDefault(channelSource, 0) + 1);
+                numFlows.put(channelSource, numFlows.getOrDefault(channelSource, 0) + 1);
             }
         }
 
-        for (BlockPos channelOrMold : flowSource.keySet()) {
+        for (BlockPos channelOrMold : flowSource.keySet())
+        {
             level.getBlockEntity(channelOrMold, TFCBlockEntities.CHANNEL.get()).ifPresent(
                     channel -> {
                         channel.setLinkProperties(
                                 flowSource.get(channelOrMold),
                                 true,
-                                nFlows.get(channelOrMold),
+                                numFlows.get(channelOrMold),
                                 fluidKey);
                     });
             level.getBlockEntity(channelOrMold, TFCBlockEntities.MOLD_TABLE.get()).ifPresent(
@@ -194,30 +205,38 @@ public class ChannelFlow {
         level.getBlockEntity(originChannel, TFCBlockEntities.CHANNEL.get()).get().setLinkProperties(
                 Pair.of(Direction.fromDelta(pos.getX(), pos.getY(), pos.getZ()), (byte) 1),
                 false,
-                nFlows.get(originChannel),
+                numFlows.get(originChannel),
                 fluidKey);
     }
 
-    private static List<BlockPos> findAdjacent(LevelAccessor level, BlockPos current, boolean findMolds) {
+    private static List<BlockPos> findAdjacent(LevelAccessor level, BlockPos current, boolean findMolds)
+    {
         final List<BlockPos> adjacent = new ArrayList<>();
-        for (Direction dir : Direction.values()) {
+        for (Direction dir : Direction.values())
+        {
             if (dir == Direction.UP)
                 continue;
 
             // When going down, allow >1 block distance
             byte maxDistance = dir == Direction.DOWN ? Byte.MAX_VALUE : 1;
 
-            for (byte i = 1; i < maxDistance + 1; i++) {
+            for (byte i = 1; i < maxDistance + 1; i++)
+            {
                 BlockPos relative = current.relative(dir, i);
                 BlockState blockState = level.getBlockState(relative);
 
-                if (findMolds && blockState.getBlock() instanceof MoldBlock) {
+                if (findMolds && blockState.getBlock() instanceof MoldBlock)
+                {
                     adjacent.add(relative);
                     break;
-                } else if (!findMolds && blockState.getBlock() instanceof ChannelBlock) {
+                }
+                else if (!findMolds && blockState.getBlock() instanceof ChannelBlock)
+                {
                     adjacent.add(relative);
                     break;
-                } else if (!blockState.isAir()) {
+                }
+                else if (!blockState.isAir())
+                {
                     break;
                 }
             }
@@ -240,8 +259,8 @@ public class ChannelFlow {
      *         Adapted from
      *         https://github.com/ClaasM/Algorithms/blob/master/src/a_star/java/simple/AStar.java
      */
-    private static List<Integer> aStar(int[][] graph, double[][] heuristic, int start, int goal) {
-
+    private static List<Integer> aStar(int[][] graph, double[][] heuristic, int start, int goal)
+    {
         // This contains the distances from the start node to all other nodes
         int[] distances = new int[graph.length];
         // Initializing with a distance of "Infinity"
@@ -264,12 +283,14 @@ public class ChannelFlow {
         boolean[] visited = new boolean[graph.length];
 
         // While there are nodes left to visit...
-        while (true) {
+        while (true)
+        {
 
             // ... find the node with the currently lowest priority...
             double lowestPriority = Integer.MAX_VALUE;
             int lowestPriorityIndex = -1;
-            for (int i = 0; i < priorities.length; i++) {
+            for (int i = 0; i < priorities.length; i++)
+            {
                 // ... by going through all nodes that haven't been visited yet
                 if (priorities[i] < lowestPriority && !visited[i]) {
                     lowestPriority = priorities[i];
@@ -277,14 +298,18 @@ public class ChannelFlow {
                 }
             }
 
-            if (lowestPriorityIndex == -1) {
+            if (lowestPriorityIndex == -1)
+            {
                 // There was no node not yet visited --> Node not found
                 throw new IllegalArgumentException("Illegal graph! No connection between start and end.");
-            } else if (lowestPriorityIndex == goal) {
+            }
+            else if (lowestPriorityIndex == goal)
+            {
                 // Goal node found
                 ArrayList<Integer> finalPath = new ArrayList<>();
                 int currentIndex = lowestPriorityIndex;
-                while (currentIndex != start) {
+                while (currentIndex != start)
+                {
                     finalPath.add(currentIndex);
                     currentIndex = parent[currentIndex];
                 }
@@ -293,10 +318,13 @@ public class ChannelFlow {
             }
 
             // ...then, for all neighboring nodes that haven't been visited yet....
-            for (int i = 0; i < graph[lowestPriorityIndex].length; i++) {
-                if (graph[lowestPriorityIndex][i] != 0 && !visited[i]) {
+            for (int i = 0; i < graph[lowestPriorityIndex].length; i++)
+            {
+                if (graph[lowestPriorityIndex][i] != 0 && !visited[i])
+                {
                     // ...if the path over this edge is shorter...
-                    if (distances[lowestPriorityIndex] + graph[lowestPriorityIndex][i] < distances[i]) {
+                    if (distances[lowestPriorityIndex] + graph[lowestPriorityIndex][i] < distances[i])
+                    {
                         // ...save this path as new shortest path
                         distances[i] = distances[lowestPriorityIndex] + graph[lowestPriorityIndex][i];
                         parent[i] = lowestPriorityIndex;
@@ -311,11 +339,14 @@ public class ChannelFlow {
         }
     }
 
-    public static boolean couldBeFilled(IItemHandlerModifiable inventory, FluidStack fluidStack, int slot) {
-        if (!fluidStack.isEmpty()) {
+    public static boolean couldBeFilled(IItemHandlerModifiable inventory, FluidStack fluidStack, int slot)
+    {
+        if (!fluidStack.isEmpty())
+        {
             final ItemStack stack = inventory.getStackInSlot(slot);
             final @Nullable IFluidHandler fluidCap = stack.getCapability(Capabilities.FluidHandler.ITEM);
-            if (fluidCap != null) {
+            if (fluidCap != null)
+            {
                 int filled = fluidCap.fill(fluidStack, IFluidHandler.FluidAction.SIMULATE);
                 return filled > 0;
             }

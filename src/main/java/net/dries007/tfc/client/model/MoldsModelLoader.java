@@ -26,28 +26,33 @@ import net.minecraft.util.GsonHelper;
 import net.neoforged.neoforge.client.model.ElementsModel;
 import net.neoforged.neoforge.client.model.geometry.IGeometryLoader;
 
-public class MoldsModelLoader implements IGeometryLoader<ElementsModel> {
+public class MoldsModelLoader implements IGeometryLoader<ElementsModel>
+{
 
     @Override
     public ElementsModel read(JsonObject json, JsonDeserializationContext deserializationContext)
-            throws JsonParseException {
+            throws JsonParseException
+    {
         final JsonArray pattern = json.getAsJsonArray("pattern");
 
         final int height = pattern.size();
-        if (height != 14) {
+        if (height != 14)
+        {
             throw new JsonSyntaxException("Invalid pattern: must have 14 rows (has " + height + ")");
         }
 
         boolean[][] full = new boolean[14][14];
 
-        for (int r = 0; r < 14; ++r) {
+        for (int r = 0; r < 14; ++r)
+        {
             String row = GsonHelper.convertToString(pattern.get(r), "pattern[" + r + "]");
             final int width = row.length();
             if (width != 14)
                 throw new JsonSyntaxException(
                         "Invalid pattern: must have 14 columns (has " + width + " in row " + r + ")");
 
-            for (int c = 0; c < 14; c++) {
+            for (int c = 0; c < 14; c++)
+            {
                 full[r][c] = row.charAt(c) != ' ';
             }
         }
@@ -55,12 +60,14 @@ public class MoldsModelLoader implements IGeometryLoader<ElementsModel> {
         return new ElementsModel(generateBlockElementsFromPattern(full));
     }
 
-    public static List<BlockElement> generateBlockElementsFromPattern(boolean[][] pattern) {
+    public static List<BlockElement> generateBlockElementsFromPattern(boolean[][] pattern)
+    {
         ArrayList<BlockElement> elements = new ArrayList<>();
 
         int from_y = 1;
         int to_y = 2;
-        for (int r = 0; r < 14; ++r) {
+        for (int r = 0; r < 14; ++r)
+        {
             int from_x = r + 1;
             int to_x = r + 2;
             for (int c = 0; c < 14; c++) {
@@ -86,8 +93,10 @@ public class MoldsModelLoader implements IGeometryLoader<ElementsModel> {
         return elements;
     }
 
-    private static float[] autoRelativeUV(Direction direction, Vector3f from, Vector3f to) {
-        switch (direction) {
+    private static float[] autoRelativeUV(Direction direction, Vector3f from, Vector3f to)
+    {
+        switch (direction)
+        {
             case NORTH:
                 return new float[] { 16 - to.x, 16 - to.y, 16 - from.x, 16 - from.y };
             case SOUTH:

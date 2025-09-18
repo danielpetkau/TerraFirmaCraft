@@ -23,11 +23,14 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
 
-public class ChannelBlockEntityRenderer implements BlockEntityRenderer<ChannelBlockEntity> {
+public class ChannelBlockEntityRenderer implements BlockEntityRenderer<ChannelBlockEntity>
+{
     @Override
     public void render(ChannelBlockEntity channel, float partialTicks, PoseStack poseStack, MultiBufferSource buffer,
-            int combinedLight, int combinedOverlay) {
-        if (!channel.hasFlow()) {
+            int combinedLight, int combinedOverlay)
+    {
+        if (!channel.hasFlow())
+        {
             return;
         }
 
@@ -44,20 +47,27 @@ public class ChannelBlockEntityRenderer implements BlockEntityRenderer<ChannelBl
     }
 
     @Override
-    public AABB getRenderBoundingBox(ChannelBlockEntity channel) {
-        if (channel.hasFlow()) {
+    public AABB getRenderBoundingBox(ChannelBlockEntity channel)
+    {
+        if (channel.hasFlow())
+        {
             Vec3 worldPosition = channel.getBlockPos().getCenter();
-            if (channel.getFlowSource().getLeft() == Direction.UP) {
+            if (channel.getFlowSource().getLeft() == Direction.UP)
+            {
                 int height = 1 + channel.getFlowSource().getRight();
                 return new AABB(
                         worldPosition.add(-1.5, -0.5, -1.5),
                         worldPosition.add(1.5, height, 1.5));
-            } else {
+            }
+            else
+            {
                 return new AABB(
                         worldPosition.add(-1.5, -0.5, -1.5),
                         worldPosition.add(1.5, 1.5, 1.5));
             }
-        } else {
+        }
+        else
+        {
             return new AABB(channel.getBlockPos());
         }
     }

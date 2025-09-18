@@ -37,7 +37,8 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-public class MoldBlock extends ExtendedBlock implements EntityBlockExtension, IBellowsConsumer {
+public class MoldBlock extends ExtendedBlock implements EntityBlockExtension, IBellowsConsumer
+{
     public static final BooleanProperty NORTH = PipeBlock.NORTH;
     public static final BooleanProperty EAST = PipeBlock.EAST;
     public static final BooleanProperty SOUTH = PipeBlock.SOUTH;
@@ -45,8 +46,10 @@ public class MoldBlock extends ExtendedBlock implements EntityBlockExtension, IB
 
     static final VoxelShape SHAPE = box(0, 0, 0, 16, 5, 16);
 
-    private static BlockState updateConnectedSides(LevelAccessor level, BlockPos pos, BlockState state) {
-        for (final Direction direction : Direction.Plane.HORIZONTAL) {
+    private static BlockState updateConnectedSides(LevelAccessor level, BlockPos pos, BlockState state)
+    {
+        for (final Direction direction : Direction.Plane.HORIZONTAL)
+        {
             final BlockPos adjacentPos = pos.relative(direction);
             final BlockState adjacentState = level.getBlockState(adjacentPos);
             final boolean adjacentChannel = adjacentState.getBlock() instanceof ChannelBlock;
@@ -56,28 +59,34 @@ public class MoldBlock extends ExtendedBlock implements EntityBlockExtension, IB
         return state;
     }
 
-    public MoldBlock(ExtendedProperties properties) {
+    public MoldBlock(ExtendedProperties properties)
+    {
         super(properties);
         this.registerDefaultState(this.defaultBlockState().setValue(EAST, false).setValue(SOUTH, false)
                 .setValue(WEST, false).setValue(NORTH, false));
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+    public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context)
+    {
         return SHAPE;
     }
 
     @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> pBuilder) {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> pBuilder)
+    {
         pBuilder.add(EAST, SOUTH, WEST, NORTH);
     }
 
     @Override
     protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos,
-            Player player, InteractionHand hand, BlockHitResult hitResult) {
-        if (player instanceof ServerPlayer serverPlayer) {
+            Player player, InteractionHand hand, BlockHitResult hitResult)
+    {
+        if (player instanceof ServerPlayer serverPlayer)
+        {
             Optional<MoldBlockEntity> mold = level.getBlockEntity(pos, TFCBlockEntities.MOLD_TABLE.get());
-            if (mold.isPresent()) {
+            if (mold.isPresent())
+            {
                 return mold.get().onRightClick(serverPlayer);
             }
         }
@@ -92,10 +101,12 @@ public class MoldBlock extends ExtendedBlock implements EntityBlockExtension, IB
 
     @Override
     public boolean onDestroyedByPlayer(BlockState state, Level level, BlockPos pos, Player player, boolean willHarvest,
-            FluidState fluid) {
+            FluidState fluid)
+    {
         // On destroy, notify source channel that all flows going through this
         // channel have been broken
-        if (!level.isClientSide()) {
+        if (!level.isClientSide())
+        {
             level.getBlockEntity(pos, TFCBlockEntities.MOLD_TABLE.get()).ifPresent(
                     channel -> channel.finishFlow());
         }
@@ -104,10 +115,12 @@ public class MoldBlock extends ExtendedBlock implements EntityBlockExtension, IB
     }
 
     @Override
-    public void onBlockExploded(BlockState state, Level level, BlockPos pos, Explosion explosion) {
+    public void onBlockExploded(BlockState state, Level level, BlockPos pos, Explosion explosion)
+    {
         // On destroy, notify source channel that all flows going through this
         // channel have been broken
-        if (!level.isClientSide()) {
+        if (!level.isClientSide())
+        {
             level.getBlockEntity(pos, TFCBlockEntities.MOLD_TABLE.get()).ifPresent(
                     channel -> channel.finishFlow());
         }
@@ -116,12 +129,14 @@ public class MoldBlock extends ExtendedBlock implements EntityBlockExtension, IB
     }
 
     @Override
-    public boolean hasAnalogOutputSignal(BlockState pState) {
+    public boolean hasAnalogOutputSignal(BlockState pState)
+    {
         return true;
     }
 
     @Override
-    public int getAnalogOutputSignal(BlockState state, Level level, BlockPos pos) {
+    public int getAnalogOutputSignal(BlockState state, Level level, BlockPos pos)
+    {
         return level.getBlockEntity(pos, TFCBlockEntities.MOLD_TABLE.get()).map(
                 mold -> {
                     if (!mold.getOutputStack().isEmpty()) {
@@ -139,13 +154,16 @@ public class MoldBlock extends ExtendedBlock implements EntityBlockExtension, IB
     }
 
     @Override
-    public void intakeAir(Level level, BlockPos pos, BlockState state, int amount) {
+    public void intakeAir(Level level, BlockPos pos, BlockState state, int amount)
+    {
         level.getBlockEntity(pos, TFCBlockEntities.MOLD_TABLE.get()).ifPresent(mold -> mold.intakeAir(amount));
     }
 
     @Override
-    public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving) {
-        if (newState.getBlock() != state.getBlock()) {
+    public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving)
+    {
+        if (newState.getBlock() != state.getBlock())
+        {
             level.getBlockEntity(pos, TFCBlockEntities.MOLD_TABLE.get()).ifPresent(
                     mold -> {
                         Helpers.spawnItem(level, pos, mold.getInventory().getStackInSlot(MoldBlockEntity.MOLD_SLOT));
