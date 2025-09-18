@@ -1,3 +1,6 @@
 {
-  "values": []
+  "values": [
+    "#c:foods/meat",
+    "#c:foods/cooked_meat"
+  ]
 }

@@ -170,7 +170,7 @@ public class BuiltinItemTags extends TagsProvider<Item> implements Accessors
             .add(Food.COOKED_RICE);
         tag(USABLE_IN_SANDWICH).addTags(VEGETABLES, COOKED_MEATS, DAIRY);
         tag(USABLE_IN_JAM_SANDWICH).addTags(COOKED_MEATS, DAIRY, PRESERVES);
-        tag(CAN_BE_SALTED);
+        tag(CAN_BE_SALTED).addTags(MEATS, COOKED_MEATS);
         tag(PIG_FOOD).addTag(FOODS);
         tag(COW_FOOD).addTag(GRAINS);
         tag(YAK_FOOD).addTag(GRAINS);

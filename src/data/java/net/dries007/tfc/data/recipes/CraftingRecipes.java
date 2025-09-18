@@ -1104,6 +1104,7 @@ public interface CraftingRecipes extends Recipes
                 LacksTraitIngredient.of(FoodTraits.SALTED)
             ))
             .input(TFCItems.POWDERS.get(Powder.SALT))
+            .copyInput()
             .addTrait(FoodTraits.SALTED)
             .shapeless("salting");
         recipe()
