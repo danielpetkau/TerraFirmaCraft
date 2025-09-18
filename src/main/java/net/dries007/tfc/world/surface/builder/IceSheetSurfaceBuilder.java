@@ -9,6 +9,7 @@ package net.dries007.tfc.world.surface.builder;
 
 import net.minecraft.world.level.block.state.BlockState;
 
+import net.dries007.tfc.TerraFirmaCraft;
 import net.dries007.tfc.world.Seed;
 import net.dries007.tfc.world.biome.BiomeNoise;
 import net.dries007.tfc.world.noise.Noise2D;
@@ -48,6 +49,8 @@ public class IceSheetSurfaceBuilder implements SurfaceBuilder
     @Override
     public void buildSurface(SurfaceBuilderContext context, int startY, int endY)
     {
+        final int seaLevel = context.getSeaLevel();
+
         final int x = context.pos().getX();
         final int z = context.pos().getZ();
 
@@ -55,19 +58,6 @@ public class IceSheetSurfaceBuilder implements SurfaceBuilder
         final int glacierSurfaceHeight = (int) Math.ceil(iceSurfaceNoise.noise(x, z));
 
         int iceDepth;
-
-        // Use shore/ocean surface builder if we might be near the ocean
-        final SurfaceBuilder iceFreeBuilder;
-        {
-            if (isShoreBiome && startY < context.getSeaLevel() + 5)
-            {
-                iceFreeBuilder = ShoreAndOceanSurfaceBuilder.MOUNTAINS.apply(seed);
-            }
-            else
-            {
-                iceFreeBuilder = NormalSurfaceBuilder.INSTANCE;
-            }
-        }
 
         // Base Groundwater check allows for exposed ice near where rivers cut into ice sheet
         if (hasMoraines && context.baseGroundwater() <= 20f)
@@ -86,7 +76,11 @@ public class IceSheetSurfaceBuilder implements SurfaceBuilder
         }
         else if (startY < glacierBaseHeight - 1.5)
         {
-            iceFreeBuilder.buildSurface(context, startY, endY);
+            NormalSurfaceBuilder.INSTANCE.buildSurface(context, startY, endY);
+        }
+        else if (isShoreBiome && startY <= seaLevel)
+        {
+            ShoreAndOceanSurfaceBuilder.MOUNTAINS.apply(seed).buildSurface(context, startY, endY);
         }
         else
         {
@@ -131,10 +125,12 @@ public class IceSheetSurfaceBuilder implements SurfaceBuilder
                                 context.setBlockState(y, iceState);
                             }
                         }
-                        else if (iceDepth == 0 || y <= context.getSeaLevel() || y < glacierBaseHeight)
+                        else if (iceDepth == 0 || y <= seaLevel || y < glacierBaseHeight)
                         {
                             // Skip placing snow where there is no glacier, or underwater
                             context.setBlockState(y, moraineState);
+                            // And stop ice from being placed below this
+                            iceDepth = 0;
                         }
                         else
                         {

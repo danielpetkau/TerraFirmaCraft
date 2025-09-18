@@ -71,7 +71,7 @@ public class ShoreAndOceanSurfaceBuilder implements SurfaceBuilder
         this.isActiveShieldVolcano = activeShieldVolcano;
         this.landBuilder = landBuilder;
 
-        final RandomSource random = seed.fork();
+        final RandomSource random = seed.forkStable().fork();
 
         this.icebergPillarNoise = NormalNoise.create(random, new NormalNoise.NoiseParameters(-6, 1.0D, 1.0D, 1.0D, 1.0D));
         this.icebergPillarRoofNoise = NormalNoise.create(random, new NormalNoise.NoiseParameters(-3, 1.0D));

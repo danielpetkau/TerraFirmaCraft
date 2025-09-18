@@ -247,6 +247,8 @@ public class TFCTags
         public static final TagKey<Block> KAOLIN_CLAY_REPLACEABLE = tag("kaolin_clay_replaceable");
         /** Blocks that can be replaced with powder snow */
         public static final TagKey<Block> POWDER_SNOW_REPLACEABLE = tag("powder_snow_replaceable");
+        /** Blocks that underwater lava springs shouldn't place on */
+        public static final TagKey<Block> COLD_OCEAN_BLOCKS = tag("cold_ocean_blocks");
         /** Hardened rock blocks only. Used in worldgen to determine in what rock types sea stacks can generate. **/
         public static final TagKey<Block> SEA_STACK_ROCKS = tag("sea_stack_rocks");
 
