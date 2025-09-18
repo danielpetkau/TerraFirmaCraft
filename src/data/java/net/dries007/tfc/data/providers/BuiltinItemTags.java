@@ -282,7 +282,9 @@ public class BuiltinItemTags extends TagsProvider<Item> implements Accessors
             .add(TFCItems.UNFIRED_POT)
             .add(TFCItems.UNFIRED_SPINDLE_HEAD)
             .add(TFCItems.UNFIRED_VESSEL)
-            .add(TFCItems.UNFIRED_LARGE_VESSEL);
+            .add(TFCItems.UNFIRED_LARGE_VESSEL)
+            .add(TFCItems.UNFIRED_CHANNEL)
+            .add(TFCItems.UNFIRED_MOLD_TABLE);
 
         tag(TOOL_RACKS).add(TFCBlocks.WOODS, Wood.BlockType.TOOL_RACK);
         tag(SCRIBING_TABLES).add(TFCBlocks.WOODS, Wood.BlockType.SCRIBING_TABLE);
