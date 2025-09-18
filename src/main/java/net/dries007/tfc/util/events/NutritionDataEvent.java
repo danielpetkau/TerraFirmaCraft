@@ -12,11 +12,14 @@ import net.neoforged.fml.event.IModBusEvent;
 import net.dries007.tfc.common.component.food.INutritionData;
 import net.dries007.tfc.common.player.PlayerInfo;
 
-public class NutritionDataSupplierEvent extends Event implements IModBusEvent
+/**
+ * An event that serves as a hook for addons to change the implementation of {@link INutritionData} they want {@link PlayerInfo} to use
+ */
+public class NutritionDataEvent extends Event implements IModBusEvent
 {
     private final PlayerInfo.NutritionDataSupplier<INutritionData> supplier;
 
-    public NutritionDataSupplierEvent(PlayerInfo.NutritionDataSupplier<INutritionData> supplier)
+    public NutritionDataEvent(PlayerInfo.NutritionDataSupplier<INutritionData> supplier)
     {
         this.supplier = supplier;
     }

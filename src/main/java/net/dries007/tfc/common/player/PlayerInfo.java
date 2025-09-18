@@ -29,7 +29,7 @@ import net.dries007.tfc.util.advancements.TFCAdvancements;
 import net.dries007.tfc.util.calendar.Calendars;
 import net.dries007.tfc.util.calendar.ICalendar;
 import net.dries007.tfc.util.climate.Climate;
-import net.dries007.tfc.util.events.NutritionDataSupplierEvent;
+import net.dries007.tfc.util.events.NutritionDataEvent;
 
 /**
  * This is a central spot for all player-specific information that TFC adds or modifies about the vanilla player. It replaces the default
@@ -482,9 +482,9 @@ public final class PlayerInfo extends net.minecraft.world.food.FoodData implemen
     private static NutritionDataSupplier<INutritionData> nutritionDataSupplier = NutritionData::new;
 
     /**
-     * Public method to allow addons to easily change out the {@link INutritionData} implementation by posting a {@link NutritionDataSupplierEvent}
+     * Public method to allow addons to easily change out the {@link INutritionData} implementation by posting a {@link NutritionDataEvent}
      */
-    public static void setNutritionDataSupplier(NutritionDataSupplierEvent event)
+    public static void setNutritionDataSupplier(NutritionDataEvent event)
     {
         nutritionDataSupplier = event.getSupplier();
     }
