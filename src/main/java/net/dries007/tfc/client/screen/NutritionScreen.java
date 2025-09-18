@@ -17,8 +17,8 @@ import net.neoforged.neoforge.network.PacketDistributor;
 
 import net.dries007.tfc.client.ClientHelpers;
 import net.dries007.tfc.client.screen.button.PlayerInventoryTabButton;
+import net.dries007.tfc.common.component.food.INutritionData;
 import net.dries007.tfc.common.component.food.Nutrient;
-import net.dries007.tfc.common.component.food.NutritionData;
 import net.dries007.tfc.common.container.Container;
 import net.dries007.tfc.common.player.IPlayerInfo;
 import net.dries007.tfc.compat.patchouli.PatchouliIntegration;
@@ -57,7 +57,7 @@ public class NutritionScreen extends TFCContainerScreen<Container>
         final Player player = ClientHelpers.getPlayer();
         if (player != null)
         {
-            final NutritionData nutrition = IPlayerInfo.get(player).nutrition();
+            final INutritionData nutrition = IPlayerInfo.get(player).nutrition();
             for (Nutrient nutrient : Nutrient.VALUES)
             {
                 final int width = (int) (nutrition.getNutrient(nutrient) * 50);

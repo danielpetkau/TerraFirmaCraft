@@ -23,7 +23,7 @@ import net.dries007.tfc.config.TFCConfig;
  * <p>
  * This only executes logic on server side, on client side it simply sets the lastAverageNutrients
  */
-public class NutritionData
+public class NutritionData implements INutritionData
 {
     private final LinkedList<FoodData> records;
     private final float defaultNutritionValue, defaultDairyNutritionValue;
@@ -44,6 +44,7 @@ public class NutritionData
         calculateNutrition();
     }
 
+    @Override
     public float getAverageNutrition()
     {
         return averageNutrients;
@@ -52,29 +53,39 @@ public class NutritionData
     /**
      * @return The nutrient value, in [0, 1]
      */
+    @Override
     public float getNutrient(Nutrient nutrient)
     {
         return nutrients[nutrient.ordinal()];
     }
 
+    @Override
     public float[] getNutrients()
     {
         return nutrients;
     }
 
     /**
-     * Set the current {@code hunger} value of the player, in {@code [0, PlayerInfo.MAX_HUNGER]}. This may update
-     * the nutrition of the player.
+     * Set the current {@code hunger} value of the player, in {@code [0, PlayerInfo.MAX_HUNGER]}.
+     * This may update the nutrition of the player.
      */
+    @Override
+    public void setHungerAndUpdate(int hunger)
+    {
+        setHunger(hunger);
+        calculateNutrition();
+    }
+
+    @Override
     public void setHunger(int hunger)
     {
         this.hunger = hunger;
-        calculateNutrition();
     }
 
     /**
      * Sets data from a packet, received on client side. Does not contain the full data only the important information
      */
+    @Override
     public void onClientUpdate(float[] nutrients)
     {
         System.arraycopy(nutrients, 0, this.nutrients, 0, this.nutrients.length);
@@ -86,6 +97,7 @@ public class NutritionData
      * If the last meal you ate had hunger, and this one didn't have hunger, we will apply the meal
      * Use case: Milk drinking. We add milk as a meal if and only if you just ate something
      */
+    @Override
     public void addNutrients(FoodData data)
     {
         if (data.hunger() > 0 || records.isEmpty() || records.getFirst().hunger() > 0)
@@ -95,11 +107,13 @@ public class NutritionData
         }
     }
 
+    @Override
     public Tag writeToNbt()
     {
         return FoodData.LIST_CODEC.encodeStart(NbtOps.INSTANCE, records).getOrThrow();
     }
 
+    @Override
     public void readFromNbt(@Nullable Tag nbt)
     {
         records.clear();

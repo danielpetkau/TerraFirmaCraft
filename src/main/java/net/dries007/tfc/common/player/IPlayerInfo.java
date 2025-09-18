@@ -14,7 +14,7 @@ import org.jetbrains.annotations.Nullable;
 import net.dries007.tfc.common.component.food.FoodCapability;
 import net.dries007.tfc.common.component.food.FoodData;
 import net.dries007.tfc.common.component.food.IFood;
-import net.dries007.tfc.common.component.food.NutritionData;
+import net.dries007.tfc.common.component.food.INutritionData;
 import net.dries007.tfc.config.TFCConfig;
 import net.dries007.tfc.network.PlayerInfoPacket;
 
@@ -103,7 +103,7 @@ public interface IPlayerInfo
     /**
      * @return The players nutrition information
      */
-    NutritionData nutrition();
+    INutritionData nutrition();
 
     /**
      * @return The modifier for the player's health, based on their current total nutrition
