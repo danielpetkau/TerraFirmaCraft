@@ -51,7 +51,6 @@ import net.dries007.tfc.common.fluids.TFCFluids;
 import net.dries007.tfc.common.items.PropickItem;
 import net.dries007.tfc.common.items.TFCItems;
 import net.dries007.tfc.common.player.ChiselMode;
-import net.dries007.tfc.common.player.PlayerInfo;
 import net.dries007.tfc.common.recipes.TFCRecipeSerializers;
 import net.dries007.tfc.common.recipes.TFCRecipeTypes;
 import net.dries007.tfc.common.recipes.ingredients.TFCIngredients;
@@ -129,7 +128,6 @@ public final class TerraFirmaCraft
         bus.addListener(TFCCreativeTabs::setAllTabContentAsNonDecaying);
         bus.addListener(Faunas::registerSpawnPlacements);
         bus.addListener(PacketHandler::setup);
-        bus.addListener(PlayerInfo::setNutritionDataSupplier);
 
         // Core Registries (vanilla)
         TFCBlocks.BLOCKS.register(bus);

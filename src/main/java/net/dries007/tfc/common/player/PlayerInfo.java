@@ -16,6 +16,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.food.FoodProperties;
+import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.network.PacketDistributor;
 
 import net.dries007.tfc.common.TFCDamageTypes;
@@ -75,7 +76,7 @@ public final class PlayerInfo extends net.minecraft.world.food.FoodData implemen
     private long intoxicationTick = Long.MIN_VALUE; // A future tick that the player is intoxicated until
     private long sleepTick = Long.MIN_VALUE; // The last tick this player slept
     private ChiselMode chiselMode = ChiselMode.SMOOTH.value();
-    private INutritionData nutrition = nutritionDataSupplier.create(0.5f, 0f); // Nutrition information
+    private INutritionData nutrition = getNutritionDataFromSupplier(0.5f, 0f); // Nutrition information
 
     private boolean modified = true;
 
@@ -479,13 +480,13 @@ public final class PlayerInfo extends net.minecraft.world.food.FoodData implemen
         T create(float defaultNutritionValue, float defaultDairyNutritionValue);
     }
 
-    private static NutritionDataSupplier<INutritionData> nutritionDataSupplier = NutritionData::new;
-
     /**
-     * Public method to allow addons to easily change out the {@link INutritionData} implementation by posting a {@link NutritionDataEvent}
+     * When constructing the {@link INutritionData}, we post a {@link NutritionDataEvent}, so that addons are able to set their implementation as the one to be used
      */
-    public static void setNutritionDataSupplier(NutritionDataEvent event)
+    private static INutritionData getNutritionDataFromSupplier(float defaultNutritionValue, float defaultDairyNutritionValue)
     {
-        nutritionDataSupplier = event.getSupplier();
+        final NutritionDataEvent event = new NutritionDataEvent(NutritionData::new);
+        NeoForge.EVENT_BUS.post(event);
+        return event.getSupplier().create(defaultNutritionValue, defaultDairyNutritionValue);
     }
 }

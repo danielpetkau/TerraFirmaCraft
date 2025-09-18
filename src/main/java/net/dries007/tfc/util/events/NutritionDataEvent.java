@@ -7,7 +7,6 @@
 package net.dries007.tfc.util.events;
 
 import net.neoforged.bus.api.Event;
-import net.neoforged.fml.event.IModBusEvent;
 
 import net.dries007.tfc.common.component.food.INutritionData;
 import net.dries007.tfc.common.player.PlayerInfo;
@@ -15,9 +14,9 @@ import net.dries007.tfc.common.player.PlayerInfo;
 /**
  * An event that serves as a hook for addons to change the implementation of {@link INutritionData} they want {@link PlayerInfo} to use
  */
-public class NutritionDataEvent extends Event implements IModBusEvent
+public class NutritionDataEvent extends Event
 {
-    private final PlayerInfo.NutritionDataSupplier<INutritionData> supplier;
+    private PlayerInfo.NutritionDataSupplier<INutritionData> supplier;
 
     public NutritionDataEvent(PlayerInfo.NutritionDataSupplier<INutritionData> supplier)
     {
@@ -27,5 +26,10 @@ public class NutritionDataEvent extends Event implements IModBusEvent
     public PlayerInfo.NutritionDataSupplier<INutritionData> getSupplier()
     {
         return this.supplier;
+    }
+
+    public void setSupplier(PlayerInfo.NutritionDataSupplier<INutritionData> supplier)
+    {
+        this.supplier = supplier;
     }
 }
