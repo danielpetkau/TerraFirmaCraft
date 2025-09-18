@@ -88,7 +88,7 @@ public class HotSpringFeature extends Feature<HotSpringConfig>
                 mutablePos.set(localX, y, localZ);
 
                 // If attempting to place on sea ice, either disallow placement if underwater locations are not allowable, or move the y downwards
-                if (Helpers.isBlock(level.getBlockState(mutablePos), TFCTags.Blocks.POWDER_SNOW_REPLACEABLE))
+                if (Helpers.isBlock(level.getBlockState(mutablePos), TFCTags.Blocks.COLD_OCEAN_BLOCKS))
                 {
                     if (config.allowUnderwater())
                     {

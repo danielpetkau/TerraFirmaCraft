@@ -9,6 +9,7 @@ package net.dries007.tfc.world.surface.builder;
 
 import net.minecraft.world.level.block.state.BlockState;
 
+import net.dries007.tfc.TerraFirmaCraft;
 import net.dries007.tfc.world.Seed;
 import net.dries007.tfc.world.biome.BiomeNoise;
 import net.dries007.tfc.world.noise.Noise2D;
@@ -18,32 +19,38 @@ import net.dries007.tfc.world.surface.SurfaceStates;
 
 public class IceSheetSurfaceBuilder implements SurfaceBuilder
 {
-    public static final SurfaceBuilderFactory NORMAL = seed -> new IceSheetSurfaceBuilder(BiomeNoise.glacialBase(seed.seed()), BiomeNoise.iceSheetSurfaceHeight(seed.seed()), true, false);
-    public static final SurfaceBuilderFactory EDGE = seed -> new IceSheetSurfaceBuilder(BiomeNoise.glacialBase(seed.seed()).addConstant(1.6), BiomeNoise.iceSheetSurfaceHeight(seed.seed()), true, false);
-    public static final SurfaceBuilderFactory EDGE_LAKE = seed -> new IceSheetSurfaceBuilder(BiomeNoise.lake(seed.seed()), BiomeNoise.iceSheetSurfaceHeight(seed.seed()), false, false);
-    public static final SurfaceBuilderFactory HIDDEN_LAKE = seed -> new IceSheetSurfaceBuilder(BiomeNoise.glacialOceanicBase(seed.seed()), BiomeNoise.iceSheetSurfaceHeight(seed.seed()), false, false);
-    public static final SurfaceBuilderFactory ICE_SHEET_MOUNTAINS = seed -> new IceSheetSurfaceBuilder(BiomeNoise.glacialCirques(seed.seed()).addConstant(39), BiomeNoise.montaneIceSheetSurfaceHeight(seed.seed()).max(BiomeNoise.glacialCirquesIceSurfaceHeight(seed.seed()).addConstant(39)), false, true);
-    public static final SurfaceBuilderFactory GLACIATED_MOUNTAINS = seed -> new IceSheetSurfaceBuilder(BiomeNoise.glacialCirques(seed.seed()).addConstant(39), BiomeNoise.glacialCirquesIceSurfaceHeight(seed.seed()).addConstant(39), false, true);
-    public static final SurfaceBuilderFactory OCEANIC = seed -> new IceSheetSurfaceBuilder(BiomeNoise.glacialOceanicBase(seed.seed()), BiomeNoise.oceanicIceSheetSurfaceHeight(seed.seed()), false, false);
-    public static final SurfaceBuilderFactory ICE_SHEET_OCEANIC_MOUNTAINS = seed -> new IceSheetSurfaceBuilder(BiomeNoise.glacialCirques(seed.seed()), BiomeNoise.oceanicIceSheetSurfaceHeight(seed.seed()).max(BiomeNoise.glacialCirquesIceSurfaceHeight(seed.seed())), false, true);
-    public static final SurfaceBuilderFactory GLACIATED_OCEANIC_MOUNTAINS = seed -> new IceSheetSurfaceBuilder(BiomeNoise.glacialCirques(seed.seed()), BiomeNoise.glacialCirquesIceSurfaceHeight(seed.seed()), false, true);
+    public static final SurfaceBuilderFactory NORMAL = seed -> new IceSheetSurfaceBuilder(seed, BiomeNoise.glacialBase(seed.seed()), BiomeNoise.iceSheetSurfaceHeight(seed.seed()), true, false, false);
+    public static final SurfaceBuilderFactory EDGE = seed -> new IceSheetSurfaceBuilder(seed, BiomeNoise.glacialBase(seed.seed()).addConstant(1.6), BiomeNoise.iceSheetSurfaceHeight(seed.seed()), true, false, false);
+    public static final SurfaceBuilderFactory EDGE_LAKE = seed -> new IceSheetSurfaceBuilder(seed, BiomeNoise.lake(seed.seed()), BiomeNoise.iceSheetSurfaceHeight(seed.seed()), false, false, false);
+    public static final SurfaceBuilderFactory HIDDEN_LAKE = seed -> new IceSheetSurfaceBuilder(seed, BiomeNoise.glacialOceanicBase(seed.seed()), BiomeNoise.iceSheetSurfaceHeight(seed.seed()), false, false, false);
+    public static final SurfaceBuilderFactory ICE_SHEET_MOUNTAINS = seed -> new IceSheetSurfaceBuilder(seed, BiomeNoise.glacialCirques(seed.seed()).addConstant(39), BiomeNoise.montaneIceSheetSurfaceHeight(seed.seed()).max(BiomeNoise.glacialCirquesIceSurfaceHeight(seed.seed()).addConstant(39)), false, true, false);
+    public static final SurfaceBuilderFactory GLACIATED_MOUNTAINS = seed -> new IceSheetSurfaceBuilder(seed, BiomeNoise.glacialCirques(seed.seed()).addConstant(39), BiomeNoise.glacialCirquesIceSurfaceHeight(seed.seed()).addConstant(39), false, true, false);
+    public static final SurfaceBuilderFactory OCEANIC = seed -> new IceSheetSurfaceBuilder(seed, BiomeNoise.glacialOceanicBase(seed.seed()), BiomeNoise.oceanicIceSheetSurfaceHeight(seed.seed()), false, false, true);
+    public static final SurfaceBuilderFactory ICE_SHEET_OCEANIC_MOUNTAINS = seed -> new IceSheetSurfaceBuilder(seed, BiomeNoise.glacialCirques(seed.seed()), BiomeNoise.oceanicIceSheetSurfaceHeight(seed.seed()).max(BiomeNoise.glacialCirquesIceSurfaceHeight(seed.seed())), false, true, true);
+    public static final SurfaceBuilderFactory GLACIATED_OCEANIC_MOUNTAINS = seed -> new IceSheetSurfaceBuilder(seed, BiomeNoise.glacialCirques(seed.seed()), BiomeNoise.glacialCirquesIceSurfaceHeight(seed.seed()), false, true, true);
 
+    private final Seed seed;
     private final Noise2D iceSurfaceNoise;
     private final Noise2D baseNoise;
     private final boolean hasMoraines;
     private final boolean hasStonyPeaks;
+    private final boolean isShoreBiome;
 
-    IceSheetSurfaceBuilder(Noise2D baseNoise, Noise2D iceSurfaceNoise, boolean hasMoraines, boolean hasStonyPeaks)
+    IceSheetSurfaceBuilder(Seed seed, Noise2D baseNoise, Noise2D iceSurfaceNoise, boolean hasMoraines, boolean hasStonyPeaks, boolean isShoreBiome)
     {
+        this.seed = seed;
         this.baseNoise = baseNoise;
         this.iceSurfaceNoise = iceSurfaceNoise;
         this.hasMoraines = hasMoraines;
         this.hasStonyPeaks = hasStonyPeaks;
+        this.isShoreBiome = isShoreBiome;
     }
 
     @Override
     public void buildSurface(SurfaceBuilderContext context, int startY, int endY)
     {
+        final int seaLevel = context.getSeaLevel();
+
         final int x = context.pos().getX();
         final int z = context.pos().getZ();
 
@@ -70,6 +77,10 @@ public class IceSheetSurfaceBuilder implements SurfaceBuilder
         else if (startY < glacierBaseHeight - 1.5)
         {
             NormalSurfaceBuilder.INSTANCE.buildSurface(context, startY, endY);
+        }
+        else if (isShoreBiome && startY <= seaLevel)
+        {
+            ShoreAndOceanSurfaceBuilder.MOUNTAINS.apply(seed).buildSurface(context, startY, endY);
         }
         else
         {
@@ -114,10 +125,12 @@ public class IceSheetSurfaceBuilder implements SurfaceBuilder
                                 context.setBlockState(y, iceState);
                             }
                         }
-                        else if (iceDepth == 0 || y <= context.getSeaLevel() || y < glacierBaseHeight)
+                        else if (iceDepth == 0 || y <= seaLevel || y < glacierBaseHeight)
                         {
                             // Skip placing snow where there is no glacier, or underwater
                             context.setBlockState(y, moraineState);
+                            // And stop ice from being placed below this
+                            iceDepth = 0;
                         }
                         else
                         {
