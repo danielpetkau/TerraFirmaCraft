@@ -63,6 +63,7 @@ public final class BlockCapabilities
         registerInventory(event, TFCBlockEntities.QUERN);
         event.registerBlockEntity(ITEM, TFCBlockEntities.CHEST.get(), TFCChestBlockEntity::getInventoryHandler);
         event.registerBlockEntity(ITEM, TFCBlockEntities.TRAPPED_CHEST.get(), TFCChestBlockEntity::getInventoryHandler);
+        event.registerBlockEntity(ITEM, TFCBlockEntities.MOLD_TABLE.get(), (object, context) -> object.getInventory());
     }
 
     private static void registerInventory(RegisterCapabilitiesEvent event, Supplier<? extends BlockEntityType<? extends InventoryBlockEntity<?>>> type)
