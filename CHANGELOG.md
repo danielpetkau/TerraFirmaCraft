@@ -1,27 +1,20 @@
 ### Changes
-
-- Fix tomatoes having fruit nutrition. Tweaked the nutrition and fertilizer demands of various vegetables.
-- Fix black dye not being able to be used for scribing.
-- Fix melons not being tagged as a fruit.
-- Fix unfired pots having the wrong item size (#3114)
-- Fix an error in the field guide for crops (#3113)
-- Fix mud bricks recipe not returning the right amount of items (#3116)
-- Fid the hardened clay recipe giving the wrong result.
-- Fix metal item tooltips only showing the result mB of one item.
-- Fix meat being unable to be cooked.
-- Fix the 'A Weird Rock' advancement.
-- Disable rendering the experience number when the experience bar is enabled.
-- More fixes to dead crops.
-- Updated some potted plant models.
-- Fix hunger and thirst depleting too quickly.
-- Fix support beam crafting deleting the saw (#3127)
-- Fix mud bricks not drying (#3130)
-- Fix groundcover not dropping when the block under it is destroyed and the groundcover is also underwater (#3119)
-- Fix jar lid melting duplicating metal.
-- Destroy crops always when pushed by a piston.
-- Updated the flowerbed models.
-- Added tint to buttercups.
-- Reduce how often rivers are cut off by shore biomes.
-- Remove some unused files from the source.
-- Fixed vessels not preserving items.
-- (Internal) fixed the test infrastructure so that it no longer fails.
+- Fixed barrel items not updating their size when used on a fluid block in the world
+- Fixed issues with wild crop placement
+- Fixed the "A Weird Rock" advancement... again
+- Fixed nutrition of players not being updated when eating/losing hunger
+- Fixed advancement trigger for eating food being in the wrong place
+- Adjusted spawn egg textures
+- Changed dye textures to use 1.21.9 versions
+- Modified nutrition data to be more extensible via addons
+- Make fireboxes more forgiving when switching between different fuel types
+- Fixed weird freshwater rings near the shores of oceans
+- Made sea ice go all the way up to shores of oceans
+- Made icebergs smaller in shallow waters
+- Removed powder snow patches from sea ice
+- Fixed broken UVs on loom renderer
+- Add models for flower pot plants that were missing them previously
+- Allow meats to be salted
+- Retire the old gametests system
+- Remove some tabs from model files created by blockbench
+- Remove some unused files from the source
