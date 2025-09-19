@@ -16,6 +16,7 @@ import net.dries007.tfc.common.blocks.EntityBlockExtension;
 import net.dries007.tfc.common.blocks.ExtendedBlock;
 import net.dries007.tfc.common.blocks.ExtendedProperties;
 import net.dries007.tfc.util.ChannelFlow;
+import net.dries007.tfc.util.Helpers;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -86,7 +87,7 @@ public class ChannelBlock extends ExtendedBlock implements EntityBlockExtension
 
     private static BlockState updateConnectedSides(LevelAccessor level, BlockPos pos, BlockState state)
     {
-        for (Direction dir : Direction.values())
+        for (Direction dir : Helpers.DIRECTIONS)
         {
             if (dir == Direction.UP)
                 continue;

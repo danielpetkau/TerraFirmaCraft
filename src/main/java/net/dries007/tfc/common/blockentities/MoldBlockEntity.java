@@ -372,7 +372,7 @@ public class MoldBlockEntity extends TickableInventoryBlockEntity<MoldBlockEntit
             sourcePosition = Optional.of(BlockPos.of(nbt.getLong("sourcePosition")));
             flowSource = Optional.of(
                     Pair.of(
-                            Direction.values()[nbt.getByte("flowSource")],
+                            Helpers.DIRECTIONS[nbt.getByte("flowSource")],
                             nbt.contains("flowSourceDistance") ? nbt.getByte("flowSourceDistance") : 1));
             fluid = Optional.of(BuiltInRegistries.FLUID.get(ResourceLocation.parse(nbt.getString("fluid"))));
         }
