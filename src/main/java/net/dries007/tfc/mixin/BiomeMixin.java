@@ -9,6 +9,7 @@ package net.dries007.tfc.mixin;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.CommonLevelAccessor;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
@@ -58,6 +59,10 @@ public abstract class BiomeMixin implements BiomeBridge
     @ModifyReturnValue(method = "getPrecipitationAt", at = @At("RETURN"))
     private Biome.Precipitation getPrecipitaitionFromClimate(Biome.Precipitation original, @Local BlockPos pos)
     {
-        return WeatherHelpers.getPrecipitationAt(Minecraft.getInstance().level, pos, original);
+        Level level = Minecraft.getInstance().level;
+        if (level == null) {
+            return original;
+        }
+        return WeatherHelpers.getPrecipitationAt(level, pos, original);
     }
 }
