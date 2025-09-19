@@ -7,7 +7,9 @@
 package net.dries007.tfc.world.river;
 
 import net.minecraft.util.Mth;
+import org.jetbrains.annotations.Nullable;
 
+import net.dries007.tfc.world.ChunkNoiseFiller;
 import net.dries007.tfc.world.Seed;
 import net.dries007.tfc.world.noise.Noise2D;
 import net.dries007.tfc.world.noise.Noise3D;
@@ -333,17 +335,17 @@ public final class RiverNoise
             final Noise2D carvingCenterNoise = new OpenSimplex2D(seed.next()).octaves(2).spread(0.02f).scaled(SEA_LEVEL_Y - 3, SEA_LEVEL_Y + 3);
             final Noise2D carvingHeightNoise = new OpenSimplex2D(seed.next()).octaves(4).spread(0.15f).scaled(8, 14);
 
-            double weight, height, carvingHeight, carvingCenter;
+            double distSquared, weight, height, carvingHeight, carvingCenter;
 
             @Override
             public double setColumnAndSampleHeight(RiverInfo info, int x, int z, double heightIn, double caveWeight, double thisWeight)
             {
-                weight = Mth.clamp(info.normDistSq() * 1.3 - 0.1, 0d, 1d); // 0 = near center
+                distSquared = Mth.clamp(info.normDistSq() * 1.3 - 0.1, 0d, 1d); // 0 = near center
+                weight = caveWeight;
                 height = heightIn;
                 carvingHeight = carvingHeightNoise.noise(x, z);
                 carvingCenter = carvingCenterNoise.noise(x, z);
 
-                final double minHeight = carvingCenter - carvingHeight; // The minimum height of the river base. Must keep the river below this value
                 final double maxHeight = carvingCenter + carvingHeight; // The maximum height of the river tunnel. Any surface height above a cave must only occur above this value.
 
                 if (caveWeight > 0.75) // Full cave carver
@@ -351,30 +353,37 @@ public final class RiverNoise
                     // Return the normal terrain height as river is fully subterranean
                     return heightIn;
                 }
-                else if (caveWeight > 0.25) // Blended cave + exterior carver
+                else
                 {
                     final double canyonMaxHeight = Math.min(55 + info.normDistSq() * 1.3 * 16, heightIn);
+                    if (caveWeight > 0.5) // Blended cave + exterior carver
+                    {
+                        final double interiorHeight = Mth.map(caveWeight, 0.5, 0.75, Math.min(maxHeight, heightIn), heightIn);
 
-                    final double interiorHeight = caveWeight > 0.5 ?
-                        Mth.map(caveWeight, 0.5, 0.75, Math.min(maxHeight, heightIn), heightIn) :
-                        Math.min(heightIn, Mth.map(caveWeight, 0.25, 0.5, canyonMaxHeight, minHeight));
+                        final double exteriorHeight = Mth.map(caveWeight, 0.5, 0.75, Math.min(canyonMaxHeight, heightIn), heightIn);
 
-                    final double exteriorHeight = caveWeight > 0.5 ?
-                        Mth.map(caveWeight, 0.5, 0.75, Math.min(canyonMaxHeight, heightIn), heightIn) :
-                        canyonMaxHeight;
-
-                    return height = Mth.lerp(weight, interiorHeight, exteriorHeight);
+                        return height = Mth.lerp(distSquared, interiorHeight, exteriorHeight);
+                    }
+                    else
+                    {
+                        return canyonMaxHeight;
+                    }
                 }
-                return heightIn;
             }
 
             @Override
             public double noise(int y, double noiseIn)
             {
-                final double distance = Math.abs(y - carvingCenter) / carvingHeight;
-                final double noise = Math.max(1 - (distance * distance), 0);
+                double vertDistance = (y - carvingCenter) / carvingHeight;
+                // Create a cave mouth
+                if (vertDistance > 0)
+                {
+                    vertDistance = vertDistance * weight * weight;
+                }
+                final double columnNoise = Math.max(1 - (vertDistance * vertDistance), 0);
+                final double noise = Mth.lerp(distSquared, columnNoise, noiseIn);
 
-                return Mth.lerp(weight, noise, noiseIn);
+                return noise * weight;
             }
         };
     }
