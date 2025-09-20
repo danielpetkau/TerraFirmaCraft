@@ -111,7 +111,7 @@ public interface HeatRecipes extends Recipes
         addFood(Food.FRESH_SEAWEED, Food.DRIED_SEAWEED);
         add(TFCBlocks.PLANTS.get(Plant.GIANT_KELP_FLOWER), TFCItems.FOOD.get(Food.DRIED_KELP), 200);
         add("from_seaweed", notRotten(TFCItems.FOOD.get(Food.DRIED_SEAWEED)), ItemStackProvider.of(TFCItems.POWDERS.get(Powder.SODA_ASH), 3), 500);
-        add("_from_kelp", notRotten(TFCItems.FOOD.get(Food.DRIED_KELP)), ItemStackProvider.of(TFCItems.POWDERS.get(Powder.SODA_ASH), 3), 500);
+        add("from_kelp", notRotten(TFCItems.FOOD.get(Food.DRIED_KELP)), ItemStackProvider.of(TFCItems.POWDERS.get(Powder.SODA_ASH), 3), 500);
         add(notRotten(Items.EGG), ItemStackProvider.of(new ItemStack(TFCItems.FOOD.get(Food.COOKED_EGG)), CopyFoodModifier.INSTANCE), 200);
         add("melt", Ingredient.of(TFCItems.BLOWPIPE_WITH_GLASS), ItemStackProvider.of(TFCItems.BLOWPIPE), 1500);
         add("melt", Ingredient.of(TFCItems.CERAMIC_BLOWPIPE_WITH_GLASS), ItemStackProvider.of(TFCItems.CERAMIC_BLOWPIPE), 1500);
