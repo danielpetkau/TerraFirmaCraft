@@ -556,7 +556,7 @@ def make_book(rm: ResourceManager, i18n: I18n, local_instance: bool = False, rev
                 'X': 'tfc:clay_grass/aridisol',
                 'C': '#tfc:clay_indicators',
             }),
-            text('$(thing)Athyrium Fern$(), $(thing)Canna$(), $(thing)Goldenrod$(), $(thing)Pampas Grass$(), $(thing)Perovskia$(), and $(thing)Water Canna$() all indicate the presence of clay nearby. Clay can also be found in smaller deposits close to water sources, such as rivers, lakes, or ponds.$(br2)Like with rocks, clay can be knapped to form new items. It requires five clay in your hand to knap. Unlike rocks, if you make a mistake, you can simply close the knapping interface, reshape your clay, and try again.').link('#tfc:clay_indicators'),
+            text('$(thing)Athyrium Fern$(), $(thing)Canna$(), $(thing)Goldenrod$(), $(thing)Pampas Grass$(), $(thing)Perovskia$(), and $(thing)Water Canna$() all indicate the presence of clay nearby. Clay can also be found in smaller deposits close to water sources, such as rivers, lakes, or ponds.$(br2)Like with rocks, clay can be knapped to form new items. It requires five clay in your hand to knap. Unlike rocks, if you make a mistake, you can simply close the knapping interface, reshape your clay, and try again.').link('#tfc:clay_indicators').anchor('knapping'),
             image('tfc:textures/gui/book/gui/clay_knapping.png', text_contents='The Knapping Interface.', border=False),
             text('The small vessel is one such item. Like all pottery items, it must be $(l:https://en.wikipedia.org/wiki/Pottery)fired$() before it can be used. Firing is a process of $(l:mechanics/heating)heating$() the item up to a point where the clay will turn into a hard $(thing)Ceramic$() material, which requires heating to 1400 °C, or $(e)$(bold)$(t:Yellow White)Yellow White$().$(br2)In order to do this in the early game, you will need to use a $(l:getting_started/pit_kiln)Pit Kiln$().', title='Small Vessel').link('tfc:ceramic/unfired_vessel').link('tfc:ceramic/vessel').anchor('vessel'),
             knapping('tfc:knapping/ceramic/unfired_vessel', 'Knapping a Clay Small Vessel.'),
@@ -1060,6 +1060,14 @@ def make_book(rm: ResourceManager, i18n: I18n, local_instance: bool = False, rev
             text('A $(thing)Bellows$() is a device which can be used to increase the air flow through another device which lets them burn at a hotter temperature. However, by burning at a hotter temperature they will also consume fuel faster. The bellows can provide air to a device that is directly in front of it, or in front and one block down. This allows it to provide air to a $(l:getting_started/firepit)Firepit$(), or a $(l:mechanics/charcoal_forge)Charcoal Forge$() for example.'),
             crafting('tfc:crafting/bellows', title='', text_contents='To use the bellows, simply place it facing the targeted heating device, and use it. The bellows will pump air into the device, raising the maximum temperature for a short time.')
         )),
+        entry('channels', 'Casting with Channels', 'tfc:channel', pages=(
+            text('You can cast from a $(l:mechanics/crucible)Crucible$() to more than one mold at a time using $(thing)Channels$() and $(thing)Mold Tables$(). Simply connect the $(thing)Mold Tables$() to the $(thing)Crucible$() using $(thing)Channels$() and right-click on the $(thing)Channel$() next to the $(thing)Crucible$(). Shift-right-click the $(thing)Mold Table$() with a $(l:getting_started/pottery#mold)Mold$() to place it or remove it.'),
+            knapping('tfc:knapping/ceramic/unfired_channel_4', '$(l:getting_started/pottery#knapping)Knapping$() several $(thing)Unfired Channels$().'),
+            knapping('tfc:knapping/ceramic/unfired_mold_table', '$(l:getting_started/pottery#knapping)Knapping$() an $(thing)Unfired Mold Table$().'),
+            heat_recipe('tfc:heating/channel', 'After the channels and mold table are knapped, they will need to be $(thing)fired$(), like any piece of pottery.'),
+            multiblock('A casting set up', '', False, multiblock_id='tfc:channel_casting'),
+            text('$(li)Using a $(l:mechanics/bellows)Bellows$() on a $(thing)Mold Table$() will cool the metal faster.$()$(li)Activating a $(thing)Channel$() with a redstone pulse will start pouring the metal.$()$(li)$(thing)Mold Tables$() output a comparator signal.', 'Automation')
+        )),
         entry('grill', 'Firepit And Grill', 'tfc:grill', pages=(
             text('A $(thing)Grill$() is an item that can be added to a firepit to cook foods more efficiently. The grill is able to cook five items at once, and also gives these items the $(thing)Wood Grilled$() trait when cooking food, which provides a minor buff to the item\'s $(l:mechanics/decay)expiration date$(). In order to create a firepit with grill, first create a $(l:getting_started/firepit)Firepit$(), then use a $(thing)Wrought Iron Grill$() on the firepit.').link('tfc:wrought_iron_grill'),
             block_spotlight('A Firepit with Grill', '', 'tfc:grill'),
@@ -1368,7 +1376,7 @@ def make_book(rm: ResourceManager, i18n: I18n, local_instance: bool = False, rev
             ),
 
             # Legumes
-            text(f'{detail_crop("cassava")}Cassava is a single block crop. Soybean seeds can be planted on farmland and will produce $(thing)Cassava$() and $(thing)Cassava Seeds$() as a product.', title='Cassava').link('tfc:seeds/cassava').link('tfc:food/cassava').anchor('cassava'),
+            text(f'{detail_crop("cassava")}Cassava is a single block crop. Cassava seeds can be planted on farmland and will produce $(thing)Cassava$() and $(thing)Cassava Seeds$() as a product.', title='Cassava').link('tfc:seeds/cassava').link('tfc:food/cassava').anchor('cassava'),
             multimultiblock('', *[two_tall_block_spotlight('', '', 'tfc:farmland/oxisol', 'tfc:crop/cassava[age=%d]' % i) for i in range(6)]),
             text(f'{detail_crop("green_bean")}Green Beans is a climbing two block tall crop. Green Bean seeds can be planted on farmland, will grow two blocks tall if a stick is present, and will produce $(thing)Green Beans$() and $(thing)Green Bean Seeds$() as a product.', title='Green Beans').link('tfc:seeds/green_bean').link('tfc:food/green_bean').anchor('green_bean'),
             multimultiblock('The stick is required in order for the crop to fully grow.', *[multiblock('', '', False, (('X',), ('Y',), ('Z',), ('0',)), {

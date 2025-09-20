@@ -192,7 +192,7 @@ public class VesselItem extends Item
                 {
                     TFCContainerProviders.MOLD_LIKE_ALLOY.openScreen(serverPlayer, hand);
                 }
-                else if (vessel.isEmpty())
+                else if (vessel.getTemperature() > 0 && !vessel.hasFluidContent())
                 {
                     player.displayClientMessage(Component.translatable("tfc.tooltip.small_vessel.inventory_too_hot"), true);
                 }

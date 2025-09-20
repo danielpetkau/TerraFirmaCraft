@@ -624,7 +624,7 @@ public class ChunkNoiseFiller extends ChunkHeightFiller
     }
 
     @Override
-    protected void updateLocalCaches(Object2DoubleMap<BiomeExtension> biomeWeights, BiomeExtension biomeAt, @Nullable RiverInfo info, double height)
+    protected void updateLocalCaches(Object2DoubleMap<BiomeExtension> biomeWeights, BiomeExtension biomeAt, @Nullable RiverInfo info, double height, boolean couldBeSalty)
     {
         final int localIndex = localX + 16 * localZ;
 
@@ -635,10 +635,11 @@ public class ChunkNoiseFiller extends ChunkHeightFiller
         }
 
         localBiomes[localIndex] = biomeAt;
-        localBiomeWeights[localIndex] = biomeWeights.getOrDefault(biomeAt, 0.5);
+        final double biomeWeightAt = biomeWeights.getOrDefault(biomeAt, 0.5);
+        localBiomeWeights[localIndex] = biomeWeightAt;
         surfaceHeight[localIndex] = (int) height;
 
-        baseBlockSource.useAccurateBiome(localX, localZ, biomeAt);
+        baseBlockSource.useAccurateBiome(localX, localZ, biomeAt, biomeWeightAt, couldBeSalty);
     }
 
     private void sampleRiverData()

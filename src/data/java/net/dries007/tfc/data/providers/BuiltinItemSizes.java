@@ -88,6 +88,10 @@ public class BuiltinItemSizes extends DataManagerProvider<ItemSizeDefinition> im
         add("soups", TFCTags.Items.SOUPS, Size.VERY_SMALL, Weight.MEDIUM);
         add("salads", TFCTags.Items.SALADS, Size.VERY_SMALL, Weight.MEDIUM);
         add("bloomery", TFCBlocks.BLOOMERY, Size.LARGE, Weight.VERY_HEAVY);
+        add("mold_tables", ingredientOf(
+            Ingredient.of(TFCItems.UNFIRED_MOLD_TABLE), 
+            Ingredient.of(TFCBlocks.MOLD_TABLE)
+        ), Size.HUGE, Weight.HEAVY);
         add("small_tools", ingredientOf(
             Ingredient.of(TFCTags.Items.TOOLS_CHISEL),
             Ingredient.of(TFCTags.Items.TOOLS_KNIFE),
@@ -117,7 +121,7 @@ public class BuiltinItemSizes extends DataManagerProvider<ItemSizeDefinition> im
         add("glass_bottles", TFCTags.Items.GLASS_BOTTLES, Size.NORMAL, Weight.MEDIUM);
         add("windmill_blades", TFCTags.Items.WINDMILL_BLADES, Size.VERY_LARGE, Weight.VERY_HEAVY);
         add("water_wheels", TFCTags.Items.WATER_WHEELS, Size.VERY_LARGE, Weight.VERY_HEAVY);
-        add("firepit_attachments", Ingredient.of(TFCItems.POT, TFCItems.WROUGHT_IRON_GRILL), Size.VERY_LARGE, Weight.HEAVY);
+        add("firepit_attachments", Ingredient.of(TFCItems.POT, TFCItems.UNFIRED_POT, TFCItems.WROUGHT_IRON_GRILL), Size.VERY_LARGE, Weight.HEAVY);
     }
 
     private void add(String name, TagKey<Item> item, Size size, Weight weight)

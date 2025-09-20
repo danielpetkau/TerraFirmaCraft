@@ -274,7 +274,9 @@ public class BuiltinBlockTags extends TagsProvider<Block> implements Accessors
                 TFCBlocks.BRONZE_BELL,
                 TFCBlocks.BRASS_BELL,
                 TFCBlocks.LARGE_VESSEL
-            );
+            )
+            .add(TFCBlocks.MOLD_TABLE)
+            .add(TFCBlocks.CHANNEL);
         tag(BlockTags.MINEABLE_WITH_SHOVEL)
             .add2(TFCBlocks.SOIL)
             .add(TFCBlocks.SAND)
@@ -725,8 +727,11 @@ public class BuiltinBlockTags extends TagsProvider<Block> implements Accessors
         tag(POWDER_SNOW_REPLACEABLE).add(
             Blocks.SNOW_BLOCK,
             Blocks.PACKED_ICE,
-            Blocks.BLUE_ICE,
-            TFCBlocks.SEA_ICE.get());
+            Blocks.BLUE_ICE);
+        tag(COLD_OCEAN_BLOCKS)
+            .addTag(POWDER_SNOW_REPLACEABLE)
+            .add(Blocks.POWDER_SNOW)
+            .add(TFCBlocks.SEA_ICE);
         tag(TIDE_POOL_BLOCKS).add(
             TFCBlocks.GROUNDCOVER.get(GroundcoverBlockType.CLAM),
             TFCBlocks.GROUNDCOVER.get(GroundcoverBlockType.MOLLUSK),

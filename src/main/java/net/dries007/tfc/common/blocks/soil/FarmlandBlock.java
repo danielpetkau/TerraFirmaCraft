@@ -118,23 +118,34 @@ public class FarmlandBlock extends Block implements ISoilBlock, HoeOverlayBlock,
         return tooltip;
     }
 
+    public static int getRainHydration(Level level, BlockPos pos, int stormHydration)
+    {
+        return getRainHydration(level, pos, stormHydration, Calendars.get(level).getCalendarTicks());
+    }
+
     /**
      * @return A value in the range [0, 60] representing total rain hydration (humidity + storm)
      */
-    public static int getRainHydration(Level level, BlockPos pos, int stormHydration)
+    public static int getRainHydration(Level level, BlockPos pos, int stormHydration, long calendarTick)
     {
         final WorldTracker tracker = WorldTracker.get(level);
         final ClimateModel model = tracker.getClimateModel();
+        final int daysInMonth = Calendars.get(level).getCalendarDaysInMonth();
 
-        final int humidityBoost = (int) (ChunkData.MAX_HUMIDITY_CONTRIBUTION * Mth.clampedMap(model.getRainfall(level, pos), ClimateModel.MIN_RAINFALL, ClimateModel.MAX_RAINFALL, 0, 1));
+        final int humidityBoost = (int) (ChunkData.MAX_HUMIDITY_CONTRIBUTION * Mth.clampedMap(model.getRainfall(level, pos, calendarTick, daysInMonth), ClimateModel.MIN_RAINFALL, ClimateModel.MAX_RAINFALL, 0, 1));
         // Ensure that storms + humidity do not exceed ChunkData.MAX_RAINFALL_CONTRIBUTION
         return (int) Mth.clamp(stormHydration + humidityBoost, 0, ChunkData.MAX_RAINFALL_CONTRIBUTION);
+    }
+
+    public static int getHydrationFromStormHydration(Level level, BlockPos pos, int stormHydration)
+    {
+        return getHydrationFromStormHydration(level, pos, stormHydration, Calendars.get(level).getCalendarTicks());
     }
 
     /**
      * @return A value in the range [0, 100]
      */
-    public static int getHydrationFromStormHydration(Level level, BlockPos pos, int stormBoost)
+    public static int getHydrationFromStormHydration(Level level, BlockPos pos, int stormBoost, long calendarTick)
     {
         if (Helpers.isFluid(level.getFluidState(pos.above()), TFCTags.Fluids.HYDRATING))
         {
@@ -159,38 +170,6 @@ public class FarmlandBlock extends Block implements ISoilBlock, HoeOverlayBlock,
         final float soilMultiplier = getHydrationMultiplier(level, pos);
 
         return Mth.clamp((int) ((waterBoost + rainBoost) * soilMultiplier), 0, 100);
-    }
-
-    /**
-     * @return A value in the range [0, 100]
-     */
-    public static int getHydrationFromStormHydrationOverTime(Level level, BlockPos pos, int stormBoost, long fromTick, long toTick)
-    {
-        if (Helpers.isFluid(level.getFluidState(pos.above()), TFCTags.Fluids.HYDRATING))
-        {
-            return 100; // special case for waterlogged crops
-        }
-
-        final int rainBoost = getRainHydrationOverTime(level, pos, stormBoost, fromTick, toTick);
-        final int waterBoost = isSourceBlockPresent(level, pos) ? 40 : 0;
-        final float soilMultiplier = getHydrationMultiplier(level, pos);
-
-        return Mth.clamp((int) ((waterBoost + rainBoost) * soilMultiplier), 0, 100);
-    }
-
-    /**
-     * @return A value in the range [0, 60] representing total rain hydration (humidity + storm)
-     */
-    public static int getRainHydrationOverTime(Level level, BlockPos pos, int stormHydration, long fromTick, long toTick)
-    {
-
-        final WorldTracker tracker = WorldTracker.get(level);
-        final ClimateModel model = tracker.getClimateModel();
-        final ICalendar calendar = Calendars.get(level);
-
-        final int humidityBoost = (int) (ChunkData.MAX_HUMIDITY_CONTRIBUTION * Mth.clampedMap(model.getRainfall(level, pos, fromTick, toTick, calendar.getCalendarDaysInMonth()), ClimateModel.MIN_RAINFALL, ClimateModel.MAX_RAINFALL, 0, 1));
-        // Ensure that storms + humidity do not exceed ChunkData.MAX_RAINFALL_CONTRIBUTION
-        return (int) Mth.clamp(stormHydration + humidityBoost, 0, ChunkData.MAX_RAINFALL_CONTRIBUTION);
     }
 
     public static void turnToDirt(BlockState state, Level level, BlockPos pos)

@@ -186,7 +186,7 @@ public final class BiomeNoise
      */
     public static Noise2D glacialOceanicBase(long seed)
     {
-        return (x, z) -> SEA_LEVEL_Y - 10;
+        return (x, z) -> SEA_LEVEL_Y - 4;
     }
 
     /**

@@ -56,6 +56,8 @@ public interface HeatRecipes extends Recipes
         add(TFCItems.UNFIRED_FIRE_INGOT_MOLD, TFCItems.FIRE_INGOT_MOLD, POTTERY);
         add(TFCItems.UNFIRED_VESSEL, TFCItems.VESSEL, POTTERY);
         add(TFCItems.UNFIRED_LARGE_VESSEL, TFCBlocks.LARGE_VESSEL, POTTERY);
+        add(TFCItems.UNFIRED_MOLD_TABLE, TFCBlocks.MOLD_TABLE, POTTERY);
+        add(TFCItems.UNFIRED_CHANNEL, TFCBlocks.CHANNEL, POTTERY);
 
         TFCItems.MOLDS.forEach((type, item) -> add(TFCItems.UNFIRED_MOLDS.get(type), item, POTTERY));
         TFCItems.GLAZED_VESSELS.forEach((color, item) -> add(TFCItems.UNFIRED_GLAZED_VESSELS.get(color), item, POTTERY));
@@ -109,7 +111,7 @@ public interface HeatRecipes extends Recipes
         addFood(Food.FRESH_SEAWEED, Food.DRIED_SEAWEED);
         add(TFCBlocks.PLANTS.get(Plant.GIANT_KELP_FLOWER), TFCItems.FOOD.get(Food.DRIED_KELP), 200);
         add("from_seaweed", notRotten(TFCItems.FOOD.get(Food.DRIED_SEAWEED)), ItemStackProvider.of(TFCItems.POWDERS.get(Powder.SODA_ASH), 3), 500);
-        add("_from_kelp", notRotten(TFCItems.FOOD.get(Food.DRIED_KELP)), ItemStackProvider.of(TFCItems.POWDERS.get(Powder.SODA_ASH), 3), 500);
+        add("from_kelp", notRotten(TFCItems.FOOD.get(Food.DRIED_KELP)), ItemStackProvider.of(TFCItems.POWDERS.get(Powder.SODA_ASH), 3), 500);
         add(notRotten(Items.EGG), ItemStackProvider.of(new ItemStack(TFCItems.FOOD.get(Food.COOKED_EGG)), CopyFoodModifier.INSTANCE), 200);
         add("melt", Ingredient.of(TFCItems.BLOWPIPE_WITH_GLASS), ItemStackProvider.of(TFCItems.BLOWPIPE), 1500);
         add("melt", Ingredient.of(TFCItems.CERAMIC_BLOWPIPE_WITH_GLASS), ItemStackProvider.of(TFCItems.CERAMIC_BLOWPIPE), 1500);
@@ -117,7 +119,7 @@ public interface HeatRecipes extends Recipes
         add(TFCItems.CACTUS_WOOD, TFCItems.DRIED_CACTUS_WOOD, 700);
 
         burnFood("bread", Ingredient.of(TFCTags.Items.BREAD), 700);
-        burnFood("meat", Ingredient.of(TFCTags.Items.MEATS), 900);
+        burnFood("meat", Ingredient.of(TFCTags.Items.COOKED_MEATS), 900);
 
         for (Ore ore : Ore.values())
             if (ore.isGraded())

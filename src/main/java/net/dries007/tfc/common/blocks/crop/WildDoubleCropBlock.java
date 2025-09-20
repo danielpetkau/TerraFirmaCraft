@@ -34,6 +34,7 @@ import net.dries007.tfc.common.blocks.ExtendedProperties;
 import net.dries007.tfc.common.blocks.TFCBlockStateProperties;
 import net.dries007.tfc.util.Helpers;
 
+// Several methods in this class are called from other types of double tall crops
 public class WildDoubleCropBlock extends WildCropBlock
 {
     public static void onPlayerWillDestroy(Level level, BlockPos pos, BlockState state, Player player)
@@ -149,7 +150,7 @@ public class WildDoubleCropBlock extends WildCropBlock
     {
         if (placer instanceof Player)
         {
-            level.setBlockAndUpdate(pos.above(), defaultBlockState().setValue(PART, DoubleCropBlock.Part.TOP));
+            level.setBlockAndUpdate(pos.above(), state.setValue(PART, DoubleCropBlock.Part.TOP));
         }
     }
 

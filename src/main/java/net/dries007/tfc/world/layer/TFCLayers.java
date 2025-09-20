@@ -297,7 +297,7 @@ public class TFCLayers
         }
         if (value == OLD_MOUNTAINS || value == EXTREME_DOLINE_MOUNTAINS)
         {
-            return TERRACE_UPPER;
+            return TERRACE_LOWER;
         }
         if (value == PLATEAU || value == EXTREME_DOLINE_PLATEAU || value == BURREN_PLATEAU || value == SHILIN_PLATEAU)
         {
@@ -319,7 +319,7 @@ public class TFCLayers
         {
             return COASTAL_DUNES;
         }
-        return SHORE;
+        return TIDAL_FLATS;
     }
 
     public static boolean hasLake(int value)

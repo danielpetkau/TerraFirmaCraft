@@ -34,8 +34,8 @@ public sealed class ChunkData
     private static final float UNKNOWN_BASE_GROUNDWATER = 0;
 
     public static float MAX_ACCUMULATED_RAINFALL = 30.0f;
-    public static float MAX_HUMIDITY_CONTRIBUTION = 45.0f;
-    public static float MAX_STORM_CONTRIBUTION = 15.0f;
+    public static float MAX_HUMIDITY_CONTRIBUTION = 50.0f;
+    public static float MAX_STORM_CONTRIBUTION = 10.0f;
     public static float MAX_RAINFALL_CONTRIBUTION = MAX_HUMIDITY_CONTRIBUTION + MAX_STORM_CONTRIBUTION;
 
     /**
@@ -140,7 +140,7 @@ public sealed class ChunkData
     // Gets the accumulated rainfall value scaled for using in crop hydration
     public float getStormHydration()
     {
-        return (MAX_STORM_CONTRIBUTION * accumulatedRainfall / ChunkData.MAX_ACCUMULATED_RAINFALL); // Up to 20% bonus from storms
+        return (MAX_STORM_CONTRIBUTION * accumulatedRainfall / ChunkData.MAX_ACCUMULATED_RAINFALL);
     }
 
     // Gets the raw accumulated rainfall value - do not use directly for crops
@@ -168,7 +168,7 @@ public sealed class ChunkData
         final float rainfall = getRainfall(x, y);
         final float rainVar = Math.abs(getRainVariance(x, y));
         // Max instantaneous rainfall value is actually double the max rainfall, this caps rainfall contribution at the max average rainfall
-        return rainfall * (1 + rainVar) * (MAX_HUMIDITY_CONTRIBUTION / ClimateModel.MAX_RAINFALL) + MAX_STORM_CONTRIBUTION;
+        return Math.min(rainfall * (1 + rainVar) * (MAX_HUMIDITY_CONTRIBUTION / ClimateModel.MAX_RAINFALL), MAX_HUMIDITY_CONTRIBUTION) + MAX_STORM_CONTRIBUTION;
     }
 
     public void setAccumulatedRainfall(ChunkAccess chunk, float rainfall)

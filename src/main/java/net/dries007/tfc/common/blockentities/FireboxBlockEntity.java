@@ -94,7 +94,7 @@ public class FireboxBlockEntity extends TickableInventoryBlockEntity<ItemStackHa
                 box.markForSync();
             }
         }
-        if (box.temperature == 0 || box.heatingCount < 4 || Math.abs(box.temperature - box.burnTemperature) > 40)
+        if (box.temperature == 0 || box.heatingCount < 4 || Math.abs(box.temperature - box.burnTemperature) > BellowsBlockEntity.MAX_DEVICE_AIR_TICKS + 1)
             box.heatingTimestamp = Calendars.SERVER.getTicks();
         if (box.getTimeLeft() <= 0)
             performHeating(level, box, box.operableBlocks);

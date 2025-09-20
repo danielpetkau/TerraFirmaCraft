@@ -81,6 +81,10 @@ public interface CraftingRecipes extends Recipes
         // Removed Crafting Recipes
         remove(
             "anvil",
+            "bamboo_planks",
+            "bamboo_raft",
+            "bamboo_chest_raft",
+            "bamboo_hanging_sign",
             "barrel",
             "beetroot_soup",
             "bolt_armor_trim_smithing_template",
@@ -130,6 +134,7 @@ public interface CraftingRecipes extends Recipes
             "sentry_armor_trim_smithing_template",
             "shaper_armor_trim_smithing_template",
             "silence_armor_trim_smithing_template",
+            "scaffolding",
             "skull_banner_pattern",
             "slime_ball",
             "smoker",
@@ -195,11 +200,11 @@ public interface CraftingRecipes extends Recipes
             .input(FluidContentIngredient.of(Fluids.WATER, 100))
             .shapeless(Items.CLAY_BALL, 4);
 
-        for (int n = 1; n <= 8; n++)
+        for (int n = 2; n <= 8; n++)
             recipe("" + n)
                 .input(TFCBlocks.HARDENED_CLAY, n)
                 .input(FluidContentIngredient.of(Fluids.WATER, 1000))
-                .shapeless(Items.CLAY, n * 4);
+                .shapeless(Items.CLAY_BALL, n * 4);
 
         TFCItems.GEMS.forEach((gem, item) -> recipe()
             .damageInputs()
@@ -364,7 +369,7 @@ public interface CraftingRecipes extends Recipes
             recipe()
                 .input(blocks.apply(SoilBlockType.MUD))
                 .input(TFCItems.STRAW)
-                .shapeless(blocks.apply(SoilBlockType.DRYING_BRICKS));
+                .shapeless(blocks.apply(SoilBlockType.DRYING_BRICKS), 4);
             recipe().to2x2(soil.mudBrick(), blocks.apply(SoilBlockType.MUD_BRICKS), 1);
             addDecorations(blocks.apply(SoilBlockType.MUD_BRICKS), TFCBlocks.MUD_BRICK_DECORATIONS.get(soil));
             // Mud Bricks have 2x2 crafting recipes as alternatives - but allow making slabs/stairs (not walls) before wood (saws)
@@ -550,6 +555,7 @@ public interface CraftingRecipes extends Recipes
                 .input('S', TFCTags.Items.TOOLS_SAW)
                 .pattern("LS", "L ")
                 .damageInputs()
+                .source(0, 1)
                 .shaped(TFCItems.SUPPORTS.get(wood), 8);
             recipe()
                 .input('L', lumber)
@@ -1103,6 +1109,7 @@ public interface CraftingRecipes extends Recipes
                 LacksTraitIngredient.of(FoodTraits.SALTED)
             ))
             .input(TFCItems.POWDERS.get(Powder.SALT))
+            .copyInput()
             .addTrait(FoodTraits.SALTED)
             .shapeless("salting");
         recipe()
@@ -1149,6 +1156,15 @@ public interface CraftingRecipes extends Recipes
         recipe("from_twigs")
             .input(TFCTags.Items.TWIGS)
             .shapeless(Items.STICK, 1);
+        recipe("from_golden_bamboo")
+            .input('X', TFCBlocks.PLANTS.get(Plant.GOLDEN_BAMBOO))
+            .pattern("X")
+            .shaped(Items.STICK);
+        recipe("from_golden_bamboo")
+            .input('I', TFCTags.Items.BAMBOO)
+            .input('~', Tags.Items.STRINGS)
+            .pattern("I~I", "I I", "I I")
+            .shaped(Items.SCAFFOLDING);
         recipe().to2x2(TFCItems.STRAW, TFCBlocks.THATCH, 1);
         recipe()
             .input(TFCBlocks.THATCH)

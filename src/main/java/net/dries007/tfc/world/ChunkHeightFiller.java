@@ -109,11 +109,17 @@ public class ChunkHeightFiller
         BiomeExtension biomeAt = null, normalBiomeAt = null, shoreBiomeAt = null, oceanBiomeAt = null;
         double maxNormalWeight = 0, maxShoreWeight = 0, maxOceanWeight = 0; // Partition on biome type
 
+        boolean anySaltyBiomesNearby = false;
         for (Object2DoubleMap.Entry<BiomeExtension> entry : biomeWeights.object2DoubleEntrySet())
         {
             final double biomeWeight = entry.getDoubleValue();
             final BiomeExtension biome = entry.getKey();
             final BiomeNoiseSampler sampler = biomeNoiseSamplers.get(biome);
+
+            if (biome.isSalty())
+            {
+                anySaltyBiomesNearby = true;
+            }
 
             assert sampler != null : "Non-existent sampler for biome: " + biome.key();
 
@@ -194,7 +200,7 @@ public class ChunkHeightFiller
 
         if (useCache)
         {
-            updateLocalCaches(biomeWeights, biomeAt, info, height);
+            updateLocalCaches(biomeWeights, biomeAt, info, height, anySaltyBiomesNearby);
         }
 
         return height;
@@ -269,12 +275,13 @@ public class ChunkHeightFiller
         final double initialCaveWeight = riverBlendWeights[RIVER_TYPE_CAVE];
         if (initialCaveWeight > 0)
         {
+            final double totalWeight = 1.0 - riverBlendWeights[RIVER_TYPE_NONE];
             // Delegate weight entirely to the cave carver after a point, and let it handle interpolation into the mouth of the cave
             // This needs to be very carefully managed not to pinch off the edge, and interpolating a canyon and cave together leads to subpar results.
             // So, we supply the river carve weight (initial value) to the cave carver, and run it at 1.0 weight instead, which will create a smooth transition.
             final double adjustedCaveWeight = initialCaveWeight < 0.25 ?
-                Mth.map(initialCaveWeight, 0.0, 0.25, 0, 0.1) :
-                1.0 - riverBlendWeights[RIVER_TYPE_NONE];
+                Mth.map(initialCaveWeight, 0.0, 0.25, 0, 0.1 * totalWeight) :
+                totalWeight;
 
             for (RiverBlendType type : RiverBlendType.ALL)
             {
@@ -322,7 +329,7 @@ public class ChunkHeightFiller
         }
     }
 
-    protected void updateLocalCaches(Object2DoubleMap<BiomeExtension> biomeWeights, BiomeExtension biomeAt, @Nullable RiverInfo info, double height) {}
+    protected void updateLocalCaches(Object2DoubleMap<BiomeExtension> biomeWeights, BiomeExtension biomeAt, @Nullable RiverInfo info, double height, boolean couldBeSalty) {}
 
     @Nullable
     protected RiverInfo sampleRiverInfo(boolean useCache)

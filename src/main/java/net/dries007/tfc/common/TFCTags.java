@@ -247,6 +247,8 @@ public class TFCTags
         public static final TagKey<Block> KAOLIN_CLAY_REPLACEABLE = tag("kaolin_clay_replaceable");
         /** Blocks that can be replaced with powder snow */
         public static final TagKey<Block> POWDER_SNOW_REPLACEABLE = tag("powder_snow_replaceable");
+        /** Blocks that underwater lava springs shouldn't place on */
+        public static final TagKey<Block> COLD_OCEAN_BLOCKS = tag("cold_ocean_blocks");
         /** Hardened rock blocks only. Used in worldgen to determine in what rock types sea stacks can generate. **/
         public static final TagKey<Block> SEA_STACK_ROCKS = tag("sea_stack_rocks");
 
@@ -402,6 +404,7 @@ public class TFCTags
 
         public static final TagKey<Item> PLANTS = tag("plants");
         public static final TagKey<Item> WILD_CROPS = tag("wild_crops");
+        public static final TagKey<Item> BAMBOO = tag("bamboo");
 
         /**
          * Colored Tags
@@ -560,6 +563,7 @@ public class TFCTags
         public static final TagKey<Item> BLAST_FURNACE_TUYERES = tag("blast_furnace_tuyeres");
         public static final TagKey<Item> TOOL_RACK_TOOLS = tag("usable_on_tool_rack");
         public static final TagKey<Item> POWDER_KEG_FUEL = tag("usable_in_powder_keg");
+        public static final TagKey<Item> USABLE_IN_MOLD_TABLE = tag("usable_in_mold_table");
         /**
          * Items that can be placed in a {@link HoldingMinecart}. Items present here must be block items, in order to
          * be able to render them.

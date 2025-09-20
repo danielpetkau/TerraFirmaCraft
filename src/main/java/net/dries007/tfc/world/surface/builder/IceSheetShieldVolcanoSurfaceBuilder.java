@@ -23,7 +23,7 @@ public class IceSheetShieldVolcanoSurfaceBuilder implements SurfaceBuilder
     public static final SurfaceBuilderFactory ICE_SHEET = seed -> new IceSheetShieldVolcanoSurfaceBuilder(seed, BiomeNoise.glaciatedShieldVolcano(seed.seed(), BiomeNoise.hotSpotIntensity(seed.seed())), BiomeNoise.iceSheetSurfaceHeight(seed.seed()).max(BiomeNoise.shieldVolcanoIceSheetSurface(seed.seed(), BiomeNoise.hotSpotIntensity(seed.seed()))), false, true, SEA_LEVEL_Y);
     public static final SurfaceBuilderFactory GLACIATED = seed -> new IceSheetShieldVolcanoSurfaceBuilder(seed, BiomeNoise.glaciatedShieldVolcano(seed.seed(), BiomeNoise.hotSpotIntensity(seed.seed())), BiomeNoise.iceSheetSurfaceHeight(seed.seed()).max(BiomeNoise.shieldVolcanoGlacierSurface(seed.seed(), BiomeNoise.hotSpotIntensity(seed.seed()))), false, true, SEA_LEVEL_Y + 30);
 
-
+    private final Seed seed;
     private final Noise2D iceSurfaceNoise;
     private final Noise2D baseNoise;
     private final boolean hasMoraines;
@@ -33,6 +33,7 @@ public class IceSheetShieldVolcanoSurfaceBuilder implements SurfaceBuilder
 
     IceSheetShieldVolcanoSurfaceBuilder(Seed seed, Noise2D baseNoise, Noise2D iceSurfaceNoise, boolean hasMoraines, boolean hasStonyPeaks, int minFreezingHeight)
     {
+        this.seed = seed;
         this.baseNoise = baseNoise;
         this.iceSurfaceNoise = iceSurfaceNoise;
         this.hasMoraines = hasMoraines;
@@ -62,7 +63,12 @@ public class IceSheetShieldVolcanoSurfaceBuilder implements SurfaceBuilder
             iceDepth = 35;
         }
 
-        if (startY < minFreezingHeight || (hasStonyPeaks && startY > glacierSurfaceHeight + 2.5) || (startY < glacierBaseHeight - 1.5))
+        final int seaLevel = context.getSeaLevel();
+        if (startY <= seaLevel)
+        {
+            ShoreAndOceanSurfaceBuilder.OLD_SHIELD_VOLCANO.apply(seed).buildSurface(context, startY, endY);
+        }
+        else if (startY < minFreezingHeight || (hasStonyPeaks && startY > glacierSurfaceHeight + 2.5) || (startY < glacierBaseHeight - 1.5))
         {
             this.baseVolcanoSurfaceBuilder.buildSurface(context, startY, endY);
         }
@@ -110,7 +116,7 @@ public class IceSheetShieldVolcanoSurfaceBuilder implements SurfaceBuilder
                                 context.setBlockState(y, iceState);
                             }
                         }
-                        else if (iceDepth == 0 || y <= context.getSeaLevel() || y < glacierBaseHeight)
+                        else if (iceDepth == 0 || y <= seaLevel || y < glacierBaseHeight)
                         {
                             // Skip placing snow where there is no glacier, or underwater
                             context.setBlockState(y, moraineState);

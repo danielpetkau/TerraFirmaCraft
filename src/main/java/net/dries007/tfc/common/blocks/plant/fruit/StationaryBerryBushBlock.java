@@ -96,8 +96,6 @@ public class StationaryBerryBushBlock extends SeasonalPlantBlock implements HoeO
 
                 final BlockPos rootPos = bush.getStemPos().below();
                 final ClimateRange range = climateRange.get();
-                final int hydration = FarmlandBlock.getHydrationFromStormHydrationOverTime(level, rootPos, (int) ChunkData.get(level, pos).getStormHydration(), currentCalendarTick, nextCalendarTick);
-
                 int monthsSpentDying = 0;
                 do
                 {
@@ -108,10 +106,11 @@ public class StationaryBerryBushBlock extends SeasonalPlantBlock implements HoeO
                     // Advance both the stage (randomly, if the previous month was healthy), and lifecycle (if the at-the-time conditions were valid)
                     nextCalendarTick = Math.min(nextCalendarTick + Calendars.SERVER.getCalendarTicksInMonth(), currentCalendarTick);
 
-
                     float temperatureAtNextTick = Climate.getTemperature(level, pos, nextCalendarTick, Calendars.SERVER.getCalendarDaysInMonth());
+                    final int hydrationAtNextTick = FarmlandBlock.getHydrationFromStormHydration(level, rootPos, (int) ChunkData.get(level, pos).getStormHydration(), nextCalendarTick);
+
                     Lifecycle lifecycleAtNextTick = getLifecycleForMonth(ICalendar.getMonthOfYear(nextCalendarTick, Calendars.SERVER.getCalendarDaysInMonth()));
-                    if (range.checkBoth(hydration, temperatureAtNextTick, false))
+                    if (range.checkBoth(hydrationAtNextTick, temperatureAtNextTick, false))
                     {
                         currentLifecycle = currentLifecycle.advanceTowards(lifecycleAtNextTick);
                     }
@@ -151,7 +150,7 @@ public class StationaryBerryBushBlock extends SeasonalPlantBlock implements HoeO
             }
         }
     }
-
+    
     /**
      * Can this bush die, given that it spent {@code monthsSpentDying} consecutive months in a dormant state, when it should've been in a non-dormant state.
      */
