@@ -7,9 +7,7 @@
 package net.dries007.tfc.world.river;
 
 import net.minecraft.util.Mth;
-import org.jetbrains.annotations.Nullable;
 
-import net.dries007.tfc.world.ChunkNoiseFiller;
 import net.dries007.tfc.world.Seed;
 import net.dries007.tfc.world.noise.Noise2D;
 import net.dries007.tfc.world.noise.Noise3D;
@@ -304,14 +302,22 @@ public final class RiverNoise
         {
             final Noise2D baseNoise = new OpenSimplex2D(seed.next()).octaves(4).spread(0.05f).scaled(-2.5f, 1.5f);
             final Noise2D cliffHeightNoise = new OpenSimplex2D(seed.next()).octaves(2).spread(0.1f).scaled(4f, 8f);
+            final Noise2D cliffBaseNoise = new OpenSimplex2D(seed.next()).octaves(2).spread(0.06f).scaled(SEA_LEVEL_Y - 2, SEA_LEVEL_Y + 4);
             final Noise2D distNoise = new OpenSimplex2D(seed.next()).octaves(4).spread(0.05f).scaled(-0.15f, 0.15f);
             double height;
 
             @Override
             public double setColumnAndSampleHeight(RiverInfo info, int x, int z, double heightIn, double caveWeight, double thisWeight)
             {
-                final double distFac = Math.sqrt(info.normDistSq()) * 0.8 + distNoise.noise(x, z);
-                final double terraceRiverHeight = 56 + distFac * 9 + baseNoise.noise(x, z) + cliffHeightNoise.noise(x, z) * Math.max(Math.floor(distFac), 0);
+                final double distFac = Math.sqrt(info.normDistSq()) * 0.85 + distNoise.noise(x, z);
+                final double slopedRiverHeight = 54 + distFac * 12 + baseNoise.noise(x, z);
+                final double cliffBaseHeight = cliffBaseNoise.noise(x, z);
+                final double cliffHeight = cliffHeightNoise.noise(x, z);
+                // A smaller set of cliffs nearer the water
+                final double lowerTerrace = slopedRiverHeight > cliffBaseHeight ? Mth.clampedMap(slopedRiverHeight, cliffBaseHeight, cliffBaseHeight + 1.1, 0, cliffHeight) : 0;
+                // A larger set of cliffs up higher
+                final double upperTerrace = slopedRiverHeight > cliffBaseHeight + cliffHeight ? Mth.clampedMap(slopedRiverHeight, cliffBaseHeight + cliffHeight, cliffBaseHeight + cliffHeight + 1.4, 0, cliffHeight + 4) : 0;
+                final double terraceRiverHeight = slopedRiverHeight + lowerTerrace + upperTerrace;
                 final double canyonRiverHeight = 55 + info.normDistSq() * 1.3 * 16;
 
                 // Use noise similar to tall canyon at edges of terrace biomes to avoid artifacts with other river noise functions
@@ -383,7 +389,7 @@ public final class RiverNoise
                 final double columnNoise = Math.max(1 - (vertDistance * vertDistance), 0);
                 final double noise = Mth.lerp(distSquared, columnNoise, noiseIn);
 
-                return noise * weight;
+                return noise * Mth.clampedMap(weight, 0.5, 0.25, 1, 0);
             }
         };
     }
