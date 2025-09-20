@@ -2,6 +2,6 @@
   "__comment__": "This file was automatically created by mcresources",
   "parent": "tfc:item/channel",
   "textures": {
-    "0": "tfc:block/fire_clay_block"
+    "0": "tfc:block/unfired_crucible_like"
   }
 }

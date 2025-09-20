@@ -1187,10 +1187,10 @@ def generate(rm: ResourceManager):
         rm.item_model(('ceramic', 'unfired_' + pottery)).with_lang(lang('Unfired %s', pottery))
 
     rm.item('ceramic/unfired_channel').with_lang(lang('unfired casting channel')).with_item_model(
-        {'0': 'tfc:block/fire_clay_block'}, parent='tfc:item/channel'
+        {'0': 'tfc:block/unfired_crucible_like'}, parent='tfc:item/channel'
     )
     rm.item('ceramic/unfired_mold_table').with_lang(lang('unfired mold table')).with_item_model(
-        {'0': 'tfc:block/fire_clay_block', '1': 'tfc:block/fire_clay_block'},
+        {'0': 'tfc:block/unfired_crucible_like', '1': 'tfc:block/unfired_crucible_top_like'},
         parent='tfc:item/mold_table',
     )
 
