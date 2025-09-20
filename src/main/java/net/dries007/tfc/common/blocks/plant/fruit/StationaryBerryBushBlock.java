@@ -165,7 +165,8 @@ public class StationaryBerryBushBlock extends SeasonalPlantBlock implements HoeO
         final ICalendar calendar = Calendars.get(level);
 
         // TODO: The display of these quantities appears to be bugged with the changes to the hydration system. Revisit once hydration system finalized
-        final float rainfall = model.getRainfall(level, pos, fromTick, toTick, calendar.getCalendarDaysInMonth()); // Rainfall forms a baseline, providing up to 60% hydration
+        // TODO: This is extra borked now because I have changes on another branch. Should use both from and to tick in the long term if indeed we don't rework to be on average rainfall
+        final float rainfall = model.getRainfall(level, pos, toTick, calendar.getCalendarDaysInMonth()); // Rainfall forms a baseline, providing up to 60% hydration
         final int waterCost = FarmlandBlock.findMinCostWater(level, pos); // Nearby water contributes an additional 0 - 80% hydration based on proximity
         return Mth.clamp((int) (60 * rainfall / ClimateModel.MAX_RAINFALL) + 20 * (5 - waterCost), 0, 100);
     }
