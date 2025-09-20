@@ -24,10 +24,7 @@ public class TickCountingBranchBlockEntity extends TickCounterBlockEntity
     public static void addTicks(Level level, BlockPos pos, long ticks)
     {
         Optional<TickCountingBranchBlockEntity> entity = level.getBlockEntity(pos, TFCBlockEntities.TICK_COUNTING_BRANCH.get());
-        if (entity.isPresent())
-        {
-            entity.get().increaseCounter(ticks);
-        }
+        entity.ifPresent(branchBlockEntity -> branchBlockEntity.increaseCounter(ticks));
     }
 
     public static void setStemPos(Level level, BlockPos pos, BlockPos stemPos)

@@ -37,6 +37,7 @@ import org.jetbrains.annotations.Nullable;
 import net.dries007.tfc.TerraFirmaCraft;
 import net.dries007.tfc.client.overworld.SolarCalculator;
 import net.dries007.tfc.common.TFCTags;
+import net.dries007.tfc.common.blockentities.TickCounterBlockEntity;
 import net.dries007.tfc.common.blockentities.TickCountingBranchBlockEntity;
 import net.dries007.tfc.common.blocks.EntityBlockExtension;
 import net.dries007.tfc.common.blocks.ExtendedProperties;
@@ -174,6 +175,7 @@ public class FruitTreeSaplingBlock extends BushBlock implements IForgeBlockExten
         // The following carries over time since planting the sapling block to the growth of the tree
         if (level.getBlockEntity(pos) instanceof TickCountingBranchBlockEntity branch)
         {
+            TickCountingBranchBlockEntity.reset(level, pos);
             TickCountingBranchBlockEntity.addTicks(level, pos, ticksToAdd);
             branch.setStemPos(stemPos);
         }
@@ -212,7 +214,6 @@ public class FruitTreeSaplingBlock extends BushBlock implements IForgeBlockExten
 
         if (Helpers.isBlock(downState, TFCTags.Blocks.FRUIT_TREE_BRANCH))
         {
-            TerraFirmaCraft.LOGGER.error("Found fruit tree branch");
             TickCountingBranchBlockEntity.setStemPos(level, pos, findBaseOfTree(level, downPos, downState));
         }
 
@@ -223,21 +224,16 @@ public class FruitTreeSaplingBlock extends BushBlock implements IForgeBlockExten
     // Returns the lowest branch block of the tree, if this sapling was placed on a branch elbow
     protected BlockPos findBaseOfTree(Level level, BlockPos startPos, BlockState startState)
     {
-        TerraFirmaCraft.LOGGER.error("Finding base of tree");
         for (Direction dir : Direction.Plane.HORIZONTAL)
         {
-            TerraFirmaCraft.LOGGER.error(dir.getName());
             if (startState.getValue(PipeBlock.PROPERTY_BY_DIRECTION.get(dir)))
             {
                 BlockPos.MutableBlockPos mutablePos = startPos.mutable();
-                TerraFirmaCraft.LOGGER.error("Start pos: " + mutablePos);
                 mutablePos.move(dir, 1);
                 while (Helpers.isBlock(level.getBlockState(mutablePos), TFCTags.Blocks.FRUIT_TREE_BRANCH))
                 {
-                    TerraFirmaCraft.LOGGER.error("Current pos: " + mutablePos);
                     mutablePos.move(0, -1, 0);
                 }
-                TerraFirmaCraft.LOGGER.error("Returned pos: " + mutablePos.above());
                 return mutablePos.above();
             }
         }
