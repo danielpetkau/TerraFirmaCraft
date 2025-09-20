@@ -154,8 +154,6 @@ public class BananaPlantBlock extends SeasonalPlantBlock implements IBushBlock, 
 
                 final BlockPos stemPos = bush.getStemPos();
                 final ClimateRange range = climateRange.get();
-                final int hydration = FarmlandBlock.getHydrationFromStormHydrationOverTime(level, stemPos.below(), (int) ChunkData.get(level, pos).getStormHydration(), currentCalendarTick, nextCalendarTick);
-
                 int stage = state.getValue(STAGE);
 
                 BlockPos abovePos = pos.above();
@@ -179,8 +177,10 @@ public class BananaPlantBlock extends SeasonalPlantBlock implements IBushBlock, 
                     }
 
                     float temperatureAtNextTick = Climate.getTemperature(level, pos, nextCalendarTick, Calendars.SERVER.getCalendarDaysInMonth());
+                    final int hydrationAtNextTick = FarmlandBlock.getHydrationFromStormHydration(level, stemPos.below(), (int) ChunkData.get(level, pos).getStormHydration(), nextCalendarTick);
+
                     Lifecycle lifecycleAtNextTick = getLifecycleForMonth(ICalendar.getMonthOfYear(nextCalendarTick, Calendars.SERVER.getCalendarDaysInMonth()));
-                    if (range.checkBoth(hydration, temperatureAtNextTick, false))
+                    if (range.checkBoth(hydrationAtNextTick, temperatureAtNextTick, false))
                     {
                         currentLifecycle = currentLifecycle.advanceTowards(lifecycleAtNextTick);
                     }
