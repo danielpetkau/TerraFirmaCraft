@@ -77,7 +77,7 @@ public class BananaPlantBlock extends SeasonalPlantBlock implements IBushBlock, 
     @Override
     protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult)
     {
-        final ItemInteractionResult result =super.useItemOn(stack, state, level, pos, player, hand, hitResult);
+        final ItemInteractionResult result = super.useItemOn(stack, state, level, pos, player, hand, hitResult);
         if (result.consumesAction())
         {
             kill(level, pos);
@@ -113,11 +113,11 @@ public class BananaPlantBlock extends SeasonalPlantBlock implements IBushBlock, 
     public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context)
     {
         return switch (state.getValue(STAGE))
-            {
-                case 0 -> TRUNK_0;
-                case 1 -> TRUNK_1;
-                default -> PLANT;
-            };
+        {
+            case 0 -> TRUNK_0;
+            case 1 -> TRUNK_1;
+            default -> PLANT;
+        };
     }
 
     @Override
@@ -153,6 +153,7 @@ public class BananaPlantBlock extends SeasonalPlantBlock implements IBushBlock, 
                 long nextCalendarTick = currentCalendarTick - deltaTicks;
 
                 final BlockPos stemPos = bush.getStemPos();
+                float temperature = Climate.getAverageTemperature(level, stemPos);
                 final ClimateRange range = climateRange.get();
                 int stage = state.getValue(STAGE);
 
@@ -176,11 +177,9 @@ public class BananaPlantBlock extends SeasonalPlantBlock implements IBushBlock, 
                         }
                     }
 
-                    float temperatureAtNextTick = Climate.getTemperature(level, pos, nextCalendarTick, Calendars.SERVER.getCalendarDaysInMonth());
-                    final int hydrationAtNextTick = FarmlandBlock.getHydrationFromStormHydration(level, stemPos.below(), (int) ChunkData.get(level, pos).getStormHydration(), nextCalendarTick);
-
+                    int hydrationAtNextTick = FarmlandBlock.getHydrationFromStormHydration(level, stemPos, (int) ChunkData.get(level, pos).getStormHydration(), nextCalendarTick);
                     Lifecycle lifecycleAtNextTick = getLifecycleForMonth(ICalendar.getMonthOfYear(nextCalendarTick, Calendars.SERVER.getCalendarDaysInMonth()));
-                    if (range.checkBoth(hydrationAtNextTick, temperatureAtNextTick, false))
+                    if (range.checkBoth(hydrationAtNextTick, temperature, false))
                     {
                         currentLifecycle = currentLifecycle.advanceTowards(lifecycleAtNextTick);
                     }
@@ -202,11 +201,12 @@ public class BananaPlantBlock extends SeasonalPlantBlock implements IBushBlock, 
                         if (level.isEmptyBlock(abovePos) && level.canSeeSky(abovePos))
                         {
                             level.setBlockAndUpdate(abovePos, newState);
-                            if (level.getBlockEntity(abovePos) instanceof BerryBushBlockEntity newBush)
+                            final long newBushTicks = nextCalendarTick;
+                            level.getBlockEntity(abovePos, TFCBlockEntities.BERRY_BUSH.get()).ifPresent(newBush ->
                             {
-                                newBush.setLastBushTick(nextCalendarTick);
+                                newBush.setLastBushTick(newBushTicks);
                                 newBush.setStemPos(stemPos);
-                            }
+                            });
                         }
                     }
                 }

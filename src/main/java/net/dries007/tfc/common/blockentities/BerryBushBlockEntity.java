@@ -73,7 +73,14 @@ public class BerryBushBlockEntity extends TFCBlockEntity implements ICalendarTic
     @Override
     public void onCalendarUpdate(long ticks)
     {
-        if (level != null && ticks >= ICalendar.TICKS_IN_DAY)
+        // TODO: This code is *very* problematic, because it just doesn't work if the chunk is loaded
+        //  Because it only updates if the tick skip is greater than a day, and always only updates once, there is weird behavior
+        //  Case 1: Time skip 1d -> grows once, expected behavior
+        //  Case 2: Time skip 23h (run twice) -> does not grow
+        //  Case 3: Time skip 3d -> grows once
+        //  Case 4: Tick sprint 2d -> does not grow
+        //  Cases 2/2 is most concerning to me as that's what shows loading the chunks is counter productive
+        if (level != null && ticks >= ICalendar.CALENDAR_TICKS_IN_DAY)
         {
             final BlockState state = level.getBlockState(worldPosition);
             if (state.getBlock() instanceof IBushBlock bush)
