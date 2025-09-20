@@ -137,9 +137,8 @@ public class GrowingFruitTreeBranchBlock extends FruitTreeBranchBlock implements
                 // Grow upward if possible
                 if (willGrowUpward && allNeighborsEmpty(level, abovePos, null) && canGrowInto(level, pos.above(2)))
                 {
-                    // Must place grown flower first in order to copy stem position from parent
+                    placeBody(level, pos, stemPos, stage);
                     placeGrownFlower(level, abovePos, stemPos, stage, state.getValue(SAPLINGS), cyclesLeft - 1, natural);
-                    placeBody(level, pos, abovePos, stage);
                 }
                 // Try and branch if near enough to the trunk
                 else if (stage < 2)
@@ -160,11 +159,10 @@ public class GrowingFruitTreeBranchBlock extends FruitTreeBranchBlock implements
                                     mutablePos.move(test, 1);
                                     if (couldBranchInDirection(level, pos, mutablePos, test))
                                     {
-                                        // Must place grown flower first in order to copy stem position from parent
-                                        placeGrownFlower(level, mutablePos, stemPos, stage + 1, state.getValue(SAPLINGS), cyclesLeft - 1, natural);
                                         mutablePos.move(test, -1);
                                         placeBody(level, mutablePos, stemPos, stage);
                                         mutablePos.move(test, 1);
+                                        placeGrownFlower(level, mutablePos, stemPos, stage + 1, state.getValue(SAPLINGS), cyclesLeft - 1, natural);
                                         doubleBranch = true;
                                     }
                                 }
@@ -299,11 +297,6 @@ public class GrowingFruitTreeBranchBlock extends FruitTreeBranchBlock implements
                 if (level.getBlockEntity(mutablePos) instanceof BerryBushBlockEntity leaf)
                 {
                     leaf.setStemPos(stemPos);
-                }
-                else
-                {
-                    TerraFirmaCraft.LOGGER.error("Placed leaf without stem at: " + mutablePos);
-                    TerraFirmaCraft.LOGGER.error("Stem pos should be: " + stemPos);
                 }
             }
         }

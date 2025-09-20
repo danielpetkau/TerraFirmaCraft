@@ -125,7 +125,7 @@ public class FruitTreeSaplingBlock extends BushBlock implements IForgeBlockExten
         final ItemStack off = player.getItemInHand(InteractionHand.OFF_HAND);
         if (defaultBlockState().getBlock().asItem() == held.getItem() && Helpers.isItem(off, TFCTags.Items.TOOLS_KNIFE) && maySplice(level, pos, state))
         {
-            held.shrink(1);
+            if (!player.isCreative()) held.shrink(1);
             level.setBlockAndUpdate(pos, state.setValue(SAPLINGS, saplings + 1));
             return ItemInteractionResult.sidedSuccess(level.isClientSide);
         }
