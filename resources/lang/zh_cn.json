@@ -696,7 +696,7 @@
   "The $(thing)Scribing Table$() is used to rename items. It requires $(l:mechanics/dye)Black Dye$() to rename items, which can be supplied as the traditional dye item or as a bucket of dye fluid.": "$(thing)命名台$()是用来给物品重命名的。重命名需要消耗$(thing)黑色染料$()。可以直接用染料物品，也可以用一桶黑色染液代替。",
   "The scribing table.": "命名台",
   "The scribing table crafting recipe.": "命名台的合成配方",
-  "The scribing screen takes text entry at the top, an input on the left, a dye in the center. The output is taken from the right slot.": "在命名台的上方输入文字，将要重命名的物品放在左侧，中间放置染料。右侧的格子就会输出物品。",
+  "The scribing screen takes text entry at the top, an input on the left, a dye in the center. The output is taken from the right slot. Using fluid dye only costs 250mb instead of 1000mb, if possible.": "The scribing screen takes text entry at the top, an input on the left, a dye in the center. The output is taken from the right slot. Using fluid dye only costs 250mb instead of 1000mb, if possible.",
   "Sewing Table": "Sewing Table",
   "The $(thing)Sewing Table$() is used to produce banner patterns and smithing templates. It requires $(l:mechanics/weaving#wool_cloth)Wool Cloth$(), $(l:mechanics/weaving#burlap_cloth)Burlap Cloth$(), String or Yarn, as well as a Needle.": "The $(thing)Sewing Table$() is used to produce banner patterns and smithing templates. It requires $(l:mechanics/weaving#wool_cloth)Wool Cloth$(), $(l:mechanics/weaving#burlap_cloth)Burlap Cloth$(), String or Yarn, as well as a Needle.",
   "A needle for sewing can be made from a bone.": "A needle for sewing can be made from a bone.",
