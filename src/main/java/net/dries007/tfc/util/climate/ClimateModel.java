@@ -48,6 +48,9 @@ public interface ClimateModel
     float MAX_RAINFALL = 500f;
     int NUM_SAMPLES_FOR_DELTAS = 4;
 
+    float MAX_CROP_RAINFALL = 600f;
+    float MAX_INSTANTANEOUS_RAINFALL = MAX_RAINFALL * 2;
+
     /**
      * The type of this climate model. Must be registered through {@link ClimateModels#REGISTRY}
      */

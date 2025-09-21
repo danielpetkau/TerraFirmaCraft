@@ -88,9 +88,8 @@ public final class CropHelpers
         final ClimateRange range = cropBlock.getClimateRange();
 
         // This is based on an average hydration over the skipped period, and the current storm hydration
-        final int stormHydration = (int) ChunkData.get(level, pos).getStormHydration();
-        final int startHydration = FarmlandBlock.getHydrationFromStormHydration(level, sourcePos, stormHydration, fromTick);
-        final int endHydration = FarmlandBlock.getHydrationFromStormHydration(level, sourcePos, stormHydration, toTick);
+        final int startHydration = FarmlandBlock.getHydration(level, sourcePos, fromTick);
+        final int endHydration = FarmlandBlock.getHydration(level, sourcePos, toTick);
         TerraFirmaCraft.LOGGER.error("Calling hydration from CropHelpers, starting value: " + startHydration);
         TerraFirmaCraft.LOGGER.error("Calling hydration from CropHelpers, ending value: " + endHydration);
         final boolean growing = checkClimate(range, startHydration, endHydration, startTemperature, endTemperature, false);
