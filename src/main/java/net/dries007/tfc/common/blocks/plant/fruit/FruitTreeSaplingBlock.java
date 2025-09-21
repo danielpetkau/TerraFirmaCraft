@@ -100,8 +100,9 @@ public class FruitTreeSaplingBlock extends BushBlock implements IForgeBlockExten
             final ClimateRange range = climateRange.get();
 
             // We use the stem position for both checks, so that the whole tree is using the temperature at the base elevation
-            text.accept(FarmlandBlock.getHydrationTooltip(level, sapling.getStemPos().below(), range, false));
-            text.accept(FarmlandBlock.getAverageTemperatureTooltip(level, sapling.getStemPos(), range, false));
+            final BlockPos stemPos = sapling.getStemPos();
+            text.accept(FarmlandBlock.getHydrationTooltip(range, false, SeasonalPlantBlock.getFruitBushHydrationFromRootPos(level, stemPos.below())));
+            text.accept(FarmlandBlock.getAverageTemperatureTooltip(level, stemPos, range, false));
 
             if (!stages[Calendars.SERVER.getHemispheralCalendarMonthOfYear(SolarCalculator.getInNorthernHemisphere(pos, level)).ordinal()].active())
             {
@@ -151,7 +152,7 @@ public class FruitTreeSaplingBlock extends BushBlock implements IForgeBlockExten
                 if (elapsedTicks > getTicksToGrow())
                 {
                     final BlockPos stemPos = counter.getStemPos();
-                    final int hydration = FarmlandBlock.getHydrationFromStormHydration(level, stemPos.below(), (int) ChunkData.get(level, pos).getStormHydration());
+                    final int hydration = SeasonalPlantBlock.getFruitBushHydrationFromRootPos(level, stemPos.below());
                     final float temp = Climate.getAverageTemperature(level, stemPos);
                     if (!climateRange.get().checkBoth(hydration, temp, false))
                     {

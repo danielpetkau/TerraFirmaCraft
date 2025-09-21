@@ -30,7 +30,6 @@ import net.dries007.tfc.util.calendar.Calendars;
 import net.dries007.tfc.util.calendar.ICalendar;
 import net.dries007.tfc.util.climate.Climate;
 import net.dries007.tfc.util.climate.ClimateRange;
-import net.dries007.tfc.world.chunkdata.ChunkData;
 
 public class StationaryBerryBushBlock extends SeasonalPlantBlock implements HoeOverlayBlock, IBushBlock
 {
@@ -73,8 +72,9 @@ public class StationaryBerryBushBlock extends SeasonalPlantBlock implements HoeO
         {
             final ClimateRange range = climateRange.get();
             final BlockPos sourcePos = bush.getStemPos().below();
-            text.accept(FarmlandBlock.getHydrationTooltip(level, sourcePos, range, false));
-            text.accept(FarmlandBlock.getTemperatureTooltip(level, sourcePos, range, false));
+            final int hydration = getFruitBushHydration(level, pos);
+            text.accept(FarmlandBlock.getHydrationTooltip(range, false, hydration));
+            text.accept(FarmlandBlock.getAverageTemperatureTooltip(level, sourcePos, range, false));
         }
     }
 
@@ -94,7 +94,10 @@ public class StationaryBerryBushBlock extends SeasonalPlantBlock implements HoeO
                 long currentCalendarTick = Calendars.SERVER.getCalendarTicks();
                 long nextCalendarTick = currentCalendarTick - deltaTicks;
 
-                final BlockPos rootPos = bush.getStemPos().below();
+                final BlockPos stemPos = bush.getStemPos();
+                float temperature = Climate.getAverageTemperature(level, pos);
+                final int hydration = getFruitBushHydrationFromRootPos(level, stemPos.below());
+
                 final ClimateRange range = climateRange.get();
                 int monthsSpentDying = 0;
                 do
@@ -106,11 +109,8 @@ public class StationaryBerryBushBlock extends SeasonalPlantBlock implements HoeO
                     // Advance both the stage (randomly, if the previous month was healthy), and lifecycle (if the at-the-time conditions were valid)
                     nextCalendarTick = Math.min(nextCalendarTick + Calendars.SERVER.getCalendarTicksInMonth(), currentCalendarTick);
 
-                    float temperatureAtNextTick = Climate.getTemperature(level, pos, nextCalendarTick, Calendars.SERVER.getCalendarDaysInMonth());
-                    final int hydrationAtNextTick = FarmlandBlock.getHydrationFromStormHydration(level, rootPos, (int) ChunkData.get(level, pos).getStormHydration(), nextCalendarTick);
-
                     Lifecycle lifecycleAtNextTick = getLifecycleForMonth(ICalendar.getMonthOfYear(nextCalendarTick, Calendars.SERVER.getCalendarDaysInMonth()));
-                    if (range.checkBoth(hydrationAtNextTick, temperatureAtNextTick, false))
+                    if (range.checkBoth(hydration, temperature, false))
                     {
                         currentLifecycle = currentLifecycle.advanceTowards(lifecycleAtNextTick);
                     }

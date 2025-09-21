@@ -6,7 +6,6 @@
 
 package net.dries007.tfc.common.blocks.plant.fruit;
 
-import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 import net.minecraft.core.BlockPos;
@@ -43,7 +42,6 @@ import net.dries007.tfc.util.calendar.ICalendar;
 import net.dries007.tfc.util.climate.Climate;
 import net.dries007.tfc.util.climate.ClimateRange;
 import net.dries007.tfc.util.climate.ClimateRanges;
-import net.dries007.tfc.world.chunkdata.ChunkData;
 
 public class BananaPlantBlock extends SeasonalPlantBlock implements IBushBlock, HoeOverlayBlock
 {
@@ -98,8 +96,9 @@ public class BananaPlantBlock extends SeasonalPlantBlock implements IBushBlock, 
         {
             final ClimateRange range = climateRange.get();
             final BlockPos sourcePos = bush.getStemPos().below();
-            text.accept(FarmlandBlock.getHydrationTooltip(level, sourcePos, range, false));
-            text.accept(FarmlandBlock.getTemperatureTooltip(level, sourcePos, range, false));
+            final int hydration = getFruitBushHydration(level, pos);
+            text.accept(FarmlandBlock.getHydrationTooltip(range, false, hydration));
+            text.accept(FarmlandBlock.getAverageTemperatureTooltip(level, sourcePos, range, false));
         }
     }
 
@@ -154,6 +153,8 @@ public class BananaPlantBlock extends SeasonalPlantBlock implements IBushBlock, 
 
                 final BlockPos stemPos = bush.getStemPos();
                 float temperature = Climate.getAverageTemperature(level, stemPos);
+                int hydration = getFruitBushHydrationFromRootPos(level, stemPos.below());
+
                 final ClimateRange range = climateRange.get();
                 int stage = state.getValue(STAGE);
 
@@ -177,9 +178,8 @@ public class BananaPlantBlock extends SeasonalPlantBlock implements IBushBlock, 
                         }
                     }
 
-                    int hydrationAtNextTick = FarmlandBlock.getHydrationFromStormHydration(level, stemPos, (int) ChunkData.get(level, pos).getStormHydration(), nextCalendarTick);
                     Lifecycle lifecycleAtNextTick = getLifecycleForMonth(ICalendar.getMonthOfYear(nextCalendarTick, Calendars.SERVER.getCalendarDaysInMonth()));
-                    if (range.checkBoth(hydrationAtNextTick, temperature, false))
+                    if (range.checkBoth(hydration, temperature, false))
                     {
                         currentLifecycle = currentLifecycle.advanceTowards(lifecycleAtNextTick);
                     }

@@ -37,7 +37,7 @@ import net.dries007.tfc.util.Helpers;
 import net.dries007.tfc.util.calendar.ICalendar;
 import net.dries007.tfc.util.climate.Climate;
 import net.dries007.tfc.util.climate.ClimateRange;
-import net.dries007.tfc.world.chunkdata.ChunkData;
+import net.dries007.tfc.util.tracker.WorldTracker;
 
 /**
  * If I had my way, everything in this mod would be chorus fruit.
@@ -216,7 +216,7 @@ public class GrowingFruitTreeBranchBlock extends FruitTreeBranchBlock implements
     @Override
     protected void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random)
     {
-        final int hydration = getHydration(level, pos);
+        final int hydration = getFruitBranchHydration(level, pos);
 
         final float temp = Climate.getAverageTemperature(level, pos);
         if (!climateRange.get().checkBoth(hydration, temp, false) && !state.getValue(NATURAL))
@@ -304,22 +304,30 @@ public class GrowingFruitTreeBranchBlock extends FruitTreeBranchBlock implements
 
     /**
      * Evaluates hydration at the base of the tree
+     * @param leafPos Must be the position of a valid {@link TickCountingBranchBlockEntity}
      */
-    private static int getHydration(Level level, BlockPos pos)
+    protected static int getFruitBranchHydration(Level level, BlockPos leafPos)
     {
-        final int stormHydration;
         final BlockPos sourcePos;
-        if (level.getBlockEntity(pos) instanceof TickCountingBranchBlockEntity branch)
+        if (level.getBlockEntity(leafPos) instanceof TickCountingBranchBlockEntity branch)
         {
             sourcePos = branch.getStemPos().below();
-            final ChunkData data = ChunkData.get(level, pos);
-            stormHydration = (int) data.getStormHydration();
         }
         else
         {
-            sourcePos = pos;
-            stormHydration = 0;
+            TerraFirmaCraft.LOGGER.error("Fruit tree leaf block entity not present");
+            sourcePos = leafPos;
         }
-        return FarmlandBlock.getHydrationFromStormHydration(level, sourcePos, stormHydration);
+        return getFruitBranchHydrationFromRootPos(level, sourcePos);
+    }
+
+    /**
+     * Evaluates hydration at the base of the tree
+     * @param rootPos can be any block location you want to know the hydration level at
+     */
+    protected static int getFruitBranchHydrationFromRootPos(Level level, BlockPos rootPos)
+    {
+        final float averageRainfall = WorldTracker.get(level).getClimateModel().getAverageRainfall(level, rootPos);
+        return FarmlandBlock.getHydrationFromRainHydration(level, rootPos, FarmlandBlock.getRainHydration(averageRainfall, 0));
     }
 }

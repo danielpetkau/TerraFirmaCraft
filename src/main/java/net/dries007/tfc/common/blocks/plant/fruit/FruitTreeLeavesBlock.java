@@ -40,7 +40,6 @@ import net.dries007.tfc.TerraFirmaCraft;
 import net.dries007.tfc.client.particle.TFCParticles;
 import net.dries007.tfc.common.TFCTags;
 import net.dries007.tfc.common.blockentities.BerryBushBlockEntity;
-import net.dries007.tfc.common.blockentities.FarmlandBlockEntity;
 import net.dries007.tfc.common.blocks.ExtendedProperties;
 import net.dries007.tfc.common.blocks.IForgeBlockExtension;
 import net.dries007.tfc.common.blocks.TFCBlockStateProperties;
@@ -54,7 +53,7 @@ import net.dries007.tfc.common.fluids.IFluidLoggable;
 import net.dries007.tfc.util.Helpers;
 import net.dries007.tfc.util.climate.Climate;
 import net.dries007.tfc.util.climate.ClimateRange;
-import net.dries007.tfc.world.chunkdata.ChunkData;
+import net.dries007.tfc.util.tracker.WorldTracker;
 
 public class FruitTreeLeavesBlock extends SeasonalPlantBlock implements IForgeBlockExtension, ILeavesBlock, IBushBlock, HoeOverlayBlock, IFluidLoggable
 {
@@ -142,7 +141,7 @@ public class FruitTreeLeavesBlock extends SeasonalPlantBlock implements IForgeBl
             {
                 final ClimateRange range = climateRange.get();
 
-                final int hydration = getHydration(level, pos);
+                final int hydration = getFruitBushHydration(level, pos);
 
                 if (range.checkBoth(hydration, Climate.getAverageTemperature(level, pos), false))
                 {
@@ -173,7 +172,7 @@ public class FruitTreeLeavesBlock extends SeasonalPlantBlock implements IForgeBl
     public void addHoeOverlayInfo(Level level, BlockPos pos, BlockState state, Consumer<Component> text, boolean isDebug)
     {
         final ClimateRange range = climateRange.get();
-        text.accept(FarmlandBlock.getHydrationTooltip(level, pos, range, false, getHydration(level, pos)));
+        text.accept(FarmlandBlock.getHydrationTooltip(range, false, getFruitBushHydration(level, pos)));
         text.accept(FarmlandBlock.getAverageTemperatureTooltip(level, pos, range, false));
     }
 
@@ -259,28 +258,5 @@ public class FruitTreeLeavesBlock extends SeasonalPlantBlock implements IForgeBl
             }
         }
         return false;
-    }
-
-
-    /**
-     * Evaluates hydration at the base of the tree
-     */
-    private static int getHydration(Level level, BlockPos leafPos)
-    {
-        final int stormHydration;
-        final BlockPos sourcePos;
-        if (level.getBlockEntity(leafPos) instanceof BerryBushBlockEntity bush)
-        {
-            sourcePos = bush.getStemPos().below();
-            final ChunkData data = ChunkData.get(level, leafPos);
-            stormHydration = (int) data.getStormHydration();
-        }
-        else
-        {
-            TerraFirmaCraft.LOGGER.error("Fruit tree leaf block entity not present");
-            sourcePos = leafPos;
-            stormHydration = 0;
-        }
-        return FarmlandBlock.getHydrationFromStormHydration(level, sourcePos, stormHydration);
     }
 }
