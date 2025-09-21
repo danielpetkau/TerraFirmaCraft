@@ -2,7 +2,7 @@
   "__comment__": "This file was automatically created by mcresources",
   "parent": "tfc:item/mold_table",
   "textures": {
-    "0": "tfc:block/fire_clay_block",
-    "1": "tfc:block/fire_clay_block"
+    "0": "tfc:block/unfired_crucible_like",
+    "1": "tfc:block/unfired_crucible_top_like"
   }
 }

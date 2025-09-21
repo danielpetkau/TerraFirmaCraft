@@ -275,12 +275,13 @@ public class ChunkHeightFiller
         final double initialCaveWeight = riverBlendWeights[RIVER_TYPE_CAVE];
         if (initialCaveWeight > 0)
         {
+            final double totalWeight = 1.0 - riverBlendWeights[RIVER_TYPE_NONE];
             // Delegate weight entirely to the cave carver after a point, and let it handle interpolation into the mouth of the cave
             // This needs to be very carefully managed not to pinch off the edge, and interpolating a canyon and cave together leads to subpar results.
             // So, we supply the river carve weight (initial value) to the cave carver, and run it at 1.0 weight instead, which will create a smooth transition.
             final double adjustedCaveWeight = initialCaveWeight < 0.25 ?
-                Mth.map(initialCaveWeight, 0.0, 0.25, 0, 0.1) :
-                1.0 - riverBlendWeights[RIVER_TYPE_NONE];
+                Mth.map(initialCaveWeight, 0.0, 0.25, 0, 0.1 * totalWeight) :
+                totalWeight;
 
             for (RiverBlendType type : RiverBlendType.ALL)
             {
