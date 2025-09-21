@@ -63,10 +63,10 @@ public interface ClimateModel
     }
 
     /**
-     * Get the base average annual temperature for a given XZ position.
+     * Get the base average annual temperature for a given XYZ position.
      *
      * @return The average annual temperature at the given {@code pos} for this climate model. Should be time-invariant, and
-     * typically in the range {@code [-25, 25]} but is not required to be.
+     * typically in the range {@code [-20, 30]} but is not required to be.
      */
     float getAverageTemperature(LevelReader level, BlockPos pos);
 
