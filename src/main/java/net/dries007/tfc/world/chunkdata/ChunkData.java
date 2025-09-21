@@ -174,11 +174,17 @@ public sealed class ChunkData
         setAccumulatedRainfall(chunk, getAccumulatedRainfall() + rainfall);
     }
 
+    /**
+     * Returns the time-invariant rainfall for this position.
+     */
     public float getRainfall(BlockPos pos)
     {
         return getRainfall(pos.getX(), pos.getZ());
     }
 
+    /**
+     * Returns the time-invariant rainfall for this position.
+     */
     public float getRainfall(int x, int z)
     {
         return rainfallLayer == null ? UNKNOWN_RAINFALL : rainfallLayer.getValue((x & 15) / 16f, (z & 15) / 16f);
@@ -204,11 +210,17 @@ public sealed class ChunkData
         return baseGroundwaterLayer == null ? UNKNOWN_BASE_GROUNDWATER : baseGroundwaterLayer.getValue((x & 15) / 16f, (z & 15) / 16f);
     }
 
+    /**
+     * Returns the time-invariant total groundwater (rivers + rainfall) for this position.
+     */
     public float getGroundwater(BlockPos pos)
     {
         return getGroundwater(pos.getX(), pos.getZ());
     }
 
+    /**
+     * Returns the time-invariant total groundwater (rivers + rainfall) for this position.
+     */
     public float getGroundwater(int x, int z)
     {
         return Math.min(getBaseGroundwater(x, z) + getRainfall(x, z), 500f);
