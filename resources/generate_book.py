@@ -912,7 +912,7 @@ def make_book(rm: ResourceManager, i18n: I18n, local_instance: bool = False, rev
             text('The $(thing)Scribing Table$() is used to rename items. It requires $(l:mechanics/dye)Black Dye$() to rename items, which can be supplied as the traditional dye item or as a bucket of dye fluid.'),
             block_spotlight('', 'The scribing table.', 'tfc:wood/scribing_table/kapok'),
             crafting('tfc:crafting/wood/scribing_table/birch', text_contents='The scribing table crafting recipe.').link('#tfc:scribing_tables'),
-            image('tfc:textures/gui/book/gui/scribing.png', text_contents='The scribing screen takes text entry at the top, an input on the left, a dye in the center. The output is taken from the right slot.', border=False),
+            image('tfc:textures/gui/book/gui/scribing.png', text_contents='The scribing screen takes text entry at the top, an input on the left, a dye in the center. The output is taken from the right slot. Using fluid dye only costs 250mb instead of 1000mb, if possible.', border=False),
         )),
         entry('sewing_table', 'Sewing Table', 'tfc:wood/sewing_table/oak', pages=(
             text('The $(thing)Sewing Table$() is used to produce banner patterns and smithing templates. It requires $(l:mechanics/weaving#wool_cloth)Wool Cloth$(), $(l:mechanics/weaving#burlap_cloth)Burlap Cloth$(), String or Yarn, as well as a Needle.'),
