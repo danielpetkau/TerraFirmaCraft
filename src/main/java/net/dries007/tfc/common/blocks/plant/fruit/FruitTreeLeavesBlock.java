@@ -134,6 +134,7 @@ public class FruitTreeLeavesBlock extends SeasonalPlantBlock implements IForgeBl
         if (state.getValue(PERSISTENT)) return; // persistent leaves don't grow
         if (level.getBlockEntity(pos) instanceof BerryBushBlockEntity leaves)
         {
+            final BlockPos stemPos = leaves.getStemPos();
             Lifecycle currentLifecycle = state.getValue(LIFECYCLE);
             Lifecycle expectedLifecycle = getLifecycleForCurrentMonth(level, pos);
             // if we are not working with a plant that is or should be dormant
@@ -141,9 +142,9 @@ public class FruitTreeLeavesBlock extends SeasonalPlantBlock implements IForgeBl
             {
                 final ClimateRange range = climateRange.get();
 
-                final int hydration = getFruitBushHydration(level, pos);
+                final int hydration = getFruitBushHydrationFromRootPos(level, stemPos.below());
 
-                if (range.checkBoth(hydration, Climate.getAverageTemperature(level, pos), false))
+                if (range.checkBoth(hydration, Climate.getAverageTemperature(level, stemPos), false))
                 {
                     currentLifecycle = currentLifecycle.advanceTowards(expectedLifecycle);
                 }
@@ -172,8 +173,18 @@ public class FruitTreeLeavesBlock extends SeasonalPlantBlock implements IForgeBl
     public void addHoeOverlayInfo(Level level, BlockPos pos, BlockState state, Consumer<Component> text, boolean isDebug)
     {
         final ClimateRange range = climateRange.get();
-        text.accept(FarmlandBlock.getHydrationTooltip(range, false, getFruitBushHydration(level, pos)));
-        text.accept(FarmlandBlock.getAverageTemperatureTooltip(level, pos, range, false));
+
+        final BlockPos stemPos;
+        if (level.getBlockEntity(pos) instanceof BerryBushBlockEntity bush)
+        {
+            stemPos = bush.getStemPos();
+        }
+        else
+        {
+            stemPos = pos;
+        }
+        text.accept(FarmlandBlock.getHydrationTooltip(range, false, getFruitBushHydrationFromRootPos(level, stemPos.below())));
+        text.accept(FarmlandBlock.getAverageTemperatureTooltip(level, stemPos, range, false));
     }
 
     @Override
