@@ -34,9 +34,7 @@ public sealed class ChunkData
     private static final float UNKNOWN_BASE_GROUNDWATER = 0;
 
     public static float MAX_ACCUMULATED_RAINFALL = 30.0f;
-    public static float MAX_HUMIDITY_CONTRIBUTION = 50.0f;
-    public static float MAX_STORM_CONTRIBUTION = 10.0f;
-    public static float MAX_RAINFALL_CONTRIBUTION = MAX_HUMIDITY_CONTRIBUTION + MAX_STORM_CONTRIBUTION;
+    public static float MAX_RAINFALL_CONTRIBUTION = 60.0f;
 
     /**
      * Accesses the chunk data from a given level, at a given position. This method <strong>may deadlock</strong> if called on a {@link ServerLevel}
@@ -137,12 +135,6 @@ public sealed class ChunkData
         return aquiferSurfaceHeight;
     }
 
-    // Gets the accumulated rainfall value scaled for using in crop hydration
-    public float getStormHydration()
-    {
-        return (MAX_STORM_CONTRIBUTION * accumulatedRainfall / ChunkData.MAX_ACCUMULATED_RAINFALL);
-    }
-
     // Gets the raw accumulated rainfall value - do not use directly for crops
     public float getAccumulatedRainfall()
     {
@@ -157,7 +149,7 @@ public sealed class ChunkData
         final float rainfall = getRainfall(x, y);
         final float rainVar = Math.abs(getRainVariance(x, y));
         // Max instantaneous rainfall value is actually double the max rainfall, this caps rainfall contribution at the max average rainfall
-        return rainfall * (1 - rainVar) * (MAX_HUMIDITY_CONTRIBUTION / ClimateModel.MAX_RAINFALL);
+        return rainfall * (1 - rainVar) * (MAX_RAINFALL_CONTRIBUTION / ClimateModel.MAX_CROP_RAINFALL);
     }
 
     // Maximum hydration a block can experience due to rain
@@ -168,7 +160,7 @@ public sealed class ChunkData
         final float rainfall = getRainfall(x, y);
         final float rainVar = Math.abs(getRainVariance(x, y));
         // Max instantaneous rainfall value is actually double the max rainfall, this caps rainfall contribution at the max average rainfall
-        return Math.min(rainfall * (1 + rainVar) * (MAX_HUMIDITY_CONTRIBUTION / ClimateModel.MAX_RAINFALL), MAX_HUMIDITY_CONTRIBUTION) + MAX_STORM_CONTRIBUTION;
+        return Math.min(rainfall * (1 + rainVar) * (MAX_RAINFALL_CONTRIBUTION / ClimateModel.MAX_CROP_RAINFALL), MAX_RAINFALL_CONTRIBUTION);
     }
 
     public void setAccumulatedRainfall(ChunkAccess chunk, float rainfall)

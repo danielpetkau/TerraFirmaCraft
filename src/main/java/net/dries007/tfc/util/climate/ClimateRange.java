@@ -13,7 +13,6 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import org.jetbrains.annotations.NotNull;
 
-import net.dries007.tfc.TerraFirmaCraft;
 import net.dries007.tfc.util.Helpers;
 import net.dries007.tfc.util.data.DataManager;
 
@@ -72,14 +71,12 @@ public record ClimateRange(
     public Result checkHydration(int hydration, boolean allowWiggle)
     {
         Result result = check(hydration, minHydration, maxHydration, hydrationWiggleRange, allowWiggle);
-        TerraFirmaCraft.LOGGER.error("Checking hydration, result: " + hydration + ": " + result.name());
         return check(hydration, minHydration, maxHydration, hydrationWiggleRange, allowWiggle);
     }
 
     public Result checkTemperature(float temperature, boolean allowWiggle)
     {
         Result result = check(temperature, minTemperature, maxTemperature, temperatureWiggleRange, allowWiggle);
-        TerraFirmaCraft.LOGGER.error("Checking temperature, result: " + temperature + ": " + result.name());
         return check(temperature, minTemperature, maxTemperature, temperatureWiggleRange, allowWiggle);
     }
 
