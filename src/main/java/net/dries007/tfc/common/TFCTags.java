@@ -349,6 +349,8 @@ public class TFCTags
         public static final TagKey<Item> JAM = tag("foods/jam");
         public static final TagKey<Item> JARRED_FOOD = tag("foods/jarred_food");
         public static final TagKey<Item> SEALED_JARRED_FOOD = tag("foods/sealed_jarred_food");
+        public static final TagKey<Item> EMPTY_JARS = tag("foods/empty_jars");
+        public static final TagKey<Item> FILLED_JARS = tag("foods/filled_jars");
         /* Includes preserves, sealed preserves, and also empty jars (with and without lid) */
         public static final TagKey<Item> JARS = tag("foods/jars");
         public static final TagKey<Item> SWEETENERS = tag("foods/sweeteners");
