@@ -78,12 +78,23 @@ public class BuiltinItemHeat extends DataManagerProvider<HeatDefinition> impleme
                     blocks.get(Metal.BlockType.WEATHERED_BLOCK_STAIRS),
                     blocks.get(Metal.BlockType.OXIDIZED_BLOCK_STAIRS)
                 ), units(Metal.BlockType.BLOCK_STAIRS));
+
+                if (Metal.BlockType.GRATE.has(metal))
+                {
+                    add(metal, "grates", Ingredient.of(
+                        blocks.get(Metal.BlockType.GRATE),
+                        blocks.get(Metal.BlockType.EXPOSED_GRATE),
+                        blocks.get(Metal.BlockType.EXPOSED_GRATE),
+                        blocks.get(Metal.BlockType.OXIDIZED_GRATE)
+                    ), units(Metal.BlockType.GRATE));
+                }
             }
             else
             {
                 add(metal, Metal.BlockType.BLOCK);
                 add(metal, Metal.BlockType.BLOCK_SLAB);
                 add(metal, Metal.BlockType.BLOCK_STAIRS);
+                add(metal, Metal.BlockType.GRATE);
             }
 
             add(metal, Metal.BlockType.ANVIL);
