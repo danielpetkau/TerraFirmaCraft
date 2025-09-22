@@ -390,6 +390,12 @@ public final class PlayerInfo extends net.minecraft.world.food.FoodData implemen
         tag.putLong("sleep", sleepTick);
     }
 
+    @Override
+    public void forceUpdate()
+    {
+        modified = true;
+    }
+
     // ===== Forward FoodData to original ===== //
 
 

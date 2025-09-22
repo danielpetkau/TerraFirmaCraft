@@ -153,12 +153,13 @@ public class BuiltinItemTags extends TagsProvider<Item> implements Accessors
         tag(FOODS).addTag(JAM).add(TFCItems.FOOD).addTag(SOUPS).addTag(SALADS).addTag(SANDWICHES);
         tag(PRESERVES).add(TFCItems.UNSEALED_FRUIT_PRESERVES);
         tag(SEALED_PRESERVES).add(TFCItems.FRUIT_PRESERVES);
-        tag(JARS)
-            .addTags(SEALED_PRESERVES, PRESERVES)
+        tag(EMPTY_JARS)
             .add(
                 TFCItems.EMPTY_JAR,
                 TFCItems.EMPTY_JAR_WITH_LID
             );
+        tag(FILLED_JARS).addTags(SEALED_PRESERVES, PRESERVES);
+        tag(JARS).addTags(EMPTY_JARS, FILLED_JARS);
         tag(SWEETENERS).add(Items.SUGAR);
         tag(BOWLS).add(Items.BOWL, TFCBlocks.CERAMIC_BOWL);
         tag(SALAD_BOWLS).addTag(BOWLS);
@@ -168,8 +169,8 @@ public class BuiltinItemTags extends TagsProvider<Item> implements Accessors
         tag(USABLE_IN_SOUP)
             .addTags(FRUITS, VEGETABLES, MEATS, COOKED_MEATS)
             .add(Food.COOKED_RICE);
-        tag(USABLE_IN_SANDWICH).addTags(VEGETABLES, COOKED_MEATS, DAIRY);
-        tag(USABLE_IN_JAM_SANDWICH).addTags(COOKED_MEATS, DAIRY, PRESERVES);
+        tag(USABLE_IN_SANDWICH).addTags(VEGETABLES, COOKED_MEATS, COOKED_FISH, DAIRY);
+        tag(USABLE_IN_JAM_SANDWICH).addTags(COOKED_MEATS, COOKED_FISH, DAIRY, PRESERVES, JAM);
         tag(CAN_BE_SALTED).addTags(MEATS, COOKED_MEATS);
         tag(PIG_FOOD).addTag(FOODS);
         tag(COW_FOOD).addTag(GRAINS);

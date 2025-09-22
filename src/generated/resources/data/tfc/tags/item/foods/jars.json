@@ -1,8 +1,6 @@
 {
   "values": [
-    "#tfc:foods/sealed_preserves",
-    "#tfc:foods/preserves",
-    "tfc:empty_jar",
-    "tfc:empty_jar_with_lid"
+    "#tfc:foods/empty_jars",
+    "#tfc:foods/filled_jars"
   ]
 }

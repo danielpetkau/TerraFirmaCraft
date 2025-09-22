@@ -1,12 +1,7 @@
 {
-  "ingredient": [
-    {
-      "item": "tfc:empty_jar"
-    },
-    {
-      "item": "tfc:empty_jar_with_lid"
-    }
-  ],
+  "ingredient": {
+    "tag": "tfc:foods/empty_jars"
+  },
   "size": "normal",
-  "weight": "light"
+  "weight": "medium"
 }

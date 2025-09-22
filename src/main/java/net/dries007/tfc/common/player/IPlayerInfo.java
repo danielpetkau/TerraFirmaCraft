@@ -157,4 +157,9 @@ public interface IPlayerInfo
      * @param info The old info for the dead player
      */
     void copyOnDeath(IPlayerInfo info);
+
+    /**
+     * Force an update packet to be sent to the client
+     */
+    void forceUpdate();
 }
