@@ -116,8 +116,8 @@ public class BuiltinItemSizes extends DataManagerProvider<ItemSizeDefinition> im
         add("tuyeres", TFCTags.Items.BLAST_FURNACE_TUYERES, Size.LARGE, Weight.HEAVY);
         add("ores", TFCTags.Items.ORE_PIECES, Size.SMALL, Weight.MEDIUM);
         add("small_ores", TFCTags.Items.SMALL_ORE_PIECES, Size.SMALL, Weight.LIGHT);
-        add("filled_jars", TFCTags.Items.FILLED_JARS, Size.VERY_LARGE, Weight.HEAVY);
-        add("empty_jars", TFCTags.Items.EMPTY_JARS, Size.TINY, Weight.MEDIUM);
+        add("filled_jars", TFCTags.Items.FILLED_JARS, Size.NORMAL, Weight.HEAVY);
+        add("empty_jars", TFCTags.Items.EMPTY_JARS, Size.NORMAL, Weight.MEDIUM);
         add("glass_bottles", TFCTags.Items.GLASS_BOTTLES, Size.NORMAL, Weight.MEDIUM);
         add("windmill_blades", TFCTags.Items.WINDMILL_BLADES, Size.VERY_LARGE, Weight.VERY_HEAVY);
         add("water_wheels", TFCTags.Items.WATER_WHEELS, Size.VERY_LARGE, Weight.VERY_HEAVY);

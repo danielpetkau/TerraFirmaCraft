@@ -2,6 +2,6 @@
   "ingredient": {
     "tag": "tfc:foods/empty_jars"
   },
-  "size": "tiny",
+  "size": "normal",
   "weight": "medium"
 }
