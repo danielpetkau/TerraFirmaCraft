@@ -29,7 +29,7 @@ public class CenteredFeatureNoise
             public double setColumnAndSampleHeight(double heightIn, int x, int z, BiomeSourceExtension biomeSource)
             {
                 Cellular2D.Cell cell = cellNoise.cell(x, z);
-                final BiomeExtension biome = biomeSource.getBiomeExtension(QuartPos.fromBlock(cell.cx()), QuartPos.fromBlock(cell.cy()));
+                final BiomeExtension biome = biomeSource.getBiomeExtension(QuartPos.fromBlock((int) cell.x()), QuartPos.fromBlock((int) cell.y()));
                 final int rarity = biome.getCenteredFeatureRarity();
                 if (checkCellRarity(cell, rarity))
                 {
@@ -143,7 +143,7 @@ public class CenteredFeatureNoise
             public double setColumnAndSampleHeight(double heightIn, int x, int z, BiomeSourceExtension biomeSource)
             {
                 Cellular2D.Cell cell = cellNoise.cell(x, z);
-                final BiomeExtension biome = biomeSource.getBiomeExtension(QuartPos.fromBlock(cell.cx()), QuartPos.fromBlock(cell.cy()));
+                final BiomeExtension biome = biomeSource.getBiomeExtension(QuartPos.fromBlock((int) cell.x()), QuartPos.fromBlock((int) cell.y()));
                 final int rarity = biome.getCenteredFeatureRarity();
                 if (checkCellRarity(cell, rarity))
                 {
@@ -238,7 +238,7 @@ public class CenteredFeatureNoise
             public double setColumnAndSampleHeight(double heightIn, int x, int z, BiomeSourceExtension biomeSource)
             {
                 Cellular2D.Cell cell = cellNoise.cell(x, z);
-                final BiomeExtension biome = biomeSource.getBiomeExtension(QuartPos.fromBlock(cell.cx()), QuartPos.fromBlock(cell.cy()));
+                final BiomeExtension biome = biomeSource.getBiomeExtension(QuartPos.fromBlock((int) cell.x()), QuartPos.fromBlock((int) cell.y()));
                 final int rarity = biome.getCenteredFeatureRarity();
                 if (checkCellRarity(cell, rarity))
                 {

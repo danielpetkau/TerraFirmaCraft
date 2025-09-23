@@ -111,5 +111,14 @@ public class Cellular2D implements Noise2D
         return new Cell(closestCenterX / frequency, closestCenterY / frequency, closestCellX, closestCellY, distance0, distance1, closestHash * (1 / 2147483648.0f));
     }
 
+    /**
+     * @param x "X"-coordinate of cell center. X/Y coordinates of cells are not tied to in game coordinates
+     * @param y "Y"-coordinate of cell center
+     * @param cx "X"-coordinate of the nearest cell (C2) center
+     * @param cy "Y"-coordinate of the nearest cell (C2) center
+     * @param f1 Distance to x, y
+     * @param f2 Distance to cx, cy
+     * @param noise Hash value of the cell, range 0-1
+     */
     public record Cell(double x, double y, int cx, int cy, double f1, double f2, double noise) {}
 }
