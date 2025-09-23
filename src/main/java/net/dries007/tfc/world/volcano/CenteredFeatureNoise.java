@@ -30,13 +30,16 @@ public class CenteredFeatureNoise
             {
                 Cellular2D.Cell cell = cellNoise.cell(x, z);
                 final BiomeExtension biome = biomeSource.getBiomeExtension(QuartPos.fromBlock((int) cell.x()), QuartPos.fromBlock((int) cell.y()));
-                final int rarity = biome.getCenteredFeatureRarity();
-                if (checkCellRarity(cell, rarity))
+                if (biome.hasCinderCones())
                 {
-                    if (biome == TFCBiomes.ACTIVE_SHIELD_VOLCANO)
-                        return modifyHeightShieldVolcano(cell, x, z, biome, heightIn);
-                    else
-                        return modifyHeight(cell, x, z, biome, heightIn);
+                    final int rarity = biome.getCenteredFeatureRarity();
+                    if (checkCellRarity(cell, rarity))
+                    {
+                        if (biome == TFCBiomes.ACTIVE_SHIELD_VOLCANO)
+                            return modifyHeightShieldVolcano(cell, x, z, biome, heightIn);
+                        else
+                            return modifyHeight(cell, x, z, biome, heightIn);
+                    }
                 }
                 return ChunkHeightFiller.NOT_PRESENT_RETURN;
             }
@@ -144,10 +147,13 @@ public class CenteredFeatureNoise
             {
                 Cellular2D.Cell cell = cellNoise.cell(x, z);
                 final BiomeExtension biome = biomeSource.getBiomeExtension(QuartPos.fromBlock((int) cell.x()), QuartPos.fromBlock((int) cell.y()));
-                final int rarity = biome.getCenteredFeatureRarity();
-                if (checkCellRarity(cell, rarity))
+                if (biome.hasTuffRings())
                 {
-                    return modifyHeight(cell, x, z, biome, heightIn);
+                    final int rarity = biome.getCenteredFeatureRarity();
+                    if (checkCellRarity(cell, rarity))
+                    {
+                        return modifyHeight(cell, x, z, biome, heightIn);
+                    }
                 }
                 return ChunkHeightFiller.NOT_PRESENT_RETURN;
             }
@@ -240,9 +246,12 @@ public class CenteredFeatureNoise
                 Cellular2D.Cell cell = cellNoise.cell(x, z);
                 final BiomeExtension biome = biomeSource.getBiomeExtension(QuartPos.fromBlock((int) cell.x()), QuartPos.fromBlock((int) cell.y()));
                 final int rarity = biome.getCenteredFeatureRarity();
-                if (checkCellRarity(cell, rarity))
+                if (biome.hasTuyas())
                 {
-                    return modifyHeight(cell, x, z, biome, heightIn);
+                    if (checkCellRarity(cell, rarity))
+                    {
+                        return modifyHeight(cell, x, z, biome, heightIn);
+                    }
                 }
                 return ChunkHeightFiller.NOT_PRESENT_RETURN;
             }

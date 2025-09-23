@@ -338,7 +338,7 @@ public class ChunkHeightFiller
             return height;
         }
     }
-    
+
     private double adjustHeightForVolcanic(final double heightIn)
     {
         double volcanoHeight = NOT_PRESENT_RETURN;
