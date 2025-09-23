@@ -50,6 +50,7 @@ import org.jetbrains.annotations.Nullable;
 import net.dries007.tfc.common.TFCTags;
 import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.blocks.rock.AqueductBlock;
+import net.dries007.tfc.common.component.size.ItemSizeManager;
 import net.dries007.tfc.mixin.accessor.FlowingFluidAccessor;
 import net.dries007.tfc.util.Helpers;
 
@@ -761,6 +762,9 @@ public final class FluidHelpers
             }
             if (!newContainerStack.isEmpty())
             {
+                // Update the new container's stack size in case it has a new
+                // size or weight, eg. sealed barrels
+                ItemSizeManager.get(newContainerStack).modifyWeight(newContainerStack);
                 // Always ensure that we've only created one new container stack.
                 ItemHandlerHelper.giveItemToPlayer(player, newContainerStack.copyWithCount(1));
             }

@@ -233,10 +233,20 @@
     },
     {
       "type": "patchouli:entity",
+      "entity": "tfc:leopard_seal",
+      "scale": 0.7,
+      "name": "Leopard Seal",
+      "text": "The Leopard Seal spawns on cold beaches, ice sheet edges, and sea ice with $(l:the_world/climate#temperature)temperatures$() of at most -9°C and $(l:the_world/climate#rainfall)rainfall$() of at least 105mm."
+    },
+    {
+      "type": "patchouli:entity",
       "entity": "tfc:turtle",
       "scale": 0.7,
       "name": "海龜",
       "text": "海龜喜歡温暖的水域。它們生活在$(l:the_world/climate#temperature)温度$()不低於 21°C、$(l:the_world/climate#rainfall)降雨量$()不小於 250mm 的温暖海洋中。"
+    },
+    {
+      "type": "patchouli:empty"
     },
     {
       "type": "patchouli:text",

@@ -129,7 +129,7 @@ public class BuiltinItemTags extends TagsProvider<Item> implements Accessors
             commonTagOf(Metal.BISMUTH_BRONZE, Metal.ItemType.DOUBLE_SHEET),
             commonTagOf(Metal.BLACK_BRONZE, Metal.ItemType.DOUBLE_SHEET));
 
-        tag(FRUITS).add(Food.BLACKBERRY, Food.BLUEBERRY, Food.BUNCHBERRY, Food.CLOUDBERRY, Food.CRANBERRY, Food.ELDERBERRY, Food.GOOSEBERRY, Food.RASPBERRY, Food.SNOWBERRY, Food.STRAWBERRY, Food.WINTERGREEN_BERRY, Food.BANANA, Food.CHERRY, Food.GREEN_APPLE, Food.LEMON, Food.OLIVE, Food.ORANGE, Food.PEACH, Food.PLUM, Food.RED_APPLE, Food.PUMPKIN_CHUNKS);
+        tag(FRUITS).add(Food.BLACKBERRY, Food.BLUEBERRY, Food.BUNCHBERRY, Food.CLOUDBERRY, Food.CRANBERRY, Food.ELDERBERRY, Food.GOOSEBERRY, Food.RASPBERRY, Food.SNOWBERRY, Food.STRAWBERRY, Food.WINTERGREEN_BERRY, Food.BANANA, Food.CHERRY, Food.GREEN_APPLE, Food.LEMON, Food.OLIVE, Food.ORANGE, Food.PEACH, Food.PLUM, Food.RED_APPLE, Food.PUMPKIN_CHUNKS, Food.MELON_SLICE);
         tag(VEGETABLES).add(Food.BEET, Food.CABBAGE, Food.CARROT, Food.GARLIC, Food.GREEN_BEAN, Food.GREEN_BELL_PEPPER, Food.ONION, Food.POTATO, Food.BAKED_POTATO, Food.RED_BELL_PEPPER, Food.SOYBEAN, Food.SUGARCANE, Food.SQUASH, Food.TOMATO, Food.YELLOW_BELL_PEPPER, Food.CASSAVA, Food.LENTIL, Food.PEANUT, Food.RADISH);
         tag(RAW_MEATS).add(Food.BEEF, Food.PORK, Food.CHICKEN, Food.QUAIL, Food.MUTTON, Food.BEAR, Food.HORSE_MEAT, Food.PHEASANT, Food.GROUSE, Food.TURKEY, Food.PEAFOWL, Food.VENISON, Food.WOLF, Food.RABBIT, Food.FOX, Food.HYENA, Food.DUCK, Food.CHEVON, Food.GRAN_FELINE, Food.TURTLE, Food.CAMELIDAE, Food.FROG_LEGS);
         tag(COOKED_MEATS).add(Food.COOKED_BEEF, Food.COOKED_PORK, Food.COOKED_CHICKEN, Food.COOKED_QUAIL, Food.COOKED_MUTTON, Food.COOKED_BEAR, Food.COOKED_HORSE_MEAT, Food.COOKED_PHEASANT, Food.COOKED_TURKEY, Food.COOKED_PEAFOWL, Food.COOKED_GROUSE, Food.COOKED_VENISON, Food.COOKED_WOLF, Food.COOKED_RABBIT, Food.COOKED_FOX, Food.COOKED_HYENA, Food.COOKED_DUCK, Food.COOKED_CHEVON, Food.COOKED_CAMELIDAE, Food.COOKED_FROG_LEGS, Food.COOKED_GRAN_FELINE);
@@ -153,12 +153,13 @@ public class BuiltinItemTags extends TagsProvider<Item> implements Accessors
         tag(FOODS).addTag(JAM).add(TFCItems.FOOD).addTag(SOUPS).addTag(SALADS).addTag(SANDWICHES);
         tag(PRESERVES).add(TFCItems.UNSEALED_FRUIT_PRESERVES);
         tag(SEALED_PRESERVES).add(TFCItems.FRUIT_PRESERVES);
-        tag(JARS)
-            .addTags(SEALED_PRESERVES, PRESERVES)
+        tag(EMPTY_JARS)
             .add(
                 TFCItems.EMPTY_JAR,
                 TFCItems.EMPTY_JAR_WITH_LID
             );
+        tag(FILLED_JARS).addTags(SEALED_PRESERVES, PRESERVES);
+        tag(JARS).addTags(EMPTY_JARS, FILLED_JARS);
         tag(SWEETENERS).add(Items.SUGAR);
         tag(BOWLS).add(Items.BOWL, TFCBlocks.CERAMIC_BOWL);
         tag(SALAD_BOWLS).addTag(BOWLS);
@@ -168,9 +169,9 @@ public class BuiltinItemTags extends TagsProvider<Item> implements Accessors
         tag(USABLE_IN_SOUP)
             .addTags(FRUITS, VEGETABLES, MEATS, COOKED_MEATS)
             .add(Food.COOKED_RICE);
-        tag(USABLE_IN_SANDWICH).addTags(VEGETABLES, COOKED_MEATS, DAIRY);
-        tag(USABLE_IN_JAM_SANDWICH).addTags(COOKED_MEATS, DAIRY, PRESERVES);
-        tag(CAN_BE_SALTED);
+        tag(USABLE_IN_SANDWICH).addTags(VEGETABLES, COOKED_MEATS, COOKED_FISH, DAIRY);
+        tag(USABLE_IN_JAM_SANDWICH).addTags(COOKED_MEATS, COOKED_FISH, DAIRY, PRESERVES, JAM);
+        tag(CAN_BE_SALTED).addTags(MEATS, COOKED_MEATS);
         tag(PIG_FOOD).addTag(FOODS);
         tag(COW_FOOD).addTag(GRAINS);
         tag(YAK_FOOD).addTag(GRAINS);
@@ -186,7 +187,8 @@ public class BuiltinItemTags extends TagsProvider<Item> implements Accessors
         tag(HORSE_FOOD).addTags(GRAINS, FRUITS);
         tag(CAT_FOOD).addTags(GRAINS, COOKED_MEATS, DAIRY, COOKED_FISH);
         tag(DOG_FOOD).addTag(MEATS);
-        tag(PENGUIN_FOOD).addTags(TURTLE_FOOD, RAW_FISH);
+        tag(PENGUIN_FOOD).addTags(RAW_FISH);
+        tag(SEAL_FOOD).addTags(RAW_FISH);
         tag(TURTLE_FOOD).add(TFCItems.FOOD.get(Food.DRIED_KELP), TFCItems.FOOD.get(Food.DRIED_SEAWEED));
         tag(FROG_FOOD).addTag(RAW_FISH).add(Items.SPIDER_EYE);
         tag(RABBIT_FOOD).addTags(GRAINS, VEGETABLES);
@@ -218,6 +220,11 @@ public class BuiltinItemTags extends TagsProvider<Item> implements Accessors
             TFCBlocks.GROUNDCOVER.get(GroundcoverBlockType.HUMUS),
             TFCBlocks.GROUNDCOVER.get(GroundcoverBlockType.DRIFTWOOD),
             TFCBlocks.GROUNDCOVER.get(GroundcoverBlockType.PINECONE));
+        tag(COMPOST_POISONS).add(
+            Items.BONE,
+            Items.BONE_MEAL,
+            Items.BONE_BLOCK
+        ).addTag(MEATS);
 
         tag(SMALL_FISHING_BAIT)
             .addTag(Tags.Items.SEEDS)
@@ -276,7 +283,9 @@ public class BuiltinItemTags extends TagsProvider<Item> implements Accessors
             .add(TFCItems.UNFIRED_POT)
             .add(TFCItems.UNFIRED_SPINDLE_HEAD)
             .add(TFCItems.UNFIRED_VESSEL)
-            .add(TFCItems.UNFIRED_LARGE_VESSEL);
+            .add(TFCItems.UNFIRED_LARGE_VESSEL)
+            .add(TFCItems.UNFIRED_CHANNEL)
+            .add(TFCItems.UNFIRED_MOLD_TABLE);
 
         tag(TOOL_RACKS).add(TFCBlocks.WOODS, Wood.BlockType.TOOL_RACK);
         tag(SCRIBING_TABLES).add(TFCBlocks.WOODS, Wood.BlockType.SCRIBING_TABLE);
@@ -285,6 +294,7 @@ public class BuiltinItemTags extends TagsProvider<Item> implements Accessors
         tag(LOOMS).add(TFCBlocks.WOODS, Wood.BlockType.LOOM);
         tag(BARRELS).add(TFCBlocks.WOODS, Wood.BlockType.BARREL);
         tag(TWIGS).add(TFCBlocks.WOODS, Wood.BlockType.TWIG);
+        tag(ItemTags.BOATS).add(TFCItems.BOATS);
         copy(TFCTags.Blocks.LAMPS, LAMPS);
         tag(Tags.Items.BUCKETS).add(
             TFCItems.WOODEN_BUCKET,
@@ -358,7 +368,7 @@ public class BuiltinItemTags extends TagsProvider<Item> implements Accessors
             .add(TFCBlocks.PLANTS.get(Plant.MUSSELS).get())
             .add(TFCBlocks.PLANTS.get(Plant.BARNACLES).get());
         tag(METAL_PLATED_BLOCKS)
-            .addAll(TFCBlocks.METALS);
+            .add(TFCBlocks.METALS, Metal.BlockType.BLOCK);
 
         // Vanilla Armor Tags
         tag(ItemTags.HEAD_ARMOR).add(TFCItems.METAL_ITEMS, Metal.ItemType.HELMET);
@@ -409,7 +419,7 @@ public class BuiltinItemTags extends TagsProvider<Item> implements Accessors
         tag(TOOLS_GLASSWORKING).add(TFCItems.PADDLE, TFCItems.JACKS, TFCItems.GEM_SAW);
         tag(TOOLS_BLOWPIPE).add(TFCItems.BLOWPIPE, TFCItems.CERAMIC_BLOWPIPE);
         tag(TOOLS_SHARP).addTags(
-            ItemTags.AXES,
+            ItemTags.HOES,
             TOOLS_KNIFE,
             TOOLS_SCYTHE,
             TOOLS_SAW);
@@ -678,8 +688,9 @@ public class BuiltinItemTags extends TagsProvider<Item> implements Accessors
         tag(CLAY_KNAPPING).add(Items.CLAY_BALL);
         tag(FIRE_CLAY_KNAPPING).add(TFCItems.FIRE_CLAY);
         tag(LEATHER_KNAPPING).add(Items.LEATHER);
-        tag(GOAT_HORN_KNAPPING).add(Items.GOAT_HORN);
+        tag(GOAT_HORN_KNAPPING).add(TFCItems.GOAT_HORN);
         tag(QUERN_HANDSTONES).add(TFCItems.HANDSTONE);
+        tag(SCRIBING_INK).add(Items.BLACK_DYE);
         tag(SEWING_LIGHT_CLOTH).add(TFCItems.WOOL_CLOTH, TFCItems.SILK_CLOTH);
         tag(SEWING_DARK_CLOTH).add(TFCItems.BURLAP_CLOTH);
         tag(SEWING_NEEDLES).add(TFCItems.BONE_NEEDLE);
@@ -706,6 +717,7 @@ public class BuiltinItemTags extends TagsProvider<Item> implements Accessors
             .addTags(Tags.Items.TOOLS, SEWING_NEEDLES)
             .add(TFCItems.SANDPAPER, Items.SPYGLASS);
         tag(POWDER_KEG_FUEL).add(Items.GUNPOWDER);
+        tag(USABLE_IN_MOLD_TABLE).addTag(FIRED_MOLDS);
         tag(MINECART_HOLDABLE)
             // Don't use tags, as this is technically restricted to only having blocks, so we don't want it to include other values accidentally
             .add(TFCBlocks.WOODS, Wood.BlockType.BARREL)
@@ -815,6 +827,7 @@ public class BuiltinItemTags extends TagsProvider<Item> implements Accessors
 
         copy(TFCTags.Blocks.FALLEN_LEAVES, FALLEN_LEAVES);
         copy(TFCTags.Blocks.CLAY_INDICATORS, CLAY_INDICATORS);
+        copy(TFCTags.Blocks.BAMBOO, BAMBOO);
     }
 
     @Override

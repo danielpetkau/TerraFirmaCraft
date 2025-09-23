@@ -90,7 +90,9 @@ public class AdvancedShapedRecipe extends ShapedRecipe
     {
         return remainder.map(remainder -> {
                 RecipeHelpers.setCraftingInput(input);
-                final var remain = RecipeHelpers.getRemainderItemsWithProvider(input, remainder);
+                final int matchSlot = RecipeHelpers.translateMatch(this, inputSlot, input);
+                final ItemStack inputStack = matchSlot != -1 ? input.getItem(matchSlot).copy() : ItemStack.EMPTY;
+                final var remain = RecipeHelpers.getRemainderItemsWithProvider(input, remainder, inputStack);
                 RecipeHelpers.clearCraftingInput();
                 return remain;
             })

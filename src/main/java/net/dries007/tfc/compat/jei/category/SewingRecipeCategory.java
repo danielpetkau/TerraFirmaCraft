@@ -30,7 +30,7 @@ public class SewingRecipeCategory extends BaseRecipeCategory<SewingRecipe>
 
     public SewingRecipeCategory(RecipeType<SewingRecipe> type, IGuiHelper helper)
     {
-        super(type, helper, helper.createBlankDrawable(144, 70), new ItemStack(TFCItems.BONE_NEEDLE.get()));
+        super(type, helper, 144, 70, new ItemStack(TFCItems.BONE_NEEDLE.get()));
 
         sewingBackground = helper.drawableBuilder(SewingTableScreen.TEXTURE, 8, 14, 112, 64).build();
         stitch = helper.drawableBuilder(SewingTableScreen.TEXTURE, 192, 0, 5, 5).build();

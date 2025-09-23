@@ -23,6 +23,7 @@ import org.apache.commons.lang3.mutable.Mutable;
 import org.apache.commons.lang3.mutable.MutableObject;
 import org.jetbrains.annotations.Nullable;
 
+import net.dries007.tfc.world.Codecs;
 import net.dries007.tfc.world.region.ChooseRocks;
 
 public final class RockLayerSettings
@@ -203,7 +204,7 @@ public final class RockLayerSettings
     {
         static final Codec<LayerData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             Codec.STRING.fieldOf("id").forGetter(c -> c.id),
-            Codec.unboundedMap(Codec.STRING, Codec.STRING).fieldOf("layers").forGetter(c -> c.layers)
+            Codecs.orderPreservingUnboundedMapCodec(Codec.STRING, Codec.STRING).fieldOf("layers").forGetter(c -> c.layers)
         ).apply(instance, LayerData::new));
     }
 }

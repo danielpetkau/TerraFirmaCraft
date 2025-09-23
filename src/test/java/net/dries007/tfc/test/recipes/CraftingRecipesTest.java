@@ -6,15 +6,17 @@
 
 package net.dries007.tfc.test.recipes;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.CraftingRecipe;
+import net.minecraft.world.item.crafting.RecipeManager;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.neoforged.neoforge.common.Tags;
 import org.junit.jupiter.api.Test;
 
 import net.dries007.tfc.common.blocks.wood.Wood;
@@ -24,11 +26,8 @@ import net.dries007.tfc.common.recipes.outputs.DamageCraftingRemainderModifier;
 import net.dries007.tfc.common.recipes.outputs.ItemStackProvider;
 import net.dries007.tfc.test.TestSetup;
 import net.dries007.tfc.util.Helpers;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.CraftingRecipe;
-import net.minecraft.world.item.crafting.RecipeManager;
-import net.minecraft.world.item.crafting.RecipeType;
-import net.neoforged.neoforge.common.Tags;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class CraftingRecipesTest implements TestSetup
 {
@@ -97,4 +96,5 @@ public class CraftingRecipesTest implements TestSetup
 
         assertTrue(recipes.isEmpty(), "Advanced shapeless crafting recipes do not have primary inputs: " + String.join("\n", recipes));
     }
+
 }

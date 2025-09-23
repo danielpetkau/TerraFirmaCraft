@@ -255,13 +255,30 @@ public interface ICalendar
      */
     default MutableComponent getCalendarDayOfYear()
     {
-        return Day.getDayName(getTotalCalendarDays(), getCalendarMonthOfYear(), getCalendarDayOfMonth());
+        return Day.getDayName(getTotalCalendarDays(), getAbsoluteCalendarMonthOfYear(), getCalendarDayOfMonth());
     }
 
     /**
      * Gets the current month of the year in calendar time
      */
-    default Month getCalendarMonthOfYear()
+    default Month getHemispheralCalendarMonthOfYear(boolean northernHemisphere)
+    {
+        if (northernHemisphere)
+        {
+            return ICalendar.getMonthOfYear(getCalendarTicks(), getCalendarDaysInMonth());
+        }
+        else
+        {
+            return ICalendar.getMonthOfYear(getCalendarTicks(), getCalendarDaysInMonth()).opposite();
+        }
+    }
+
+    /**
+     * Gets the current month of the year in calendar time
+     * This should be used only for interfaces that display a calendar month by name, i.e. "January"
+     * or that deal with absolute time, rather than time of year
+     */
+    default Month getAbsoluteCalendarMonthOfYear()
     {
         return ICalendar.getMonthOfYear(getCalendarTicks(), getCalendarDaysInMonth());
     }

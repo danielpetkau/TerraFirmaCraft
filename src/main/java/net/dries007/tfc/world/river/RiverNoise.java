@@ -146,6 +146,34 @@ public final class RiverNoise
         };
     }
 
+    // A copy of wide, but a little deeper to help with shore blending
+    public static RiverNoiseSampler wideDeep(Seed seed)
+    {
+        return new RiverNoiseSampler()
+        {
+
+            final Noise2D baseNoise = new OpenSimplex2D(seed.next()).octaves(4).spread(0.05f).scaled(-2.5f, 1.5f);
+            final Noise2D distNoise = new OpenSimplex2D(seed.next()).octaves(4).spread(0.05f).scaled(-0.15f, 0.15f);
+
+            double height;
+
+            @Override
+            public double setColumnAndSampleHeight(RiverInfo info, int x, int z, double heightIn, double caveWeight, double thisWeight)
+            {
+                final double distFac = info.normDistSq() * 0.8f + distNoise.noise(x, z);
+                final double riverHeight = 55 + distFac * 7 + baseNoise.noise(x, z);
+
+                return height = Math.min(riverHeight, heightIn);
+            }
+
+            @Override
+            public double noise(int y, double noiseIn)
+            {
+                return y > height ? 0 : noiseIn;
+            }
+        };
+    }
+
     public static RiverNoiseSampler canyon(Seed seed)
     {
         return new RiverNoiseSampler()
@@ -274,14 +302,22 @@ public final class RiverNoise
         {
             final Noise2D baseNoise = new OpenSimplex2D(seed.next()).octaves(4).spread(0.05f).scaled(-2.5f, 1.5f);
             final Noise2D cliffHeightNoise = new OpenSimplex2D(seed.next()).octaves(2).spread(0.1f).scaled(4f, 8f);
+            final Noise2D cliffBaseNoise = new OpenSimplex2D(seed.next()).octaves(2).spread(0.06f).scaled(SEA_LEVEL_Y - 2, SEA_LEVEL_Y + 4);
             final Noise2D distNoise = new OpenSimplex2D(seed.next()).octaves(4).spread(0.05f).scaled(-0.15f, 0.15f);
             double height;
 
             @Override
             public double setColumnAndSampleHeight(RiverInfo info, int x, int z, double heightIn, double caveWeight, double thisWeight)
             {
-                final double distFac = Math.sqrt(info.normDistSq()) * 0.8 + distNoise.noise(x, z);
-                final double terraceRiverHeight = 56 + distFac * 9 + baseNoise.noise(x, z) + cliffHeightNoise.noise(x, z) * Math.max(Math.floor(distFac), 0);
+                final double distFac = Math.sqrt(info.normDistSq()) * 0.85 + distNoise.noise(x, z);
+                final double slopedRiverHeight = 54 + distFac * 12 + baseNoise.noise(x, z);
+                final double cliffBaseHeight = cliffBaseNoise.noise(x, z);
+                final double cliffHeight = cliffHeightNoise.noise(x, z);
+                // A smaller set of cliffs nearer the water
+                final double lowerTerrace = slopedRiverHeight > cliffBaseHeight ? Mth.clampedMap(slopedRiverHeight, cliffBaseHeight, cliffBaseHeight + 1.1, 0, cliffHeight) : 0;
+                // A larger set of cliffs up higher
+                final double upperTerrace = slopedRiverHeight > cliffBaseHeight + cliffHeight ? Mth.clampedMap(slopedRiverHeight, cliffBaseHeight + cliffHeight, cliffBaseHeight + cliffHeight + 1.4, 0, cliffHeight + 4) : 0;
+                final double terraceRiverHeight = slopedRiverHeight + lowerTerrace + upperTerrace;
                 final double canyonRiverHeight = 55 + info.normDistSq() * 1.3 * 16;
 
                 // Use noise similar to tall canyon at edges of terrace biomes to avoid artifacts with other river noise functions
@@ -305,17 +341,17 @@ public final class RiverNoise
             final Noise2D carvingCenterNoise = new OpenSimplex2D(seed.next()).octaves(2).spread(0.02f).scaled(SEA_LEVEL_Y - 3, SEA_LEVEL_Y + 3);
             final Noise2D carvingHeightNoise = new OpenSimplex2D(seed.next()).octaves(4).spread(0.15f).scaled(8, 14);
 
-            double weight, height, carvingHeight, carvingCenter;
+            double distSquared, weight, height, carvingHeight, carvingCenter;
 
             @Override
             public double setColumnAndSampleHeight(RiverInfo info, int x, int z, double heightIn, double caveWeight, double thisWeight)
             {
-                weight = Mth.clamp(info.normDistSq() * 1.3 - 0.1, 0d, 1d); // 0 = near center
+                distSquared = Mth.clamp(info.normDistSq() * 1.3 - 0.1, 0d, 1d); // 0 = near center
+                weight = caveWeight;
                 height = heightIn;
                 carvingHeight = carvingHeightNoise.noise(x, z);
                 carvingCenter = carvingCenterNoise.noise(x, z);
 
-                final double minHeight = carvingCenter - carvingHeight; // The minimum height of the river base. Must keep the river below this value
                 final double maxHeight = carvingCenter + carvingHeight; // The maximum height of the river tunnel. Any surface height above a cave must only occur above this value.
 
                 if (caveWeight > 0.75) // Full cave carver
@@ -323,30 +359,37 @@ public final class RiverNoise
                     // Return the normal terrain height as river is fully subterranean
                     return heightIn;
                 }
-                else if (caveWeight > 0.25) // Blended cave + exterior carver
+                else
                 {
                     final double canyonMaxHeight = Math.min(55 + info.normDistSq() * 1.3 * 16, heightIn);
+                    if (caveWeight > 0.5) // Blended cave + exterior carver
+                    {
+                        final double interiorHeight = Mth.map(caveWeight, 0.5, 0.75, Math.min(maxHeight, heightIn), heightIn);
 
-                    final double interiorHeight = caveWeight > 0.5 ?
-                        Mth.map(caveWeight, 0.5, 0.75, Math.min(maxHeight, heightIn), heightIn) :
-                        Math.min(heightIn, Mth.map(caveWeight, 0.25, 0.5, canyonMaxHeight, minHeight));
+                        final double exteriorHeight = Mth.map(caveWeight, 0.5, 0.75, Math.min(canyonMaxHeight, heightIn), heightIn);
 
-                    final double exteriorHeight = caveWeight > 0.5 ?
-                        Mth.map(caveWeight, 0.5, 0.75, Math.min(canyonMaxHeight, heightIn), heightIn) :
-                        canyonMaxHeight;
-
-                    return height = Mth.lerp(weight, interiorHeight, exteriorHeight);
+                        return height = Mth.lerp(distSquared, interiorHeight, exteriorHeight);
+                    }
+                    else
+                    {
+                        return canyonMaxHeight;
+                    }
                 }
-                return heightIn;
             }
 
             @Override
             public double noise(int y, double noiseIn)
             {
-                final double distance = Math.abs(y - carvingCenter) / carvingHeight;
-                final double noise = Math.max(1 - (distance * distance), 0);
+                double vertDistance = (y - carvingCenter) / carvingHeight;
+                // Create a cave mouth
+                if (vertDistance > 0)
+                {
+                    vertDistance = vertDistance * weight * weight;
+                }
+                final double columnNoise = Math.max(1 - (vertDistance * vertDistance), 0);
+                final double noise = Mth.lerp(distSquared, columnNoise, noiseIn);
 
-                return Mth.lerp(weight, noise, noiseIn);
+                return noise * Mth.clampedMap(weight, 0.5, 0.25, 1, 0);
             }
         };
     }

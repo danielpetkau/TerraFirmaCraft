@@ -10,8 +10,8 @@
       "type": "minecraft:in_square"
     },
     {
-      "type": "tfc:climate",
-      "min_temperature": -14
+      "type": "minecraft:heightmap",
+      "heightmap": "OCEAN_FLOOR_WG"
     }
   ]
 }

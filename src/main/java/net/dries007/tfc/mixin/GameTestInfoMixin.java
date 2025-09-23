@@ -11,7 +11,7 @@ import net.minecraft.gametest.framework.GameTestInfo;
 import net.minecraft.resources.ResourceLocation;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.ModifyArg;
 
 @Mixin(GameTestInfo.class)
 public abstract class GameTestInfoMixin
@@ -21,9 +21,9 @@ public abstract class GameTestInfoMixin
      * as a {@link ResourceLocation}, and it is compared in a case-insensitive manner later. This is the best solution that doesn't require
      * removing nice display names, and allows {@code /test runthis} to function correctly.
      */
-    @Redirect(method = "spawnStructure", at = @At(value = "INVOKE", target = "Lnet/minecraft/gametest/framework/GameTestInfo;getTestName()Ljava/lang/String;"))
-    private String replaceTestNameWithLowerCase(GameTestInfo info)
+    @ModifyArg(method = "prepareTestStructure", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/entity/StructureBlockEntity;setMetaData(Ljava/lang/String;)V"))
+    private String replaceTestNameWithLowerCase(String metaData)
     {
-        return info.getTestName().toLowerCase(Locale.ROOT);
+        return metaData.toLowerCase(Locale.ROOT);
     }
 }

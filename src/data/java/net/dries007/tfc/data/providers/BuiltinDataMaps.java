@@ -24,7 +24,7 @@ public class BuiltinDataMaps extends DataMapProvider
     }
 
     @Override
-    protected void gather()
+    protected void gather(HolderLookup.Provider provider)
     {
         for (Metal metal : Metal.values())
             if (metal.weatheredParts())

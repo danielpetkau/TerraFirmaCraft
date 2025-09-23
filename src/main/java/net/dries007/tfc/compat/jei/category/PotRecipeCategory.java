@@ -22,9 +22,9 @@ import net.dries007.tfc.compat.jei.JEIIntegration;
 
 public abstract class PotRecipeCategory<T extends PotRecipe> extends BaseRecipeCategory<T>
 {
-    public PotRecipeCategory(RecipeType<T> type, IGuiHelper helper, IDrawable background)
+    public PotRecipeCategory(RecipeType<T> type, IGuiHelper helper, int width, int height)
     {
-        super(type, helper, background, new ItemStack(TFCItems.POT.get()));
+        super(type, helper, width, height, new ItemStack(TFCItems.POT.get()));
     }
 
     protected void setInitialIngredients(IRecipeLayoutBuilder builder, PotRecipe recipe)

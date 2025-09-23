@@ -139,7 +139,7 @@ def generate(rm: ResourceManager):
     biome(rm, 'dormant_shield_volcano', 'extreme_hills', hot_spring_features=True, shield_volcano_features=True)
     biome(rm, 'extinct_shield_volcano', 'extreme_hills', hot_spring_features='empty', shield_volcano_features=True)
     biome(rm, 'ancient_shield_volcano', 'extreme_hills', shield_volcano_features=True)
-    biome(rm, 'sunken_shield_volcano', 'extreme_hills', shield_volcano_features=True)
+    biome(rm, 'sunken_shield_volcano', 'extreme_hills', shield_volcano_features=True, reef_features=True)
     biome(rm, 'shield_volcano_shore', 'beach', ocean_features=True, shield_volcano_features=True)
     biome(rm, 'old_shield_volcano_shore', 'beach', ocean_features=True, shield_volcano_features=True)
 
@@ -389,7 +389,7 @@ def generate(rm: ResourceManager):
         'height': 7,
         'states': [{'replace': 'tfc:%s/%s' % (block, soil), 'with': 'tfc:%s/mollisol' % block} for soil in ALFISOL_REPLACEABLE for block in NATURAL_SOIL_BLOCKS]
     })
-    rm.placed_feature('mollisol_disc', 'tfc:mollisol_disc', decorate_square(), decorate_heightmap('world_surface_wg'), decorate_climate(min_temp=-9, max_temp=3, min_water=200, forest_types=['grassland']))
+    rm.placed_feature('mollisol_disc', 'tfc:mollisol_disc', decorate_square(), decorate_count(2), decorate_heightmap('world_surface_wg'), decorate_climate(min_temp=-9, max_temp=3, min_water=250, forest_types=['grassland'], ignore_rivers=True))
 
 
     for ore in ORE_DEPOSITS:
@@ -424,14 +424,16 @@ def generate(rm: ResourceManager):
         'radius': 5,
         'tries': 20,
         'min_height': 2,
-        'max_height': 5
+        'max_height': 5,
+        'allow_underwater': True
     })
     rm.configured_feature('mega_calcite', 'tfc:thin_spike', {
         'state': 'tfc:calcite',
         'radius': 12,
         'tries': 70,
         'min_height': 3,
-        'max_height': 9
+        'max_height': 9,
+        'allow_underwater': True
     })
 
     rm.placed_feature('calcite', 'tfc:calcite', decorate_count(4), decorate_square(), decorate_range(-56, 60, bias='biased_to_bottom'))
@@ -442,7 +444,8 @@ def generate(rm: ResourceManager):
         'radius': 10,
         'tries': 50,
         'min_height': 2,
-        'max_height': 5
+        'max_height': 5,
+        'allow_underwater': False
     })
     rm.placed_feature('icicle', 'tfc:icicle', decorate_count(3), decorate_square(), decorate_range(-32, 100, bias='biased_to_bottom'), decorate_climate(max_temp=-4))
 
@@ -561,7 +564,6 @@ def generate(rm: ResourceManager):
             })
 
     igneous_rocks = expand_rocks(['igneous_extrusive', 'igneous_intrusive'])
-    # TODO: Need to stop lava hot springs generating on top of sea ice. As a temporary measure, I added a climate restriction
     configured_placed_feature(rm, 'lava_hot_spring', 'tfc:hot_spring', {
         'fluid_state': 'minecraft:lava',
         'radius': 10,
@@ -573,7 +575,7 @@ def generate(rm: ResourceManager):
                 {'block': 'tfc:rock/hardened/%s' % rock, 'weight': 2}
             ]
         } for rock in igneous_rocks]
-    }, decorate_chance(20), decorate_square(), decorate_climate(min_temp=-14))
+    }, decorate_chance(20), decorate_square(), decorate_heightmap('ocean_floor_wg'))
 
     rm.configured_feature('random_empty_hot_spring', 'minecraft:simple_random_selector', {
         'features': count_weighted_list(
@@ -606,7 +608,7 @@ def generate(rm: ResourceManager):
     forest_config(rm, 270, 500, -14.2, 8.6, -1, 0.1, False, 'douglas_fir', True, krum=True, podzol=True)
     forest_config(rm, 210, 500, 6.8, 17.6, -0.4, 0.6, False, 'hickory', True, alfisol=True)
     forest_config(rm, 300, 500, 19.4, 40, -0.55, 0.55, False, 'kapok', False)
-    forest_config(rm, 200, 500, 15.8, 28.4, -1, 1, False, 'mangrove', False, floating=True)
+    forest_config(rm, 200, 500, 15.8, 40, -1, 1, False, 'mangrove', False, floating=True)
     forest_config(rm, 200, 450, -5.8, 10.4, -0.8, 1, False, 'maple', True, alfisol=True)
     forest_config(rm, 210, 500, -0.4, 17.6, -0.5, 0.75, False, 'oak', False, alfisol=True)
     forest_config(rm, 150, 330, 17.6, 40, -0.7, 0.7, False, 'palm', False)
@@ -1099,16 +1101,12 @@ def generate(rm: ResourceManager):
     }), decorate_square(), decorate_heightmap('world_surface_wg'))
 
     for coral in ('tree', 'mushroom', 'claw'):
-        configured_placed_feature(rm, 'coral_%s' % coral, 'tfc:coral_%s' % coral, {})
+        configured_placed_feature(rm, 'coral_%s' % coral, 'tfc:coral_%s' % coral, {}, decorate_climate(12, 50), ('minecraft:noise_based_count', {
+            'noise_to_count_ratio': 7,
+            'noise_factor': 160.0,
+            'noise_offset': 1
+        }), decorate_square(), decorate_heightmap('ocean_floor_wg'))
         rm.placed_feature_tag('feature/corals', 'tfc:coral_%s' % coral)
-
-    configured_placed_feature(rm, 'coral_reef', 'minecraft:simple_random_selector', {
-        'features': '#tfc:feature/corals'
-    }, ('minecraft:noise_based_count', {
-        'noise_to_count_ratio': 20,
-        'noise_factor': 200,
-        'noise_offset': 1
-    }), decorate_square(), decorate_climate(min_temp=12, max_temp=50, fuzzy=True), decorate_heightmap('ocean_floor_wg'))
 
     configured_placed_feature(rm, 'tide_pool', 'tfc:tide_pool', {}, decorate_chance(5), decorate_count(10), decorate_square(), decorate_heightmap('ocean_floor_wg'), decorate_biome())
     rm.placed_feature('big_tide_pool', 'tfc:tide_pool', decorate_chance(15), decorate_count(40), decorate_square(), decorate_heightmap('ocean_floor_wg'), decorate_biome())
@@ -1568,7 +1566,7 @@ def decorate_carving_mask(min_y: Optional[VerticalAnchor] = None, max_y: Optiona
         'max_y': utils.as_vertical_anchor(max_y) if max_y is not None else None
     }
 
-def decorate_climate(min_temp: Optional[float] = None, max_temp: Optional[float] = None, min_water: Optional[float] = None, max_water: Optional[float] = None, min_rain_variance: Optional[float] = None, max_rain_variance: Optional[float] = None, rain_variance_absolute: Optional[bool] = None, min_forest: Optional[int] = None, max_forest: Optional[int] = None, min_elevation: Optional[int] = None, max_elevation: Optional[int] = None, fuzzy: Optional[bool] = None, forest_types: Optional[List[str]] = None, needs_forest: Optional[bool] = False) -> Json:
+def decorate_climate(min_temp: Optional[float] = None, max_temp: Optional[float] = None, min_water: Optional[float] = None, max_water: Optional[float] = None, min_rain_variance: Optional[float] = None, max_rain_variance: Optional[float] = None, rain_variance_absolute: Optional[bool] = None, min_forest: Optional[int] = None, max_forest: Optional[int] = None, min_elevation: Optional[int] = None, max_elevation: Optional[int] = None, fuzzy: Optional[bool] = None, ignore_rivers: Optional[bool] = None, forest_types: Optional[List[str]] = None, needs_forest: Optional[bool] = False) -> Json:
 
     if needs_forest:
         min_forest = 3
@@ -1586,7 +1584,8 @@ def decorate_climate(min_temp: Optional[float] = None, max_temp: Optional[float]
         'forest_types': forest_types,
         'min_elevation': min_elevation,
         'max_elevation': max_elevation,
-        'fuzzy': fuzzy
+        'fuzzy': fuzzy,
+        'ignore_rivers': ignore_rivers
     }
 
 # Elevations are number above/below the high tide elevation
@@ -1758,13 +1757,15 @@ LAKE_CREATURES: Dict[str, Dict[str, Any]] = {
 
 ICE_SHEET_OCEANIC_CREATURES: Dict[str, Dict[str, Any]] = {
     'polar_bear': spawner('tfc:polar_bear', min_count=1, max_count=1, weight=1),
-    'penguin': spawner('tfc:penguin', min_count=2, max_count=5)
+    'penguin': spawner('tfc:penguin', min_count=2, max_count=5),
+    'leopard_seal': spawner('tfc:leopard_seal', min_count=1, max_count=2)
 }
 
 SHORE_CREATURES: Dict[str, Dict[str, Any]] = {
     'polar_bear': spawner('tfc:polar_bear', min_count=1, max_count=1, weight=1),
     'penguin': spawner('tfc:penguin', min_count=2, max_count=5, weight=10),
-    'turtle': spawner('tfc:turtle', min_count=2, max_count=5, weight=10)
+    'turtle': spawner('tfc:turtle', min_count=2, max_count=5, weight=10),
+    'leopard_seal': spawner('tfc:leopard_seal', min_count=2, max_count=4)
 }
 
 LAND_CREATURES: Dict[str, Dict[str, Any]] = {
@@ -1885,7 +1886,9 @@ def biome(rm: ResourceManager, name: str, category: str, boulders: bool = False,
     spawners['monster'] = [entity for entity in VANILLA_MONSTERS.values()]
 
     if reef_features:
-        large_features.append('tfc:coral_reef')
+        large_features.append('tfc:coral_mushroom')
+        large_features.append('tfc:coral_tree')
+        large_features.append('tfc:coral_claw')
 
     # Continental / Land Features
     # Exclude these features from salt flat biomes

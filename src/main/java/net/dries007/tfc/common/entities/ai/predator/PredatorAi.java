@@ -10,9 +10,10 @@ import java.util.Optional;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
+import com.mojang.datafixers.util.Pair;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
-import net.minecraft.util.RandomSource;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.Brain;
@@ -25,12 +26,10 @@ import net.minecraft.world.entity.ai.sensing.SensorType;
 import net.minecraft.world.entity.schedule.Activity;
 
 import net.dries007.tfc.common.TFCTags;
-import net.dries007.tfc.common.entities.ai.FastGateBehavior;
 import net.dries007.tfc.common.entities.ai.SetLookTarget;
 import net.dries007.tfc.common.entities.ai.TFCBrain;
 import net.dries007.tfc.common.entities.ai.pet.MoveToTargetSinkIfNotSleeping;
 import net.dries007.tfc.common.entities.predator.Predator;
-import net.dries007.tfc.common.entities.prey.RammingPrey;
 import net.dries007.tfc.util.Helpers;
 
 public class PredatorAi
@@ -137,14 +136,14 @@ public class PredatorAi
         ), MemoryModuleType.ATTACK_TARGET);
     }
 
-    public static FastGateBehavior<Predator> createIdleMovementBehaviors()
+    public static RunOne<Predator> createIdleMovementBehaviors()
     {
-        return FastGateBehavior.runOne(ImmutableList.of(
-            RandomStroll.stroll(0.4F),
-            SetWalkTargetFromLookTarget.create(0.4F, 3),
-            new DoNothing(30, 60),
-            StrollToPoi.create(MemoryModuleType.HOME, 0.6F, 2, 5),
-            StrollAroundPoi.create(MemoryModuleType.HOME, 0.6F, MAX_WANDER_DISTANCE)
+        return new RunOne<>(ImmutableList.of(
+            Pair.of(RandomStroll.stroll(0.4F), 1),
+            Pair.of(SetWalkTargetFromLookTarget.create(0.4F, 3), 1),
+            Pair.of(new DoNothing(30, 60), 1),
+            Pair.of(StrollToPoi.create(MemoryModuleType.HOME, 0.6F, 2, 5), 1),
+            Pair.of(StrollAroundPoi.create(MemoryModuleType.HOME, 0.6F, MAX_WANDER_DISTANCE), 1)
         ));
     }
 

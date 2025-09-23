@@ -2,6 +2,9 @@
   "__comment__": "This file was automatically created by mcresources",
   "replace": false,
   "values": [
+    "tfc:coral_mushroom",
+    "tfc:coral_tree",
+    "tfc:coral_claw",
     "tfc:forest",
     "tfc:rare_bamboo",
     "tfc:bamboo",

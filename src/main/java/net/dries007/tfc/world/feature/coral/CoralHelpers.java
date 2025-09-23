@@ -21,6 +21,8 @@ import net.dries007.tfc.common.blocks.plant.coral.CoralWallFanBlock;
 import net.dries007.tfc.common.fluids.TFCFluids;
 import net.dries007.tfc.util.Helpers;
 
+import static net.dries007.tfc.world.TFCChunkGenerator.*;
+
 public final class CoralHelpers
 {
     /**

@@ -30,6 +30,7 @@ import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.BlockHitResult;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.ItemHandlerHelper;
+import net.neoforged.neoforge.items.ItemStackHandler;
 
 import net.dries007.tfc.common.blockentities.FireboxBlockEntity;
 import net.dries007.tfc.common.blocks.devices.DeviceBlock;
@@ -52,29 +53,26 @@ public class FireboxBlock extends DeviceBlock implements IBellowsConsumer
     {
         if (level.getBlockEntity(pos) instanceof FireboxBlockEntity firebox)
         {
-            final IItemHandler inv = Helpers.getCapability(BlockCapabilities.ITEM, firebox);
-            if (inv != null)
+            final ItemStackHandler inv = firebox.getInventory();
+            if (firebox.isItemValid(0, stack))
             {
-                if (firebox.isItemValid(0, stack))
+                final ItemStack leftover = Helpers.insertAllSlots(inv, stack.split(1));
+                if (!leftover.isEmpty())
                 {
-                    final ItemStack leftover = Helpers.insertAllSlots(inv, stack.split(1));
-                    if (!leftover.isEmpty())
-                    {
-                        ItemHandlerHelper.giveItemToPlayer(player, leftover);
-                        return ItemInteractionResult.FAIL;
-                    }
-                    else
-                    {
-                        return ItemInteractionResult.SUCCESS;
-                    }
+                    ItemHandlerHelper.giveItemToPlayer(player, leftover);
+                    return ItemInteractionResult.FAIL;
                 }
-                else if (stack.isEmpty() && player.isShiftKeyDown() && !inv.getStackInSlot(0).isEmpty())
+                else
                 {
-                    ItemHandlerHelper.giveItemToPlayer(player, inv.getStackInSlot(0));
                     return ItemInteractionResult.SUCCESS;
                 }
             }
-            if (player instanceof ServerPlayer serverPlayer)
+            else if (stack.isEmpty() && player.isShiftKeyDown() && !inv.getStackInSlot(0).isEmpty())
+            {
+                ItemHandlerHelper.giveItemToPlayer(player, inv.getStackInSlot(0));
+                return ItemInteractionResult.SUCCESS;
+            }
+            else if (player instanceof ServerPlayer serverPlayer)
             {
                 serverPlayer.openMenu(firebox, pos);
             }

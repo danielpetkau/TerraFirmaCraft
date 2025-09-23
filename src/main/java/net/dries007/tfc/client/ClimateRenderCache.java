@@ -17,6 +17,8 @@ import net.dries007.tfc.util.climate.Climate;
 import net.dries007.tfc.util.climate.ClimateModel;
 import net.dries007.tfc.util.tracker.WeatherHelpers;
 
+import static net.dries007.tfc.world.TFCChunkGenerator.*;
+
 /**
  * This stores the climate parameters at the current client player location, for quick lookup in rendering purposes
  */
@@ -24,6 +26,8 @@ public enum ClimateRenderCache
 {
     INSTANCE;
 
+    private float hemisphereScale;
+    private float averageSeaLevelTemperature;
     private float averageTemperature;
     private float temperature;
     private float averageRainfall;
@@ -46,8 +50,10 @@ public enum ClimateRenderCache
         if (level != null && player != null)
         {
             final BlockPos pos = player.blockPosition();
+            final BlockPos seaLevelPos = pos.atY(SEA_LEVEL_Y);
             final ClimateModel model = Climate.get(level);
 
+            averageSeaLevelTemperature = model.getAverageTemperature(level, seaLevelPos);
             averageTemperature = model.getAverageTemperature(level, pos);
             temperature = model.getTemperature(level, pos);
             averageRainfall = model.getAverageRainfall(level, pos);
@@ -57,6 +63,7 @@ public enum ClimateRenderCache
             averageGroundwater = model.getAverageGroundwater(level, pos);
             groundwater = model.getGroundwater(level, pos);
             wind = model.getWind(level, pos);
+            hemisphereScale = model.hemisphereScale();
 
             // Calculate a real rain level to interpolate from on client. This reads the level's rain level, which includes influence
             // from climate, but doesn't include local influences.
@@ -77,6 +84,11 @@ public enum ClimateRenderCache
                 currRainLevel = level.rainLevel;
             }
         }
+    }
+
+    public float getAverageSeaLevelTemperature()
+    {
+        return averageSeaLevelTemperature;
     }
 
     public float getAverageTemperature()
@@ -122,6 +134,11 @@ public enum ClimateRenderCache
     public float getGroundwater()
     {
         return groundwater;
+    }
+
+    public float getHemisphereScale()
+    {
+        return hemisphereScale;
     }
 
     public Vec2 getWind()

@@ -34,7 +34,7 @@ public record EffectExpirePacket(Holder<MobEffect> effect) implements CustomPack
 
     void handle()
     {
-        if (effect == TFCEffects.PINNED.get())
+        if (effect.value() == TFCEffects.PINNED.get())
         {
             final Player player = ClientHelpers.getPlayer();
             if (player != null && player.hasEffect(TFCEffects.PINNED.holder()))

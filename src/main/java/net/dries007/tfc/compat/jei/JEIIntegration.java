@@ -329,8 +329,6 @@ public final class JEIIntegration implements IModPlugin
     @Override
     public void registerVanillaCategoryExtensions(IVanillaCategoryExtensionRegistration registry)
     {
-        // todo: figure out what to do with advanced shaped/shapeless recipes, plus extra products
-        //registry.getCraftingCategory().addExtension(AdvancedShapelessRecipe.class, AdvancedShapelessExtension::new);
-        //registry.getCraftingCategory().addExtension(ExtraProductsCraftingRecipe.class, ExtraProductsExtension::new);
+        TFCCraftingExtensions.register(registry);
     }
 }

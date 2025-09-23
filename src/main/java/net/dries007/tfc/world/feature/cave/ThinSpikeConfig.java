@@ -16,14 +16,15 @@ import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfigur
 
 import net.dries007.tfc.world.Codecs;
 
-public record ThinSpikeConfig(BlockState state, int radius, int tries, int minHeight, int maxHeight) implements FeatureConfiguration
+public record ThinSpikeConfig(BlockState state, int radius, int tries, int minHeight, int maxHeight, boolean allowUnderwater) implements FeatureConfiguration
 {
     public static final Codec<ThinSpikeConfig> CODEC = RecordCodecBuilder.<ThinSpikeConfig>create(instance -> instance.group(
         Codecs.BLOCK_STATE.fieldOf("state").forGetter(c -> c.state),
         Codec.intRange(1, 16).fieldOf("radius").forGetter(c -> c.radius),
         Codecs.POSITIVE_INT.fieldOf("tries").forGetter(c -> c.tries),
         Codecs.POSITIVE_INT.fieldOf("min_height").forGetter(c -> c.minHeight),
-        Codecs.POSITIVE_INT.fieldOf("max_height").forGetter(c -> c.maxHeight)
+        Codecs.POSITIVE_INT.fieldOf("max_height").forGetter(c -> c.maxHeight),
+        Codec.BOOL.fieldOf("allow_underwater").forGetter(c -> c.allowUnderwater)
     ).apply(instance, ThinSpikeConfig::new)).comapFlatMap(c -> {
         if (c.maxHeight < c.minHeight)
         {

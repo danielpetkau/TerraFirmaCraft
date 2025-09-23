@@ -25,7 +25,7 @@ public class WeldingRecipeCategory extends BaseRecipeCategory<WeldingRecipe>
 {
     public WeldingRecipeCategory(RecipeType<WeldingRecipe> type, IGuiHelper helper)
     {
-        super(type, helper, helper.createBlankDrawable(118, 26), new ItemStack(TFCItems.METAL_ITEMS.get(Metal.WROUGHT_IRON).get(Metal.ItemType.HAMMER).get()));
+        super(type, helper, 118, 26, new ItemStack(TFCItems.METAL_ITEMS.get(Metal.WROUGHT_IRON).get(Metal.ItemType.HAMMER).get()));
     }
 
     @Override

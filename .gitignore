@@ -36,6 +36,7 @@
 
 # Splash / Logo Images
 !/img/**/*.png
+!/img/**/*.gif
 
 # Other exclusions
 __pycache__/

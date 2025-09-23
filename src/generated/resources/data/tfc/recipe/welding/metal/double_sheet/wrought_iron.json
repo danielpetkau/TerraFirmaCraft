@@ -8,7 +8,7 @@
     "id": "tfc:metal/double_sheet/wrought_iron"
   },
   "second_input": {
-    "tag": "c:ingots/wrought_iron"
+    "tag": "c:sheets/wrought_iron"
   },
   "tier": 2
 }

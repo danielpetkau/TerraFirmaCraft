@@ -18,6 +18,7 @@ import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.neoforged.neoforge.event.entity.RegisterSpawnPlacementsEvent;
 
+import net.dries007.tfc.client.overworld.SolarCalculator;
 import net.dries007.tfc.common.entities.ai.predator.PackPredator;
 import net.dries007.tfc.common.entities.ai.prey.TFCOcelot;
 import net.dries007.tfc.common.entities.aquatic.AquaticCritter;
@@ -28,6 +29,7 @@ import net.dries007.tfc.common.entities.aquatic.Jellyfish;
 import net.dries007.tfc.common.entities.aquatic.Manatee;
 import net.dries007.tfc.common.entities.aquatic.Octopoteuthis;
 import net.dries007.tfc.common.entities.aquatic.Penguin;
+import net.dries007.tfc.common.entities.aquatic.LeopardSeal;
 import net.dries007.tfc.common.entities.aquatic.TFCCod;
 import net.dries007.tfc.common.entities.aquatic.TFCDolphin;
 import net.dries007.tfc.common.entities.aquatic.TFCPufferfish;
@@ -73,6 +75,7 @@ public class Faunas
     public static final Id<Manatee> MANATEE = registerFish(TFCEntities.MANATEE);
     public static final Id<TFCTurtle> TURTLE = registerAnimal(TFCEntities.TURTLE);
     public static final Id<Penguin> PENGUIN = registerAnimal(TFCEntities.PENGUIN);
+    public static final Id<LeopardSeal> LEOPARD_SEAL = registerAnimal(TFCEntities.LEOPARD_SEAL);
     public static final Id<TFCFrog> FROG = registerAnimal(TFCEntities.FROG);
     public static final Id<Predator> POLAR_BEAR = registerAnimal(TFCEntities.POLAR_BEAR);
     public static final Id<Predator> GRIZZLY_BEAR = registerAnimal(TFCEntities.GRIZZLY_BEAR);
@@ -134,6 +137,7 @@ public class Faunas
         registerSpawnPlacement(event, MANATEE);
         registerSpawnPlacement(event, TURTLE);
         registerSpawnPlacement(event, PENGUIN);
+        registerSpawnPlacement(event, LEOPARD_SEAL);
         registerSpawnPlacement(event, FROG);
         registerSpawnPlacement(event, POLAR_BEAR);
         registerSpawnPlacement(event, GRIZZLY_BEAR);
@@ -222,7 +226,7 @@ public class Faunas
             }
 
             final ChunkData data = ChunkData.get(level, pos);
-            if (!fauna.climate().isValid(data, pos, rand))
+            if (!fauna.climate().isValid(data, pos, rand, SolarCalculator.getInNorthernHemisphere(pos, level.getLevel())))
             {
                 return false;
             }
@@ -232,7 +236,7 @@ public class Faunas
             {
                 return false;
             }
-            if (!fauna.months().isEmpty() && !fauna.months().contains(Calendars.SERVER.getCalendarMonthOfYear()))
+            if (!fauna.months().isEmpty() && !fauna.months().contains(Calendars.SERVER.getHemispheralCalendarMonthOfYear(SolarCalculator.getInNorthernHemisphere(pos, level.getLevel()))))
             {
                 return false;
             }

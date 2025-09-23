@@ -43,7 +43,7 @@
     },
     {
       "type": "patchouli:text",
-      "text": "$(bold)Legumes$() produce large amounts of $(b)Nitrogen$(), and consume $(b)Nitrogen$() and $(d)Potassium$(). They produce foods rich in Vegetable and Protein.$(br2)$(bold)Vegetables$() consume all three nutrients to produce foods rich in Vegetable.$(br2)$(bold)Cover$() crops produce all three nutrients, but their produce has only limited uses."
+      "text": "$(bold)Legumes$() produce large amounts of $(b)Nitrogen$(), and consume $(b)Phosphorous$() and $(d)Potassium$(). They produce foods rich in Vegetable and Protein.$(br2)$(bold)Vegetables$() consume all three nutrients to produce foods rich in Vegetable.$(br2)$(bold)Cover$() crops produce all three nutrients, but their produce has only limited uses."
     },
     {
       "type": "patchouli:text",
@@ -926,7 +926,7 @@
     {
       "type": "patchouli:text",
       "anchor": "cassava",
-      "text": "$(bold)$(l:the_world/climate#temperature)Temperature$(): 10 - 47 °C$(br)$(bold)$(l:mechanics/hydration)Hydration$(): 45 - 100 %$(br)$(bold)Category$(): Legume$(br)$(br)$(bold)$(b)N: +50 $(bold)$(6)P: 40 $(bold)$(d)K: 20$()$(br)Cassava is a single block crop. Soybean seeds can be planted on farmland and will produce $(thing)Cassava$() and $(thing)Cassava Seeds$() as a product.",
+      "text": "$(bold)$(l:the_world/climate#temperature)Temperature$(): 10 - 47 °C$(br)$(bold)$(l:mechanics/hydration)Hydration$(): 45 - 100 %$(br)$(bold)Category$(): Legume$(br)$(br)$(bold)$(b)N: +50 $(bold)$(6)P: 40 $(bold)$(d)K: 20$()$(br)Cassava is a single block crop. Cassava seeds can be planted on farmland and will produce $(thing)Cassava$() and $(thing)Cassava Seeds$() as a product.",
       "title": "Cassava"
     },
     {
@@ -1354,7 +1354,7 @@
             ]
           ],
           "mapping": {
-            "X": "tfc:crop/lentil[age=0]",
+            "X": "tfc:crop/peanut[age=0]",
             "Y": "tfc:farmland/oxisol"
           }
         },
@@ -1371,7 +1371,7 @@
             ]
           ],
           "mapping": {
-            "X": "tfc:crop/lentil[age=1]",
+            "X": "tfc:crop/peanut[age=1]",
             "Y": "tfc:farmland/oxisol"
           }
         },
@@ -1388,7 +1388,7 @@
             ]
           ],
           "mapping": {
-            "X": "tfc:crop/lentil[age=2]",
+            "X": "tfc:crop/peanut[age=2]",
             "Y": "tfc:farmland/oxisol"
           }
         },
@@ -1405,7 +1405,7 @@
             ]
           ],
           "mapping": {
-            "X": "tfc:crop/lentil[age=3]",
+            "X": "tfc:crop/peanut[age=3]",
             "Y": "tfc:farmland/oxisol"
           }
         },
@@ -1422,7 +1422,7 @@
             ]
           ],
           "mapping": {
-            "X": "tfc:crop/lentil[age=4]",
+            "X": "tfc:crop/peanut[age=4]",
             "Y": "tfc:farmland/oxisol"
           }
         },
@@ -1439,7 +1439,7 @@
             ]
           ],
           "mapping": {
-            "X": "tfc:crop/lentil[age=5]",
+            "X": "tfc:crop/peanut[age=5]",
             "Y": "tfc:farmland/oxisol"
           }
         }
@@ -2476,7 +2476,7 @@
     {
       "type": "patchouli:text",
       "anchor": "tomatoes",
-      "text": "$(bold)$(l:the_world/climate#temperature)Temperature$(): 1 - 47 °C$(br)$(bold)$(l:mechanics/hydration)Hydration$(): 20 - 85 %$(br)$(bold)Category$(): Vegetable$(br)$(br)$(bold)$(b)N: 40 $(bold)$(6)P: 50 $(bold)$(d)K: 60$()$(br)Tomatoes are a climbing two block tall crop. Tomato seeds can be planted on farmland, will grow two blocks tall if a stick is present, and will produce $(thing)Tomatoes$() and $(thing)Tomato Seeds$() as a product.",
+      "text": "$(bold)$(l:the_world/climate#temperature)Temperature$(): 1 - 47 °C$(br)$(bold)$(l:mechanics/hydration)Hydration$(): 20 - 85 %$(br)$(bold)Category$(): Vegetable$(br)$(br)$(bold)$(b)N: 30 $(bold)$(6)P: 40 $(bold)$(d)K: 50$()$(br)Tomatoes are a climbing two block tall crop. Tomato seeds can be planted on farmland, will grow two blocks tall if a stick is present, and will produce $(thing)Tomatoes$() and $(thing)Tomato Seeds$() as a product.",
       "title": "西红柿"
     },
     {
@@ -3217,7 +3217,7 @@
             ]
           ],
           "mapping": {
-            "X": "tfc:crop/lentil[age=0]",
+            "X": "tfc:crop/alfalfa[age=0]",
             "Y": "tfc:farmland/mollisol"
           }
         },
@@ -3234,7 +3234,7 @@
             ]
           ],
           "mapping": {
-            "X": "tfc:crop/lentil[age=1]",
+            "X": "tfc:crop/alfalfa[age=1]",
             "Y": "tfc:farmland/mollisol"
           }
         },
@@ -3251,7 +3251,7 @@
             ]
           ],
           "mapping": {
-            "X": "tfc:crop/lentil[age=2]",
+            "X": "tfc:crop/alfalfa[age=2]",
             "Y": "tfc:farmland/mollisol"
           }
         },
@@ -3268,7 +3268,7 @@
             ]
           ],
           "mapping": {
-            "X": "tfc:crop/lentil[age=3]",
+            "X": "tfc:crop/alfalfa[age=3]",
             "Y": "tfc:farmland/mollisol"
           }
         },
@@ -3285,7 +3285,7 @@
             ]
           ],
           "mapping": {
-            "X": "tfc:crop/lentil[age=4]",
+            "X": "tfc:crop/alfalfa[age=4]",
             "Y": "tfc:farmland/mollisol"
           }
         },
@@ -3302,7 +3302,7 @@
             ]
           ],
           "mapping": {
-            "X": "tfc:crop/lentil[age=5]",
+            "X": "tfc:crop/alfalfa[age=5]",
             "Y": "tfc:farmland/mollisol"
           }
         }
@@ -3331,7 +3331,7 @@
             ]
           ],
           "mapping": {
-            "X": "tfc:crop/lentil[age=0]",
+            "X": "tfc:crop/canola[age=0]",
             "Y": "tfc:farmland/mollisol"
           }
         },
@@ -3348,7 +3348,7 @@
             ]
           ],
           "mapping": {
-            "X": "tfc:crop/lentil[age=1]",
+            "X": "tfc:crop/canola[age=1]",
             "Y": "tfc:farmland/mollisol"
           }
         },
@@ -3365,7 +3365,7 @@
             ]
           ],
           "mapping": {
-            "X": "tfc:crop/lentil[age=2]",
+            "X": "tfc:crop/canola[age=2]",
             "Y": "tfc:farmland/mollisol"
           }
         },
@@ -3382,7 +3382,7 @@
             ]
           ],
           "mapping": {
-            "X": "tfc:crop/lentil[age=3]",
+            "X": "tfc:crop/canola[age=3]",
             "Y": "tfc:farmland/mollisol"
           }
         },
@@ -3399,7 +3399,7 @@
             ]
           ],
           "mapping": {
-            "X": "tfc:crop/lentil[age=4]",
+            "X": "tfc:crop/canola[age=4]",
             "Y": "tfc:farmland/mollisol"
           }
         },
@@ -3416,7 +3416,7 @@
             ]
           ],
           "mapping": {
-            "X": "tfc:crop/lentil[age=5]",
+            "X": "tfc:crop/canola[age=5]",
             "Y": "tfc:farmland/mollisol"
           }
         }
@@ -3445,7 +3445,7 @@
             ]
           ],
           "mapping": {
-            "X": "tfc:crop/lentil[age=0]",
+            "X": "tfc:crop/radish[age=0]",
             "Y": "tfc:farmland/mollisol"
           }
         },
@@ -3462,7 +3462,7 @@
             ]
           ],
           "mapping": {
-            "X": "tfc:crop/lentil[age=1]",
+            "X": "tfc:crop/radish[age=1]",
             "Y": "tfc:farmland/mollisol"
           }
         },
@@ -3479,7 +3479,7 @@
             ]
           ],
           "mapping": {
-            "X": "tfc:crop/lentil[age=2]",
+            "X": "tfc:crop/radish[age=2]",
             "Y": "tfc:farmland/mollisol"
           }
         },
@@ -3496,7 +3496,7 @@
             ]
           ],
           "mapping": {
-            "X": "tfc:crop/lentil[age=3]",
+            "X": "tfc:crop/radish[age=3]",
             "Y": "tfc:farmland/mollisol"
           }
         },
@@ -3513,7 +3513,7 @@
             ]
           ],
           "mapping": {
-            "X": "tfc:crop/lentil[age=4]",
+            "X": "tfc:crop/radish[age=4]",
             "Y": "tfc:farmland/mollisol"
           }
         },
@@ -3530,7 +3530,7 @@
             ]
           ],
           "mapping": {
-            "X": "tfc:crop/lentil[age=5]",
+            "X": "tfc:crop/radish[age=5]",
             "Y": "tfc:farmland/mollisol"
           }
         }

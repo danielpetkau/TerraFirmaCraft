@@ -23,7 +23,7 @@ public class BlastFurnaceRecipeCategory extends BaseRecipeCategory<BlastFurnaceR
 {
     public BlastFurnaceRecipeCategory(RecipeType<BlastFurnaceRecipe> type, IGuiHelper helper)
     {
-        super(type, helper, helper.createBlankDrawable(98, 26), new ItemStack(TFCBlocks.BLAST_FURNACE.get()));
+        super(type, helper, 98, 26, new ItemStack(TFCBlocks.BLAST_FURNACE.get()));
     }
 
     @Override

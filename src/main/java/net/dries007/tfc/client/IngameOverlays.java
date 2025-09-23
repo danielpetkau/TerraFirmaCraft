@@ -73,6 +73,7 @@ public enum IngameOverlays
     private static final ResourceLocation VANILLA_MOUNT_HEALTH = VanillaGuiLayers.VEHICLE_HEALTH;
     private static final ResourceLocation VANILLA_FOOD = VanillaGuiLayers.FOOD_LEVEL;
     private static final ResourceLocation VANILLA_EXP = VanillaGuiLayers.EXPERIENCE_BAR;
+    private static final ResourceLocation VANILLA_EXP_LEVEL = VanillaGuiLayers.EXPERIENCE_LEVEL;
     private static final ResourceLocation VANILLA_JUMP = VanillaGuiLayers.JUMP_METER;
 
     public static void registerOverlays(RegisterGuiLayersEvent event)
@@ -111,7 +112,7 @@ public enum IngameOverlays
         {
             event.setCanceled(true);
         }
-        if (!TFCConfig.CLIENT.enableExperienceBar.get() && (id.equals(VANILLA_EXP) || id.equals(VANILLA_JUMP)))
+        if (!TFCConfig.CLIENT.enableExperienceBar.get() && (id.equals(VANILLA_EXP) || id.equals(VANILLA_JUMP) || id.equals(VANILLA_EXP_LEVEL)))
         {
             event.setCanceled(true);
         }
@@ -272,9 +273,8 @@ public enum IngameOverlays
             }
             else
             {
-                // todo: fishing rendering over xp bar isn't working
                 final int x = graphics.guiWidth() / 2 - 91;
-                final int y = graphics.hashCode() - 29;
+                final int y = graphics.guiHeight() - 29;
                 final int amount = Mth.ceil(Mth.clampedMap(hook.pullExhaustion, 0, 100, 0, 183));
                 graphics.blit(TEXTURE, x, y, 0, 111, 182, 5);
                 if (amount > 0)

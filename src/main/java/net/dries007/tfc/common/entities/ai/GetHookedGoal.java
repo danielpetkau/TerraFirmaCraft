@@ -58,7 +58,7 @@ public class GetHookedGoal extends MoveToBlockGoal
     @Override
     protected boolean isValidTarget(LevelReader level, BlockPos pos)
     {
-        return Helpers.isFluid(level.getFluidState(pos), TFCTags.Fluids.WATER_LIKE);
+        return Helpers.isFluid(level.getFluidState(pos), TFCTags.Fluids.ANY_INFINITE_WATER);
     }
 
     @Override

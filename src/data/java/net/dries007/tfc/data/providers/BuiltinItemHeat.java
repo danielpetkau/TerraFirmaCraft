@@ -78,12 +78,23 @@ public class BuiltinItemHeat extends DataManagerProvider<HeatDefinition> impleme
                     blocks.get(Metal.BlockType.WEATHERED_BLOCK_STAIRS),
                     blocks.get(Metal.BlockType.OXIDIZED_BLOCK_STAIRS)
                 ), units(Metal.BlockType.BLOCK_STAIRS));
+
+                if (Metal.BlockType.GRATE.has(metal))
+                {
+                    add(metal, "grates", Ingredient.of(
+                        blocks.get(Metal.BlockType.GRATE),
+                        blocks.get(Metal.BlockType.WEATHERED_GRATE),
+                        blocks.get(Metal.BlockType.EXPOSED_GRATE),
+                        blocks.get(Metal.BlockType.OXIDIZED_GRATE)
+                    ), units(Metal.BlockType.GRATE));
+                }
             }
             else
             {
                 add(metal, Metal.BlockType.BLOCK);
                 add(metal, Metal.BlockType.BLOCK_SLAB);
                 add(metal, Metal.BlockType.BLOCK_STAIRS);
+                add(metal, Metal.BlockType.GRATE);
             }
 
             add(metal, Metal.BlockType.ANVIL);
@@ -128,7 +139,7 @@ public class BuiltinItemHeat extends DataManagerProvider<HeatDefinition> impleme
         addAndMelt(TFCBlocks.BRASS_BELL, Metal.BRASS, 100);
         addAndMelt(TFCItems.JACKS, Metal.BRASS, 100);
         addAndMelt(TFCItems.GEM_SAW, Metal.BRASS, 50);
-        addAndMelt(TFCItems.JAR_LID, Metal.TIN, 12);
+        addAndMelt(TFCItems.JAR_LID, Metal.TIN, 6);
 
         add(TFCTags.Items.GLASS_BLOWPIPES, 0.7f);
         add(Tags.Items.RODS_WOODEN, 2.5f); // Includes twigs
@@ -146,6 +157,8 @@ public class BuiltinItemHeat extends DataManagerProvider<HeatDefinition> impleme
         add(TFCTags.Items.UNFIRED_VESSELS, 1.0f);
         add(TFCTags.Items.UNFIRED_LARGE_VESSELS, 1.5f);
         add(TFCTags.Items.UNFIRED_MOLDS, 1.5f);
+        add(TFCItems.UNFIRED_CHANNEL, 1.5f);
+        add(TFCItems.UNFIRED_MOLD_TABLE, 1.5f);
         add(Items.CLAY, 0.5f);
         add(TFCItems.KAOLIN_CLAY, 2.0f);
         add(TFCItems.CACTUS_WOOD, 1.0f);

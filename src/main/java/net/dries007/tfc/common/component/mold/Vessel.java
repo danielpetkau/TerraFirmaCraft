@@ -101,6 +101,11 @@ public class Vessel implements IMold, ItemContainer, FluidContainer, HeatContain
         return vessel.fluidContent().isEmpty() && Helpers.isEmpty(vessel.itemContent());
     }
 
+    public boolean hasFluidContent()
+    {
+        return !vessel.fluidContent().isEmpty();
+    }
+
     @Override
     public void setTemperature(float temperature)
     {
@@ -165,10 +170,12 @@ public class Vessel implements IMold, ItemContainer, FluidContainer, HeatContain
     {
         if (isInventory())
         {
-            updateWith(vessel.with(slot, stack.copy()));
+            updateWith(vessel.with(slot, FoodCapability.applyTrait(stack.copy(), FoodTraits.PRESERVED).copy()));
         }
     }
 
+    // todo: this is not called *at all* by container insert methods. so we handle in setSTackInSlot. is that fine?
+    // i think this was just an oversight by alcatraz. Still, it's weird af.
     @Override
     public ItemStack insertItem(int slot, ItemStack stack, boolean simulate)
     {
@@ -230,7 +237,7 @@ public class Vessel implements IMold, ItemContainer, FluidContainer, HeatContain
                 // At this point we know that the vessel is going to be modified, so we make a mutable copy for the period of this function
                 if (updated == null) updated = vessel.copyMut();
 
-                final ItemStack outputStack = recipe.assembleStacked(stack, containerInfo.slotCapacity());
+                final ItemStack outputStack = recipe.assembleStacked(stack, containerInfo.slotCapacity(), false);
                 final FluidStack outputFluid = recipe.assembleFluid(stack);
 
                 if (!outputFluid.isEmpty())

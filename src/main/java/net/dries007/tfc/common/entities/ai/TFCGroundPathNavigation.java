@@ -35,7 +35,7 @@ public class TFCGroundPathNavigation extends GroundPathNavigation
             BlockState state = level.getBlockState(cursor.set(mob.getX(), mob.getBlockY(), mob.getZ()));
             int checked = 0;
 
-            while (Helpers.isFluid(state.getFluidState(), TFCTags.Fluids.WATER_LIKE))
+            while (Helpers.isFluid(state.getFluidState(), TFCTags.Fluids.ANY_INFINITE_WATER))
             {
                 state = level.getBlockState(cursor.move(0, 1, 0));
                 ++checked;
@@ -94,7 +94,7 @@ public class TFCGroundPathNavigation extends GroundPathNavigation
                     while (true)
                     {
                         // TFC: Include other water fluids here
-                        if (!Helpers.isFluid(groundState.getFluidState(), TFCTags.Fluids.WATER_LIKE))
+                        if (!Helpers.isFluid(groundState.getFluidState(), TFCTags.Fluids.ANY_INFINITE_WATER))
                         {
                             yPos--;
                             break;

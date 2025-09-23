@@ -40,6 +40,7 @@ import net.dries007.tfc.common.entities.ai.pet.MoveToTargetSinkIfNotSleeping;
 import net.dries007.tfc.common.entities.aquatic.AmphibiousAnimal;
 import net.dries007.tfc.common.entities.predator.AmphibiousPredator;
 import net.dries007.tfc.common.entities.predator.Predator;
+import net.dries007.tfc.util.EnvironmentHelpers;
 import net.dries007.tfc.util.Helpers;
 
 import static net.dries007.tfc.common.entities.ai.predator.PredatorAi.*;
@@ -149,7 +150,7 @@ public class AmphibiousPredatorAi
         if (tracker.isPresent())
         {
             BlockPos pos = tracker.get().currentBlockPosition();
-            return level.isWaterAt(pos) == entity.isInWaterOrBubble();
+            return EnvironmentHelpers.isWaterAt(level, pos) == entity.isInWaterOrBubble();
         }
         return false;
     }

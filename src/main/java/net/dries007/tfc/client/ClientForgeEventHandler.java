@@ -156,8 +156,8 @@ public class ClientForgeEventHandler
                     Calendars.CLIENT.getCalendarTicks()
                 ));
                 tooltip.add("Temperature: Sea Level Avg: %.3f Avg: %.3f Now: %.3f".formatted(
+                    ClimateRenderCache.INSTANCE.getAverageSeaLevelTemperature(),
                     ClimateRenderCache.INSTANCE.getAverageTemperature(),
-                    EnvironmentHelpers.adjustAvgTempForElev(pos.getY(), ClimateRenderCache.INSTANCE.getAverageTemperature()),
                     ClimateRenderCache.INSTANCE.getTemperature()
                 ));
                 tooltip.add("Rain: Avg: %.3f Var: %.3f Now: %.3f".formatted(
@@ -276,6 +276,8 @@ public class ClientForgeEventHandler
             {
                 // Check what we would get if melted
                 final FluidStack fluid = recipe.assembleFluid(stack);
+                // Set the correct amount of fluid, since the recipe's result is for only 1 item
+                fluid.setAmount(fluid.getAmount() * stack.getCount());
                 if (!fluid.isEmpty())
                 {
                     final MutableComponent meltsInto = Tooltips.meltsInto(fluid, recipe.getTemperature());

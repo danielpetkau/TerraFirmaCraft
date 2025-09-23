@@ -48,7 +48,7 @@ public class SealedBarrelRecipeCategory extends BarrelRecipeCategory<SealedBarre
 
             final IRecipeSlotBuilder intermediateSlot = builder.addSlot(RecipeIngredientRole.RENDER_ONLY, 76, 5);
             intermediateSlot.addItemStacks(intermediateItem);
-            intermediateSlot.addTooltipCallback((slots, tooltip) -> tooltip.add(1, Component.translatable("tfc.tooltip.while_sealed_description").withStyle(ChatFormatting.DARK_PURPLE, ChatFormatting.ITALIC)));
+            intermediateSlot.addRichTooltipCallback((slots, tooltip) -> tooltip.add(Component.translatable("tfc.tooltip.while_sealed_description").withStyle(ChatFormatting.DARK_PURPLE, ChatFormatting.ITALIC)));
             intermediateSlot.setBackground(slot, -1, -1);
 
             // Note that the output item might be empty as parsed by the super() call, so we need to re-check it.

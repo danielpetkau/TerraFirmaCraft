@@ -35,7 +35,7 @@ public class GlassworkingRecipeCategory extends BaseRecipeCategory<GlassworkingR
 
     public GlassworkingRecipeCategory(RecipeType<GlassworkingRecipe> type, IGuiHelper helper)
     {
-        super(type, helper, helper.createBlankDrawable(175, 110), new ItemStack(TFCItems.BLOWPIPE_WITH_GLASS.get()));
+        super(type, helper, 175, 110, new ItemStack(TFCItems.BLOWPIPE_WITH_GLASS.get()));
     }
 
     @Override

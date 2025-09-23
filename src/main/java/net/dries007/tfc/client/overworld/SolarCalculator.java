@@ -6,10 +6,15 @@
 
 package net.dries007.tfc.client.overworld;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
 
+import net.dries007.tfc.common.TFCAttachments;
 import net.dries007.tfc.util.Helpers;
 import net.dries007.tfc.util.calendar.ICalendar;
+import net.dries007.tfc.util.climate.Climate;
 
 /**
  * Models for realistic solar positioning and calculations.
@@ -112,7 +117,7 @@ public final class SolarCalculator
      */
     public static SkyPos getSunPosition(int z, float hemisphereScale, float fractionOfYear, float fractionOfDay)
     {
-        final double latitude = getNorthHemisphereLatitude(z, hemisphereScale);
+        final double latitude = getLatitude(z, hemisphereScale);
         // Declination
         // Approximation based on sin with amplitude of 23.44 degrees
         final double declination = 23.44f * Mth.DEG_TO_RAD * Mth.sin(Mth.TWO_PI * (284f / 365f + fractionOfYear));
@@ -152,23 +157,36 @@ public final class SolarCalculator
     }
 
     /**
-     * Return the corresponding latitude given a position and climate temperature scale. This <strong>does not</strong> currently use a hemispherical
-     * model (although it could), due to introducing inconsistency with how the rest of TFC handles seasons. As a result, the latitude will always be
-     * oriented in a "north hemisphere" convention.
-     * @return A latitude, in {@code [0, pi / 2]}
-     */
-    public static float getNorthHemisphereLatitude(int z, float hemisphereScale)
-    {
-        return Mth.abs(getLatitude(z, hemisphereScale));
-    }
-
-    /**
-     * Return the corresponding latitude given a position and climate temperature scale.
+     * Return the corresponding latitude given a position and climate temperature scale. This uses a hemispherical
+     * model. As a result, the high-sun half of the year is different for Northern and Southern hemispheres.
      * @return A latitude, in {@code [-pi / 2, pi / 2]}
      */
     public static float getLatitude(int z, float hemisphereScale)
     {
         return Helpers.triangle(-Mth.HALF_PI, 0, 1 / (4 * hemisphereScale), z - 0.5f * hemisphereScale);
+    }
+
+    /**
+     * Return true if the position is in a Northern Hemisphere, false if Southern
+     */
+    public static boolean getInNorthernHemisphere(BlockPos pos, Level level)
+    {
+        return getInNorthernHemisphere(pos.getZ(), Climate.get(level).hemisphereScale());
+    }
+
+    /**
+     * Return true if the position is in a Northern Hemisphere, false if Southern
+     */
+    public static boolean getInNorthernHemisphere(int z, float hemisphereScale)
+    {
+        if (hemisphereScale == 0)
+        {
+            return true;
+        }
+        final int adjustedZ = z - (int) (hemisphereScale / 2);
+        final int poleToPoleDistance = (int) (hemisphereScale * 2);
+        final int normalizedZ = Mth.positiveModulo(adjustedZ, (poleToPoleDistance * 2));
+        return normalizedZ > poleToPoleDistance;
     }
 
     /**
@@ -195,7 +213,7 @@ public final class SolarCalculator
 
         // The observer is the position on earth that we would be observing the moon from. We use this to rotate the location of the moon (initially
         // given in earth-centric coordinates), into coordinates based on the observer position.
-        final double observerZenith = Mth.HALF_PI - getNorthHemisphereLatitude(z, hemisphereScale);
+        final double observerZenith = Mth.HALF_PI - getLatitude(z, hemisphereScale);
         final double observerAzimuth = Mth.TWO_PI * (1 - ICalendar.getFractionOfDay(calendarTick));
 
         // Rotation Rz(-observerAzimuth) are trivial to do in spherical coordinates
@@ -233,7 +251,7 @@ public final class SolarCalculator
         // The zenith position is just based on the latitude, not inverted
         // The azimuth position is based on both the rotation of the earth, and the rotation of earth around the sun - different stars will be seen
         // on opposite years, during day and night.
-        final double starZenith = Mth.HALF_PI - getNorthHemisphereLatitude(z, hemisphereScale);
+        final double starZenith = Mth.HALF_PI - getLatitude(z, hemisphereScale);
         final double starAzimuth = Mth.TWO_PI * Mth.frac(fractionOfYear + fractionOfDay + 0.5f);
         return SkyPos.of(starZenith, starAzimuth);
     }

@@ -279,6 +279,7 @@ public final class TFCItems
     public static final ItemId MANATEE_EGG = registerSpawnEgg(TFCEntities.MANATEE);
     public static final ItemId TURTLE_EGG = registerSpawnEgg(TFCEntities.TURTLE);
     public static final ItemId PENGUIN_EGG = registerSpawnEgg(TFCEntities.PENGUIN);
+    public static final ItemId LEOPARD_SEAL_SPAWN_EGG = registerSpawnEgg(TFCEntities.LEOPARD_SEAL);
     public static final ItemId FROG_EGG = registerSpawnEgg(TFCEntities.FROG);
     public static final ItemId POLAR_BEAR_EGG = registerSpawnEgg(TFCEntities.POLAR_BEAR);
     public static final ItemId GRIZZLY_BEAR_EGG = registerSpawnEgg(TFCEntities.GRIZZLY_BEAR);
@@ -355,6 +356,9 @@ public final class TFCItems
 
     public static final ItemId UNFIRED_VESSEL = register("ceramic/unfired_vessel");
     public static final ItemId VESSEL = register("ceramic/vessel", () -> new VesselItem(new Properties()));
+
+    public static final ItemId UNFIRED_CHANNEL = register("ceramic/unfired_channel");
+    public static final ItemId UNFIRED_MOLD_TABLE = register("ceramic/unfired_mold_table");
 
     public static final Map<DyeColor, ItemId> UNFIRED_GLAZED_VESSELS = Helpers.mapOf(DyeColor.class, color ->
         register("ceramic/" + color + "_unfired_vessel")

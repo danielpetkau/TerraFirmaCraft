@@ -10,19 +10,24 @@ import java.util.List;
 import com.google.common.collect.Lists;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.feature.TreeFeature;
 
 import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.fluids.FluidHelpers;
+import net.dries007.tfc.util.EnvironmentHelpers;
 import net.dries007.tfc.util.Helpers;
 import net.dries007.tfc.util.collections.IWeighted;
 import net.dries007.tfc.world.feature.tree.RootConfig;
+
+import static net.dries007.tfc.world.TFCChunkGenerator.*;
 
 public record SpecialRootPlacer(float skewChance)
 {
@@ -30,32 +35,37 @@ public record SpecialRootPlacer(float skewChance)
         Codec.FLOAT.fieldOf("skew_chance").forGetter(c -> c.skewChance)
     ).apply(instance, SpecialRootPlacer::new));
 
-    public boolean placeRoots(WorldGenLevel level, RandomSource random, BlockPos pos, BlockPos trunkOrigin, RootConfig config)
+    public boolean placeRoots(WorldGenLevel level, RandomSource random, BlockPos.MutableBlockPos mutablePos, RootConfig config)
     {
         final List<BlockPos> positions = Lists.newArrayList();
-        final BlockPos.MutableBlockPos cursor = pos.mutable();
-
-        while (cursor.getY() < trunkOrigin.getY())
+        final int oceanFloorY = level.getChunk(mutablePos).getHeight(Heightmap.Types.OCEAN_FLOOR_WG, mutablePos.getX(), mutablePos.getZ());
+        if (oceanFloorY < SEA_LEVEL_Y - 4)
         {
-            if (!this.canPlaceRoot(level, cursor, config))
-                return false;
-
-            cursor.move(0, 1, 0);
+            return false;
+        }
+        else
+        {
+            // We use a mutable pos so that mangrove roots can raise the height of the trunk base
+            // Do not modify the mutable pos beyond this point
+            mutablePos.setY(Math.max(oceanFloorY + random.nextInt(4), SEA_LEVEL_Y + 1));
         }
 
-        positions.add(trunkOrigin.below());
+        positions.add(mutablePos.below());
 
+        final Direction guaranteedDirection = Util.getRandom(Direction.Plane.HORIZONTAL.stream().toList(), random);
         for (Direction direction : Direction.Plane.HORIZONTAL)
         {
-            final BlockPos relativePos = trunkOrigin.relative(direction);
-            final List<BlockPos> used = Lists.newArrayList();
-            if (!this.simulateRoots(level, random, relativePos, direction, trunkOrigin, used, 0, config))
+            // TODO: Design a smarter root placement system
+            //  The way this was structured previously failed placement for the entire tree if simulateRoots returned false for any of the 4 directions
+            //  However, that system invalidated the spawns of most mangroves, which is what I would call bad
+            if (direction == guaranteedDirection || random.nextInt(3) > 0)
             {
-                return false;
+                final BlockPos relativePos = mutablePos.relative(direction);
+                final List<BlockPos> used = Lists.newArrayList();
+                this.simulateRoots(level, random, relativePos, direction, mutablePos, used, 0, config);
+                positions.addAll(used);
             }
-
-            positions.addAll(used);
-            positions.add(trunkOrigin.relative(direction));
+            positions.add(mutablePos.relative(direction));
         }
 
         for (BlockPos rootPos : positions)
@@ -112,11 +122,10 @@ public record SpecialRootPlacer(float skewChance)
         }
     }
 
-
     private boolean canPlaceRoot(WorldGenLevel level, BlockPos pos, RootConfig config)
     {
         final BlockState state = level.getBlockState(pos);
-        return FluidHelpers.isAirOrEmptyFluid(state) || config.blocks().get(state.getBlock()) != null;
+        return FluidHelpers.isAirOrEmptyFluid(state) || EnvironmentHelpers.isWorldgenReplaceable(state) || config.blocks().get(state.getBlock()) != null;
     }
 
     private void placeRoot(WorldGenLevel level, RandomSource random, BlockPos pos, RootConfig config)

@@ -16,9 +16,9 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 
 import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.level.material.PushReaction;
 
 import net.dries007.tfc.common.blockentities.CropBlockEntity;
-import net.dries007.tfc.common.blockentities.FarmlandBlockEntity.NutrientType;
 import net.dries007.tfc.common.blockentities.TFCBlockEntities;
 import net.dries007.tfc.common.blocks.ExtendedProperties;
 import net.dries007.tfc.common.blocks.TFCBlocks;
@@ -56,7 +56,7 @@ public enum Crop implements StringRepresentable
     SQUASH(0.25f, 0.45f, 0.5f, 8), // Default , 8
 
     // Pickable Vegetables
-    TOMATO(0.35f, 0.45f, 0.5f, 4, 4, true, null, () -> TFCItems.FOOD.get(Food.TOMATO)), // Double, Stick, 4 -> 4
+    TOMATO(0.3f, 0.4f, 0.5f, 4, 4, true, null, () -> TFCItems.FOOD.get(Food.TOMATO)), // Double, Stick, 4 -> 4
     RED_BELL_PEPPER(0.3f, 0.4f, 0.5f, 7, () -> TFCItems.FOOD.get(Food.GREEN_BELL_PEPPER), () -> TFCItems.FOOD.get(Food.RED_BELL_PEPPER)), // Pickable, 7
     YELLOW_BELL_PEPPER(0.3f, 0.4f, 0.5f, 7, () -> TFCItems.FOOD.get(Food.GREEN_BELL_PEPPER), () -> TFCItems.FOOD.get(Food.YELLOW_BELL_PEPPER)), // Pickable,
 
@@ -86,7 +86,7 @@ public enum Crop implements StringRepresentable
 
     private static ExtendedProperties dead()
     {
-        return ExtendedProperties.of(MapColor.PLANT).noCollission().randomTicks().strength(0.4F).sound(SoundType.CROP).flammable(60, 30);
+        return ExtendedProperties.of(MapColor.PLANT).noCollission().randomTicks().strength(0.4F).sound(SoundType.CROP).flammable(60, 30).pushReaction(PushReaction.DESTROY);
     }
 
     private final String serializedName;
@@ -120,19 +120,27 @@ public enum Crop implements StringRepresentable
 
     Crop(float nitrogen, float phosporous, float potassium, int doubleBlockBottomStages, int doubleBlockTopStages, boolean requiresStick, @Nullable Supplier<Supplier<? extends Item>> fruit1, Supplier<Supplier<? extends Item>> fruit2)
     {
-        this(nitrogen, phosporous, potassium, requiresStick ?
+        this(nitrogen, phosporous, potassium,
+            requiresStick ?
                 self -> PickableClimbingCropBlock.create(doubleCrop(), doubleBlockBottomStages, doubleBlockTopStages, self, fruit1, fruit2) :
                 self -> DoubleCropBlock.create(doubleCrop(), doubleBlockBottomStages, doubleBlockTopStages, self),
-            self -> new DeadClimbingCropBlock(dead(), self.getClimateRange()), self -> new WildDoubleCropBlock(dead().randomTicks())
+            requiresStick ?
+                self -> new DeadClimbingCropBlock(dead(), self.getClimateRange()) :
+                self -> new DeadDoubleCropBlock(dead(), self.getClimateRange()),
+            self -> new WildDoubleCropBlock(dead().randomTicks())
         );
     }
 
     Crop(float nitrogen, float phosporous, float potassium, int doubleBlockBottomStages, int doubleBlockTopStages, boolean requiresStick)
     {
-        this(nitrogen, phosporous, potassium, requiresStick ?
+        this(nitrogen, phosporous, potassium,
+            requiresStick ?
                 self -> ClimbingCropBlock.create(doubleCrop(), doubleBlockBottomStages, doubleBlockTopStages, self) :
                 self -> DoubleCropBlock.create(doubleCrop(), doubleBlockBottomStages, doubleBlockTopStages, self),
-            self -> new DeadClimbingCropBlock(dead(), self.getClimateRange()), self -> new WildDoubleCropBlock(dead().randomTicks())
+            requiresStick ?
+                self -> new DeadClimbingCropBlock(dead(), self.getClimateRange()) :
+                self -> new DeadDoubleCropBlock(dead(), self.getClimateRange()),
+            self -> new WildDoubleCropBlock(dead().randomTicks())
         );
     }
 

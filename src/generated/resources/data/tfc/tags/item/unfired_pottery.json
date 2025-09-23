@@ -59,6 +59,8 @@
     "tfc:ceramic/unfired_pot",
     "tfc:ceramic/unfired_spindle_head",
     "tfc:ceramic/unfired_vessel",
-    "tfc:ceramic/unfired_large_vessel"
+    "tfc:ceramic/unfired_large_vessel",
+    "tfc:ceramic/unfired_channel",
+    "tfc:ceramic/unfired_mold_table"
   ]
 }

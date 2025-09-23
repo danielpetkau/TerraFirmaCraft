@@ -6,6 +6,7 @@
     "radius": 10,
     "tries": 50,
     "min_height": 2,
-    "max_height": 5
+    "max_height": 5,
+    "allow_underwater": false
   }
 }

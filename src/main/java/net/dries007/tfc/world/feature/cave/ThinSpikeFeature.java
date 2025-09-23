@@ -8,6 +8,7 @@ package net.dries007.tfc.world.feature.cave;
 
 import com.mojang.serialization.Codec;
 import net.minecraft.core.BlockPos;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.state.BlockState;
@@ -45,7 +46,7 @@ public class ThinSpikeFeature extends Feature<ThinSpikeConfig>
             for (int i = 0; i < 7; i++)
             {
                 mutablePos.move(0, 1, 0);
-                if (!FluidHelpers.isAirOrEmptyFluid(level.getBlockState(mutablePos)))
+                if (isEmptyBlock(config, level.getBlockState(mutablePos)))
                 {
                     mutablePos.move(0, -1, 0);
                     break;
@@ -61,15 +62,16 @@ public class ThinSpikeFeature extends Feature<ThinSpikeConfig>
     {
         // Place the first spike block
         // Ensure we're not appending to an existing spike - the canSurvive() check will pass, but will result in a broken tip
+        // Ensure we're not appending non-icicles to ice
         pos.move(0, 1, 0);
         final BlockState stateAbove = level.getBlockState(pos);
-        if (Helpers.isBlock(stateAbove, spike.getBlock()))
+        if (Helpers.isBlock(stateAbove, spike.getBlock()) || (!config.allowUnderwater() && Helpers.isBlock(stateAbove, BlockTags.ICE)))
         {
             return false;
         }
 
         pos.move(0, -1, 0);
-        if (!placeSpikeBlock(level, pos, spike))
+        if (!placeSpikeBlock(level, pos, spike, config))
         {
             return false;
         }
@@ -79,7 +81,7 @@ public class ThinSpikeFeature extends Feature<ThinSpikeConfig>
         for (int i = 0; i < height; i++)
         {
             pos.move(0, -1, 0);
-            if (!placeSpikeBlock(level, pos, spike))
+            if (!placeSpikeBlock(level, pos, spike, config))
             {
                 // Could not place a spike at this position. Back up, and exit the loop to fix the tip.
                 pos.move(0, 1, 0);
@@ -99,10 +101,10 @@ public class ThinSpikeFeature extends Feature<ThinSpikeConfig>
         return false;
     }
 
-    private boolean placeSpikeBlock(WorldGenLevel level, BlockPos pos, BlockState spike)
+    private boolean placeSpikeBlock(WorldGenLevel level, BlockPos pos, BlockState spike, ThinSpikeConfig config)
     {
         final BlockState state = level.getBlockState(pos);
-        if (FluidHelpers.isAirOrEmptyFluid(state) && spike.canSurvive(level, pos))
+        if (isEmptyBlock(config, state) && spike.canSurvive(level, pos))
         {
             final BlockState adjustedSpike = FluidHelpers.fillWithFluid(spike, state.getFluidState().getType());
             if (adjustedSpike != null)
@@ -112,5 +114,11 @@ public class ThinSpikeFeature extends Feature<ThinSpikeConfig>
             }
         }
         return false;
+    }
+
+
+    private static boolean isEmptyBlock(ThinSpikeConfig config, BlockState state)
+    {
+        return config.allowUnderwater() ? FluidHelpers.isAirOrEmptyFluid(state) : state.isAir();
     }
 }

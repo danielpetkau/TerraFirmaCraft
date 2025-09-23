@@ -33,7 +33,7 @@ public class ChiselRecipeCategory extends BaseRecipeCategory<ChiselRecipe>
 
     public ChiselRecipeCategory(RecipeType<ChiselRecipe> type, IGuiHelper helper)
     {
-        super(type, helper, helper.createBlankDrawable(118, 26), new ItemStack(TFCItems.METAL_ITEMS.get(Metal.BLACK_BRONZE).get(Metal.ItemType.CHISEL).get()));
+        super(type, helper, 118, 26, new ItemStack(TFCItems.METAL_ITEMS.get(Metal.BLACK_BRONZE).get(Metal.ItemType.CHISEL).get()));
         modes = ChiselMode.REGISTRY.stream()
             .collect(Collectors.toMap(
                 e -> e,

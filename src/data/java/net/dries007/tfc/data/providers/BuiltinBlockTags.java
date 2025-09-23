@@ -30,6 +30,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SlabBlock;
 import net.minecraft.world.level.block.StairBlock;
+import net.minecraft.world.level.block.WallBlock;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.common.data.ExistingFileHelper.ResourceType;
@@ -102,7 +103,7 @@ public class BuiltinBlockTags extends TagsProvider<Block> implements Accessors
         tag(BlockTags.SAND).add(TFCBlocks.SAND);
         tag(BlockTags.STAIRS).addEveryTFC(b -> b instanceof StairBlock);
         tag(BlockTags.SLABS).addEveryTFC(b -> b instanceof SlabBlock);
-        tag(BlockTags.WALLS).addEveryTFC(b -> b instanceof SlabBlock);
+        tag(BlockTags.WALLS).addEveryTFC(b -> b instanceof WallBlock);
         tag(BlockTags.LEAVES)
             .add(TFCBlocks.WOODS, Wood.BlockType.LEAVES)
             .addTags(FALLEN_LEAVES)
@@ -137,6 +138,9 @@ public class BuiltinBlockTags extends TagsProvider<Block> implements Accessors
             TFCBlocks.PLANTS.get(Plant.LIANA).get(),
             TFCBlocks.PLANTS.get(Plant.LIANA_PLANT).get()
         );
+        tag(BlockTags.INFINIBURN_OVERWORLD).add(TFCBlocks.PIT_KILN);
+        tag(BlockTags.INFINIBURN_END).add(TFCBlocks.PIT_KILN);
+        tag(BlockTags.INFINIBURN_NETHER).add(TFCBlocks.PIT_KILN);
         tag(BlockTags.FENCE_GATES).add(TFCBlocks.WOODS, Wood.BlockType.FENCE_GATE);
         tag(BlockTags.BASE_STONE_OVERWORLD)
             .addTags(STONES_RAW, STONES_HARDENED);
@@ -270,7 +274,9 @@ public class BuiltinBlockTags extends TagsProvider<Block> implements Accessors
                 TFCBlocks.BRONZE_BELL,
                 TFCBlocks.BRASS_BELL,
                 TFCBlocks.LARGE_VESSEL
-            );
+            )
+            .add(TFCBlocks.MOLD_TABLE)
+            .add(TFCBlocks.CHANNEL);
         tag(BlockTags.MINEABLE_WITH_SHOVEL)
             .add2(TFCBlocks.SOIL)
             .add(TFCBlocks.SAND)
@@ -412,7 +418,7 @@ public class BuiltinBlockTags extends TagsProvider<Block> implements Accessors
         tag(SUPPORTS_LANDSLIDE).addTags(FARMLANDS, PATHS);
         tag(NOT_SOLID_SUPPORTING).addTags(STONES_SMOOTH);
         tag(TOUGHNESS_1).add(TFCBlocks.CHARCOAL_PILE, TFCBlocks.CHARCOAL_FORGE);
-        tag(TOUGHNESS_2).addTag(Tags.Blocks.STONES);
+        tag(TOUGHNESS_2).addTag(Tags.Blocks.STONES).addTag(Tags.Blocks.COBBLESTONES);
         tag(TOUGHNESS_3).add(Blocks.BEDROCK);
         tag(BREAKS_WHEN_ISOLATED).addTag(STONES_RAW);
         tag(FALLEN_LEAVES).add(TFCBlocks.WOODS, Wood.BlockType.FALLEN_LEAVES);
@@ -714,14 +720,18 @@ public class BuiltinBlockTags extends TagsProvider<Block> implements Accessors
                 TFCBlocks.PLANTS.get(Plant.TIMOTHY_GRASS),
                 TFCBlocks.PLANTS.get(Plant.RADDIA_GRASS),
                 TFCBlocks.PLANTS.get(Plant.RED_OAT_GRASS),
+                TFCBlocks.PLANTS.get(Plant.TURTLE_GRASS),
                 TFCBlocks.GROUNDCOVER.get(GroundcoverBlockType.HUMUS)
             )
             .addTag(FALLEN_LEAVES);
         tag(POWDER_SNOW_REPLACEABLE).add(
             Blocks.SNOW_BLOCK,
             Blocks.PACKED_ICE,
-            Blocks.PACKED_ICE,
-            TFCBlocks.SEA_ICE.get());
+            Blocks.BLUE_ICE);
+        tag(COLD_OCEAN_BLOCKS)
+            .addTag(POWDER_SNOW_REPLACEABLE)
+            .add(Blocks.POWDER_SNOW)
+            .add(TFCBlocks.SEA_ICE);
         tag(TIDE_POOL_BLOCKS).add(
             TFCBlocks.GROUNDCOVER.get(GroundcoverBlockType.CLAM),
             TFCBlocks.GROUNDCOVER.get(GroundcoverBlockType.MOLLUSK),

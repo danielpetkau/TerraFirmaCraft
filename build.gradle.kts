@@ -2,7 +2,7 @@ import groovy.json.JsonOutput
 import groovy.json.JsonSlurper
 
 plugins {
-    id("net.neoforged.moddev") version "2.0.91"
+    id("net.neoforged.moddev") version "2.0.107"
     id("net.neoforged.licenser") version "0.7.2"
 }
 
@@ -29,8 +29,9 @@ val generateModMetadata = tasks.register<ProcessResources>("generateModMetadata"
     val modReplacementProperties = mapOf(
         "modId" to modId,
         "modVersion" to modVersion,
-        "minecraftVersionRange" to "[$minecraftVersion,)",
+        "minecraftVersionRange" to "[$minecraftVersion]",
         "neoForgeVersionRange" to "[$neoForgeVersion,)",
+        "patchouliVersionRange" to "[$patchouliVersion,)",
         "jeiVersionRange" to "[$jeiVersion,)"
     )
     inputs.properties(modReplacementProperties)
@@ -39,6 +40,9 @@ val generateModMetadata = tasks.register<ProcessResources>("generateModMetadata"
     into(layout.buildDirectory.dir("generated/sources/modMetadata"))
 }
 
+neoForge {
+    version = neoForgeVersion // this is here because declaring a neoForge version enables 'additionalRuntimeClasspath'
+}
 
 base {
     archivesName.set("TerraFirmaCraft-NeoForge-$minecraftVersion")
@@ -85,39 +89,7 @@ sourceSets {
     create("data")
 }
 
-dependencies {
-    // EMI
-    compileOnly("dev.emi:emi-neoforge:${emiVersion}:api")
-    //runtimeOnly("dev.emi:emi-neoforge:${emiVersion}")
-
-    // JEI
-    compileOnly("mezz.jei:jei-${minecraftVersion}-common-api:${jeiVersion}")
-    compileOnly("mezz.jei:jei-${minecraftVersion}-neoforge-api:${jeiVersion}")
-    runtimeOnly("mezz.jei:jei-${minecraftVersion}-neoforge:${jeiVersion}")
-
-    // Patchouli
-    // We need to compile against the full JAR, not just the API, because we do some egregious hacks.
-    implementation("vazkii.patchouli:Patchouli:$patchouliVersion")
-
-    // Jade / The One Probe
-    implementation(group = "curse.maven", name = "jade-324717", version = "6853386")
-    compileOnly(group = "mcjty.theoneprobe", name = "theoneprobe", version = "1.21_neo-12.0.4-6")
-
-    // ModernFix - useful at runtime for significant memory savings in TFC in dev (see i.e. wall block shape caches)
-    runtimeOnly(group = "curse.maven", name = "modernfix-790626", version = "6766126")
-
-    // Data
-    "dataImplementation"(sourceSets["main"].output)
-
-    // Test
-    // Use JUnit at runtime, plus depend on data to allow us to mock certain data without having to load a server
-    testImplementation(sourceSets["data"].output)
-    testImplementation("org.junit.jupiter:junit-jupiter:5.10.3")
-    testRuntimeOnly("org.junit.platform:junit-platform-launcher:1.10.3")
-}
-
 neoForge {
-    version = neoForgeVersion
     addModdingDependenciesTo(sourceSets["data"])
     validateAccessTransformers = true
 
@@ -163,6 +135,38 @@ neoForge {
     ideSyncTask(generateModMetadata)
 }
 
+dependencies {
+    // EMI
+    compileOnly("dev.emi:emi-neoforge:${emiVersion}:api")
+    //runtimeOnly("dev.emi:emi-neoforge:${emiVersion}")
+
+    // JEI
+    compileOnly("mezz.jei:jei-${minecraftVersion}-common-api:${jeiVersion}")
+    compileOnly("mezz.jei:jei-${minecraftVersion}-neoforge-api:${jeiVersion}")
+    runtimeOnly("mezz.jei:jei-${minecraftVersion}-neoforge:${jeiVersion}")
+
+    // Patchouli
+    // We need to compile against the full JAR, not just the API, because we do some egregious hacks.
+    implementation("vazkii.patchouli:Patchouli:$patchouliVersion")
+    "dataImplementation"("vazkii.patchouli:Patchouli:$patchouliVersion")
+
+    // Jade / The One Probe
+    implementation(group = "curse.maven", name = "jade-324717", version = "6853386")
+    compileOnly(group = "mcjty.theoneprobe", name = "theoneprobe", version = "1.21_neo-12.0.4-6")
+
+    // ModernFix - useful at runtime for significant memory savings in TFC in dev (see i.e. wall block shape caches)
+    runtimeOnly(group = "curse.maven", name = "modernfix-790626", version = "6766126")
+
+    // Data
+    "dataImplementation"(sourceSets["main"].output)
+
+    // Test
+    // Use JUnit at runtime, plus depend on data to allow us to mock certain data without having to load a server
+    testImplementation(sourceSets["data"].output)
+    testImplementation("org.junit.jupiter:junit-jupiter:5.10.3")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher:1.10.3")
+}
+
 // Automatically apply a license header when running checkLicense / updateLicense
 license {
     header(project.file("HEADER.txt"))
@@ -171,34 +175,64 @@ license {
     exclude("net/dries007/tfc/world/noise/FastNoiseLite.java") // Fast Noise
 }
 
-tasks {
-    processResources {
-        if (modIsInCI) {
-            doLast {
-                val jsonMinifyStart: Long = System.currentTimeMillis()
-                var jsonMinified: Long = 0
-                var jsonBytesBefore: Long = 0
-                var jsonBytesAfter: Long = 0
+abstract class MinifyJsonTask : DefaultTask() {
 
-                fileTree(mapOf("dir" to outputs.files.asPath, "include" to "**/*.json")).forEach {
-                    jsonMinified++
-                    jsonBytesBefore += it.length()
-                    try {
-                        it.writeText(JsonOutput.toJson(JsonSlurper().parse(it)).replace("\"__comment__\":\"This file was automatically created by mcresources\",", ""))
-                    } catch (e: Exception) {
-                        println("JSON Error in ${it.path}")
-                        throw e
-                    }
+    @get:InputDirectory
+    abstract val dir: DirectoryProperty
 
-                    jsonBytesAfter += it.length()
-                }
-                println("Minified $jsonMinified json files. Reduced ${jsonBytesBefore / 1024} kB to ${(jsonBytesAfter / 1024)} kB. Took ${System.currentTimeMillis() - jsonMinifyStart} ms")
+    @TaskAction
+    fun minify() {
+        val jsonSlurper = JsonSlurper()
+        var jsonMinified = 0
+        var jsonBytesBefore = 0L
+        var jsonBytesAfter = 0L
+        val start = System.currentTimeMillis()
+
+        dir.get().asFileTree.matching {
+            include("**/*.json")
+        }.forEach { file ->
+            jsonMinified++
+            jsonBytesBefore += file.length()
+            try {
+                val parsed = jsonSlurper.parse(file)
+                val minified = JsonOutput.toJson(parsed)
+                    .replace("\"__comment__\":\"This file was automatically created by mcresources\",", "")
+                file.writeText(minified)
+            } catch (e: Exception) {
+                logger.error("JSON Error in ${file.path}", e)
+                throw e
             }
+            jsonBytesAfter += file.length()
         }
+
+        logger.lifecycle(
+            "Minified $jsonMinified JSON files. Reduced ${jsonBytesBefore / 1024} kB → ${(jsonBytesAfter / 1024)} kB. Took ${System.currentTimeMillis() - start} ms"
+        )
+    }
+}
+
+if (modIsInCI) {
+    tasks.register<MinifyJsonTask>("minifyJson") {
+        // `processResources` writes into build/resources/<sourceSet>
+        dir.set(layout.buildDirectory.dir("resources/main"))
     }
 
+    tasks.named<ProcessResources>("processResources") {
+        finalizedBy("minifyJson") // run AFTER processResources
+    }
+}
+
+
+tasks {
     test {
         useJUnitPlatform()
+        testLogging {
+            events("failed", "standardError")
+            exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
+            showCauses = true
+            showExceptions = true
+            showStackTraces = true
+        }
     }
 
     jar {

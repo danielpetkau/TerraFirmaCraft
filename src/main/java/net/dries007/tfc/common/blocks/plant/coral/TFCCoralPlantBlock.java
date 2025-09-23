@@ -27,6 +27,7 @@ import org.jetbrains.annotations.Nullable;
 import net.dries007.tfc.common.TFCDamageTypes;
 import net.dries007.tfc.common.TFCTags;
 import net.dries007.tfc.common.blocks.TFCBlockStateProperties;
+import net.dries007.tfc.common.entities.aquatic.AmphibiousAnimal;
 import net.dries007.tfc.common.entities.aquatic.AquaticMob;
 import net.dries007.tfc.common.fluids.FluidHelpers;
 import net.dries007.tfc.common.fluids.FluidProperty;
@@ -102,7 +103,7 @@ public class TFCCoralPlantBlock extends Block implements IFluidLoggable
     @Override
     protected void entityInside(BlockState state, Level level, BlockPos pos, Entity entity)
     {
-        if (!(entity instanceof AquaticMob))
+        if (!(entity instanceof AquaticMob || entity instanceof AmphibiousAnimal))
         {
             TFCDamageTypes.coral(entity, 0.5f);
         }

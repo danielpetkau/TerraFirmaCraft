@@ -33,7 +33,7 @@ public class SimplePotRecipeCategory extends PotRecipeCategory<PotRecipe>
 
     public SimplePotRecipeCategory(RecipeType<PotRecipe> type, IGuiHelper helper)
     {
-        super(type, helper, helper.createBlankDrawable(110, 100));
+        super(type, helper, 110, 100);
     }
 
     @Override

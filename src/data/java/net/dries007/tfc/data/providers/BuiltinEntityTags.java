@@ -14,7 +14,6 @@ import net.minecraft.world.entity.EntityType;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 
 import net.dries007.tfc.TerraFirmaCraft;
-import net.dries007.tfc.common.TFCTags;
 import net.dries007.tfc.common.entities.TFCEntities;
 import net.dries007.tfc.common.entities.aquatic.Fish;
 
@@ -45,6 +44,7 @@ public class BuiltinEntityTags extends EntityTypeTagsProvider
 
         tag(SPAWNS_ON_COLD_BLOCKS)
             .add(
+                TFCEntities.LEOPARD_SEAL.get(),
                 TFCEntities.PENGUIN.get(),
                 TFCEntities.POLAR_BEAR.get()
             );
@@ -69,6 +69,7 @@ public class BuiltinEntityTags extends EntityTypeTagsProvider
                 TFCEntities.FRESHWATER_FISH.get(Fish.CRAPPIE).get()
             );
 
+        // noinspection unchecked
         tag(BUBBLE_COLUMN_IMMUNE)
             .addTags(SMALL_FISH)
             .add(
@@ -106,6 +107,7 @@ public class BuiltinEntityTags extends EntityTypeTagsProvider
         tag(AMPHIBIOUS_CREATURES)
             .add(TFCEntities.TURTLE.get())
             .add(TFCEntities.PENGUIN.get())
+            .add(TFCEntities.LEOPARD_SEAL.get())
             .add(TFCEntities.FROG.get());
 
         tag(BEARS)
@@ -119,6 +121,15 @@ public class BuiltinEntityTags extends EntityTypeTagsProvider
             .add(TFCEntities.LION.get())
             .add(TFCEntities.SABERTOOTH.get())
             .add(TFCEntities.TIGER.get());
+
+        tag(OCEAN_PREDATORS)
+            .add(TFCEntities.ORCA.get())
+            .add(TFCEntities.DOLPHIN.get());
+
+        tag(HUNTED_BY_OCEAN_PREDATORS)
+            .addTag(SMALL_FISH)
+            .add(TFCEntities.PENGUIN.get())
+            .add(TFCEntities.LEOPARD_SEAL.get());
 
         tag(CANINE_PREDATORS)
             .add(TFCEntities.WOLF.get())

@@ -22,9 +22,10 @@ import net.minecraft.world.entity.ai.behavior.DoNothing;
 import net.minecraft.world.entity.ai.behavior.EntityTracker;
 import net.minecraft.world.entity.ai.behavior.EraseMemoryIf;
 import net.minecraft.world.entity.ai.behavior.FollowTemptation;
+import net.minecraft.world.entity.ai.behavior.GateBehavior;
 import net.minecraft.world.entity.ai.behavior.LookAtTargetSink;
 import net.minecraft.world.entity.ai.behavior.MeleeAttack;
-
+import net.minecraft.world.entity.ai.behavior.RunOne;
 import net.dries007.tfc.common.entities.ai.SetLookTarget;
 
 import net.minecraft.world.entity.ai.behavior.SetWalkTargetAwayFrom;
@@ -40,7 +41,6 @@ import net.minecraft.world.entity.ai.sensing.Sensor;
 import net.minecraft.world.entity.ai.sensing.SensorType;
 import net.minecraft.world.entity.schedule.Activity;
 
-import net.dries007.tfc.common.entities.ai.FastGateBehavior;
 import net.dries007.tfc.common.entities.ai.TFCBrain;
 import net.dries007.tfc.common.entities.ai.livestock.BreedBehavior;
 import net.dries007.tfc.common.entities.ai.livestock.LivestockAi;
@@ -108,16 +108,16 @@ public class TamableAi
         brain.addActivity(TFCBrain.IDLE_AT_HOME.get(), ImmutableList.of(
             Pair.of(0, SetLookTarget.create(EntityType.PLAYER, 6.0F, UniformInt.of(30, 60))), // looks at player, but its only try it every so often -- "Run Sometimes"
             Pair.of(1, new BreedBehavior<>(0.5f)), // custom TFC breed behavior
-            Pair.of(1, new AnimalPanic(1f)), // if memory of being hit, runs away
+            Pair.of(1, new AnimalPanic<>(1f)), // if memory of being hit, runs away
             Pair.of(2, new FollowTemptation(e -> e.isBaby() ? 1.5F : 1.25F)), // sets the walk and look targets to whomever it has a memory of being tempted by
             Pair.of(3, BabyFollowAdult.create(UniformInt.of(5, 16), 1.25F)), // babies follow any random adult around
             Pair.of(3, StrollToPoi.create(MemoryModuleType.HOME, 1F, 10, HOME_WANDER_DISTANCE - 10)),
             Pair.of(3, StartAttacking.create(TamableAi::getUnwantedAttackTarget)), // rats or attackers only
-            Pair.of(4, FastGateBehavior.runOne(ImmutableList.of(
-                StrollToPoi.create(MemoryModuleType.HOME, 0.6F, 10, HOME_WANDER_DISTANCE - 10),
-                StrollAroundPoi.create(MemoryModuleType.HOME, 0.6F, HOME_WANDER_DISTANCE),
-                SetWalkTargetFromLookTarget.create(1.0F, 3), // walk to what it is looking at
-                new DoNothing(30, 60)
+            Pair.of(4, new RunOne<>(ImmutableList.of(
+                Pair.of(StrollToPoi.create(MemoryModuleType.HOME, 0.6F, 10, HOME_WANDER_DISTANCE - 10), 1),
+                Pair.of(StrollAroundPoi.create(MemoryModuleType.HOME, 0.6F, HOME_WANDER_DISTANCE), 1),
+                Pair.of(SetWalkTargetFromLookTarget.create(1.0F, 3), 1), // walk to what it is looking at
+                Pair.of(new DoNothing(30, 60), 1)
             )))
         ));
     }
@@ -176,7 +176,7 @@ public class TamableAi
         ));
     }
 
-    public static FastGateBehavior<TFCAnimal> createIdleMovementBehaviors()
+    public static GateBehavior<TFCAnimal> createIdleMovementBehaviors()
     {
         return LivestockAi.createIdleMovementBehaviors();
     }

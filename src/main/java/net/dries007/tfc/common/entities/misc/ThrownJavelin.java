@@ -61,6 +61,16 @@ public class ThrownJavelin extends AbstractArrow
     }
 
     @Override
+    protected void onHitEntity(EntityHitResult result)
+    {
+        if (this.getOwner() != null && this.getOwner() instanceof ServerPlayer)
+        {
+            TFCAdvancements.STAB_ENTITY.trigger((ServerPlayer) this.getOwner(), result.getEntity());
+        }
+        super.onHitEntity(result);
+    }
+
+    @Override
     protected boolean tryPickup(Player player)
     {
         return super.tryPickup(player) || this.isNoPhysics() && this.ownedBy(player) && player.getInventory().add(this.getPickupItem());

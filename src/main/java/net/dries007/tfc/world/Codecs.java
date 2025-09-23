@@ -8,19 +8,25 @@ package net.dries007.tfc.world;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.function.Function;
+import java.util.stream.Collector;
 import com.mojang.datafixers.util.Either;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
+import com.mojang.serialization.Decoder;
+import com.mojang.serialization.DynamicOps;
+import com.mojang.serialization.Encoder;
 import net.minecraft.core.DefaultedRegistry;
-import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.nbt.NbtOps;
+import net.minecraft.resources.DelegatingOps;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.ExtraCodecs;
-import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.configurations.BlockStateConfiguration;
@@ -141,5 +147,50 @@ public final class Codecs extends ExtraCodecs
             list -> list.stream().collect(Collectors.toMap(Pair::getFirst, Pair::getSecond)),
             map -> map.entrySet().stream().map(e -> Pair.of(e.getKey(), e.getValue())).toList()
         );
+    }
+
+    /**
+     * Version of {@link Codec#unboundedMap(Codec, Codec)} which ensures the order of map entries are preserved when (de)serializing to/from nbt.
+     */
+    public static <K, V> Codec<Map<K, V>> orderPreservingUnboundedMapCodec(Codec<K> keyCodec, Codec<V> elementCodec)
+    {
+        final Codec<Map<K, V>> baseMapCodec = Codec.unboundedMap(keyCodec, elementCodec);
+        final Codec<List<Pair<K, V>>> asList = recordPairCodec(keyCodec, "key", elementCodec, "value").listOf();
+        return Codec.of(orderedEncoder(baseMapCodec, asList), orderedDecoder(Codec.either(baseMapCodec, asList)), "OrderPreservingUnboundMapCodec[" + keyCodec + " -> " + elementCodec + "]");
+    }
+
+    private static <K, V> Encoder<Map<K, V>> orderedEncoder(Codec<Map<K, V>> map, Codec<List<Pair<K, V>>> list)
+    {
+        return new Encoder<>() {
+            @Override
+            public <T> DataResult<T> encode(Map<K, V> input, DynamicOps<T> ops, T prefix) {
+                if (ops == NbtOps.INSTANCE || ops instanceof DelegatingOps<T> del && del.delegate == NbtOps.INSTANCE)
+                {
+                    return list.encode(input.entrySet().stream().map(e -> Pair.of(e.getKey(), e.getValue())).toList(), ops, prefix);
+                }
+                else
+                {
+                    return map.encode(input, ops, prefix);
+                }
+            }
+        };
+    }
+
+    private static <K, V> Decoder<Map<K, V>> orderedDecoder(Codec<Either<Map<K, V>, List<Pair<K, V>>>> eitherCodec)
+    {
+        return new Decoder<>() {
+            @Override
+            public <T> DataResult<Pair<Map<K, V>, T>> decode(DynamicOps<T> ops, T input) {
+                return eitherCodec.decode(ops, input)
+                    .map(pair -> pair.mapFirst(either -> either.map(Function.identity(), list -> list.stream().collect(Collector.of(
+                        LinkedHashMap::new,
+                        (map, p) -> map.put(p.getFirst(), p.getSecond()),
+                        (m1, m2) -> {
+                            m1.putAll(m2);
+                            return m1;
+                        }
+                    )))));
+            }
+        };
     }
 }

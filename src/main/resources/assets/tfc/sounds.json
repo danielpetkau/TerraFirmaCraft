@@ -1816,6 +1816,54 @@
       "tfc:entity/penguin/death1"
     ]
   },
+  
+  "entity.seal.ambient": {
+    "subtitle": "subtitles.entity.tfc.seal.ambient",
+    "sounds": [
+      {
+        "name": "minecraft:entity.wolf.ambient",
+        "type": "event"
+      }
+    ]
+  },
+  "entity.seal.hurt": {
+    "subtitle": "subtitles.entity.tfc.seal.hurt",
+    "sounds": [
+      {
+        "name": "minecraft:entity.wolf.hurt",
+        "type": "event"
+      }
+    ]
+  },
+  "entity.seal.step": {
+    "subtitle": "subtitles.entity.tfc.seal.footsteps",
+    "sounds": [
+      {
+		"name": "minecraft:entity/fish/flop1",
+        "volume": 0.5,
+		"pitch": 0.7
+      }
+    ]
+  },
+  "entity.seal.death": {
+    "subtitle": "subtitles.entity.tfc.seal.death",
+    "sounds": [
+      {
+        "name": "minecraft:entity.wolf.death",
+        "type": "event"
+      }
+    ]
+  },
+  "entity.seal.attack": {
+    "subtitle": "subtitles.entity.tfc.seal.attack",
+    "sounds": [
+	  {
+        "name": "minecraft:entity.fox.bite",
+        "type": "event",
+        "pitch": 0.5
+	  }
+    ]
+  },
   "entity.quail.ambient": {
     "subtitle": "subtitles.entity.tfc.quail.ambient",
     "sounds": [

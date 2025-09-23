@@ -17,6 +17,7 @@ public enum RiverBlendType
     TALL_BANKED(RiverNoise::tallBanked), // Sim to banked, but taller for use in mud flat/salt flat biomes
     FLOODPLAIN(RiverNoise::floodplain), // Flat banks at water level with steep banks farther from river
     WIDE(RiverNoise::wide), // Wide, smooth V-shaped valleys
+    WIDE_DEEP(RiverNoise::wideDeep), // Wide, smooth V-shaped valleys, but a few blocks deeper
     CANYON(RiverNoise::canyon), // Tall, smooth V-shaped valleys
     TALL_CANYON(RiverNoise::tallCanyon), // Slot canyons with undercut walls
     TALUS(RiverNoise::talus), // Single line of cliffs with steep slopes above and below

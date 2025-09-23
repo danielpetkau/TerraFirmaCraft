@@ -36,6 +36,11 @@ public enum Season implements StringRepresentable
         return VALUES[(ordinal() - 1) & 0b11];
     }
 
+    public Season opposite()
+    {
+        return VALUES[(ordinal() + 2) & 0b11];
+    }
+
     @Override
     public String getSerializedName()
     {

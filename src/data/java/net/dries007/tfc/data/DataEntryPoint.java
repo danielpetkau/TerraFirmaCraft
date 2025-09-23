@@ -56,7 +56,7 @@ import net.dries007.tfc.util.PhysicalDamageType;
 
 import static net.dries007.tfc.TerraFirmaCraft.*;
 
-@EventBusSubscriber(modid = MOD_ID, bus = EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = MOD_ID)
 public final class DataEntryPoint
 {
     @SubscribeEvent

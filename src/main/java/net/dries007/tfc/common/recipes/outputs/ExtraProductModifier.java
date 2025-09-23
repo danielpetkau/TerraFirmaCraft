@@ -17,6 +17,11 @@ import org.jetbrains.annotations.Nullable;
 import net.dries007.tfc.common.component.food.FoodCapability;
 import net.dries007.tfc.common.recipes.RecipeHelpers;
 
+/**
+ * Must be used on the remainder as that is where the crafting player is set nowadays...
+ * This is still very brittle.
+ * @param stack the extra product.
+ */
 public record ExtraProductModifier(ItemStack stack) implements ItemStackModifier
 {
     public static final MapCodec<ExtraProductModifier> CODEC = ItemStack.CODEC.fieldOf("stack").xmap(ExtraProductModifier::of, ExtraProductModifier::stack);
@@ -33,7 +38,7 @@ public record ExtraProductModifier(ItemStack stack) implements ItemStackModifier
         final @Nullable Player player = RecipeHelpers.getCraftingPlayer();
         if (player != null && context == Context.DEFAULT)
         {
-            ItemHandlerHelper.giveItemToPlayer(player, stack.copy());
+            ItemHandlerHelper.giveItemToPlayer(player, stack().copy());
         }
         return stack;
     }

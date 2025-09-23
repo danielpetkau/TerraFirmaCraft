@@ -128,8 +128,15 @@ public class PlantBlockModel implements IDynamicBakedModel, IUnbakedGeometry<Pla
         {
             randomScale = Mth.clampedMap(Climate.getAverageTemperature(level, pos), 16f, 26f, 0.03f, 0.5f);
 
-            //This line is all that should need to change to support hemispheral seasons
-            start = start + 1.5f;
+            // This handles differences between hemispheres
+            if (ClientHelpers.inNorthernHemisphere())
+            {
+                start = start + 1.5f;
+            }
+            else
+            {
+                start = start + 1f;
+            }
         }
         start = (start + random.nextFloat(-randomScale, randomScale)) % 1;
         return getModelFromCalendar(start, start + plant.getBloomingEnd(), start + plant.getSeedingEnd(), start + plant.getDyingEnd(),

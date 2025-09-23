@@ -10,7 +10,7 @@
     },
     {
       "type": "patchouli:spotlight",
-      "item": "tag:tfc:salads",
+      "item": "tag:c:foods/salad",
       "title": "",
       "link_recipes": false,
       "text": "В верхние слоты можно добавить до пяти ингредиентов. $(thing)Чаши$() можно добавить в нижний левый слот. Когда вы закончите, салат можно взять из нижнего правого слота."

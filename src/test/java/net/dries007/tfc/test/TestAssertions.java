@@ -35,4 +35,5 @@ public class TestAssertions extends Assertions
     {
         if (ItemStack.matches(expected, actual)) fail("expected: " + expected + ", actual: " + actual);
     }
+
 }

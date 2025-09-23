@@ -46,8 +46,22 @@ public interface IWeatheringBlock
      */
     default void onRandomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random)
     {
-        if (getAge() == Age.OXIDIZED || random.nextFloat() < 0.015f)
+        float resistanceThreshold = 1f-weatheringResistance();
+
+
+        if (getAge() == Age.OXIDIZED || random.nextFloat() < 0.95f || random.nextFloat() > resistanceThreshold)
         {
+            return;
+        }
+
+        final float chance = random.nextFloat();
+
+
+        // do slow random weathering
+        float randomChance = ageModifier() * 0.05f;
+        if (chance < randomChance)
+        {
+            changeToNextState(level, pos, state);
             return;
         }
 
@@ -69,10 +83,43 @@ public interface IWeatheringBlock
         float neighborModifier = 1;
         if ((count) / (overall) > 0.4f)
         {
-            neighborModifier = 0.005f;
+            neighborModifier = 0.00025f;
         }
 
-        final float chance = random.nextFloat();
+        // do "drip" weathering
+        int adjacentCount = 0;
+        for (Direction direction : Direction.Plane.HORIZONTAL.stream().toList())
+        {
+            if (level.getBlockState(pos.relative(direction)).getBlock() instanceof IWeatheringBlock)
+            {
+                adjacentCount++;
+            }
+        }
+        if (adjacentCount <= 3)
+        {
+            float drip = 0;
+            for (int y = 1; y < 5; y++)
+            {
+                if (level.getBlockState(pos.above(y)).getBlock() instanceof IWeatheringBlock weatheringBlock && weatheringBlock.getAge().ordinal() > getAge().ordinal())
+                {
+                    drip += 0.2f;
+                }
+                else
+                {
+                    break;
+                }
+            }
+            float overallChance = ageModifier() * drip;
+            if (getAge() != Age.NONE)
+            {
+                overallChance *= neighborModifier;
+            }
+            if (chance < overallChance)
+            {
+                changeToNextState(level, pos, state);
+                return;
+            }
+        }
 
         // do climate-affected weathering when blocks are exposed to > 5 blocks of air
         boolean topExposed = true;
@@ -92,54 +139,18 @@ public interface IWeatheringBlock
             {
                 overallChance *= neighborModifier;
             }
-            if (chance < overallChance && chance > weatheringResistance())
+            if (chance < overallChance)
             {
                 changeToNextState(level, pos, state);
                 return;
             }
         }
 
-        // do "drip" weathering
-        int adjacentCount = 0;
-        for (Direction direction : Direction.Plane.HORIZONTAL.stream().toList())
-        {
-            if (level.getBlockState(pos.relative(direction)).getBlock() instanceof IWeatheringBlock)
-            {
-                adjacentCount++;
-            }
-        }
-        if (adjacentCount <= 2)
-        {
-            float drip = 0;
-            for (int y = 1; y < 5; y++)
-            {
-                if (level.getBlockState(pos.above(y)).getBlock() instanceof IWeatheringBlock weatheringBlock && weatheringBlock.getAge().ordinal() > getAge().ordinal())
-                {
-                    drip += 0.2f;
-                }
-                else
-                {
-                    break;
-                }
-            }
-            float overallChance = ageModifier() * drip;
-            if (getAge() != Age.NONE)
-            {
-                overallChance *= neighborModifier;
-            }
-            if (chance < overallChance && chance > weatheringResistance())
-            {
-                changeToNextState(level, pos, state);
-                return;
-            }
-        }
 
-        // do slow random weathering
-        float overallChance = ageModifier() * 0.006f;
-        if (chance < overallChance && chance > weatheringResistance())
-        {
-            changeToNextState(level, pos, state);
-        }
+
+
+
+
     }
 
     private float climateModifier(Level level, BlockPos pos)

@@ -8,6 +8,6 @@
     "id": "tfc:metal/double_sheet/gold"
   },
   "second_input": {
-    "tag": "c:ingots/gold"
+    "tag": "c:sheets/gold"
   }
 }

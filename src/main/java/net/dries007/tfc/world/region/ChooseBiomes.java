@@ -250,6 +250,12 @@ public enum ChooseBiomes implements RegionTask
                 }
 
             }
+
+            // Increase prevalence/size of salt marshes in climates where mangroves can generate
+            if (point.distanceToOcean <= 2 && point.biome == LOWLANDS && point.rainfall > 220 && point.temperature > 18)
+            {
+                point.biome = SALT_MARSH;
+            }
         }
     }
 

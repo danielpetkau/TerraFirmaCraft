@@ -82,20 +82,35 @@ public final class RecipeHelpers
         return CRAFTING_INPUT.get();
     }
 
-    public static NonNullList<ItemStack> getRemainderItemsWithProvider(CraftingInput input, ItemStackProvider provider)
+    /**
+     * Produces a {@code NonNullList} of the items that should remain after completing a recipe, taking an {@link ItemStackProvider} into account.
+     * For all items in the recipe that are not the primary input, we resort to the defined remainder of the item, if it exists
+     *
+     * @param input The items involved in the recipe
+     * @param provider A provider for an item that should have a non-default remainder
+     * @param primaryInput The item that should have a non-default remainder
+     * @return A list containing the remaining {@link ItemStack}s after a recipe has been completed
+     */
+    public static NonNullList<ItemStack> getRemainderItemsWithProvider(CraftingInput input, ItemStackProvider provider, ItemStack primaryInput)
     {
         final NonNullList<ItemStack> results = NonNullList.withSize(input.size(), ItemStack.EMPTY);
         for (int i = 0; i < results.size(); i++)
         {
             final ItemStack stack = input.getItem(i);
-            final ItemStack outputStack = provider.getStack(stack.copyWithCount(1));
-
-            if (!outputStack.isEmpty())
+            if (ItemStack.isSameItem(primaryInput, stack))
             {
+                final ItemStack outputStack = provider.getStack(stack.copyWithCount(1));
+                if (!outputStack.isEmpty())
+                {
+                    results.set(i, outputStack);
+                }
+            }
+            else if (stack.hasCraftingRemainingItem())
+            {
+                final ItemStack outputStack = stack.getCraftingRemainingItem();
                 results.set(i, outputStack);
             }
         }
-
         return results;
     }
 

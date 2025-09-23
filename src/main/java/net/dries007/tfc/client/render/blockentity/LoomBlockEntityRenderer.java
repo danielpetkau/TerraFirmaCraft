@@ -93,7 +93,7 @@ public class LoomBlockEntityRenderer implements BlockEntityRenderer<LoomBlockEnt
     {
         for (float[] v : RenderHelpers.getDiagonalPlaneVertices(0.1875F, 0.9375F, 0.75F - 0.001F, 0.8125F, 0.9375F - 0.625F * progress, 0.75F - 0.001F, 0F, 0F, 1F, progress))
         {
-            RenderHelpers.renderTexturedVertex(poseStack, buffer, packedLight, packedOverlay, v[0], v[1], v[2], sprite.getU(v[3] * 16f), sprite.getV(v[4] * 16f), 0, 1, 0);
+            RenderHelpers.renderTexturedVertex(poseStack, buffer, packedLight, packedOverlay, v[0], v[1], v[2], sprite.getU(v[3]), sprite.getV(v[4]), 0, 1, 0);
         }
     }
 
@@ -137,7 +137,7 @@ public class LoomBlockEntityRenderer implements BlockEntityRenderer<LoomBlockEnt
 
             for (float[] v : RenderHelpers.getDiagonalPlaneVertices(0.1875F + 0.625F / maxPieces * i, y1, z1 - 0.001F, 0.1875F + 0.625F / maxPieces * (i + 1F), y2, z2 - 0.001F, texX1, texY1, texX2, texY2))
             {
-                RenderHelpers.renderTexturedVertex(poseStack, buffer, packedLight, packedOverlay, v[0], v[1], v[2], sprite.getU(v[3] * 16f), sprite.getV(v[4] * 16f), 0, 1, 0);
+                RenderHelpers.renderTexturedVertex(poseStack, buffer, packedLight, packedOverlay, v[0], v[1], v[2], sprite.getU(v[3]), sprite.getV(v[4]), 0, 1, 0);
             }
 
             if (i % 2 == 0)
@@ -149,7 +149,7 @@ public class LoomBlockEntityRenderer implements BlockEntityRenderer<LoomBlockEnt
 
             for (float[] v : RenderHelpers.getDiagonalPlaneVertices(0.1875F + 0.625F / maxPieces * i, (float) 0, z1 - 0.001F, 0.1875F + 0.625F / maxPieces * (i + 1), y2, z2 - 0.001F, texX1, texY1, texX2, texY2))
             {
-                RenderHelpers.renderTexturedVertex(poseStack, buffer, packedLight, packedOverlay, v[0], v[1], v[2], sprite.getU(v[3] * 16f), sprite.getV(v[4] * 16f), 0, 1, 0);
+                RenderHelpers.renderTexturedVertex(poseStack, buffer, packedLight, packedOverlay, v[0], v[1], v[2], sprite.getU(v[3]), sprite.getV(v[4]), 0, 1, 0);
             }
         }
     }

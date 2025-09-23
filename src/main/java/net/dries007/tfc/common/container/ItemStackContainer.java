@@ -82,20 +82,20 @@ public class ItemStackContainer extends Container
      * Prevent any movement of the item stack from which this container was opened.
      */
     @Override
-    public void clicked(int slot, int dragType, ClickType clickType, Player player)
+    public void clicked(int slot, int button, ClickType clickType, Player player)
     {
         // We can't move if:
         // the slot is the item index, and it's an illegal action (like, swapping the items)
         // the hotbar item is being swapped out
         // the action is "pickup all" (this ignores every slot, so we cannot allow it)
         if ((slot == itemIndex && ILLEGAL_ITEM_CLICKS.contains(clickType)) ||
-            (dragType == hotbarIndex && clickType == ClickType.SWAP) ||
-            (dragType == 40 && clickType == ClickType.SWAP && hand == InteractionHand.OFF_HAND) ||
+            (button == hotbarIndex && clickType == ClickType.SWAP) ||
+            ((button == 40 || (button >= 0 && button <= 9)) && clickType == ClickType.SWAP) ||
             clickType == ClickType.PICKUP_ALL)
         {
             return;
         }
-        super.clicked(slot, dragType, clickType, player);
+        super.clicked(slot, button, clickType, player);
     }
 
     @FunctionalInterface

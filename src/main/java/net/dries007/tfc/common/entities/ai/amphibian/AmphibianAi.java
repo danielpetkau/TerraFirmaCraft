@@ -13,8 +13,6 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.valueproviders.UniformInt;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.behavior.*;
@@ -23,20 +21,17 @@ import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.memory.MemoryStatus;
 import net.minecraft.world.entity.ai.sensing.Sensor;
 import net.minecraft.world.entity.ai.sensing.SensorType;
-import net.minecraft.world.entity.animal.axolotl.Axolotl;
-import net.minecraft.world.entity.animal.axolotl.AxolotlAi;
 import net.minecraft.world.entity.schedule.Activity;
 import net.minecraft.world.level.Level;
 
 import com.mojang.datafixers.util.Pair;
 
 import net.dries007.tfc.common.TFCTags;
-import net.dries007.tfc.common.entities.ai.FastGateBehavior;
 import net.dries007.tfc.common.entities.ai.SetLookTarget;
 import net.dries007.tfc.common.entities.ai.TFCBrain;
 import net.dries007.tfc.common.entities.aquatic.AmphibiousAnimal;
+import net.dries007.tfc.util.EnvironmentHelpers;
 import net.dries007.tfc.util.Helpers;
-import net.dries007.tfc.util.calendar.ICalendar;
 
 /**
  * Reference implementation of {@link Brain} based on Axolotls.
@@ -50,7 +45,8 @@ public class AmphibianAi
     public static final ImmutableList<? extends MemoryModuleType<?>> MEMORY_TYPES = ImmutableList.of(
         MemoryModuleType.NEAREST_LIVING_ENTITIES, MemoryModuleType.NEAREST_VISIBLE_LIVING_ENTITIES, MemoryModuleType.NEAREST_VISIBLE_PLAYER, MemoryModuleType.LOOK_TARGET, MemoryModuleType.NEAREST_VISIBLE_ADULT,
         MemoryModuleType.WALK_TARGET, MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE, MemoryModuleType.PATH, MemoryModuleType.ATTACK_TARGET, MemoryModuleType.ATTACK_COOLING_DOWN, MemoryModuleType.HUNTED_RECENTLY,
-        MemoryModuleType.PLAY_DEAD_TICKS, MemoryModuleType.HURT_BY_ENTITY, MemoryModuleType.HOME, MemoryModuleType.TEMPTING_PLAYER, MemoryModuleType.IS_TEMPTED, MemoryModuleType.TEMPTATION_COOLDOWN_TICKS, MemoryModuleType.BREED_TARGET, MemoryModuleType.IS_PANICKING
+        MemoryModuleType.PLAY_DEAD_TICKS, MemoryModuleType.HURT_BY_ENTITY, MemoryModuleType.HOME, MemoryModuleType.TEMPTING_PLAYER, MemoryModuleType.IS_TEMPTED, MemoryModuleType.TEMPTATION_COOLDOWN_TICKS,
+        MemoryModuleType.BREED_TARGET, MemoryModuleType.IS_PANICKING
     );
 
     public static Brain<?> makeBrain(Brain<? extends AmphibiousAnimal> brain)
@@ -102,7 +98,7 @@ public class AmphibianAi
                     Pair.of(RandomStroll.stroll(0.15F, false), 2),
                     Pair.of(SetWalkTargetFromLookTarget.create(AmphibianAi::canSetWalkTargetFromLookTarget, AmphibianAi::getSpeedModifier, 3), 3),
                     Pair.of(new DoNothing(30, 60), 3),
-                    Pair.of(StrollToPoi.create(MemoryModuleType.HOME, 0.5f, 5, 100), 3)
+                    Pair.of(AmphibiousStrollToPoi.create(MemoryModuleType.HOME, AmphibianAi::getSpeedModifier, 5, 100), 3)
                 )
             ))
         ));
@@ -157,11 +153,6 @@ public class AmphibianAi
             .flatMap(nearest -> nearest.findClosest(p -> Helpers.isEntity(p, TFCTags.Entities.SMALL_FISH) && p.isAlive()));
     }
 
-    private static boolean isDayTime(Entity animal)
-    {
-        return animal.level().getDayTime() % ICalendar.TICKS_IN_DAY < 12000;
-    }
-
     private static boolean canSetWalkTargetFromLookTarget(LivingEntity entity)
     {
         Level level = entity.level();
@@ -169,7 +160,7 @@ public class AmphibianAi
         if (tracker.isPresent())
         {
             BlockPos pos = tracker.get().currentBlockPosition();
-            return level.isWaterAt(pos) == entity.isInWaterOrBubble();
+            return EnvironmentHelpers.isWaterAt(level, pos) == entity.isInWaterOrBubble();
         }
         return false;
     }

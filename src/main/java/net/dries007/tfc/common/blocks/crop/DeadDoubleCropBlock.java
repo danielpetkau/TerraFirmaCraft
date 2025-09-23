@@ -6,11 +6,10 @@
 
 package net.dries007.tfc.common.blocks.crop;
 
-
-import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -18,6 +17,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -29,8 +29,11 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 
+import net.dries007.tfc.common.TFCTags;
 import net.dries007.tfc.common.blocks.ExtendedProperties;
 import net.dries007.tfc.common.blocks.TFCBlockStateProperties;
+import net.dries007.tfc.common.blocks.crop.DoubleCropBlock.Part;
+import net.dries007.tfc.util.Helpers;
 import net.dries007.tfc.util.climate.ClimateRange;
 
 public class DeadDoubleCropBlock extends DeadCropBlock
@@ -93,7 +96,30 @@ public class DeadDoubleCropBlock extends DeadCropBlock
     @Override
     public boolean canSurvive(BlockState state, LevelReader level, BlockPos pos)
     {
-        return WildDoubleCropBlock.doubleBlockSurvives(state, level, pos);
+        final Part part = state.getValue(PART);
+        final BlockState belowState = level.getBlockState(pos.below());
+        if (part == Part.BOTTOM)
+        {
+            return Helpers.isBlock(belowState.getBlock(), TFCTags.Blocks.FARMLANDS);
+        }
+        else
+        {
+            return Helpers.isBlock(belowState, this) && belowState.getValue(PART) == Part.BOTTOM;
+        }
+    }
+
+    @Override
+    public BlockState updateShape(BlockState state, Direction facing, BlockState facingState, LevelAccessor level, BlockPos currentPos, BlockPos facingPos)
+    {
+        DoubleCropBlock.Part part = state.getValue(PART);
+        if (facing.getAxis() != Direction.Axis.Y || part == DoubleCropBlock.Part.BOTTOM != (facing == Direction.UP) || facingState.getBlock() == this && facingState.getValue(PART) != part)
+        {
+            return part == DoubleCropBlock.Part.BOTTOM && facing == Direction.DOWN && !state.canSurvive(level, currentPos) ? Blocks.AIR.defaultBlockState() : super.updateShape(state, facing, facingState, level, currentPos, facingPos);
+        }
+        else
+        {
+            return Blocks.AIR.defaultBlockState();
+        }
     }
 
     @Override

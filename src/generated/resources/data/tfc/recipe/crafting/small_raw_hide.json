@@ -15,11 +15,7 @@
     "modifiers": [
       {
         "type": "tfc:damage_crafting_remainder"
-      }
-    ]
-  },
-  "result": {
-    "modifiers": [
+      },
       {
         "type": "tfc:extra_products",
         "stack": {
@@ -27,10 +23,10 @@
           "id": "tfc:wool"
         }
       }
-    ],
-    "stack": {
-      "count": 1,
-      "id": "tfc:small_raw_hide"
-    }
+    ]
+  },
+  "result": {
+    "count": 1,
+    "id": "tfc:small_raw_hide"
   }
 }

@@ -96,6 +96,7 @@ public final class TFCSounds
     public static final EntityId MUSK_OX = registerEntity("musk_ox", false, false);
     public static final EntityId DUCK = registerEntity("duck", false, false);
     public static final EntityId PENGUIN = registerEntity("penguin", false, false);
+    public static final EntityId SEAL = registerEntity("seal", true, false);
     public static final EntityId QUAIL = registerEntity("quail", false, false);
     public static final EntityId LION = registerEntity("lion", true, true);
     public static final EntityId COUGAR = registerEntity("cougar", true, true);

@@ -9,9 +9,12 @@ package net.dries007.tfc.common.recipes.outputs;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import io.netty.buffer.ByteBuf;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
+
+import net.dries007.tfc.common.Lore;
 
 public record ChanceModifier(float chance) implements ItemStackModifier
 {
@@ -23,6 +26,8 @@ public record ChanceModifier(float chance) implements ItemStackModifier
     {
         if (context != Context.DEFAULT)
         {
+            // this is actually evil
+            Lore.append(stack, Component.translatable("tfc.tooltip.chance", chance * 100));
             return stack;
         }
         int count = 0;

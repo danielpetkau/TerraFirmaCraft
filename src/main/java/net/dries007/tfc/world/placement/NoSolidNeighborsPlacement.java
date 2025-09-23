@@ -27,7 +27,7 @@ public class NoSolidNeighborsPlacement extends PlacementModifier
     @Override
     public Stream<BlockPos> getPositions(PlacementContext context, RandomSource random, BlockPos pos)
     {
-        return !hasSolidNeighbor(context, pos) ? Stream.of(pos) : Stream.empty();
+        return !hasNoSolidNeighbors(context, pos) ? Stream.of(pos) : Stream.empty();
     }
 
     @Override
@@ -36,17 +36,17 @@ public class NoSolidNeighborsPlacement extends PlacementModifier
         return TFCPlacements.NO_SOLID_NEIGHBORS.get();
     }
 
-    private boolean hasSolidNeighbor(PlacementContext level, BlockPos pos)
+    private boolean hasNoSolidNeighbors(PlacementContext level, BlockPos pos)
     {
         final BlockPos.MutableBlockPos cursor = new BlockPos.MutableBlockPos();
         for (Direction dir : Direction.Plane.HORIZONTAL)
         {
             if (!isNonSolid(level, cursor.setWithOffset(pos, dir)))
             {
-                return false;
+                return true;
             }
         }
-        return true;
+        return false;
     }
 
     private boolean isNonSolid(PlacementContext level, BlockPos pos)

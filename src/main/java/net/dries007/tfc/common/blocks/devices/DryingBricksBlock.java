@@ -161,6 +161,13 @@ public class DryingBricksBlock extends BottomSupportedDeviceBlock
         return !state.getValue(DRIED);
     }
 
+
+    @Override
+    protected void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random)
+    {
+        tick(state, level, pos, random);
+    }
+
     /**
      * Random tick falls through to here
      */

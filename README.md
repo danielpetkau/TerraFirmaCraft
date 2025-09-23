@@ -46,3 +46,5 @@ Based on original work by Robert "Bioxx" Anthony, Amanda "Kittychanley" Halek an
 Music by Mike "Menoch" Pelaez
 
 Parts of this project are edited source code from the original TerraFirmaCraft for 1.7.10 mod. They are used under a different license with permission from the original author (Bioxx).
+
+Thanks to [AlcatrazEscapee](https://github.com/alcatrazEscapee) for invaluable contributions, project guidance and leadership from the Minecraft 1.12 era in 2018, all the way until 1.20 in 2025.

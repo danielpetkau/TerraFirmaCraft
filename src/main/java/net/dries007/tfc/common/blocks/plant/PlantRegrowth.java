@@ -19,6 +19,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.WorldgenRandom;
 import org.jetbrains.annotations.Nullable;
 
+import net.dries007.tfc.client.overworld.SolarCalculator;
 import net.dries007.tfc.common.TFCTags;
 import net.dries007.tfc.common.blocks.crop.DeadCropBlock;
 import net.dries007.tfc.common.blocks.rock.LooseRockBlock;
@@ -32,9 +33,9 @@ import net.dries007.tfc.world.chunkdata.ChunkData;
 
 public final class PlantRegrowth
 {
-    public static boolean canSpread(Level level, RandomSource random)
+    public static boolean canSpread(Level level, RandomSource random, BlockPos pos)
     {
-        return random.nextFloat() < TFCConfig.SERVER.plantSpreadChance.get() && Calendars.get(level).getCalendarMonthOfYear().getSeason() != Season.WINTER;
+        return random.nextFloat() < TFCConfig.SERVER.plantSpreadChance.get() && Calendars.get(level).getHemispheralCalendarMonthOfYear(SolarCalculator.getInNorthernHemisphere(pos, level)).getSeason() != Season.WINTER;
     }
 
     public static final BiPredicate<BlockState, BlockPos> DEFAULT_PLACEMENT_TEST = (s, p) -> s.isAir() || s.getBlock() instanceof DeadCropBlock;
@@ -98,7 +99,7 @@ public final class PlantRegrowth
     public static void placeRisingRock(ServerLevel level, BlockPos pos, RandomSource random)
     {
         if (random.nextFloat() > TFCConfig.SERVER.grassSpawningRocksChance.get()
-            || Calendars.SERVER.getCalendarMonthOfYear().getSeason() != Season.SPRING
+            || Calendars.SERVER.getHemispheralCalendarMonthOfYear(SolarCalculator.getInNorthernHemisphere(pos, level)).getSeason() != Season.SPRING
             || Climate.getAverageTemperature(level, pos) > 8f
             || !level.isAreaLoaded(pos, 2)
             || hasPlayerNearby(level, pos, 20))

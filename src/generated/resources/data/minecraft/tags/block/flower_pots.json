@@ -7,6 +7,7 @@
     "tfc:plant/potted/rose",
     "tfc:plant/potted/allium",
     "tfc:plant/potted/anthurium",
+    "tfc:plant/potted/azalea",
     "tfc:plant/potted/barrel_cactus",
     "tfc:plant/potted/bear_grass",
     "tfc:plant/potted/blood_lily",
@@ -22,6 +23,7 @@
     "tfc:plant/potted/desert_flame",
     "tfc:plant/potted/dry_grass",
     "tfc:plant/potted/edelweiss",
+    "tfc:plant/potted/elegant_sunburst_lichen",
     "tfc:plant/potted/field_horsetail",
     "tfc:plant/potted/foxglove",
     "tfc:plant/potted/grape_hyacinth",
@@ -70,6 +72,7 @@
     "tfc:plant/potted/yellow_saxifrage",
     "tfc:plant/potted/yucca",
     "tfc:plant/potted/tree_fern",
+    "tfc:plant/potted/cycad",
     "tfc:plant/potted/golden_bamboo"
   ]
 }

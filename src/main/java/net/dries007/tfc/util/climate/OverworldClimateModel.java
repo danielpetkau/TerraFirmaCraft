@@ -24,6 +24,7 @@ import net.minecraft.world.level.levelgen.XoroshiroRandomSource;
 import net.minecraft.world.phys.Vec2;
 import org.jetbrains.annotations.Nullable;
 
+import net.dries007.tfc.client.overworld.SolarCalculator;
 import net.dries007.tfc.common.TFCTags;
 import net.dries007.tfc.config.TFCConfig;
 import net.dries007.tfc.util.Helpers;
@@ -123,7 +124,7 @@ public class OverworldClimateModel implements ClimateModel
     @Override
     public float getAverageTemperature(LevelReader level, BlockPos pos)
     {
-        return ChunkData.get(level, pos).getAverageSeaLevelTemp(pos);
+        return Helpers.adjustAverageTemperatureByElevation(pos.getY(), ChunkData.get(level, pos).getAverageSeaLevelTemp(pos), SEA_LEVEL);
     }
 
     @Override
@@ -137,7 +138,7 @@ public class OverworldClimateModel implements ClimateModel
         final float monthFactor = Mth.lerp(delta, currentMonth.getTemperatureModifier(), currentMonth.next().getTemperatureModifier());
 
         final float monthTemperature = calculateMonthlyTemperature(pos.getZ(), monthFactor);
-        final float dailyTemperature = calculateDailyTemperature(calendarTicks);
+        final float dailyTemperature = calculateDailyTemperature(calendarTicks, daysInMonth, pos.getZ());
 
         return adjustTemperatureByElevation(pos.getY(), data.getAverageSeaLevelTemp(pos), monthTemperature, dailyTemperature);
     }
@@ -446,10 +447,16 @@ public class OverworldClimateModel implements ClimateModel
     }
 
     /**
-     * Calculates the average monthly temperature for a location and given month.
+     * Calculates the average monthly temperature for a location and given calendar month.
+     * @param ignoreHemispheres will scale the temperature by the given month factor without inverting it if it is in a Southern Hemisphere.
+     *                          For instance, with this true, passing in the factor for June will always return the factor for Early Summer, never for Early Winter
      */
-    public float getAverageMonthlyTemperature(int z, int y, float averageTemperature, float monthFactor)
+    public float getAverageMonthlyTemperature(int z, int y, float averageTemperature, float monthFactor, boolean ignoreHemispheres)
     {
+        if (ignoreHemispheres && !SolarCalculator.getInNorthernHemisphere(z, hemisphereScale()))
+        {
+            monthFactor = -monthFactor;
+        }
         final float monthlyTemperature = calculateMonthlyTemperature(z, monthFactor);
         return adjustTemperatureByElevation(y, averageTemperature, monthlyTemperature, 0);
     }
@@ -489,10 +496,11 @@ public class OverworldClimateModel implements ClimateModel
 
     /**
      * Calculates the monthly temperature for a given latitude and month modifier
+     * The hemispheral impact on seasonal temperatures is calculated here as well
      */
     protected float calculateMonthlyTemperature(int z, float monthTemperatureModifier)
     {
-        return monthTemperatureModifier * (temperatureScale == 0 ? 0 : Helpers.triangle(-9f, 9f, 1f / (2f * temperatureScale), z));
+        return monthTemperatureModifier * (temperatureScale == 0 ? 0 : Helpers.triangle(-18f, 0f, 1f / (4f * temperatureScale), z - temperatureScale / 2));
     }
 
     /**
@@ -500,10 +508,12 @@ public class OverworldClimateModel implements ClimateModel
      *
      * @return A value in the range {@code [-4.0, 4.0]}
      */
-    protected float calculateDailyTemperature(long calendarTime)
+    protected float calculateDailyTemperature(long calendarTime, long daysInMonth, int z)
     {
         // Hottest part of the day at noon, coldest at midnight, range [-1, 1]
-        final float fractionOfDay = ICalendar.getFractionOfDay(calendarTime);
+        final int sunBasedDayTime = SolarCalculator.getSunBasedDayTime(z, hemisphereScale(), ICalendar.getFractionOfYear(calendarTime, daysInMonth), ICalendar.getFractionOfDay(calendarTime));
+        // This is always by 24,000 ticks because the getSunBasedDayTime is scaled to vanilla day lengths
+        final float fractionOfDay = (float) sunBasedDayTime / 24_000;
         final float hourModifier = fractionOfDay < 0.5f
             ? Mth.map(fractionOfDay, 0f, 0.5f, -1, 1)
             : Mth.map(fractionOfDay, 0.5f, 1f, 1, -1);

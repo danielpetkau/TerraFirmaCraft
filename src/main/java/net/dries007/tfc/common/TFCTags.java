@@ -247,6 +247,8 @@ public class TFCTags
         public static final TagKey<Block> KAOLIN_CLAY_REPLACEABLE = tag("kaolin_clay_replaceable");
         /** Blocks that can be replaced with powder snow */
         public static final TagKey<Block> POWDER_SNOW_REPLACEABLE = tag("powder_snow_replaceable");
+        /** Blocks that underwater lava springs shouldn't place on */
+        public static final TagKey<Block> COLD_OCEAN_BLOCKS = tag("cold_ocean_blocks");
         /** Hardened rock blocks only. Used in worldgen to determine in what rock types sea stacks can generate. **/
         public static final TagKey<Block> SEA_STACK_ROCKS = tag("sea_stack_rocks");
 
@@ -267,6 +269,8 @@ public class TFCTags
         /**
          * These vanilla tags, historically, were required for <strong>any</strong> fluid behavior, and so may still be used that way.
          * Do not rely on them only containing water or lava, instead, reference the below tags for more specific fluid grouping.
+         *
+         * DO NOT USE THESE FOR GAME LOGIC!!!!!
          */
         public static final TagKey<Fluid> WATER_LIKE = FluidTags.WATER;
         public static final TagKey<Fluid> LAVA_LIKE = FluidTags.LAVA;
@@ -345,6 +349,8 @@ public class TFCTags
         public static final TagKey<Item> JAM = tag("foods/jam");
         public static final TagKey<Item> JARRED_FOOD = tag("foods/jarred_food");
         public static final TagKey<Item> SEALED_JARRED_FOOD = tag("foods/sealed_jarred_food");
+        public static final TagKey<Item> EMPTY_JARS = tag("foods/empty_jars");
+        public static final TagKey<Item> FILLED_JARS = tag("foods/filled_jars");
         /* Includes preserves, sealed preserves, and also empty jars (with and without lid) */
         public static final TagKey<Item> JARS = tag("foods/jars");
         public static final TagKey<Item> SWEETENERS = tag("foods/sweeteners");
@@ -378,6 +384,7 @@ public class TFCTags
         public static final TagKey<Item> PENGUIN_FOOD = tag("penguin_food");
         public static final TagKey<Item> TURTLE_FOOD = tag("turtle_food");
         public static final TagKey<Item> FROG_FOOD = tag("frog_food");
+        public static final TagKey<Item> SEAL_FOOD = tag("seal_food");
         public static final TagKey<Item> RABBIT_FOOD = tag("rabbit_food");
 
         // Compost
@@ -399,6 +406,7 @@ public class TFCTags
 
         public static final TagKey<Item> PLANTS = tag("plants");
         public static final TagKey<Item> WILD_CROPS = tag("wild_crops");
+        public static final TagKey<Item> BAMBOO = tag("bamboo");
 
         /**
          * Colored Tags
@@ -557,6 +565,7 @@ public class TFCTags
         public static final TagKey<Item> BLAST_FURNACE_TUYERES = tag("blast_furnace_tuyeres");
         public static final TagKey<Item> TOOL_RACK_TOOLS = tag("usable_on_tool_rack");
         public static final TagKey<Item> POWDER_KEG_FUEL = tag("usable_in_powder_keg");
+        public static final TagKey<Item> USABLE_IN_MOLD_TABLE = tag("usable_in_mold_table");
         /**
          * Items that can be placed in a {@link HoldingMinecart}. Items present here must be block items, in order to
          * be able to render them.
