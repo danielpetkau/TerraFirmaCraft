@@ -559,7 +559,7 @@
   "config.jade.plugin_tfc.ocelot": "Оцелот",
   "config.jade.plugin_tfc.rabbit": "Кролик",
   "config.jade.plugin_tfc.fishing_hook": "Рыболовный крючок",
-  "tfc.commands.disabled_by_tfc": "Эта команда была отключена TerraFirmaCraft, используйте /time вместо неё",
+  "tfc.commands.disabled_by_tfc": "Эта команда была отключена TerraFirmaCraft, используйте \"%s\" вместо неё",
   "tfc.commands.time.set_day_length": "Длина дня установлена на %s минут/день",
   "tfc.commands.time.set_day_length_disabled": "Цикл светового дня отключён",
   "tfc.commands.time.set_month_length": "Длина месяца установлена на %s дней/месяц",
