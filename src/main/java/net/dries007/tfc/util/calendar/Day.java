@@ -25,6 +25,7 @@ public enum Day
     SUNDAY;
 
     private static final Map<String, String> BIRTHDAYS = new HashMap<>();
+    private static final Map<String, Component> HOLIDAYS = new HashMap<>();
     private static final Day[] VALUES = values();
 
     static

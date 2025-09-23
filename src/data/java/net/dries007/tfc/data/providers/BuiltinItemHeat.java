@@ -83,7 +83,7 @@ public class BuiltinItemHeat extends DataManagerProvider<HeatDefinition> impleme
                 {
                     add(metal, "grates", Ingredient.of(
                         blocks.get(Metal.BlockType.GRATE),
-                        blocks.get(Metal.BlockType.EXPOSED_GRATE),
+                        blocks.get(Metal.BlockType.WEATHERED_GRATE),
                         blocks.get(Metal.BlockType.EXPOSED_GRATE),
                         blocks.get(Metal.BlockType.OXIDIZED_GRATE)
                     ), units(Metal.BlockType.GRATE));
