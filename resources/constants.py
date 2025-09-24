@@ -2291,7 +2291,7 @@ DEFAULT_LANG = {
     'tfc.recipe.barrel.tfc.barrel.rye_whiskey': 'Fermenting Rye Whiskey',
     'tfc.recipe.barrel.tfc.barrel.vinegar': 'Vinegar',
     'tfc.recipe.barrel.tfc.barrel.brined': 'Brining',
-    'tfc.recipe.barrel.tfc.barrel.pickling': 'Pickling',
+    'tfc.recipe.barrel.tfc.barrel.pickled': 'Pickling',
     'tfc.recipe.barrel.tfc.barrel.preserved_in_vinegar': 'Preserving In Vinegar',
     'tfc.recipe.barrel.tfc.barrel.mortar': 'Mortar',
     'tfc.recipe.barrel.tfc.barrel.curdling': 'Curdling Milk',
