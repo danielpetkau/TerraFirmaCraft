@@ -42,7 +42,8 @@ public abstract class DairyAnimal extends ProducingMammal
     public InteractionResult mobInteract(Player player, InteractionHand hand)
     {
         final ItemStack held = player.getItemInHand(hand);
-        final @Nullable IFluidHandlerItem destFluidItemHandler = held.getCapability(Capabilities.FluidHandler.ITEM);
+        // Without copying the stack the dest handler is the same as the input handler, and gets filled with fluid
+        final @Nullable IFluidHandlerItem destFluidItemHandler = held.copy().getCapability(Capabilities.FluidHandler.ITEM);
 
         if (!held.isEmpty() && destFluidItemHandler != null)
         {
