@@ -22,7 +22,7 @@ import net.dries007.tfc.util.Helpers;
 @SuppressWarnings("unused")
 public final class TFCCommands
 {
-    private static final Component DISABLED = Component.translatable("tfc.commands.disabled_by_tfc");
+    private static final String DISABLED = "tfc.commands.disabled_by_tfc";
 
     public static void registerCommands(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext context)
     {
@@ -50,7 +50,16 @@ public final class TFCCommands
             .removeIf(node -> node.getName().equals("day"));
         dispatcher.register(Commands.literal("neoforge")
             .then(Commands.literal("day")
-                .executes(c -> { c.getSource().sendFailure(DISABLED); return 0; })));
+                .executes(c -> { c.getSource().sendFailure(Component.translatable(DISABLED, "/time")); return 0; })));
+
+        // We do the same with the `/gamerule doDaylightCycle` command, since this has been effectively replaced by `/time set dayLength` already
+        dispatcher.getRoot()
+            .getChild("gamerule")
+            .getChildren()
+            .removeIf(node -> node.getName().equals("doDaylightCycle"));
+        dispatcher.register(Commands.literal("gamerule")
+            .then(Commands.literal("doDaylightCycle")
+                .executes(c -> { c.getSource().sendFailure(Component.translatable(DISABLED, "/time set dayLength")); return 0; })));
     }
 
     public static <S extends SharedSuggestionProvider> Supplier<SuggestionProvider<S>> register(String id, SuggestionProvider<SharedSuggestionProvider> provider)
