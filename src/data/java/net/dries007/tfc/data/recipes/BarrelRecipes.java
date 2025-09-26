@@ -137,13 +137,14 @@ public interface BarrelRecipes extends Recipes
                 foods,
                 NotRottenIngredient.INSTANCE,
                 HasTraitIngredient.of(FoodTraits.BRINED),
-                LacksTraitIngredient.of(FoodTraits.BRINED)
+                LacksTraitIngredient.of(FoodTraits.PICKLED)
             ))
             .input(fluidOf(SimpleFluid.VINEGAR), 125)
             .output(ItemStackProvider.of(
                 CopyInputModifier.INSTANCE,
                 AddTraitModifier.of(FoodTraits.PICKLED)
-            ));
+            ))
+            .sealed(hours(4));
         barrel("preserved_in_vinegar")
             .input(AndIngredient.of(
                 foods,
