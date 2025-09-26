@@ -44,7 +44,7 @@ public final class SurfaceManager
         this.builders = collectSurfaceBuilders(seed);
     }
 
-    public void buildSurface(LevelAccessor world, ChunkAccess chunk, RockLayerSettings rockLayerSettings, ChunkData chunkData, BiomeExtension[] accurateChunkBiomes, BiomeExtension[] accurateChunkBiomesNoRivers, double[] accurateChunkBiomeWeights, double[] slopeMap, RandomSource random, int seaLevel, int minY)
+    public void buildSurface(LevelAccessor world, ChunkAccess chunk, RockLayerSettings rockLayerSettings, ChunkData chunkData, BiomeExtension[] accurateChunkBiomes, BiomeExtension[] accurateChunkBiomesNoRivers, double[] accurateChunkBiomeWeights, double[] slopeMap, RandomSource random, int seaLevel, int minY, BiomeExtension cinderConeBiome, BiomeExtension tuffRingBiome, BiomeExtension tuyaBiome)
     {
         final boolean debugSlope = false;
 
@@ -56,7 +56,7 @@ public final class SurfaceManager
             slopeVisualization(chunk, slopeMap, blockX, blockZ);
         }
 
-        final SurfaceBuilderContext context = new SurfaceBuilderContext(world, chunk, chunkData, random, rockLayerSettings, seaLevel, minY);
+        final SurfaceBuilderContext context = new SurfaceBuilderContext(world, chunk, chunkData, random, rockLayerSettings, seaLevel, minY, cinderConeBiome, tuffRingBiome, tuyaBiome);
         for (int x = 0; x < 16; ++x)
         {
             for (int z = 0; z < 16; ++z)

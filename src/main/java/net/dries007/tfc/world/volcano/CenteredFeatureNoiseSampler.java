@@ -23,6 +23,8 @@ public interface CenteredFeatureNoiseSampler
         return heightIn;
     }
 
+    BiomeExtension getCenterBiome(int x, int z, BiomeSourceExtension biomeSource);
+
     /**
      * @return {@code true} if {@code biome} can generate these noise features at all.
      */

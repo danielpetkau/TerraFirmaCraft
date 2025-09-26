@@ -16,17 +16,17 @@ import net.dries007.tfc.world.surface.SurfaceBuilderContext;
 import net.dries007.tfc.world.volcano.CenteredFeatureNoise;
 import net.dries007.tfc.world.volcano.CenteredFeatureNoiseSampler;
 
-public class TuyasSurfaceBuilder implements SurfaceBuilder
+public class TuyaSurfaceBuilder implements SurfaceBuilder
 {
     public static SurfaceBuilderFactory create(SurfaceBuilderFactory parent)
     {
-        return seed -> new TuyasSurfaceBuilder(parent.apply(seed), seed);
+        return seed -> new TuyaSurfaceBuilder(parent.apply(seed), seed);
     }
 
     private final SurfaceBuilder parent;
     private final Seed seed;
 
-    public TuyasSurfaceBuilder(SurfaceBuilder parent, Seed seed)
+    public TuyaSurfaceBuilder(SurfaceBuilder parent, Seed seed)
     {
         this.parent = parent;
         this.seed = seed;
@@ -35,10 +35,10 @@ public class TuyasSurfaceBuilder implements SurfaceBuilder
     @Override
     public void buildSurface(SurfaceBuilderContext context, int startY, int endY)
     {
-        if (context.biome().hasTuyas())
+        if (context.tuyaBiome().hasTuyas())
         {
             final CenteredFeatureNoiseSampler sampler = CenteredFeatureNoise.tuya(seed);
-            final float easing = sampler.calculateEasing(context.pos(), context.biome());
+            final float easing = sampler.calculateEasing(context.pos(), context.tuyaBiome());
             if (1 - easing < 0.16f)
             {
                 buildVolcanicSurface(context, startY, endY, easing);

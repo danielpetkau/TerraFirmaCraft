@@ -41,11 +41,11 @@ public class CinderConeSurfaceBuilder implements SurfaceBuilder
     @Override
     public void buildSurface(SurfaceBuilderContext context, int startY, int endY)
     {
-        if (context.biome().hasCinderCones())
+        if (context.cinderConeBiome().hasCinderCones())
         {
             final CenteredFeatureNoiseSampler sampler = CenteredFeatureNoise.cinder(seed);
-            final float easing = sampler.calculateEasing(context.pos(), context.biome());
-            if (easing > 0.6f && startY > context.biome().getCenteredFeatureRockHeight() + heightNoise.noise(context.pos().getX(), context.pos().getZ()))
+            final float easing = sampler.calculateEasing(context.pos(), context.cinderConeBiome());
+            if (easing > 0.6f && startY > context.cinderConeBiome().getCenteredFeatureRockHeight() + heightNoise.noise(context.pos().getX(), context.pos().getZ()))
             {
                 buildVolcanicSurface(context, startY, endY, easing);
                 return;

@@ -44,6 +44,12 @@ public class CenteredFeatureNoise
                 return ChunkHeightFiller.NOT_PRESENT_RETURN;
             }
 
+            public BiomeExtension getCenterBiome(int x, int z, BiomeSourceExtension biomeSource)
+            {
+                Cellular2D.Cell cell = cellNoise.cell(x, z);
+                return biomeSource.getBiomeExtension(QuartPos.fromBlock((int) cell.x()), QuartPos.fromBlock((int) cell.y()));
+            }
+
             /**
              * Calculate the closeness value to a volcano, in the range [0, 1]. 1 = Center of a volcano, 0 = Nowhere near.
              */
@@ -158,6 +164,12 @@ public class CenteredFeatureNoise
                 return ChunkHeightFiller.NOT_PRESENT_RETURN;
             }
 
+            public BiomeExtension getCenterBiome(int x, int z, BiomeSourceExtension biomeSource)
+            {
+                Cellular2D.Cell cell = cellNoise.cell(x, z);
+                return biomeSource.getBiomeExtension(QuartPos.fromBlock((int) cell.x()), QuartPos.fromBlock((int) cell.y()));
+            }
+
             private double modifyHeight(Cellular2D.Cell cell, int x, int z, BiomeExtension biome, double heightIn)
             {
                 if (cell != null)
@@ -254,6 +266,12 @@ public class CenteredFeatureNoise
                     }
                 }
                 return ChunkHeightFiller.NOT_PRESENT_RETURN;
+            }
+
+            public BiomeExtension getCenterBiome(int x, int z, BiomeSourceExtension biomeSource)
+            {
+                Cellular2D.Cell cell = cellNoise.cell(x, z);
+                return biomeSource.getBiomeExtension(QuartPos.fromBlock((int) cell.x()), QuartPos.fromBlock((int) cell.y()));
             }
 
             public double modifyHeight(Cellular2D.Cell cell, double x, double z, BiomeExtension biome, double heightIn)

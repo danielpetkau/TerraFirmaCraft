@@ -22,7 +22,7 @@ import net.dries007.tfc.world.river.RiverBlendType;
 import net.dries007.tfc.world.shore.ShoreBlendType;
 import net.dries007.tfc.world.surface.builder.SurfaceBuilderFactory;
 import net.dries007.tfc.world.surface.builder.TuffRingsSurfaceBuilder;
-import net.dries007.tfc.world.surface.builder.TuyasSurfaceBuilder;
+import net.dries007.tfc.world.surface.builder.TuyaSurfaceBuilder;
 import net.dries007.tfc.world.surface.builder.CinderConeSurfaceBuilder;
 
 import static net.dries007.tfc.world.TFCChunkGenerator.*;
@@ -91,7 +91,9 @@ public class BiomeBuilder
 
     public BiomeBuilder surface(SurfaceBuilderFactory surfaceBuilderFactory)
     {
-        this.surfaceBuilderFactory = surfaceBuilderFactory;
+        this.surfaceBuilderFactory = CinderConeSurfaceBuilder.create(surfaceBuilderFactory);
+        this.surfaceBuilderFactory = TuffRingsSurfaceBuilder.create(this.surfaceBuilderFactory);
+        this.surfaceBuilderFactory = TuyaSurfaceBuilder.create(this.surfaceBuilderFactory);
         return this;
     }
 
@@ -196,9 +198,6 @@ public class BiomeBuilder
         this.centeredFeatureBaseHeight = baseHeight;
         this.centeredFeatureScaleHeight = scaleHeight;
 
-        assert surfaceBuilderFactory != null : "cinder cones must be called after setting a surface builder";
-        this.surfaceBuilderFactory = CinderConeSurfaceBuilder.create(surfaceBuilderFactory);
-
         return this;
     }
 
@@ -208,10 +207,6 @@ public class BiomeBuilder
         this.centeredFeatureFrequency = frequency;
         this.centeredFeatureBaseHeight = baseHeight;
         this.centeredFeatureScaleHeight = scaleHeight;
-
-        assert surfaceBuilderFactory != null : "Tuff rings must be called after setting a surface builder";
-
-        this.surfaceBuilderFactory = TuffRingsSurfaceBuilder.create(surfaceBuilderFactory);
 
         return this;
     }
@@ -224,10 +219,6 @@ public class BiomeBuilder
         this.centeredFeatureBaseHeight = baseHeight;
         this.centeredFeatureScaleHeight = scaleHeight;
         this.centeredFeatureIce = icy;
-
-        assert surfaceBuilderFactory != null : "Tuyas must be called after setting a surface builder";
-
-        this.surfaceBuilderFactory = TuyasSurfaceBuilder.create(surfaceBuilderFactory);
 
         return this;
     }

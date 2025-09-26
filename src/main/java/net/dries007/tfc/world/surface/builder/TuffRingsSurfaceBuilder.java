@@ -33,10 +33,10 @@ public class TuffRingsSurfaceBuilder implements SurfaceBuilder
     @Override
     public void buildSurface(SurfaceBuilderContext context, int startY, int endY)
     {
-        if (context.biome().hasTuffRings())
+        if (context.tuffRingBiome().hasTuffRings())
         {
             final CenteredFeatureNoiseSampler sampler = CenteredFeatureNoise.tuffRing(seed);
-            final float easing = sampler.calculateEasing(context.pos(), context.biome());
+            final float easing = sampler.calculateEasing(context.pos(), context.tuffRingBiome());
             if (easing > 0.6f)
             {
                 if (startY < context.getSeaLevel() + 3)
