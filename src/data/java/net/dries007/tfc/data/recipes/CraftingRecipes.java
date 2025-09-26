@@ -924,7 +924,7 @@ public interface CraftingRecipes extends Recipes
         recipe()
             .input(Tags.Items.SANDS, 4)
             .input(Tags.Items.GRAVELS, 4)
-            .shapeless(TFCBlocks.AGGREGATE);
+            .shapeless(TFCBlocks.AGGREGATE, 8);
         recipe()
             .input('S', Items.STICK)
             .input('L', TFCTags.Items.LUMBER)
