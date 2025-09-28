@@ -27,6 +27,9 @@ def main():
     errors += validate_models_used(model_locations, km + km2 + km3)
     assert errors == 0
 
+def sanitize(filepath):
+    return filepath.replace('./src/main/resources/', 's/m/r/')
+
 def validate_lang(state_locations, lang_json, sound_json):
     tested = 0
     tested_sound = 0
@@ -107,7 +110,7 @@ def validate_models_used(model_locations, known_models):
                     forgiven = True
             if not forgiven:
                 errors += 1
-                print('Model not in a blockstate file or used as parent: %s' % f)
+                print('Model not in a blockstate file or used as parent: %s' % sanitize(f))
     print('Unused model validation: Validated %s files, found %s errors' % (tested, errors))
     return errors
 
@@ -152,7 +155,7 @@ def validate_textures(model_locations):
                             path = ASSETS_PATH + 'tfc/textures/%s.png' % res.path
                             if path not in existing_textures:
                                 if len(glob(path)) == 0:
-                                    print('Texture file not found. Name: %s Filepath: %s' % (f, path))
+                                    print('Texture file not found. Name: %s Filepath: %s' % (sanitize(f), sanitize(path)))
                                     errors += 1
                                 else:
                                     existing_textures.append(path)
@@ -164,7 +167,7 @@ def validate_textures(model_locations):
                 if check in f:
                     forgiven = True
             if not forgiven:
-                print('Texture not matched to any model file: %s' % f)
+                print('Texture not matched to any model file: %s' % sanitize(f))
                 errors += 1
 
     print('Texture Validation: Verified %s files, %s texture entries, found %s errors' % (files_tested, tested, errors))
