@@ -507,6 +507,16 @@ public interface CraftingRecipes extends Recipes
                 .input(planks)
                 .damageInputs()
                 .shapeless(lumber, 4);
+            recipe("from_stairs")
+                .inputIsPrimary(TFCTags.Items.TOOLS_SAW)
+                .input(blocks.get(Wood.BlockType.STAIRS))
+                .damageInputs()
+                .shapeless(lumber, 3);
+            recipe("from_slabs")
+                .inputIsPrimary(TFCTags.Items.TOOLS_SAW)
+                .input(blocks.get(Wood.BlockType.SLAB))
+                .damageInputs()
+                .shapeless(lumber, 2);
             recipe().to2x2(lumber, planks, 1);
             recipe()
                 .input('L', lumber)
@@ -914,7 +924,7 @@ public interface CraftingRecipes extends Recipes
         recipe()
             .input(Tags.Items.SANDS, 4)
             .input(Tags.Items.GRAVELS, 4)
-            .shapeless(TFCBlocks.AGGREGATE);
+            .shapeless(TFCBlocks.AGGREGATE, 8);
         recipe()
             .input('S', Items.STICK)
             .input('L', TFCTags.Items.LUMBER)
@@ -1158,7 +1168,7 @@ public interface CraftingRecipes extends Recipes
             .shapeless(Items.STICK, 1);
         recipe("from_golden_bamboo")
             .input('X', TFCBlocks.PLANTS.get(Plant.GOLDEN_BAMBOO))
-            .pattern("X")
+            .pattern("X", "X")
             .shaped(Items.STICK);
         recipe("from_golden_bamboo")
             .input('I', TFCTags.Items.BAMBOO)

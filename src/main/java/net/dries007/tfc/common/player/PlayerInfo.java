@@ -211,6 +211,14 @@ public final class PlayerInfo extends net.minecraft.world.food.FoodData implemen
         addThirst(food.water());
         addIntoxication(food.intoxication());
 
+        // It is important to add nutrients before calling `FoodData#eat`, otherwise `getFoodLevel` will return the food level _after_ eating, instead of the food level at time of eating.
+        // We can't rely on `getLastFoodLevel` either since that value only gets set in `FoodData#tick`, so a tick-perfect call to this method would lead to an incorrect value being used.
+        // This only leaves splitting the call to `INutritionData#addNutrients` and the call to `INutritionData#setHungerAndUpdate` into separate parts before and after calling `FoodData#eat`
+        if (!player.level().isClientSide)
+        {
+            nutrition.addNutrients(food, getFoodLevel());
+        }
+
         if (food.hunger() > 0)
         {
             // In order to get the exact saturation we want, apply this scaling factor here
@@ -220,7 +228,6 @@ public final class PlayerInfo extends net.minecraft.world.food.FoodData implemen
         // Add nutrients and update the hunger value in NutritionData
         if (!player.level().isClientSide)
         {
-            nutrition.addNutrients(food, getFoodLevel());
             nutrition.setHungerAndUpdate(getFoodLevel());
         }
 

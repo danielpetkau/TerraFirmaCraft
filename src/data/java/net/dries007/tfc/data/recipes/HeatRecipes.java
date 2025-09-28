@@ -125,10 +125,6 @@ public interface HeatRecipes extends Recipes
             if (ore.isGraded())
                 addOres(ore, ore.metal());
 
-        pivot(TFCBlocks.METALS, Metal.BlockType.BLOCK).forEach((metal, block) -> add(
-            Ingredient.of(storageBlockTagOf(Registries.ITEM, metal)),
-            new FluidStack(fluidOf(metal), units(Metal.BlockType.BLOCK)),
-            temperatureOf(metal)));
         TFCItems.METAL_ITEMS.forEach((metal, items) -> items.forEach((type, item) -> add(nameOf(item), new HeatingRecipe(
             ingredientOf(metal, type),
             ItemStackProvider.empty(),
