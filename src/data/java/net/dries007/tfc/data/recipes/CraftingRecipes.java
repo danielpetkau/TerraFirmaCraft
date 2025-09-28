@@ -380,7 +380,7 @@ public interface CraftingRecipes extends Recipes
             recipe("small")
                 .input('#', blocks.apply(SoilBlockType.MUD_BRICKS))
                 .pattern("# ", "##")
-                .shaped(TFCBlocks.MUD_BRICK_DECORATIONS.get(soil).stair(), 8);
+                .shaped(TFCBlocks.MUD_BRICK_DECORATIONS.get(soil).stair(), 4);
             recipe()
                 .input(blocks.apply(SoilBlockType.MUD))
                 .input(TFCBlocks.TREE_ROOTS)
