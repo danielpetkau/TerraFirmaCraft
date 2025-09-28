@@ -6,7 +6,6 @@
 
 package net.dries007.tfc.common.blockentities;
 
-import java.util.Optional;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
@@ -23,14 +22,12 @@ public class TickCountingBranchBlockEntity extends TickCounterBlockEntity
 
     public static void addTicks(Level level, BlockPos pos, long ticks)
     {
-        Optional<TickCountingBranchBlockEntity> entity = level.getBlockEntity(pos, TFCBlockEntities.TICK_COUNTING_BRANCH.get());
-        entity.ifPresent(branchBlockEntity -> branchBlockEntity.increaseCounter(ticks));
+        level.getBlockEntity(pos, TFCBlockEntities.TICK_COUNTING_BRANCH.get()).ifPresent(entity -> entity.increaseCounter(ticks));
     }
 
     public static void setStemPos(Level level, BlockPos pos, BlockPos stemPos)
     {
-        Optional<TickCountingBranchBlockEntity> entity = level.getBlockEntity(pos, TFCBlockEntities.TICK_COUNTING_BRANCH.get());
-        entity.ifPresent(branchBlockEntity -> branchBlockEntity.setStemPos(stemPos));
+        level.getBlockEntity(pos, TFCBlockEntities.TICK_COUNTING_BRANCH.get()).ifPresent(entity -> entity.setStemPos(stemPos));
     }
 
     private BlockPos stemPos;
@@ -49,14 +46,22 @@ public class TickCountingBranchBlockEntity extends TickCounterBlockEntity
     @Override
     public void loadAdditional(CompoundTag nbt, HolderLookup.Provider provider)
     {
-        int[] stemArray = nbt.getIntArray("stemPos");
-        stemPos = new BlockPos(stemArray[0], stemArray[1], stemArray[2]);
+        if (nbt.contains("stemPos", CompoundTag.TAG_INT_ARRAY)) // todo: remove this array handling, its handling old worlds
+        {
+            final int[] stemArray = nbt.getIntArray("stemPos");
+            stemPos = new BlockPos(stemArray[0], stemArray[1], stemArray[2]);
+        }
+        else
+        {
+            stemPos = nbt.contains("stemPos", CompoundTag.TAG_LONG) ? BlockPos.of(nbt.getLong("stemPos")) : worldPosition;
+        }
         super.loadAdditional(nbt, provider);
     }
 
     @Override
     public void saveAdditional(CompoundTag nbt, HolderLookup.Provider provider)
     {
+        nbt.putLong("stemPos", stemPos.asLong());
         nbt.putIntArray("stemPos", new int[] {stemPos.getX(), stemPos.getY(), stemPos.getZ()});
         super.saveAdditional(nbt, provider);
     }

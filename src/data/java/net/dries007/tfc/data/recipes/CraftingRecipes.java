@@ -1165,6 +1165,9 @@ public interface CraftingRecipes extends Recipes
             .input('~', Tags.Items.STRINGS)
             .pattern("I~I", "I I", "I I")
             .shaped(Items.SCAFFOLDING);
+        recipe()
+            .input(TFCBlocks.PLANTS.get(Plant.GOLDEN_BAMBOO))
+            .shapeless(TFCBlocks.GOLDEN_BAMBOO_BLOCK, 9);
         recipe().to2x2(TFCItems.STRAW, TFCBlocks.THATCH, 1);
         recipe()
             .input(TFCBlocks.THATCH)

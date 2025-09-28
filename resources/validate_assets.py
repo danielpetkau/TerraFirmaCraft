@@ -1,12 +1,15 @@
+import os
 from glob import glob
 import json
 from typing import List
 
 from mcresources import utils
 
+import generate_textures
+
 ASSETS_PATH = './src/main/resources/assets/'
-TEXTURE_FORGIVENESS_PATHS: List = ['_fluff', 'block/burlap', 'block/powder', 'metal/smooth', 'metal/block', 'block/molten_flow', 'block/paper', 'block/unrefined_paper', 'yellow_bell', 'red_bell', 'green_bell', 'sandstone/side', 'quiver', 'placed_item', 'spawn_egg',]
-MODEL_FORGIVENESS_PATHS: List = ['block/jar', 'block/firepit_log_']
+TEXTURE_FORGIVENESS_PATHS: List = ['_fluff', 'block/burlap', 'block/powder', 'metal/smooth', 'metal/block', 'block/molten_flow', 'block/molten_still', 'block/paper', 'block/unrefined_paper', 'yellow_bell', 'red_bell', 'green_bell', 'sandstone/side', 'quiver', 'placed_item', 'spawn_egg', 'metal/door']
+MODEL_FORGIVENESS_PATHS: List = ['block/jar', 'block/firepit_log_', 'block/ceramic/', 'mold/ceramic/', 'crankshaft_wheel', 'firepit_pot_placed']
 LANG_PATH = ASSETS_PATH + 'tfc/lang/en_us.json'
 SOUNDS_PATH = ASSETS_PATH + 'tfc/sounds.json'
 
@@ -25,7 +28,12 @@ def main():
     errors += bs_errors
     errors += bs_errors2
     errors += validate_models_used(model_locations, km + km2 + km3)
+
     assert errors == 0
+
+    print('Testing generate_textures.py by generating them and throwing if any changes are detected...')
+    generate_textures.is_testing = True
+    generate_textures.main()
 
 def sanitize(filepath):
     return filepath.replace('./src/main/resources/', 's/m/r/')
@@ -103,7 +111,7 @@ def validate_models_used(model_locations, known_models):
         fixed_km.append(ASSETS_PATH + 'tfc/models/%s.json' % res.path)
     for f in fixed_ml:
         tested += 1
-        forgiven = True
+        forgiven = False
         if f not in fixed_km:
             for path in MODEL_FORGIVENESS_PATHS:
                 if path in f:
@@ -124,6 +132,12 @@ def validate_model_parents(model_locations):
             parent = model_file['parent']
             tested, errors = find_model_file(f, parent, tested, errors, 'Model parent not found. Model: %s, Parent: %s')
             known_models.append(parent)
+        elif 'loader' in model_file and model_file['loader'] == 'tfc:plant':
+            for stage in ('blooming', 'seeding', 'dying', 'dormant', 'sprouting', 'budding'):
+                parent = model_file[stage]['parent']
+                tested, errors = find_model_file(f, parent, tested, errors, 'Model file %s points to non-existent model: %s')
+                known_models.append(parent)
+
     print('Parent Validation: Validated %s files, found %s errors' % (tested, errors))
     return errors, known_models
 
@@ -168,6 +182,9 @@ def validate_textures(model_locations):
                     forgiven = True
             if not forgiven:
                 print('Texture not matched to any model file: %s' % sanitize(f))
+                if 'plant' in f:
+                    os.unlink(f)
+                    print('deleted')
                 errors += 1
 
     print('Texture Validation: Verified %s files, %s texture entries, found %s errors' % (files_tested, tested, errors))

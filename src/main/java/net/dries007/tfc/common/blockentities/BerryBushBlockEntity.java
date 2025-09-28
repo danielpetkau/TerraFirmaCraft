@@ -55,8 +55,15 @@ public class BerryBushBlockEntity extends TFCBlockEntity implements ICalendarTic
     {
         lastUpdateTick = nbt.getLong("lastUpdateTick");
         lastTick = nbt.getLong("lastTick");
-        int[] stemArray = nbt.getIntArray("stemPos");
-        stemPos = new BlockPos(stemArray[0], stemArray[1], stemArray[2]);
+        if (nbt.contains("stemPos", CompoundTag.TAG_INT_ARRAY)) // todo: remove this array handling, its handling old worlds
+        {
+            final int[] stemArray = nbt.getIntArray("stemPos");
+            stemPos = new BlockPos(stemArray[0], stemArray[1], stemArray[2]);
+        }
+        else
+        {
+            stemPos = nbt.contains("stemPos", CompoundTag.TAG_LONG) ? BlockPos.of(nbt.getLong("stemPos")) : worldPosition;
+        }
 
         super.loadAdditional(nbt, provider);
     }
@@ -66,7 +73,7 @@ public class BerryBushBlockEntity extends TFCBlockEntity implements ICalendarTic
     {
         nbt.putLong("lastUpdateTick", lastUpdateTick);
         nbt.putLong("lastTick", lastTick);
-        nbt.putIntArray("stemPos", new int[] {stemPos.getX(), stemPos.getY(), stemPos.getZ()});
+        nbt.putLong("stemPos", stemPos.asLong());
         super.saveAdditional(nbt, provider);
     }
 

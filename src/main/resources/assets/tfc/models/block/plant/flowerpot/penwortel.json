@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/template_potted_azalea_bush",
-  "textures": {
-    "plant": "tfc:block/plant/palash/penwortel",
-    "side": "tfc:block/plant/palash/penwortel",
-    "top": "tfc:block/plant/palash/penwortel"
-  }
-}

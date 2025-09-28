@@ -356,6 +356,9 @@ def generate(rm: ResourceManager):
     for block in SIMPLE_BLOCKS:
         rm.blockstate(block).with_block_model().with_item_model().with_block_loot('tfc:%s' % block).with_lang(lang(block))
     rm.blockstate('thatch').with_block_model({'texture': 'tfc:block/thatch'}, parent='block/powder_snow').with_item_model().with_block_loot('tfc:thatch').with_lang(lang('thatch'))
+    rm.blockstate('golden_bamboo_block', variants=dict(('axis=%s' % a, {'model': 'tfc:block/golden_bamboo_%s' % a}) for a in ('x', 'y', 'z'))).with_block_loot('tfc:golden_bamboo_block').with_lang(lang('golden bamboo block'))
+    for a in ('x', 'y', 'z'):
+        rm.block_model('golden_bamboo_%s' % a, {'side': 'tfc:block/golden_bamboo_side', 'end': 'tfc:block/golden_bamboo_top'}, 'minecraft:block/bamboo_block_%s' % a)
 
     for name in ('pumpkin', 'melon'):
         # Loot table for the non-rotten block is done via code, as we need to select rotten/not via tile entity
@@ -759,8 +762,9 @@ def generate(rm: ResourceManager):
         block.with_block_model({'end': 'tfc:block/dirt/%s_top' % soil, 'side': 'tfc:block/dirt/%s' % soil}, 'minecraft:block/cube_column').with_item_model().with_block_loot('tfc:dirt/%s' % soil).with_lang(lang('%s Dirt', soil))
         block = rm.blockstate(('coarse_dirt', soil), variants={'': [{'model': 'tfc:block/coarse_dirt/%s' % soil}]}, use_default_model=False)
         block.with_block_model({'end': 'tfc:block/coarse_dirt/%s_top' % soil, 'side': 'tfc:block/coarse_dirt/%s' % soil}, 'minecraft:block/cube_column').with_item_model().with_block_loot('tfc:coarse_dirt/%s' % soil).with_lang(lang('Coarse %s', soil))
-        for variant in ('mud', 'rooted_dirt', 'mud_bricks'):
-            rm.blockstate((variant, soil)).with_block_model().with_item_model().with_block_loot('tfc:%s/%s' % (variant, soil)).with_lang(lang('%s %s', soil, variant))
+        for variant in ('rooted_dirt', 'mud'):
+            rm.blockstate((variant, soil)).with_block_model({'end': 'tfc:block/%s/%s_top' % (variant, soil), 'side': 'tfc:block/%s/%s' % (variant, soil)}, 'minecraft:block/cube_column').with_item_model().with_block_loot('tfc:%s/%s' % (variant, soil)).with_lang(lang('%s %s', soil, variant))
+        rm.blockstate(('mud_bricks', soil)).with_block_model().with_item_model().with_block_loot('tfc:mud_bricks/%s' % soil).with_lang(lang('%s mud bricks', soil))
 
         # Clay Dirt
         block = rm.blockstate(('clay', soil), use_default_model=False)

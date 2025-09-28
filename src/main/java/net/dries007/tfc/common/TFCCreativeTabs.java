@@ -617,6 +617,7 @@ public final class TFCCreativeTabs
                 out.accept(TFCBlocks.PALM_MOSAIC_STAIRS);
                 out.accept(TFCBlocks.PALM_MOSAIC_SLAB);
             }
+            out.accept(TFCBlocks.GOLDEN_BAMBOO_BLOCK);
             accept(out, TFCItems.LUMBER, wood);
             accept(out, TFCItems.BOATS, wood);
             accept(out, TFCItems.SUPPORTS, wood);
