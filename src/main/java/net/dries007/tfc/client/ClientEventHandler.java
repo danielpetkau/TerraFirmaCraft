@@ -379,6 +379,8 @@ public final class ClientEventHandler
         final RenderType cutout = RenderType.cutout();
         final RenderType cutoutMipped = RenderType.cutoutMipped();
         final RenderType translucent = RenderType.translucent();
+
+        // todo this is non-functional
         final Predicate<RenderType> ghostBlock = rt -> rt == cutoutMipped || rt == Sheets.translucentCullBlockSheet();
 
         // Rock blocks
@@ -391,23 +393,24 @@ public final class ClientEventHandler
         TFCBlocks.ORE_DEPOSITS.values().forEach(map -> map.values().forEach(reg -> ItemBlockRenderTypes.setRenderLayer(reg.get(), cutout)));
 
         // Wood blocks
-        final Predicate<RenderType> leafPredicate = layer -> Minecraft.useFancyGraphics() ? layer == cutoutMipped : layer == solid;
         TFCBlocks.WOODS.values().forEach(map -> {
             Stream.of(SAPLING, DOOR, TRAPDOOR, FENCE, FENCE_GATE, BUTTON, PRESSURE_PLATE, SLAB, STAIRS, TWIG, BARREL, SCRIBING_TABLE, SEWING_TABLE, SHELF, POTTED_SAPLING, ENCASED_AXLE, CLUTCH, GEAR_BOX).forEach(type -> ItemBlockRenderTypes.setRenderLayer(map.get(type).get(), cutout));
-            Stream.of(LEAVES, FALLEN_LEAVES).forEach(type -> ItemBlockRenderTypes.setRenderLayer(map.get(type).get(), leafPredicate));
+            // todo see ItemBlockRenderTypes we need to switch the leaves properties correctly
+            Stream.of(LEAVES, FALLEN_LEAVES).forEach(type -> ItemBlockRenderTypes.setRenderLayer(map.get(type).get(), cutoutMipped));
         });
 
+        // todo see ItemBlockRenderTypes we need to switch the leaves properties correctly
         ItemBlockRenderTypes.setRenderLayer(TFCBlocks.TREE_ROOTS.get(), cutoutMipped);
-        ItemBlockRenderTypes.setRenderLayer(TFCBlocks.PINE_KRUMMHOLZ.get(), leafPredicate);
-        ItemBlockRenderTypes.setRenderLayer(TFCBlocks.DOUGLAS_FIR_KRUMMHOLZ.get(), leafPredicate);
-        ItemBlockRenderTypes.setRenderLayer(TFCBlocks.SPRUCE_KRUMMHOLZ.get(), leafPredicate);
-        ItemBlockRenderTypes.setRenderLayer(TFCBlocks.WHITE_CEDAR_KRUMMHOLZ.get(), leafPredicate);
-        ItemBlockRenderTypes.setRenderLayer(TFCBlocks.ASPEN_KRUMMHOLZ.get(), leafPredicate);
-        ItemBlockRenderTypes.setRenderLayer(TFCBlocks.POTTED_PINE_KRUMMHOLZ.get(), leafPredicate);
-        ItemBlockRenderTypes.setRenderLayer(TFCBlocks.POTTED_DOUGLAS_FIR_KRUMMHOLZ.get(), leafPredicate);
-        ItemBlockRenderTypes.setRenderLayer(TFCBlocks.POTTED_SPRUCE_KRUMMHOLZ.get(), leafPredicate);
-        ItemBlockRenderTypes.setRenderLayer(TFCBlocks.POTTED_WHITE_CEDAR_KRUMMHOLZ.get(), leafPredicate);
-        ItemBlockRenderTypes.setRenderLayer(TFCBlocks.POTTED_ASPEN_KRUMMHOLZ.get(), leafPredicate);
+        ItemBlockRenderTypes.setRenderLayer(TFCBlocks.PINE_KRUMMHOLZ.get(), cutoutMipped);
+        ItemBlockRenderTypes.setRenderLayer(TFCBlocks.DOUGLAS_FIR_KRUMMHOLZ.get(), cutoutMipped);
+        ItemBlockRenderTypes.setRenderLayer(TFCBlocks.SPRUCE_KRUMMHOLZ.get(), cutoutMipped);
+        ItemBlockRenderTypes.setRenderLayer(TFCBlocks.WHITE_CEDAR_KRUMMHOLZ.get(), cutoutMipped);
+        ItemBlockRenderTypes.setRenderLayer(TFCBlocks.ASPEN_KRUMMHOLZ.get(), cutoutMipped);
+        ItemBlockRenderTypes.setRenderLayer(TFCBlocks.POTTED_PINE_KRUMMHOLZ.get(), cutoutMipped);
+        ItemBlockRenderTypes.setRenderLayer(TFCBlocks.POTTED_DOUGLAS_FIR_KRUMMHOLZ.get(), cutoutMipped);
+        ItemBlockRenderTypes.setRenderLayer(TFCBlocks.POTTED_SPRUCE_KRUMMHOLZ.get(), cutoutMipped);
+        ItemBlockRenderTypes.setRenderLayer(TFCBlocks.POTTED_WHITE_CEDAR_KRUMMHOLZ.get(), cutoutMipped);
+        ItemBlockRenderTypes.setRenderLayer(TFCBlocks.POTTED_ASPEN_KRUMMHOLZ.get(), cutoutMipped);
 
         // Grass
         TFCBlocks.SOIL.get(SoilBlockType.GRASS).values().forEach(reg -> ItemBlockRenderTypes.setRenderLayer(reg.get(), cutoutMipped));

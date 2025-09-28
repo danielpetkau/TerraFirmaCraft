@@ -1545,8 +1545,8 @@ def generate(rm: ResourceManager):
     for plant in ('duckweed', 'lotus', 'sargassum', 'white_water_lily', 'yellow_water_lily', 'purple_water_lily', 'green_algae', 'red_algae'):
         if plant not in ('purple_water_lily', 'yellow_water_lily', 'white_water_lily', 'lotus'):
             rm.blockstate(('plant', plant), variants={'': four_ways('tfc:block/plant/%s' % plant)}, use_default_model=False)
-        tinted = plant not in ('green_algae', 'sargassum', 'red_algae')
-        rm.block_model(('plant', plant), parent='tfc:block/plant/template_floating%s' % ('_tinted' if tinted else ''), textures={'pad': 'tfc:block/plant/%s/%s' % (plant, plant)})
+            tinted = plant not in ('green_algae', 'sargassum', 'red_algae')
+            rm.block_model(('plant', plant), parent='tfc:block/plant/template_floating%s' % ('_tinted' if tinted else ''), textures={'pad': 'tfc:block/plant/%s/%s' % (plant, plant)})
         rm.item_model(('plant', plant), 'tfc:item/plant/%s' % plant)
 
     # Food
