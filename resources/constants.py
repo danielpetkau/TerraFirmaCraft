@@ -954,6 +954,7 @@ def lang_enum(name: str, values: Sequence[str]) -> Dict[str, str]:
 VANILLA_OVERRIDE_LANG = {
     'item.minecraft.glow_ink_sac': 'Glowing Ink Sac',
     'item.minecraft.shield': 'Wooden Shield',
+    'block.minecraft.bed.no_sleep': 'You can only sleep at night',
     'block.minecraft.bell': 'Golden Bell',
     'block.minecraft.slime_block': 'Glue Block',
     'block.minecraft.loom': 'Banner Loom',
