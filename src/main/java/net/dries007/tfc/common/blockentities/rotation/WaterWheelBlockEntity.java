@@ -65,19 +65,19 @@ public class WaterWheelBlockEntity extends TickableBlockEntity implements Rotati
 
         rotation.tick();
 
-        final float currentSpeed = rotation.speed();
-        final float targetSpeed = wheel.targetSpeed;
-
-        final float nextSpeed = targetSpeed > currentSpeed
-            ? Math.min(targetSpeed, currentSpeed + LERP_SPEED)
-            : Math.max(targetSpeed, currentSpeed - LERP_SPEED);
-
         if (wheel.obstructed)
         {
             rotation.setSpeed(0);
         }
         else
         {
+            final float currentSpeed = rotation.speed();
+            final float targetSpeed = wheel.targetSpeed;
+
+            final float nextSpeed = targetSpeed > currentSpeed
+                ? Math.min(targetSpeed, currentSpeed + LERP_SPEED)
+                : Math.max(targetSpeed, currentSpeed - LERP_SPEED);
+
             rotation.setSpeed(nextSpeed);
         }
     }

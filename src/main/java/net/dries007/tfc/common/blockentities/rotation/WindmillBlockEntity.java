@@ -71,26 +71,25 @@ public class WindmillBlockEntity extends TickableInventoryBlockEntity<ItemStackH
     {
         final Rotation.Tickable rotation = windmill.node.rotation();
 
-        rotation.tick();
-
-        final float targetBeforeWind = Mth.map(state.getValue(WindmillBlock.COUNT), 1, SLOTS, 0, MAX_SPEED) + (state.getValue(WindmillBlock.COUNT) > 1 ? MIN_SPEED : 0);
-
-        float wind = Climate.get(level).getWind(level, pos).length();
-
-        float windFactor = Math.min(wind, 0.5f) * 4f; // clamp below ~57 kmh and do a little mixing math
-
-        final float targetSpeed = windFactor * targetBeforeWind;
-        final float currentSpeed = rotation.speed();
-        final float nextSpeed = targetSpeed > currentSpeed
-            ? Math.min(targetSpeed, currentSpeed + LERP_SPEED)
-            : Math.max(targetSpeed, currentSpeed - LERP_SPEED);
-
         if (windmill.obstructed)
         {
             rotation.setSpeed(0);
         }
         else
         {
+            rotation.tick();
+
+            final float targetBeforeWind = Mth.map(state.getValue(WindmillBlock.COUNT), 1, SLOTS, 0, MAX_SPEED) + (state.getValue(WindmillBlock.COUNT) > 1 ? MIN_SPEED : 0);
+
+            float wind = Climate.get(level).getWind(level, pos).length();
+
+            float windFactor = Math.min(wind, 0.5f) * 4f; // clamp below ~57 kmh and do a little mixing math
+
+            final float targetSpeed = windFactor * targetBeforeWind;
+            final float currentSpeed = rotation.speed();
+            final float nextSpeed = targetSpeed > currentSpeed
+                ? Math.min(targetSpeed, currentSpeed + LERP_SPEED)
+                : Math.max(targetSpeed, currentSpeed - LERP_SPEED);
             rotation.setSpeed(nextSpeed);
         }
     }
