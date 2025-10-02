@@ -279,6 +279,9 @@ def generate(rm: ResourceManager):
                     if ore == 'pyrite':
                         name = lang('native gold?')
                     rm.block('tfc:ore/%s/%s/prospected' % (ore, rock)).with_lang(name)
+            else:
+                name = lang(ore)
+                rm.block('tfc:%s/prospected' % (ore)).with_lang(name)
 
     # Loose Ore Items
     for ore, ore_data in ORES.items():
