@@ -107,11 +107,26 @@ public class CalendarEventHandler
      */
     public static void onPlayersFinishedSleeping(ServerLevel level)
     {
-        // Skip the calendar forward
+        // Calculate time slept
         final float currentFractionOfDay = Calendars.SERVER.getCalendarFractionOfDay();
         final float wakeUpTime = 5f / 24f; // 5 am, expressed as a fraction of day
         final float targetFraction = wakeUpTime > currentFractionOfDay ? wakeUpTime : 1 + wakeUpTime;
-        Calendars.SERVER.skipForwardBy((long) ((targetFraction - currentFractionOfDay) * ICalendar.CALENDAR_TICKS_IN_DAY));
+        final int calendarTicksSlept = (int) ((targetFraction - currentFractionOfDay) * ICalendar.CALENDAR_TICKS_IN_DAY);
+
+        // Skip the calendar forward
+        Calendars.SERVER.skipForwardBy(calendarTicksSlept);
+
+        // Exhaustion is based on the player ticks, not calendar ticks, so re-scale it appropriately
+        final float exhaustion = Calendars.SERVER.getFixedCalendarTicksFromTick(calendarTicksSlept)
+            * PlayerInfo.PASSIVE_EXHAUSTION_PER_TICK
+            * TFCConfig.SERVER.passiveExhaustionModifier.get().floatValue();
+
+        for (ServerPlayer player : level.players())
+        {
+            // Consume hunger based on time skipped
+            // This doesn't really make sense in either case, but this makes the most sense to do in multiplayer
+            player.causeFoodExhaustion(exhaustion);
+        }
     }
 
     /**
