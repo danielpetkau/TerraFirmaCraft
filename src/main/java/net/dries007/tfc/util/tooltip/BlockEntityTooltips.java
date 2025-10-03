@@ -227,7 +227,10 @@ public final class BlockEntityTooltips
     public static final BlockEntityTooltip BELLOWS = (level, state, pos, entity, tooltip) -> {
         if (entity instanceof BellowsBlockEntity bellows)
         {
-            final int step = Mth.clamp((int) Mth.map(bellows.getExtensionLength(0f), BellowsBlockEntity.MIN_EXTENSION, BellowsBlockEntity.MAX_EXTENSION, 0, 10), 0, 10);
+            final int step = Mth.clamp((int) Mth.map(
+                bellows.getExtensionLength(0f),
+                BellowsBlockEntity.MIN_EXTENSION, BellowsBlockEntity.MAX_EXTENSION,
+                0, 10), 0, 10);
             if (step > 0)
             {
                 tooltip.accept(Component.translatable("tfc.jade.bellows_" + step));
@@ -523,7 +526,8 @@ public final class BlockEntityTooltips
         {
             for (ItemStack stack : Helpers.iterate(placedItem.getInventory()))
             {
-                if (!stack.isEmpty()) tooltip.accept(stack.getHoverName());
+                if (!stack.isEmpty())
+                    tooltip.accept(stack.getHoverName());
             }
         }
     };

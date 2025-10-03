@@ -53,14 +53,10 @@ public class WindmillBlockEntity extends TickableInventoryBlockEntity<ItemStackH
 
         if (level.getGameTime() % 40 == 0)
         {
-            if (!windmill.obstructed && isObstructedBySolidBlocks(level, pos, state.getValue(WindmillBlock.AXIS)))
+            boolean obstructedNow = isObstructedBySolidBlocks(level, pos, state.getValue(WindmillBlock.AXIS));
+            if (obstructedNow != windmill.obstructed)
             {
-                windmill.obstructed = true;
-                windmill.markForSync();
-            }
-            if (windmill.obstructed && !isObstructedBySolidBlocks(level, pos, state.getValue(WindmillBlock.AXIS)))
-            {
-                windmill.obstructed = false;
+                windmill.obstructed = obstructedNow;
                 windmill.markForSync();
             }
 

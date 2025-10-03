@@ -1124,6 +1124,7 @@
   "tfc.config.client.effectHorizontalAdjustment": "Effect Horizontal Adjustment",
   "tfc.config.client.enableDebug": "Enable Debug",
   "tfc.config.client.enableExperienceBar": "Enable Experience Bar",
+  "tfc.config.client.rotationDisplayStyle": "Rotional Speed Display Units",
   "tfc.config.client.enableHealthBar": "Enable Health Bar",
   "tfc.config.client.enableHungerBar": "Enable Hunger Bar",
   "tfc.config.client.enableInkSplatter": "Enable Ink Splatter",

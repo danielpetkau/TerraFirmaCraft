@@ -1128,6 +1128,7 @@
   "tfc.config.client.effectHorizontalAdjustment": "Горизонтальная регулировка эффекта",
   "tfc.config.client.enableDebug": "Включить режим отладки",
   "tfc.config.client.enableExperienceBar": "Включить панель опыта",
+  "tfc.config.client.rotationDisplayStyle": "Rotional Speed Display Units",
   "tfc.config.client.enableHealthBar": "Включить индикатор здоровья",
   "tfc.config.client.enableHungerBar": "Включить индикатор сытости",
   "tfc.config.client.enableInkSplatter": "Включить брызги чернил",

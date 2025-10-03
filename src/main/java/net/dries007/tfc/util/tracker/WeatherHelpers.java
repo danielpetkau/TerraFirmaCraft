@@ -607,21 +607,24 @@ public final class WeatherHelpers
     /**
      * Converts wind speed to M/s
      */
-    public static float windMS(Vec2 wind){
+    public static float windMS(Vec2 wind)
+    {
         return wind.length() * WIND_MS_FACTOR;
     }
 
     /**
      * Converts wind speed to M/tick (useful for accurately affecting entity/particle velocity)
      */
-    public static float windMT(Vec2 wind){
+    public static float windMT(Vec2 wind)
+    {
         return wind.length() * WIND_MS_FACTOR / 20;
     }
 
     /**
      * Converts wind speed to KM/h
      */
-    public static float windKMS(Vec2 wind){
+    public static float windKMS(Vec2 wind)
+    {
         return wind.length() * WIND_KMS_FACTOR;
     }
 
