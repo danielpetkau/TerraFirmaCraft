@@ -98,7 +98,7 @@ public sealed class ChunkData
     private LerpFloatLayer temperatureLayer;
     private int @Nullable [] aquiferSurfaceHeight;
     private ForestType forestType;
-    private Byte[] shuffledBlockPositions;
+    private final Byte[] shuffledBlockPositions = getShuffledByteArray();
 
     private long lastRandomTick;
     private long lastRainTick;
@@ -117,7 +117,6 @@ public sealed class ChunkData
         this.status = Status.EMPTY;
         this.rockData = new RockData(generator);
         this.forestType = ForestType.GRASSLAND;
-        this.shuffledBlockPositions = getShuffledByteArray();
         this.lastRandomTick = -1;
         this.lastRainTick = -1;
         this.nextSnowPosition = 0;
@@ -275,7 +274,7 @@ public sealed class ChunkData
         chunk.setUnsaved(true); // Flag the chunk, since we need to re-save the data
     }
 
-    public BlockPos getNextSnowPos(ChunkAccess chunk, ChunkPos chunkPos)
+    public BlockPos getNextSnowPos(ChunkPos chunkPos)
     {
         // Convert byte into local coordinates x, z = [0, 15]
         Byte b = shuffledBlockPositions[nextSnowPosition - Byte.MIN_VALUE];
@@ -283,11 +282,14 @@ public sealed class ChunkData
         int x = b & mask;
         int z = b >> 4 & mask;
 
+        return new BlockPos(chunkPos.getMinBlockX() + x, 0, chunkPos.getMinBlockZ() + z);
+    }
+
+    public void iterateSnowPos(ChunkAccess chunk)
+    {
         // Iterate to the next snow position
         nextSnowPosition++;
         chunk.setUnsaved(true); // Flag the chunk, since we need to re-save the data
-
-        return new BlockPos(chunkPos.getMinBlockX() + x, 0, chunkPos.getMinBlockZ() + z);
     }
 
     /**
