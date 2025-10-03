@@ -44,7 +44,6 @@ import net.dries007.tfc.common.blocks.ThinSpikeBlock;
 import net.dries007.tfc.common.blocks.plant.KrummholzBlock;
 import net.dries007.tfc.mixin.accessor.PoiSectionAccessor;
 import net.dries007.tfc.mixin.accessor.SectionStorageAccessor;
-import net.dries007.tfc.network.ChunkRainfallPacket;
 import net.dries007.tfc.util.Helpers;
 import net.dries007.tfc.util.calendar.Calendars;
 import net.dries007.tfc.util.climate.ClimateModel;
@@ -223,19 +222,6 @@ public final class WeatherHelpers
         final BlockPos surfacePos = getSequentialSurfacePos(level, chunkPos, chunk, data, false);
         final float rainfall = model.getRainfall(level, surfacePos, data.getLastRandomTick(), currentTick, Calendars.SERVER.getCalendarDaysInMonth());
         final int daysInMonth = Calendars.SERVER.getCalendarDaysInMonth();
-
-        // TODO: I believe rainfall accumulation can be removed now
-        // Update rainfall accumulation for this chunk periodically
-        if (timeSinceLastRainTick > 1_000)
-        {
-            final long firstCalendarTick = Calendars.SERVER.getCalendarTicks() + Calendars.SERVER.getFixedCalendarTicksFromTick(data.getLastRainTick() - Calendars.SERVER.getTicks());
-            final long secondCalendarTick = Calendars.SERVER.getCalendarTicks();
-
-            final float rainfallForRainTick = model.getRainfall(level, surfacePos, firstCalendarTick, secondCalendarTick, daysInMonth);
-            data.addAccumulatedRainfall(chunk, model.getDeltaRainInMillimeters(level, surfacePos, firstCalendarTick, secondCalendarTick, rainfallForRainTick, Calendars.SERVER.getCalendarTicksInYear(), Calendars.SERVER.getCalendarDaysInMonth()));
-            data.setLastRainTick(chunk, currentTick);
-            PacketDistributor.sendToPlayersTrackingChunk(level, chunkPos, new ChunkRainfallPacket(chunkPos, data.getAccumulatedRainfall()));
-        }
 
         if (timeSinceTick > 4_000)
         {

@@ -36,7 +36,6 @@ public sealed class ChunkData
     private static final float UNKNOWN_RAIN_VARIANCE = 0;
     private static final float UNKNOWN_BASE_GROUNDWATER = 0;
 
-    public static float MAX_ACCUMULATED_RAINFALL = 30.0f;
     public static float MAX_RAINFALL_CONTRIBUTION = 60.0f;
 
     /**
@@ -102,7 +101,6 @@ public sealed class ChunkData
 
     private long lastRandomTick;
     private long lastRainTick;
-    private float accumulatedRainfall;
     private Byte nextSnowPosition;
 
     public ChunkData(ChunkPos pos)
@@ -141,12 +139,6 @@ public sealed class ChunkData
         return aquiferSurfaceHeight;
     }
 
-    // Gets the raw accumulated rainfall value - do not use directly for crops
-    public float getAccumulatedRainfall()
-    {
-        return accumulatedRainfall;
-    }
-
     // Minimum hydration a block can experience due to rain
     public float getMinRainfallHydration(BlockPos pos)
     {
@@ -167,17 +159,6 @@ public sealed class ChunkData
         final float rainVar = Math.abs(getRainVariance(x, y));
         // Max instantaneous rainfall value is actually double the max rainfall, this caps rainfall contribution at the max average rainfall
         return Math.min(rainfall * (1 + rainVar) * (MAX_RAINFALL_CONTRIBUTION / ClimateModel.MAX_CROP_RAINFALL), MAX_RAINFALL_CONTRIBUTION);
-    }
-
-    public void setAccumulatedRainfall(ChunkAccess chunk, float rainfall)
-    {
-        this.accumulatedRainfall = Mth.clamp(rainfall, 0, MAX_ACCUMULATED_RAINFALL);
-        chunk.setUnsaved(true);
-    }
-
-    public void addAccumulatedRainfall(ChunkAccess chunk, float rainfall)
-    {
-        setAccumulatedRainfall(chunk, getAccumulatedRainfall() + rainfall);
     }
 
     /**
@@ -304,7 +285,6 @@ public sealed class ChunkData
         this.baseGroundwaterLayer = baseGroundwaterLayer;
         this.temperatureLayer = temperatureLayer;
         this.forestType = forestType;
-        this.accumulatedRainfall = 0;
         this.status = Status.PARTIAL;
     }
 
@@ -344,13 +324,13 @@ public sealed class ChunkData
         assert status == Status.FULL;
         assert rainfallLayer != null && temperatureLayer != null && rainVarianceLayer != null && baseGroundwaterLayer != null;
 
-        return new ChunkWatchPacket(pos, rainfallLayer, rainVarianceLayer, baseGroundwaterLayer, temperatureLayer, forestType, accumulatedRainfall);
+        return new ChunkWatchPacket(pos, rainfallLayer, rainVarianceLayer, baseGroundwaterLayer, temperatureLayer, forestType);
     }
 
     /**
      * Called on client, sets to received data
      */
-    public void onUpdatePacket(LerpFloatLayer rainfallLayer, LerpFloatLayer rainVarianceLayer, LerpFloatLayer baseGroundwaterLayer, LerpFloatLayer temperatureLayer, ForestType forestType, float accumulatedRainfall)
+    public void onUpdatePacket(LerpFloatLayer rainfallLayer, LerpFloatLayer rainVarianceLayer, LerpFloatLayer baseGroundwaterLayer, LerpFloatLayer temperatureLayer, ForestType forestType)
     {
         assert status == Status.EMPTY || status == Status.CLIENT;
 
@@ -359,7 +339,6 @@ public sealed class ChunkData
         this.baseGroundwaterLayer = baseGroundwaterLayer;
         this.temperatureLayer = temperatureLayer;
         this.forestType = forestType;
-        this.accumulatedRainfall = accumulatedRainfall;
         this.status = Status.CLIENT;
     }
 
@@ -386,7 +365,6 @@ public sealed class ChunkData
             nbt.put("baseGroundwater", baseGroundwaterLayer.write());
             nbt.put("temperature", temperatureLayer.write());
             nbt.putByte("forestType", (byte) forestType.ordinal());
-            nbt.putFloat("accumulatedRainfall", accumulatedRainfall);
             nbt.putLong("lastRandomTick", lastRandomTick);
             nbt.putLong("lastRainTick", lastRainTick);
         }
@@ -410,7 +388,6 @@ public sealed class ChunkData
             baseGroundwaterLayer = new LerpFloatLayer(nbt.getCompound("baseGroundwater"));
             temperatureLayer = new LerpFloatLayer(nbt.getCompound("temperature"));
             forestType = ForestType.valueOf(nbt.getByte("forestType"));
-            accumulatedRainfall = nbt.getFloat("accumulatedRainfall");
             lastRandomTick = nbt.getLong("lastRandomTick");
             lastRainTick = nbt.getLong("lastRainTick");
         }
@@ -462,7 +439,7 @@ public sealed class ChunkData
         }
 
         @Override
-        public void onUpdatePacket(LerpFloatLayer rainfallLayer, LerpFloatLayer rainVarianceLayer, LerpFloatLayer baseGroundwaterLayer, LerpFloatLayer temperatureLayer, ForestType forestType, float accumulatedRainfall)
+        public void onUpdatePacket(LerpFloatLayer rainfallLayer, LerpFloatLayer rainVarianceLayer, LerpFloatLayer baseGroundwaterLayer, LerpFloatLayer temperatureLayer, ForestType forestType)
         {
             error();
         }
