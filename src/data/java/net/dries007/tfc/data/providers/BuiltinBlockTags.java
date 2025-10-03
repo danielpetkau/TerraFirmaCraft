@@ -574,11 +574,11 @@ public class BuiltinBlockTags extends TagsProvider<Block> implements Accessors
         tag(MINEABLE_WITH_HAMMER).addTag(BlockTags.LOGS);
         tag(MINEABLE_WITH_KNIFE).addTag(BlockTags.MINEABLE_WITH_HOE);
         tag(MINEABLE_WITH_SCYTHE).addTag(BlockTags.MINEABLE_WITH_HOE);
+        tag(MINEABLE_WITH_HOE).addTag(BlockTags.MINEABLE_WITH_HOE);
         tag(MINEABLE_WITH_GLASS_SAW)
             .addTags(Tags.Blocks.GLASS_BLOCKS, Tags.Blocks.GLASS_PANES)
             .add(TFCBlocks.COLORED_POURED_GLASS)
             .add(TFCBlocks.POURED_GLASS);
-        tag(MINEABLE_WITH_HOE); // Empty
 
         tag(PROSPECTABLE).addTags(Tags.Blocks.ORES);
 
