@@ -219,7 +219,7 @@ public final class WeatherHelpers
         final long timeSinceLastRainTick = currentTick - data.getLastRainTick();
 
         final ChunkPos chunkPos = chunk.getPos();
-        final BlockPos surfacePos = getRandomSurfacePos(level, chunkPos);
+        final BlockPos surfacePos = getSequentialSurfacePos(level, chunkPos, chunk, data);
         final float rainfall = model.getRainfall(level, surfacePos, data.getLastRandomTick(), currentTick, Calendars.SERVER.getCalendarDaysInMonth());
         final int daysInMonth = Calendars.SERVER.getCalendarDaysInMonth();
 
@@ -265,7 +265,7 @@ public final class WeatherHelpers
                 netChangeInSnow = Math.min(64 - countExistingSnowInChunk(level, chunkPos), netChangeInSnow);
                 for (int i = 0; i < netChangeInSnow; i++)
                 {
-                    handleSnowAccumulation(level, getRandomSurfacePos(level, chunkPos));
+                    handleSnowAccumulation(level, getSequentialSurfacePos(level, chunkPos, chunk, data));
                 }
             }
             else if (netChangeInSnow < 0)
@@ -295,9 +295,9 @@ public final class WeatherHelpers
         data.setLastRandomTick(chunk, currentTick);
     }
 
-    private static BlockPos getRandomSurfacePos(ServerLevel level, ChunkPos chunkPos)
+    private static BlockPos getSequentialSurfacePos(ServerLevel level, ChunkPos chunkPos, ChunkAccess access, ChunkData data)
     {
-        final BlockPos randomPos = level.getBlockRandomPos(chunkPos.getMinBlockX(), 0, chunkPos.getMinBlockZ(), 15);
+        final BlockPos randomPos = data.getNextSnowPos(access, chunkPos);
         return level.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING, randomPos);
     }
 

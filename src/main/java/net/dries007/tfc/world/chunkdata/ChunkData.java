@@ -6,6 +6,9 @@
 
 package net.dries007.tfc.world.chunkdata;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
@@ -95,10 +98,12 @@ public sealed class ChunkData
     private LerpFloatLayer temperatureLayer;
     private int @Nullable [] aquiferSurfaceHeight;
     private ForestType forestType;
+    private Byte[] shuffledBlockPositions;
 
     private long lastRandomTick;
     private long lastRainTick;
     private float accumulatedRainfall;
+    private Byte nextSnowPosition;
 
     public ChunkData(ChunkPos pos)
     {
@@ -112,8 +117,10 @@ public sealed class ChunkData
         this.status = Status.EMPTY;
         this.rockData = new RockData(generator);
         this.forestType = ForestType.GRASSLAND;
+        this.shuffledBlockPositions = getShuffledByteArray();
         this.lastRandomTick = -1;
         this.lastRainTick = -1;
+        this.nextSnowPosition = 0;
     }
 
     public ChunkPos getPos()
@@ -266,6 +273,21 @@ public sealed class ChunkData
     {
         this.lastRainTick = lastRainTick;
         chunk.setUnsaved(true); // Flag the chunk, since we need to re-save the data
+    }
+
+    public BlockPos getNextSnowPos(ChunkAccess chunk, ChunkPos chunkPos)
+    {
+        // Convert byte into local coordinates x, z = [0, 15]
+        Byte b = shuffledBlockPositions[nextSnowPosition - Byte.MIN_VALUE];
+        final Byte mask = 15; // 0000 1111
+        int x = b & mask;
+        int z = b >> 4 & mask;
+
+        // Iterate to the next snow position
+        nextSnowPosition++;
+        chunk.setUnsaved(true); // Flag the chunk, since we need to re-save the data
+
+        return new BlockPos(chunkPos.getMinBlockX() + x, 0, chunkPos.getMinBlockZ() + z);
     }
 
     /**
@@ -465,5 +487,22 @@ public sealed class ChunkData
         {
             throw new UnsupportedOperationException("Tried to modify immutable chunk data");
         }
+    }
+
+    // Returns an array of length 256 containing every Byte in a random order
+    private Byte[] getShuffledByteArray()
+    {
+        List<Byte> list = new ArrayList<>();
+        for (byte i = Byte.MIN_VALUE; i < Byte.MAX_VALUE; i++)
+        {
+            list.add(i);
+        }
+        // Dealing with the overflow
+        list.add(Byte.MAX_VALUE);
+
+        Collections.shuffle(list);
+
+        return list.toArray(new Byte[256]);
+
     }
 }
