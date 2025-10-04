@@ -215,7 +215,6 @@ public final class WeatherHelpers
         final long currentTick = Calendars.SERVER.getTicks();
         final long currentCalendarTick = Calendars.SERVER.getCalendarTicks();
         final long timeSinceTick = currentTick - data.getLastRandomTick();
-        final long timeSinceLastRainTick = currentTick - data.getLastRainTick();
 
         final ChunkPos chunkPos = chunk.getPos();
         final BlockPos surfacePos = getSequentialSurfacePos(level, chunkPos, chunk, data, false);
