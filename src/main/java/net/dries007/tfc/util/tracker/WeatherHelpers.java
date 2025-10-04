@@ -31,7 +31,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.material.Fluids;
-import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
 
 import net.dries007.tfc.common.TFCPoiTypes;
@@ -42,6 +41,7 @@ import net.dries007.tfc.common.blocks.SnowPileBlock;
 import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.blocks.ThinSpikeBlock;
 import net.dries007.tfc.common.blocks.plant.KrummholzBlock;
+import net.dries007.tfc.config.TFCConfig;
 import net.dries007.tfc.mixin.accessor.PoiSectionAccessor;
 import net.dries007.tfc.mixin.accessor.SectionStorageAccessor;
 import net.dries007.tfc.util.Helpers;
@@ -58,8 +58,8 @@ public final class WeatherHelpers
 
     // The number of ticks per a single snow accumulation/melt event in a single chunk. For reference, vanilla operates at
     // (48 / randomTickSpeed), or 16 ticks. We do melting much slower, since it's statistically much less likely to be raining
-    private static final int TICKS_PER_SNOW_ACCUMULATION = 80;
-    private static final int TICKS_PER_SNOW_MELT_PER_SNOW_ACCUMULATION = 3;
+    private static final int TICKS_PER_SNOW_ACCUMULATION = TFCConfig.SERVER.ticksPerSnowAccumulation.get();
+    private static final int TICKS_PER_SNOW_MELT_PER_SNOW_ACCUMULATION = TFCConfig.SERVER.snowMeltMultiplier.get();
     private static final int TICKS_PER_SNOW_MELT = TICKS_PER_SNOW_ACCUMULATION * TICKS_PER_SNOW_MELT_PER_SNOW_ACCUMULATION;
 
     // For fast forwarding, the number of "fast-forward" ticks that should be simulated for each step of estimated
@@ -68,8 +68,7 @@ public final class WeatherHelpers
     private static final int UPDATES_PER_SNOW_ACCUMULATION_SKIP = 1 + 4_000 / TICKS_PER_SNOW_ACCUMULATION;
 
     // The maximum number of single tick updates that can be scheduled to happen
-    // TODO: Add this to the server config
-    private static final int MAX_UPDATES_PER_TICK = 256;
+    private static final int MAX_UPDATES_PER_TICK = TFCConfig.SERVER.snowMaxAccumulationOnUpdate.get();
 
     /**
      * Replaces a call to {@link Biome#getPrecipitationAt(BlockPos)} with one that is aware of both the local climate,
@@ -242,7 +241,9 @@ public final class WeatherHelpers
                 }
                 else if (estimatedTemperature < -2f && isPrecipitating(model.getRain(calendarTick), rainfall))
                 {
-                    netChangeInSnow = netChangeInSnow + UPDATES_PER_SNOW_ACCUMULATION_SKIP;
+                    // Reduce amount of snow accumulated if near the temperature threshold
+                    final float fuzz = Mth.clampedMap(estimatedTemperature, -2f, -12f, 0.5f, 1f);
+                    netChangeInSnow = netChangeInSnow + (int) (UPDATES_PER_SNOW_ACCUMULATION_SKIP * fuzz);
                 }
             }
 
