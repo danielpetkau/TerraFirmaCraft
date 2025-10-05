@@ -9,6 +9,7 @@ package net.dries007.tfc.world.chunkdata;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
@@ -97,11 +98,11 @@ public sealed class ChunkData
     private LerpFloatLayer temperatureLayer;
     private int @Nullable [] aquiferSurfaceHeight;
     private ForestType forestType;
-    private final Byte[] shuffledBlockPositions = getShuffledByteArray();
+    private final byte[] shuffledBlockPositions = getShuffledByteArray();
 
     private long lastRandomTick;
     private long lastRainTick;
-    private Byte nextSnowPosition;
+    private byte nextSnowPosition;
 
     public ChunkData(ChunkPos pos)
     {
@@ -258,8 +259,8 @@ public sealed class ChunkData
     public BlockPos getNextSnowPos(ChunkPos chunkPos)
     {
         // Convert byte into local coordinates x, z = [0, 15]
-        Byte b = shuffledBlockPositions[nextSnowPosition - Byte.MIN_VALUE];
-        final Byte mask = 15; // 0000 1111
+        byte b = shuffledBlockPositions[nextSnowPosition - Byte.MIN_VALUE];
+        final byte mask = 15; // 0000 1111
         int x = b & mask;
         int z = b >> 4 & mask;
 
@@ -468,20 +469,20 @@ public sealed class ChunkData
         }
     }
 
-    // Returns an array of length 256 containing every Byte in a random order
-    private Byte[] getShuffledByteArray()
-    {
-        List<Byte> list = new ArrayList<>();
-        for (byte i = Byte.MIN_VALUE; i < Byte.MAX_VALUE; i++)
-        {
-            list.add(i);
+    // Returns an array of length 256 containing every byte in a random order
+    private byte[] getShuffledByteArray() {
+        byte[] arr = new byte[256];
+        for (int i = 0; i < 256; i++) {
+            arr[i] = (byte) (i - 128); // -128 to 127
         }
-        // Dealing with the overflow
-        list.add(Byte.MAX_VALUE);
-
-        Collections.shuffle(list);
-
-        return list.toArray(new Byte[256]);
-
+        // Fisher-Yates shuffle
+        Random rand = new Random();
+        for (int i = arr.length - 1; i > 0; i--) {
+            int j = rand.nextInt(i + 1);
+            byte tmp = arr[i];
+            arr[i] = arr[j];
+            arr[j] = tmp;
+        }
+        return arr;
     }
 }
