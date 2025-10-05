@@ -46,7 +46,7 @@ import net.dries007.tfc.common.recipes.ingredients.NotRottenIngredient;
 import net.dries007.tfc.common.recipes.outputs.MealModifier;
 import net.dries007.tfc.util.Metal;
 
-import static net.dries007.tfc.util.DataHelpers.Builder;
+import static net.dries007.tfc.util.DataGenerationHelpers.Builder;
 
 public interface CraftingRecipes extends Recipes
 {

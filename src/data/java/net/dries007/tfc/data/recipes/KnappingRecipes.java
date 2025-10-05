@@ -27,7 +27,7 @@ import net.dries007.tfc.data.providers.BuiltinKnappingTypes;
 import net.dries007.tfc.util.Metal;
 import net.dries007.tfc.util.data.KnappingPattern;
 import net.dries007.tfc.util.data.KnappingType;
-import static net.dries007.tfc.util.DataHelpers.Builder;
+import static net.dries007.tfc.util.DataGenerationHelpers.Builder;
 
 public interface KnappingRecipes extends Recipes
 {

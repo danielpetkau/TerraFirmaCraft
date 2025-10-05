@@ -42,7 +42,7 @@ import net.dries007.tfc.common.recipes.outputs.ExtraProductModifier;
 import net.dries007.tfc.common.recipes.outputs.ItemStackModifier;
 import net.dries007.tfc.common.recipes.outputs.ItemStackProvider;
 
-public interface DataHelpers
+public interface DataGenerationHelpers
 {
     /**
      * A recipe builder capable of building shaped, shapeless recipes, optionally with both output and remainder features
