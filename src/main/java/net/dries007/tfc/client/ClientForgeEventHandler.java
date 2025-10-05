@@ -416,7 +416,7 @@ public class ClientForgeEventHandler
             final Vec2 wind = ClimateRenderCache.INSTANCE.getWind();
             final float windStrength = wind.length();
             int count = 0;
-            if (windStrength > 0.3f)
+            if (windStrength > 0.07f) // spawn wind particles starting at ~8 kmh
             {
                 count = (int) (windStrength * 8);
             }
