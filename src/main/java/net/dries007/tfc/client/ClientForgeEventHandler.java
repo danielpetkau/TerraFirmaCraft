@@ -95,7 +95,6 @@ import net.dries007.tfc.network.PlaceBlockSpecialPacket;
 import net.dries007.tfc.network.RequestClimateModelPacket;
 import net.dries007.tfc.network.StackFoodPacket;
 import net.dries007.tfc.network.SwitchInventoryTabPacket;
-import net.dries007.tfc.util.EnvironmentHelpers;
 import net.dries007.tfc.util.Helpers;
 import net.dries007.tfc.util.PhysicalDamageType;
 import net.dries007.tfc.util.calendar.Calendars;
@@ -108,6 +107,7 @@ import net.dries007.tfc.util.tooltip.Tooltips;
 import net.dries007.tfc.world.ChunkGeneratorExtension;
 import net.dries007.tfc.world.chunkdata.ChunkData;
 
+import static net.dries007.tfc.util.tracker.WeatherHelpers.*;
 import static net.minecraft.ChatFormatting.*;
 
 public class ClientForgeEventHandler
@@ -172,11 +172,11 @@ public class ClientForgeEventHandler
                 ));
                 final Vec2 wind = ClimateRenderCache.INSTANCE.getWind();
                 tooltip.add(Component.translatable("tfc.tooltip.wind_speed",
-                    Mth.floor(320 * wind.length()),
-                    String.format("%.0f", Mth.abs(wind.x * 100)),
-                    Helpers.translateEnum(wind.x > 0 ? Direction.EAST : Direction.WEST),
-                    String.format("%.0f", Mth.abs(wind.y * 100)),
-                    Helpers.translateEnum(wind.y > 0 ? Direction.SOUTH : Direction.NORTH))
+                        Mth.floor(windKMS(wind)),
+                        String.format("%.0f", Mth.abs(wind.x * 100)),
+                        Helpers.translateEnum(wind.x > 0 ? Direction.EAST : Direction.WEST),
+                        String.format("%.0f", Mth.abs(wind.y * 100)),
+                        Helpers.translateEnum(wind.y > 0 ? Direction.SOUTH : Direction.NORTH))
                     .getString());
 
                 final ChunkData data = ChunkData.get(mc.level, pos);
@@ -306,10 +306,10 @@ public class ClientForgeEventHandler
                         first = false;
                     }
                     tooltip.add(Component.literal(DARK_GRAY
-                        + typeOfComponent(stack.getComponentsPatch().get(component.type()))
-                        + BuiltInRegistries.DATA_COMPONENT_TYPE.getKey(component.type())
-                        + " = "
-                        + component.value()
+                            + typeOfComponent(stack.getComponentsPatch().get(component.type()))
+                            + BuiltInRegistries.DATA_COMPONENT_TYPE.getKey(component.type())
+                            + " = "
+                            + component.value()
                         // Avoid showing the encoding, it's interesting but not necessary. Uncomment if needing to debug
                         //+ " = "
                         //+ component.encodeValue(RegistryOps.create(NbtOps.INSTANCE, Minecraft.getInstance().level.registryAccess()))
@@ -416,7 +416,7 @@ public class ClientForgeEventHandler
             final Vec2 wind = ClimateRenderCache.INSTANCE.getWind();
             final float windStrength = wind.length();
             int count = 0;
-            if (windStrength > 0.3f)
+            if (windStrength > 0.07f) // spawn wind particles starting at ~8 kmh
             {
                 count = (int) (windStrength * 8);
             }
@@ -461,7 +461,7 @@ public class ClientForgeEventHandler
             Slot slot = inv.getSlotUnderMouse();
             if (slot != null)
             {
-               PacketDistributor.sendToServer(new StackFoodPacket(slot.index));
+                PacketDistributor.sendToServer(new StackFoodPacket(slot.index));
             }
         }
     }

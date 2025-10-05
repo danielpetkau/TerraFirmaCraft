@@ -31,6 +31,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.phys.Vec2;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
 
@@ -59,6 +60,8 @@ public final class WeatherHelpers
 
     // The number of ticks per a single snow accumulation/melt event in a single chunk. For reference, vanilla operates at
     // (48 / randomTickSpeed), or 16 ticks. We do melting much slower, since it's statistically much less likely to be raining
+    private static final int WIND_KMS_FACTOR = 115;
+    private static final int WIND_MS_FACTOR = 32;
     private static final int TICKS_PER_SNOW_ACCUMULATION = 80;
     private static final int TICKS_PER_SNOW_MELT_PER_SNOW_ACCUMULATION = 3;
     private static final int TICKS_PER_SNOW_MELT = TICKS_PER_SNOW_ACCUMULATION * TICKS_PER_SNOW_MELT_PER_SNOW_ACCUMULATION;
@@ -600,4 +603,29 @@ public final class WeatherHelpers
     {
         return state.getBlock() == Blocks.ICE || state.getBlock() == TFCBlocks.ICE_PILE.get() || state.getBlock() == TFCBlocks.SEA_ICE.get();
     }
+
+    /**
+     * Converts wind speed to M/s
+     */
+    public static float windMS(Vec2 wind)
+    {
+        return wind.length() * WIND_MS_FACTOR;
+    }
+
+    /**
+     * Converts wind speed to M/tick (useful for accurately affecting entity/particle velocity)
+     */
+    public static float windMT(Vec2 wind)
+    {
+        return wind.length() * WIND_MS_FACTOR / 20;
+    }
+
+    /**
+     * Converts wind speed to KM/h
+     */
+    public static float windKMS(Vec2 wind)
+    {
+        return wind.length() * WIND_KMS_FACTOR;
+    }
+
 }
