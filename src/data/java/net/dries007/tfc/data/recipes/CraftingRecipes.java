@@ -6,36 +6,23 @@
 
 package net.dries007.tfc.data.recipes;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
-import java.util.function.BiConsumer;
 import java.util.function.Function;
-import com.google.common.collect.ImmutableMap;
 
 import net.dries007.tfc.common.blocks.*;
 
-import net.minecraft.core.Holder;
-import net.minecraft.core.NonNullList;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.crafting.Recipe;
-import net.minecraft.world.item.crafting.ShapedRecipe;
-import net.minecraft.world.item.crafting.ShapedRecipePattern;
-import net.minecraft.world.item.crafting.ShapelessRecipe;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.material.Fluids;
 import net.neoforged.neoforge.common.Tags;
-import org.jetbrains.annotations.Nullable;
-
 import net.dries007.tfc.common.TFCTags;
 import net.dries007.tfc.common.blocks.plant.Plant;
 import net.dries007.tfc.common.blocks.rock.Ore;
@@ -44,33 +31,18 @@ import net.dries007.tfc.common.blocks.rock.RockCategory;
 import net.dries007.tfc.common.blocks.soil.SoilBlockType;
 import net.dries007.tfc.common.blocks.wood.Wood;
 import net.dries007.tfc.common.component.food.FoodData;
-import net.dries007.tfc.common.component.food.FoodTrait;
 import net.dries007.tfc.common.component.food.FoodTraits;
 import net.dries007.tfc.common.fluids.TFCFluids;
 import net.dries007.tfc.common.items.Food;
 import net.dries007.tfc.common.items.HideItemType;
 import net.dries007.tfc.common.items.Powder;
 import net.dries007.tfc.common.items.TFCItems;
-import net.dries007.tfc.common.recipes.AdvancedShapedRecipe;
-import net.dries007.tfc.common.recipes.AdvancedShapelessRecipe;
 import net.dries007.tfc.common.recipes.CastingCraftingRecipe;
 import net.dries007.tfc.common.recipes.FoodCombiningCraftingRecipe;
 import net.dries007.tfc.common.recipes.ingredients.AndIngredient;
 import net.dries007.tfc.common.recipes.ingredients.FluidContentIngredient;
 import net.dries007.tfc.common.recipes.ingredients.LacksTraitIngredient;
 import net.dries007.tfc.common.recipes.ingredients.NotRottenIngredient;
-import net.dries007.tfc.common.recipes.outputs.AddBaitToRodModifier;
-import net.dries007.tfc.common.recipes.outputs.AddGlassModifier;
-import net.dries007.tfc.common.recipes.outputs.AddPowderModifier;
-import net.dries007.tfc.common.recipes.outputs.AddTraitModifier;
-import net.dries007.tfc.common.recipes.outputs.CopyFoodModifier;
-import net.dries007.tfc.common.recipes.outputs.CopyForgingBonusModifier;
-import net.dries007.tfc.common.recipes.outputs.CopyInputModifier;
-import net.dries007.tfc.common.recipes.outputs.CopyOldestFoodModifier;
-import net.dries007.tfc.common.recipes.outputs.DamageCraftingRemainderModifier;
-import net.dries007.tfc.common.recipes.outputs.ExtraProductModifier;
-import net.dries007.tfc.common.recipes.outputs.ItemStackModifier;
-import net.dries007.tfc.common.recipes.outputs.ItemStackProvider;
 import net.dries007.tfc.common.recipes.outputs.MealModifier;
 import net.dries007.tfc.util.Metal;
 
