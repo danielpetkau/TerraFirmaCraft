@@ -23,6 +23,13 @@ public class TFCContainerScreen<C extends AbstractContainerMenu> extends Abstrac
     protected final ResourceLocation texture;
     protected final Inventory playerInventory;
 
+    public enum TextAlignment
+    {
+        LEFT,
+        CENTER,
+        RIGHT
+    }
+
     public TFCContainerScreen(C container, Inventory playerInventory, Component name, ResourceLocation texture)
     {
         super(container, playerInventory, name);
@@ -49,10 +56,25 @@ public class TFCContainerScreen<C extends AbstractContainerMenu> extends Abstrac
         graphics.blit(texture, leftPos, topPos, 0, 0, 0, imageWidth, imageHeight, 256, 256);
     }
 
-    protected void drawCenteredLine(GuiGraphics graphics, Component text, int y)
+    protected void drawLine(GuiGraphics graphics, Component text, TextAlignment alignment, int y)
     {
-        final int x = (imageWidth - font.width(text)) / 2;
-        graphics.drawString(font, text, x, y, 0x404040, false);
+        drawLine(graphics, text, alignment, 0x404040, y);
+    }
+
+    protected void drawLine(GuiGraphics graphics, Component text, TextAlignment alignment, int color, int y)
+    {
+        drawLine(graphics, text, alignment, color, 0, y);
+    }
+
+    protected void drawLine(GuiGraphics graphics, Component text, TextAlignment alignment, int color, int x, int y)
+    {
+        switch (alignment)
+        {
+            case LEFT -> x += 8;
+            case CENTER -> x += (imageWidth - font.width(text)) / 2;
+            default -> x += imageWidth - font.width(text) - 8;
+        }
+        graphics.drawString(font, text, x, y, color, false);
     }
 
     public Inventory getPlayerInventory()
