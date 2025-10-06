@@ -70,7 +70,7 @@ public enum PlaceBlockSpecialPacket implements CustomPacketPayload
                 {
                     // Try and place a block on top of the surface that we clicked.
                     final BlockState toPlace = PlacedItemBlock.updateStateValues(level, pos, TFCBlocks.PLACED_ITEM.get().defaultBlockState());
-                    if (!PlacedItemBlock.isEmptyContents(toPlace))
+                    if (PlacedItemBlock.isSlotSupported(toPlace, blockResult))
                     {
                         level.setBlockAndUpdate(above, toPlace);
                         level.getBlockEntity(above, TFCBlockEntities.PLACED_ITEM.get()).ifPresent(e -> e.insertItem(player, stack, blockResult));
