@@ -64,8 +64,6 @@ public final class WeatherHelpers
     private static final int TICKS_PER_SNOW_MELT_PER_SNOW_ACCUMULATION = TFCConfig.SERVER.snowMeltMultiplier.get();
     private static final int WIND_KMS_FACTOR = 115;
     private static final int WIND_MS_FACTOR = 32;
-    private static final int TICKS_PER_SNOW_ACCUMULATION = 80;
-    private static final int TICKS_PER_SNOW_MELT_PER_SNOW_ACCUMULATION = 3;
     private static final int TICKS_PER_SNOW_MELT = TICKS_PER_SNOW_ACCUMULATION * TICKS_PER_SNOW_MELT_PER_SNOW_ACCUMULATION;
 
     // For fast forwarding, the number of "fast-forward" ticks that should be simulated for each step of estimated
