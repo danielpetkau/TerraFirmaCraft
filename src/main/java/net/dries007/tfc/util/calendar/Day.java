@@ -46,6 +46,7 @@ public enum Day
         BIRTHDAYS.put("JANUARY20", "Therighthon");
         BIRTHDAYS.put("FEBRUARY21", "CtrlAltDavid");
         BIRTHDAYS.put("MARCH10", "Disastermoo");
+        BIRTHDAYS.put("OCTOBER30", "Dodo");
         BIRTHDAYS.put("OCTOBER31", "alekiponi");
         BIRTHDAYS.put("JULY14", "Daniel");
         BIRTHDAYS.put("JANUARY6", "Char");
