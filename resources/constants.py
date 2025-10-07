@@ -2300,7 +2300,7 @@ DEFAULT_LANG = {
     'tfc.recipe.barrel.tfc.barrel.pickled': 'Pickling',
     'tfc.recipe.barrel.tfc.barrel.preserved_in_vinegar': 'Preserving In Vinegar',
     'tfc.recipe.barrel.tfc.barrel.mortar': 'Mortar',
-    'tfc.recipe.barrel.tfc.barrel.curdling': 'Curdling Milk',
+    'tfc.recipe.barrel.tfc.barrel.curdled_milk': 'Curdling Milk',
     'tfc.recipe.barrel.tfc.barrel.cheese': 'Cheese',
     'tfc.recipe.barrel.tfc.barrel.raw_alabaster': 'Raw Alabaster',
     'tfc.recipe.barrel.tfc.barrel.clean_jute_net': 'Cleaning Jute Net',

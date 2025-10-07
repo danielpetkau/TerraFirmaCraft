@@ -64,7 +64,6 @@ public interface CraftingRecipes extends Recipes
             "bolt_armor_trim_smithing_template",
             "bone_meal",
             "bookshelf",
-            "bow",
             "bricks",
             "bucket",
             "campfire",
@@ -618,6 +617,11 @@ public interface CraftingRecipes extends Recipes
             .input('T', Items.REDSTONE_TORCH)
             .pattern("ISI", "ITI", "ISI")
             .shaped(Items.ACTIVATOR_RAIL, 12);
+        replace("bow")
+            .input('S', Tags.Items.STRINGS)
+            .input('T', Tags.Items.RODS_WOODEN)
+            .pattern("ST ", "S T", "ST ")
+            .shaped(Items.BOW);
         replace("comparator")
             .input('S', TFCTags.Items.STONES_RAW)
             .input('R', Tags.Items.DUSTS_REDSTONE)
