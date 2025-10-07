@@ -79,6 +79,7 @@ public class TFCContainerScreen<C extends AbstractContainerMenu> extends Abstrac
     /**
      * Use to draw a line with a particular text alignment with a color and x and y offsets
      * x is counted from the right with right alignment
+     * color will be ignored if -1
      */
     protected void drawLine(GuiGraphics graphics, Component text, TextAlignment alignment, int color, int x, int y)
     {
