@@ -47,7 +47,7 @@ public enum Day
         BIRTHDAYS.put("FEBRUARY21", "CtrlAltDavid");
         BIRTHDAYS.put("MARCH10", "Disastermoo");
         BIRTHDAYS.put("OCTOBER31", "alekiponi");
-        BIRTHDAYS.put("JULY14", "Daniel and Dodo");
+        BIRTHDAYS.put("JULY14", "Daniel");
     }
 
     public static Day valueOf(int i)
