@@ -48,6 +48,7 @@ public enum Day
         BIRTHDAYS.put("MARCH10", "Disastermoo");
         BIRTHDAYS.put("OCTOBER31", "alekiponi");
         BIRTHDAYS.put("JULY14", "Daniel");
+        BIRTHDAYS.put("JANUARY6", "Char");
     }
 
     public static Day valueOf(int i)
