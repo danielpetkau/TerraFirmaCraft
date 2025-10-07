@@ -68,12 +68,12 @@ public class ClimateScreen extends TFCContainerScreen<Container>
 
         drawLine(stack, Helpers.translateEnum(KoppenClimateClassification.classify(averageTemp, averageRainfall, rainVar, ClientHelpers.inNorthernHemisphere())), CENTER, 18);
 
-        drawLine(stack, Component.translatable("tfc.tooltip.climate_temperature"), LEFT,0xFFFFFF,32);
-        drawLine(stack, Component.translatable("tfc.tooltip.climate_temperature.average", style.formatRange(averageTemp)), LEFT,0xFFFFFF, 36, 32);
-        drawLine(stack, Component.translatable("tfc.tooltip.climate_temperature.now", style.formatRange(currentTemp)), LEFT,0xFFFFFF, 96,32);
+        drawLine(stack, Component.translatable("tfc.tooltip.climate_temperature_name"), LEFT,32);
+        drawLine(stack, Component.translatable("tfc.tooltip.climate_temperature_average", style.formatRange(averageTemp)), LEFT, -1,36, 32);
+        drawLine(stack, Component.translatable("tfc.tooltip.climate_temperature_now", style.formatRange(currentTemp)), LEFT, -1,96,32);
 
 
-        drawLine(stack, Component.translatable("tfc.tooltip.climate_rainfall"), LEFT, 0x202080, 46);
+        drawLine(stack, Component.translatable("tfc.tooltip.climate_rainfall_name"), LEFT, 0x202080, 46);
         drawLine(stack, Component.translatable("tfc.tooltip.climate_rainfall_average", String.format("%.0f", averageRainfall)), LEFT,0x202080, 36, 46);
         drawLine(stack, Component.translatable("tfc.tooltip.climate_rainfall_now", String.format("%.0f", currentRainfall)), LEFT,0x202080, 96, 46);
 

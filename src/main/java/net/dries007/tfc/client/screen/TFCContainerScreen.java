@@ -15,6 +15,8 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 
 import net.dries007.tfc.util.Helpers;
 
+import static net.dries007.tfc.client.screen.TFCContainerScreen.TextAlignment.*;
+
 public class TFCContainerScreen<C extends AbstractContainerMenu> extends AbstractContainerScreen<C>
 {
     public static final ResourceLocation INVENTORY_1x1 = Helpers.identifier("textures/gui/single_inventory.png");
@@ -56,18 +58,38 @@ public class TFCContainerScreen<C extends AbstractContainerMenu> extends Abstrac
         graphics.blit(texture, leftPos, topPos, 0, 0, 0, imageWidth, imageHeight, 256, 256);
     }
 
+
+    /**
+     * Use to draw a line with a particular text alignment and a y offset
+     */
+
     protected void drawLine(GuiGraphics graphics, Component text, TextAlignment alignment, int y)
     {
         drawLine(graphics, text, alignment, 0x404040, y);
     }
 
+    /**
+     * Use to draw a line with a particular text alignment with a color and y offset
+     */
     protected void drawLine(GuiGraphics graphics, Component text, TextAlignment alignment, int color, int y)
     {
         drawLine(graphics, text, alignment, color, 0, y);
     }
 
+    /**
+     * Use to draw a line with a particular text alignment with a color and x and y offsets
+     * x is counted from the right with right alignment
+     */
     protected void drawLine(GuiGraphics graphics, Component text, TextAlignment alignment, int color, int x, int y)
     {
+        if (alignment == RIGHT)
+        {
+            x *= -1;
+        }
+        if (color == -1)
+        {
+            color = 0x404040;
+        }
         switch (alignment)
         {
             case LEFT -> x += 8;
