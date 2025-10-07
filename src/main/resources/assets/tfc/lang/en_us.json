@@ -289,7 +289,7 @@
   "tfc.tooltip.anvil_plan": "Plans",
   "tfc.tooltip.anvil_tier_required": "Requires %s Anvil",
   "tfc.tooltip.calendar_days_years": "%d, %04d",
-  "tfc.tooltip.calendar_days_left_in_month": "%s day left in %s",
+  "tfc.tooltip.calendar_days_left_in_month": "%s days left in %s",
   "tfc.tooltip.calendar_second_last_day_in_month": "%s day left in %s",
   "tfc.tooltip.calendar_last_day_in_month": "Last day of %s!",
   "tfc.tooltip.calendar_hour_minute_month_day_year": "%s %s %d, %04d",
