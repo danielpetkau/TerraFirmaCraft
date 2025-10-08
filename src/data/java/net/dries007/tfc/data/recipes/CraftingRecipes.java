@@ -792,7 +792,7 @@ public interface CraftingRecipes extends Recipes
             .input('L', Tags.Items.LEATHERS)
             .pattern("SSS", "SLS", "SSS")
             .shaped(Items.ITEM_FRAME, 4);
-        replace("ladder")
+        recipe()
             .input('L', TFCTags.Items.LUMBER)
             .pattern("L L", "L L", "L L")
             .shaped(Items.LADDER, 16);
