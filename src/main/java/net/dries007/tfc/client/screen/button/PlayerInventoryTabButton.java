@@ -89,28 +89,25 @@ public class PlayerInventoryTabButton extends Button
         graphics.blit(ClientHelpers.GUI_ICONS, getX(), getY(), 0, (float) textureU, (float) textureV, width, height, 256, 256);
         graphics.blit(ClientHelpers.GUI_ICONS, iconX, iconY, 16, 16, (float) iconU, (float) iconV, 32, 32, 256, 256);
 
-        if (this.isHovered() && (tab == SwitchInventoryTabPacket.Tab.CALENDAR || tab == SwitchInventoryTabPacket.Tab.CLIMATE))
+        if (this.isHovered())
         {
-            final Font font = Minecraft.getInstance().font;
-            Component hoverText;
-            switch (tab)
+            Component hoverText = Component.empty();
+
+            if (tab == SwitchInventoryTabPacket.Tab.CALENDAR)
             {
-                case CALENDAR ->
-                {
-                    hoverText = Calendars.CLIENT.getDayTime();
-                }
-                case CLIMATE ->
-                {
-                    final TemperatureDisplayStyle style = TFCConfig.CLIENT.climateTooltipStyle.get();
-                    hoverText = Objects.requireNonNull(style.formatRange(ClimateRenderCache.INSTANCE.getTemperature()));
-                }
-                default ->
-                {
-                    hoverText = Component.empty();
-                }
+                hoverText = Calendars.CLIENT.getDayTime();
+            }
+            if (tab == SwitchInventoryTabPacket.Tab.CLIMATE)
+            {
+                final TemperatureDisplayStyle style = TFCConfig.CLIENT.climateTooltipStyle.get();
+                hoverText = Objects.requireNonNull(style.formatRange(ClimateRenderCache.INSTANCE.getTemperature()));
             }
 
-            graphics.renderTooltip(font, hoverText, mouseX, mouseY);
+            if (!hoverText.equals(Component.empty()))
+            {
+                final Font font = Minecraft.getInstance().font;
+                graphics.renderTooltip(font, hoverText, mouseX, mouseY);
+            }
         }
     }
 
