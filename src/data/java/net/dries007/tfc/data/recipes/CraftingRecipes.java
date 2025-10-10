@@ -331,12 +331,21 @@ public interface CraftingRecipes extends Recipes
             recipe("from_slabs")
                 .input(rock.getSlab(Rock.BlockType.COBBLE).get())
                 .shapeless(blocks.get(Rock.BlockType.LOOSE), 2);
+            recipe("from_slabs")
+                .input(rock.getSlab(Rock.BlockType.MOSSY_COBBLE).get())
+                .shapeless(blocks.get(Rock.BlockType.MOSSY_LOOSE), 2);
             recipe("from_stairs")
                 .input(rock.getStair(Rock.BlockType.COBBLE).get())
                 .shapeless(blocks.get(Rock.BlockType.LOOSE), 3);
+            recipe("from_stairs")
+                .input(rock.getStair(Rock.BlockType.MOSSY_COBBLE).get())
+                .shapeless(blocks.get(Rock.BlockType.MOSSY_LOOSE), 3);
             recipe("from_walls")
                 .input(rock.getWall(Rock.BlockType.COBBLE).get())
                 .shapeless(blocks.get(Rock.BlockType.LOOSE), 4);
+            recipe("from_walls")
+                .input(rock.getWall(Rock.BlockType.MOSSY_COBBLE).get())
+                .shapeless(blocks.get(Rock.BlockType.MOSSY_LOOSE), 4);
         }
 
         TFCBlocks.SANDSTONE.forEach((color, blocks) -> {
