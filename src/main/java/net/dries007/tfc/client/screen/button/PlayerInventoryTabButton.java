@@ -6,15 +6,25 @@
 
 package net.dries007.tfc.client.screen.button;
 
+import java.util.Objects;
+import io.netty.buffer.ByteBuf;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.neoforged.neoforge.network.PacketDistributor;
 
 import net.dries007.tfc.client.ClientHelpers;
+import net.dries007.tfc.client.ClimateRenderCache;
 import net.dries007.tfc.client.RenderHelpers;
+import net.dries007.tfc.config.TFCConfig;
+import net.dries007.tfc.config.TemperatureDisplayStyle;
 import net.dries007.tfc.network.SwitchInventoryTabPacket;
+import net.dries007.tfc.util.calendar.Calendars;
 
 public class PlayerInventoryTabButton extends Button
 {
@@ -26,14 +36,16 @@ public class PlayerInventoryTabButton extends Button
     private int iconY;
     private int prevGuiLeft;
     private int prevGuiTop;
+    private SwitchInventoryTabPacket.Tab tab;
     private Runnable tickCallback;
 
     public PlayerInventoryTabButton(int guiLeft, int guiTop, int xIn, int yIn, int widthIn, int heightIn, int textureU, int textureV, int iconX, int iconY, int iconU, int iconV, SwitchInventoryTabPacket.Tab tab)
     {
-        this(guiLeft, guiTop, xIn, yIn, widthIn, heightIn, textureU, textureV, iconX, iconY, iconU, iconV, button -> PacketDistributor.sendToServer(new SwitchInventoryTabPacket(tab)));
+        this(guiLeft, guiTop, xIn, yIn, widthIn, heightIn, textureU, textureV, iconX, iconY, iconU, iconV, button -> PacketDistributor.sendToServer(new SwitchInventoryTabPacket(tab)), tab);
+        this.tab = tab;
     }
 
-    public PlayerInventoryTabButton(int guiLeft, int guiTop, int xIn, int yIn, int widthIn, int heightIn, int textureU, int textureV, int iconX, int iconY, int iconU, int iconV, OnPress onPressIn)
+    public PlayerInventoryTabButton(int guiLeft, int guiTop, int xIn, int yIn, int widthIn, int heightIn, int textureU, int textureV, int iconX, int iconY, int iconU, int iconV, OnPress onPressIn, SwitchInventoryTabPacket.Tab tab)
     {
         super(guiLeft + xIn, guiTop + yIn, widthIn, heightIn, Component.empty(), onPressIn, RenderHelpers.NARRATION);
         this.prevGuiLeft = guiLeft;
@@ -45,6 +57,7 @@ public class PlayerInventoryTabButton extends Button
         this.iconU = iconU;
         this.iconV = iconV;
         this.tickCallback = () -> {};
+        this.tab = tab;
     }
 
     public PlayerInventoryTabButton setRecipeBookCallback(InventoryScreen screen)
@@ -75,6 +88,30 @@ public class PlayerInventoryTabButton extends Button
 
         graphics.blit(ClientHelpers.GUI_ICONS, getX(), getY(), 0, (float) textureU, (float) textureV, width, height, 256, 256);
         graphics.blit(ClientHelpers.GUI_ICONS, iconX, iconY, 16, 16, (float) iconU, (float) iconV, 32, 32, 256, 256);
+
+        if (this.isHovered() && (tab == SwitchInventoryTabPacket.Tab.CALENDAR || tab == SwitchInventoryTabPacket.Tab.CLIMATE))
+        {
+            final Font font = Minecraft.getInstance().font;
+            Component hoverText;
+            switch (tab)
+            {
+                case CALENDAR ->
+                {
+                    hoverText = Calendars.CLIENT.getDayTime();
+                }
+                case CLIMATE ->
+                {
+                    final TemperatureDisplayStyle style = TFCConfig.CLIENT.climateTooltipStyle.get();
+                    hoverText = Objects.requireNonNull(style.formatRange(ClimateRenderCache.INSTANCE.getTemperature()));
+                }
+                default ->
+                {
+                    hoverText = Component.empty();
+                }
+            }
+
+            graphics.renderTooltip(font, hoverText, mouseX, mouseY);
+        }
     }
 
     public void updateGuiSize(int guiLeft, int guiTop)
