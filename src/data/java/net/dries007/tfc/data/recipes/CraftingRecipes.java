@@ -46,7 +46,6 @@ import net.dries007.tfc.common.recipes.ingredients.LacksTraitIngredient;
 import net.dries007.tfc.common.recipes.ingredients.NotRottenIngredient;
 import net.dries007.tfc.common.recipes.outputs.MealModifier;
 import net.dries007.tfc.util.Metal;
-import net.dries007.tfc.util.MetalItem;
 
 import static net.dries007.tfc.util.DataGenerationHelpers.Builder;
 
@@ -329,6 +328,15 @@ public interface CraftingRecipes extends Recipes
             recipe().useTool(TFCTags.Items.TOOLS_CHISEL, blocks.get(Rock.BlockType.RAW), blocks.get(Rock.BlockType.SMOOTH));
 
             TFCBlocks.ROCK_DECORATIONS.get(rock).forEach((type, decorations) -> addDecorations(blocks.get(type), decorations));
+            recipe("from_slabs")
+                .input(rock.getSlab(Rock.BlockType.COBBLE).get())
+                .shapeless(blocks.get(Rock.BlockType.LOOSE), 2);
+            recipe("from_stairs")
+                .input(rock.getStair(Rock.BlockType.COBBLE).get())
+                .shapeless(blocks.get(Rock.BlockType.LOOSE), 3);
+            recipe("from_walls")
+                .input(rock.getWall(Rock.BlockType.COBBLE).get())
+                .shapeless(blocks.get(Rock.BlockType.LOOSE), 4);
         }
 
         TFCBlocks.SANDSTONE.forEach((color, blocks) -> {
