@@ -91,20 +91,16 @@ public class PlayerInventoryTabButton extends Button
 
         if (this.isHovered())
         {
-            Component hoverText = Component.empty();
-
             if (tab == SwitchInventoryTabPacket.Tab.CALENDAR)
             {
-                hoverText = Calendars.CLIENT.getDayTime();
+                final Component hoverText = Calendars.CLIENT.getDayTime();
+                final Font font = Minecraft.getInstance().font;
+                graphics.renderTooltip(font, hoverText, mouseX, mouseY);
             }
-            if (tab == SwitchInventoryTabPacket.Tab.CLIMATE)
+            else if (tab == SwitchInventoryTabPacket.Tab.CLIMATE)
             {
                 final TemperatureDisplayStyle style = TFCConfig.CLIENT.climateTooltipStyle.get();
-                hoverText = Objects.requireNonNull(style.formatRange(ClimateRenderCache.INSTANCE.getTemperature()));
-            }
-
-            if (!hoverText.equals(Component.empty()))
-            {
+                final Component hoverText = Objects.requireNonNull(style.formatRange(ClimateRenderCache.INSTANCE.getTemperature()));
                 final Font font = Minecraft.getInstance().font;
                 graphics.renderTooltip(font, hoverText, mouseX, mouseY);
             }
