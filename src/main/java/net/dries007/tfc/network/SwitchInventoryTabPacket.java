@@ -6,6 +6,7 @@
 
 package net.dries007.tfc.network;
 
+import net.dries007.tfc.client.screen.button.PlayerInventoryTabButton;
 import net.dries007.tfc.common.container.TFCContainerProviders;
 import net.dries007.tfc.compat.patchouli.PatchouliIntegration;
 
@@ -16,10 +17,10 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.level.ServerPlayer;
 import org.jetbrains.annotations.Nullable;
 
-public record SwitchInventoryTabPacket(Tab tab) implements CustomPacketPayload
+public record SwitchInventoryTabPacket(PlayerInventoryTabButton.Tab tab) implements CustomPacketPayload
 {
     public static final CustomPacketPayload.Type<SwitchInventoryTabPacket> TYPE = PacketHandler.type("switch_inventory_tab");
-    public static final StreamCodec<ByteBuf, SwitchInventoryTabPacket> CODEC = Tab.STREAM.map(SwitchInventoryTabPacket::new, c -> c.tab);
+    public static final StreamCodec<ByteBuf, SwitchInventoryTabPacket> CODEC = PlayerInventoryTabButton.Tab.STREAM.map(SwitchInventoryTabPacket::new, c -> c.tab);
 
     @Override
     public Type<? extends CustomPacketPayload> type()
@@ -41,13 +42,5 @@ public record SwitchInventoryTabPacket(Tab tab) implements CustomPacketPayload
                 case BOOK -> PatchouliIntegration.openGui(player);
             }
         }
-    }
-
-    public enum Tab
-    {
-        INVENTORY, CALENDAR, NUTRITION, CLIMATE, BOOK;
-
-        public static final Tab[] VALUES = values();
-        public static final StreamCodec<ByteBuf, Tab> STREAM = ByteBufCodecs.BYTE.map(c -> VALUES[c], c -> (byte) c.ordinal());
     }
 }

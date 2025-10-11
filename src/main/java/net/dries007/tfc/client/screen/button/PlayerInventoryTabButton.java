@@ -28,34 +28,56 @@ import net.dries007.tfc.util.calendar.Calendars;
 
 public class PlayerInventoryTabButton extends Button
 {
+    public enum Tab
+    {
+        INVENTORY(0, 0, 176, 4),
+        CALENDAR(16, 0, 176, 27),
+        NUTRITION(32, 0, 176, 50),
+        CLIMATE(48, 0, 176, 73),
+        BOOK(64, 0, 176, 96);
+
+        Tab(int iconU, int iconV, int xIn, int yIn)
+        {
+            this.iconU = iconU;
+            this.iconV = iconV;
+            this.xIn = xIn;
+            this.yIn = yIn;
+        }
+
+        public final int iconU;
+        public final int iconV;
+
+        public final int xIn;
+        public final int yIn;
+
+        public static final PlayerInventoryTabButton.Tab[] VALUES = values();
+        public static final StreamCodec<ByteBuf, PlayerInventoryTabButton.Tab> STREAM = ByteBufCodecs.BYTE.map(c -> VALUES[c], c -> (byte) c.ordinal());
+    }
+
     private final int textureU;
     private final int textureV;
-    private final int iconU;
-    private final int iconV;
     private int iconX;
     private int iconY;
     private int prevGuiLeft;
     private int prevGuiTop;
-    private SwitchInventoryTabPacket.Tab tab;
+    private Tab tab;
     private Runnable tickCallback;
 
-    public PlayerInventoryTabButton(int guiLeft, int guiTop, int xIn, int yIn, int widthIn, int heightIn, int textureU, int textureV, int iconX, int iconY, int iconU, int iconV, SwitchInventoryTabPacket.Tab tab)
+    public PlayerInventoryTabButton(int guiLeft, int guiTop, boolean active, Tab tab)
     {
-        this(guiLeft, guiTop, xIn, yIn, widthIn, heightIn, textureU, textureV, iconX, iconY, iconU, iconV, button -> PacketDistributor.sendToServer(new SwitchInventoryTabPacket(tab)), tab);
+        this(guiLeft, guiTop, active, tab, button -> PacketDistributor.sendToServer(new SwitchInventoryTabPacket(tab)));
         this.tab = tab;
     }
 
-    public PlayerInventoryTabButton(int guiLeft, int guiTop, int xIn, int yIn, int widthIn, int heightIn, int textureU, int textureV, int iconX, int iconY, int iconU, int iconV, OnPress onPressIn, SwitchInventoryTabPacket.Tab tab)
+    public PlayerInventoryTabButton(int guiLeft, int guiTop, boolean active, Tab tab, OnPress onPressIn)
     {
-        super(guiLeft + xIn, guiTop + yIn, widthIn, heightIn, Component.empty(), onPressIn, RenderHelpers.NARRATION);
+        super(guiLeft + tab.xIn + (active ? -3 : 0), guiTop + tab.yIn, active ? 23 : 20, 22, Component.empty(), onPressIn, RenderHelpers.NARRATION);
         this.prevGuiLeft = guiLeft;
         this.prevGuiTop = guiTop;
-        this.textureU = textureU;
-        this.textureV = textureV;
-        this.iconX = guiLeft + xIn + iconX;
-        this.iconY = guiTop + yIn + iconY;
-        this.iconU = iconU;
-        this.iconV = iconV;
+        this.textureU = active ? 100 : 80;
+        this.textureV = 0;
+        this.iconX = guiLeft + tab.xIn + 1;
+        this.iconY = guiTop + tab.yIn + 2;
         this.tickCallback = () -> {};
         this.tab = tab;
     }
@@ -87,17 +109,17 @@ public class PlayerInventoryTabButton extends Button
         tickCallback.run();
 
         graphics.blit(ClientHelpers.GUI_ICONS, getX(), getY(), 0, (float) textureU, (float) textureV, width, height, 256, 256);
-        graphics.blit(ClientHelpers.GUI_ICONS, iconX, iconY, 16, 16, (float) iconU, (float) iconV, 32, 32, 256, 256);
+        graphics.blit(ClientHelpers.GUI_ICONS, iconX, iconY, 16, 16, (float) tab.iconU, (float) tab.iconV, 16, 16, 256, 256);
 
         if (this.isHovered())
         {
-            if (tab == SwitchInventoryTabPacket.Tab.CALENDAR)
+            if (tab == Tab.CALENDAR)
             {
                 final Component hoverText = Calendars.CLIENT.getDayTime();
                 final Font font = Minecraft.getInstance().font;
                 graphics.renderTooltip(font, hoverText, mouseX, mouseY);
             }
-            else if (tab == SwitchInventoryTabPacket.Tab.CLIMATE)
+            else if (tab == Tab.CLIMATE)
             {
                 final TemperatureDisplayStyle style = TFCConfig.CLIENT.climateTooltipStyle.get();
                 final Component hoverText = Objects.requireNonNull(style.formatRange(ClimateRenderCache.INSTANCE.getTemperature()));

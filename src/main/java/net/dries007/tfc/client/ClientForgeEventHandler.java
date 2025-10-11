@@ -306,10 +306,10 @@ public class ClientForgeEventHandler
                         first = false;
                     }
                     tooltip.add(Component.literal(DARK_GRAY
-                        + typeOfComponent(stack.getComponentsPatch().get(component.type()))
-                        + BuiltInRegistries.DATA_COMPONENT_TYPE.getKey(component.type())
-                        + " = "
-                        + component.value()
+                            + typeOfComponent(stack.getComponentsPatch().get(component.type()))
+                            + BuiltInRegistries.DATA_COMPONENT_TYPE.getKey(component.type())
+                            + " = "
+                            + component.value()
                         // Avoid showing the encoding, it's interesting but not necessary. Uncomment if needing to debug
                         //+ " = "
                         //+ component.encodeValue(RegistryOps.create(NbtOps.INSTANCE, Minecraft.getInstance().level.registryAccess()))
@@ -360,11 +360,11 @@ public class ClientForgeEventHandler
             int guiLeft = screen.getGuiLeft();
             int guiTop = screen.getGuiTop();
 
-            event.addListener(new PlayerInventoryTabButton(guiLeft, guiTop, 176 - 3, 4, 20 + 3, 22, 128 + 20, 0, 1, 3, 0, 0, button -> {}, SwitchInventoryTabPacket.Tab.INVENTORY).setRecipeBookCallback(screen));
-            event.addListener(new PlayerInventoryTabButton(guiLeft, guiTop, 176, 27, 20, 22, 128, 0, 1, 3, 32, 0, SwitchInventoryTabPacket.Tab.CALENDAR).setRecipeBookCallback(screen));
-            event.addListener(new PlayerInventoryTabButton(guiLeft, guiTop, 176, 50, 20, 22, 128, 0, 1, 3, 64, 0, SwitchInventoryTabPacket.Tab.NUTRITION).setRecipeBookCallback(screen));
-            event.addListener(new PlayerInventoryTabButton(guiLeft, guiTop, 176, 73, 20, 22, 128, 0, 1, 3, 96, 0, SwitchInventoryTabPacket.Tab.CLIMATE).setRecipeBookCallback(screen));
-            PatchouliIntegration.ifEnabled(() -> event.addListener(new PlayerInventoryTabButton(guiLeft, guiTop, 176, 96, 20, 22, 128, 0, 1, 3, 0, 32, SwitchInventoryTabPacket.Tab.BOOK).setRecipeBookCallback(screen)));
+            event.addListener(new PlayerInventoryTabButton(guiLeft, guiTop, true, PlayerInventoryTabButton.Tab.INVENTORY, button -> {}).setRecipeBookCallback(screen));
+            event.addListener(new PlayerInventoryTabButton(guiLeft, guiTop, false, PlayerInventoryTabButton.Tab.CALENDAR).setRecipeBookCallback(screen));
+            event.addListener(new PlayerInventoryTabButton(guiLeft, guiTop, false, PlayerInventoryTabButton.Tab.NUTRITION).setRecipeBookCallback(screen));
+            event.addListener(new PlayerInventoryTabButton(guiLeft, guiTop, false, PlayerInventoryTabButton.Tab.CLIMATE).setRecipeBookCallback(screen));
+            PatchouliIntegration.ifEnabled(() -> event.addListener(new PlayerInventoryTabButton(guiLeft, guiTop, false, PlayerInventoryTabButton.Tab.BOOK).setRecipeBookCallback(screen)));
         }
     }
 
@@ -466,7 +466,7 @@ public class ClientForgeEventHandler
             Slot slot = inv.getSlotUnderMouse();
             if (slot != null)
             {
-               PacketDistributor.sendToServer(new StackFoodPacket(slot.index));
+                PacketDistributor.sendToServer(new StackFoodPacket(slot.index));
             }
         }
     }
