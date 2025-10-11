@@ -8,9 +8,12 @@ package net.dries007.tfc.data.recipes;
 
 import java.util.function.Function;
 import java.util.stream.Stream;
+
+import net.dries007.tfc.common.recipes.outputs.*;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
@@ -43,13 +46,6 @@ import net.dries007.tfc.common.recipes.ingredients.HasTraitIngredient;
 import net.dries007.tfc.common.recipes.ingredients.HeatIngredient;
 import net.dries007.tfc.common.recipes.ingredients.LacksTraitIngredient;
 import net.dries007.tfc.common.recipes.ingredients.NotRottenIngredient;
-import net.dries007.tfc.common.recipes.outputs.AddHeatModifier;
-import net.dries007.tfc.common.recipes.outputs.AddTraitModifier;
-import net.dries007.tfc.common.recipes.outputs.CopyInputModifier;
-import net.dries007.tfc.common.recipes.outputs.DyeLeatherModifier;
-import net.dries007.tfc.common.recipes.outputs.EmptyBowlModifier;
-import net.dries007.tfc.common.recipes.outputs.ItemStackProvider;
-import net.dries007.tfc.common.recipes.outputs.RemoveTraitModifier;
 
 import static net.minecraft.world.item.crafting.Ingredient.*;
 
@@ -212,12 +208,17 @@ public interface BarrelRecipes extends Recipes
         dye(TFCItems.UNFIRED_LARGE_VESSEL, TFCItems.UNFIRED_GLAZED_LARGE_VESSELS::get);
 
         for (DyeColor color : DyeColor.values())
-            barrel(color.name() + "_leather")
+            barrel(color.name() + "_dyeable")
                 .input(fluidOf(color), 25)
-                .input(Ingredient.of(Items.LEATHER_CHESTPLATE, Items.LEATHER_LEGGINGS, Items.LEATHER_BOOTS, Items
-                    .LEATHER_HELMET, Items.LEATHER_HORSE_ARMOR))
+                .input(Ingredient.of(ItemTags.DYEABLE))
                 .output(ItemStackProvider.of(CopyInputModifier.INSTANCE, DyeLeatherModifier.of(color)))
                 .sealed(hours(1));
+
+        barrel("bleach_dyeable")
+            .input(fluidOf(SimpleFluid.LYE), 25)
+            .input(Ingredient.of(ItemTags.DYEABLE))
+            .output(ItemStackProvider.of(CopyInputModifier.INSTANCE, RemoveDyeModifier.INSTANCE))
+            .sealed(hours(1));
 
         musicDisc(DyeColor.YELLOW, Items.MUSIC_DISC_13);
         musicDisc(DyeColor.ORANGE, Items.MUSIC_DISC_BLOCKS);
