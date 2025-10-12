@@ -137,7 +137,8 @@ public interface CraftingRecipes extends Recipes
             "wooden_hoe",
             "wooden_pickaxe",
             "wooden_shovel",
-            "wooden_sword"
+            "wooden_sword",
+            "snow_block"
         );
         for (String material : List.of("diamond", "golden", "iron"))
             remove(
@@ -1245,6 +1246,13 @@ public interface CraftingRecipes extends Recipes
             .input('S', TFCItems.METAL_ITEMS.get(Metal.BRASS).get(Metal.ItemType.SHEET))
             .pattern(" G ", "SBS", " B ")
             .shaped(TFCBlocks.CALENDAR_CLOCK);
+        recipe()
+            .input('G', Blocks.GLASS_PANE)
+            .input('B', TFCTags.Items.GLASS_BOTTLES)
+            .input('R', Items.REDSTONE)
+            .input('S', TFCItems.METAL_ITEMS.get(Metal.BRASS).get(Metal.ItemType.SHEET))
+            .pattern(" G ", "RBR", " S ")
+            .shaped(TFCBlocks.THERMOMETER);
     }
 
     /**
