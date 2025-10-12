@@ -907,16 +907,9 @@ def generate(rm: ResourceManager):
     block.with_block_loot(when_silk_touch('minecraft:ice'))
     rm.item_model('ice_pile', parent='minecraft:item/ice', no_textures=True)
 
-    # Loot table for snow blocks and snow piles - override the vanilla one to only return one snowball per layer
+    # Loot table for snow blocks and snow piles - override the vanilla one to return nothing (snowballs are useless and annoying)
     def snow_block_loot_table(block: str):
-        rm.block_loot(block, loot_tables.pool(loot_tables.alternatives(
-            when_silk_touch('minecraft:snow'),
-            'minecraft:snowball'
-        ), conditions=({
-            'condition': 'minecraft:entity_properties',
-            'predicate': {},
-            'entity': 'this'
-        })))
+        rm.block_loot(block, when_silk_touch('minecraft:snow'))
 
     snow_block_loot_table('snow_pile')
     snow_block_loot_table('minecraft:snow')
