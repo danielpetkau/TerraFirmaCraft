@@ -2,6 +2,7 @@
 #  See the project README.md and LICENSE.txt for more information.
 
 import itertools
+import math
 from typing import List
 
 from mcresources import ResourceManager, ItemContext, utils, block_states, loot_tables, atlases, BlockContext
@@ -631,6 +632,16 @@ def generate(rm: ResourceManager):
         ({'lit': False, 'axis': 'z'}, {'model': 'tfc:block/firepit_unlit', 'y': 90})
     ).with_lang(lang('Pot')).with_block_loot('tfc:powder/wood_ash', 'tfc:ceramic/pot')
     rm.item_model('pot', 'tfc:item/firepit_pot')
+
+    # easier to just use a loop since 0 - 15 power needs to be mapped to 0 - 10 models
+    thermometer_states = {}
+    for p in range (0, 16):
+        for f, y in {'north': None, 'south': 180, 'east': 90, 'west': 270}.items():
+            m = math.floor(p * (11/16))
+            thermometer_states.update({'power=%s,facing=%s' % (p, f) : {'model': 'tfc:block/thermometer/thermometer_%s' % m, 'y': y}})
+
+    rm.blockstate('thermometer', variants=thermometer_states).with_lang(lang('Thermometer')).with_block_loot('tfc:thermometer')
+    rm.item_model('thermometer')
 
     block = rm.blockstate('powderkeg', variants={
         'lit=false,sealed=true': {'model': 'tfc:block/powderkeg_sealed'},
