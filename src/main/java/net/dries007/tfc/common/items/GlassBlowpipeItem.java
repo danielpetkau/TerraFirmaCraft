@@ -175,16 +175,7 @@ public class GlassBlowpipeItem extends BlowpipeItem
     @Override
     public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entity)
     {
-        if (entity instanceof Player player)
-        {
-            stopUsing(player, stack);
-        }
-        return super.finishUsingItem(stack, level, entity);
-    }
-
-    protected void stopUsing(LivingEntity entity, ItemStack stack)
-    {
-        if (entity instanceof Player player)
+        if (entity instanceof Player player && !level.isClientSide)
         {
             final ItemStack otherHand = getOtherHandItem(player);
             final GlassOperation op = GlassOperation.get(otherHand, player);
@@ -192,12 +183,11 @@ public class GlassBlowpipeItem extends BlowpipeItem
             {
                 GlassWorking.apply(stack, op);
 
-                final Level level = entity.level();
                 final @Nullable GlassworkingRecipe recipe = GlassworkingRecipe.get(level, stack);
                 if (recipe != null)
                 {
                     final boolean broken = consumeBlowpipe(player, player.getUsedItemHand(), stack);
-                    ItemHandlerHelper.giveItemToPlayer(player, recipe.getResultItem(level.registryAccess()));
+                    ItemHandlerHelper.giveItemToPlayer(player, recipe.getResultItem(level.registryAccess()).copy());
                     level.playSound(null, player.blockPosition(), broken ? SoundEvents.ITEM_BREAK : SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.PLAYERS);
                 }
             }
@@ -209,5 +199,6 @@ public class GlassBlowpipeItem extends BlowpipeItem
             player.getCooldowns().addCooldown(TFCItems.BLOWPIPE_WITH_GLASS.asItem(), 80);
             player.getCooldowns().addCooldown(TFCItems.CERAMIC_BLOWPIPE_WITH_GLASS.asItem(), 80);
         }
+        return super.finishUsingItem(stack, level, entity);
     }
 }
