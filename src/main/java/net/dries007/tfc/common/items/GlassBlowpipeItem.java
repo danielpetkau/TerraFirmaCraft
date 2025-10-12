@@ -206,6 +206,8 @@ public class GlassBlowpipeItem extends BlowpipeItem
             // Cooldown all blowpipe items
             player.getCooldowns().addCooldown(TFCItems.BLOWPIPE.asItem(), 80);
             player.getCooldowns().addCooldown(TFCItems.CERAMIC_BLOWPIPE.asItem(), 80);
+            player.getCooldowns().addCooldown(TFCItems.BLOWPIPE_WITH_GLASS.asItem(), 80);
+            player.getCooldowns().addCooldown(TFCItems.CERAMIC_BLOWPIPE_WITH_GLASS.asItem(), 80);
         }
     }
 }
