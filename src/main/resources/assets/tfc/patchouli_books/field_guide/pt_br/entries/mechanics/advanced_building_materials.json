@@ -17,18 +17,18 @@
       "type": "patchouli:text",
       "anchor": "plaster",
       "text": "Alabaster é um bloco de construção feito de $(l:the_world/ores_and_minerals#gypsum)Gesso$(). Alabaster pode ser feito elaborando diretamente com $(l:the_world/ores_and_minerals#gypsum)Gesso$(), No entanto, pode ser feito com mais eficiência, selando alguns $(l:the_world/ores_and_minerals#gypsum)Gesso$() com 100 mB de $(thing)Limewater$() em um barril.",
-      "title": "Alabaster"
+      "title": "Plaster"
     },
     {
       "type": "patchouli:crafting",
       "recipe": "tfc:crafting/alabaster_brick",
       "recipe2": "tfc:crafting/alabaster/bricks",
-      "title": "Alabaster Bricks"
+      "title": "Plaster Bricks"
     },
     {
       "type": "patchouli:text",
-      "text": "Alabaster can be $(l:mechanics/dye)dyed$() in a $(l:mechanics/barrels)Barrel$() of dye into any color. Raw Alabaster blocks can also be $(l:mechanics/chisel)chiseled$() into $(thing)Polished Alabaster$() using the $(thing)Smooth$() chisel mode, or crafted into stairs, slabs, or walls.",
-      "title": "Alabaster Decorations"
+      "text": "Plaster can be $(l:mechanics/dye)dyed$() in a $(l:mechanics/barrels)Barrel$() of dye into any color. Raw Plaster blocks can also be $(l:mechanics/chisel)chiseled$() into $(thing)Polished Plaster$() using the $(thing)Smooth$() chisel mode, or crafted into stairs, slabs, or walls.",
+      "title": "Plaster Decorations"
     },
     {
       "type": "patchouli:crafting",
