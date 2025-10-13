@@ -1,11 +1,18 @@
 ### Changes
 - Visual rework to nutrition, climate, and calendar screens
-- Change wind to use a new scale and a new distribution
-- Make windmills respect wind speed
-- Added mechanical clock
-- Added weather vane and anemometer
-- Added thermometer
+- Added Precision Clock
+  - Outputs an analog redstone signal based on the month or the hour
+- Added Weather Vane
+  - Outputs an analog redstone signal based on the wind direction
+- Added Anemometer
+  - Outputs an analog redstone signal based on the wind speed
+- Added Thermometer
+  - Outputs an analog redstone signal based on the ambient temperature, or the temperature of a device
 - Shoveling snow no longer drops snowballs
+- Add barrel recipe for mass crafting of mud from dirt
+- Rain and snow are now pushed by the wind
+  - Both weather types are angled by the wind
+  - Snow is sped up by the wind
 
 ### Bug Fixes
 - Fix invalid item placement below shelves (Closes #3154)
@@ -21,3 +28,5 @@
 - Fix glassworking recipes giving invalid item stacks and bricking servers (Closes #3214)
 - Fix crops that grow with sticks dropping extra items on death
 - Allow whole pumpkins and melons to be composted
+- Fix Barrels deleting their contents upon placement into a barrel rack (Closes #3178)
+- Fix Fireboxes playing lit sounds while unlit
