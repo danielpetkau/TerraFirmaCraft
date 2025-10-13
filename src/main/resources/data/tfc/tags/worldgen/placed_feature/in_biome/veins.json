@@ -3,7 +3,6 @@
   "replace": false,
   "values": [
     "tfc:vein/gravel",
-    "tfc:vein/kaolin_disc",
     "tfc:vein/granite_dike",
     "tfc:vein/diorite_dike",
     "tfc:vein/gabbro_dike",
@@ -42,8 +41,6 @@
     "tfc:vein/lapis_lazuli",
     "tfc:vein/diamond",
     "tfc:vein/emerald",
-    "tfc:vein/amethyst",
-    "tfc:vein/opal",
     "tfc:vein/ruby",
     "tfc:geode"
   ]

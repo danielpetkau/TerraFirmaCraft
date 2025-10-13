@@ -38,7 +38,7 @@ class Vein(NamedTuple):
     density: float
     grade: tuple[int, int, int]  # (poor, normal, rich) weights
     rocks: tuple[str, ...]  # Rock, or rock categories
-    biomes: str | None
+    rivers_only: bool
     height: int
     radius: int
     deposits: bool
@@ -59,10 +59,9 @@ class Vein(NamedTuple):
         max_y: int,
         density: float,
         rocks: tuple[str, ...],
-
+        rivers_only: bool = False,
         vein_type: str = 'cluster',
         grade: tuple[int, int, int] = (),
-        biomes: str = None,
         height: int = 2,  # For disc type veins, `size` is the width
         radius: int = 5,  # For pipe type veins, `size` is the height
         deposits: bool = False,
@@ -78,7 +77,7 @@ class Vein(NamedTuple):
         assert project is None or project is True or project == 'offset'
 
         underground_rarity, underground_count = deep_indicator
-        return Vein(ore, 'tfc:%s_vein' % vein_type, rarity, size, min_y, max_y, density, grade, rocks, biomes, height, radius, deposits, indicator, underground_rarity, underground_count, None if project is None else True, None if project != 'offset' else True, near_lava, simple_blocks)
+        return Vein(ore, 'tfc:%s_vein' % vein_type, rarity, size, min_y, max_y, density, grade, rocks, rivers_only, height, radius, deposits, indicator, underground_rarity, underground_count, None if project is None else True, None if project != 'offset' else True, near_lava, simple_blocks)
 
     def config(self) -> dict[str, Any]:
         cfg = {
@@ -88,7 +87,6 @@ class Vein(NamedTuple):
             'max_y': self.max_y,
             'project': self.project,
             'project_offset': self.project_offset,
-            'biomes': self.biomes,
             'near_lava': self.near_lava,
         }
         if self.vein_type == 'tfc:cluster_vein':
@@ -412,8 +410,8 @@ ORE_VEINS: dict[str, Vein] = {
     'diamond': Vein.new('diamond', 30, 60, -64, 100, 0.15, ('gabbro',), vein_type='pipe', radius=5),
     'emerald': Vein.new('emerald', 80, 60, -64, 100, 0.15, ('igneous_intrusive',), vein_type='pipe', radius=5),
 
-    'amethyst': Vein.new('amethyst', 25, 8, 40, 60, 0.2, ('sedimentary', 'metamorphic'), vein_type='disc', biomes='#tfc:is_river', height=4),
-    'opal': Vein.new('opal', 25, 8, 40, 60, 0.2, ('sedimentary', 'igneous_extrusive'), vein_type='disc', biomes='#tfc:is_river', height=4),
+    'amethyst': Vein.new('amethyst', 25, 8, 40, 60, 0.2, ('sedimentary', 'metamorphic'), vein_type='disc', rivers_only=True, height=4),
+    'opal': Vein.new('opal', 25, 8, 40, 60, 0.2, ('sedimentary', 'igneous_extrusive'), vein_type='disc', rivers_only=True, height=4),
     'ruby': Vein.new('ruby', 12, 22, -70, -10, 0.2, ('schist', 'gneiss')),
 }
 
@@ -915,6 +913,7 @@ BLOCK_ENTITIES = ('log_pile', 'burning_log_pile', 'placed_item', 'pit_kiln', 'ch
 ARMOR_SECTIONS = ('chestplate', 'leggings', 'boots', 'helmet')
 TFC_ARMOR_SECTIONS = ('helmet', 'chestplate', 'greaves', 'boots')
 TFC_BIOMES = ['badlands', 'canyons', 'low_canyons', 'plains', 'plateau', 'plateau_wide', 'hills', 'rolling_hills', 'highlands', 'lake', 'lowlands', 'salt_marsh', 'mountains', 'volcanic_mountains', 'old_mountains', 'oceanic_mountains', 'volcanic_oceanic_mountains', 'ocean', 'ocean_reef', 'deep_ocean', 'deep_ocean_trench', 'river', 'guano_island', 'shore', 'tidal_flats', 'sea_stacks', 'terrace_upper', 'terrace_lower', 'setback_cliffs', 'coastal_dunes', 'rocky_shores', 'embayments', 'salt_flats', 'mud_flats', 'dune_sea', 'grassy_dunes', 'whorled_canyons', 'stair_step_canyons', 'mesas', 'buttes', 'hoodoos', 'rocky_plateau', 'tower_karst_plains', 'burren_plains', 'shilin_plains', 'doline_plains', 'cenote_plains', 'tower_karst_canyons', 'doline_canyons', 'cenote_canyons', 'shilin_canyons', 'tower_karst_hills', 'shilin_hills', 'doline_hills', 'cenote_hills', 'tower_karst_highlands', 'burren_badlands_tall', 'shilin_highlands', 'doline_highlands', 'cenote_highlands', 'extreme_doline_plateau', 'burren_plateau', 'shilin_plateau', 'doline_plateau', 'cenote_plateau', 'tower_karst_lake', 'tower_karst_bay', 'extreme_doline_mountains', 'burren_badlands', 'doline_rolling_hills', 'cenote_rolling_hills', 'burren_roche_moutonee', 'active_shield_volcano', 'dormant_shield_volcano', 'extinct_shield_volcano', 'ancient_shield_volcano', 'sunken_shield_volcano', 'shield_volcano_shore', 'old_shield_volcano_shore', 'mountain_lake', 'volcanic_mountain_lake', 'old_mountain_lake', 'oceanic_mountain_lake', 'volcanic_oceanic_mountain_lake', 'plateau_lake', 'ice_sheet', 'ice_sheet_mountains', 'ice_sheet_oceanic_mountains', 'ice_sheet_shield_volcano', 'ice_sheet_tuyas', 'subglacial_lake', 'ice_sheet_edge', 'ice_sheet_tuyas_edge', 'ice_sheet_mountains_edge', 'ice_sheet_oceanic_mountains_edge', 'meltwater_lake', 'ice_sheet_oceanic', 'ice_sheet_shore', 'glaciated_shield_volcano', 'glaciated_mountains', 'glaciated_oceanic_mountains', 'glacially_carved_mountains', 'glacially_carved_oceanic_mountains', 'drumlins', 'tuyas', 'knob_and_kettle', 'patterned_ground', 'inverted_patterned_ground', 'stone_circles']
+KAOLIN_BIOMES = ['rolling_hills', 'highlands', 'plateau', 'plateau_wide', 'old_mountains', 'tower_karst_hills', 'tower_karst_highlands', 'extreme_doline_plateau', 'extreme_doline_mountains', 'doline_rolling_hills', 'doline_highlands', 'doline_plateau', 'cenote_rolling_hills', 'cenote_highlands', 'cenote_plateau', 'shilin_hills', 'shilin_highlands', 'shilin_plateau', 'buttes', 'mesas', 'stair_step_canyons', 'dormant_shield_volcano', 'extinct_shield_volcano', 'ancient_shield_volcano', 'badlands', 'canyons']
 VANILLA_TRIMS = ('coast', 'sentry', 'dune', 'wild', 'ward', 'eye', 'vex', 'tide', 'snout', 'rib', 'spire', 'wayfinder', 'shaper', 'silence', 'raiser', 'host', 'flow', 'bolt')
 
 BUTTERFLIES = ('golden_birdwing', 'papilio_rumanzovia', 'papilio_palinurus', 'moth_diaphora', 'peacock', 'sericinus', 'papilio_blumei', 'adonis_blue', 'silverwashed_frittilary', 'moth_saturnia', 'moth_argema', 'moth_attacus', 'moth_luna', 'moth_trosia')
