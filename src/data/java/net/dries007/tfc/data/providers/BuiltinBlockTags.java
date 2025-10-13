@@ -742,6 +742,8 @@ public class BuiltinBlockTags extends TagsProvider<Block> implements Accessors
             TFCBlocks.GROUNDCOVER.get(GroundcoverBlockType.MOLLUSK),
             TFCBlocks.GROUNDCOVER.get(GroundcoverBlockType.MUSSEL),
             TFCBlocks.GROUNDCOVER.get(GroundcoverBlockType.SEA_URCHIN));
+        tag(CANCELS_FLOOD_FILL_LAKE)
+            .addTag(BAMBOO);
         tag(KAOLIN_CLAY_REPLACEABLE).addTags(DIRT, Tags.Blocks.STONES, Tags.Blocks.GRAVELS);
         tag(KAOLIN_CLAY_REPLACEABLE)
             .addTags(DIRT, Tags.Blocks.GRAVELS)

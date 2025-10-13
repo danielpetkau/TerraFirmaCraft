@@ -243,6 +243,8 @@ public class TFCTags
         public static final TagKey<Block> SINGLE_BLOCK_REPLACEABLE = tag("single_block_replaceable");
         /** Decoration blocks that spawn in tide pools */
         public static final TagKey<Block> TIDE_POOL_BLOCKS = tag("tide_pool_blocks");
+        /** Blocks that cannot border a flood fill lake */
+        public static final TagKey<Block> CANCELS_FLOOD_FILL_LAKE = tag("cancels_flood_fill_lake");
         /** Blocks that can be replaced with kaolin clay */
         public static final TagKey<Block> KAOLIN_CLAY_REPLACEABLE = tag("kaolin_clay_replaceable");
         /** Blocks that can be replaced with powder snow */
