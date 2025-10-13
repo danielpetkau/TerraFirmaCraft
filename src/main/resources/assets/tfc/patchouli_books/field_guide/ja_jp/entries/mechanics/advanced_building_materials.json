@@ -15,7 +15,7 @@
     },
     {
       "type": "patchouli:text",
-      "anchor": "alabaster",
+      "anchor": "plaster",
       "text": "アラバスターは $(l:the_world/ores_and_minerals#gypsum)石膏$() から作られた建築ブロックです。 アラバスターは $(l:the_world/ores_and_minerals#gypsum)石膏$() を使って直接クラフトすることで作成できますが、一部の $(l:the_world/ores_and_minerals#gypsum)石膏$() を 100 mB で封印するとより効率的に作成できます。 樽の中に $(thing)石灰水$()を入れて石膏を密封します。",
       "title": "アラバスター"
     },

@@ -44,6 +44,14 @@ class I18n:
 
     def translate(self, text: str) -> str:
         """ Translates the string into the current domain """
+        # Small logic to ignore the English-only rename of Alabaster to Plaster
+        if self.is_root() == False:
+            text = (text
+                .replace("Plaster", "Alabaster")
+                .replace("plaster", "alabaster")
+                .replace("PLASTER", "ALABASTER")
+            )
+
         if self.is_root():
             # For en_us, always keep the current text (read only)
             translated = text

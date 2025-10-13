@@ -15,7 +15,7 @@
     },
     {
       "type": "patchouli:text",
-      "anchor": "alabaster",
+      "anchor": "plaster",
       "text": "雪花石膏是一種用$(l:the_world/ores_and_minerals#gypsum)石膏$()礦做成的建築材料。石膏可以直接在物品欄中做成雪花石膏，不過等以後有了$(l:mechanics/barrels)桶$()會有更高效的製作方法。",
       "title": "雪花石膏"
     },

@@ -15,7 +15,7 @@
     },
     {
       "type": "patchouli:text",
-      "anchor": "alabaster",
+      "anchor": "plaster",
       "text": "Алебастр - будівельний матеріал, що виготовлено з $(l:the_world/ores_and_minerals#gypsum)гіпсу$(). Його можна виготовити безпосередньо з $(l:the_world/ores_and_minerals#gypsum)гіпсу$(), але ефективніше буде запечатати $(l:the_world/ores_and_minerals#gypsum)гіпс$() у діжці із 100 mB $(thing)вапняної води$() на один шматочок.",
       "title": "Алебастр"
     },

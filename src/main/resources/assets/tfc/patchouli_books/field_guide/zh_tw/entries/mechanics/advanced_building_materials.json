@@ -15,7 +15,7 @@
     },
     {
       "type": "patchouli:text",
-      "anchor": "alabaster",
+      "anchor": "plaster",
       "text": "雪花石膏是一種由$(l:the_world/ores_and_minerals#gypsum)石膏$()製成的建築方塊. 它可以直接由$(l:the_world/ores_and_minerals#gypsum)石膏$()合成得到, 但你可以把一些$(l:the_world/ores_and_minerals#gypsum)石膏$()和 100 mB 的$(thing)石灰水$()密封在大桶裡來更高效的製造雪花石膏.",
       "title": "雪花石膏"
     },
