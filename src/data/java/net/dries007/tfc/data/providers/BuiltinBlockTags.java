@@ -761,6 +761,8 @@ public class BuiltinBlockTags extends TagsProvider<Block> implements Accessors
             .addTags(DIRT, Tags.Blocks.GRAVELS)
             .add(Blocks.SNOW_BLOCK);
         tag(THERMOMETER_READABLE)
+            .add(TFCBlocks.STOVE_POT)
+            .add(TFCBlocks.STOVE)
             .add(TFCBlocks.FIREBOX)
             .add(TFCBlocks.BLAST_FURNACE)
             .add(TFCBlocks.CRUCIBLE);

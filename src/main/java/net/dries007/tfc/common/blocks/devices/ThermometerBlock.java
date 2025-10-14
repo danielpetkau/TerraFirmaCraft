@@ -61,30 +61,19 @@ public class ThermometerBlock extends DeviceBlock
     @Nullable
     public BlockState getStateForPlacement(BlockPlaceContext context)
     {
-        BlockState blockstate = this.defaultBlockState();
+        BlockState state = Helpers.getSupportedDirectionalStateForPlacement(this, context, false);
+
+        assert state != null;
+        final Direction direction = state.getValue(FACING);
         final LevelReader levelreader = context.getLevel();
         final BlockPos blockpos = context.getClickedPos();
 
-        final Direction[] looking = context.getNearestLookingDirections();
-
-        for (Direction direction : looking)
+        if (levelreader.getBlockState(blockpos.relative(direction.getOpposite())).is(TFCTags.Blocks.THERMOMETER_READABLE))
         {
-            if (direction.getAxis().isHorizontal())
-            {
-                Direction direction1 = direction.getOpposite();
-                blockstate = blockstate.setValue(FACING, direction1);
-                if (blockstate.canSurvive(levelreader, blockpos))
-                {
-                    if (levelreader.getBlockState(blockpos.relative(direction1.getOpposite())).is(TFCTags.Blocks.THERMOMETER_READABLE))
-                    {
-                        blockstate = blockstate.setValue(ATTACHED, true);
-                    }
-                    return blockstate;
-                }
-            }
+            state = state.setValue(ATTACHED, true);
         }
 
-        return null;
+        return state;
     }
 
     @Override
@@ -169,12 +158,14 @@ public class ThermometerBlock extends DeviceBlock
     }
 
     @Override
-    protected BlockState rotate(BlockState state, Rotation rot) {
+    protected BlockState rotate(BlockState state, Rotation rot)
+    {
         return state.setValue(FACING, rot.rotate(state.getValue(FACING)));
     }
 
     @Override
-    protected BlockState mirror(BlockState state, Mirror mirror) {
+    protected BlockState mirror(BlockState state, Mirror mirror)
+    {
         return state.rotate(mirror.getRotation(state.getValue(FACING)));
     }
 }
