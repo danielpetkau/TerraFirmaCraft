@@ -18,6 +18,7 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -25,6 +26,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.DoorBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.phys.AABB;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.ItemStackHandler;
 
@@ -92,6 +95,17 @@ public class FireboxBlockEntity extends TickableInventoryBlockEntity<ItemStackHa
                 box.heatingCount = box.operableBlocks.size();
                 box.heatingTimestamp = Calendars.SERVER.getTicks();
                 box.markForSync();
+            }
+        }
+        if (level.getGameTime() % 40 == 0 && box.temperature > 300)
+        {
+            for (BlockPos operablePos : box.operableBlocks)
+            {
+                final List<LivingEntity> livingEntities = level.getEntitiesOfClass(LivingEntity.class, new AABB(operablePos));
+                for (LivingEntity living : livingEntities)
+                {
+                    living.igniteForTicks(80);
+                }
             }
         }
         if (box.temperature == 0 || box.heatingCount < 4 || Math.abs(box.temperature - box.burnTemperature) > BellowsBlockEntity.MAX_DEVICE_AIR_TICKS + 1)
@@ -187,7 +201,8 @@ public class FireboxBlockEntity extends TickableInventoryBlockEntity<ItemStackHa
                         }
                     }
                 }
-            }});
+            }
+        });
     }
 
     private static boolean isValidInterior(BlockState state)
