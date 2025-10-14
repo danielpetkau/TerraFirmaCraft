@@ -1070,6 +1070,18 @@ def make_book(rm: ResourceManager, i18n: I18n, local_instance: bool = False, rev
             multiblock('A casting set up', '', False, multiblock_id='tfc:channel_casting'),
             text('$(li)Using a $(l:mechanics/bellows)Bellows$() on a $(thing)Mold Table$() will cool the metal faster.$()$(li)Activating a $(thing)Channel$() with a redstone pulse will start pouring the metal.$()$(li)$(thing)Mold Tables$() output a comparator signal.', 'Automation')
         )),
+        entry('redstone_devices', 'Redstone Devices', 'tfc:calendar_clock', pages=(
+            text('Once you advance far enough in your world, you may want to measure certain conditions, such as the wind speed or the time of the day. There are several devices that may suit your needs for this.'),
+            image('tfc:textures/gui/book/tutorial/redstone_devices.png'),
+            crafting('tfc:crafting/calendar_clock', text_contents='The first is the $(thing)Precision Clock$(). The Clock detects the hour, or, when toggled with $(item)$(k:key.use)$(), the month.'),
+            text('When in hour mode, the clock will output a strong analog signal where signal 0 means midnight or noon, and signal 11 means 11:00 or 23:00. When in month mode, the clock will output a strong analog signal where signal 0 means January, and signal 11 means December. You do not need a comparator to read the Clock\'s signal strength.'),
+            crafting('tfc:crafting/thermometer', text_contents='Next we have the $(thing)Thermometer$(), which detects the ambient temperature, or the temperature of the device it is placed onto.'),
+            text('When reading ambient temperature, the Thermometer will output a strong analog signal where signal 0 means -40C, and signal 15 means +40C. When reading device temperature, the Thermometer will output a weak analog signal where signal 0 means no heat, and signal 15 means Brilliant White. You do not need a comparator to read the Thermometer\'s signal strength.'),
+            crafting('tfc:crafting/anemometer', title=''),
+            text('The $(thing)Anemometer$() detects the wind speed. It outputs a strong analog signal where signal 0 means 0kmh, and signal 15 means 115 kmh. You do not need a comparator to read the Anemometer\'s signal strength.'),
+            crafting('tfc:crafting/vane', title=''),
+            text('The $(thing)Weather Vane$() detects the wind direction. It outputs a strong analog signal where signal 0 means North, and signal 8 means south. The signal increases as the wind direction proceeds clockwise. You do not need a comparator to read the Weather Vane\'s signal strength.'),
+            )),
         entry('grill', 'Firepit And Grill', 'tfc:grill', pages=(
             text('A $(thing)Grill$() is an item that can be added to a firepit to cook foods more efficiently. The grill is able to cook five items at once, and also gives these items the $(thing)Wood Grilled$() trait when cooking food, which provides a minor buff to the item\'s $(l:mechanics/decay)expiration date$(). In order to create a firepit with grill, first create a $(l:getting_started/firepit)Firepit$(), then use a $(thing)Wrought Iron Grill$() on the firepit.').link('tfc:wrought_iron_grill'),
             block_spotlight('A Firepit with Grill', '', 'tfc:grill'),
