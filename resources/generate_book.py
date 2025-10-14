@@ -1086,6 +1086,11 @@ def make_book(rm: ResourceManager, i18n: I18n, local_instance: bool = False, rev
             item_spotlight('tfc:food/fruit_soup', 'Soup Recipes', text_contents='Soup is made from 3-5 $(thing)fruits$(), $(thing)vegetables$(), or $(thing)meats$() in a pot of $(thing)water$(). When the recipe is done, the water in the pot will turn red. $(item)$(k:key.use)$() with a $(l:mechanics/bowls)bowl$() to retrieve it. Soup combines multiple nutrients into a single meal.').anchor('soup'),
             item_spotlight('tfc:bucket/red_dye', 'Simple Recipes', text_contents='Other pot recipes transform the items and fluid in the pot into something else. For example, boiling five $(thing)ash$() in $(thing)water$() makes $(thing)lye$().')  # todo: better recipe page for the pot
         )),
+        entry('stove', 'Stove', 'tfc:stove', pages=(
+            non_text_first_page(),
+            crafting('tfc:crafting/stove', title='', text_contents='A $(thing)Stove$() is a variant of the $(thing)Firepit$() that can be used without the fear of it setting nearby blocks on fire. It has all the same functionality as a firepit, and a pot can be added as well. However, a grill cannot be added to the Stove.'),
+            block_spotlight(block='tfc:stove', title='', text_content='')
+        )),
         entry('chisel', 'Chisel', 'tfc:metal/chisel/wrought_iron', pages=(
             text('Chisels are a tool for creating decorative forms of other blocks, including slabs and stairs. In order to get started, you will need a $(thing)Chisel$() and any type of $(thing)Hammer$(). Chisels must be cast in molds or forged on an $(l:mechanics/anvils)Anvil$(). In order to start chiseling, hold the chisel in your main hand and a hammer in your off hand, and target a block in the world.').link('#c:tools/chisel'),
             text('If you can chisel that block, a $(c)red outline$() of the block to be chiseled will be shown based on what $(thing)Mode$() you have selected.$(br2)The chisel has three modes that can be switched by using $(item)$(k:tfc.key.cycle_chisel_mode)$(): $(thing)Slab$(), $(thing)Stair$(), and $(thing)Smooth$(). An indicator of your chisel mode should show up next to the hotbar.'),
