@@ -955,7 +955,7 @@
       "item": "tfc:ore/gypsum",
       "title": "Гіпс",
       "link_recipes": false,
-      "text": "Gypsum is a decorative $(thing)Mineral$() which can be used to make $(l:mechanics/advanced_building_materials#alabaster)Alabaster$(). It can be found in very large flat deposits near the surface in $(l:the_world/geology#sedimentary)Sedimentary$() rocks."
+      "text": "Gypsum is a decorative $(thing)Mineral$() which can be used to make $(l:mechanics/advanced_building_materials#plaster)Plaster$(). It can be found in very large flat deposits near the surface in $(l:the_world/geology#sedimentary)Sedimentary$() rocks."
     },
     {
       "type": "patchouli:multiblock",

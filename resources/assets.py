@@ -380,21 +380,21 @@ def generate(rm: ResourceManager):
     rm.blockstate('saltwater_bubble_column', model='tfc:block/fluid/salt_water').with_lang(lang('bubble column'))
 
     for variant in ('raw', 'bricks', 'polished'):
-        rm.blockstate(('alabaster', variant)).with_block_model().with_item_model().with_block_loot('tfc:alabaster/%s' % variant).with_lang(lang('%s Alabaster', variant) if variant != 'bricks' else lang('Alabaster %s', variant))
+        rm.blockstate(('alabaster', variant)).with_block_model().with_item_model().with_block_loot('tfc:alabaster/%s' % variant).with_lang(lang('%s Plaster', variant) if variant != 'bricks' else lang('Plaster %s', variant))
 
     for color in COLORS:
-        rm.blockstate(('alabaster', 'raw', color)).with_block_model().with_item_model().with_block_loot('tfc:alabaster/raw/%s' % color).with_lang(lang('%s Raw Alabaster', color))
-        bricks = rm.blockstate(('alabaster', 'bricks', color)).with_block_model().with_item_model().with_block_loot('tfc:alabaster/bricks/%s' % color).with_lang(lang('%s Alabaster Bricks', color))
-        polished = rm.blockstate(('alabaster', 'polished', color)).with_block_model().with_item_model().with_block_loot('tfc:alabaster/polished/%s' % color).with_lang(lang('%s Polished Alabaster', color))
+        rm.blockstate(('alabaster', 'raw', color)).with_block_model().with_item_model().with_block_loot('tfc:alabaster/raw/%s' % color).with_lang(lang('%s Raw Plaster', color))
+        bricks = rm.blockstate(('alabaster', 'bricks', color)).with_block_model().with_item_model().with_block_loot('tfc:alabaster/bricks/%s' % color).with_lang(lang('%s Plaster Bricks', color))
+        polished = rm.blockstate(('alabaster', 'polished', color)).with_block_model().with_item_model().with_block_loot('tfc:alabaster/polished/%s' % color).with_lang(lang('%s Polished Plaster', color))
         bricks.make_slab().make_stairs().make_wall()
         polished.make_slab().make_stairs().make_wall()
         for extra in ('slab', 'stairs', 'wall'):
-            block = rm.block(('alabaster', 'bricks', color + '_' + extra)).with_lang(lang('%s Alabaster Brick %s', color, extra))
+            block = rm.block(('alabaster', 'bricks', color + '_' + extra)).with_lang(lang('%s Plaster Brick %s', color, extra))
             if extra != 'slab':
                 block.with_block_loot('tfc:alabaster/bricks/%s_%s' % (color, extra))
             else:
                 slab_loot(rm, 'tfc:alabaster/bricks/%s_%s' % (color, extra))
-            block = rm.block(('alabaster', 'polished', color + '_' + extra)).with_lang(lang('%s Polished Alabaster %s', color, extra))
+            block = rm.block(('alabaster', 'polished', color + '_' + extra)).with_lang(lang('%s Polished Plaster %s', color, extra))
             if extra != 'slab':
                 block.with_block_loot('tfc:alabaster/polished/%s_%s' % (color, extra))
             else:
@@ -1108,6 +1108,7 @@ def generate(rm: ResourceManager):
     for item in SIMPLE_ITEMS:
         rm.item_model(item).with_lang(lang(item))
 
+    rm.item_model('alabaster_brick', 'tfc:item/alabaster_brick').with_lang(lang('Plaster Brick'))
     rm.item_model('blowpipe/empty_gui', 'tfc:item/blowpipe')
     rm.item_model('blowpipe/ceramic_empty_gui', 'tfc:item/ceramic_blowpipe')
     rm.item_model('blowpipe/empty_held', parent='tfc:item/blowpipe/empty', no_textures=True)
