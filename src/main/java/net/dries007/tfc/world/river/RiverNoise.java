@@ -224,7 +224,10 @@ public final class RiverNoise
 
                 final double riverHeight = 55 + adjDistFac * 16 + baseNoise.noise(x, z);
 
-                this.distFac = Math.max(0, distFac * 0.7);
+                // Carve more aggressively in wider rivers to reduce floating terrain
+                final double widthFactor = Mth.clampedMap(info.widthSq(), 144, 324, 0.7, 1.1);
+
+                this.distFac = Math.max(0, distFac * widthFactor);
                 this.x = x;
                 this.z = z;
 

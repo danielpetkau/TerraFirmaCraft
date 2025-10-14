@@ -44,6 +44,7 @@ class I18n:
 
     def translate(self, text: str) -> str:
         """ Translates the string into the current domain """
+        
         if self.is_root():
             # For en_us, always keep the current text (read only)
             translated = text
