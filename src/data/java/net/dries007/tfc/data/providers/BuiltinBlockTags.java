@@ -248,6 +248,10 @@ public class BuiltinBlockTags extends TagsProvider<Block> implements Accessors
             .add(TFCBlocks.FIREBOX)
             .add(TFCBlocks.VANE)
             .add(TFCBlocks.ANEMOMETER)
+            .add(TFCBlocks.STOVE)
+            .add(TFCBlocks.STOVE_POT)
+            .add(TFCBlocks.STOVE)
+            .add(TFCBlocks.STOVE_POT)
             .add(
                 TFCBlocks.ICICLE,
                 TFCBlocks.SEA_ICE,
@@ -474,8 +478,16 @@ public class BuiltinBlockTags extends TagsProvider<Block> implements Accessors
             .add(TFCBlocks.METALS, Metal.BlockType.OXIDIZED_GRATE)
             .add(TFCBlocks.METALS, Metal.BlockType.WEATHERED_GRATE);
         tag(SCRAPING_SURFACE).addTag(BlockTags.LOGS);
-        tag(GLASS_POURING_TABLE).add(TFCBlocks.METALS.get(Metal.BRASS).get(Metal.BlockType.BLOCK));
-        tag(GLASS_BASIN_BLOCKS).add(TFCBlocks.METALS.get(Metal.BRASS).get(Metal.BlockType.BLOCK));
+        tag(GLASS_POURING_TABLE)
+            .add(TFCBlocks.METALS.get(Metal.BRASS).get(Metal.BlockType.BLOCK))
+            .add(TFCBlocks.METALS.get(Metal.BRASS).get(Metal.BlockType.EXPOSED_BLOCK))
+            .add(TFCBlocks.METALS.get(Metal.BRASS).get(Metal.BlockType.WEATHERED_BLOCK))
+            .add(TFCBlocks.METALS.get(Metal.BRASS).get(Metal.BlockType.OXIDIZED_BLOCK));
+        tag(GLASS_BASIN_BLOCKS)
+            .add(TFCBlocks.METALS.get(Metal.BRASS).get(Metal.BlockType.BLOCK))
+            .add(TFCBlocks.METALS.get(Metal.BRASS).get(Metal.BlockType.EXPOSED_BLOCK))
+            .add(TFCBlocks.METALS.get(Metal.BRASS).get(Metal.BlockType.WEATHERED_BLOCK))
+            .add(TFCBlocks.METALS.get(Metal.BRASS).get(Metal.BlockType.OXIDIZED_BLOCK));
         tag(THATCH_BED_THATCH).add(TFCBlocks.THATCH);
         tag(FRUIT_TREE_BRANCH)
             .add(TFCBlocks.BANANA_PLANT, TFCBlocks.DEAD_BANANA_PLANT)
