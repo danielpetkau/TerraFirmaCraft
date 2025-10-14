@@ -61,9 +61,12 @@ public class ThermometerBlock extends DeviceBlock
     @Nullable
     public BlockState getStateForPlacement(BlockPlaceContext context)
     {
-        BlockState state = Helpers.getSupportedDirectionalStateForPlacement(this, context, false);
+        BlockState state = Helpers.getSupportedDirectionalStateForPlacement(this, context, true);
 
-        assert state != null;
+        if (state == null)
+        {
+            return null;
+        }
         final Direction direction = state.getValue(FACING);
         final LevelReader levelreader = context.getLevel();
         final BlockPos blockpos = context.getClickedPos();
@@ -150,7 +153,7 @@ public class ThermometerBlock extends DeviceBlock
     {
         BlockPos blockpos = pos.relative(facing.getOpposite());
         BlockState blockstate = level.getBlockState(blockpos);
-        if (blockstate.is(TFCBlocks.CRUCIBLE.get()))
+        if (Helpers.isBlock(blockstate, TFCTags.Blocks.THERMOMETER_READABLE))
         {
             return true;
         }
