@@ -35,6 +35,12 @@ public class FissureFeature extends Feature<FissureConfig>
             final int pieceDepth = 1 + random.nextInt(maxPieceLength);
             for (int dy = 1; dy <= pieceDepth; dy++)
             {
+                // Cut off before running into rivers
+                if (level.getBlockState(mutablePos.below(2)).isEmpty())
+                {
+                    return;
+                }
+
                 level.setBlock(mutablePos.setWithOffset(topPos, 0, -dy, 0), insideState, 2);
                 level.setBlock(mutablePos.setWithOffset(topPos, -1, -dy, 0), wallState, 2);
                 level.setBlock(mutablePos.setWithOffset(topPos, 1, -dy, 0), wallState, 2);
