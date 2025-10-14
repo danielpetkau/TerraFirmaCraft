@@ -103,7 +103,7 @@ public class VaneBlockEntity extends TickableBlockEntity
 
     public int getRedstoneSignal()
     {
-        return Math.clamp(Mth.floor((WeatherHelpers.wrappedPositiveAngle(targetAngle - (11.25f * Mth.DEG_TO_RAD)) / Mth.TWO_PI) * 16), 0, 15);
+        return WeatherHelpers.granularCardinalIntFromAngle(WeatherHelpers.wrappedPositiveAngle(targetAngle));
     }
 
     @Override
