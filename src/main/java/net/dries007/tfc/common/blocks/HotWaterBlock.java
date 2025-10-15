@@ -31,16 +31,14 @@ public class HotWaterBlock extends LiquidBlock
     @Override
     public void animateTick(BlockState stateIn, Level level, BlockPos pos, RandomSource random)
     {
+        BlockState bubbleState = level.getBlockState(pos);
         double x = pos.getX() + random.nextFloat();
         double y = pos.getY();
         double z = pos.getZ() + random.nextFloat();
-
-        //TODO: Bubble particles are buggy with TFC water types in all cases
-        if (random.nextInt(3) == 0)
-            level.addParticle(ParticleTypes.BUBBLE_COLUMN_UP, x, y + random.nextFloat(), z, 0.0, 0.04, 0.0);
-
         if (level.isEmptyBlock(pos.above()))
             level.addParticle(TFCParticles.STEAM.get(), x, y + 1.0D, z, 0.0D, 0.0D, 0.0D);
+        if (bubbleState.getBlock() instanceof TFCBubbleColumnBlock bubbleBlock && bubbleBlock.isDownBubbles(level, pos)) return;
+        if (random.nextInt(3) == 0) level.addParticle(TFCParticles.BUBBLE.get(), x, y + random.nextFloat(), z, 0.0, 0.04, 0.0);
     }
 
     @Override

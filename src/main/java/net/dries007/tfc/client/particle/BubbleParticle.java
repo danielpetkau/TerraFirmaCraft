@@ -10,9 +10,6 @@ import net.minecraft.client.particle.*;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.particles.SimpleParticleType;
 
-/**
- * This is {@link BubbleColumnUpParticle} minus the fluid tag check and with a short lifecycle
- */
 public class BubbleParticle extends TextureSheetParticle
 {
     public BubbleParticle(ClientLevel worldIn, double x, double y, double z, double motionX, double motionY, double motionZ)
@@ -23,7 +20,7 @@ public class BubbleParticle extends TextureSheetParticle
         this.xd = motionX * 0.2D + (Math.random() * 2.0D - 1.0D) * 0.02D;
         this.yd = motionY * 0.2D + (Math.random() * 2.0D - 1.0D) * 0.02D;
         this.zd = motionZ * 0.2D + (Math.random() * 2.0D - 1.0D) * 0.02D;
-        this.lifetime = 3 + random.nextInt(3);
+        this.lifetime = 12 + random.nextInt(8);
     }
 
     @Override
@@ -32,13 +29,13 @@ public class BubbleParticle extends TextureSheetParticle
         xo = x;
         yo = y;
         zo = z;
-        yd += 0.005D;
+        yd += 0.002D;
         if (lifetime-- <= 0)
         {
             remove();
         }
         else
-        {
+        { 
             move(xd, yd, zd);
             xd *= 0.85F;
             yd *= 0.85F;
