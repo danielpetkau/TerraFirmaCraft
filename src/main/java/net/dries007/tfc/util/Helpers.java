@@ -815,7 +815,7 @@ public final class Helpers
     /**
      * Removes / Consumes item entities from 2 lists up to a maximum number of items (taking into account the count of each item)
      * Passes each item stack, with stack size = 1, to the provided consumer
-     * 
+     *
      * This alternates consuming items from the 2 lists, starting with set1
      * If one of the sets runs out, it starts only taking items from the other set
      */
@@ -1583,7 +1583,8 @@ public final class Helpers
     }
 
     @Nullable
-    public static BlockState getSupportedDirectionalStateForPlacement(Block block, BlockPlaceContext context, boolean horizontal){
+    public static BlockState getSupportedDirectionalStateForPlacement(Block block, BlockPlaceContext context, boolean horizontal)
+    {
         BlockState blockstate = block.defaultBlockState();
         final LevelReader levelreader = context.getLevel();
         final BlockPos blockpos = context.getClickedPos();
@@ -1592,14 +1593,16 @@ public final class Helpers
 
         for (Direction direction : looking)
         {
-            if (direction.getAxis().isHorizontal() || !horizontal)
+            // if it can not be placed on the vertical axis, and we're checking a vertical axis
+            if (horizontal && direction.getAxis().isVertical())
             {
-                Direction direction1 = direction.getOpposite();
-                blockstate = blockstate.setValue(BlockStateProperties.FACING, direction1);
-                if (blockstate.canSurvive(levelreader, blockpos))
-                {
-                    return blockstate;
-                }
+                continue;
+            }
+            Direction direction1 = direction.getOpposite();
+            blockstate = blockstate.setValue(horizontal ? BlockStateProperties.HORIZONTAL_FACING : BlockStateProperties.FACING, direction1);
+            if (blockstate.canSurvive(levelreader, blockpos))
+            {
+                return blockstate;
             }
         }
 

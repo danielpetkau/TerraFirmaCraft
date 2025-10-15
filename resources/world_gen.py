@@ -22,10 +22,15 @@ def generate(rm: ResourceManager):
     rm.placed_feature_tag('in_biome/all_lakes', 'tfc:underground_flood_fill_lake', 'tfc:flood_fill_lake')
     rm.placed_feature_tag('in_biome/veins', *[
         'tfc:vein/gravel',
-        'tfc:vein/kaolin_disc',
         *['tfc:vein/%s_dike' % rock for rock, data in ROCKS.items() if data.category == 'igneous_intrusive'],
-        *('tfc:vein/%s' % v for v in ORE_VEINS.keys()),
+        *['tfc:vein/%s' % name for name, vein in ORE_VEINS.items() if not vein.rivers_only],
         'tfc:geode'
+    ])
+    rm.placed_feature_tag('in_biome/veins/kaolin', *[
+        'tfc:vein/kaolin_disc'
+    ])
+    rm.placed_feature_tag('in_biome/veins/river', *[
+        *['tfc:vein/%s' % name for name, vein in ORE_VEINS.items() if vein.rivers_only]
     ])
     rm.placed_feature_tag('in_biome/underground_decoration', *UNDERGROUND_FEATURES)
     rm.placed_feature_tag('in_biome/top_layer_modification', 'tfc:surface_loose_rocks', 'tfc:ice_and_snow')
@@ -71,7 +76,7 @@ def generate(rm: ResourceManager):
     biome(rm, 'rolling_hills', 'plains', boulders=True)
     biome(rm, 'highlands', 'plains', boulders=True, hot_spring_features='empty')
     biome(rm, 'lake', 'river')
-    biome(rm, 'lowlands', 'swamp', lake_features=False, ocean_features='both')
+    biome(rm, 'lowlands', 'swamp', lake_features=False)
     biome(rm, 'salt_marsh', 'swamp', lake_features=False, ocean_features='both')
     biome(rm, 'mountains', 'extreme_hills')
     biome(rm, 'volcanic_mountains', 'extreme_hills', volcano_features=True, hot_spring_features=True)
@@ -127,7 +132,7 @@ def generate(rm: ResourceManager):
     biome(rm, 'shilin_plateau', 'extreme_hills')
     biome(rm, 'doline_plateau', 'extreme_hills')
     biome(rm, 'cenote_plateau', 'extreme_hills')
-    biome(rm, 'tower_karst_lake', 'river', lake_features=False, ocean_features='both')
+    biome(rm, 'tower_karst_lake', 'river', lake_features=False)
     biome(rm, 'tower_karst_bay', 'beach', lake_features=False, ocean_features='both')
     biome(rm, 'extreme_doline_mountains', 'extreme_hills')
     biome(rm, 'burren_badlands', 'mesa')
@@ -743,7 +748,6 @@ def generate(rm: ResourceManager):
         'density': 1.0,
         'project': True,
         'random_name': 'kaolin',
-        'biomes': '#tfc:kaolin_clay_spawns_in',
         'indicator': {
             'depth': 35,
             'spread': 5,
@@ -760,16 +764,6 @@ def generate(rm: ResourceManager):
     rm.biome_tag('shilins', 'tfc:shilin_plains', 'tfc:shilin_canyons', 'tfc:shilin_hills', 'tfc:shilin_highlands', 'tfc:shilin_plateau')
     rm.biome_tag('burrens', 'tfc:burren_plains', 'tfc:burren_badlands', 'tfc:burren_badlands_tall', 'tfc:burren_plateau')
     rm.biome_tag('karsts', '#tfc:tower_karsts', '#tfc:dolines', '#tfc:cenotes', '#tfc:shilins', '#tfc:burrens')
-    # Kaolin clay biomes, each row sorted by height, last row misc.
-    (rm.biome_tag('kaolin_clay_spawns_in',
-                 'tfc:rolling_hills', 'tfc:highlands', 'tfc:plateau', 'tfc:plateau_wide', 'tfc:old_mountains',
-                 'tfc:tower_karst_hills', 'tfc:tower_karst_highlands', 'tfc:extreme_doline_plateau', 'tfc:extreme_doline_mountains',
-                 'tfc:doline_rolling_hills', 'tfc:doline_highlands', 'tfc:doline_plateau',
-                 'tfc:cenote_rolling_hills', 'tfc:cenote_highlands', 'tfc:cenote_plateau',
-                 'tfc:shilin_hills', 'tfc:shilin_highlands', 'tfc:shilin_plateau',
-                 'tfc:buttes', 'tfc:mesas', 'tfc:stair_step_canyons',
-                 'tfc:dormant_shield_volcano', 'tfc:extinct_shield_volcano', 'tfc:ancient_shield_volcano',
-                 'tfc:badlands', 'tfc:canyons'))
 
     configured_placed_feature(rm, ('vein', 'gravel'), 'tfc:disc_vein', {
         'rarity': 30,
@@ -794,7 +788,6 @@ def generate(rm: ResourceManager):
                 'max_y': 180,
                 'density': 0.98,
                 'random_name': rock,
-                'biomes': '#tfc:karsts',
                 'height': 150,
                 'radius': 18,
                 'min_skew': 7,
@@ -1941,6 +1934,8 @@ def biome(rm: ResourceManager, name: str, category: str, boulders: bool = False,
         '#tfc:in_biome/surface_structures',  # Surface Structures
         '#tfc:in_biome/strongholds',  # Strongholds
         '#tfc:in_biome/veins',  # Underground Ores
+        '#tfc:in_biome/veins/kaolin' if name in KAOLIN_BIOMES else None,
+        '#tfc:in_biome/veins/river' if category == 'river' else None,
         '#tfc:in_biome/underground_decoration',  # Underground Decoration
         '#tfc:in_biome/large_features/%s' % name,  # Fluid Springs (we co-opt this as they likely won't interfere and it's in the right order)
         '#tfc:in_biome/surface_decoration/%s' % name,  # Vegetal Decoration

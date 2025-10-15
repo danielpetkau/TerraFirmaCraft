@@ -453,7 +453,7 @@ public interface CraftingRecipes extends Recipes
             recipe()
                 .input('L', lumber)
                 .pattern("LL", "LL", "LL")
-                .shaped(blocks.get(Wood.BlockType.DOOR), 2);
+                .shaped(blocks.get(Wood.BlockType.DOOR));
             recipe()
                 .input('L', lumber)
                 .input('S', blocks.get(Wood.BlockType.STRIPPED_LOG))
@@ -567,7 +567,7 @@ public interface CraftingRecipes extends Recipes
             recipe()
                 .input('L', lumber)
                 .pattern("LLL", "LLL")
-                .shaped(blocks.get(Wood.BlockType.TRAPDOOR));
+                .shaped(blocks.get(Wood.BlockType.TRAPDOOR), 2);
             recipe()
                 .input(blocks.get(Wood.BlockType.CHEST))
                 .input(Items.TRIPWIRE_HOOK)
@@ -1229,6 +1229,10 @@ public interface CraftingRecipes extends Recipes
         recipe("from_canola")
             .input(TFCItems.CANOLA)
             .shapeless(TFCItems.STRAW);
+        recipe()
+            .input('S', ingredientOf(Metal.CAST_IRON, Metal.ItemType.DOUBLE_SHEET))
+            .pattern(" S ", "S S", " S ")
+            .shaped(TFCBlocks.STOVE);
         recipe()
             .input('R', TFCItems.METAL_ITEMS.get(Metal.BRASS).get(Metal.ItemType.ROD))
             .input('B', TFCItems.BRASS_MECHANISMS)

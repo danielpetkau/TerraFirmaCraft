@@ -38,7 +38,7 @@ class Vein(NamedTuple):
     density: float
     grade: tuple[int, int, int]  # (poor, normal, rich) weights
     rocks: tuple[str, ...]  # Rock, or rock categories
-    biomes: str | None
+    rivers_only: bool
     height: int
     radius: int
     deposits: bool
@@ -59,10 +59,9 @@ class Vein(NamedTuple):
         max_y: int,
         density: float,
         rocks: tuple[str, ...],
-
+        rivers_only: bool = False,
         vein_type: str = 'cluster',
         grade: tuple[int, int, int] = (),
-        biomes: str = None,
         height: int = 2,  # For disc type veins, `size` is the width
         radius: int = 5,  # For pipe type veins, `size` is the height
         deposits: bool = False,
@@ -78,7 +77,7 @@ class Vein(NamedTuple):
         assert project is None or project is True or project == 'offset'
 
         underground_rarity, underground_count = deep_indicator
-        return Vein(ore, 'tfc:%s_vein' % vein_type, rarity, size, min_y, max_y, density, grade, rocks, biomes, height, radius, deposits, indicator, underground_rarity, underground_count, None if project is None else True, None if project != 'offset' else True, near_lava, simple_blocks)
+        return Vein(ore, 'tfc:%s_vein' % vein_type, rarity, size, min_y, max_y, density, grade, rocks, rivers_only, height, radius, deposits, indicator, underground_rarity, underground_count, None if project is None else True, None if project != 'offset' else True, near_lava, simple_blocks)
 
     def config(self) -> dict[str, Any]:
         cfg = {
@@ -88,7 +87,6 @@ class Vein(NamedTuple):
             'max_y': self.max_y,
             'project': self.project,
             'project_offset': self.project_offset,
-            'biomes': self.biomes,
             'near_lava': self.near_lava,
         }
         if self.vein_type == 'tfc:cluster_vein':
@@ -412,8 +410,8 @@ ORE_VEINS: dict[str, Vein] = {
     'diamond': Vein.new('diamond', 30, 60, -64, 100, 0.15, ('gabbro',), vein_type='pipe', radius=5),
     'emerald': Vein.new('emerald', 80, 60, -64, 100, 0.15, ('igneous_intrusive',), vein_type='pipe', radius=5),
 
-    'amethyst': Vein.new('amethyst', 25, 8, 40, 60, 0.2, ('sedimentary', 'metamorphic'), vein_type='disc', biomes='#tfc:is_river', height=4),
-    'opal': Vein.new('opal', 25, 8, 40, 60, 0.2, ('sedimentary', 'igneous_extrusive'), vein_type='disc', biomes='#tfc:is_river', height=4),
+    'amethyst': Vein.new('amethyst', 25, 8, 40, 60, 0.2, ('sedimentary', 'metamorphic'), vein_type='disc', rivers_only=True, height=4),
+    'opal': Vein.new('opal', 25, 8, 40, 60, 0.2, ('sedimentary', 'igneous_extrusive'), vein_type='disc', rivers_only=True, height=4),
     'ruby': Vein.new('ruby', 12, 22, -70, -10, 0.2, ('schist', 'gneiss')),
 }
 
@@ -915,6 +913,7 @@ BLOCK_ENTITIES = ('log_pile', 'burning_log_pile', 'placed_item', 'pit_kiln', 'ch
 ARMOR_SECTIONS = ('chestplate', 'leggings', 'boots', 'helmet')
 TFC_ARMOR_SECTIONS = ('helmet', 'chestplate', 'greaves', 'boots')
 TFC_BIOMES = ['badlands', 'canyons', 'low_canyons', 'plains', 'plateau', 'plateau_wide', 'hills', 'rolling_hills', 'highlands', 'lake', 'lowlands', 'salt_marsh', 'mountains', 'volcanic_mountains', 'old_mountains', 'oceanic_mountains', 'volcanic_oceanic_mountains', 'ocean', 'ocean_reef', 'deep_ocean', 'deep_ocean_trench', 'river', 'guano_island', 'shore', 'tidal_flats', 'sea_stacks', 'terrace_upper', 'terrace_lower', 'setback_cliffs', 'coastal_dunes', 'rocky_shores', 'embayments', 'salt_flats', 'mud_flats', 'dune_sea', 'grassy_dunes', 'whorled_canyons', 'stair_step_canyons', 'mesas', 'buttes', 'hoodoos', 'rocky_plateau', 'tower_karst_plains', 'burren_plains', 'shilin_plains', 'doline_plains', 'cenote_plains', 'tower_karst_canyons', 'doline_canyons', 'cenote_canyons', 'shilin_canyons', 'tower_karst_hills', 'shilin_hills', 'doline_hills', 'cenote_hills', 'tower_karst_highlands', 'burren_badlands_tall', 'shilin_highlands', 'doline_highlands', 'cenote_highlands', 'extreme_doline_plateau', 'burren_plateau', 'shilin_plateau', 'doline_plateau', 'cenote_plateau', 'tower_karst_lake', 'tower_karst_bay', 'extreme_doline_mountains', 'burren_badlands', 'doline_rolling_hills', 'cenote_rolling_hills', 'burren_roche_moutonee', 'active_shield_volcano', 'dormant_shield_volcano', 'extinct_shield_volcano', 'ancient_shield_volcano', 'sunken_shield_volcano', 'shield_volcano_shore', 'old_shield_volcano_shore', 'mountain_lake', 'volcanic_mountain_lake', 'old_mountain_lake', 'oceanic_mountain_lake', 'volcanic_oceanic_mountain_lake', 'plateau_lake', 'ice_sheet', 'ice_sheet_mountains', 'ice_sheet_oceanic_mountains', 'ice_sheet_shield_volcano', 'ice_sheet_tuyas', 'subglacial_lake', 'ice_sheet_edge', 'ice_sheet_tuyas_edge', 'ice_sheet_mountains_edge', 'ice_sheet_oceanic_mountains_edge', 'meltwater_lake', 'ice_sheet_oceanic', 'ice_sheet_shore', 'glaciated_shield_volcano', 'glaciated_mountains', 'glaciated_oceanic_mountains', 'glacially_carved_mountains', 'glacially_carved_oceanic_mountains', 'drumlins', 'tuyas', 'knob_and_kettle', 'patterned_ground', 'inverted_patterned_ground', 'stone_circles']
+KAOLIN_BIOMES = ['rolling_hills', 'highlands', 'plateau', 'plateau_wide', 'old_mountains', 'tower_karst_hills', 'tower_karst_highlands', 'extreme_doline_plateau', 'extreme_doline_mountains', 'doline_rolling_hills', 'doline_highlands', 'doline_plateau', 'cenote_rolling_hills', 'cenote_highlands', 'cenote_plateau', 'shilin_hills', 'shilin_highlands', 'shilin_plateau', 'buttes', 'mesas', 'stair_step_canyons', 'dormant_shield_volcano', 'extinct_shield_volcano', 'ancient_shield_volcano', 'badlands', 'canyons']
 VANILLA_TRIMS = ('coast', 'sentry', 'dune', 'wild', 'ward', 'eye', 'vex', 'tide', 'snout', 'rib', 'spire', 'wayfinder', 'shaper', 'silence', 'raiser', 'host', 'flow', 'bolt')
 
 BUTTERFLIES = ('golden_birdwing', 'papilio_rumanzovia', 'papilio_palinurus', 'moth_diaphora', 'peacock', 'sericinus', 'papilio_blumei', 'adonis_blue', 'silverwashed_frittilary', 'moth_saturnia', 'moth_argema', 'moth_attacus', 'moth_luna', 'moth_trosia')
@@ -2326,7 +2325,7 @@ DEFAULT_LANG = {
     'tfc.recipe.barrel.tfc.barrel.mortar': 'Mortar',
     'tfc.recipe.barrel.tfc.barrel.curdled_milk': 'Curdling Milk',
     'tfc.recipe.barrel.tfc.barrel.cheese': 'Cheese',
-    'tfc.recipe.barrel.tfc.barrel.raw_alabaster': 'Raw Alabaster',
+    'tfc.recipe.barrel.tfc.barrel.raw_alabaster': 'Raw Plaster',
     'tfc.recipe.barrel.tfc.barrel.clean_jute_net': 'Cleaning Jute Net',
     'tfc.recipe.barrel.tfc.barrel.candle': 'Candle',
     'tfc.recipe.barrel.tfc.barrel.dye.bleach_wool': 'Bleaching Wool',
@@ -2339,9 +2338,9 @@ DEFAULT_LANG = {
     'tfc.recipe.barrel.tfc.barrel.dye.bleach_concrete_powder': 'Bleaching Concrete Powder',
     'tfc.recipe.barrel.tfc.barrel.dye.bleach_candles': 'Bleaching Candles',
     'tfc.recipe.barrel.tfc.barrel.dye.bleach_windmill_blades': 'Bleaching Windmill Blades',
-    'tfc.recipe.barrel.tfc.barrel.dye.bleach_raw': 'Bleaching Raw Alabaster',
-    'tfc.recipe.barrel.tfc.barrel.dye.bleach_bricks': 'Bleaching Bricks Alabaster',
-    'tfc.recipe.barrel.tfc.barrel.dye.bleach_polished': 'Bleaching Polished Alabaster',
+    'tfc.recipe.barrel.tfc.barrel.dye.bleach_raw': 'Bleaching Raw Plaster',
+    'tfc.recipe.barrel.tfc.barrel.dye.bleach_bricks': 'Bleaching Bricks Plaster',
+    'tfc.recipe.barrel.tfc.barrel.dye.bleach_polished': 'Bleaching Polished Plaster',
     'tfc.recipe.barrel.tfc.barrel.dye.disc_strad': 'Imprinting Strad Disc',
     'tfc.recipe.barrel.tfc.barrel.dye.white_shulker': 'Dyeing Shulker White',
     'tfc.recipe.barrel.tfc.barrel.dye.white_glazed_vessel': 'Dyeing Unfired Vessel White',
@@ -2349,9 +2348,9 @@ DEFAULT_LANG = {
     'tfc.recipe.barrel.tfc.barrel.dye.white_concrete_powder': 'Dyeing Aggregate White',
     'tfc.recipe.barrel.tfc.barrel.dye.white_candle': 'Dyeing Candle White',
     'tfc.recipe.barrel.tfc.barrel.dye.white_leather': 'Dyeing Leather White',
-    'tfc.recipe.barrel.tfc.barrel.dye.white_raw_alabaster': 'Dyeing Alabaster Raw White',
-    'tfc.recipe.barrel.tfc.barrel.dye.white_bricks_alabaster': 'Dyeing Alabaster Bricks White',
-    'tfc.recipe.barrel.tfc.barrel.dye.white_polished_alabaster': 'Dyeing Alabaster Polished White',
+    'tfc.recipe.barrel.tfc.barrel.dye.white_raw_alabaster': 'Dyeing Plaster Raw White',
+    'tfc.recipe.barrel.tfc.barrel.dye.white_bricks_alabaster': 'Dyeing Plaster Bricks White',
+    'tfc.recipe.barrel.tfc.barrel.dye.white_polished_alabaster': 'Dyeing Plaster Polished White',
     'tfc.recipe.barrel.tfc.barrel.dye.orange_wool': 'Dyeing Wool Orange',
     'tfc.recipe.barrel.tfc.barrel.dye.orange_carpet': 'Dyeing Carpet Orange',
     'tfc.recipe.barrel.tfc.barrel.dye.orange_bed': 'Dyeing Bed Orange',
@@ -2365,9 +2364,9 @@ DEFAULT_LANG = {
     'tfc.recipe.barrel.tfc.barrel.dye.orange_concrete_powder': 'Dyeing Aggregate Orange',
     'tfc.recipe.barrel.tfc.barrel.dye.orange_candle': 'Dyeing Candle Orange',
     'tfc.recipe.barrel.tfc.barrel.dye.orange_leather': 'Dyeing Leather Orange',
-    'tfc.recipe.barrel.tfc.barrel.dye.orange_raw_alabaster': 'Dyeing Alabaster Raw Orange',
-    'tfc.recipe.barrel.tfc.barrel.dye.orange_bricks_alabaster': 'Dyeing Alabaster Bricks Orange',
-    'tfc.recipe.barrel.tfc.barrel.dye.orange_polished_alabaster': 'Dyeing Alabaster Polished Orange',
+    'tfc.recipe.barrel.tfc.barrel.dye.orange_raw_alabaster': 'Dyeing Plaster Raw Orange',
+    'tfc.recipe.barrel.tfc.barrel.dye.orange_bricks_alabaster': 'Dyeing Plaster Bricks Orange',
+    'tfc.recipe.barrel.tfc.barrel.dye.orange_polished_alabaster': 'Dyeing Plaster Polished Orange',
     'tfc.recipe.barrel.tfc.barrel.dye.orange_windmill_blade': 'Dyeing Windmill Blade Orange',
     'tfc.recipe.barrel.tfc.barrel.dye.magenta_wool': 'Dyeing Wool Magenta',
     'tfc.recipe.barrel.tfc.barrel.dye.magenta_carpet': 'Dyeing Carpet Magenta',
@@ -2382,9 +2381,9 @@ DEFAULT_LANG = {
     'tfc.recipe.barrel.tfc.barrel.dye.magenta_concrete_powder': 'Dyeing Aggregate Magenta',
     'tfc.recipe.barrel.tfc.barrel.dye.magenta_candle': 'Dyeing Candle Magenta',
     'tfc.recipe.barrel.tfc.barrel.dye.magenta_leather': 'Dyeing Leather Magenta',
-    'tfc.recipe.barrel.tfc.barrel.dye.magenta_raw_alabaster': 'Dyeing Alabaster Raw Magenta',
-    'tfc.recipe.barrel.tfc.barrel.dye.magenta_bricks_alabaster': 'Dyeing Alabaster Bricks Magenta',
-    'tfc.recipe.barrel.tfc.barrel.dye.magenta_polished_alabaster': 'Dyeing Alabaster Polished Magenta',
+    'tfc.recipe.barrel.tfc.barrel.dye.magenta_raw_alabaster': 'Dyeing Plaster Raw Magenta',
+    'tfc.recipe.barrel.tfc.barrel.dye.magenta_bricks_alabaster': 'Dyeing Plaster Bricks Magenta',
+    'tfc.recipe.barrel.tfc.barrel.dye.magenta_polished_alabaster': 'Dyeing Plaster Polished Magenta',
     'tfc.recipe.barrel.tfc.barrel.dye.magenta_windmill_blade': 'Dyeing Windmill Blade Magenta',
     'tfc.recipe.barrel.tfc.barrel.dye.light_blue_wool': 'Dyeing Wool Light Blue',
     'tfc.recipe.barrel.tfc.barrel.dye.light_blue_carpet': 'Dyeing Carpet Light Blue',
@@ -2399,9 +2398,9 @@ DEFAULT_LANG = {
     'tfc.recipe.barrel.tfc.barrel.dye.light_blue_concrete_powder': 'Dyeing Aggregate Light Blue',
     'tfc.recipe.barrel.tfc.barrel.dye.light_blue_candle': 'Dyeing Candle Light Blue',
     'tfc.recipe.barrel.tfc.barrel.dye.light_blue_leather': 'Dyeing Leather Light Blue',
-    'tfc.recipe.barrel.tfc.barrel.dye.light_blue_raw_alabaster': 'Dyeing Alabaster Raw Light Blue',
-    'tfc.recipe.barrel.tfc.barrel.dye.light_blue_bricks_alabaster': 'Dyeing Alabaster Bricks Light Blue',
-    'tfc.recipe.barrel.tfc.barrel.dye.light_blue_polished_alabaster': 'Dyeing Alabaster Polished Light Blue',
+    'tfc.recipe.barrel.tfc.barrel.dye.light_blue_raw_alabaster': 'Dyeing Plaster Raw Light Blue',
+    'tfc.recipe.barrel.tfc.barrel.dye.light_blue_bricks_alabaster': 'Dyeing Plaster Bricks Light Blue',
+    'tfc.recipe.barrel.tfc.barrel.dye.light_blue_polished_alabaster': 'Dyeing Plaster Polished Light Blue',
     'tfc.recipe.barrel.tfc.barrel.dye.light_blue_windmill_blade': 'Dyeing Windmill Blade Light Blue',
     'tfc.recipe.barrel.tfc.barrel.dye.yellow_wool': 'Dyeing Wool Yellow',
     'tfc.recipe.barrel.tfc.barrel.dye.yellow_carpet': 'Dyeing Carpet Yellow',
@@ -2416,9 +2415,9 @@ DEFAULT_LANG = {
     'tfc.recipe.barrel.tfc.barrel.dye.yellow_concrete_powder': 'Dyeing Aggregate Yellow',
     'tfc.recipe.barrel.tfc.barrel.dye.yellow_candle': 'Dyeing Candle Yellow',
     'tfc.recipe.barrel.tfc.barrel.dye.yellow_leather': 'Dyeing Leather Yellow',
-    'tfc.recipe.barrel.tfc.barrel.dye.yellow_raw_alabaster': 'Dyeing Alabaster Raw Yellow',
-    'tfc.recipe.barrel.tfc.barrel.dye.yellow_bricks_alabaster': 'Dyeing Alabaster Bricks Yellow',
-    'tfc.recipe.barrel.tfc.barrel.dye.yellow_polished_alabaster': 'Dyeing Alabaster Polished Yellow',
+    'tfc.recipe.barrel.tfc.barrel.dye.yellow_raw_alabaster': 'Dyeing Plaster Raw Yellow',
+    'tfc.recipe.barrel.tfc.barrel.dye.yellow_bricks_alabaster': 'Dyeing Plaster Bricks Yellow',
+    'tfc.recipe.barrel.tfc.barrel.dye.yellow_polished_alabaster': 'Dyeing Plaster Polished Yellow',
     'tfc.recipe.barrel.tfc.barrel.dye.yellow_windmill_blade': 'Dyeing Windmill Blade Yellow',
     'tfc.recipe.barrel.tfc.barrel.dye.lime_wool': 'Dyeing Wool Lime',
     'tfc.recipe.barrel.tfc.barrel.dye.lime_carpet': 'Dyeing Carpet Lime',
@@ -2433,9 +2432,9 @@ DEFAULT_LANG = {
     'tfc.recipe.barrel.tfc.barrel.dye.lime_concrete_powder': 'Dyeing Aggregate Lime',
     'tfc.recipe.barrel.tfc.barrel.dye.lime_candle': 'Dyeing Candle Lime',
     'tfc.recipe.barrel.tfc.barrel.dye.lime_leather': 'Dyeing Leather Lime',
-    'tfc.recipe.barrel.tfc.barrel.dye.lime_raw_alabaster': 'Dyeing Alabaster Raw Lime',
-    'tfc.recipe.barrel.tfc.barrel.dye.lime_bricks_alabaster': 'Dyeing Alabaster Bricks Lime',
-    'tfc.recipe.barrel.tfc.barrel.dye.lime_polished_alabaster': 'Dyeing Alabaster Polished Lime',
+    'tfc.recipe.barrel.tfc.barrel.dye.lime_raw_alabaster': 'Dyeing Plaster Raw Lime',
+    'tfc.recipe.barrel.tfc.barrel.dye.lime_bricks_alabaster': 'Dyeing Plaster Bricks Lime',
+    'tfc.recipe.barrel.tfc.barrel.dye.lime_polished_alabaster': 'Dyeing Plaster Polished Lime',
     'tfc.recipe.barrel.tfc.barrel.dye.lime_windmill_blade': 'Dyeing Windmill Blade Lime',
     'tfc.recipe.barrel.tfc.barrel.dye.pink_wool': 'Dyeing Wool Pink',
     'tfc.recipe.barrel.tfc.barrel.dye.pink_carpet': 'Dyeing Carpet Pink',
@@ -2449,9 +2448,9 @@ DEFAULT_LANG = {
     'tfc.recipe.barrel.tfc.barrel.dye.pink_concrete_powder': 'Dyeing Aggregate Pink',
     'tfc.recipe.barrel.tfc.barrel.dye.pink_candle': 'Dyeing Candle Pink',
     'tfc.recipe.barrel.tfc.barrel.dye.pink_leather': 'Dyeing Leather Pink',
-    'tfc.recipe.barrel.tfc.barrel.dye.pink_raw_alabaster': 'Dyeing Alabaster Raw Pink',
-    'tfc.recipe.barrel.tfc.barrel.dye.pink_bricks_alabaster': 'Dyeing Alabaster Bricks Pink',
-    'tfc.recipe.barrel.tfc.barrel.dye.pink_polished_alabaster': 'Dyeing Alabaster Polished Pink',
+    'tfc.recipe.barrel.tfc.barrel.dye.pink_raw_alabaster': 'Dyeing Plaster Raw Pink',
+    'tfc.recipe.barrel.tfc.barrel.dye.pink_bricks_alabaster': 'Dyeing Plaster Bricks Pink',
+    'tfc.recipe.barrel.tfc.barrel.dye.pink_polished_alabaster': 'Dyeing Plaster Polished Pink',
     'tfc.recipe.barrel.tfc.barrel.dye.pink_windmill_blade': 'Dyeing Windmill Blade Pink',
     'tfc.recipe.barrel.tfc.barrel.dye.gray_wool': 'Dyeing Wool Gray',
     'tfc.recipe.barrel.tfc.barrel.dye.gray_carpet': 'Dyeing Carpet Gray',
@@ -2465,9 +2464,9 @@ DEFAULT_LANG = {
     'tfc.recipe.barrel.tfc.barrel.dye.gray_concrete_powder': 'Dyeing Aggregate Gray',
     'tfc.recipe.barrel.tfc.barrel.dye.gray_candle': 'Dyeing Candle Gray',
     'tfc.recipe.barrel.tfc.barrel.dye.gray_leather': 'Dyeing Leather Gray',
-    'tfc.recipe.barrel.tfc.barrel.dye.gray_raw_alabaster': 'Dyeing Alabaster Raw Gray',
-    'tfc.recipe.barrel.tfc.barrel.dye.gray_bricks_alabaster': 'Dyeing Alabaster Bricks Gray',
-    'tfc.recipe.barrel.tfc.barrel.dye.gray_polished_alabaster': 'Dyeing Alabaster Polished Gray',
+    'tfc.recipe.barrel.tfc.barrel.dye.gray_raw_alabaster': 'Dyeing Plaster Raw Gray',
+    'tfc.recipe.barrel.tfc.barrel.dye.gray_bricks_alabaster': 'Dyeing Plaster Bricks Gray',
+    'tfc.recipe.barrel.tfc.barrel.dye.gray_polished_alabaster': 'Dyeing Plaster Polished Gray',
     'tfc.recipe.barrel.tfc.barrel.dye.gray_windmill_blade': 'Dyeing Windmill Blade Gray',
     'tfc.recipe.barrel.tfc.barrel.dye.light_gray_wool': 'Dyeing Wool Light Gray',
     'tfc.recipe.barrel.tfc.barrel.dye.light_gray_carpet': 'Dyeing Carpet Light Gray',
@@ -2481,9 +2480,9 @@ DEFAULT_LANG = {
     'tfc.recipe.barrel.tfc.barrel.dye.light_gray_concrete_powder': 'Dyeing Aggregate Light Gray',
     'tfc.recipe.barrel.tfc.barrel.dye.light_gray_candle': 'Dyeing Candle Light Gray',
     'tfc.recipe.barrel.tfc.barrel.dye.light_gray_leather': 'Dyeing Leather Light Gray',
-    'tfc.recipe.barrel.tfc.barrel.dye.light_gray_raw_alabaster': 'Dyeing Alabaster Raw Light Gray',
-    'tfc.recipe.barrel.tfc.barrel.dye.light_gray_bricks_alabaster': 'Dyeing Alabaster Bricks Light Gray',
-    'tfc.recipe.barrel.tfc.barrel.dye.light_gray_polished_alabaster': 'Dyeing Alabaster Polished Light Gray',
+    'tfc.recipe.barrel.tfc.barrel.dye.light_gray_raw_alabaster': 'Dyeing Plaster Raw Light Gray',
+    'tfc.recipe.barrel.tfc.barrel.dye.light_gray_bricks_alabaster': 'Dyeing Plaster Bricks Light Gray',
+    'tfc.recipe.barrel.tfc.barrel.dye.light_gray_polished_alabaster': 'Dyeing Plaster Polished Light Gray',
     'tfc.recipe.barrel.tfc.barrel.dye.light_gray_windmill_blade': 'Dyeing Windmill Blade Light Gray',
     'tfc.recipe.barrel.tfc.barrel.dye.cyan_wool': 'Dyeing Wool Cyan',
     'tfc.recipe.barrel.tfc.barrel.dye.cyan_carpet': 'Dyeing Carpet Cyan',
@@ -2498,9 +2497,9 @@ DEFAULT_LANG = {
     'tfc.recipe.barrel.tfc.barrel.dye.cyan_concrete_powder': 'Dyeing Aggregate Cyan',
     'tfc.recipe.barrel.tfc.barrel.dye.cyan_candle': 'Dyeing Candle Cyan',
     'tfc.recipe.barrel.tfc.barrel.dye.cyan_leather': 'Dyeing Leather Cyan',
-    'tfc.recipe.barrel.tfc.barrel.dye.cyan_raw_alabaster': 'Dyeing Alabaster Raw Cyan',
-    'tfc.recipe.barrel.tfc.barrel.dye.cyan_bricks_alabaster': 'Dyeing Alabaster Bricks Cyan',
-    'tfc.recipe.barrel.tfc.barrel.dye.cyan_polished_alabaster': 'Dyeing Alabaster Polished Cyan',
+    'tfc.recipe.barrel.tfc.barrel.dye.cyan_raw_alabaster': 'Dyeing Plaster Raw Cyan',
+    'tfc.recipe.barrel.tfc.barrel.dye.cyan_bricks_alabaster': 'Dyeing Plaster Bricks Cyan',
+    'tfc.recipe.barrel.tfc.barrel.dye.cyan_polished_alabaster': 'Dyeing Plaster Polished Cyan',
     'tfc.recipe.barrel.tfc.barrel.dye.cyan_windmill_blade': 'Dyeing Windmill Blade Cyan',
     'tfc.recipe.barrel.tfc.barrel.dye.purple_wool': 'Dyeing Wool Purple',
     'tfc.recipe.barrel.tfc.barrel.dye.purple_carpet': 'Dyeing Carpet Purple',
@@ -2515,9 +2514,9 @@ DEFAULT_LANG = {
     'tfc.recipe.barrel.tfc.barrel.dye.purple_concrete_powder': 'Dyeing Aggregate Purple',
     'tfc.recipe.barrel.tfc.barrel.dye.purple_candle': 'Dyeing Candle Purple',
     'tfc.recipe.barrel.tfc.barrel.dye.purple_leather': 'Dyeing Leather Purple',
-    'tfc.recipe.barrel.tfc.barrel.dye.purple_raw_alabaster': 'Dyeing Alabaster Raw Purple',
-    'tfc.recipe.barrel.tfc.barrel.dye.purple_bricks_alabaster': 'Dyeing Alabaster Bricks Purple',
-    'tfc.recipe.barrel.tfc.barrel.dye.purple_polished_alabaster': 'Dyeing Alabaster Polished Purple',
+    'tfc.recipe.barrel.tfc.barrel.dye.purple_raw_alabaster': 'Dyeing Plaster Raw Purple',
+    'tfc.recipe.barrel.tfc.barrel.dye.purple_bricks_alabaster': 'Dyeing Plaster Bricks Purple',
+    'tfc.recipe.barrel.tfc.barrel.dye.purple_polished_alabaster': 'Dyeing Plaster Polished Purple',
     'tfc.recipe.barrel.tfc.barrel.dye.purple_windmill_blade': 'Dyeing Windmill Blade Purple',
     'tfc.recipe.barrel.tfc.barrel.dye.blue_wool': 'Dyeing Wool Blue',
     'tfc.recipe.barrel.tfc.barrel.dye.blue_carpet': 'Dyeing Carpet Blue',
@@ -2532,9 +2531,9 @@ DEFAULT_LANG = {
     'tfc.recipe.barrel.tfc.barrel.dye.blue_concrete_powder': 'Dyeing Aggregate Blue',
     'tfc.recipe.barrel.tfc.barrel.dye.blue_candle': 'Dyeing Candle Blue',
     'tfc.recipe.barrel.tfc.barrel.dye.blue_leather': 'Dyeing Leather Blue',
-    'tfc.recipe.barrel.tfc.barrel.dye.blue_raw_alabaster': 'Dyeing Alabaster Raw Blue',
-    'tfc.recipe.barrel.tfc.barrel.dye.blue_bricks_alabaster': 'Dyeing Alabaster Bricks Blue',
-    'tfc.recipe.barrel.tfc.barrel.dye.blue_polished_alabaster': 'Dyeing Alabaster Polished Blue',
+    'tfc.recipe.barrel.tfc.barrel.dye.blue_raw_alabaster': 'Dyeing Plaster Raw Blue',
+    'tfc.recipe.barrel.tfc.barrel.dye.blue_bricks_alabaster': 'Dyeing Plaster Bricks Blue',
+    'tfc.recipe.barrel.tfc.barrel.dye.blue_polished_alabaster': 'Dyeing Plaster Polished Blue',
     'tfc.recipe.barrel.tfc.barrel.dye.blue_windmill_blade': 'Dyeing Windmill Blade Blue',
     'tfc.recipe.barrel.tfc.barrel.dye.brown_wool': 'Dyeing Wool Brown',
     'tfc.recipe.barrel.tfc.barrel.dye.brown_carpet': 'Dyeing Carpet Brown',
@@ -2548,9 +2547,9 @@ DEFAULT_LANG = {
     'tfc.recipe.barrel.tfc.barrel.dye.brown_concrete_powder': 'Dyeing Aggregate Brown',
     'tfc.recipe.barrel.tfc.barrel.dye.brown_candle': 'Dyeing Candle Brown',
     'tfc.recipe.barrel.tfc.barrel.dye.brown_leather': 'Dyeing Leather Brown',
-    'tfc.recipe.barrel.tfc.barrel.dye.brown_raw_alabaster': 'Dyeing Alabaster Raw Brown',
-    'tfc.recipe.barrel.tfc.barrel.dye.brown_bricks_alabaster': 'Dyeing Alabaster Bricks Brown',
-    'tfc.recipe.barrel.tfc.barrel.dye.brown_polished_alabaster': 'Dyeing Alabaster Polished Brown',
+    'tfc.recipe.barrel.tfc.barrel.dye.brown_raw_alabaster': 'Dyeing Plaster Raw Brown',
+    'tfc.recipe.barrel.tfc.barrel.dye.brown_bricks_alabaster': 'Dyeing Plaster Bricks Brown',
+    'tfc.recipe.barrel.tfc.barrel.dye.brown_polished_alabaster': 'Dyeing Plaster Polished Brown',
     'tfc.recipe.barrel.tfc.barrel.dye.brown_windmill_blade': 'Dyeing Windmill Blade Brown',
     'tfc.recipe.barrel.tfc.barrel.dye.green_wool': 'Dyeing Wool Green',
     'tfc.recipe.barrel.tfc.barrel.dye.green_carpet': 'Dyeing Carpet Green',
@@ -2565,9 +2564,9 @@ DEFAULT_LANG = {
     'tfc.recipe.barrel.tfc.barrel.dye.green_concrete_powder': 'Dyeing Aggregate Green',
     'tfc.recipe.barrel.tfc.barrel.dye.green_candle': 'Dyeing Candle Green',
     'tfc.recipe.barrel.tfc.barrel.dye.green_leather': 'Dyeing Leather Green',
-    'tfc.recipe.barrel.tfc.barrel.dye.green_raw_alabaster': 'Dyeing Alabaster Raw Green',
-    'tfc.recipe.barrel.tfc.barrel.dye.green_bricks_alabaster': 'Dyeing Alabaster Bricks Green',
-    'tfc.recipe.barrel.tfc.barrel.dye.green_polished_alabaster': 'Dyeing Alabaster Polished Green',
+    'tfc.recipe.barrel.tfc.barrel.dye.green_raw_alabaster': 'Dyeing Plaster Raw Green',
+    'tfc.recipe.barrel.tfc.barrel.dye.green_bricks_alabaster': 'Dyeing Plaster Bricks Green',
+    'tfc.recipe.barrel.tfc.barrel.dye.green_polished_alabaster': 'Dyeing Plaster Polished Green',
     'tfc.recipe.barrel.tfc.barrel.dye.green_windmill_blade': 'Dyeing Windmill Blade Green',
     'tfc.recipe.barrel.tfc.barrel.dye.red_wool': 'Dyeing Wool Red',
     'tfc.recipe.barrel.tfc.barrel.dye.red_carpet': 'Dyeing Carpet Red',
@@ -2582,9 +2581,9 @@ DEFAULT_LANG = {
     'tfc.recipe.barrel.tfc.barrel.dye.red_concrete_powder': 'Dyeing Aggregate Red',
     'tfc.recipe.barrel.tfc.barrel.dye.red_candle': 'Dyeing Candle Red',
     'tfc.recipe.barrel.tfc.barrel.dye.red_leather': 'Dyeing Leather Red',
-    'tfc.recipe.barrel.tfc.barrel.dye.red_raw_alabaster': 'Dyeing Alabaster Raw Red',
-    'tfc.recipe.barrel.tfc.barrel.dye.red_bricks_alabaster': 'Dyeing Alabaster Bricks Red',
-    'tfc.recipe.barrel.tfc.barrel.dye.red_polished_alabaster': 'Dyeing Alabaster Polished Red',
+    'tfc.recipe.barrel.tfc.barrel.dye.red_raw_alabaster': 'Dyeing Plaster Raw Red',
+    'tfc.recipe.barrel.tfc.barrel.dye.red_bricks_alabaster': 'Dyeing Plaster Bricks Red',
+    'tfc.recipe.barrel.tfc.barrel.dye.red_polished_alabaster': 'Dyeing Plaster Polished Red',
     'tfc.recipe.barrel.tfc.barrel.dye.red_windmill_blade': 'Dyeing Windmill Blade Red',
     'tfc.recipe.barrel.tfc.barrel.dye.black_wool': 'Dyeing Wool Black',
     'tfc.recipe.barrel.tfc.barrel.dye.black_carpet': 'Dyeing Carpet Black',
@@ -2599,9 +2598,9 @@ DEFAULT_LANG = {
     'tfc.recipe.barrel.tfc.barrel.dye.black_concrete_powder': 'Dyeing Aggregate Black',
     'tfc.recipe.barrel.tfc.barrel.dye.black_candle': 'Dyeing Candle Black',
     'tfc.recipe.barrel.tfc.barrel.dye.black_leather': 'Dyeing Leather Black',
-    'tfc.recipe.barrel.tfc.barrel.dye.black_raw_alabaster': 'Dyeing Alabaster Raw Black',
-    'tfc.recipe.barrel.tfc.barrel.dye.black_bricks_alabaster': 'Dyeing Alabaster Bricks Black',
-    'tfc.recipe.barrel.tfc.barrel.dye.black_polished_alabaster': 'Dyeing Alabaster Polished Black',
+    'tfc.recipe.barrel.tfc.barrel.dye.black_raw_alabaster': 'Dyeing Plaster Raw Black',
+    'tfc.recipe.barrel.tfc.barrel.dye.black_bricks_alabaster': 'Dyeing Plaster Bricks Black',
+    'tfc.recipe.barrel.tfc.barrel.dye.black_polished_alabaster': 'Dyeing Plaster Polished Black',
     'tfc.recipe.barrel.tfc.barrel.dye.black_windmill_blade': 'Dyeing Windmill Blade Black',
 
     **{

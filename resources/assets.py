@@ -380,21 +380,21 @@ def generate(rm: ResourceManager):
     rm.blockstate('saltwater_bubble_column', model='tfc:block/fluid/salt_water').with_lang(lang('bubble column'))
 
     for variant in ('raw', 'bricks', 'polished'):
-        rm.blockstate(('alabaster', variant)).with_block_model().with_item_model().with_block_loot('tfc:alabaster/%s' % variant).with_lang(lang('%s Alabaster', variant) if variant != 'bricks' else lang('Alabaster %s', variant))
+        rm.blockstate(('alabaster', variant)).with_block_model().with_item_model().with_block_loot('tfc:alabaster/%s' % variant).with_lang(lang('%s Plaster', variant) if variant != 'bricks' else lang('Plaster %s', variant))
 
     for color in COLORS:
-        rm.blockstate(('alabaster', 'raw', color)).with_block_model().with_item_model().with_block_loot('tfc:alabaster/raw/%s' % color).with_lang(lang('%s Raw Alabaster', color))
-        bricks = rm.blockstate(('alabaster', 'bricks', color)).with_block_model().with_item_model().with_block_loot('tfc:alabaster/bricks/%s' % color).with_lang(lang('%s Alabaster Bricks', color))
-        polished = rm.blockstate(('alabaster', 'polished', color)).with_block_model().with_item_model().with_block_loot('tfc:alabaster/polished/%s' % color).with_lang(lang('%s Polished Alabaster', color))
+        rm.blockstate(('alabaster', 'raw', color)).with_block_model().with_item_model().with_block_loot('tfc:alabaster/raw/%s' % color).with_lang(lang('%s Raw Plaster', color))
+        bricks = rm.blockstate(('alabaster', 'bricks', color)).with_block_model().with_item_model().with_block_loot('tfc:alabaster/bricks/%s' % color).with_lang(lang('%s Plaster Bricks', color))
+        polished = rm.blockstate(('alabaster', 'polished', color)).with_block_model().with_item_model().with_block_loot('tfc:alabaster/polished/%s' % color).with_lang(lang('%s Polished Plaster', color))
         bricks.make_slab().make_stairs().make_wall()
         polished.make_slab().make_stairs().make_wall()
         for extra in ('slab', 'stairs', 'wall'):
-            block = rm.block(('alabaster', 'bricks', color + '_' + extra)).with_lang(lang('%s Alabaster Brick %s', color, extra))
+            block = rm.block(('alabaster', 'bricks', color + '_' + extra)).with_lang(lang('%s Plaster Brick %s', color, extra))
             if extra != 'slab':
                 block.with_block_loot('tfc:alabaster/bricks/%s_%s' % (color, extra))
             else:
                 slab_loot(rm, 'tfc:alabaster/bricks/%s_%s' % (color, extra))
-            block = rm.block(('alabaster', 'polished', color + '_' + extra)).with_lang(lang('%s Polished Alabaster %s', color, extra))
+            block = rm.block(('alabaster', 'polished', color + '_' + extra)).with_lang(lang('%s Polished Plaster %s', color, extra))
             if extra != 'slab':
                 block.with_block_loot('tfc:alabaster/polished/%s_%s' % (color, extra))
             else:
@@ -609,6 +609,18 @@ def generate(rm: ResourceManager):
     }).with_lang(lang('Firepit')).with_block_loot('tfc:powder/wood_ash')
     rm.item_model('firepit', 'tfc:item/firepit')
 
+    rm.blockstate('stove', variants={
+        'lit=true,facing=north': {'model': 'tfc:block/stove_lit', 'y' : 270},
+        'lit=true,facing=south': {'model': 'tfc:block/stove_lit', 'y': 90},
+        'lit=true,facing=east': {'model': 'tfc:block/stove_lit'},
+        'lit=true,facing=west': {'model': 'tfc:block/stove_lit', 'y': 180},
+        'lit=false,facing=north': {'model': 'tfc:block/stove_unlit', 'y' : 270},
+        'lit=false,facing=south': {'model': 'tfc:block/stove_unlit', 'y': 90},
+        'lit=false,facing=east': {'model': 'tfc:block/stove_unlit'},
+        'lit=false,facing=west': {'model': 'tfc:block/stove_unlit', 'y': 180},
+    }).with_lang(lang('Stove')).with_block_loot('tfc:stove')
+    rm.item_model('stove', 'tfc:item/stove')
+
     for stage in ('cold', 'dried', 'fresh', 'white', 'red'):
         for i in range(1, 5):
             rm.block_model('firepit_log_%s_%s' % (i, stage), {'all': 'tfc:block/devices/firepit/log_%s' % stage}, parent='tfc:block/firepit_log_%s' % i)
@@ -633,6 +645,21 @@ def generate(rm: ResourceManager):
     ).with_lang(lang('Pot')).with_block_loot('tfc:powder/wood_ash', 'tfc:ceramic/pot')
     rm.item_model('pot', 'tfc:item/firepit_pot')
 
+    rm.blockstate_multipart('stove_pot',
+        ({'facing': 'north'}, {'model': 'tfc:block/pot_stove', 'y' : 270}),
+        ({'facing': 'south'}, {'model': 'tfc:block/pot_stove', 'y': 90}),
+        ({'facing': 'east'}, {'model': 'tfc:block/pot_stove'}),
+        ({'facing': 'west'}, {'model': 'tfc:block/pot_stove', 'y': 180}),
+        ({'lit': True, 'facing': 'north'}, {'model': 'tfc:block/stove_lit', 'y' : 270}),
+        ({'lit': True, 'facing': 'south'}, {'model': 'tfc:block/stove_lit', 'y': 90}),
+        ({'lit': True, 'facing': 'east'}, {'model': 'tfc:block/stove_lit'}),
+        ({'lit': True, 'facing': 'west'}, {'model': 'tfc:block/stove_lit', 'y': 180}),
+        ({'lit': False, 'facing': 'north'}, {'model': 'tfc:block/stove_unlit', 'y' : 270}),
+        ({'lit': False, 'facing': 'south'}, {'model': 'tfc:block/stove_unlit', 'y': 90}),
+        ({'lit': False, 'facing': 'east'}, {'model': 'tfc:block/stove_unlit'}),
+        ({'lit': False, 'facing': 'west'}, {'model': 'tfc:block/stove_unlit', 'y': 180}),
+        ).with_lang(lang('Pot')).with_block_loot('tfc:stove', 'tfc:ceramic/pot')
+    rm.item_model('stove_pot', 'tfc:item/stove_pot')
     # easier to just use a loop since 0 - 15 power needs to be mapped to 0 - 10 models
     thermometer_states = {}
     for p in range (0, 16):
@@ -1108,6 +1135,7 @@ def generate(rm: ResourceManager):
     for item in SIMPLE_ITEMS:
         rm.item_model(item).with_lang(lang(item))
 
+    rm.item_model('alabaster_brick', 'tfc:item/alabaster_brick').with_lang(lang('Plaster Brick'))
     rm.item_model('blowpipe/empty_gui', 'tfc:item/blowpipe')
     rm.item_model('blowpipe/ceramic_empty_gui', 'tfc:item/ceramic_blowpipe')
     rm.item_model('blowpipe/empty_held', parent='tfc:item/blowpipe/empty', no_textures=True)

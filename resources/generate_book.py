@@ -216,7 +216,7 @@ def make_book(rm: ResourceManager, i18n: I18n, local_instance: bool = False, rev
             block_spotlight('', 'Sylvite in Chert.', 'tfc:ore/%s/%s' % ('sylvite', 'chert')),
             item_spotlight('tfc:ore/borax', 'Borax', text_contents='Borax is a $(thing)Mineral$() which can be ground in the $(l:mechanics/quern)Quern$() to produce $(l:mechanics/flux)Flux$(). It can be found in very large flat deposits near the surface in $(thing)Claystone$(), $(thing)Limestone$(), and $(thing)Shale$().').link('tfc:ore/%s' % 'borax').anchor('borax'),
             block_spotlight('', 'Borax in Shale.', 'tfc:ore/%s/%s' % ('borax', 'shale')),
-            item_spotlight('tfc:ore/gypsum', 'Gypsum', text_contents='Gypsum is a decorative $(thing)Mineral$() which can be used to make $(l:mechanics/advanced_building_materials#alabaster)Alabaster$(). It can be found in very large flat deposits near the surface in $(l:the_world/geology#sedimentary)Sedimentary$() rocks.').link('tfc:ore/%s' % 'gypsum').anchor('gypsum'),
+            item_spotlight('tfc:ore/gypsum', 'Gypsum', text_contents='Gypsum is a decorative $(thing)Mineral$() which can be used to make $(l:mechanics/advanced_building_materials#plaster)Plaster$(). It can be found in very large flat deposits near the surface in $(l:the_world/geology#sedimentary)Sedimentary$() rocks.').link('tfc:ore/%s' % 'gypsum').anchor('gypsum'),
             block_spotlight('', 'Gypsum in Chalk.', 'tfc:ore/%s/%s' % ('gypsum', 'chalk')),
             item_spotlight('tfc:ore/halite', 'Halite', text_contents='Halite is a $(thing)Mineral$() which can be ground in the $(l:mechanics/quern)Quern$() to make $(thing)Salt$(), which is an important $(l:mechanics/decay#salting)Preservative$(). It can be found in very large flat deposits near the surface in $(l:the_world/geology#sedimentary)Sedimentary$() rocks.').link('tfc:ore/%s' % 'halite').anchor('halite'),
             block_spotlight('', 'Halite.', 'tfc:halite'),
@@ -933,12 +933,12 @@ def make_book(rm: ResourceManager, i18n: I18n, local_instance: bool = False, rev
         )),
         entry('advanced_building_materials', 'Advanced Materials', 'tfc:brick/rhyolite', pages=(
             text('In addition to the primitive $(l:getting_started/building_materials)building materials$() of the stone age, the acquisition of metal tools allows the construction of more advanced building materials'),
-            text('$(br) 1. $(l:mechanics/advanced_building_materials#alabaster)Alabaster$()$(br) 2. $(l:mechanics/advanced_building_materials#bricks_and_mortar)Bricks and Mortar$()$(br)', title='Contents'),
+            text('$(br) 1. $(l:mechanics/advanced_building_materials#plaster)Plaster$()$(br) 2. $(l:mechanics/advanced_building_materials#bricks_and_mortar)Bricks and Mortar$()$(br)', title='Contents'),
             page_break(),
-            # Alabaster
-            text('Alabaster is a building block made from $(l:the_world/ores_and_minerals#gypsum)Gypsum$(). Alabaster can be made by directly crafting with $(l:the_world/ores_and_minerals#gypsum)Gypsum$(), however it can be made more efficiently by sealing some $(l:the_world/ores_and_minerals#gypsum)Gypsum$() with 100 mB of $(thing)Limewater$() in a barrel.', title='Alabaster').anchor('alabaster').link('tfc:alabaster/raw', 'tfc:alabaster/polished'),
-            crafting('tfc:crafting/alabaster_brick', 'tfc:crafting/alabaster/bricks', title='Alabaster Bricks'),
-            text('Alabaster can be $(l:mechanics/dye)dyed$() in a $(l:mechanics/barrels)Barrel$() of dye into any color. Raw Alabaster blocks can also be $(l:mechanics/chisel)chiseled$() into $(thing)Polished Alabaster$() using the $(thing)Smooth$() chisel mode, or crafted into stairs, slabs, or walls.', title='Alabaster Decorations'),
+            # Plaster
+            text('Plaster is a building block made from $(l:the_world/ores_and_minerals#gypsum)Gypsum$(). Plaster can be made by directly crafting with $(l:the_world/ores_and_minerals#gypsum)Gypsum$(), however it can be made more efficiently by sealing some $(l:the_world/ores_and_minerals#gypsum)Gypsum$() with 100 mB of $(thing)Limewater$() in a barrel.', title='Plaster').anchor('plaster').link('tfc:alabaster/raw', 'tfc:alabaster/polished'),
+            crafting('tfc:crafting/alabaster_brick', 'tfc:crafting/alabaster/bricks', title='Plaster Bricks'),
+            text('Plaster can be $(l:mechanics/dye)dyed$() in a $(l:mechanics/barrels)Barrel$() of dye into any color. Raw Plaster blocks can also be $(l:mechanics/chisel)chiseled$() into $(thing)Polished Plaster$() using the $(thing)Smooth$() chisel mode, or crafted into stairs, slabs, or walls.', title='Plaster Decorations'),
             crafting('tfc:crafting/alabaster/bricks/magenta_stairs', 'tfc:crafting/alabaster/polished/magenta_slab', title='Stairs and Slabs'),
             page_break(),
             text('$(thing)Stone Bricks$() can be made using a $(l:mechanics/chisel)Chisel$() with some individual loose rocks. It then requires $(thing)Mortar$() in order to form a strong building block.$(br2)Mortar can be made by adding $(thing)Sand$() to a barrel of $(l:mechanics/barrels#limewater)Limewater$().', title='Bricks and Mortar').anchor('bricks_and_mortar'),
@@ -1070,6 +1070,18 @@ def make_book(rm: ResourceManager, i18n: I18n, local_instance: bool = False, rev
             multiblock('A casting set up', '', False, multiblock_id='tfc:channel_casting'),
             text('$(li)Using a $(l:mechanics/bellows)Bellows$() on a $(thing)Mold Table$() will cool the metal faster.$()$(li)Activating a $(thing)Channel$() with a redstone pulse will start pouring the metal.$()$(li)$(thing)Mold Tables$() output a comparator signal.', 'Automation')
         )),
+        entry('redstone_devices', 'Redstone Devices', 'tfc:calendar_clock', pages=(
+            text('Once you advance far enough in your world, you may want to measure certain conditions, such as the wind speed or the time of the day. There are several devices that may suit your needs for this.'),
+            image('tfc:textures/gui/book/tutorial/redstone_devices.png'),
+            crafting('tfc:crafting/calendar_clock', text_contents='The first is the $(thing)Precision Clock$(). The Clock detects the hour, or, when toggled with $(item)$(k:key.use)$(), the month.'),
+            text('When in hour mode, the clock will output a strong analog signal where signal 0 means midnight or noon, and signal 11 means 11:00 or 23:00. When in month mode, the clock will output a strong analog signal where signal 0 means January, and signal 11 means December. You do not need a comparator to read the Clock\'s signal strength.'),
+            crafting('tfc:crafting/thermometer', text_contents='Next we have the $(thing)Thermometer$(), which detects the ambient temperature, or the temperature of the device it is placed onto.'),
+            text('When reading ambient temperature, the Thermometer will output a strong analog signal where signal 0 means -40C, and signal 15 means +40C. When reading device temperature, the Thermometer will output a weak analog signal where signal 0 means no heat, and signal 15 means Brilliant White. You do not need a comparator to read the Thermometer\'s signal strength.'),
+            crafting('tfc:crafting/anemometer', title=''),
+            text('The $(thing)Anemometer$() detects the wind speed. It outputs a strong analog signal where signal 0 means 0kmh, and signal 15 means 115 kmh. You do not need a comparator to read the Anemometer\'s signal strength.'),
+            crafting('tfc:crafting/vane', title=''),
+            text('The $(thing)Weather Vane$() detects the wind direction. It outputs a strong analog signal where signal 0 means North, and signal 8 means south. The signal increases as the wind direction proceeds clockwise. You do not need a comparator to read the Weather Vane\'s signal strength.'),
+            )),
         entry('grill', 'Firepit And Grill', 'tfc:grill', pages=(
             text('A $(thing)Grill$() is an item that can be added to a firepit to cook foods more efficiently. The grill is able to cook five items at once, and also gives these items the $(thing)Wood Grilled$() trait when cooking food, which provides a minor buff to the item\'s $(l:mechanics/decay)expiration date$(). In order to create a firepit with grill, first create a $(l:getting_started/firepit)Firepit$(), then use a $(thing)Wrought Iron Grill$() on the firepit.').link('tfc:wrought_iron_grill'),
             block_spotlight('A Firepit with Grill', '', 'tfc:grill'),
@@ -1085,6 +1097,11 @@ def make_book(rm: ResourceManager, i18n: I18n, local_instance: bool = False, rev
             image('tfc:textures/gui/book/gui/pot.png', text_contents='The pot interface, actively boiling and making a type of soup.', border=False),
             item_spotlight('tfc:food/fruit_soup', 'Soup Recipes', text_contents='Soup is made from 3-5 $(thing)fruits$(), $(thing)vegetables$(), or $(thing)meats$() in a pot of $(thing)water$(). When the recipe is done, the water in the pot will turn red. $(item)$(k:key.use)$() with a $(l:mechanics/bowls)bowl$() to retrieve it. Soup combines multiple nutrients into a single meal.').anchor('soup'),
             item_spotlight('tfc:bucket/red_dye', 'Simple Recipes', text_contents='Other pot recipes transform the items and fluid in the pot into something else. For example, boiling five $(thing)ash$() in $(thing)water$() makes $(thing)lye$().')  # todo: better recipe page for the pot
+        )),
+        entry('stove', 'Stove', 'tfc:stove', pages=(
+            non_text_first_page(),
+            crafting('tfc:crafting/stove', title='', text_contents='A $(thing)Stove$() is a variant of the $(thing)Firepit$() that can be used without the fear of it setting nearby blocks on fire. It has all the same functionality as a firepit, and a pot can be added as well. However, a grill cannot be added to the Stove.'),
+            block_spotlight(block='tfc:stove', title='', text_content='')
         )),
         entry('chisel', 'Chisel', 'tfc:metal/chisel/wrought_iron', pages=(
             text('Chisels are a tool for creating decorative forms of other blocks, including slabs and stairs. In order to get started, you will need a $(thing)Chisel$() and any type of $(thing)Hammer$(). Chisels must be cast in molds or forged on an $(l:mechanics/anvils)Anvil$(). In order to start chiseling, hold the chisel in your main hand and a hammer in your off hand, and target a block in the world.').link('#c:tools/chisel'),
@@ -1309,7 +1326,7 @@ def make_book(rm: ResourceManager, i18n: I18n, local_instance: bool = False, rev
             sealed_barrel_recipe('tfc:barrel/tannin', '$(bold)Tannin$() is an acidic fluid, made by dissolving bark from certain $(thing)Logs$() in a barrel of $(thing)Water$(). $(thing)Oak$(), $(thing)Birch$(), $(thing)Chestnut$(), $(thing)Douglas Fir$(), $(thing)Hickory$(), $(thing)Maple$(), and $(thing)Sequoia$() are all able to be used to create $(thing)Tannin$().').anchor('tannin'),
             text('A couple barrel recipes operate by mixing two fluids at a certain ratio. This is done by taking a filled bucket of one of the ingredients, and putting it in the fluid addition slot of a barrel that has the required amount of the other fluid. This is done for making $(thing)Milk Vinegar$(), where $(thing)Vinegar$() is added to $(thing)Milk$() at a 9:1 ratio. Vinegar is also added in the same ratio to $(thing)Salt Water$() to make $(thing)Brine$().'),
             text('Barrels have the ability to cool $(l:mechanics/heating)hot$() items. Put a hot item in a barrel of $(thing)Water$(), $(thing)Olive Oil$(), or $(thing)Salt Water$(), and it will quickly bring its temperature down.'),
-            text('Barrels have the ability to $(l:mechanics/dye)Dye$() and $(l:mechanics/dye#lye)Bleach$() items. Most color-able things, like carpet, candles, and $(l:mechanics/advanced_building_materials#alabaster)Alabaster$() can be dyed by sealing them in a barrel of dye or bleached by sealing them in a barrel of lye. See the dye chapter for more information.'),
+            text('Barrels have the ability to $(l:mechanics/dye)Dye$() and $(l:mechanics/dye#lye)Bleach$() items. Most color-able things, like carpet, candles, and $(l:mechanics/advanced_building_materials#plaster)Plaster$() can be dyed by sealing them in a barrel of dye or bleached by sealing them in a barrel of lye. See the dye chapter for more information.'),
             text('Barrels can preserve items in $(thing)Vinegar$(). Vinegar is made by sealing $(thing)Fruit$() in a barrel of $(thing)Alcohol$(). For information on how that process works, see the relevant $(l:mechanics/decay#vinegar)page$().'),
             crafting('tfc:crafting/barrel_rack', text_contents='Barrels placed against the side of a block work the same as vertical barrels, but have restrictions on placement. For example, they must have a $(thing)Barrel Rack$() added to them with $(item)$(k:key.use)$() in order to have another sideways barrel above them.'),
             two_tall_block_spotlight('Sideways Barrels', 'Sideways barrels show their sealed state using the $(thing)Tap$(). If the tap is sideways, it is sealed.', 'tfc:wood/barrel/kapok[facing=north,rack=true,sealed=false]', 'tfc:wood/barrel/kapok[facing=north,rack=false,sealed=true]'),

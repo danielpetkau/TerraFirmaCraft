@@ -8,6 +8,7 @@ package net.dries007.tfc.client.overworld;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.List;
 import com.machinezoo.noexception.throwing.ThrowingSupplier;
 import com.mojang.blaze3d.platform.GlStateManager;
@@ -259,39 +260,6 @@ public class LevelRendererExtension extends DimensionSpecialEffects.OverworldEff
                 final float starAlpha = level.getStarBrightness(partialTick);
                 final float nightAlpha = starAlpha * rainAlpha;
 
-                // The moon uses a separate shader color, that alpha's out the moon somewhat when it's during the day, just to make it
-                // seem a little less prominent than in night
-                final float moonAlpha = (0.2f + 0.8f * starAlpha) * rainAlpha;
-
-                // Sun
-                final Matrix4f sun = rotateTo(stack, sunPos);
-
-                RenderSystem.setShaderColor(1f, 1f, 1f, rainAlpha);
-                RenderSystem.setShader(GameRenderer::getPositionTexShader);
-                RenderSystem.setShaderTexture(0, SUN_LOCATION);
-                BufferBuilder buffer = tesselator.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
-                buffer.addVertex(sun, -30.0F, 100.0F, -30.0F).setUv(0.0F, 0.0F);
-                buffer.addVertex(sun, 30.0F, 100.0F, -30.0F).setUv(1.0F, 0.0F);
-                buffer.addVertex(sun, 30.0F, 100.0F, 30.0F).setUv(1.0F, 1.0F);
-                buffer.addVertex(sun, -30.0F, 100.0F, 30.0F).setUv(0.0F, 1.0F);
-                BufferUploader.drawWithShader(buffer.buildOrThrow());
-
-                // Moon
-                final SkyPos moonPos = ClientSolarCalculatorBridge.getMoonPosition(level, camera.getBlockPosition());
-                final int moonPhase = ClientSolarCalculatorBridge.getMoonPhase();
-                final int moonU = moonPhase % 4;
-                final int moonV = moonPhase / 4 % 2;
-                final Matrix4f moon = rotateTo(stack, moonPos);
-
-                RenderSystem.setShaderColor(1f, 1f, 1f, moonAlpha);
-                RenderSystem.setShaderTexture(0, MOON_LOCATION);
-                buffer = tesselator.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
-                buffer.addVertex(moon, -20.0F, 100.0F, -20.0F).setUv((moonU + 1) / 4.0F, (moonV + 1) / 2.0F);
-                buffer.addVertex(moon, 20.0F, 100.0F, -20.0F).setUv(moonU / 4.0F, (moonV + 1) / 2.0F);
-                buffer.addVertex(moon, 20.0F, 100.0F, 20.0F).setUv(moonU / 4.0F, moonV / 2.0F);
-                buffer.addVertex(moon, -20.0F, 100.0F, 20.0F).setUv((moonU + 1) / 4.0F, moonV / 2.0F);
-                BufferUploader.drawWithShader(buffer.buildOrThrow());
-
                 // Stars
                 if (nightAlpha > 0.0F && starBuffer != null)
                 {
@@ -311,8 +279,6 @@ public class LevelRendererExtension extends DimensionSpecialEffects.OverworldEff
 
                 RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
                 RenderSystem.disableBlend();
-                RenderSystem.defaultBlendFunc();
-                RenderSystem.setShaderColor(0f, 0f, 0f, 0f);
 
                 final double distanceAboveHorizon = camera.getEntity().getEyePosition(partialTick).y - level.getLevelData().getHorizonHeight(level);
                 if (distanceAboveHorizon < 0.0)
@@ -325,6 +291,80 @@ public class LevelRendererExtension extends DimensionSpecialEffects.OverworldEff
                     stack.popPose();
                 }
 
+                // Sun and Moon positions
+                final Matrix4f sun = rotateTo(stack, sunPos);
+                final SkyPos moonPos = ClientSolarCalculatorBridge.getMoonPosition(level, camera.getBlockPosition());
+                final Matrix4f moon = rotateTo(stack, moonPos);
+
+                // We need to cut a sky-colored quad out of the sky in order to render the sun and moon with the correct blending
+                float[] coverColors;
+                if (sunriseColor != null)
+                {
+                    coverColors = Arrays.copyOf(sunriseColor,sunriseColor.length);
+                } else {
+                    coverColors = new float[3];
+                    coverColors[0] = (float) skyColor.x;
+                    coverColors[1] = (float) skyColor.y;
+                    coverColors[2] = (float) skyColor.z;
+                }
+
+                coverColors[0] = (float) skyColor.x;
+                coverColors[1] = (float) skyColor.y;
+                coverColors[2] = (float) skyColor.z;
+
+                FogRenderer.levelFogColor();
+                RenderSystem.depthMask(false);
+
+                RenderSystem.setShaderColor(1, 1, 1, 1.0F);
+                RenderSystem.setShader(GameRenderer::getPositionColorShader);
+                BufferBuilder buffer = tesselator.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
+                buffer.addVertex(sun, -7.5F, 100.0F, -7.5F).setColor(coverColors[0],coverColors[1],coverColors[2], 1.0f);
+                buffer.addVertex(sun, 7.5F, 100.0F, -7.5F).setColor(coverColors[0],coverColors[1],coverColors[2], 1.0f);
+                buffer.addVertex(sun, 7.5F, 100.0F, 7.5F).setColor(coverColors[0],coverColors[1],coverColors[2], 1.0f);
+                buffer.addVertex(sun, -7.5F, 100.0F, 7.5F).setColor(coverColors[0],coverColors[1],coverColors[2], 1.0f);
+                BufferUploader.drawWithShader(buffer.buildOrThrow());
+
+                buffer = tesselator.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
+                buffer.addVertex(moon, -7.5F, 100.0F, -7.5F).setColor(coverColors[0],coverColors[1],coverColors[2], 1.0f);
+                buffer.addVertex(moon, 7.5F, 100.0F, -7.5F).setColor(coverColors[0],coverColors[1],coverColors[2], 1.0f);
+                buffer.addVertex(moon, 7.5F, 100.0F, 7.5F).setColor(coverColors[0],coverColors[1],coverColors[2], 1.0f);
+                buffer.addVertex(moon, -7.5F, 100.0F, 7.5F).setColor(coverColors[0],coverColors[1],coverColors[2], 1.0f);
+                BufferUploader.drawWithShader(buffer.buildOrThrow());
+
+                RenderSystem.enableBlend();
+
+                // Sun With Glow
+
+                RenderSystem.setShaderColor(1f, 1f, 1f, rainAlpha);
+                RenderSystem.setShader(GameRenderer::getPositionTexShader);
+                RenderSystem.setShaderTexture(0, SUN_LOCATION);
+                buffer = tesselator.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
+                buffer.addVertex(sun, -30.0F, 100.0F, -30.0F).setUv(0.0F, 0.0F);
+                buffer.addVertex(sun, 30.0F, 100.0F, -30.0F).setUv(1.0F, 0.0F);
+                buffer.addVertex(sun, 30.0F, 100.0F, 30.0F).setUv(1.0F, 1.0F);
+                buffer.addVertex(sun, -30.0F, 100.0F, 30.0F).setUv(0.0F, 1.0F);
+                BufferUploader.drawWithShader(buffer.buildOrThrow());
+
+
+                // Moon With Glow
+                // The moon uses a separate shader color, that alpha's out the moon somewhat when it's during the day, just to make it
+                // seem a little less prominent than in night
+                final float moonAlpha = (0.2f + 0.8f * starAlpha) * rainAlpha;
+
+                final int moonPhase = ClientSolarCalculatorBridge.getMoonPhase();
+                final int moonU = (moonPhase % 4);
+                final int moonV = (moonPhase / 4 % 2);
+
+                RenderSystem.setShaderColor(1f, 1f, 1f, moonAlpha);
+                RenderSystem.setShaderTexture(0, MOON_LOCATION);
+                buffer = tesselator.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
+                buffer.addVertex(moon, -30.0F, 100.0F, -30.0F).setUv(moonU / 4.0F, (moonV + 1) / 2.0F);
+                buffer.addVertex(moon, 30.0F, 100.0F, -30.0F).setUv((moonU + 1) / 4.0F, (moonV + 1) / 2.0F);
+                buffer.addVertex(moon, 30.0F, 100.0F, 30.0F).setUv((moonU + 1) / 4.0F, moonV / 2.0F);
+                buffer.addVertex(moon, -30.0F, 100.0F, 30.0F).setUv(moonU / 4.0F, moonV / 2.0F);
+                BufferUploader.drawWithShader(buffer.buildOrThrow());
+
+                RenderSystem.disableBlend();
                 RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
                 RenderSystem.depthMask(true);
             }
