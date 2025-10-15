@@ -453,7 +453,7 @@ public interface CraftingRecipes extends Recipes
             recipe()
                 .input('L', lumber)
                 .pattern("LL", "LL", "LL")
-                .shaped(blocks.get(Wood.BlockType.DOOR), 2);
+                .shaped(blocks.get(Wood.BlockType.DOOR));
             recipe()
                 .input('L', lumber)
                 .input('S', blocks.get(Wood.BlockType.STRIPPED_LOG))
@@ -567,7 +567,7 @@ public interface CraftingRecipes extends Recipes
             recipe()
                 .input('L', lumber)
                 .pattern("LLL", "LLL")
-                .shaped(blocks.get(Wood.BlockType.TRAPDOOR));
+                .shaped(blocks.get(Wood.BlockType.TRAPDOOR), 2);
             recipe()
                 .input(blocks.get(Wood.BlockType.CHEST))
                 .input(Items.TRIPWIRE_HOOK)
