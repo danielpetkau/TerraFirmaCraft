@@ -27,6 +27,7 @@ import org.jetbrains.annotations.Nullable;
 
 import net.dries007.tfc.client.RenderHelpers;
 import net.dries007.tfc.common.blockentities.PlacedItemBlockEntity;
+import net.dries007.tfc.common.items.JavelinItem;
 import net.dries007.tfc.common.items.TFCItems;
 
 public class PlacedItemBlockEntityRenderer<T extends PlacedItemBlockEntity> implements BlockEntityRenderer<T>
@@ -125,19 +126,22 @@ public class PlacedItemBlockEntityRenderer<T extends PlacedItemBlockEntity> impl
             // model is properly 'sitting' on the surface
             final BakedModel model = mc.getItemRenderer().getModel(stack, entity.getLevel(), null, 0);
 
+            // Javelins are rendered in the hand as 3d, but render flat in the inventory and when placed
+            final boolean renderAsBlock = model.isGui3d() && !(stack.getItem() instanceof JavelinItem);
+
             if (isLarge)
             {
                 // Large items, translate to center
-                pose.translate(0.5, model.isGui3d() ? 0.25 : 0.03125, 0.5);
+                pose.translate(0.5, renderAsBlock ? 0.25 : 0.03125, 0.5);
             }
             else
             {
                 // For small items, translate to the center of the slot, and then scale down by half
-                pose.translate(0.25 + slotX * 0.5, model.isGui3d() ? 0.125 : 0.03125, 0.25 + slotZ * 0.5);
+                pose.translate(0.25 + slotX * 0.5, renderAsBlock ? 0.125 : 0.03125, 0.25 + slotZ * 0.5);
                 pose.scale(0.5f, 0.5f, 0.5f);
             }
 
-            if (model.isGui3d())
+            if (renderAsBlock)
             {
                 // Rotate around the center axis
                 pose.mulPose(Axis.YP.rotationDegrees(entity.getRotations(slot)));
