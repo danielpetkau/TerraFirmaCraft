@@ -10,21 +10,28 @@ import net.minecraft.client.particle.*;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.SimpleParticleType;
+import net.minecraft.util.Mth;
+
 /*
- * Implementation for generic bubble particles, overriding default bubble particles to work in any liquid not just water.
+* Implementation for Bubble Column Down particles, overriding default ones so they can work in any liquid not just water
  */
-public class BubbleParticle extends TextureSheetParticle
+public class BubbleColumnDownParticle extends TextureSheetParticle
 {
-    public BubbleParticle(ClientLevel worldIn, double x, double y, double z, double motionX, double motionY, double motionZ)
+    private float angle;
+
+
+    public BubbleColumnDownParticle(ClientLevel worldIn, double x, double y, double z)
     {
-        // Sets Bubble particle paramters
+        // Sets Bubble column particle paramters
         super(worldIn, x, y, z);
         this.setSize(0.02F, 0.02F);
         this.quadSize *= random.nextFloat() * 0.6F + 0.2F;
-        this.xd = motionX * 0.2D + (Math.random() * 2.0D - 1.0D) * 0.02D;
-        this.yd = motionY * 0.2D + (Math.random() * 2.0D - 1.0D) * 0.02D;
-        this.zd = motionZ * 0.2D + (Math.random() * 2.0D - 1.0D) * 0.02D;
-        this.lifetime = (int)(8.0 / (Math.random() * 0.8 + 0.2));
+        this.lifetime = (int)(Math.random() * 60.0) + 30;
+        this.hasPhysics = false;
+        this.xd = 0.0;
+        this.yd = -0.05;
+        this.zd = 0.0;
+        this.gravity = 0.002F;
     }
 
     @Override
@@ -35,13 +42,14 @@ public class BubbleParticle extends TextureSheetParticle
         this.zo = this.z;
         if (this.age++ >= this.lifetime)
             this.remove();
-        yd += 0.002D;
-        move(xd, yd, zd);
-        xd *= 0.85F;
-        yd *= 0.85F;
-        zd *= 0.85F;
-        if (this.level.getFluidState(BlockPos.containing(this.x, this.y, this.z)).isEmpty())
+        this.xd += (double)(0.6F * Mth.cos(this.angle));
+        this.zd += (double)(0.6F * Mth.sin(this.angle));
+        this.xd *= 0.07;
+        this.zd *= 0.07;
+        this.move(this.xd, this.yd, this.zd);
+        if (this.level.getFluidState(BlockPos.containing(this.x, this.y, this.z)).isEmpty() || this.onGround)
             this.remove();
+        this.angle += 0.08F;
     }
 
     @Override
@@ -55,7 +63,7 @@ public class BubbleParticle extends TextureSheetParticle
         @Override
         public Particle createParticle(SimpleParticleType type, ClientLevel level, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed)
         {
-            BubbleParticle particle = new BubbleParticle(level, x, y, z, xSpeed, ySpeed, zSpeed);
+            BubbleColumnDownParticle particle = new BubbleColumnDownParticle(level, x, y, z);
             particle.pickSprite(sprite);
             return particle;
         }
