@@ -349,10 +349,11 @@ public class ForestFeature extends Feature<ForestConfig>
         final float rainVariance = chunkData.getRainVariance(pos) * (SolarCalculator.getInNorthernHemisphere(pos, level.getLevel()) ? 1f : -1f);
 
         final float groundwater = chunkData.getGroundwater(pos);
-        final float averageTemperature = EnvironmentHelpers.adjustAvgTempForElev(pos.getY(), chunkData.getAverageSeaLevelTemp(pos));
+        final int elevation = pos.getY();
+        final float averageTemperature = EnvironmentHelpers.adjustAvgTempForElev(elevation, chunkData.getAverageSeaLevelTemp(pos));
         final List<ForestConfig.Entry> entries = config.entries().stream().map(configuredFeature -> configuredFeature.value().config()).map(cfg -> (ForestConfig.Entry) cfg)
-            .filter(entry -> entry.isValid(averageTemperature, groundwater, rainVariance))
-            .sorted(Comparator.comparingDouble(entry -> entry.distanceFromMean(averageTemperature, groundwater, rainVariance)))
+            .filter(entry -> entry.isValid(averageTemperature, groundwater, rainVariance, elevation))
+            .sorted(Comparator.comparingDouble(entry -> entry.distanceFromMean(averageTemperature, groundwater, rainVariance, elevation)))
             .collect(Collectors.toList());
 
         if (entries.isEmpty()) return null;
