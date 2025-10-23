@@ -7,6 +7,7 @@
 package net.dries007.tfc.client.render.blockentity;
 
 import com.mojang.math.Axis;
+import net.dries007.tfc.common.blocks.devices.CalendarClockBlock;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -82,7 +83,7 @@ public class CalendarClockBlockEntityRenderer implements BlockEntityRenderer<Cal
 
         model.setupAnim(clock, partialTick);
 
-        if (clock.getBlockState().getValue(TFCBlockStateProperties.CLOCK_MONTH_MODE))
+        if (clock.getBlockState().getValue(TFCBlockStateProperties.CLOCK_MODE).equals(CalendarClockBlock.Mode.MONTH))
         {
             model.renderToBuffer(stack, buffer.getBuffer(RenderType.entityCutoutNoCull(TEXTURE_MONTH)), packedLight, packedOverlay, -1);
         }

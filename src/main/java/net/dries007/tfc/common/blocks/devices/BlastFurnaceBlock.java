@@ -84,6 +84,20 @@ public class BlastFurnaceBlock extends DeviceBlock implements IBellowsConsumer
     }
 
     @Override
+    protected boolean hasAnalogOutputSignal(BlockState state){
+        return TFCConfig.SERVER.blastFurnaceEnableAutomation.get();
+    }
+
+    @Override
+    protected int getAnalogOutputSignal(BlockState state, Level level, BlockPos pos){
+        final BlastFurnaceBlockEntity blastFurnace = level.getBlockEntity(pos, TFCBlockEntities.BLAST_FURNACE.get()).orElse(null);
+        if (blastFurnace != null && blastFurnace.getCapacity() != 0){
+            return blastFurnace.getFuelCount() * 15 / blastFurnace.getCapacity();
+        }
+        return 0;
+    }
+
+    @Override
     protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult)
     {
         final BlastFurnaceBlockEntity blastFurnace = level.getBlockEntity(pos, TFCBlockEntities.BLAST_FURNACE.get()).orElse(null);

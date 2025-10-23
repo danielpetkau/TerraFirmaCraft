@@ -766,6 +766,10 @@ public class BuiltinBlockTags extends TagsProvider<Block> implements Accessors
             .add(TFCBlocks.FIREBOX)
             .add(TFCBlocks.BLAST_FURNACE)
             .add(TFCBlocks.CRUCIBLE);
+        tag(CLOCK_READABLE)
+            .add(TFCBlocks.WOODS, Wood.BlockType.BARREL)
+            .add(TFCBlocks.BLOOMERY)
+            .add(TFCBlocks.FIREBOX);
         tag(SEA_STACK_ROCKS).add(
             TFCBlocks.ROCK_BLOCKS.get(Rock.BASALT).get(Rock.BlockType.HARDENED),
             TFCBlocks.ROCK_BLOCKS.get(Rock.LIMESTONE).get(Rock.BlockType.HARDENED),

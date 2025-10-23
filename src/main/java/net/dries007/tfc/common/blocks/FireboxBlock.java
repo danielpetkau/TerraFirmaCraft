@@ -6,6 +6,8 @@
 
 package net.dries007.tfc.common.blocks;
 
+import net.dries007.tfc.common.blockentities.TFCBlockEntities;
+import net.dries007.tfc.config.TFCConfig;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
@@ -91,6 +93,25 @@ public class FireboxBlock extends DeviceBlock implements IBellowsConsumer
         super.stepOn(level, pos, state, entity);
     }
 
+    @Override
+    protected boolean hasAnalogOutputSignal(BlockState state){
+        return TFCConfig.SERVER.fireboxEnableAutomation.get();
+    }
+
+    @Override
+    protected int getAnalogOutputSignal(BlockState state, Level level, BlockPos pos) {
+        final FireboxBlockEntity firebox = level.getBlockEntity(pos, TFCBlockEntities.FIREBOX.get()).orElse(null);
+        int maxSlot = FireboxBlockEntity.SLOTS;
+        if (firebox != null && !firebox.getInventory().getStackInSlot(0).isEmpty()){
+            for (int i = 0; i < maxSlot; i++){
+                if (firebox.getInventory().getStackInSlot(i).isEmpty()){
+                    return i * 15 / (maxSlot);
+                }
+            }
+            return 15;
+        }
+        return 0;
+    }
 
     @Override
     public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random)
