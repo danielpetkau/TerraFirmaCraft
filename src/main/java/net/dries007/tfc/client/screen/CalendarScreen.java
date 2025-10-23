@@ -93,5 +93,10 @@ public class CalendarScreen extends TFCContainerScreen<Container>
         }
 
         drawLine(graphics, Component.translatable(Calendars.CLIENT.getHemispheralCalendarMonthOfYear(ClientHelpers.inNorthernHemisphere()).getTranslationKey(Month.Style.SEASON)), CENTER, 55);
+
+        if (Calendars.CLIENT.getHourOfDay() >= 20 || Calendars.CLIENT.getHourOfDay() < 5)
+        {
+            graphics.blit(texture, 154, 3, 176, 0, 16, 16);
+        }
     }
 }

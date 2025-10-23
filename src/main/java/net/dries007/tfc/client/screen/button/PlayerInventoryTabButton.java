@@ -6,6 +6,7 @@
 
 package net.dries007.tfc.client.screen.button;
 
+import java.util.List;
 import java.util.Objects;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
@@ -63,6 +64,8 @@ public class PlayerInventoryTabButton extends Button
     private Tab tab;
     private Runnable tickCallback;
 
+    private boolean active;
+
     public PlayerInventoryTabButton(int guiLeft, int guiTop, boolean active, Tab tab)
     {
         this(guiLeft, guiTop, active, tab, button -> PacketDistributor.sendToServer(new SwitchInventoryTabPacket(tab)));
@@ -71,15 +74,16 @@ public class PlayerInventoryTabButton extends Button
 
     public PlayerInventoryTabButton(int guiLeft, int guiTop, boolean active, Tab tab, OnPress onPressIn)
     {
-        super(guiLeft + tab.xIn + (active ? -3 : 0), guiTop + tab.yIn, active ? 23 : 20, 22, Component.empty(), onPressIn, RenderHelpers.NARRATION);
+        super(guiLeft + tab.xIn + (active ? -3 : -2), guiTop + tab.yIn, 24, 24, Component.empty(), onPressIn, RenderHelpers.NARRATION);
         this.prevGuiLeft = guiLeft;
         this.prevGuiTop = guiTop;
-        this.textureU = active ? 100 : 80;
-        this.textureV = 0;
+        this.textureU = active ? 24 : 0;
+        this.textureV = 16;
         this.iconX = guiLeft + tab.xIn + 1;
-        this.iconY = guiTop + tab.yIn + 2;
+        this.iconY = guiTop + tab.yIn + 4;
         this.tickCallback = () -> {};
         this.tab = tab;
+        this.active = active;
     }
 
     public PlayerInventoryTabButton setRecipeBookCallback(InventoryScreen screen)
@@ -111,20 +115,39 @@ public class PlayerInventoryTabButton extends Button
         graphics.blit(ClientHelpers.GUI_ICONS, getX(), getY(), 0, (float) textureU, (float) textureV, width, height, 256, 256);
         graphics.blit(ClientHelpers.GUI_ICONS, iconX, iconY, 16, 16, (float) tab.iconU, (float) tab.iconV, 16, 16, 256, 256);
 
-        if (this.isHovered())
+        if (this.isHovered() && !this.active)
         {
-            if (tab == Tab.CALENDAR)
+            final Font font = Minecraft.getInstance().font;
+            switch (tab)
             {
-                final Component hoverText = Calendars.CLIENT.getDayTime();
-                final Font font = Minecraft.getInstance().font;
-                graphics.renderTooltip(font, hoverText, mouseX, mouseY);
-            }
-            else if (tab == Tab.CLIMATE)
-            {
-                final TemperatureDisplayStyle style = TFCConfig.CLIENT.climateTooltipStyle.get();
-                final Component hoverText = Objects.requireNonNull(style.formatRange(ClimateRenderCache.INSTANCE.getTemperature()));
-                final Font font = Minecraft.getInstance().font;
-                graphics.renderTooltip(font, hoverText, mouseX, mouseY);
+                case INVENTORY ->
+                {
+                    final Component title = Component.translatable("container.inventory");
+                    graphics.renderTooltip(font, title, mouseX, mouseY);
+                }
+                case CALENDAR ->
+                {
+                    final Component title = Component.translatable("tfc.screen.calendar");
+                    final Component hoverText = Calendars.CLIENT.getDayTime();
+                    graphics.renderComponentTooltip(font, List.of(title, hoverText), mouseX, mouseY);
+                }
+                case NUTRITION ->
+                {
+                    final Component title = Component.translatable("tfc.screen.nutrition");
+                    graphics.renderTooltip(font, title, mouseX, mouseY);
+                }
+                case CLIMATE ->
+                {
+                    final TemperatureDisplayStyle style = TFCConfig.CLIENT.climateTooltipStyle.get();
+                    final Component title = Component.translatable("tfc.screen.climate");
+                    final Component hoverText = Objects.requireNonNull(style.formatRange(ClimateRenderCache.INSTANCE.getTemperature()));
+                    graphics.renderComponentTooltip(font, List.of(title, hoverText), mouseX, mouseY);
+                }
+                case BOOK ->
+                {
+                    final Component hoverText = Component.literal("Field Guide");
+                    graphics.renderTooltip(font, hoverText, mouseX, mouseY);
+                }
             }
         }
     }

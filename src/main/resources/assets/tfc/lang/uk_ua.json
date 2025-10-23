@@ -267,6 +267,7 @@
   "tfc.screen.scribing_table": "Перейменування",
   "tfc.screen.pet_command": "Командувати улюбленцем",
   "tfc.screen.sewing_table": "Sewing Table",
+  "tfc.tab.field_guide": "Field Guide",
   "tfc.tooltip.fluid_units": "%s mB",
   "tfc.tooltip.fluid_units_of": "%s mB рідини %s",
   "tfc.tooltip.fluid_units_and_capacity": "%s / %s mB",

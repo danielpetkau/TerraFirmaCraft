@@ -259,6 +259,7 @@
   "tfc.screen.scribing_table": "アイテム名を変更",
   "tfc.screen.pet_command": "ペットの指示",
   "tfc.screen.sewing_table": "Sewing Table",
+  "tfc.tab.field_guide": "Field Guide",
   "tfc.tooltip.fluid_units": "%s mB",
   "tfc.tooltip.fluid_units_of": "%s mB の %s",
   "tfc.tooltip.fluid_units_and_capacity": "%s / %s mB",

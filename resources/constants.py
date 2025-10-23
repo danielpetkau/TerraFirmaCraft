@@ -1187,6 +1187,7 @@ DEFAULT_LANG = {
     'tfc.screen.scribing_table': 'Rename Items',
     'tfc.screen.pet_command': 'Pet Commands',
     'tfc.screen.sewing_table': 'Sewing Table',
+    'tfc.tab.field_guide': 'Field Guide',
     # Tooltips (found in Tooltips.java)
     'tfc.tooltip.fluid_units': '%s mB',
     'tfc.tooltip.fluid_units_of': '%s mB of %s',

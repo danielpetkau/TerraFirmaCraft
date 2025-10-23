@@ -264,6 +264,7 @@
   "tfc.screen.scribing_table": "Переименование",
   "tfc.screen.pet_command": "Команды для питомца",
   "tfc.screen.sewing_table": "Швейный стол",
+  "tfc.tab.field_guide": "Field Guide",
   "tfc.tooltip.fluid_units": "%s mB",
   "tfc.tooltip.fluid_units_of": "%s mB жидкости %s",
   "tfc.tooltip.fluid_units_and_capacity": "%s / %s mB",
