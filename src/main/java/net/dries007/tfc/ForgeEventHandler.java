@@ -8,6 +8,7 @@ package net.dries007.tfc;
 
 import com.mojang.logging.LogUtils;
 import net.minecraft.advancements.CriteriaTriggers;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponents;
@@ -115,6 +116,7 @@ import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
+import vazkii.patchouli.api.BookDrawScreenEvent;
 
 import net.dries007.tfc.client.TFCSounds;
 import net.dries007.tfc.common.TFCTags;
@@ -817,7 +819,7 @@ public final class ForgeEventHandler
     public static void onLivingHurt(LivingIncomingDamageEvent event)
     {
         float amount = event.getAmount();
-        
+
         // Vanilla kill command uses Float.MAX_VALUE, possibly others
         if (amount == Float.MAX_VALUE)
         {

@@ -61,29 +61,29 @@ public class PlayerInventoryTabButton extends Button
     private int iconY;
     private int prevGuiLeft;
     private int prevGuiTop;
-    private Tab tab;
+    private final Tab tab;
     private Runnable tickCallback;
+    private final boolean active;
+    private final boolean book;
 
-    private boolean active;
-
-    public PlayerInventoryTabButton(int guiLeft, int guiTop, boolean active, Tab tab)
+    public PlayerInventoryTabButton(int guiLeft, int guiTop, boolean active, boolean book, Tab tab)
     {
-        this(guiLeft, guiTop, active, tab, button -> PacketDistributor.sendToServer(new SwitchInventoryTabPacket(tab)));
-        this.tab = tab;
+        this(guiLeft, guiTop, active, book, tab, button -> PacketDistributor.sendToServer(new SwitchInventoryTabPacket(tab)));
     }
 
-    public PlayerInventoryTabButton(int guiLeft, int guiTop, boolean active, Tab tab, OnPress onPressIn)
+    public PlayerInventoryTabButton(int guiLeft, int guiTop, boolean active, boolean book, Tab tab, OnPress onPressIn)
     {
-        super(guiLeft + tab.xIn + (active ? -3 : -2), guiTop + tab.yIn, 24, 24, Component.empty(), onPressIn, RenderHelpers.NARRATION);
+        super(book ? (guiLeft + tab.xIn + 100) : (guiLeft + tab.xIn + (active ? -3 : -2)), book ? (guiTop + tab.yIn + 5) : (guiTop + tab.yIn), 24, 22, Component.empty(), onPressIn, RenderHelpers.NARRATION);
         this.prevGuiLeft = guiLeft;
         this.prevGuiTop = guiTop;
-        this.textureU = active ? 24 : 0;
+        this.textureU = book ? (active ? 72 : 48) : (active ? 24 : 0);
         this.textureV = 16;
-        this.iconX = guiLeft + tab.xIn + 1;
-        this.iconY = guiTop + tab.yIn + 4;
+        this.iconX = book ? (guiLeft + tab.xIn + 103 + 1) : (guiLeft + tab.xIn + 1);
+        this.iconY = book ? (guiTop + tab.yIn + 4 + 4) : (guiTop + tab.yIn + 3);
         this.tickCallback = () -> {};
         this.tab = tab;
         this.active = active;
+        this.book = book;
     }
 
     public PlayerInventoryTabButton setRecipeBookCallback(InventoryScreen screen)

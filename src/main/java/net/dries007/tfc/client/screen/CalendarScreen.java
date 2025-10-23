@@ -39,15 +39,15 @@ public class CalendarScreen extends TFCContainerScreen<Container>
     public void init()
     {
         super.init();
-        addRenderableWidget(new PlayerInventoryTabButton(leftPos, topPos, false, PlayerInventoryTabButton.Tab.INVENTORY, button -> {
+        addRenderableWidget(new PlayerInventoryTabButton(leftPos, topPos, false, false, PlayerInventoryTabButton.Tab.INVENTORY, button -> {
             playerInventory.player.containerMenu = playerInventory.player.inventoryMenu;
             Minecraft.getInstance().setScreen(new InventoryScreen(playerInventory.player));
             PacketDistributor.sendToServer(new SwitchInventoryTabPacket(PlayerInventoryTabButton.Tab.INVENTORY));
         }));
-        addRenderableWidget(new PlayerInventoryTabButton(leftPos, topPos, true, PlayerInventoryTabButton.Tab.CALENDAR, button -> {}));
-        addRenderableWidget(new PlayerInventoryTabButton(leftPos, topPos, false, PlayerInventoryTabButton.Tab.NUTRITION));
-        addRenderableWidget(new PlayerInventoryTabButton(leftPos, topPos, false, PlayerInventoryTabButton.Tab.CLIMATE));
-        PatchouliIntegration.ifEnabled(() -> addRenderableWidget(new PlayerInventoryTabButton(leftPos, topPos, false, PlayerInventoryTabButton.Tab.BOOK)));
+        addRenderableWidget(new PlayerInventoryTabButton(leftPos, topPos, true, false, PlayerInventoryTabButton.Tab.CALENDAR, button -> {}));
+        addRenderableWidget(new PlayerInventoryTabButton(leftPos, topPos, false, false, PlayerInventoryTabButton.Tab.NUTRITION));
+        addRenderableWidget(new PlayerInventoryTabButton(leftPos, topPos, false, false, PlayerInventoryTabButton.Tab.CLIMATE));
+        PatchouliIntegration.ifEnabled(() -> addRenderableWidget(new PlayerInventoryTabButton(leftPos, topPos, false, false, PlayerInventoryTabButton.Tab.BOOK)));
     }
 
     @Override

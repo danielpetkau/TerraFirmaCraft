@@ -15,6 +15,7 @@ import com.mojang.blaze3d.vertex.VertexFormat;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
@@ -22,11 +23,13 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
+import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.client.event.RenderTooltipEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.joml.Vector2ic;
 import org.lwjgl.opengl.GL11;
+import vazkii.patchouli.api.BookDrawScreenEvent;
 import vazkii.patchouli.client.base.ClientTicker;
 import vazkii.patchouli.client.book.BookEntry;
 import vazkii.patchouli.client.book.gui.GuiBook;
@@ -37,9 +40,12 @@ import vazkii.patchouli.common.book.BookRegistry;
 import vazkii.patchouli.common.item.ItemModBook;
 import vazkii.patchouli.common.util.ItemStackUtil;
 
+import net.dries007.tfc.client.ClientForgeEventHandler;
+import net.dries007.tfc.client.screen.button.PlayerInventoryTabButton;
 import net.dries007.tfc.config.TFCConfig;
 import net.dries007.tfc.network.OpenFieldGuidePacket;
 import net.dries007.tfc.network.PacketHandler;
+import net.dries007.tfc.util.Helpers;
 
 /**
  * This is modified from {@link TooltipHandler}, in order to render additional tooltips, as we don't have an explicit book item. We render a tooltip,
@@ -53,7 +59,11 @@ public final class PatchouliClientEventHandler
 
     public static void init()
     {
-        NeoForge.EVENT_BUS.addListener(PatchouliClientEventHandler::renderBookTooltipWithoutBook);
+        final IEventBus bus = NeoForge.EVENT_BUS;
+
+        bus.addListener(PatchouliClientEventHandler::renderBookTooltipWithoutBook);
+        bus.addListener(PatchouliClientEventHandler::onDrawBook);
+
     }
 
     public static void renderBookTooltipWithoutBook(RenderTooltipEvent.Pre event)
@@ -217,5 +227,28 @@ public final class PatchouliClientEventHandler
             }
         }
         return false;
+    }
+
+    public static void onDrawBook(BookDrawScreenEvent event)
+    {
+        if (event.getBook().equals(Helpers.resourceLocation("tfc", "field_guide")))
+        {
+            final Screen screen = event.getScreen();
+            final GuiGraphics graphics = event.getGraphics();
+            final Font font = Minecraft.getInstance().font;
+
+            if (screen instanceof GuiBook bookScreen)
+            {
+
+                bookScreen.addRenderableWidget(new PlayerInventoryTabButton(bookScreen.bookLeft, bookScreen.bookTop, false, true, PlayerInventoryTabButton.Tab.INVENTORY));
+                bookScreen.addRenderableWidget(new PlayerInventoryTabButton(bookScreen.bookLeft, bookScreen.bookTop, false, true, PlayerInventoryTabButton.Tab.CALENDAR));
+                bookScreen.addRenderableWidget(new PlayerInventoryTabButton(bookScreen.bookLeft, bookScreen.bookTop, false, true, PlayerInventoryTabButton.Tab.NUTRITION));
+                bookScreen.addRenderableWidget(new PlayerInventoryTabButton(bookScreen.bookLeft, bookScreen.bookTop, false, true, PlayerInventoryTabButton.Tab.CLIMATE));
+                bookScreen.addRenderableWidget(new PlayerInventoryTabButton(bookScreen.bookLeft, bookScreen.bookTop, true, true, PlayerInventoryTabButton.Tab.BOOK));
+
+            }
+
+        }
+
     }
 }

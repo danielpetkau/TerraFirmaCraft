@@ -13,8 +13,10 @@ import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.toasts.TutorialToast;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.FogRenderer;
@@ -67,9 +69,11 @@ import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.network.PacketDistributor;
 import net.neoforged.neoforge.server.ServerLifecycleHooks;
 import org.jetbrains.annotations.Nullable;
+import vazkii.patchouli.api.BookDrawScreenEvent;
 
 import net.dries007.tfc.TerraFirmaCraft;
 import net.dries007.tfc.client.particle.TFCParticles;
+import net.dries007.tfc.client.screen.TFCContainerScreen;
 import net.dries007.tfc.client.screen.button.PlayerInventoryTabButton;
 import net.dries007.tfc.common.blockentities.SluiceBlockEntity;
 import net.dries007.tfc.common.blocks.devices.SluiceBlock;
@@ -134,7 +138,9 @@ public class ClientForgeEventHandler
         bus.addListener(ClientForgeEventHandler::onEffectRender);
         bus.addListener(ClientForgeEventHandler::onRecipesUpdated);
         bus.addListener(IngameOverlays::checkGuiOverlays);
+
     }
+
 
     public static void onRenderGameOverlayText(CustomizeGuiOverlayEvent.DebugText event)
     {
@@ -360,11 +366,11 @@ public class ClientForgeEventHandler
             int guiLeft = screen.getGuiLeft();
             int guiTop = screen.getGuiTop();
 
-            event.addListener(new PlayerInventoryTabButton(guiLeft, guiTop, true, PlayerInventoryTabButton.Tab.INVENTORY, button -> {}).setRecipeBookCallback(screen));
-            event.addListener(new PlayerInventoryTabButton(guiLeft, guiTop, false, PlayerInventoryTabButton.Tab.CALENDAR).setRecipeBookCallback(screen));
-            event.addListener(new PlayerInventoryTabButton(guiLeft, guiTop, false, PlayerInventoryTabButton.Tab.NUTRITION).setRecipeBookCallback(screen));
-            event.addListener(new PlayerInventoryTabButton(guiLeft, guiTop, false, PlayerInventoryTabButton.Tab.CLIMATE).setRecipeBookCallback(screen));
-            PatchouliIntegration.ifEnabled(() -> event.addListener(new PlayerInventoryTabButton(guiLeft, guiTop, false, PlayerInventoryTabButton.Tab.BOOK).setRecipeBookCallback(screen)));
+            event.addListener(new PlayerInventoryTabButton(guiLeft, guiTop, true, false, PlayerInventoryTabButton.Tab.INVENTORY, button -> {}).setRecipeBookCallback(screen));
+            event.addListener(new PlayerInventoryTabButton(guiLeft, guiTop, false, false, PlayerInventoryTabButton.Tab.CALENDAR).setRecipeBookCallback(screen));
+            event.addListener(new PlayerInventoryTabButton(guiLeft, guiTop, false, false, PlayerInventoryTabButton.Tab.NUTRITION).setRecipeBookCallback(screen));
+            event.addListener(new PlayerInventoryTabButton(guiLeft, guiTop, false, false, PlayerInventoryTabButton.Tab.CLIMATE).setRecipeBookCallback(screen));
+            PatchouliIntegration.ifEnabled(() -> event.addListener(new PlayerInventoryTabButton(guiLeft, guiTop, false, false, PlayerInventoryTabButton.Tab.BOOK).setRecipeBookCallback(screen)));
         }
     }
 
