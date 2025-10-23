@@ -148,6 +148,8 @@ public class ServerConfig extends BaseConfig
     public final Supplier<Boolean> powderKegEnableAutomation;
     public final Supplier<Double> powderKegStrengthModifier;
     public final Supplier<Integer> powderKegFuseTime;
+    // Blocks - Firebox
+    public final Supplier<Boolean> fireboxEnableAutomation;
     // Blocks - Hot Water
     public final Supplier<Double> hotWaterHealAmount;
     // Blocks - Sapling
@@ -390,7 +392,7 @@ public class ServerConfig extends BaseConfig
         crucibleCapacity = builder.comment("Tank capacity of a crucible (in mB).").define("crucibleCapacity", 4000, 0, FluidAlloy.MAX_ALLOY);
         cruciblePouringRate = builder.comment("A modifier for how fast fluid containers empty into crucibles. Containers will empty 1 mB every (this) number of ticks.").define("cruciblePouringRate", 4, 1, Integer.MAX_VALUE);
         crucibleFastPouringRate = builder.comment("A modifier for how fast fluid containers empty into crucibles when shift is held. Containers will empty 1 mB every (this) number of ticks.").define("crucibleFastPouringRate", 1, 1, Integer.MAX_VALUE);
-        crucibleEnableAutomation = builder.comment("If true, barrels will interact with in-world automation such as hoppers on a side-specific basis.").define("crucibleEnableAutomation", true);
+        crucibleEnableAutomation = builder.comment("If true, crucibles will interact with in-world automation such as hoppers on a side-specific basis.").define("crucibleEnableAutomation", true);
 
         builder.swap("anvil");
 
@@ -486,6 +488,10 @@ public class ServerConfig extends BaseConfig
         powderKegEnableAutomation = builder.comment("If true, powder kegs will interact with in-world automation such as hoppers on a side-specific basis.").define("powderKegEnableAutomation", true);
         powderKegStrengthModifier = builder.comment("A modifier to the strength of powderkegs when exploding. A max powderkeg explosion is 64, and all explosions are capped to this size no matter the value of the modifier.").define("powderKegStrengthModifier", 1d, 0, 64);
         powderKegFuseTime = builder.comment("The time in ticks for a powderkeg to defuse. Default is 80 ticks, or 4 seconds.").define("powderKegFuseTime", 80, 1, Integer.MAX_VALUE);
+
+        builder.swap("firebox");
+
+        fireboxEnableAutomation = builder.comment("If true, fireboxes will interact with in-world automation such as hoppers or comparators").define("fireboxEnableAutomation", true);
 
         builder.swap("hotWater");
 

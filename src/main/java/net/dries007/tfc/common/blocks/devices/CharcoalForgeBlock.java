@@ -7,6 +7,8 @@
 package net.dries007.tfc.common.blocks.devices;
 
 import java.util.function.BiPredicate;
+
+import net.dries007.tfc.config.TFCConfig;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
@@ -134,6 +136,26 @@ public class CharcoalForgeBlock extends DeviceBlock implements IBellowsConsumer
     protected BlockState updateShape(BlockState state, Direction facing, BlockState facingState, LevelAccessor world, BlockPos currentPos, BlockPos facingPos)
     {
         return state.getValue(HEAT) > 0 && !isValid(world, currentPos) ? state.setValue(HEAT, 0) : state;
+    }
+
+    @Override
+    protected boolean hasAnalogOutputSignal(BlockState state){
+        return TFCConfig.SERVER.charcoalForgeEnableAutomation.get();
+    }
+
+    @Override
+    protected int getAnalogOutputSignal(BlockState state, Level level, BlockPos pos) {
+        final CharcoalForgeBlockEntity charcoalForge = level.getBlockEntity(pos, TFCBlockEntities.CHARCOAL_FORGE.get()).orElse(null);
+        final int maxSlot = CharcoalForgeBlockEntity.SLOT_FUEL_MAX;
+        if (charcoalForge != null && !charcoalForge.getInventory().getStackInSlot(0).isEmpty()){
+            for (int i = 0; i <= maxSlot; i++){
+                if (charcoalForge.getInventory().getStackInSlot(i).isEmpty()){
+                    return i * 15 / (maxSlot + 1);
+                }
+            }
+            return 15;
+        }
+        return 0;
     }
 
     @Override

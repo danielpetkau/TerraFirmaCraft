@@ -6,8 +6,10 @@
 
 package net.dries007.tfc.common.blocks.devices;
 
+import net.dries007.tfc.common.TFCTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -24,6 +26,7 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -35,9 +38,11 @@ import net.dries007.tfc.common.blocks.ExtendedProperties;
 import net.dries007.tfc.common.blocks.TFCBlockStateProperties;
 import net.dries007.tfc.util.Helpers;
 
+import java.util.Locale;
+
 public class CalendarClockBlock extends DeviceBlock
 {
-    public static BooleanProperty CLOCK_MONTH_MODE = TFCBlockStateProperties.CLOCK_MONTH_MODE;
+    public static EnumProperty<Mode> MODE = TFCBlockStateProperties.CLOCK_MODE;
     public static DirectionProperty FACING = BlockStateProperties.FACING;
     private static final VoxelShape SHAPE_UP = box(1D, 0D, 1D, 15D, 2.0D, 15D);
     private static final VoxelShape SHAPE_DOWN = box(1D, 14D, 1D, 15D, 16.0D, 15D);
@@ -49,7 +54,7 @@ public class CalendarClockBlock extends DeviceBlock
     public CalendarClockBlock(ExtendedProperties properties)
     {
         super(properties, InventoryRemoveBehavior.NOOP);
-        registerDefaultState(getStateDefinition().any().setValue(CLOCK_MONTH_MODE, false).setValue(FACING, Direction.UP));
+        registerDefaultState(getStateDefinition().any().setValue(MODE, Mode.HOUR).setValue(FACING, Direction.UP));
     }
 
     @Override
@@ -62,7 +67,21 @@ public class CalendarClockBlock extends DeviceBlock
     @Nullable
     public BlockState getStateForPlacement(BlockPlaceContext context)
     {
-        return Helpers.getSupportedDirectionalStateForPlacement(this, context, false);
+        BlockState state = Helpers.getSupportedDirectionalStateForPlacement(this, context, false);
+
+        if (state == null)
+        {
+            return null;
+        }
+        final Direction direction = state.getValue(FACING);
+        final LevelReader level = context.getLevel();
+        final BlockPos pos = context.getClickedPos();
+
+        if (level.getBlockState(pos.relative(direction.getOpposite())).is(TFCTags.Blocks.CLOCK_READABLE))
+        {
+            state = state.setValue(FACING, direction);
+        }
+        return state;
     }
 
     @Override
@@ -90,9 +109,34 @@ public class CalendarClockBlock extends DeviceBlock
             }
             else
             {
-                final BlockState blockstate = state.cycle(CLOCK_MONTH_MODE);
-                level.setBlock(pos, blockstate, 2);
-                level.gameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Context.of(player, blockstate));
+                BlockState blockState;
+                Direction direction = state.getValue(FACING);
+                switch (state.getValue(MODE)) {
+                    case Mode.HOUR:
+                    default: blockState = state.setValue(MODE, Mode.MONTH);
+                        break;
+                    case MONTH:
+                        if (level.getBlockState(pos
+                                .relative(direction.getOpposite()))
+                            .is(TFCTags.Blocks.CLOCK_READABLE))
+                        {
+                            blockState = state.setValue(MODE, Mode.TIMER);
+                        }
+                        else if (level.getBlockState(pos
+                                .relative(direction.getOpposite())
+                                .relative(direction.getOpposite()))
+                            .is(TFCTags.Blocks.CLOCK_READABLE)){
+                            blockState = state.setValue(MODE, Mode.TIMER);
+                        }
+                        else {
+                            blockState = state.setValue(MODE, Mode.HOUR);
+                        }
+                        break;
+                    case TIMER:
+                        blockState = state.setValue(MODE, Mode.HOUR);
+                }
+                level.setBlock(pos, blockState, 2);
+                level.gameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Context.of(player, blockState));
                 if (level.getBlockEntity(pos) instanceof CalendarClockBlockEntity clock)
                 {
                     clock.needsInstantUpdate();
@@ -109,7 +153,7 @@ public class CalendarClockBlock extends DeviceBlock
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
-        builder.add(CLOCK_MONTH_MODE).add(FACING);
+        builder.add(MODE).add(FACING);
     }
 
     @Override
@@ -127,13 +171,13 @@ public class CalendarClockBlock extends DeviceBlock
     }
 
     @Override
-    protected BlockState updateShape(BlockState state, Direction facing, BlockState facingState, LevelAccessor level, BlockPos blockpos, BlockPos facingPos)
+    protected BlockState updateShape(BlockState state, Direction facing, BlockState facingState, LevelAccessor level, BlockPos blockPos, BlockPos facingPos)
     {
-        if (facing == state.getValue(FACING).getOpposite() && !this.canSurvive(state, level, blockpos))
+        if (facing == state.getValue(FACING).getOpposite() && !this.canSurvive(state, level, blockPos))
         {
             return Blocks.AIR.defaultBlockState();
         }
-        return super.updateShape(state, facing, facingState, level, blockpos, facingPos);
+        return super.updateShape(state, facing, facingState, level, blockPos, facingPos);
     }
 
     @Override
@@ -145,7 +189,7 @@ public class CalendarClockBlock extends DeviceBlock
     @Override
     protected int getDirectSignal(BlockState blockState, BlockGetter blockAccess, BlockPos pos, Direction side)
     {
-        if (blockState.getValue(FACING) == side)
+        if (blockState.getValue(FACING) == side && !blockState.getValue(MODE).equals(Mode.TIMER))
         {
             return getSignal(blockState, blockAccess, pos, side);
         }
@@ -172,6 +216,10 @@ public class CalendarClockBlock extends DeviceBlock
     {
         BlockPos blockpos = pos.relative(facing.getOpposite());
         BlockState blockstate = level.getBlockState(blockpos);
+        if (Helpers.isBlock(blockstate, TFCTags.Blocks.CLOCK_READABLE))
+        {
+            return true;
+        }
         return blockstate.isFaceSturdy(level, blockpos, facing);
     }
 
@@ -185,5 +233,23 @@ public class CalendarClockBlock extends DeviceBlock
     protected BlockState mirror(BlockState state, Mirror mirror)
     {
         return state.rotate(mirror.getRotation(state.getValue(FACING)));
+    }
+
+    public enum Mode implements StringRepresentable
+    {
+        HOUR, MONTH, TIMER;
+
+        private final String serializedName;
+
+        Mode()
+        {
+            this.serializedName = name().toLowerCase(Locale.ROOT);
+        }
+
+        @Override
+        public String getSerializedName()
+        {
+            return serializedName;
+        }
     }
 }
