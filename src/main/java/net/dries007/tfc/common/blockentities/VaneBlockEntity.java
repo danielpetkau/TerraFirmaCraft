@@ -16,6 +16,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec2;
 
 import net.dries007.tfc.util.climate.Climate;
+import net.dries007.tfc.util.tracker.WeatherHelpers;
 
 public class VaneBlockEntity extends TickableBlockEntity
 {
@@ -102,18 +103,7 @@ public class VaneBlockEntity extends TickableBlockEntity
 
     public int getRedstoneSignal()
     {
-        // make angle non-negative
-        float angle = targetAngle < 0
-            ? targetAngle += Mth.TWO_PI
-            : targetAngle;
-        // rotate so North is signal 0/15
-        angle += Mth.PI / 2;
-        // wrap
-        if (angle > Mth.TWO_PI)
-        {
-            angle -= Mth.TWO_PI;
-        }
-        return Math.clamp(Mth.floor((angle / Mth.TWO_PI) * 16), 0, 15);
+        return WeatherHelpers.granularCardinalIntFromAngle(WeatherHelpers.wrappedPositiveAngle(targetAngle));
     }
 
     @Override

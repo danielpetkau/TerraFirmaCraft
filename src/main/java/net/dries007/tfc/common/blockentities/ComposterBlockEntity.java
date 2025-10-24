@@ -84,11 +84,6 @@ public class ComposterBlockEntity extends InventoryBlockEntity<ItemStackHandler>
         {
             readyTicks *= (long) ((rainfall - 350f) / 50f + 1f);
         }
-        cursor.move(0, 1, 0);
-        if (Helpers.isBlock(level.getBlockState(cursor), BlockTags.SNOW))
-        {
-            readyTicks *= 0.9f;
-        }
         for (Direction direction : Direction.Plane.HORIZONTAL)
         {
             cursor.setWithOffset(getBlockPos(), direction);

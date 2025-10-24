@@ -15,7 +15,8 @@
     },
     {
       "type": "patchouli:text",
-      "text": "コンポスターは特定の条件下でより適切に動作します。 上部に雪のブロックがあるコンポスターは、わずかに速く動作します。 降雨量が 150mm 未満または 350mm を超える地域では、コンポスターの動作が大幅に遅くなり、その影響は最大降雨量と最小降雨量に近づくにつれて大きくなります。 また、他のコンポスターに触れているコンポスターの動作は遅くなります。"
+      "text": "Composters operate better in certain conditions. Composters in regions of less than 150mm or greater than 350mm of rainfall operate much slower, with that effect getting stronger closer to the maximum and minimum rainfall. Also, composters that are touching other composters work slower.",
+      "title": "Working Conditions"
     },
     {
       "type": "tfc:multimultiblock",

@@ -15,7 +15,8 @@
     },
     {
       "type": "patchouli:text",
-      "text": "Компостеры работают лучше в определенных условиях. Компостеры, на которых сверху лежит блок снега, работают немного быстрее. Компостеры в регионах с осадками менее 150 мм или более 350 мм работают гораздо медленнее, причем этот эффект усиливается ближе к максимальному и минимальному количеству осадков. Также компостеры, касающиеся других компостеров, работают медленнее."
+      "text": "Composters operate better in certain conditions. Composters in regions of less than 150mm or greater than 350mm of rainfall operate much slower, with that effect getting stronger closer to the maximum and minimum rainfall. Also, composters that are touching other composters work slower.",
+      "title": "Working Conditions"
     },
     {
       "type": "tfc:multimultiblock",

@@ -15,6 +15,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.core.SectionPos;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundGameEventPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
@@ -32,7 +33,6 @@ import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.Vec2;
-import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
 
 import net.dries007.tfc.common.TFCPoiTypes;
@@ -219,11 +219,12 @@ public final class WeatherHelpers
         final ChunkData data = ChunkData.get(chunk);
         final long currentTick = Calendars.SERVER.getTicks();
         final long currentCalendarTick = Calendars.SERVER.getCalendarTicks();
-        final long timeSinceTick = currentTick - data.getLastRandomTick();
+        final long lastRandomTick = data.getLastRandomTick();
+        final long timeSinceTick = currentTick - lastRandomTick;
 
         final ChunkPos chunkPos = chunk.getPos();
         final BlockPos surfacePos = getSequentialSurfacePos(level, chunkPos, chunk, data, false);
-        final float rainfall = model.getRainfall(level, surfacePos, data.getLastRandomTick(), currentTick, Calendars.SERVER.getCalendarDaysInMonth());
+        final float rainfall = model.getRainfall(level, surfacePos, lastRandomTick, currentTick, Calendars.SERVER.getCalendarDaysInMonth());
         final int daysInMonth = Calendars.SERVER.getCalendarDaysInMonth();
 
         if (timeSinceTick > 4_000)
@@ -621,9 +622,146 @@ public final class WeatherHelpers
     /**
      * Converts wind speed to KM/h
      */
-    public static float windKMS(Vec2 wind)
+    public static float windKMH(Vec2 wind)
     {
         return wind.length() * WIND_KMS_FACTOR;
+    }
+
+    /**
+     * Wraps and makes a wind angle positive, implicit that with the resulting angle, north is 0 degrees
+     */
+    public static float wrappedPositiveAngle(float angleIn)
+    {
+        float angle = angleIn < 0
+            ? angleIn += Mth.TWO_PI
+            : angleIn;
+        // rotate so North is signal 0/15
+        angle += Mth.PI / 2;
+        // wrap
+        if (angle > Mth.TWO_PI)
+        {
+            angle -= Mth.TWO_PI;
+        }
+        return angle;
+    }
+
+    /**
+     * Table for getting the wind direction as a cardinal, represented as an int
+     * Should be used in all cases to ensure consistency between any cardinal direction representation of a wind angle
+     */
+    public static int granularCardinalIntFromAngle(float angle)
+    {
+        angle *= Mth.RAD_TO_DEG;
+        float m = 11.25f;
+
+        // implicit north
+        int direction = 0;
+
+        if (angle <= 22.5 + m && angle >= 22.5 - m)
+        {
+            // north by northeast
+            direction = 1;
+        }
+        else if (angle <= 45 + m && angle >= 45 - m)
+        {
+            // northeast
+            direction = 2;
+        }
+        else if (angle <= 67.5 + m && angle >= 67.5 - m)
+        {
+            // east by northeast
+            direction = 3;
+        }
+        else if (angle <= 90 + m && angle >= 90 - m)
+        {
+            // east
+            direction = 4;
+        }
+        else if (angle <= 112.5 + m && angle >= 112.5 - m)
+        {
+            // east by southeast
+            direction = 5;
+        }
+        else if (angle <= 135 + m && angle >= 135 - m)
+        {
+            // southeast
+            direction = 6;
+        }
+        else if (angle <= 157.5 + m && angle >= 157.5 - m)
+        {
+            // south by southeast
+            direction = 7;
+        }
+        else if (angle <= 180 + m && angle >= 180 - m)
+        {
+            // south
+            direction = 8;
+        }
+        else if (angle <= 202.5 + m && angle >= 202.5 - m)
+        {
+            // south by southwest
+            direction = 9;
+        }
+        else if (angle <= 225 + m && angle >= 225 - m)
+        {
+            // southwest
+            direction = 10;
+        }
+        else if (angle <= 247.5 + m && angle >= 247.5 - m)
+        {
+            // west by southwest
+            direction = 11;
+        }
+        else if (angle <= 270 + m && angle >= 270 - m)
+        {
+            // west
+            direction = 12;
+        }
+        else if (angle <= 292.5 + m && angle >= 292.5 - m)
+        {
+            // west by northwest
+            direction = 13;
+        }
+        else if (angle <= 315 + m && angle >= 315 - m)
+        {
+            // northwest
+            direction = 14;
+        }
+        else if (angle <= 337.5 + m && angle >= 337.5 - m)
+        {
+            // north by northwest
+            direction = 15;
+        }
+
+        return direction;
+    }
+
+    /**
+     * Returns the appropriate cardinal direction translation for any wind angle
+     */
+    public static Component windGranularCardinal(Vec2 wind)
+    {
+        final float angle = wrappedPositiveAngle((float) Mth.atan2(wind.y, wind.x));
+        int direction = granularCardinalIntFromAngle(angle);
+        switch (direction) {
+            case 0 -> {return Helpers.translateEnum(Direction.NORTH);}
+            case 1 -> {return Component.translatable("tfc.direction.cardinal_granular", Helpers.translateEnum(Direction.NORTH), Component.translatable("tfc.direction.cardinal_northeast"));}
+            case 2 -> {return Component.translatable("tfc.direction.cardinal_northeast");}
+            case 3 -> {return Component.translatable("tfc.direction.cardinal_granular", Helpers.translateEnum(Direction.EAST), Component.translatable("tfc.direction.cardinal_northeast"));}
+            case 4 -> {return Helpers.translateEnum(Direction.EAST);}
+            case 5 -> {return Component.translatable("tfc.direction.cardinal_granular", Helpers.translateEnum(Direction.EAST), Component.translatable("tfc.direction.cardinal_southeast"));}
+            case 6 -> {return Component.translatable("tfc.direction.cardinal_southeast");}
+            case 7 -> {return Component.translatable("tfc.direction.cardinal_granular", Helpers.translateEnum(Direction.SOUTH), Component.translatable("tfc.direction.cardinal_southeast"));}
+            case 8 -> {return Helpers.translateEnum(Direction.SOUTH);}
+            case 9 -> {return Component.translatable("tfc.direction.cardinal_granular", Helpers.translateEnum(Direction.SOUTH), Component.translatable("tfc.direction.cardinal_southwest"));}
+            case 10 -> {return Component.translatable("tfc.direction.cardinal_southwest");}
+            case 11 -> {return Component.translatable("tfc.direction.cardinal_granular", Helpers.translateEnum(Direction.WEST), Component.translatable("tfc.direction.cardinal_southwest"));}
+            case 12 -> {return Helpers.translateEnum(Direction.WEST);}
+            case 13 -> {return Component.translatable("tfc.direction.cardinal_granular", Helpers.translateEnum(Direction.WEST), Component.translatable("tfc.direction.cardinal_northwest"));}
+            case 14 -> {return Component.translatable("tfc.direction.cardinal_northwest");}
+            case 15 -> {return Component.translatable("tfc.direction.cardinal_granular", Helpers.translateEnum(Direction.NORTH), Component.translatable("tfc.direction.cardinal_northwest"));}
+        }
+        return Component.empty();
     }
 
 }

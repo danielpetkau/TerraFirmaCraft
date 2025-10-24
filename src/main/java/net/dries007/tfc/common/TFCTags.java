@@ -243,6 +243,8 @@ public class TFCTags
         public static final TagKey<Block> SINGLE_BLOCK_REPLACEABLE = tag("single_block_replaceable");
         /** Decoration blocks that spawn in tide pools */
         public static final TagKey<Block> TIDE_POOL_BLOCKS = tag("tide_pool_blocks");
+        /** Blocks that cannot border a flood fill lake */
+        public static final TagKey<Block> CANCELS_FLOOD_FILL_LAKE = tag("cancels_flood_fill_lake");
         /** Blocks that can be replaced with kaolin clay */
         public static final TagKey<Block> KAOLIN_CLAY_REPLACEABLE = tag("kaolin_clay_replaceable");
         /** Blocks that can be replaced with powder snow */
@@ -251,6 +253,7 @@ public class TFCTags
         public static final TagKey<Block> COLD_OCEAN_BLOCKS = tag("cold_ocean_blocks");
         /** Hardened rock blocks only. Used in worldgen to determine in what rock types sea stacks can generate. **/
         public static final TagKey<Block> SEA_STACK_ROCKS = tag("sea_stack_rocks");
+        public static final TagKey<Block> THERMOMETER_READABLE = tag("thermometer_readable");
 
 
         private static TagKey<Block> tag(String name)

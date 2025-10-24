@@ -81,20 +81,17 @@ public class ForestFeature extends Feature<ForestConfig>
 
     private boolean placeTree(WorldGenLevel level, ChunkGenerator generator, RandomSource random, BlockPos chunkBlockPos, ForestConfig config, ChunkData data, BlockPos.MutableBlockPos mutablePos, ForestType typeConfig)
     {
+        final int chunkX = chunkBlockPos.getX();
+        final int chunkZ = chunkBlockPos.getZ();
+
+        mutablePos.set(chunkX + random.nextInt(16), 0, chunkZ + random.nextInt(16));
+        mutablePos.setY(level.getHeight(Heightmap.Types.OCEAN_FLOOR_WG, mutablePos.getX(), mutablePos.getZ()));
         final ForestConfig.Entry entry = getTree(data, random, config, mutablePos, typeConfig, level);
         if (entry != null)
         {
-            final int chunkX = chunkBlockPos.getX();
-            final int chunkZ = chunkBlockPos.getZ();
-
-            mutablePos.set(chunkX + random.nextInt(16), 0, chunkZ + random.nextInt(16));
             if (entry.floating())
             {
                 mutablePos.setY(level.getHeight(Heightmap.Types.WORLD_SURFACE_WG, mutablePos.getX(), mutablePos.getZ()) + random.nextInt(2));
-            }
-            else
-            {
-                mutablePos.setY(level.getHeight(Heightmap.Types.OCEAN_FLOOR_WG, mutablePos.getX(), mutablePos.getZ()));
             }
             ConfiguredFeature<?, ?> feature;
             final int oldChance = entry.oldGrowthChance();
@@ -349,10 +346,11 @@ public class ForestFeature extends Feature<ForestConfig>
         final float rainVariance = chunkData.getRainVariance(pos) * (SolarCalculator.getInNorthernHemisphere(pos, level.getLevel()) ? 1f : -1f);
 
         final float groundwater = chunkData.getGroundwater(pos);
-        final float averageTemperature = EnvironmentHelpers.adjustAvgTempForElev(pos.getY(), chunkData.getAverageSeaLevelTemp(pos));
+        final int elevation = pos.getY();
+        final float averageTemperature = EnvironmentHelpers.adjustAvgTempForElev(elevation, chunkData.getAverageSeaLevelTemp(pos));
         final List<ForestConfig.Entry> entries = config.entries().stream().map(configuredFeature -> configuredFeature.value().config()).map(cfg -> (ForestConfig.Entry) cfg)
-            .filter(entry -> entry.isValid(averageTemperature, groundwater, rainVariance))
-            .sorted(Comparator.comparingDouble(entry -> entry.distanceFromMean(averageTemperature, groundwater, rainVariance)))
+            .filter(entry -> entry.isValid(averageTemperature, groundwater, rainVariance, elevation))
+            .sorted(Comparator.comparingDouble(entry -> entry.distanceFromMean(averageTemperature, groundwater, rainVariance, elevation)))
             .collect(Collectors.toList());
 
         if (entries.isEmpty()) return null;

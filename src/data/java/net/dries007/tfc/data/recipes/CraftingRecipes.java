@@ -46,7 +46,6 @@ import net.dries007.tfc.common.recipes.ingredients.LacksTraitIngredient;
 import net.dries007.tfc.common.recipes.ingredients.NotRottenIngredient;
 import net.dries007.tfc.common.recipes.outputs.MealModifier;
 import net.dries007.tfc.util.Metal;
-import net.dries007.tfc.util.MetalItem;
 
 import static net.dries007.tfc.util.DataGenerationHelpers.Builder;
 
@@ -138,7 +137,8 @@ public interface CraftingRecipes extends Recipes
             "wooden_hoe",
             "wooden_pickaxe",
             "wooden_shovel",
-            "wooden_sword"
+            "wooden_sword",
+            "snow_block"
         );
         for (String material : List.of("diamond", "golden", "iron"))
             remove(
@@ -329,6 +329,24 @@ public interface CraftingRecipes extends Recipes
             recipe().useTool(TFCTags.Items.TOOLS_CHISEL, blocks.get(Rock.BlockType.RAW), blocks.get(Rock.BlockType.SMOOTH));
 
             TFCBlocks.ROCK_DECORATIONS.get(rock).forEach((type, decorations) -> addDecorations(blocks.get(type), decorations));
+            recipe("from_slabs")
+                .input(rock.getSlab(Rock.BlockType.COBBLE).get())
+                .shapeless(blocks.get(Rock.BlockType.LOOSE), 2);
+            recipe("from_slabs")
+                .input(rock.getSlab(Rock.BlockType.MOSSY_COBBLE).get())
+                .shapeless(blocks.get(Rock.BlockType.MOSSY_LOOSE), 2);
+            recipe("from_stairs")
+                .input(rock.getStair(Rock.BlockType.COBBLE).get())
+                .shapeless(blocks.get(Rock.BlockType.LOOSE), 3);
+            recipe("from_stairs")
+                .input(rock.getStair(Rock.BlockType.MOSSY_COBBLE).get())
+                .shapeless(blocks.get(Rock.BlockType.MOSSY_LOOSE), 3);
+            recipe("from_walls")
+                .input(rock.getWall(Rock.BlockType.COBBLE).get())
+                .shapeless(blocks.get(Rock.BlockType.LOOSE), 4);
+            recipe("from_walls")
+                .input(rock.getWall(Rock.BlockType.MOSSY_COBBLE).get())
+                .shapeless(blocks.get(Rock.BlockType.MOSSY_LOOSE), 4);
         }
 
         TFCBlocks.SANDSTONE.forEach((color, blocks) -> {
@@ -435,7 +453,7 @@ public interface CraftingRecipes extends Recipes
             recipe()
                 .input('L', lumber)
                 .pattern("LL", "LL", "LL")
-                .shaped(blocks.get(Wood.BlockType.DOOR), 2);
+                .shaped(blocks.get(Wood.BlockType.DOOR));
             recipe()
                 .input('L', lumber)
                 .input('S', blocks.get(Wood.BlockType.STRIPPED_LOG))
@@ -549,7 +567,7 @@ public interface CraftingRecipes extends Recipes
             recipe()
                 .input('L', lumber)
                 .pattern("LLL", "LLL")
-                .shaped(blocks.get(Wood.BlockType.TRAPDOOR));
+                .shaped(blocks.get(Wood.BlockType.TRAPDOOR), 2);
             recipe()
                 .input(blocks.get(Wood.BlockType.CHEST))
                 .input(Items.TRIPWIRE_HOOK)
@@ -1212,6 +1230,10 @@ public interface CraftingRecipes extends Recipes
             .input(TFCItems.CANOLA)
             .shapeless(TFCItems.STRAW);
         recipe()
+            .input('S', ingredientOf(Metal.CAST_IRON, Metal.ItemType.DOUBLE_SHEET))
+            .pattern(" S ", "S S", " S ")
+            .shaped(TFCBlocks.STOVE);
+        recipe()
             .input('R', TFCItems.METAL_ITEMS.get(Metal.BRASS).get(Metal.ItemType.ROD))
             .input('B', TFCItems.BRASS_MECHANISMS)
             .pattern(" R ", "RBR", " R ")
@@ -1228,6 +1250,13 @@ public interface CraftingRecipes extends Recipes
             .input('S', TFCItems.METAL_ITEMS.get(Metal.BRASS).get(Metal.ItemType.SHEET))
             .pattern(" G ", "SBS", " B ")
             .shaped(TFCBlocks.CALENDAR_CLOCK);
+        recipe()
+            .input('G', Blocks.GLASS_PANE)
+            .input('B', TFCTags.Items.GLASS_BOTTLES)
+            .input('R', Items.REDSTONE)
+            .input('S', TFCItems.METAL_ITEMS.get(Metal.BRASS).get(Metal.ItemType.SHEET))
+            .pattern(" G ", "RBR", " S ")
+            .shaped(TFCBlocks.THERMOMETER);
     }
 
     /**

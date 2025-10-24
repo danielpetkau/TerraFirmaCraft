@@ -507,7 +507,7 @@ public final class ForgeEventHandler
         BlockState state = event.getState();
         Block block = state.getBlock();
 
-        if ((block == TFCBlocks.FIREPIT.get() || block == TFCBlocks.POT.get() || block == TFCBlocks.GRILL.get()) && event.isStrong())
+        if ((block == TFCBlocks.FIREPIT.get() || block == TFCBlocks.POT.get() || block == TFCBlocks.GRILL.get() || block == TFCBlocks.STOVE.get() || block == TFCBlocks.STOVE_POT.get()) && event.isStrong())
         {
             final BlockEntity entity = level.getBlockEntity(pos);
             if (entity instanceof AbstractFirepitBlockEntity<?> firepit && firepit.light(state))
@@ -871,8 +871,8 @@ public final class ForgeEventHandler
         {
             final ItemStack newItem = new ItemStack(BlowpipeItem.transform(pipe.getItem()));
             GlassWorking.createNewBatch(newItem, batch);
-            event.getCarriedSlotAccess().set(newItem);
-            event.getSlot().getItem().shrink(1);
+            event.getSlot().set(newItem);
+            event.getCarriedSlotAccess().get().shrink(1);
             event.setCanceled(true);
         }
     }

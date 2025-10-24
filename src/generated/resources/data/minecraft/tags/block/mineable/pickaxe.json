@@ -2379,6 +2379,10 @@
     "tfc:firebox",
     "tfc:vane",
     "tfc:anemometer",
+    "tfc:stove",
+    "tfc:stove_pot",
+    "tfc:stove",
+    "tfc:stove_pot",
     "tfc:icicle",
     "tfc:sea_ice",
     "tfc:ice_pile",
@@ -2408,6 +2412,7 @@
     "tfc:ceramic/large_vessel",
     "tfc:mold_table",
     "tfc:channel",
-    "tfc:calendar_clock"
+    "tfc:calendar_clock",
+    "tfc:thermometer"
   ]
 }
