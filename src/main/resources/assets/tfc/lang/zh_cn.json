@@ -307,6 +307,7 @@
   "tfc.tooltip.calendar_day": "星期：%s",
   "tfc.tooltip.calendar_birthday": "%s的生日！",
   "tfc.tooltip.calendar_date": "日期：%s",
+  "tfc.tooltip.climate_average_temperature": "Average Temperature: %s",
   "tfc.tooltip.climate_temperature_name": "Temp:",
   "tfc.tooltip.climate_temperature_now": "Now: %s",
   "tfc.tooltip.climate_temperature_average": "Avg: %s",

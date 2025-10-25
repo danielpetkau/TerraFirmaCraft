@@ -298,6 +298,7 @@
   "tfc.tooltip.calendar_day": "曜日 : %s",
   "tfc.tooltip.calendar_birthday": "%s の誕生日です！",
   "tfc.tooltip.calendar_date": "日付 : %s",
+  "tfc.tooltip.climate_average_temperature": "Average Temperature: %s",
   "tfc.tooltip.climate_temperature_name": "Temp:",
   "tfc.tooltip.climate_temperature_now": "Now: %s",
   "tfc.tooltip.climate_temperature_average": "Avg: %s",

@@ -1227,6 +1227,7 @@ DEFAULT_LANG = {
     'tfc.tooltip.calendar_day': 'Day : %s',
     'tfc.tooltip.calendar_birthday': '%s\'s Birthday!',
     'tfc.tooltip.calendar_date': 'Date : %s',
+    'tfc.tooltip.climate_average_temperature': 'Avg. Temp: %s',
     "tfc.tooltip.climate_temperature_name": "Temp:",
     "tfc.tooltip.climate_temperature_now": "Now: %s",
     "tfc.tooltip.climate_temperature_average": "Avg: %s",
