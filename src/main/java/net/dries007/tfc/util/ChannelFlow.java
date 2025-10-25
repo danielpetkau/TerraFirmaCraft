@@ -22,10 +22,10 @@ import org.jetbrains.annotations.Nullable;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
-import net.dries007.tfc.common.blockentities.MoldBlockEntity;
+import net.dries007.tfc.common.blockentities.MoldTableBlockEntity;
 import net.dries007.tfc.common.blockentities.TFCBlockEntities;
 import net.dries007.tfc.common.blocks.devices.ChannelBlock;
-import net.dries007.tfc.common.blocks.devices.MoldBlock;
+import net.dries007.tfc.common.blocks.devices.MoldTableBlock;
 import net.dries007.tfc.common.blockentities.CrucibleBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -45,7 +45,7 @@ public class ChannelFlow
     public static void fromCrucible(LevelAccessor level, CrucibleBlockEntity source, BlockPos originChannel)
     {
         // This checks that metal is present and molten
-        Optional<IFluidHandler> iFldHandler = MoldBlockEntity.getFluidHandlerIfAppropriate(source, Optional.empty());
+        Optional<IFluidHandler> iFldHandler = MoldTableBlockEntity.getFluidHandlerIfAppropriate(source, Optional.empty());
         if (iFldHandler.isEmpty())
         {
             return;
@@ -102,14 +102,14 @@ public class ChannelFlow
         // a flickering rendered flow.
         molds.removeIf(
                 pos -> {
-                    Optional<MoldBlockEntity> moldEnt = level.getBlockEntity(pos, TFCBlockEntities.MOLD_TABLE.get());
+                    Optional<MoldTableBlockEntity> moldEnt = level.getBlockEntity(pos, TFCBlockEntities.MOLD_TABLE.get());
 
                     if (moldEnt.isEmpty())
                         return true;
                     if (!moldEnt.get().getOutputStack().isEmpty())
                         return true;
                     final FluidStack outputDrop = iFldHandler.get().drain(1, IFluidHandler.FluidAction.SIMULATE);
-                    return !couldBeFilled(moldEnt.get().getInventory(), outputDrop, MoldBlockEntity.MOLD_SLOT);
+                    return !couldBeFilled(moldEnt.get().getInventory(), outputDrop, MoldTableBlockEntity.MOLD_SLOT);
                 });
 
         // Early exit if no (valid) molds are connected
@@ -225,7 +225,7 @@ public class ChannelFlow
                 BlockPos relative = current.relative(dir, i);
                 BlockState blockState = level.getBlockState(relative);
 
-                if (findMolds && blockState.getBlock() instanceof MoldBlock)
+                if (findMolds && blockState.getBlock() instanceof MoldTableBlock)
                 {
                     adjacent.add(relative);
                     break;

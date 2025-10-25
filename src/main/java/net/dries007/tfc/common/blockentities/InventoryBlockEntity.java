@@ -183,6 +183,7 @@ public abstract class InventoryBlockEntity<C extends IItemHandlerModifiable & IN
     public void setAndUpdateSlots(int slot)
     {
         setChanged();
+        markForSync();
     }
 
     public boolean canInteractWith(Player player)
