@@ -29,10 +29,6 @@ import net.dries007.tfc.util.Helpers;
 
 public class WaterWheelBlockEntityRenderer implements BlockEntityRenderer<WaterWheelBlockEntity>
 {
-    public static final Map<Block, ResourceLocation> TEXTURES = RenderHelpers.mapOf(map ->
-        TFCBlocks.WOODS.forEach((wood, m) ->
-            map.accept(m.get(Wood.BlockType.WATER_WHEEL), Helpers.identifier("textures/entity/water_wheel/" + wood.getSerializedName() + ".png"))));
-
     private final WaterWheelModel model;
 
     public WaterWheelBlockEntityRenderer(BlockEntityRendererProvider.Context context)
@@ -44,7 +40,8 @@ public class WaterWheelBlockEntityRenderer implements BlockEntityRenderer<WaterW
     public void render(WaterWheelBlockEntity wheel, float partialTick, PoseStack stack, MultiBufferSource buffer, int packedLight, int packedOverlay)
     {
         final Block block = wheel.getBlockState().getBlock();
-        final @Nullable ResourceLocation texture = TEXTURES.get(block);
+        assert block instanceof WaterWheelBlock;
+        final @Nullable ResourceLocation texture = ((WaterWheelBlock) block).getTextureLocation();
         if (wheel.getLevel() == null || texture == null)
         {
             return;
