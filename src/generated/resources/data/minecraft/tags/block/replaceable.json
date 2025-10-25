@@ -146,6 +146,7 @@
     "tfc:light",
     "tfc:freshwater_bubble_column",
     "tfc:saltwater_bubble_column",
+    "tfc:spring_water_bubble_column",
     "tfc:fluid/metal/bismuth",
     "tfc:fluid/metal/bismuth_bronze",
     "tfc:fluid/metal/black_bronze",

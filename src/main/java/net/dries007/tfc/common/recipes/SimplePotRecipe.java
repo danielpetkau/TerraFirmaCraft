@@ -76,10 +76,16 @@ public class SimplePotRecipe extends PotRecipe
     {
         // Compute the outputs here, before the pot inventory is cleared
         final List<ItemStack> outputs = new ArrayList<>(5);
-        for (int i = 0; i < Math.min(outputItems.size(), inventory.getSlots()); i++)
+        final List<ItemStackProvider> providers = new ArrayList<>(outputItems);
+        for (int i = 0; i < inventory.getSlots(); i++)
         {
+            if (providers.isEmpty())
+                break;
             final ItemStack input = inventory.getStackInSlot(PotBlockEntity.SLOT_EXTRA_INPUT_START + i);
-            outputs.add(outputItems.get(i).getSingleStack(input));
+            if (!input.isEmpty())
+            {
+                outputs.add(providers.removeFirst().getSingleStack(input));
+            }
         }
         return new SimpleOutput(usesAllFluid ? outputFluid.copy() : favorNewFluidStack(inventory.getFluidHandler().getFluidInTank(0), outputFluid), outputs);
     }
