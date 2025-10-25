@@ -2,7 +2,8 @@
   "type": "tfc:landslide",
   "ingredient": [
     "tfc:clay/aridisol",
-    "tfc:clay_grass/aridisol"
+    "tfc:clay_grass/aridisol",
+    "tfc:clay_duff/aridisol"
   ],
   "result": "tfc:clay/aridisol"
 }
