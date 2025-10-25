@@ -17,7 +17,7 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 
-import net.dries007.tfc.common.blockentities.BerryBushBlockEntity;
+import net.dries007.tfc.common.blockentities.SeasonalPlantBlockEntity;
 import net.dries007.tfc.common.blockentities.TFCBlockEntities;
 import net.dries007.tfc.common.blocks.ExtendedProperties;
 import net.dries007.tfc.common.blocks.TFCBlocks;
@@ -36,7 +36,7 @@ public final class FruitBlocks
 
     public static WaterloggedBerryBushBlock createCranberry()
     {
-        return new WaterloggedBerryBushBlock(ExtendedProperties.of(MapColor.PLANT).strength(0.6f).noOcclusion().randomTicks().sound(SoundType.SWEET_BERRY_BUSH).blockEntity(TFCBlockEntities.BERRY_BUSH).flammableLikeLeaves(), TFCItems.FOOD.get(Food.CRANBERRY), CRANBERRY_STAGES, ClimateRanges.CRANBERRY_BUSH);
+        return new WaterloggedBerryBushBlock(ExtendedProperties.of(MapColor.PLANT).strength(0.6f).noOcclusion().randomTicks().sound(SoundType.SWEET_BERRY_BUSH).blockEntity(TFCBlockEntities.SEASONAL_PLANT).flammableLikeLeaves(), TFCItems.FOOD.get(Food.CRANBERRY), CRANBERRY_STAGES, ClimateRanges.CRANBERRY_BUSH);
     }
 
     public static Block createBananaSapling()
@@ -61,7 +61,7 @@ public final class FruitBlocks
 
     public static Block createBananaPlant()
     {
-        return new BananaPlantBlock(ExtendedProperties.of(MapColor.PLANT).strength(0.5F).sound(SoundType.GRASS).randomTicks().noOcclusion().forceSolidOn().blockEntity(TFCBlockEntities.BERRY_BUSH).serverTicks(BerryBushBlockEntity::serverTick).flammableLikeLeaves().cloneItem(TFCBlocks.BANANA_SAPLING), TFCItems.FOOD.get(Food.BANANA), BANANA_STAGES);
+        return new BananaPlantBlock(ExtendedProperties.of(MapColor.PLANT).strength(0.5F).sound(SoundType.GRASS).randomTicks().noOcclusion().forceSolidOn().blockEntity(TFCBlockEntities.SEASONAL_PLANT).flammableLikeLeaves().cloneItem(TFCBlocks.BANANA_SAPLING), TFCItems.FOOD.get(Food.BANANA), BANANA_STAGES);
     }
 
     public enum SpreadingBush
@@ -84,12 +84,12 @@ public final class FruitBlocks
 
         public Block createBush()
         {
-            return new SpreadingBushBlock(ExtendedProperties.of(MapColor.PLANT).strength(0.6f).noOcclusion().randomTicks().sound(SoundType.SWEET_BERRY_BUSH).blockEntity(TFCBlockEntities.BERRY_BUSH).serverTicks(BerryBushBlockEntity::serverTick).flammableLikeLeaves(), TFCItems.FOOD.get(product), stages, TFCBlocks.SPREADING_CANES.get(this), maxHeight, ClimateRanges.SPREADING_BUSHES.get(this));
+            return new SpreadingBushBlock(ExtendedProperties.of(MapColor.PLANT).strength(0.6f).noOcclusion().randomTicks().sound(SoundType.SWEET_BERRY_BUSH).blockEntity(TFCBlockEntities.SEASONAL_PLANT).flammableLikeLeaves(), TFCItems.FOOD.get(product), stages, TFCBlocks.SPREADING_CANES.get(this), maxHeight, ClimateRanges.SPREADING_BUSHES.get(this));
         }
 
         public Block createCane()
         {
-            return new SpreadingCaneBlock(ExtendedProperties.of(MapColor.PLANT).strength(0.6f).noOcclusion().randomTicks().sound(SoundType.SWEET_BERRY_BUSH).blockEntity(TFCBlockEntities.BERRY_BUSH).serverTicks(BerryBushBlockEntity::serverTick).flammableLikeLeaves(), TFCItems.FOOD.get(product), stages, TFCBlocks.SPREADING_BUSHES.get(this), maxHeight, ClimateRanges.SPREADING_BUSHES.get(this));
+            return new SpreadingCaneBlock(ExtendedProperties.of(MapColor.PLANT).strength(0.6f).noOcclusion().randomTicks().sound(SoundType.SWEET_BERRY_BUSH).blockEntity(TFCBlockEntities.SEASONAL_PLANT).flammableLikeLeaves(), TFCItems.FOOD.get(product), stages, TFCBlocks.SPREADING_BUSHES.get(this), maxHeight, ClimateRanges.SPREADING_BUSHES.get(this));
         }
     }
 
@@ -113,7 +113,7 @@ public final class FruitBlocks
 
         public Block create()
         {
-            return new StationaryBerryBushBlock(ExtendedProperties.of(MapColor.PLANT).strength(0.6f).noOcclusion().randomTicks().sound(SoundType.SWEET_BERRY_BUSH).blockEntity(TFCBlockEntities.BERRY_BUSH).serverTicks(BerryBushBlockEntity::serverTick).flammableLikeLeaves(), TFCItems.FOOD.get(product), stages, ClimateRanges.STATIONARY_BUSHES.get(this));
+            return new StationaryBerryBushBlock(ExtendedProperties.of(MapColor.PLANT).strength(0.6f).noOcclusion().randomTicks().sound(SoundType.SWEET_BERRY_BUSH).blockEntity(TFCBlockEntities.SEASONAL_PLANT).flammableLikeLeaves(), TFCItems.FOOD.get(product), stages, ClimateRanges.STATIONARY_BUSHES.get(this));
         }
     }
 
@@ -166,7 +166,7 @@ public final class FruitBlocks
 
         public Block createLeaves()
         {
-            return new FruitTreeLeavesBlock(ExtendedProperties.of().mapColor(FruitTreeLeavesBlock::getMapColor).strength(0.5F).sound(SoundType.GRASS).randomTicks().noOcclusion().blockEntity(TFCBlockEntities.BERRY_BUSH).serverTicks(BerryBushBlockEntity::serverTick).flammableLikeLeaves(), TFCItems.FOOD.get(product), stages, ClimateRanges.FRUIT_TREES.get(this), floweringLeavesColor);
+            return new FruitTreeLeavesBlock(ExtendedProperties.of().mapColor(FruitTreeLeavesBlock::getMapColor).strength(0.5F).sound(SoundType.GRASS).randomTicks().noOcclusion().blockEntity(TFCBlockEntities.SEASONAL_PLANT).flammableLikeLeaves(), TFCItems.FOOD.get(product), stages, ClimateRanges.FRUIT_TREES.get(this), floweringLeavesColor);
         }
 
         public Block createBranch()

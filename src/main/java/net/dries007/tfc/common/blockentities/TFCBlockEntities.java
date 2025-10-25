@@ -112,7 +112,8 @@ public final class TFCBlockEntities
     ).flatMap(woodMap -> woodMap.values().stream().flatMap(metalMap -> metalMap.values().stream())));
     public static final Id<LampBlockEntity> LAMP = register("lamp", LampBlockEntity::new, TFCBlocks.METALS.values().stream().filter(map -> map.get(Metal.BlockType.LAMP) != null).map(map -> map.get(Metal.BlockType.LAMP)));
     public static final Id<ThatchBedBlockEntity> THATCH_BED = register("thatch_bed", ThatchBedBlockEntity::new, TFCBlocks.THATCH_BED);
-    public static final Id<BerryBushBlockEntity> BERRY_BUSH = register("berry_bush", BerryBushBlockEntity::new, Stream.of(
+    // TODO: The "berry_bush" name for this block entity that needs to be used on anything that extends SeasonalPlantBlock is misleading, but I don't want to make a breaking change at the moment
+    public static final Id<SeasonalPlantBlockEntity> SEASONAL_PLANT = register("berry_bush", SeasonalPlantBlockEntity::new, Stream.of(
         List.of(
             TFCBlocks.BANANA_PLANT,
             TFCBlocks.CRANBERRY_BUSH

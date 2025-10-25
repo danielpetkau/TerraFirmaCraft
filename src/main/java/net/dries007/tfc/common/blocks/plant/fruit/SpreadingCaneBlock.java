@@ -8,13 +8,13 @@ package net.dries007.tfc.common.blocks.plant.fruit;
 
 import java.util.function.Supplier;
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Mirror;
@@ -28,13 +28,15 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 
+import net.dries007.tfc.TerraFirmaCraft;
 import net.dries007.tfc.common.TFCTags;
+import net.dries007.tfc.common.blockentities.SeasonalPlantBlockEntity;
 import net.dries007.tfc.common.blocks.ExtendedProperties;
 import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.util.Helpers;
 import net.dries007.tfc.util.climate.ClimateRange;
 
-public class SpreadingCaneBlock extends SpreadingBushBlock implements IBushBlock
+public class SpreadingCaneBlock extends SpreadingBushBlock
 {
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
 
@@ -73,43 +75,58 @@ public class SpreadingCaneBlock extends SpreadingBushBlock implements IBushBlock
     }
 
     @Override
-    protected BlockState growAndPropagate(Level level, BlockPos pos, RandomSource random, BlockState state)
+    protected void growAndPropagate(BlockState state, ServerLevel level, BlockPos pos, RandomSource random, int cycles)
     {
-        if (!state.getValue(LIFECYCLE).active())
+        cycles = Math.min(cycles - 1, 8); // TODO
+
+        if (!state.getValue(LIFECYCLE).active()) // TODO: Probably should just check this earlier?
         {
-            return state; // Only grow when active
+            return;
         }
 
-        final int prevStage = state.getValue(STAGE);
-        if (prevStage < 2)
+        final int oldStage = state.getValue(STAGE);
+        if (oldStage < 2) // TODO: I think we should use 1 as the growth state and 2 as the has failed growth state.
         {
-            return state.setValue(STAGE, prevStage + 1); // Increment stage if possible
+            final BlockState newState = state.setValue(STAGE, state.getValue(STAGE) + 1);
+            level.setBlock(pos, newState, 3);
+            // TODO: Move to another method, make sure all setBlock occurrences are replaced by something like this
+            if (level.getBlockEntity(pos) instanceof SeasonalPlantBlockEntity bush)
+            {
+                bush.resetCounter();
+                bush.increaseCounter(TICKS_TO_GROW_BERRY_BUSH * cycles);
+            }
+            level.getBlockState(pos).randomTick(level, pos, level.random);
+            return; // Increment stage if possible
         }
 
         // Otherwise, try and convert to a bush bock
+        convertToBush(level, pos, state, cycles);
+    }
+
+    private void convertToBush(ServerLevel level, BlockPos pos, BlockState oldState, int cycles)
+    {
         // Bush blocks start at stage = 1 when they're grown from another bush block, as stage = 0 is just for newly planted
-        final BlockState placeState = companion.get().defaultBlockState().setValue(STAGE, 1).setValue(LIFECYCLE, state.getValue(LIFECYCLE));
+        final BlockState placeState = companion.get().defaultBlockState().setValue(STAGE, 1).setValue(LIFECYCLE, oldState.getValue(LIFECYCLE));
         if (placeState.canSurvive(level, pos))
         {
-            level.setBlockAndUpdate(pos, placeState);
-        }
+            level.setBlock(pos, placeState, Block.UPDATE_ALL);
+            if (level.getBlockEntity(pos) instanceof SeasonalPlantBlockEntity bush)
+            {
+                bush.resetCounter();
+                bush.increaseCounter(TICKS_TO_GROW_BERRY_BUSH * cycles);
 
-        return state;
+                bush.setStemPos(pos);
+            }
+            else
+            {
+                TerraFirmaCraft.LOGGER.error("Failed to update growing berry bush block entity at: {}", pos);
+            }
+            level.getBlockState(pos).randomTick(level, pos, level.random);
+        }
     }
 
     @Override
-    protected boolean mayDie(Level level, BlockPos pos, BlockState state, int monthsSpentDying)
-    {
-        BlockState parent = level.getBlockState(pos.relative(state.getValue(FACING).getOpposite()));
-        if (Helpers.isBlock(parent, TFCTags.Blocks.LIVING_SPREADING_BUSHES))
-        {
-            return false; // if the parent is alive we shouldn't die
-        }
-        return super.mayDie(level, pos, state, monthsSpentDying);
-    }
-
-    @Override
-    protected boolean mayPlaceOn(BlockState state, BlockGetter level, BlockPos pos)
+    protected boolean mayPlaceOn(BlockState oldState, BlockGetter level, BlockPos pos)
     {
         return true;
     }
@@ -122,28 +139,28 @@ public class SpreadingCaneBlock extends SpreadingBushBlock implements IBushBlock
     }
 
     @Override
-    public boolean canSurvive(BlockState state, LevelReader level, BlockPos pos)
+    public boolean canSurvive(BlockState oldState, LevelReader level, BlockPos pos)
     {
-        return Helpers.isBlock(level.getBlockState(pos.relative(state.getValue(FACING).getOpposite())), TFCTags.Blocks.SPREADING_BUSHES);
+        return Helpers.isBlock(level.getBlockState(pos.relative(oldState.getValue(FACING).getOpposite())), TFCTags.Blocks.SPREADING_BUSHES);
     }
 
     @Override
-    public ItemStack getCloneItemStack(BlockState state, HitResult target, LevelReader level, BlockPos pos, Player player)
+    public ItemStack getCloneItemStack(BlockState oldState, HitResult target, LevelReader level, BlockPos pos, Player player)
     {
         return new ItemStack(companion.get());
     }
 
     @Override
     @SuppressWarnings("deprecation")
-    public BlockState rotate(BlockState state, Rotation rot)
+    public BlockState rotate(BlockState oldState, Rotation rot)
     {
-        return state.setValue(FACING, rot.rotate(state.getValue(FACING)));
+        return oldState.setValue(FACING, rot.rotate(oldState.getValue(FACING)));
     }
 
     @Override
     @SuppressWarnings("deprecation")
-    public BlockState mirror(BlockState state, Mirror mirror)
+    public BlockState mirror(BlockState oldState, Mirror mirror)
     {
-        return state.rotate(mirror.getRotation(state.getValue(FACING)));
+        return oldState.rotate(mirror.getRotation(oldState.getValue(FACING)));
     }
 }

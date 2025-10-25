@@ -27,7 +27,7 @@ import org.jetbrains.annotations.Nullable;
 
 import net.dries007.tfc.TerraFirmaCraft;
 import net.dries007.tfc.common.TFCTags;
-import net.dries007.tfc.common.blockentities.BerryBushBlockEntity;
+import net.dries007.tfc.common.blockentities.SeasonalPlantBlockEntity;
 import net.dries007.tfc.common.blockentities.TickCountingBranchBlockEntity;
 import net.dries007.tfc.common.blocks.EntityBlockExtension;
 import net.dries007.tfc.common.blocks.ExtendedProperties;
@@ -294,7 +294,7 @@ public class GrowingFruitTreeBranchBlock extends FruitTreeBranchBlock implements
             if (level.isEmptyBlock(mutablePos))
             {
                 level.setBlock(mutablePos, leaves, Block.UPDATE_ALL);
-                if (level.getBlockEntity(mutablePos) instanceof BerryBushBlockEntity leaf)
+                if (level.getBlockEntity(mutablePos) instanceof SeasonalPlantBlockEntity leaf)
                 {
                     leaf.setStemPos(stemPos);
                 }

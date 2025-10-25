@@ -25,6 +25,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
@@ -44,7 +45,7 @@ import org.jetbrains.annotations.Nullable;
 import net.dries007.tfc.TerraFirmaCraft;
 import net.dries007.tfc.client.overworld.SolarCalculator;
 import net.dries007.tfc.common.TFCTags;
-import net.dries007.tfc.common.blockentities.BerryBushBlockEntity;
+import net.dries007.tfc.common.blockentities.SeasonalPlantBlockEntity;
 import net.dries007.tfc.common.blockentities.TickCounterBlockEntity;
 import net.dries007.tfc.common.blocks.EntityBlockExtension;
 import net.dries007.tfc.common.blocks.ExtendedProperties;
@@ -58,6 +59,7 @@ import net.dries007.tfc.util.Helpers;
 import net.dries007.tfc.util.calendar.Calendars;
 import net.dries007.tfc.util.calendar.ICalendar;
 import net.dries007.tfc.util.calendar.Month;
+import net.dries007.tfc.util.climate.Climate;
 import net.dries007.tfc.util.climate.ClimateRange;
 import net.dries007.tfc.util.tracker.WorldTracker;
 
@@ -67,6 +69,49 @@ public abstract class SeasonalPlantBlock extends BushBlock implements IForgeBloc
 
     public static final IntegerProperty STAGE = TFCBlockStateProperties.STAGE_2;
     public static final EnumProperty<Lifecycle> LIFECYCLE = TFCBlockStateProperties.LIFECYCLE;
+
+    public void randomTick(SeasonalPlantBlock plant, BlockState state, ServerLevel level, BlockPos pos, RandomSource random)
+    {
+        final int rarity = Math.max(1, (int) (ICalendar.TICKS_IN_DAY * level.getGameRules().getInt(GameRules.RULE_RANDOMTICKING) * (1 / 4096f)));
+        if (random.nextInt(rarity) == 0)
+        {
+            plant.onUpdate(level, pos, state);
+        }
+    }
+
+    // By default, we only keep track of the life cycle with this method as that functionality is shared by all seasonal plant blocks
+    public void onUpdate(Level level, BlockPos pos, BlockState state)
+    {
+        if (level.getBlockEntity(pos) instanceof SeasonalPlantBlockEntity plant)
+        {
+            final BlockPos stemPos = plant.getStemPos();
+            Lifecycle currentLifecycle = state.getValue(LIFECYCLE);
+            Lifecycle expectedLifecycle = getLifecycleForCurrentMonth(level, pos);
+            // if we are not working with a plant that is or should be dormant
+            if (!checkAndSetDormant(level, pos, state, currentLifecycle, expectedLifecycle))
+            {
+                final ClimateRange range = climateRange.get();
+
+                final int hydration = getFruitBushHydrationFromRootPos(level, stemPos.below());
+
+                if (range.checkBoth(hydration, Climate.getAverageTemperature(level, stemPos), false))
+                {
+                    currentLifecycle = currentLifecycle.advanceTowards(expectedLifecycle);
+                }
+                else
+                {
+                    currentLifecycle = Lifecycle.DORMANT;
+                }
+
+                BlockState newState = state.setValue(LIFECYCLE, currentLifecycle);
+
+                if (state != newState)
+                {
+                    level.setBlock(pos, newState, 3);
+                }
+            }
+        }
+    }
 
     /**
      * This function is essentially min(blocks to reach the ground, provided distance value)
@@ -216,12 +261,12 @@ public abstract class SeasonalPlantBlock extends BushBlock implements IForgeBloc
 
     /**
      * Evaluates hydration at the base of the tree/bush/plant
-     * @param leafPos Must be the position of a valid {@link BerryBushBlockEntity}
+     * @param leafPos Must be the position of a valid {@link SeasonalPlantBlockEntity}
      */
     protected static int getFruitBushHydration(Level level, BlockPos leafPos)
     {
         final BlockPos sourcePos;
-        if (level.getBlockEntity(leafPos) instanceof BerryBushBlockEntity bush)
+        if (level.getBlockEntity(leafPos) instanceof SeasonalPlantBlockEntity bush)
         {
             sourcePos = bush.getStemPos().below();
         }

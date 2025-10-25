@@ -9,10 +9,10 @@ package net.dries007.tfc.common.blocks.plant.fruit;
 import java.util.function.Supplier;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
@@ -20,10 +20,13 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-import net.dries007.tfc.common.blockentities.BerryBushBlockEntity;
+import net.dries007.tfc.TerraFirmaCraft;
+import net.dries007.tfc.common.TFCTags;
+import net.dries007.tfc.common.blockentities.SeasonalPlantBlockEntity;
 import net.dries007.tfc.common.blocks.ExtendedProperties;
 import net.dries007.tfc.common.blocks.IForgeBlockExtension;
 import net.dries007.tfc.common.blocks.soil.HoeOverlayBlock;
+import net.dries007.tfc.util.Helpers;
 import net.dries007.tfc.util.climate.ClimateRange;
 
 /**
@@ -40,7 +43,7 @@ import net.dries007.tfc.util.climate.ClimateRange;
  * </ul>
  * The player can harvest bush blocks, stage 2 for a guaranteed drop, all other stages for 1/2 chance.
  */
-public class SpreadingBushBlock extends StationaryBerryBushBlock implements IForgeBlockExtension, IBushBlock, HoeOverlayBlock
+public class SpreadingBushBlock extends StationaryBerryBushBlock implements IForgeBlockExtension, HoeOverlayBlock
 {
     protected final Supplier<? extends Block> companion;
     protected final int maxHeight;
@@ -65,12 +68,14 @@ public class SpreadingBushBlock extends StationaryBerryBushBlock implements IFor
     }
 
     @Override
-    protected BlockState growAndPropagate(Level level, BlockPos pos, RandomSource random, BlockState state)
+    protected void growAndPropagate(BlockState state, ServerLevel level, BlockPos pos, RandomSource random, int cycles)
     {
+        cycles = Math.min(cycles - 1, 8); // TODO
+
         if (!state.getValue(LIFECYCLE).active())
         {
             // Only grow when active
-            return state;
+            return;
         }
 
         // Increment stage by one
@@ -79,7 +84,16 @@ public class SpreadingBushBlock extends StationaryBerryBushBlock implements IFor
         if (originalStage == 0)
         {
             // Stage 0 -> grow into stage 1
-            return state.setValue(STAGE, 1);
+            final BlockState newState = state.setValue(STAGE, 1);
+            level.setBlock(pos, newState, Block.UPDATE_ALL);
+            // TODO: Move to another method, make sure all setBlock occurrences are replaced by something like this
+            if (level.getBlockEntity(pos) instanceof SeasonalPlantBlockEntity bush)
+            {
+                bush.resetCounter();
+                bush.increaseCounter(TICKS_TO_GROW_BERRY_BUSH * cycles);
+            }
+            level.getBlockState(pos).randomTick(level, pos, level.random);
+            return;
         }
         if (originalStage == 1)
         {
@@ -89,15 +103,10 @@ public class SpreadingBushBlock extends StationaryBerryBushBlock implements IFor
             if (level.isEmptyBlock(abovePos) && distanceToGround(level, pos, maxHeight) < maxHeight)
             {
                 // Growing upwards grows at stage = 1, because stage = 0 is just newly planted bushes.
-                level.setBlockAndUpdate(abovePos, state.setValue(STAGE, 1).setValue(LIFECYCLE, state.getValue(LIFECYCLE)));
+                state.setValue(STAGE, 1).setValue(LIFECYCLE, state.getValue(LIFECYCLE));
+                placeNewBushWithBlockEntity(level, abovePos, pos, state, cycles);
 
-                // If block grows, set the new block's stem position to match the original
-                if (level.getBlockEntity(pos) instanceof BerryBushBlockEntity sourceBush && level.getBlockEntity(abovePos) instanceof BerryBushBlockEntity newBush)
-                {
-                    newBush.setStemPos(sourceBush.getStemPos());
-                }
-
-                return state; // Stay in stage 1, if we only grew upwards.
+                return; // Stay in stage 1, if we only grew upwards.
             }
 
             if (random.nextBoolean())
@@ -107,20 +116,14 @@ public class SpreadingBushBlock extends StationaryBerryBushBlock implements IFor
                 final BlockPos offsetPos = pos.relative(offset);
                 if (level.isEmptyBlock(offsetPos))
                 {
-                    level.setBlockAndUpdate(offsetPos, companion.get().defaultBlockState().setValue(SpreadingCaneBlock.FACING, offset).setValue(LIFECYCLE, state.getValue(LIFECYCLE)));
-
-                    // If block grows, set the new block's stem position to match the original
-                    if (level.getBlockEntity(pos) instanceof BerryBushBlockEntity sourceBush && level.getBlockEntity(offsetPos) instanceof BerryBushBlockEntity newBush)
-                    {
-                        newBush.setStemPos(sourceBush.getStemPos());
-                    }
-
+                    placeNewBushWithBlockEntity(level, offsetPos, pos, companion.get().defaultBlockState().setValue(SpreadingCaneBlock.FACING, offset).setValue(LIFECYCLE, state.getValue(LIFECYCLE)), cycles);
                 }
             }
 
-            return state.setValue(STAGE, 2);
+            // Increase age to stop this block from growing again in future
+            level.setBlock(pos, state.setValue(STAGE, 2), Block.UPDATE_ALL);
         }
-        return state; // Stay at stage 2, and don't grow
+        // Stay at stage 2, and don't grow
     }
 
     @Override
@@ -129,5 +132,33 @@ public class SpreadingBushBlock extends StationaryBerryBushBlock implements IFor
         final BlockPos belowPos = pos.below();
         final BlockState belowState = level.getBlockState(belowPos);
         return mayPlaceOn(belowState, level, belowPos) || (belowState.getBlock() == this && belowState.getValue(STAGE) != 0);
+    }
+
+    @Override
+    protected boolean mayPlaceOn(BlockState state, BlockGetter level, BlockPos pos)
+    {
+        return Helpers.isBlock(state, TFCTags.Blocks.SPREADING_FRUIT_GROWS_ON);
+    }
+
+    private void placeNewBushWithBlockEntity(ServerLevel level, BlockPos newPos, BlockPos oldPos, BlockState state, int cycles)
+    {
+        level.setBlockAndUpdate(newPos, state);
+        // If block grows, set the new block's stem position to match the original
+        if (level.getBlockEntity(oldPos) instanceof SeasonalPlantBlockEntity sourceBush && level.getBlockEntity(newPos) instanceof SeasonalPlantBlockEntity newBush)
+        {
+            sourceBush.resetCounter();
+            sourceBush.increaseCounter(TICKS_TO_GROW_BERRY_BUSH * cycles);
+
+            newBush.resetCounter();
+            newBush.increaseCounter(TICKS_TO_GROW_BERRY_BUSH * cycles);
+
+            newBush.setStemPos(sourceBush.getStemPos());
+        }
+        else
+        {
+            TerraFirmaCraft.LOGGER.error("Failed to update growing berry bush block entity at: {}", oldPos);
+        }
+        level.getBlockState(oldPos).randomTick(level, oldPos, level.random);
+        level.getBlockState(newPos).randomTick(level, newPos, level.random);
     }
 }

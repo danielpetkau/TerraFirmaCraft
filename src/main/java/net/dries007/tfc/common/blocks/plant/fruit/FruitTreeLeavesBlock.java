@@ -36,10 +36,9 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-import net.dries007.tfc.TerraFirmaCraft;
 import net.dries007.tfc.client.particle.TFCParticles;
 import net.dries007.tfc.common.TFCTags;
-import net.dries007.tfc.common.blockentities.BerryBushBlockEntity;
+import net.dries007.tfc.common.blockentities.SeasonalPlantBlockEntity;
 import net.dries007.tfc.common.blocks.ExtendedProperties;
 import net.dries007.tfc.common.blocks.IForgeBlockExtension;
 import net.dries007.tfc.common.blocks.TFCBlockStateProperties;
@@ -51,11 +50,9 @@ import net.dries007.tfc.common.fluids.FluidHelpers;
 import net.dries007.tfc.common.fluids.FluidProperty;
 import net.dries007.tfc.common.fluids.IFluidLoggable;
 import net.dries007.tfc.util.Helpers;
-import net.dries007.tfc.util.climate.Climate;
 import net.dries007.tfc.util.climate.ClimateRange;
-import net.dries007.tfc.util.tracker.WorldTracker;
 
-public class FruitTreeLeavesBlock extends SeasonalPlantBlock implements IForgeBlockExtension, ILeavesBlock, IBushBlock, HoeOverlayBlock, IFluidLoggable
+public class FruitTreeLeavesBlock extends SeasonalPlantBlock implements IForgeBlockExtension, ILeavesBlock, HoeOverlayBlock, IFluidLoggable
 {
     public static MapColor getMapColor(BlockState state)
     {
@@ -118,49 +115,12 @@ public class FruitTreeLeavesBlock extends SeasonalPlantBlock implements IForgeBl
         TFCLeavesBlock.dripRainwater(level, pos, random);
     }
 
-    @Override
-    protected void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random)
-    {
-        IBushBlock.randomTick(this, state, level, pos, random);
-    }
-
-
     // this is superficially the same as the StationaryBerryBushBlock onUpdate, we can condense them
     @Override
     public void onUpdate(Level level, BlockPos pos, BlockState state)
     {
-        // Fruit tree leaves work like berry bushes, but don't have propagation or growth functionality.
-        // Which makes them relatively simple, as then they only need to keep track of their lifecycle.
         if (state.getValue(PERSISTENT)) return; // persistent leaves don't grow
-        if (level.getBlockEntity(pos) instanceof BerryBushBlockEntity leaves)
-        {
-            final BlockPos stemPos = leaves.getStemPos();
-            Lifecycle currentLifecycle = state.getValue(LIFECYCLE);
-            Lifecycle expectedLifecycle = getLifecycleForCurrentMonth(level, pos);
-            // if we are not working with a plant that is or should be dormant
-            if (!checkAndSetDormant(level, pos, state, currentLifecycle, expectedLifecycle))
-            {
-                final ClimateRange range = climateRange.get();
-
-                final int hydration = getFruitBushHydrationFromRootPos(level, stemPos.below());
-
-                if (range.checkBoth(hydration, Climate.getAverageTemperature(level, stemPos), false))
-                {
-                    currentLifecycle = currentLifecycle.advanceTowards(expectedLifecycle);
-                }
-                else
-                {
-                    currentLifecycle = Lifecycle.DORMANT;
-                }
-
-                BlockState newState = state.setValue(LIFECYCLE, currentLifecycle);
-
-                if (state != newState)
-                {
-                    level.setBlock(pos, newState, 3);
-                }
-            }
-        }
+        super.onUpdate(level, pos, state);
     }
 
     @Override
@@ -175,7 +135,7 @@ public class FruitTreeLeavesBlock extends SeasonalPlantBlock implements IForgeBl
         final ClimateRange range = climateRange.get();
 
         final BlockPos stemPos;
-        if (level.getBlockEntity(pos) instanceof BerryBushBlockEntity bush)
+        if (level.getBlockEntity(pos) instanceof SeasonalPlantBlockEntity bush)
         {
             stemPos = bush.getStemPos();
         }
