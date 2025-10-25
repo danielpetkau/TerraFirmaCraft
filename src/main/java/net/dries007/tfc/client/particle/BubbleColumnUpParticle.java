@@ -10,21 +10,25 @@ import net.minecraft.client.particle.*;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.SimpleParticleType;
+
 /*
- * Implementation for generic bubble particles, overriding default bubble particles to work in any liquid not just water.
+ * Implementation for Bubble Column Up particles, overriding default ones so they can work in any liquid not just water
  */
-public class BubbleParticle extends TextureSheetParticle
+public class BubbleColumnUpParticle extends TextureSheetParticle
 {
-    public BubbleParticle(ClientLevel worldIn, double x, double y, double z, double motionX, double motionY, double motionZ)
+
+    public BubbleColumnUpParticle(ClientLevel worldIn, double x, double y, double z, double motionX, double motionY, double motionZ)
     {
-        // Sets Bubble particle paramters
+        // Sets Bubble column particle paramters
         super(worldIn, x, y, z);
         this.setSize(0.02F, 0.02F);
         this.quadSize *= random.nextFloat() * 0.6F + 0.2F;
-        this.xd = motionX * 0.2D + (Math.random() * 2.0D - 1.0D) * 0.02D;
-        this.yd = motionY * 0.2D + (Math.random() * 2.0D - 1.0D) * 0.02D;
-        this.zd = motionZ * 0.2D + (Math.random() * 2.0D - 1.0D) * 0.02D;
-        this.lifetime = (int)(8.0 / (Math.random() * 0.8 + 0.2));
+        this.gravity = -0.125F;
+        this.friction = 0.85F;
+        this.xd = motionX * 0.2 + (Math.random() * 2.0 - 1.0) * 0.02;
+        this.yd = motionY * 0.2 + (Math.random() * 2.0 - 1.0) * 0.02;
+        this.zd = motionZ * 0.2 + (Math.random() * 2.0 - 1.0) * 0.02;
+        this.lifetime = (int)(40.0 / (Math.random() * 0.8 + 0.2));
     }
 
     @Override
@@ -55,7 +59,7 @@ public class BubbleParticle extends TextureSheetParticle
         @Override
         public Particle createParticle(SimpleParticleType type, ClientLevel level, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed)
         {
-            BubbleParticle particle = new BubbleParticle(level, x, y, z, xSpeed, ySpeed, zSpeed);
+            BubbleColumnUpParticle particle = new BubbleColumnUpParticle(level, x, y, z, xSpeed, ySpeed, zSpeed);
             particle.pickSprite(sprite);
             return particle;
         }

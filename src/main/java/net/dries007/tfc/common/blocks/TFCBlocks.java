@@ -471,6 +471,7 @@ public final class TFCBlocks
     ));
     public static final Id<Block> FRESHWATER_BUBBLE_COLUMN = registerNoItem("freshwater_bubble_column", () -> new TFCBubbleColumnBlock(Properties.ofFullCopy(Blocks.BUBBLE_COLUMN).noCollission().noLootTable(), () -> Fluids.WATER));
     public static final Id<Block> SALTWATER_BUBBLE_COLUMN = registerNoItem("saltwater_bubble_column", () -> new TFCBubbleColumnBlock(Properties.ofFullCopy(Blocks.BUBBLE_COLUMN).noCollission().noLootTable(), TFCFluids.SALT_WATER::getSource));
+    public static final Id<Block> SPRING_WATER_BUBBLE_COLUMN = registerNoItem("spring_water_bubble_column", () -> new TFCBubbleColumnBlock(Properties.ofFullCopy(Blocks.BUBBLE_COLUMN).noCollission().noLootTable(), TFCFluids.SPRING_WATER::getSource));
 
     public static final Id<Block> INGOT_PILE = registerNoItem("ingot_pile", () -> new IngotPileBlock(ExtendedProperties.of(MapColor.METAL).strength(4, 60).sound(SoundType.METAL).noOcclusion().blockEntity(TFCBlockEntities.INGOT_PILE)));
     public static final Id<Block> DOUBLE_INGOT_PILE = registerNoItem("double_ingot_pile", () -> new DoubleIngotPileBlock(ExtendedProperties.of(MapColor.METAL).strength(4, 60).sound(SoundType.METAL).noOcclusion().blockEntity(TFCBlockEntities.INGOT_PILE)));

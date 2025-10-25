@@ -27,7 +27,7 @@ public class TFCMagmaBlock extends MagmaBlock implements IForgeBlockExtension
     @Override
     protected BlockState updateShape(BlockState state, Direction facing, BlockState faceState, LevelAccessor level, BlockPos currentPos, BlockPos facingPos)
     {
-        if (facing == Direction.UP && TFCBubbleColumnBlock.canExistIn(faceState.getFluidState().getType()))
+        if (facing == Direction.UP && TFCBubbleColumnBlock.canExistIn(faceState))
         {
             level.scheduleTick(currentPos, this, 20);
         }
