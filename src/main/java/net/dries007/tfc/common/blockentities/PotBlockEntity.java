@@ -10,7 +10,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.Component;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -305,7 +304,7 @@ public class PotBlockEntity extends AbstractFirepitBlockEntity<PotBlockEntity.Po
         {
             this.pot = (PotBlockEntity) entity;
             this.inventory = new InventoryItemHandler(entity, 9);
-            this.tank = new FluidTank(FluidHelpers.BUCKET_VOLUME, fluid -> Helpers.isFluid(fluid.getFluid(), TFCTags.Fluids.USABLE_IN_POT));
+            this.tank = new FluidTank(FluidHelpers.BUCKET_VOLUME, this::canInsertFluid);
         }
 
         @NotNull
@@ -346,6 +345,11 @@ public class PotBlockEntity extends AbstractFirepitBlockEntity<PotBlockEntity.Po
         public void clearFluid()
         {
             tank.setFluid(FluidStack.EMPTY);
+        }
+
+        private boolean canInsertFluid(FluidStack fluid)
+        {
+            return pot.output == null && Helpers.isFluid(fluid.getFluid(), TFCTags.Fluids.USABLE_IN_POT);
         }
     }
 }
