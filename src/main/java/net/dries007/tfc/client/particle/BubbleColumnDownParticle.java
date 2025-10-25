@@ -12,8 +12,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.util.Mth;
 
-/*
-* Implementation for Bubble Column Down particles, overriding default ones so they can work in any liquid not just water
+/**
+ * Implementation for Bubble Column Down particles, overriding default ones so they can work in any liquid not just water
  */
 public class BubbleColumnDownParticle extends TextureSheetParticle
 {

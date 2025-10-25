@@ -11,7 +11,7 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.SimpleParticleType;
 
-/*
+/**
  * Implementation for Bubble Column Up particles, overriding default ones so they can work in any liquid not just water
  */
 public class BubbleColumnUpParticle extends TextureSheetParticle
