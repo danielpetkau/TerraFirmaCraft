@@ -18,6 +18,7 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
@@ -82,11 +83,12 @@ public class StationaryBerryBushBlock extends SeasonalPlantBlock implements HoeO
         super.tick(state, level, pos, rand);
         if (level.getBlockEntity(pos) instanceof SeasonalPlantBlockEntity counter)
         {
-            int cycles = (int) (counter.getTicksSinceUpdate() / TICKS_TO_GROW_BERRY_BUSH);
+            long ticks = counter.getTicksSinceUpdate(); // TODO: Remove inline variable
+            int cycles = (int) (ticks / TICKS_TO_GROW_BERRY_BUSH);
             if (cycles >= 1)
             {
-                growAndPropagate(state, level, pos, rand, cycles);
                 counter.resetCounter();
+                growAndPropagate(state, level, pos, rand, cycles);
             }
         }
     }
@@ -123,7 +125,7 @@ public class StationaryBerryBushBlock extends SeasonalPlantBlock implements HoeO
         {
             // Increment stage by one if not fully grown
             final BlockState newState = state.setValue(STAGE, state.getValue(STAGE) + 1);
-            level.setBlock(pos, newState, 3);
+            placeBlockAndResetCounter(level, pos, newState, cycles);
             return;
         }
 
@@ -146,13 +148,15 @@ public class StationaryBerryBushBlock extends SeasonalPlantBlock implements HoeO
 
         // Then, try and pick a random position within the expansion radius, and place a bush there.
         final BlockPos.MutableBlockPos cursor = pos.mutable();
-        for (int tries = 0; tries < 6; tries++)
+        for (int tries = 0; tries < 3; tries++)
         {
-            cursor.setWithOffset(pos, Helpers.triangle(random, 3), Helpers.triangle(random, 2), Helpers.triangle(random, 3));
-            final BlockState placementState = getNewState(level, cursor);
-            if (canPlaceNewBushAt(level, pos, placementState))
+            cursor.setWithOffset(pos, Helpers.triangle(random, 3), 0, Helpers.triangle(random, 3));
+            final BlockPos newPos = level.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, cursor);
+            final BlockState placementState = getNewState(level, newPos);
+            if (canPlaceNewBushAt(level, newPos, placementState))
             {
-                placeBlockAndResetCounter(level, pos, placementState, cycles);
+                placeBlockAndResetCounter(level, newPos, placementState, cycles);
+                return;
             }
         }
     }

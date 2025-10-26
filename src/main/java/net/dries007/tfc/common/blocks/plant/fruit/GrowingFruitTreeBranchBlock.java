@@ -240,8 +240,8 @@ public class GrowingFruitTreeBranchBlock extends FruitTreeBranchBlock implements
             int cycles = (int) (days / 5);
             if (cycles >= 1)
             {
-                grow(state, level, pos, rand, cycles);
                 counter.resetCounter();
+                grow(state, level, pos, rand, cycles);
             }
         }
     }

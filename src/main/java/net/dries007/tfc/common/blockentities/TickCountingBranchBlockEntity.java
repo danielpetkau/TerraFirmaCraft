@@ -13,6 +13,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
+// TODO: As of writing, this class is identical to SeasonalPlantBlockEntity, so we should just merge them
 public class TickCountingBranchBlockEntity extends TickCounterBlockEntity
 {
     public static void reset(Level level, BlockPos pos)
