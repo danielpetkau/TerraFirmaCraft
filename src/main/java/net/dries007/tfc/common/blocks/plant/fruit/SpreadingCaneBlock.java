@@ -85,7 +85,7 @@ public class SpreadingCaneBlock extends SpreadingBushBlock
         }
 
         final int oldStage = state.getValue(STAGE);
-        if (oldStage < 2) // TODO: I think we should use 1 as the growth state and 2 as the has failed growth state.
+        if (oldStage < 2)
         {
             final BlockState newState = state.setValue(STAGE, state.getValue(STAGE) + 1);
             placeBlockAndResetCounter(level, pos, newState, cycles);

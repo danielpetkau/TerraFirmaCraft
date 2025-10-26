@@ -508,7 +508,7 @@ public class BuiltinBlockTags extends TagsProvider<Block> implements Accessors
             .add(TFCBlocks.SPREADING_CANES);
         tag(SPREADING_BUSHES)
             .addTags(LIVING_SPREADING_BUSHES)
-            .add(TFCBlocks.DEAD_BERRY_BUSH, TFCBlocks.DEAD_CANE);
+            .add(TFCBlocks.DEAD_BERRY_BUSH, TFCBlocks.DEAD_CANE, TFCBlocks.BANANA_PLANT);
         tag(THORNY_BUSHES).add(
             TFCBlocks.SPREADING_BUSHES.get(FruitBlocks.SpreadingBush.RASPBERRY),
             TFCBlocks.SPREADING_BUSHES.get(FruitBlocks.SpreadingBush.BLACKBERRY));

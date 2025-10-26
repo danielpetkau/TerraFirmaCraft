@@ -110,7 +110,7 @@ public class StationaryBerryBushBlock extends SeasonalPlantBlock implements HoeO
      */
     protected void growAndPropagate(BlockState state, ServerLevel level, BlockPos pos, RandomSource random, int cycles)
     {
-        cycles = Math.min(cycles - 1, 8); // TODO: Probably move to a smarted place like whereever we check valid seasons
+        cycles = Math.min(cycles - 1, 8); // TODO: Probably move to a smarted place like wherever we check valid seasons
 
         // Must be in an active lifecycle to grow at all
         if (!state.getValue(LIFECYCLE).active()) // TODO: Probably should just check this earlier?

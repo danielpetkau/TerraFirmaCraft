@@ -19,8 +19,10 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.ticks.TickPriority;
 
 import net.dries007.tfc.common.TFCTags;
+import net.dries007.tfc.common.blockentities.SeasonalPlantBlockEntity;
 import net.dries007.tfc.common.blocks.ExtendedProperties;
 import net.dries007.tfc.util.Helpers;
 import net.dries007.tfc.util.climate.ClimateRanges;
@@ -41,7 +43,14 @@ public class BananaSaplingBlock extends FruitTreeSaplingBlock
     @Override
     public void createTree(Level level, BlockPos pos, BlockState state, RandomSource random, long ticksToAdd, BlockPos stemPos)
     {
-        level.setBlockAndUpdate(pos, block.get().defaultBlockState().setValue(SeasonalPlantBlock.LIFECYCLE, Lifecycle.HEALTHY));
+        level.setBlockAndUpdate(pos, block.get().defaultBlockState().setValue(SeasonalPlantBlock.STAGE, 1).setValue(SeasonalPlantBlock.LIFECYCLE, Lifecycle.HEALTHY));
+        // The following carries over time since planting the sapling block to the growth of the plant
+        if (level.getBlockEntity(pos) instanceof SeasonalPlantBlockEntity plant)
+        {
+            SeasonalPlantBlockEntity.reset(level, pos);
+            SeasonalPlantBlockEntity.addTicks(level, pos, ticksToAdd);
+        }
+        level.scheduleTick(pos, block.get(), 20, TickPriority.NORMAL);
     }
 
     @Override
