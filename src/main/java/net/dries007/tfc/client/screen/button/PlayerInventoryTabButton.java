@@ -73,12 +73,12 @@ public class PlayerInventoryTabButton extends Button
 
     public PlayerInventoryTabButton(int guiLeft, int guiTop, boolean active, boolean detached, Tab tab, OnPress onPressIn)
     {
-        super(detached ? (guiLeft + tab.xIn + 100) : (guiLeft + tab.xIn + (active ? -3 : -2)), detached ? (guiTop + tab.yIn + 5) : (guiTop + tab.yIn), 24, 22, Component.empty(), onPressIn, RenderHelpers.NARRATION);
+        super(detached ? (guiLeft + tab.xIn + 110) : (guiLeft + tab.xIn + (active ? -3 : -2)), detached ? (guiTop + tab.yIn + 5) : (guiTop + tab.yIn), 24, 22, Component.empty(), onPressIn, RenderHelpers.NARRATION);
         this.prevGuiLeft = guiLeft;
         this.prevGuiTop = guiTop;
         this.textureU = detached ? (active ? 72 : 48) : (active ? 24 : 0);
         this.textureV = 16;
-        this.iconX = detached ? (guiLeft + tab.xIn + 103 + 1) : (guiLeft + tab.xIn + 1);
+        this.iconX = detached ? (guiLeft + tab.xIn + 113 + 1) : (guiLeft + tab.xIn + 1);
         this.iconY = detached ? (guiTop + tab.yIn + 4 + 4) : (guiTop + tab.yIn + 3);
         this.tickCallback = () -> {};
         this.tab = tab;
