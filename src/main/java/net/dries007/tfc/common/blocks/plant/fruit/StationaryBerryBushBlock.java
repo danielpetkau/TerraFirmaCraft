@@ -59,7 +59,7 @@ public class StationaryBerryBushBlock extends SeasonalPlantBlock implements HoeO
     protected void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random)
     {
         final int hydration = getFruitBushHydration(level, pos);
-        final float temp = Climate.getAverageTemperature(level, pos); // TODO: Must override this for other fruit bushed that may have separate root positions
+        final float temp = Climate.getAverageTemperature(level, pos); // TODO: Must override this for other fruit bushes that may have separate root positions
 
         if (!climateRange.get().checkBoth(hydration, temp, false))
         {
@@ -152,12 +152,12 @@ public class StationaryBerryBushBlock extends SeasonalPlantBlock implements HoeO
             final BlockState placementState = getNewState(level, cursor);
             if (canPlaceNewBushAt(level, pos, placementState))
             {
-                placePropagule(level, pos, placementState, cycles);
+                placeBlockAndResetCounter(level, pos, placementState, cycles);
             }
         }
     }
 
-    private void placePropagule(ServerLevel level, BlockPos pos, BlockState state, int cycles)
+    protected void placeBlockAndResetCounter(ServerLevel level, BlockPos pos, BlockState state, int cycles)
     {
         level.setBlock(pos, state, Block.UPDATE_ALL);
         if (level.getBlockEntity(pos) instanceof SeasonalPlantBlockEntity bush)

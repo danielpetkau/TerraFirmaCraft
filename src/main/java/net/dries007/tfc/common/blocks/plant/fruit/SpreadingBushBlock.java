@@ -19,6 +19,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.neoforged.neoforge.common.Tags;
 
 import net.dries007.tfc.TerraFirmaCraft;
 import net.dries007.tfc.common.TFCTags;
@@ -85,45 +86,56 @@ public class SpreadingBushBlock extends StationaryBerryBushBlock implements IFor
         {
             // Stage 0 -> grow into stage 1
             final BlockState newState = state.setValue(STAGE, 1);
-            level.setBlock(pos, newState, Block.UPDATE_ALL);
-            // TODO: Move to another method, make sure all setBlock occurrences are replaced by something like this
-            if (level.getBlockEntity(pos) instanceof SeasonalPlantBlockEntity bush)
-            {
-                bush.resetCounter();
-                bush.increaseCounter(TICKS_TO_GROW_BERRY_BUSH * cycles);
-            }
-            level.getBlockState(pos).randomTick(level, pos, level.random);
+            placeBlockAndResetCounter(level, pos, newState, cycles);
             return;
         }
         if (originalStage == 1)
         {
-            // Stage 1: either grow upwards, or attempt to grow a cane and move to stage 2
-            // Grow a bush upwards
-            final BlockPos abovePos = pos.above();
-            if (level.isEmptyBlock(abovePos) && distanceToGround(level, pos, maxHeight) < maxHeight)
+            // Stage 1: Check a random horizontal direction, and try to grow that way
+            final Direction dir = Direction.Plane.HORIZONTAL.getRandomDirection(random);
+            final BlockPos adjacentPos = pos.relative(dir);
+            if (level.getBlockState(adjacentPos).isEmpty())
             {
-                // Growing upwards grows at stage = 1, because stage = 0 is just newly planted bushes.
-                state.setValue(STAGE, 1).setValue(LIFECYCLE, state.getValue(LIFECYCLE));
-                placeNewBushWithBlockEntity(level, abovePos, pos, state, cycles);
-
-                return; // Stay in stage 1, if we only grew upwards.
+                placeNewBushAndResetCounters(level, adjacentPos, pos, companion.get().defaultBlockState().setValue(SpreadingCaneBlock.FACING, dir).setValue(LIFECYCLE, state.getValue(LIFECYCLE)), cycles);
+                maybeStopGrowing(level, pos, state, random);
             }
-
-            if (random.nextBoolean())
+            else
             {
-                // Optionally cause a cane to grow on an adjacent block
-                final Direction offset = Direction.Plane.HORIZONTAL.getRandomDirection(random);
-                final BlockPos offsetPos = pos.relative(offset);
-                if (level.isEmptyBlock(offsetPos))
+                // If it can't grow in that direction, attempt to grow the bush upwards
+                final BlockPos abovePos = pos.above();
+                if (level.isEmptyBlock(abovePos) && distanceToGround(level, pos, maxHeight) < maxHeight)
                 {
-                    placeNewBushWithBlockEntity(level, offsetPos, pos, companion.get().defaultBlockState().setValue(SpreadingCaneBlock.FACING, offset).setValue(LIFECYCLE, state.getValue(LIFECYCLE)), cycles);
+                    // Growing upwards grows at stage = 1, because stage = 0 is just newly planted bushes.
+                    state.setValue(STAGE, 1).setValue(LIFECYCLE, state.getValue(LIFECYCLE));
+                    placeNewBushAndResetCounters(level, abovePos, pos, state, cycles);
+
+                    // Increase age to stop this block from growing again in future
+                    level.setBlock(pos, state.setValue(STAGE, 2), Block.UPDATE_ALL);
                 }
             }
-
-            // Increase age to stop this block from growing again in future
-            level.setBlock(pos, state.setValue(STAGE, 2), Block.UPDATE_ALL);
         }
-        // Stay at stage 2, and don't grow
+    }
+
+    private void maybeStopGrowing(ServerLevel level, BlockPos pos, BlockState state, RandomSource random)
+    {
+        if (random.nextBoolean())
+        {
+            // Before allowing this to propagate multiple times, check that there aren't too many bush blocks nearby
+            int count = 0;
+            for (BlockPos target : BlockPos.betweenClosed(pos.offset(-2, 0, -2), pos.offset(2, 1, 2)))
+            {
+                if (level.getBlockState(target).getBlock() == this)
+                {
+                    count++;
+                    if (count > 10)
+                    {
+                        return;
+                    }
+                }
+            }
+        }
+        // Otherwise, stop growing
+        level.setBlock(pos, state.setValue(STAGE, 2), Block.UPDATE_ALL);
     }
 
     @Override
@@ -140,7 +152,7 @@ public class SpreadingBushBlock extends StationaryBerryBushBlock implements IFor
         return Helpers.isBlock(state, TFCTags.Blocks.SPREADING_FRUIT_GROWS_ON);
     }
 
-    private void placeNewBushWithBlockEntity(ServerLevel level, BlockPos newPos, BlockPos oldPos, BlockState state, int cycles)
+    private void placeNewBushAndResetCounters(ServerLevel level, BlockPos newPos, BlockPos oldPos, BlockState state, int cycles)
     {
         level.setBlockAndUpdate(newPos, state);
         // If block grows, set the new block's stem position to match the original

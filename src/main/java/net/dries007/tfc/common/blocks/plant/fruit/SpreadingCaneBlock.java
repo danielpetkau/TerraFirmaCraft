@@ -88,22 +88,16 @@ public class SpreadingCaneBlock extends SpreadingBushBlock
         if (oldStage < 2) // TODO: I think we should use 1 as the growth state and 2 as the has failed growth state.
         {
             final BlockState newState = state.setValue(STAGE, state.getValue(STAGE) + 1);
-            level.setBlock(pos, newState, 3);
-            // TODO: Move to another method, make sure all setBlock occurrences are replaced by something like this
-            if (level.getBlockEntity(pos) instanceof SeasonalPlantBlockEntity bush)
-            {
-                bush.resetCounter();
-                bush.increaseCounter(TICKS_TO_GROW_BERRY_BUSH * cycles);
-            }
+            placeBlockAndResetCounter(level, pos, newState, cycles);
             level.getBlockState(pos).randomTick(level, pos, level.random);
             return; // Increment stage if possible
         }
 
         // Otherwise, try and convert to a bush bock
-        convertToBush(level, pos, state, cycles);
+        placeCompanionBlockAndResetCounter(level, pos, state, cycles);
     }
 
-    private void convertToBush(ServerLevel level, BlockPos pos, BlockState oldState, int cycles)
+    private void placeCompanionBlockAndResetCounter(ServerLevel level, BlockPos pos, BlockState oldState, int cycles)
     {
         // Bush blocks start at stage = 1 when they're grown from another bush block, as stage = 0 is just for newly planted
         final BlockState placeState = companion.get().defaultBlockState().setValue(STAGE, 1).setValue(LIFECYCLE, oldState.getValue(LIFECYCLE));
