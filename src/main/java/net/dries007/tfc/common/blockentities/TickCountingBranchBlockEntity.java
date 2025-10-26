@@ -47,14 +47,14 @@ public class TickCountingBranchBlockEntity extends TickCounterBlockEntity
     @Override
     public void loadAdditional(CompoundTag nbt, HolderLookup.Provider provider)
     {
-        if (nbt.contains("stemPos", CompoundTag.TAG_INT_ARRAY)) // todo: remove this array handling, its handling old worlds
+        if (nbt.contains("stemPos", CompoundTag.TAG_INT_ARRAY))
         {
             final int[] stemArray = nbt.getIntArray("stemPos");
             stemPos = new BlockPos(stemArray[0], stemArray[1], stemArray[2]);
         }
         else
         {
-            stemPos = nbt.contains("stemPos", CompoundTag.TAG_LONG) ? BlockPos.of(nbt.getLong("stemPos")) : worldPosition;
+            stemPos = nbt.contains("stemPos", CompoundTag.TAG_LONG) ? BlockPos.of(nbt.getLong("stemPos")) : worldPosition; // todo: remove this array handling, its handling old worlds
         }
         super.loadAdditional(nbt, provider);
     }

@@ -12,7 +12,9 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -21,15 +23,20 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import org.jetbrains.annotations.Nullable;
 
 import net.dries007.tfc.TerraFirmaCraft;
+import net.dries007.tfc.common.TFCTags;
 import net.dries007.tfc.common.blockentities.SeasonalPlantBlockEntity;
+import net.dries007.tfc.common.blockentities.TickCountingBranchBlockEntity;
 import net.dries007.tfc.common.blocks.ExtendedProperties;
 import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.blocks.soil.FarmlandBlock;
 import net.dries007.tfc.common.blocks.soil.HoeOverlayBlock;
 import net.dries007.tfc.util.Helpers;
+import net.dries007.tfc.util.calendar.Calendars;
 import net.dries007.tfc.util.calendar.ICalendar;
+import net.dries007.tfc.util.calendar.Month;
 import net.dries007.tfc.util.climate.Climate;
 import net.dries007.tfc.util.climate.ClimateRange;
 
@@ -60,7 +67,7 @@ public class StationaryBerryBushBlock extends SeasonalPlantBlock implements HoeO
     protected void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random)
     {
         final int hydration = getFruitBushHydration(level, pos);
-        final float temp = Climate.getAverageTemperature(level, pos); // TODO: Must override this for other fruit bushes that may have separate root positions
+        final float temp = Climate.getAverageTemperature(level, pos);
 
         if (!climateRange.get().checkBoth(hydration, temp, false))
         {
@@ -70,10 +77,9 @@ public class StationaryBerryBushBlock extends SeasonalPlantBlock implements HoeO
         {
             this.tick(state, level, pos, random);
         }
-        super.randomTick(state, level, pos, random); // TODO: Verify needed
+        super.randomTick(state, level, pos, random);
     }
 
-    // TODO: Update this comment if I re-imagine how these things check climate
     /**
      * Should only be called after the climate range has been checked
      */
@@ -81,12 +87,37 @@ public class StationaryBerryBushBlock extends SeasonalPlantBlock implements HoeO
     public void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource rand)
     {
         super.tick(state, level, pos, rand);
-        if (level.getBlockEntity(pos) instanceof SeasonalPlantBlockEntity counter)
+
+        // Must be in an active lifecycle to consider growing
+        if (state.getValue(LIFECYCLE).active() && level.getBlockEntity(pos) instanceof SeasonalPlantBlockEntity counter)
         {
-            long ticks = counter.getTicksSinceUpdate(); // TODO: Remove inline variable
-            int cycles = (int) (ticks / TICKS_TO_GROW_BERRY_BUSH);
-            if (cycles >= 1)
+            // Then find the max number of times the plant could have grown in the time since the last update
+            int maxCycles = (int) (counter.getTicksSinceUpdate() / TICKS_TO_GROW_BERRY_BUSH);
+            if (maxCycles >= 1)
             {
+                // Cap the number of cycles for longer time skips
+                maxCycles = Math.min(maxCycles, 8);
+                int cycles = 0;
+                final int daysInMonth = Calendars.SERVER.getCalendarDaysInMonth();
+                final long currentTick = Calendars.SERVER.getTicks();
+                long simulatedTick = counter.getLastUpdateTick();
+                // Check through the skipped time and only add growth if the plant was not dormant
+                while (cycles < maxCycles && simulatedTick < currentTick)
+                {
+                    Month month = ICalendar.getMonthOfYear(simulatedTick, daysInMonth);
+                    Lifecycle lifecycle = this.getLifecycleForMonth(month);
+                    if (lifecycle != Lifecycle.DORMANT)
+                    {
+                        cycles++;
+                        simulatedTick = simulatedTick + TICKS_TO_GROW_BERRY_BUSH;
+                    }
+                    else
+                    {
+                        simulatedTick = simulatedTick + (long) ICalendar.CALENDAR_TICKS_IN_DAY * daysInMonth;
+                    }
+                }
+
+                // Only reset the counter if we actually grow
                 counter.resetCounter();
                 growAndPropagate(state, level, pos, rand, cycles);
             }
@@ -106,19 +137,20 @@ public class StationaryBerryBushBlock extends SeasonalPlantBlock implements HoeO
         }
     }
 
+    @Override
+    public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack)
+    {
+        SeasonalPlantBlockEntity.reset(level, pos);
+        super.setPlacedBy(level, pos, state, placer, stack);
+    }
+
     /**
      * Performs growth and (optional) propagation of the bush.
      * Propagation should be naturally limited to not cause runaway generation.
      */
     protected void growAndPropagate(BlockState state, ServerLevel level, BlockPos pos, RandomSource random, int cycles)
     {
-        cycles = Math.min(cycles - 1, 8); // TODO: Probably move to a smarted place like wherever we check valid seasons
-
-        // Must be in an active lifecycle to grow at all
-        if (!state.getValue(LIFECYCLE).active()) // TODO: Probably should just check this earlier?
-        {
-            return;
-        }
+        cycles--;
 
         final int oldStage = state.getValue(STAGE);
         if (oldStage < 2)
@@ -132,14 +164,14 @@ public class StationaryBerryBushBlock extends SeasonalPlantBlock implements HoeO
         // Otherwise, attempt to propagate
         // Conditions to propagate:
         // 1. Must be in max growth stage, and an active lifecycle
-        // 2. Must not have more than 3 other bushes within the expansion radius
+        // 2. Must not have more than 3 total bushes within the expansion radius
         int count = 0;
         for (BlockPos target : BlockPos.betweenClosed(pos.offset(-2, -1, -2), pos.offset(2, 1, 2)))
         {
             if (level.getBlockState(target).getBlock() == this)
             {
                 count++;
-                if (count > 4) // 3 + 1 because the above this block gets counted
+                if (count > 3)
                 {
                     return;
                 }
@@ -173,7 +205,7 @@ public class StationaryBerryBushBlock extends SeasonalPlantBlock implements HoeO
         {
             TerraFirmaCraft.LOGGER.error("Failed to update propagated berry bush block entity at: {}", pos);
         }
-        level.getBlockState(pos).randomTick(level, pos, level.random);
+        level.getBlockState(pos).tick(level, pos, level.random); // TODO: Decide if we are using, tick, random tick, or schedule tick for this, and stick to it in all versions of this method
     }
 
     protected BlockState getNewState(Level level, BlockPos pos)

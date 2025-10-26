@@ -28,6 +28,7 @@ import net.dries007.tfc.common.blocks.ExtendedProperties;
 import net.dries007.tfc.common.blocks.IForgeBlockExtension;
 import net.dries007.tfc.common.blocks.soil.HoeOverlayBlock;
 import net.dries007.tfc.util.Helpers;
+import net.dries007.tfc.util.climate.Climate;
 import net.dries007.tfc.util.climate.ClimateRange;
 
 /**
@@ -69,15 +70,35 @@ public class SpreadingBushBlock extends StationaryBerryBushBlock implements IFor
     }
 
     @Override
+    protected void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random)
+    {
+        final BlockPos climatePos;
+        if (level.getBlockEntity(pos) instanceof SeasonalPlantBlockEntity plant)
+        {
+            climatePos = plant.getStemPos();
+        }
+        else
+        {
+            climatePos = pos;
+        }
+        final int hydration = getFruitBushHydrationFromRootPos(level, climatePos);
+        final float temp = Climate.getAverageTemperature(level, climatePos);
+
+        if (!climateRange.get().checkBoth(hydration, temp, false))
+        {
+            SeasonalPlantBlockEntity.reset(level, pos);
+        }
+        else
+        {
+            this.tick(state, level, pos, random);
+        }
+        super.randomTick(state, level, pos, random);
+    }
+
+    @Override
     protected void growAndPropagate(BlockState state, ServerLevel level, BlockPos pos, RandomSource random, int cycles)
     {
-        cycles = Math.min(cycles - 1, 8); // TODO
-
-        if (!state.getValue(LIFECYCLE).active())
-        {
-            // Only grow when active
-            return;
-        }
+        cycles--;
 
         // Increment stage by one
         final int originalStage = state.getValue(STAGE);

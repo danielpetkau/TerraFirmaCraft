@@ -314,13 +314,6 @@ public abstract class SeasonalPlantBlock extends BushBlock implements IForgeBloc
     }
 
     @Override
-    public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack)
-    {
-        SeasonalPlantBlockEntity.reset(level, pos);
-        super.setPlacedBy(level, pos, state, placer, stack);
-    }
-
-    @Override
     protected MapCodec<? extends BushBlock> codec()
     {
         return fakeBlockCodec();

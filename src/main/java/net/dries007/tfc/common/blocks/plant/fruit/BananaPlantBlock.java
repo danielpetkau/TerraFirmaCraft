@@ -185,16 +185,10 @@ public class BananaPlantBlock extends SeasonalPlantBlock implements HoeOverlayBl
      */
     protected void grow(BlockState state, ServerLevel level, BlockPos pos, RandomSource random, int cycles)
     {
-        cycles = Math.min(cycles - 1, 8); // TODO
+        cycles--;
 
-        // TODO: I don't expect this to work in its current state, and I'd like to rework bananas to always have leaves anyways
+        // TODO: I don't expect this to work in its current state
         onUpdate(level, pos, state);
-
-        // Must be in an active lifecycle to grow at all
-        if (!state.getValue(LIFECYCLE).active()) // TODO: Probably should just check this earlier?
-        {
-            return;
-        }
 
         final int oldStage = state.getValue(STAGE);
 

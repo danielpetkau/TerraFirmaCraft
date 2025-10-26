@@ -93,6 +93,8 @@ public class GrowingFruitTreeBranchBlock extends FruitTreeBranchBlock implements
 
     public void grow(BlockState state, ServerLevel level, BlockPos pos, RandomSource random, int cyclesLeft)
     {
+        cyclesLeft--;
+
         FruitTreeBranchBlock body = (FruitTreeBranchBlock) this.body.get();
         BlockPos abovePos = pos.above();
         final boolean natural = state.getValue(NATURAL);
@@ -138,7 +140,7 @@ public class GrowingFruitTreeBranchBlock extends FruitTreeBranchBlock implements
                 if (willGrowUpward && allNeighborsEmpty(level, abovePos, null) && canGrowInto(level, pos.above(2)))
                 {
                     placeBody(level, pos, stemPos, stage);
-                    placeGrownFlower(level, abovePos, stemPos, stage, state.getValue(SAPLINGS), cyclesLeft - 1, natural);
+                    placeGrownFlower(level, abovePos, stemPos, stage, state.getValue(SAPLINGS), cyclesLeft, natural);
                 }
                 // Try and branch if near enough to the trunk
                 else if (stage < 2)
@@ -162,13 +164,13 @@ public class GrowingFruitTreeBranchBlock extends FruitTreeBranchBlock implements
                                         mutablePos.move(test, -1);
                                         placeBody(level, mutablePos, stemPos, stage);
                                         mutablePos.move(test, 1);
-                                        placeGrownFlower(level, mutablePos, stemPos, stage + 1, state.getValue(SAPLINGS), cyclesLeft - 1, natural);
+                                        placeGrownFlower(level, mutablePos, stemPos, stage + 1, state.getValue(SAPLINGS), cyclesLeft, natural);
                                         doubleBranch = true;
                                     }
                                 }
                                 if (!doubleBranch)
                                 {
-                                    placeGrownFlower(level, mutablePos, stemPos, stage + 1, state.getValue(SAPLINGS), cyclesLeft - 1, natural);
+                                    placeGrownFlower(level, mutablePos, stemPos, stage + 1, state.getValue(SAPLINGS), cyclesLeft, natural);
                                 }
                             }
                             directions.remove(test);

@@ -34,6 +34,7 @@ import net.dries007.tfc.common.blockentities.SeasonalPlantBlockEntity;
 import net.dries007.tfc.common.blocks.ExtendedProperties;
 import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.util.Helpers;
+import net.dries007.tfc.util.climate.Climate;
 import net.dries007.tfc.util.climate.ClimateRange;
 
 public class SpreadingCaneBlock extends SpreadingBushBlock
@@ -75,15 +76,34 @@ public class SpreadingCaneBlock extends SpreadingBushBlock
     }
 
     @Override
+    protected void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random)
+    {
+        final BlockPos climatePos;
+        if (level.getBlockEntity(pos) instanceof SeasonalPlantBlockEntity plant)
+        {
+            climatePos = plant.getStemPos();
+        }
+        else
+        {
+            climatePos = pos;
+        }
+        final int hydration = getFruitBushHydrationFromRootPos(level, climatePos);
+        final float temp = Climate.getAverageTemperature(level, climatePos);
+
+        if (!climateRange.get().checkBoth(hydration, temp, false))
+        {
+            SeasonalPlantBlockEntity.reset(level, pos);
+        }
+        else
+        {
+            this.tick(state, level, pos, random);
+        }
+        super.randomTick(state, level, pos, random);
+    }
+
+    @Override
     protected void growAndPropagate(BlockState state, ServerLevel level, BlockPos pos, RandomSource random, int cycles)
     {
-        cycles = Math.min(cycles - 1, 8); // TODO
-
-        if (!state.getValue(LIFECYCLE).active()) // TODO: Probably should just check this earlier?
-        {
-            return;
-        }
-
         final int oldStage = state.getValue(STAGE);
         if (oldStage < 2)
         {
