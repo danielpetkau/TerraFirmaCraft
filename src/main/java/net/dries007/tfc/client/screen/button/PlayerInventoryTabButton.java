@@ -64,26 +64,26 @@ public class PlayerInventoryTabButton extends Button
     private final Tab tab;
     private Runnable tickCallback;
     private final boolean active;
-    private final boolean book;
+    private final boolean detached;
 
-    public PlayerInventoryTabButton(int guiLeft, int guiTop, boolean active, boolean book, Tab tab)
+    public PlayerInventoryTabButton(int guiLeft, int guiTop, boolean active, boolean detached, Tab tab)
     {
-        this(guiLeft, guiTop, active, book, tab, button -> PacketDistributor.sendToServer(new SwitchInventoryTabPacket(tab)));
+        this(guiLeft, guiTop, active, detached, tab, button -> PacketDistributor.sendToServer(new SwitchInventoryTabPacket(tab)));
     }
 
-    public PlayerInventoryTabButton(int guiLeft, int guiTop, boolean active, boolean book, Tab tab, OnPress onPressIn)
+    public PlayerInventoryTabButton(int guiLeft, int guiTop, boolean active, boolean detached, Tab tab, OnPress onPressIn)
     {
-        super(book ? (guiLeft + tab.xIn + 100) : (guiLeft + tab.xIn + (active ? -3 : -2)), book ? (guiTop + tab.yIn + 5) : (guiTop + tab.yIn), 24, 22, Component.empty(), onPressIn, RenderHelpers.NARRATION);
+        super(detached ? (guiLeft + tab.xIn + 100) : (guiLeft + tab.xIn + (active ? -3 : -2)), detached ? (guiTop + tab.yIn + 5) : (guiTop + tab.yIn), 24, 22, Component.empty(), onPressIn, RenderHelpers.NARRATION);
         this.prevGuiLeft = guiLeft;
         this.prevGuiTop = guiTop;
-        this.textureU = book ? (active ? 72 : 48) : (active ? 24 : 0);
+        this.textureU = detached ? (active ? 72 : 48) : (active ? 24 : 0);
         this.textureV = 16;
-        this.iconX = book ? (guiLeft + tab.xIn + 103 + 1) : (guiLeft + tab.xIn + 1);
-        this.iconY = book ? (guiTop + tab.yIn + 4 + 4) : (guiTop + tab.yIn + 3);
+        this.iconX = detached ? (guiLeft + tab.xIn + 103 + 1) : (guiLeft + tab.xIn + 1);
+        this.iconY = detached ? (guiTop + tab.yIn + 4 + 4) : (guiTop + tab.yIn + 3);
         this.tickCallback = () -> {};
         this.tab = tab;
         this.active = active;
-        this.book = book;
+        this.detached = detached;
     }
 
     public PlayerInventoryTabButton setRecipeBookCallback(InventoryScreen screen)
@@ -145,7 +145,7 @@ public class PlayerInventoryTabButton extends Button
                 }
                 case BOOK ->
                 {
-                    final Component hoverText = Component.literal("Field Guide");
+                    final Component hoverText = Component.translatable("tfc.tab.field_guide");
                     graphics.renderTooltip(font, hoverText, mouseX, mouseY);
                 }
             }

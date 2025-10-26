@@ -62,8 +62,6 @@ public final class PatchouliClientEventHandler
         final IEventBus bus = NeoForge.EVENT_BUS;
 
         bus.addListener(PatchouliClientEventHandler::renderBookTooltipWithoutBook);
-        bus.addListener(PatchouliClientEventHandler::onDrawBook);
-
     }
 
     public static void renderBookTooltipWithoutBook(RenderTooltipEvent.Pre event)
@@ -227,28 +225,5 @@ public final class PatchouliClientEventHandler
             }
         }
         return false;
-    }
-
-    public static void onDrawBook(BookDrawScreenEvent event)
-    {
-        if (event.getBook().equals(Helpers.resourceLocation("tfc", "field_guide")))
-        {
-            final Screen screen = event.getScreen();
-            final GuiGraphics graphics = event.getGraphics();
-            final Font font = Minecraft.getInstance().font;
-
-            if (screen instanceof GuiBook bookScreen)
-            {
-
-                bookScreen.addRenderableWidget(new PlayerInventoryTabButton(bookScreen.bookLeft, bookScreen.bookTop, false, true, PlayerInventoryTabButton.Tab.INVENTORY));
-                bookScreen.addRenderableWidget(new PlayerInventoryTabButton(bookScreen.bookLeft, bookScreen.bookTop, false, true, PlayerInventoryTabButton.Tab.CALENDAR));
-                bookScreen.addRenderableWidget(new PlayerInventoryTabButton(bookScreen.bookLeft, bookScreen.bookTop, false, true, PlayerInventoryTabButton.Tab.NUTRITION));
-                bookScreen.addRenderableWidget(new PlayerInventoryTabButton(bookScreen.bookLeft, bookScreen.bookTop, false, true, PlayerInventoryTabButton.Tab.CLIMATE));
-                bookScreen.addRenderableWidget(new PlayerInventoryTabButton(bookScreen.bookLeft, bookScreen.bookTop, true, true, PlayerInventoryTabButton.Tab.BOOK));
-
-            }
-
-        }
-
     }
 }
