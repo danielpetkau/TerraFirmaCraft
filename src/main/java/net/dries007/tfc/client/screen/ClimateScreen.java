@@ -41,15 +41,15 @@ public class ClimateScreen extends TFCContainerScreen<Container>
     {
         super.init();
 
-        addRenderableWidget(new PlayerInventoryTabButton(leftPos, topPos, 176, 4, 20, 22, 128, 0, 1, 3, 0, 0, button -> {
+        addRenderableWidget(new PlayerInventoryTabButton(leftPos, topPos, false, false, PlayerInventoryTabButton.Tab.INVENTORY, button -> {
             playerInventory.player.containerMenu = playerInventory.player.inventoryMenu;
             Minecraft.getInstance().setScreen(new InventoryScreen(playerInventory.player));
-            PacketDistributor.sendToServer(new SwitchInventoryTabPacket(SwitchInventoryTabPacket.Tab.INVENTORY));
+            PacketDistributor.sendToServer(new SwitchInventoryTabPacket(PlayerInventoryTabButton.Tab.INVENTORY));
         }));
-        addRenderableWidget(new PlayerInventoryTabButton(leftPos, topPos, 176, 27, 20, 22, 128, 0, 1, 3, 32, 0, SwitchInventoryTabPacket.Tab.CALENDAR));
-        addRenderableWidget(new PlayerInventoryTabButton(leftPos, topPos, 176, 50, 20, 22, 128, 0, 1, 3, 64, 0, SwitchInventoryTabPacket.Tab.NUTRITION));
-        addRenderableWidget(new PlayerInventoryTabButton(leftPos, topPos, 176 - 3, 73, 20 + 3, 22, 128 + 20, 0, 1, 3, 96, 0, button -> {}));
-        PatchouliIntegration.ifEnabled(() -> addRenderableWidget(new PlayerInventoryTabButton(leftPos, topPos, 176, 96, 20, 22, 128, 0, 1, 3, 0, 32, SwitchInventoryTabPacket.Tab.BOOK)));
+        addRenderableWidget(new PlayerInventoryTabButton(leftPos, topPos, false, false, PlayerInventoryTabButton.Tab.CALENDAR));
+        addRenderableWidget(new PlayerInventoryTabButton(leftPos, topPos, false, false, PlayerInventoryTabButton.Tab.NUTRITION));
+        addRenderableWidget(new PlayerInventoryTabButton(leftPos, topPos, true, false, PlayerInventoryTabButton.Tab.CLIMATE, button -> {}));
+        PatchouliIntegration.ifEnabled(() -> addRenderableWidget(new PlayerInventoryTabButton(leftPos, topPos, false, false, PlayerInventoryTabButton.Tab.BOOK)));
     }
 
     @Override
@@ -68,18 +68,18 @@ public class ClimateScreen extends TFCContainerScreen<Container>
 
         drawLine(stack, Helpers.translateEnum(KoppenClimateClassification.classify(averageTemp, averageRainfall, rainVar, ClientHelpers.inNorthernHemisphere())), CENTER, 18);
 
-        drawLine(stack, Component.translatable("tfc.tooltip.climate_temperature_name"), LEFT,32);
-        drawLine(stack, Component.translatable("tfc.tooltip.climate_temperature_average", style.formatRange(averageTemp)), LEFT, -1,36, 32);
-        drawLine(stack, Component.translatable("tfc.tooltip.climate_temperature_now", style.formatRange(currentTemp)), LEFT, -1,96,32);
+        drawLine(stack, Component.translatable("tfc.tooltip.climate_temperature_name"), LEFT, 32);
+        drawLine(stack, Component.translatable("tfc.tooltip.climate_temperature_average", style.formatRange(averageTemp)), LEFT, -1, 36, 32);
+        drawLine(stack, Component.translatable("tfc.tooltip.climate_temperature_now", style.formatRange(currentTemp)), LEFT, -1, 96, 32);
 
 
         drawLine(stack, Component.translatable("tfc.tooltip.climate_rainfall_name"), LEFT, 0x202080, 46);
-        drawLine(stack, Component.translatable("tfc.tooltip.climate_rainfall_average", String.format("%.0f", averageRainfall)), LEFT,0x202080, 36, 46);
-        drawLine(stack, Component.translatable("tfc.tooltip.climate_rainfall_now", String.format("%.0f", currentRainfall)), LEFT,0x202080, 96, 46);
+        drawLine(stack, Component.translatable("tfc.tooltip.climate_rainfall_average", String.format("%.0f", averageRainfall)), LEFT, 0x202080, 36, 46);
+        drawLine(stack, Component.translatable("tfc.tooltip.climate_rainfall_now", String.format("%.0f", currentRainfall)), LEFT, 0x202080, 96, 46);
 
-        drawLine(stack, Component.translatable("tfc.tooltip.climate_peak_rainfall"), LEFT,0x202080, 57);
+        drawLine(stack, Component.translatable("tfc.tooltip.climate_peak_rainfall"), LEFT, 0x202080, 57);
 
-        drawLine(stack, Component.translatable(rainVar > 0 ? "tfc.tooltip.climate_peak_rainfall_july" : "tfc.tooltip.climate_peak_rainfall_january", String.format("%.0f", averageRainfall * (1 + Math.abs(rainVar)))), LEFT, 0x202080,36, 57);
+        drawLine(stack, Component.translatable(rainVar > 0 ? "tfc.tooltip.climate_peak_rainfall_july" : "tfc.tooltip.climate_peak_rainfall_january", String.format("%.0f", averageRainfall * (1 + Math.abs(rainVar)))), LEFT, 0x202080, 36, 57);
     }
 
 }

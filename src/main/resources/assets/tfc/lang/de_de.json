@@ -260,6 +260,7 @@
   "tfc.screen.scribing_table": "Gegenstand umbenennen",
   "tfc.screen.pet_command": "Haustier Befehle",
   "tfc.screen.sewing_table": "Sewing Table",
+  "tfc.tab.field_guide": "Field Guide",
   "tfc.tooltip.fluid_units": "%s mB",
   "tfc.tooltip.fluid_units_of": "%s mB von %s",
   "tfc.tooltip.fluid_units_and_capacity": "%s / %s mB",

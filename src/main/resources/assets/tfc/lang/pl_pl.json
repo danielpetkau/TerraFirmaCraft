@@ -259,6 +259,7 @@
   "tfc.screen.scribing_table": "Nazwij przedmiot",
   "tfc.screen.pet_command": "Komendy pupila",
   "tfc.screen.sewing_table": "Sewing Table",
+  "tfc.tab.field_guide": "Field Guide",
   "tfc.tooltip.fluid_units": "%s mB",
   "tfc.tooltip.fluid_units_of": "%s mB %s",
   "tfc.tooltip.fluid_units_and_capacity": "%s / %s mB",

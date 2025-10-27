@@ -260,6 +260,7 @@
   "tfc.screen.scribing_table": "아이템 이름 변경",
   "tfc.screen.pet_command": "반려동물",
   "tfc.screen.sewing_table": "Sewing Table",
+  "tfc.tab.field_guide": "Field Guide",
   "tfc.tooltip.fluid_units": "%s mB",
   "tfc.tooltip.fluid_units_of": "%2$s %1$s mB",
   "tfc.tooltip.fluid_units_and_capacity": "%s / %s mB",
