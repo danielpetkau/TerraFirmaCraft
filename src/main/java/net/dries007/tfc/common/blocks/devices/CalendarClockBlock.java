@@ -76,8 +76,9 @@ public class CalendarClockBlock extends DeviceBlock
         final Direction direction = state.getValue(FACING);
         final LevelReader level = context.getLevel();
         final BlockPos pos = context.getClickedPos();
+        final BlockState blockState1 = level.getBlockState(pos.relative(direction.getOpposite()));
 
-        if (level.getBlockState(pos.relative(direction.getOpposite())).is(TFCTags.Blocks.CLOCK_READABLE))
+        if (Helpers.isBlock(blockState1, TFCTags.Blocks.CLOCK_READABLE))
         {
             state = state.setValue(FACING, direction);
         }
@@ -116,19 +117,20 @@ public class CalendarClockBlock extends DeviceBlock
                     default: blockState = state.setValue(MODE, Mode.MONTH);
                         break;
                     case MONTH:
-                        if (level.getBlockState(pos
-                                .relative(direction.getOpposite()))
-                            .is(TFCTags.Blocks.CLOCK_READABLE))
+                        final Direction oppositeDirection = direction.getOpposite();
+                        final BlockState blockState1 = level.getBlockState(pos.relative(oppositeDirection));
+                        final BlockState blockState2 = level.getBlockState(pos.relative(oppositeDirection).relative(oppositeDirection));
+                        //Since it now checks for an interface, addon devices can support this too (justified tag)
+                        if (Helpers.isBlock(blockState1, TFCTags.Blocks.CLOCK_READABLE))
                         {
                             blockState = state.setValue(MODE, Mode.TIMER);
                         }
-                        else if (level.getBlockState(pos
-                                .relative(direction.getOpposite())
-                                .relative(direction.getOpposite()))
-                            .is(TFCTags.Blocks.CLOCK_READABLE)){
+                        else if (Helpers.isBlock(blockState2, TFCTags.Blocks.CLOCK_READABLE))
+                        {
                             blockState = state.setValue(MODE, Mode.TIMER);
                         }
-                        else {
+                        else
+                        {
                             blockState = state.setValue(MODE, Mode.HOUR);
                         }
                         break;

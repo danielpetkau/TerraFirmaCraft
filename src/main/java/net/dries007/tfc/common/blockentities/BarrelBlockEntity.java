@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import com.google.common.collect.ImmutableList;
+import net.dries007.tfc.util.calendar.IRecipeTimer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
@@ -73,7 +74,7 @@ import net.dries007.tfc.util.calendar.CalendarTransaction;
 import net.dries007.tfc.util.calendar.Calendars;
 import net.dries007.tfc.util.calendar.ICalendarTickable;
 
-public class BarrelBlockEntity extends TickableInventoryBlockEntity<BarrelBlockEntity.BarrelInventory> implements ICalendarTickable, BarrelInventoryCallback
+public class BarrelBlockEntity extends TickableInventoryBlockEntity<BarrelBlockEntity.BarrelInventory> implements ICalendarTickable, BarrelInventoryCallback, IRecipeTimer
 {
     public static final int SLOT_FLUID_CONTAINER_IN = 0;
     public static final int SLOT_FLUID_CONTAINER_OUT = 1;
@@ -370,6 +371,19 @@ public class BarrelBlockEntity extends TickableInventoryBlockEntity<BarrelBlockE
     public void setLastCalendarUpdateTick(long tick)
     {
         lastUpdateTick = tick;
+    }
+
+    @Override
+    public int getRecipeDuration()
+    {
+        @Nullable SealedBarrelRecipe recipe = getRecipe();
+        return recipe != null ? recipe.getDuration() : 0;
+    }
+
+    @Override
+    public long getRemainingTime()
+    {
+        return getRemainingTicks();
     }
 
     @Override

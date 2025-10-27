@@ -9,6 +9,8 @@ package net.dries007.tfc.common.blockentities;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+
+import net.dries007.tfc.util.calendar.IRecipeTimer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
@@ -40,7 +42,7 @@ import net.dries007.tfc.util.calendar.CalendarTransaction;
 import net.dries007.tfc.util.calendar.Calendars;
 import net.dries007.tfc.util.calendar.ICalendarTickable;
 
-public class BloomeryBlockEntity extends TickableBlockEntity implements ICalendarTickable
+public class BloomeryBlockEntity extends TickableBlockEntity implements ICalendarTickable, IRecipeTimer
 {
     public static void serverTick(Level level, BlockPos pos, BlockState state, BloomeryBlockEntity bloomery)
     {
@@ -256,6 +258,18 @@ public class BloomeryBlockEntity extends TickableBlockEntity implements ICalenda
     public void setLastCalendarUpdateTick(long tick)
     {
         lastPlayerTick = tick;
+    }
+
+    @Override
+    public int getRecipeDuration()
+    {
+        return cachedRecipe != null ? cachedRecipe.getDuration() : 0;
+    }
+
+    @Override
+    public long getRemainingTime()
+    {
+        return getRemainingTicks();
     }
 
     private void dumpItems()

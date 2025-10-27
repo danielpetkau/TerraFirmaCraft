@@ -82,8 +82,9 @@ public class CalendarClockBlockEntityRenderer implements BlockEntityRenderer<Cal
         }
 
         model.setupAnim(clock, partialTick);
-
-        if (clock.getBlockState().getValue(TFCBlockStateProperties.CLOCK_MODE).equals(CalendarClockBlock.Mode.MONTH))
+        //Leaving the rendering side to Aleki
+        CalendarClockBlock.Mode mode = clock.getBlockState().getValue(TFCBlockStateProperties.CLOCK_MODE);
+        if (mode.equals(CalendarClockBlock.Mode.MONTH))
         {
             model.renderToBuffer(stack, buffer.getBuffer(RenderType.entityCutoutNoCull(TEXTURE_MONTH)), packedLight, packedOverlay, -1);
         }

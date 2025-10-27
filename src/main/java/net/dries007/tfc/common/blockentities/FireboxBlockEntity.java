@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
 import javax.annotation.Nullable;
+
+import net.dries007.tfc.util.calendar.IRecipeTimer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
@@ -41,7 +43,7 @@ import net.dries007.tfc.util.calendar.ICalendar;
 import net.dries007.tfc.util.calendar.ICalendarTickable;
 import net.dries007.tfc.util.data.Fuel;
 
-public class FireboxBlockEntity extends TickableInventoryBlockEntity<ItemStackHandler> implements ICalendarTickable, IHeatable
+public class FireboxBlockEntity extends TickableInventoryBlockEntity<ItemStackHandler> implements ICalendarTickable, IHeatable, IRecipeTimer
 {
     public static void serverTick(Level level, BlockPos pos, BlockState state, FireboxBlockEntity box)
     {
@@ -402,6 +404,18 @@ public class FireboxBlockEntity extends TickableInventoryBlockEntity<ItemStackHa
         lastPlayerTick = tick;
     }
 
+    @Override
+    public int getRecipeDuration()
+    {
+        return isHeating() ? getTimeToHeat() : 0;
+    }
+
+    @Override
+    public long getRemainingTime()
+    {
+        return isHeating() ? getTimeLeft() : 0;
+    }
+
     @Nullable
     @Override
     public AbstractContainerMenu createMenu(int windowID, Inventory playerInv, Player player)
@@ -429,5 +443,4 @@ public class FireboxBlockEntity extends TickableInventoryBlockEntity<ItemStackHa
         }
         needsSlotUpdate = false;
     }
-
 }

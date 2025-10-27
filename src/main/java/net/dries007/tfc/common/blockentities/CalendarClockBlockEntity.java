@@ -7,6 +7,7 @@
 package net.dries007.tfc.common.blockentities;
 
 import net.dries007.tfc.common.blocks.devices.CalendarClockBlock;
+import net.dries007.tfc.util.calendar.IRecipeTimer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
@@ -50,68 +51,55 @@ public class CalendarClockBlockEntity extends TickableBlockEntity
             clock.markForSync();
             clock.needsUpdate = false;
         }
-        else if (Calendars.SERVER.getCalendarTicks() % 20 == 0) {
-            if (state.getValue(CalendarClockBlock.MODE).equals(CalendarClockBlock.Mode.TIMER)) {
-                int signal = clock.getRedstoneSignal();
-                int newSignal;
+        //Made it update faster just for timed devices otherwise it still only updates redstone values every 3 seconds
+        else if (Calendars.SERVER.getCalendarTicks() % 20 == 0)
+        {
+            if (state.getValue(CalendarClockBlock.MODE).equals(CalendarClockBlock.Mode.TIMER))
+            {
+                final int signal = clock.getRedstoneSignal();
                 int recipeDuration = 0;
                 long remainingTime = 0;
                 // checks for block entities behind it
                 BlockEntity attachedTo = level.getBlockEntity(pos.relative(state.getValue(CalendarClockBlock.FACING).getOpposite()));
                 // if there is none it checks for the one behind that
-                if (attachedTo == null) {
+                if (attachedTo == null)
+                {
                     attachedTo = level.getBlockEntity(pos.relative(state.getValue(CalendarClockBlock.FACING).getOpposite()).relative(state.getValue(CalendarClockBlock.FACING).getOpposite()));
                 }
-                if (attachedTo != null) {
-                    switch (attachedTo) {
-                        case BloomeryBlockEntity bloomery: {
-                            if (bloomery.getCachedRecipe() != null) {
-                                recipeDuration = ((BloomeryBlockEntity) attachedTo).getCachedRecipe().getDuration();
-                                remainingTime = ((BloomeryBlockEntity) attachedTo).getRemainingTicks();
-                            }
-                            break;
-                        }
-                        case BarrelBlockEntity barrel: {
-                            if (barrel.getRecipe() != null) {
-                                recipeDuration = ((BarrelBlockEntity) attachedTo).getRecipe().getDuration();
-                                remainingTime = ((BarrelBlockEntity) attachedTo).getRemainingTicks();
-                            }
-                            break;
-                        }
-                        case FireboxBlockEntity firebox: {
-                            if (firebox.isHeating()) {
-                                recipeDuration = ((FireboxBlockEntity) attachedTo).getTimeToHeat();
-                                remainingTime = ((FireboxBlockEntity) attachedTo).getTimeLeft();
-                            }
-                            break;
-                        }
-                        default: {
-                            level.setBlockAndUpdate(pos, state.setValue(CalendarClockBlock.MODE, CalendarClockBlock.Mode.HOUR));
-                        }
-                    }
+                if (attachedTo instanceof IRecipeTimer)
+                {
+                    recipeDuration = ((IRecipeTimer) attachedTo).getRecipeDuration();
+                    remainingTime = ((IRecipeTimer) attachedTo).getRemainingTime();
                 }
                 // if there is still no block entity it boots out of timer mode
-                else {
+                else
+                {
                     level.setBlockAndUpdate(pos, state.setValue(CalendarClockBlock.MODE, CalendarClockBlock.Mode.HOUR));
                 }
-                newSignal = recipeDuration != 0 && remainingTime != 0 ? (int) Math.ceilDiv(remainingTime * 15, recipeDuration) : 0;
-                clock.timer = newSignal;
-                if (signal != clock.getRedstoneSignal()) {
+                clock.timer = recipeDuration != 0 && remainingTime != 0 ? (int) Math.ceilDiv(remainingTime * 15, recipeDuration) : 0;
+                if (signal != clock.getRedstoneSignal())
+                {
                     level.updateNeighborsAt(pos, state.getBlock());
-                    if (attachedTo != null) {
+                    if (attachedTo != null)
+                    {
                         level.updateNeighborsAt(attachedTo.getBlockPos(), state.getBlock());
                     }
                 }
-            } else if (Calendars.SERVER.getCalendarTicks() % 60 == 0) {
+            }
+            else if (Calendars.SERVER.getCalendarTicks() % 60 == 0)
+            {
                 int signal = clock.getRedstoneSignal();
-                if (Calendars.SERVER.getAbsoluteCalendarMonthOfYear().ordinal() != clock.month) {
+                if (Calendars.SERVER.getAbsoluteCalendarMonthOfYear().ordinal() != clock.month)
+                {
                     clock.month = Calendars.SERVER.getAbsoluteCalendarMonthOfYear().ordinal();
                 }
-                if (getHourOfDay(Calendars.SERVER.getCalendarTicks()) != clock.hour) {
+                if (getHourOfDay(Calendars.SERVER.getCalendarTicks()) != clock.hour)
+                {
                     clock.hour = getHourOfDay(Calendars.SERVER.getCalendarTicks());
                 }
                 // only needs to update blocks when the signal strength has changed
-                if (signal != clock.getRedstoneSignal()) {
+                if (signal != clock.getRedstoneSignal())
+                {
                     level.updateNeighborsAt(pos, state.getBlock());
                     level.updateNeighborsAt(pos.relative(state.getValue(BlockStateProperties.FACING).getOpposite()), state.getBlock());
                 }
@@ -146,15 +134,17 @@ public class CalendarClockBlockEntity extends TickableBlockEntity
 
     public int getRedstoneSignal()
     {
-        if (this.getBlockState().getValue(TFCBlockStateProperties.CLOCK_MODE).equals(CalendarClockBlock.Mode.HOUR)) {
-            return hour > 11
-                ? hour - 12
-                : hour;
+        CalendarClockBlock.Mode mode = this.getBlockState().getValue(TFCBlockStateProperties.CLOCK_MODE);
+        if (mode.equals(CalendarClockBlock.Mode.HOUR))
+        {
+            return hour > 11 ? hour - 12 : hour;
         }
-        else if (this.getBlockState().getValue(TFCBlockStateProperties.CLOCK_MODE).equals(CalendarClockBlock.Mode.MONTH)){
+        else if (mode.equals(CalendarClockBlock.Mode.MONTH))
+        {
             return month;
         }
-        else {
+        else
+        {
             return timer;
         }
     }
