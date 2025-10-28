@@ -12,7 +12,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import net.dries007.tfc.common.TFCTags;
-import net.dries007.tfc.common.blockentities.MoldBlockEntity;
+import net.dries007.tfc.common.blockentities.MoldTableBlockEntity;
 import net.dries007.tfc.common.component.TFCComponents;
 import net.dries007.tfc.common.component.fluid.FluidComponent;
 import net.dries007.tfc.common.component.mold.IMold;
@@ -45,21 +45,21 @@ import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.neoforged.neoforge.fluids.FluidStack;
 
-public class MoldBlockEntityRenderer implements BlockEntityRenderer<MoldBlockEntity>
+public class MoldBlockEntityRenderer implements BlockEntityRenderer<MoldTableBlockEntity>
 {
 
     @Override
-    public void render(MoldBlockEntity mold, float partialTicks, PoseStack poseStack, MultiBufferSource buffer,
-            int combinedLight, int combinedOverlay)
+    public void render(MoldTableBlockEntity mold, float partialTicks, PoseStack poseStack, MultiBufferSource buffer,
+                       int combinedLight, int combinedOverlay)
     {
         VertexConsumer builder = buffer.getBuffer(RenderType.cutout());
 
         // Render flow into the mold
         if (mold.hasSource())
         {
-            ResourceLocation texture = IClientFluidTypeExtensions.of(mold.getSourceFluid().getFluidType())
+            ResourceLocation texture = IClientFluidTypeExtensions.of(mold.getFluidToRender().getFluidType())
                     .getStillTexture();
-            int color = RenderHelpers.getFluidColor(mold.getSourceFluid());
+            int color = RenderHelpers.getFluidColor(mold.getFluidToRender());
             TextureAtlasSprite sprite = Minecraft.getInstance().getTextureAtlas(RenderHelpers.BLOCKS_ATLAS)
                     .apply(texture);
 
@@ -144,7 +144,7 @@ public class MoldBlockEntityRenderer implements BlockEntityRenderer<MoldBlockEnt
     }
 
     @Override
-    public AABB getRenderBoundingBox(MoldBlockEntity mold)
+    public AABB getRenderBoundingBox(MoldTableBlockEntity mold)
     {
         if (mold.hasSource())
         {

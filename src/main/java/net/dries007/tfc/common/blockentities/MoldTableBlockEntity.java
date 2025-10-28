@@ -7,25 +7,7 @@
 package net.dries007.tfc.common.blockentities;
 
 import java.util.Optional;
-
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
-import org.apache.commons.lang3.tuple.Pair;
-
-import net.dries007.tfc.common.TFCTags;
-import net.dries007.tfc.common.capabilities.ItemCapabilities;
-import net.dries007.tfc.common.capabilities.PartialFluidHandler;
-import net.dries007.tfc.common.capabilities.PartialItemHandler;
-import net.dries007.tfc.common.capabilities.SidedHandler;
-import net.dries007.tfc.common.component.heat.IHeat;
-import net.dries007.tfc.common.component.heat.IHeatConsumer;
-import net.dries007.tfc.common.component.mold.IMold;
-import net.dries007.tfc.common.recipes.CastingRecipe;
-import net.dries007.tfc.common.recipes.InstantBarrelRecipe;
-import net.dries007.tfc.common.recipes.TFCRecipeTypes;
-import net.dries007.tfc.util.FluidAlloy;
-import net.dries007.tfc.util.Helpers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
@@ -40,22 +22,42 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.neoforged.neoforge.common.crafting.SizedIngredient;
+import net.neoforged.neoforge.common.util.INBTSerializable;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.fluids.crafting.SizedFluidIngredient;
+import net.neoforged.neoforge.items.IItemHandlerModifiable;
 import net.neoforged.neoforge.items.ItemHandlerHelper;
-import net.neoforged.neoforge.items.ItemStackHandler;
+import org.apache.commons.lang3.tuple.Pair;
 
-public class MoldBlockEntity extends TickableInventoryBlockEntity<MoldBlockEntity.MoldBlockInventory>
+import net.dries007.tfc.common.TFCTags;
+import net.dries007.tfc.common.capabilities.DelegateItemHandler;
+import net.dries007.tfc.common.capabilities.InventoryItemHandler;
+import net.dries007.tfc.common.capabilities.ItemCapabilities;
+import net.dries007.tfc.common.capabilities.PartialFluidHandler;
+import net.dries007.tfc.common.capabilities.PartialItemHandler;
+import net.dries007.tfc.common.capabilities.SidedHandler;
+import net.dries007.tfc.common.component.heat.IHeat;
+import net.dries007.tfc.common.component.heat.IHeatConsumer;
+import net.dries007.tfc.common.component.heat.IHeatView;
+import net.dries007.tfc.common.component.mold.IMold;
+import net.dries007.tfc.common.recipes.CastingRecipe;
+import net.dries007.tfc.common.recipes.InstantBarrelRecipe;
+import net.dries007.tfc.common.recipes.TFCRecipeTypes;
+import net.dries007.tfc.util.FluidAlloy;
+import net.dries007.tfc.util.Helpers;
+
+public class MoldTableBlockEntity extends TickableInventoryBlockEntity<MoldTableBlockEntity.MoldBlockInventory>
 {
-    public static void serverTick(Level level, BlockPos pos, BlockState state, MoldBlockEntity mold)
+    public static void serverTick(Level level, BlockPos pos, BlockState state, MoldTableBlockEntity mold)
     {
         mold.checkForLastTickSync();
 
         // If output is already present, do not move or try to draw liquids
         if (!mold.getOutputStack().isEmpty())
         {
-            if (mold.hasSource()) {
+            if (mold.hasSource())
+            {
                 mold.finishFlow();
             }
             return;
@@ -65,40 +67,40 @@ public class MoldBlockEntity extends TickableInventoryBlockEntity<MoldBlockEntit
         if (mold.hasSource() && level.getGameTime() % 2 == 0) // Draw at half the speed
         {
             level.getBlockEntity(mold.sourcePosition.get(), TFCBlockEntities.CRUCIBLE.get()).ifPresent(
-                    crucible -> {
-                        // getFluidHandlerIfAppropriate ensures that the crucible's metal is the same as
-                        // the one we
-                        // we're expecting (mold.fluid).
-                        // This ensures that we are not drawing two different fluids in the same "flow".
-                        Optional<IFluidHandler> fluidHandler = getFluidHandlerIfAppropriate(crucible, mold.fluid);
+                crucible -> {
+                    // getFluidHandlerIfAppropriate ensures that the crucible's metal is the same as
+                    // the one we
+                    // we're expecting (mold.fluid).
+                    // This ensures that we are not drawing two different fluids in the same "flow".
+                    Optional<IFluidHandler> fluidHandler = getFluidHandlerIfAppropriate(crucible, mold.fluid);
 
-                        // If the chain of channels was broken, finish the flow
-                        if (fluidHandler.isEmpty() || mold.isLinkBroken())
-                        {
-                            mold.finishFlow();
-                            return;
-                        }
+                    // If the chain of channels was broken, finish the flow
+                    if (fluidHandler.isEmpty() || mold.isLinkBroken())
+                    {
+                        mold.finishFlow();
+                        return;
+                    }
 
-                        final FluidStack outputDrop = fluidHandler.get().drain(1, IFluidHandler.FluidAction.SIMULATE);
-                        final FluidStack outputRemainder = Helpers.mergeOutputFluidIntoSlot(
-                                mold.getInventory(), outputDrop, crucible.getTemperature(), MoldBlockEntity.MOLD_SLOT);
+                    final FluidStack outputDrop = fluidHandler.get().drain(1, IFluidHandler.FluidAction.SIMULATE);
+                    final FluidStack outputRemainder = Helpers.mergeOutputFluidIntoSlot(
+                        mold.getInventory(), outputDrop, crucible.getTemperature(), MoldTableBlockEntity.MOLD_SLOT);
 
-                        Optional.ofNullable(mold.getMoldStack().getCapability(ItemCapabilities.HEAT))
-                                .ifPresent(heatCap -> heatCap.setTemperature(crucible.getTemperature()));
+                    Optional.ofNullable(mold.getMoldStack().getCapability(ItemCapabilities.HEAT))
+                        .ifPresent(heatCap -> heatCap.setTemperature(crucible.getTemperature()));
 
-                        if (outputRemainder.isEmpty())
-                        {
-                            // Remainder was emptied, so do the extraction for real
-                            fluidHandler.get().drain(1, IFluidHandler.FluidAction.EXECUTE);
-                            crucible.markForSync();
-                            mold.markForSync();
-                        }
-                        else
-                        {
-                            // Could not fill any longer, finish the flow
-                            mold.finishFlow();
-                        }
-                    });
+                    if (outputRemainder.isEmpty())
+                    {
+                        // Remainder was emptied, so do the extraction for real
+                        fluidHandler.get().drain(1, IFluidHandler.FluidAction.EXECUTE);
+                        crucible.markForSync();
+                        mold.markForSync();
+                    }
+                    else
+                    {
+                        // Could not fill any longer, finish the flow
+                        mold.finishFlow();
+                    }
+                });
         }
 
         // Move results from mold item to output stack
@@ -109,11 +111,11 @@ public class MoldBlockEntity extends TickableInventoryBlockEntity<MoldBlockEntit
             final CastingRecipe recipe = CastingRecipe.get(moldItem);
             if (recipe != null)
             {
-                Optional.ofNullable(recipe.assemble(moldItem)).ifPresent(
-                        stack -> {
-                            mold.inventory.setStackInSlot(OUTPUT_SLOT, stack);
-                            moldItem.drainIgnoringTemperature(Integer.MAX_VALUE, IFluidHandler.FluidAction.EXECUTE);
-                        });
+                Optional.of(recipe.assemble(moldItem)).ifPresent(
+                    stack -> {
+                        mold.inventory.setStackInSlot(OUTPUT_SLOT, stack);
+                        moldItem.drainIgnoringTemperature(Integer.MAX_VALUE, IFluidHandler.FluidAction.EXECUTE);
+                    });
             }
         }
     }
@@ -124,20 +126,18 @@ public class MoldBlockEntity extends TickableInventoryBlockEntity<MoldBlockEntit
      * - The fluid in the crucible is the same as shouldBeFluid, if given
      * - The metal is molten
      */
-    public static Optional<IFluidHandler> getFluidHandlerIfAppropriate(CrucibleBlockEntity crucible,
-            Optional<Fluid> shouldBeFluid)
-        {
-
-        IFluidHandler crucibleFluidHandler = crucible.getSidedFluidInventory(Direction.NORTH);
+    public static Optional<IFluidHandler> getFluidHandlerIfAppropriate(CrucibleBlockEntity crucible, Optional<Fluid> shouldBeFluid)
+    {
+        final IFluidHandler crucibleFluidHandler = crucible.getSidedFluidInventory(Direction.NORTH);
         FluidAlloy alloy = crucible.getAlloy();
 
         // The crucible has no alloy
-        if (alloy == null)
+        if (alloy.isEmpty())
             return Optional.empty();
 
         // The fluid type of the alloy is not the same as the target fluid type
         if (shouldBeFluid.isPresent()
-                && (alloy.getResult().getFluidType() != shouldBeFluid.get().getFluidType()))
+            && (alloy.getResult().getFluidType() != shouldBeFluid.get().getFluidType()))
         {
             return Optional.empty();
         }
@@ -148,12 +148,12 @@ public class MoldBlockEntity extends TickableInventoryBlockEntity<MoldBlockEntit
             return Optional.empty();
         }
 
-        return Optional.of(crucibleFluidHandler);
+        return Optional.ofNullable(crucibleFluidHandler);
     }
 
     /***
      * The position of the crucible where the flow is coming from
-     * 
+     *
      * Empty if the mold table does not have a flow currently
      */
     private Optional<BlockPos> sourcePosition = Optional.empty();
@@ -161,7 +161,7 @@ public class MoldBlockEntity extends TickableInventoryBlockEntity<MoldBlockEntit
     /***
      * The direction where the flow is coming from,
      * as well as the distance (for downwards flow)
-     * 
+     *
      * Empty if the channel does not have a flow currently.
      */
     private Optional<Pair<Direction, Byte>> flowSource = Optional.empty();
@@ -169,7 +169,7 @@ public class MoldBlockEntity extends TickableInventoryBlockEntity<MoldBlockEntit
     /***
      * The fluid to expect from the crucible. Flow should finish
      * if the fluid from the crucible is different than this value.
-     * 
+     *
      * Empty if the mold table does not have a flow currently
      */
     private Optional<Fluid> fluid = Optional.empty();
@@ -179,19 +179,19 @@ public class MoldBlockEntity extends TickableInventoryBlockEntity<MoldBlockEntit
     public static final int MOLD_SLOT = 0;
     public static final int OUTPUT_SLOT = 1;
 
-    public MoldBlockEntity(BlockPos pos, BlockState state) 
+    public MoldTableBlockEntity(BlockPos pos, BlockState state)
     {
         super(TFCBlockEntities.MOLD_TABLE.get(), pos, state, MoldBlockInventory::new);
 
         sidedFluidInventory = new SidedHandler<>(inventory);
 
         sidedFluidInventory.on(
-                PartialFluidHandler::insertOnly, // Allow input fluid from all sides and top
-                Direction.WEST, Direction.EAST, Direction.NORTH, Direction.SOUTH, Direction.UP);
+            PartialFluidHandler::insertOnly, // Allow input fluid from all sides and top
+            Direction.WEST, Direction.EAST, Direction.NORTH, Direction.SOUTH, Direction.UP);
 
         PartialItemHandler handler = new PartialItemHandler(inventory);
         sidedInventory.on(handler.insert(MOLD_SLOT), Direction.UP)
-                .on(handler.extract(OUTPUT_SLOT), Direction.DOWN);
+            .on(handler.extract(OUTPUT_SLOT), Direction.DOWN);
     }
 
     @Nullable
@@ -207,21 +207,22 @@ public class MoldBlockEntity extends TickableInventoryBlockEntity<MoldBlockEntit
 
     public void finishFlow()
     {
+        assert level != null;
         flowSource.ifPresent(
-                flowSource -> {
-                    Direction expectedDirection = flowSource.getLeft();
-                    int expectedDistance = flowSource.getRight();
-                    BlockPos expectedSourcePos = worldPosition.relative(expectedDirection, expectedDistance);
+            flowSource -> {
+                Direction expectedDirection = flowSource.getLeft();
+                int expectedDistance = flowSource.getRight();
+                BlockPos expectedSourcePos = worldPosition.relative(expectedDirection, expectedDistance);
 
-                    Optional<ChannelBlockEntity> channelBE = level.getBlockEntity(expectedSourcePos,
-                            TFCBlockEntities.CHANNEL.get());
-                    channelBE.ifPresent(channel -> channel.notifyBrokenLink(1));
+                Optional<ChannelBlockEntity> channelBE = level.getBlockEntity(expectedSourcePos,
+                    TFCBlockEntities.CHANNEL.get());
+                channelBE.ifPresent(channel -> channel.notifyBrokenLink(1));
 
-                    markForSync();
-                    sourcePosition = Optional.empty();
-                    fluid = Optional.empty();
-                    this.flowSource = Optional.empty();
-                });
+                markForSync();
+                sourcePosition = Optional.empty();
+                fluid = Optional.empty();
+                this.flowSource = Optional.empty();
+            });
     }
 
     public void setSource(BlockPos sourcePos, Fluid fluid, Pair<Direction, Byte> flowSource)
@@ -233,9 +234,10 @@ public class MoldBlockEntity extends TickableInventoryBlockEntity<MoldBlockEntit
 
     public boolean isLinkBroken()
     {
+        assert level != null;
         Optional<ChannelBlockEntity> blockEntity = level.getBlockEntity(
-                worldPosition.relative(flowSource.get().getLeft(), flowSource.get().getRight()),
-                TFCBlockEntities.CHANNEL.get());
+            worldPosition.relative(flowSource.get().getLeft(), flowSource.get().getRight()),
+            TFCBlockEntities.CHANNEL.get());
 
         if (blockEntity.isEmpty())
             return true;
@@ -252,14 +254,14 @@ public class MoldBlockEntity extends TickableInventoryBlockEntity<MoldBlockEntit
         return blockEntity.get().isLinkBroken();
     }
 
-    public Fluid getSourceFluid()
+    public Fluid getFluidToRender()
     {
-        return fluid.get();
+        return fluid.orElseThrow();
     }
 
     public Pair<Direction, Byte> getFlowSource()
     {
-        return flowSource.get();
+        return flowSource.orElseThrow();
     }
 
     public ItemStack getMoldStack()
@@ -284,6 +286,7 @@ public class MoldBlockEntity extends TickableInventoryBlockEntity<MoldBlockEntit
 
     public ItemInteractionResult onRightClick(Player player)
     {
+        assert level != null;
         final boolean interactWithMoldSlot = player.isShiftKeyDown() || inventory.getStackInSlot(MOLD_SLOT).isEmpty();
 
         if (interactWithMoldSlot)
@@ -309,7 +312,7 @@ public class MoldBlockEntity extends TickableInventoryBlockEntity<MoldBlockEntit
                     if (!level.isClientSide)
                     {
                         ItemHandlerHelper.giveItemToPlayer(player, inventory.extractItem(MOLD_SLOT, 1, false),
-                                player.getInventory().selected);
+                            player.getInventory().selected);
                     }
                 }
 
@@ -337,7 +340,7 @@ public class MoldBlockEntity extends TickableInventoryBlockEntity<MoldBlockEntit
                 if (!level.isClientSide)
                 {
                     ItemHandlerHelper.giveItemToPlayer(player, inventory.extractItem(OUTPUT_SLOT, 1, false),
-                            player.getInventory().selected);
+                        player.getInventory().selected);
                 }
                 markForSync();
                 return ItemInteractionResult.sidedSuccess(level.isClientSide);
@@ -371,9 +374,9 @@ public class MoldBlockEntity extends TickableInventoryBlockEntity<MoldBlockEntit
         {
             sourcePosition = Optional.of(BlockPos.of(nbt.getLong("sourcePosition")));
             flowSource = Optional.of(
-                    Pair.of(
-                            Helpers.DIRECTIONS[nbt.getByte("flowSource")],
-                            nbt.contains("flowSourceDistance") ? nbt.getByte("flowSourceDistance") : 1));
+                Pair.of(
+                    Helpers.DIRECTIONS[nbt.getByte("flowSource")],
+                    nbt.contains("flowSourceDistance") ? nbt.getByte("flowSourceDistance") : 1));
             fluid = Optional.of(BuiltInRegistries.FLUID.get(ResourceLocation.parse(nbt.getString("fluid"))));
         }
         else
@@ -390,10 +393,10 @@ public class MoldBlockEntity extends TickableInventoryBlockEntity<MoldBlockEntit
     {
         if (hasSource())
         {
-            nbt.putLong("sourcePosition", sourcePosition.get().asLong());
-            nbt.putByte("flowSource", (byte) flowSource.get().getLeft().ordinal());
+            nbt.putLong("sourcePosition", sourcePosition.orElseThrow().asLong());
+            nbt.putByte("flowSource", (byte) flowSource.orElseThrow().getLeft().ordinal());
             nbt.putByte("flowSourceDistance", flowSource.get().getRight());
-            nbt.putString("fluid", BuiltInRegistries.FLUID.getKey(fluid.get()).toString());
+            nbt.putString("fluid", BuiltInRegistries.FLUID.getKey(fluid.orElseThrow()).toString());
         }
         super.saveAdditional(nbt, provider);
     }
@@ -402,31 +405,54 @@ public class MoldBlockEntity extends TickableInventoryBlockEntity<MoldBlockEntit
     {
         final ItemStack drainStack = this.inventory.getStackInSlot(MOLD_SLOT);
         Optional.ofNullable(IMold.get(drainStack)).ifPresent(
-                moldItem -> {
-                    moldItem.setTemperature(Math.max(0, moldItem.getTemperature() - amount / 4));
-                });
+            moldItem -> {
+                moldItem.setTemperature(Math.max(0, moldItem.getTemperature() - amount / 4f));
+            });
     }
 
-    // This inventory delegates the fluid and heat handler to the
-    // item in the mold stack, as long as this item has the
-    // corresponding capabilities (i.e. a mold item is present).
-    // If it does not have them, it implements some default behaviour
-    // for every method.
-    // Moreover, it adds some custom behaviour for fill
-    public static class MoldBlockInventory extends ItemStackHandler implements IFluidHandler, IHeatConsumer
+    @Override
+    public void setAndUpdateSlots(int slot)
     {
-        private final MoldBlockEntity moldTable;
+        super.setAndUpdateSlots(slot);
+        markForSync();
+    }
+
+    /**
+     * This inventory delegates the fluid and heat handler to the
+     * item in the mold stack, as long as this item has the
+     * corresponding capabilities (i.e. a mold item is present).
+     * If it does not have them, it implements some default behaviour for every method.
+     * Moreover, it adds some custom behaviour for fill
+     */
+    public static class MoldBlockInventory implements IFluidHandler, IHeatConsumer, DelegateItemHandler, INBTSerializable<CompoundTag>
+    {
+        private final MoldTableBlockEntity moldTable;
+        private final InventoryItemHandler inventory;
 
         MoldBlockInventory(InventoryBlockEntity<?> entity)
         {
-            super(2);
-            moldTable = (MoldBlockEntity) entity;
+            moldTable = (MoldTableBlockEntity) entity;
+            inventory = new InventoryItemHandler(entity, 2);
         }
 
         @Override
-        protected void onContentsChanged(int slot)
+        public IItemHandlerModifiable getItemHandler()
         {
-            moldTable.markForSync();
+            return inventory;
+        }
+
+        @Override
+        public CompoundTag serializeNBT(HolderLookup.Provider provider)
+        {
+            final CompoundTag nbt = new CompoundTag();
+            nbt.put("inventory", inventory.serializeNBT(provider));
+            return nbt;
+        }
+
+        @Override
+        public void deserializeNBT(HolderLookup.Provider provider, CompoundTag nbt)
+        {
+            inventory.deserializeNBT(provider, nbt.getCompound("inventory"));
         }
 
         private Optional<IFluidHandler> getMoldFluidHandler()
@@ -442,7 +468,7 @@ public class MoldBlockEntity extends TickableInventoryBlockEntity<MoldBlockEntit
         @Override
         public float getTemperature()
         {
-            return getMoldHeatHandler().map(h -> h.getTemperature()).orElse(0f);
+            return getMoldHeatHandler().map(IHeatView::getTemperature).orElse(0f);
         }
 
         @Override
@@ -454,11 +480,10 @@ public class MoldBlockEntity extends TickableInventoryBlockEntity<MoldBlockEntit
         @Override
         public int getTanks()
         {
-            return getMoldFluidHandler().map(h -> h.getTanks()).orElse(0);
+            return getMoldFluidHandler().map(IFluidHandler::getTanks).orElse(0);
         }
 
         @Override
-        @Nonnull
         public FluidStack getFluidInTank(int tank)
         {
             return getMoldFluidHandler().map(h -> h.getFluidInTank(tank)).orElse(FluidStack.EMPTY.copy());
@@ -471,7 +496,7 @@ public class MoldBlockEntity extends TickableInventoryBlockEntity<MoldBlockEntit
         }
 
         @Override
-        public boolean isFluidValid(int tank, @Nonnull FluidStack stack)
+        public boolean isFluidValid(int tank, FluidStack stack)
         {
             return getMoldFluidHandler().map(h -> h.isFluidValid(tank, stack)).orElse(false);
         }
@@ -506,49 +531,50 @@ public class MoldBlockEntity extends TickableInventoryBlockEntity<MoldBlockEntit
                 // and the filled liquid, then this returns a Pair with the
                 // result ItemStack and the amount of fluid that would be consumed
                 Optional<Pair<ItemStack, Integer>> recipeResult = recipeManager
-                        .getAllRecipesFor(
-                                TFCRecipeTypes.BARREL_INSTANT.get())
-                        .stream()
-                        .filter(
-                                recipeHolder -> recipeHolder.value().getInputItem().test(stack)
-                                        && recipeHolder.value().getInputFluid().test(fluid))
-                        .findFirst().map(
-                                recipeHolder -> {
-                                    InstantBarrelRecipe recipe = recipeHolder.value();
-                                    SizedIngredient inputItem = recipe.getInputItem();
-                                    SizedFluidIngredient inputFluid = recipe.getInputFluid();
+                    .getAllRecipesFor(
+                        TFCRecipeTypes.BARREL_INSTANT.get())
+                    .stream()
+                    .filter(
+                        recipeHolder -> recipeHolder.value().getInputItem().test(stack)
+                            && recipeHolder.value().getInputFluid().test(fluid))
+                    .findFirst().map(
+                        recipeHolder -> {
+                            InstantBarrelRecipe recipe = recipeHolder.value();
+                            SizedIngredient inputItem = recipe.getInputItem();
+                            SizedFluidIngredient inputFluid = recipe.getInputFluid();
 
-                                    // Evaluates an instant barrel recipe, similar to InstantFluidBarrelRecipe#assembleOutputs
+                            // Evaluates an instant barrel recipe, similar to InstantFluidBarrelRecipe#assembleOutputs
 
-                                    // Calculate the multiplier in use for this recipe
-                                    int multiplier;
-                                    if (inputItem.count() == 0)
-                                    {
-                                        multiplier = fluid.getAmount() / inputFluid.amount();
-                                    }
-                                    else if (inputFluid.amount() == 0)
-                                    {
-                                        multiplier = stack.getCount() / inputItem.count();
-                                    }
-                                    else
-                                    {
-                                        multiplier = Math.min(fluid.getAmount() / inputFluid.amount(),
-                                                stack.getCount() / inputItem.count());
-                                    }
+                            // Calculate the multiplier in use for this recipe
+                            int multiplier;
+                            if (inputItem.count() == 0)
+                            {
+                                multiplier = fluid.getAmount() / inputFluid.amount();
+                            }
+                            else if (inputFluid.amount() == 0)
+                            {
+                                multiplier = stack.getCount() / inputItem.count();
+                            }
+                            else
+                            {
+                                multiplier = Math.min(fluid.getAmount() / inputFluid.amount(),
+                                    stack.getCount() / inputItem.count());
+                            }
 
-                                    // Compute output
-                                    final ItemStack outputItem = recipe.getOutputItem().getSingleStack(stack);
-                                    if (!outputItem.isEmpty())
-                                    {
-                                        outputItem.setCount(Math.min(outputItem.getMaxStackSize(),
-                                                multiplier * outputItem.getCount()));
-                                    }
+                            // Compute output
+                            final ItemStack outputItem = recipe.getOutputItem().getSingleStack(stack);
+                            if (!outputItem.isEmpty())
+                            {
+                                outputItem.setCount(Math.min(outputItem.getMaxStackSize(),
+                                    multiplier * outputItem.getCount()));
+                            }
 
-                                    // Amount of fluid that would be consumed
-                                    return Pair.of(outputItem, multiplier * inputFluid.amount());
-                                });
+                            // Amount of fluid that would be consumed
+                            return Pair.of(outputItem, multiplier * inputFluid.amount());
+                        });
 
-                if (recipeResult.isPresent()) {
+                if (recipeResult.isPresent())
+                {
                     if (action == FluidAction.EXECUTE)
                     {
                         if (usedMoldStack)
@@ -568,14 +594,12 @@ public class MoldBlockEntity extends TickableInventoryBlockEntity<MoldBlockEntit
         }
 
         @Override
-        @Nonnull
         public FluidStack drain(FluidStack resource, FluidAction action)
         {
             return getMoldFluidHandler().map(h -> h.drain(resource, action)).orElse(FluidStack.EMPTY.copy());
         }
 
         @Override
-        @Nonnull
         public FluidStack drain(int maxDrain, FluidAction action)
         {
             return getMoldFluidHandler().map(h -> h.drain(maxDrain, action)).orElse(FluidStack.EMPTY.copy());

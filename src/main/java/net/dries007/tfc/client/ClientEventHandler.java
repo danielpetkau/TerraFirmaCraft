@@ -154,6 +154,8 @@ import net.dries007.tfc.client.overworld.LevelRendererExtension;
 import net.dries007.tfc.client.overworld.StarsReloadListener;
 import net.dries007.tfc.client.particle.AnimatedParticle;
 import net.dries007.tfc.client.particle.BubbleParticle;
+import net.dries007.tfc.client.particle.BubbleColumnDownParticle;
+import net.dries007.tfc.client.particle.BubbleColumnUpParticle;
 import net.dries007.tfc.client.particle.FallingLeafParticle;
 import net.dries007.tfc.client.particle.FluidDripParticle;
 import net.dries007.tfc.client.particle.GlintParticleProvider;
@@ -956,6 +958,8 @@ public final class ClientEventHandler
     public static void registerParticleFactories(RegisterParticleProvidersEvent event)
     {
         event.registerSpriteSet(TFCParticles.BUBBLE.get(), BubbleParticle.Provider::new);
+        event.registerSpriteSet(TFCParticles.BUBBLE_COLUMN_UP.get(), BubbleColumnUpParticle.Provider::new);
+        event.registerSpriteSet(TFCParticles.BUBBLE_COLUMN_DOWN.get(), BubbleColumnDownParticle.Provider::new);
         event.registerSpriteSet(TFCParticles.WATER_FLOW.get(), WaterFlowParticle.Provider::new);
         event.registerSpriteSet(TFCParticles.STEAM.get(), SteamParticle.Provider::new);
         event.registerSpriteSet(TFCParticles.NITROGEN.get(), set -> new GlintParticleProvider(set, ChatFormatting.AQUA));

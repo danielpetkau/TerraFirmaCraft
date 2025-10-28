@@ -3,6 +3,7 @@
   "ingredient": [
     "tfc:dirt/mollisol",
     "tfc:grass/mollisol",
+    "tfc:duff/mollisol",
     "tfc:grass_path/mollisol",
     "tfc:farmland/mollisol",
     "tfc:rooted_dirt/mollisol"

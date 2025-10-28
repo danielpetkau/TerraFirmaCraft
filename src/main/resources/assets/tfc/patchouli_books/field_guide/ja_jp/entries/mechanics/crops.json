@@ -3197,7 +3197,7 @@
     {
       "type": "patchouli:text",
       "anchor": "alfalfa",
-      "text": "$(bold)$(l:the_world/climate#temperature)Temperature$(): -30 - 14 °C$(br)$(bold)$(l:mechanics/hydration)Hydration$(): 40 - 100 %$(br)$(bold)Category$(): Cover$(br)$(br)$(bold)$(b)N: +80 $(bold)$(6)P: +50 $(bold)$(d)K: +60$()$(br)Alfalfa is a single block crop adapted to cold temperatures. Alfalfa seeds can be planted on farmland and will produce $(thing)Alfalfa$() and $(thing)Alfalfa Seeds$() as a product, while enriching the soil. Alfalfa can be used as a source of straw, or compost.",
+      "text": "$(bold)$(l:the_world/climate#temperature)Temperature$(): -30 - 14 °C$(br)$(bold)$(l:mechanics/hydration)Hydration$(): 40 - 100 %$(br)$(bold)Category$(): Cover$(br)$(br)$(bold)$(b)N: +24.0 $(bold)$(6)P: +15.0 $(bold)$(d)K: +18.0$()$(br)Alfalfa is a single block crop adapted to cold temperatures. Alfalfa seeds can be planted on farmland and will produce $(thing)Alfalfa$() and $(thing)Alfalfa Seeds$() as a product, while enriching the soil. Alfalfa can be used as a source of straw, or compost.",
       "title": "Alfalfa"
     },
     {
@@ -3311,7 +3311,7 @@
     {
       "type": "patchouli:text",
       "anchor": "canola",
-      "text": "$(bold)$(l:the_world/climate#temperature)Temperature$(): -35 - 17 °C$(br)$(bold)$(l:mechanics/hydration)Hydration$(): 20 - 75 %$(br)$(bold)Category$(): Cover$(br)$(br)$(bold)$(b)N: +30 $(bold)$(6)P: +60 $(bold)$(d)K: +100$()$(br)Canola is a single block crop adapted to cold temperatures. Canola seeds can be planted on farmland and will produce $(thing)Canola$() and $(thing)Canola Seeds$() as a product, while enriching the soil. Canola can be used as a source of straw, or compost, and the seeds can be used for oil.",
+      "text": "$(bold)$(l:the_world/climate#temperature)Temperature$(): -35 - 17 °C$(br)$(bold)$(l:mechanics/hydration)Hydration$(): 20 - 75 %$(br)$(bold)Category$(): Cover$(br)$(br)$(bold)$(b)N: +9.0 $(bold)$(6)P: +18.0 $(bold)$(d)K: +30.0$()$(br)Canola is a single block crop adapted to cold temperatures. Canola seeds can be planted on farmland and will produce $(thing)Canola$() and $(thing)Canola Seeds$() as a product, while enriching the soil. Canola can be used as a source of straw, or compost, and the seeds can be used for oil.",
       "title": "Canola"
     },
     {
@@ -3425,7 +3425,7 @@
     {
       "type": "patchouli:text",
       "anchor": "radish",
-      "text": "$(bold)$(l:the_world/climate#temperature)Temperature$(): -33 - 21 °C$(br)$(bold)$(l:mechanics/hydration)Hydration$(): 30 - 90 %$(br)$(bold)Category$(): Cover$(br)$(br)$(bold)$(b)N: +50 $(bold)$(6)P: +100 $(bold)$(d)K: +60$()$(br)Radishes are a single block crop adapted to cold temperatures. Radish seeds can be planted on farmland and will produce $(thing)Radishes$() and $(thing)Radish Seeds$() as a product, while enriching the soil. Radishes are not a very nutritious vegetable, but can be fed to many animals.",
+      "text": "$(bold)$(l:the_world/climate#temperature)Temperature$(): -33 - 21 °C$(br)$(bold)$(l:mechanics/hydration)Hydration$(): 30 - 90 %$(br)$(bold)Category$(): Cover$(br)$(br)$(bold)$(b)N: +15.0 $(bold)$(6)P: +30.0 $(bold)$(d)K: +18.0$()$(br)Radishes are a single block crop adapted to cold temperatures. Radish seeds can be planted on farmland and will produce $(thing)Radishes$() and $(thing)Radish Seeds$() as a product, while enriching the soil. Radishes are not a very nutritious vegetable, but can be fed to many animals.",
       "title": "Radish"
     },
     {

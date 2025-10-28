@@ -13,12 +13,9 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
-import javax.naming.directory.DirContext;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.locale.Language;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.util.Mth;
@@ -29,7 +26,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.FireBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.phys.Vec2;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import org.jetbrains.annotations.Nullable;
@@ -53,7 +49,7 @@ import net.dries007.tfc.common.blockentities.IHeatable;
 import net.dries007.tfc.common.blockentities.IngotPileBlockEntity;
 import net.dries007.tfc.common.blockentities.LampBlockEntity;
 import net.dries007.tfc.common.blockentities.LoomBlockEntity;
-import net.dries007.tfc.common.blockentities.MoldBlockEntity;
+import net.dries007.tfc.common.blockentities.MoldTableBlockEntity;
 import net.dries007.tfc.common.blockentities.NestBoxBlockEntity;
 import net.dries007.tfc.common.blockentities.PitKilnBlockEntity;
 import net.dries007.tfc.common.blockentities.PlacedItemBlockEntity;
@@ -92,7 +88,7 @@ import net.dries007.tfc.common.blocks.devices.FirepitBlock;
 import net.dries007.tfc.common.blocks.devices.IngotPileBlock;
 import net.dries007.tfc.common.blocks.devices.JackOLanternBlock;
 import net.dries007.tfc.common.blocks.devices.LampBlock;
-import net.dries007.tfc.common.blocks.devices.MoldBlock;
+import net.dries007.tfc.common.blocks.devices.MoldTableBlock;
 import net.dries007.tfc.common.blocks.devices.NestBoxBlock;
 import net.dries007.tfc.common.blocks.devices.PitKilnBlock;
 import net.dries007.tfc.common.blocks.devices.PlacedItemBlock;
@@ -173,7 +169,7 @@ public final class BlockEntityTooltips
         callback.register("water_wheel", ROTATIONAL_SOURCE, WaterWheelBlock.class);
         callback.register("windmill", ROTATIONAL_SOURCE, WindmillBlock.class);
         callback.register("hot_poured_glass", HOT_POURED_GLASS, HotPouredGlassBlock.class);
-        callback.register("mold_table", MOLD_TABLE, MoldBlock.class);
+        callback.register("mold_table", MOLD_TABLE, MoldTableBlock.class);
         callback.register("placed_item", PLACED_ITEM, PlacedItemBlock.class);
         callback.register("shelf", PLACED_ITEM, ShelfBlock.class);
         callback.register("calendar_clock", CALENDAR_CLOCK, CalendarClockBlock.class);
@@ -592,7 +588,7 @@ public final class BlockEntityTooltips
     };
 
     public static final BlockEntityTooltip MOLD_TABLE = (level, state, pos, entity, tooltip) -> {
-        if (entity instanceof MoldBlockEntity mold)
+        if (entity instanceof MoldTableBlockEntity mold)
         {
             heat(tooltip, mold.getInventory().getTemperature());
         }

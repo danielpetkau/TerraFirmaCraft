@@ -31,6 +31,8 @@ public final class TFCParticles
     public static final DeferredRegister<ParticleType<?>> PARTICLE_TYPES = DeferredRegister.create(Registries.PARTICLE_TYPE, MOD_ID);
 
     public static final Id<SimpleParticleType> BUBBLE = register("bubble");
+    public static final Id<SimpleParticleType> BUBBLE_COLUMN_UP = register("bubble_column_up");
+    public static final Id<SimpleParticleType> BUBBLE_COLUMN_DOWN = register("bubble_column_down");
     public static final Id<SimpleParticleType> WATER_FLOW = register("water_flow");
     public static final Id<SimpleParticleType> STEAM = register("steam");
     public static final Id<SimpleParticleType> NITROGEN = register("nitrogen");

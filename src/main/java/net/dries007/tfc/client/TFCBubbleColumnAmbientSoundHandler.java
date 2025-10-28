@@ -13,6 +13,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.BubbleColumnBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.dries007.tfc.common.blocks.TFCBubbleColumnBlock;
 
 public class TFCBubbleColumnAmbientSoundHandler implements AmbientSoundHandler
 {
@@ -29,10 +30,10 @@ public class TFCBubbleColumnAmbientSoundHandler implements AmbientSoundHandler
     public void tick()
     {
         Level level = player.clientLevel;
-        BlockState stateAt = level.getBlockStatesIfLoaded(player.getBoundingBox().inflate(0.0D, -0.4F, 0.0D).deflate(1.0E-6D)).filter((state) -> state.getBlock() instanceof BubbleColumnBlock).findFirst().orElse(null);
+        BlockState stateAt = level.getBlockStatesIfLoaded(player.getBoundingBox().inflate(0.0D, -0.4F, 0.0D).deflate(1.0E-6D)).filter((state) -> state.getBlock() instanceof TFCBubbleColumnBlock).findFirst().orElse(null);
         if (stateAt != null)
         {
-            if (!wasInBubbleColumn && !firstTick && stateAt.is(Blocks.BUBBLE_COLUMN) && !player.isSpectator())
+            if (!wasInBubbleColumn && !firstTick && stateAt.getBlock() instanceof TFCBubbleColumnBlock && !player.isSpectator())
             {
                 if (stateAt.getValue(BubbleColumnBlock.DRAG_DOWN))
                 {

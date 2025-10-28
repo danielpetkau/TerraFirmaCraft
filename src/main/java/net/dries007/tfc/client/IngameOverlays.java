@@ -447,7 +447,7 @@ public enum IngameOverlays
                     {
                         graphics.blit(IngameOverlays.TEXTURE, -8, 0, u, 40, 16, 16);
 
-                        stack.translate(0F, 0F,-0.001F);
+                        stack.translate(0F, 0F,0.001F);
                         graphics.blit(IngameOverlays.TEXTURE, -6, 14 - (int) (12 * familiarity), familiarity == 1.0F ? 114 : 94, 74 - (int) (12 * familiarity), 12, (int) (12 * familiarity));
                     }
                     if (animal instanceof MammalProperties mammal && mammal.getPregnantTime() > 0 && mammal.isFertilized())
