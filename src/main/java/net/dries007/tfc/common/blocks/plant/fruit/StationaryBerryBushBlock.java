@@ -26,9 +26,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 
 import net.dries007.tfc.TerraFirmaCraft;
-import net.dries007.tfc.common.TFCTags;
 import net.dries007.tfc.common.blockentities.SeasonalPlantBlockEntity;
-import net.dries007.tfc.common.blockentities.TickCountingBranchBlockEntity;
 import net.dries007.tfc.common.blocks.ExtendedProperties;
 import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.blocks.soil.FarmlandBlock;
@@ -100,26 +98,67 @@ public class StationaryBerryBushBlock extends SeasonalPlantBlock implements HoeO
                 int cycles = 0;
                 final int daysInMonth = Calendars.SERVER.getCalendarDaysInMonth();
                 final long currentTick = Calendars.SERVER.getTicks();
-                long simulatedTick = counter.getLastUpdateTick();
-                // Check through the skipped time and only add growth if the plant was not dormant
-                while (cycles < maxCycles && simulatedTick < currentTick)
+                final long previousTick = counter.getLastUpdateTick();
+
+                // If it's been 6+ months, skip the simulation and set cycles to the max value
+                if (currentTick - previousTick >= (long) ICalendar.CALENDAR_TICKS_IN_DAY * daysInMonth * 6)
                 {
-                    Month month = ICalendar.getMonthOfYear(simulatedTick, daysInMonth);
-                    Lifecycle lifecycle = this.getLifecycleForMonth(month);
-                    if (lifecycle != Lifecycle.DORMANT)
+                    cycles = 8;
+                }
+                else
+                {
+                    long simulatedTick = previousTick;
+                    boolean checkReverseDirection = false;
+
+                    // Check through the skipped time and only add growth if the plant was not dormant
+                    while (cycles < maxCycles && simulatedTick < currentTick)
                     {
-                        cycles++;
-                        simulatedTick = simulatedTick + TICKS_TO_GROW_BERRY_BUSH;
+                        Month month = ICalendar.getMonthOfYear(simulatedTick, daysInMonth);
+                        Lifecycle lifecycle = this.getLifecycleForMonth(month);
+                        if (lifecycle != Lifecycle.DORMANT)
+                        {
+                            cycles++;
+                            simulatedTick = simulatedTick + TICKS_TO_GROW_BERRY_BUSH;
+                        }
+                        else
+                        {
+                            // Stop checking the forward direction and check the reverse direction if we hit a dormant season
+                            checkReverseDirection = true;
+                            break;
+                        }
                     }
-                    else
+                    if (checkReverseDirection)
                     {
-                        simulatedTick = simulatedTick + (long) ICalendar.CALENDAR_TICKS_IN_DAY * daysInMonth;
+
+                        // Check through the skipped time and only add growth if the plant was not dormant, but in the opposite direction
+                        simulatedTick = currentTick;
+                        while (cycles < maxCycles && simulatedTick > previousTick)
+                        {
+                            Month month = ICalendar.getMonthOfYear(simulatedTick, daysInMonth);
+                            Lifecycle lifecycle = this.getLifecycleForMonth(month);
+                            if (lifecycle != Lifecycle.DORMANT)
+                            {
+                                cycles++;
+                                simulatedTick = simulatedTick + TICKS_TO_GROW_BERRY_BUSH;
+                            }
+                            else
+                            {
+                                // If this state is reached, we have found both ends of a dormant period and all uncounted time is dormancy
+                                // We can be sure it is the same dormant period because only one such period can be found in a 6-month span
+                                break;
+                            }
+                        }
                     }
                 }
 
-                // Only reset the counter if we actually grow
+                // Reset the counter because at this point we are either growing or in the middle of a dormant season
                 counter.resetCounter();
-                growAndPropagate(state, level, pos, rand, cycles);
+
+                // Verify we actually had enough time to grow
+                if (cycles > 0)
+                {
+                    growAndPropagate(state, level, pos, rand, cycles);
+                }
             }
         }
     }
