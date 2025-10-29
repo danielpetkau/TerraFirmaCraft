@@ -13,6 +13,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -180,7 +181,7 @@ public class CrucibleBlock extends DeviceBlock implements EntityBlockExtension, 
             final FluidStack fluid = crucible.getInventory().getFluidInTank(0);
             if (!fluid.isEmpty())
             {
-                return fluid.getAmount() * 15 / TFCConfig.SERVER.crucibleCapacity.get();
+                return Mth.clamp(fluid.getAmount() * 15 / TFCConfig.SERVER.crucibleCapacity.get(), 1, 15);
             }
         }
         return 0;

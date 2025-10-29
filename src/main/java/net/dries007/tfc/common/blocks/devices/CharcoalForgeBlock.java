@@ -16,6 +16,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.ItemInteractionResult;
@@ -149,15 +150,18 @@ public class CharcoalForgeBlock extends DeviceBlock implements IBellowsConsumer
     {
         if (level.getBlockEntity(pos) instanceof CharcoalForgeBlockEntity charcoalForge)
         {
-            final int maxSlot = CharcoalForgeBlockEntity.SLOT_FUEL_MAX;
-            for (int i = 0; i <= maxSlot; i++)
+            if (!charcoalForge.getInventory().getStackInSlot(0).isEmpty())
             {
-                if (charcoalForge.getInventory().getStackInSlot(i).isEmpty())
+                final int maxSlot = CharcoalForgeBlockEntity.SLOT_FUEL_MAX;
+                for (int i = 0; i <= maxSlot; i++)
                 {
-                    return i * 15 / (maxSlot + 1);
+                    if (charcoalForge.getInventory().getStackInSlot(i).isEmpty())
+                    {
+                        return Mth.clamp(i * 15 / (maxSlot + 1), 1, 15);
+                    }
                 }
+                return 15;
             }
-            return 15;
         }
         return 0;
     }

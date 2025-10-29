@@ -95,7 +95,7 @@ public class BlastFurnaceBlock extends DeviceBlock implements IBellowsConsumer
     {
         if (level.getBlockEntity(pos) instanceof BlastFurnaceBlockEntity blastFurnace)
         {
-            if (blastFurnace.getFuelCount() > 0)
+            if (blastFurnace.getFuelCount() > 0 && blastFurnace.getCapacity() != 0)
             {
                 return Mth.clamp(blastFurnace.getFuelCount() * 15 / blastFurnace.getCapacity(), 1, 15);
             }

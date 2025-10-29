@@ -290,7 +290,7 @@ public class BarrelBlock extends SealableDeviceBlock
             final FluidStack tank = barrel.getInventory().getFluidInTank(0);
             if (!tank.isEmpty())
             {
-                return tank.getAmount() * 15 / TFCConfig.SERVER.barrelCapacity.get();
+                return Mth.clamp(tank.getAmount() * 15 / TFCConfig.SERVER.barrelCapacity.get(), 1, 15);
             }
         }
         return 0;
