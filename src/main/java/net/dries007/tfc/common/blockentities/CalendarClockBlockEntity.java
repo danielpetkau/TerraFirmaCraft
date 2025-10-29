@@ -7,7 +7,6 @@
 package net.dries007.tfc.common.blockentities;
 
 import net.dries007.tfc.common.blocks.devices.CalendarClockBlock;
-import net.dries007.tfc.util.calendar.IRecipeTimer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
@@ -19,7 +18,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 
 import net.dries007.tfc.common.blocks.TFCBlockStateProperties;
-import net.dries007.tfc.util.calendar.Calendar;
 import net.dries007.tfc.util.calendar.Calendars;
 
 import static net.dries007.tfc.util.calendar.ICalendar.*;

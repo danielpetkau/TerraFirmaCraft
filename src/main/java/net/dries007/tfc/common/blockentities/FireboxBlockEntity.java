@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.Queue;
 import javax.annotation.Nullable;
 
-import net.dries007.tfc.util.calendar.IRecipeTimer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
