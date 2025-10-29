@@ -139,17 +139,21 @@ public class CharcoalForgeBlock extends DeviceBlock implements IBellowsConsumer
     }
 
     @Override
-    protected boolean hasAnalogOutputSignal(BlockState state){
+    protected boolean hasAnalogOutputSignal(BlockState state)
+    {
         return TFCConfig.SERVER.charcoalForgeEnableAutomation.get();
     }
 
     @Override
-    protected int getAnalogOutputSignal(BlockState state, Level level, BlockPos pos) {
-        final CharcoalForgeBlockEntity charcoalForge = level.getBlockEntity(pos, TFCBlockEntities.CHARCOAL_FORGE.get()).orElse(null);
-        final int maxSlot = CharcoalForgeBlockEntity.SLOT_FUEL_MAX;
-        if (charcoalForge != null && !charcoalForge.getInventory().getStackInSlot(0).isEmpty()){
-            for (int i = 0; i <= maxSlot; i++){
-                if (charcoalForge.getInventory().getStackInSlot(i).isEmpty()){
+    protected int getAnalogOutputSignal(BlockState state, Level level, BlockPos pos)
+    {
+        if (level.getBlockEntity(pos) instanceof CharcoalForgeBlockEntity charcoalForge)
+        {
+            final int maxSlot = CharcoalForgeBlockEntity.SLOT_FUEL_MAX;
+            for (int i = 0; i <= maxSlot; i++)
+            {
+                if (charcoalForge.getInventory().getStackInSlot(i).isEmpty())
+                {
                     return i * 15 / (maxSlot + 1);
                 }
             }

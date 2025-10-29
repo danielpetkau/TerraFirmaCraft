@@ -277,16 +277,19 @@ public class BarrelBlock extends SealableDeviceBlock
     }
 
     @Override
-    protected boolean hasAnalogOutputSignal(BlockState state){
+    protected boolean hasAnalogOutputSignal(BlockState state)
+    {
         return TFCConfig.SERVER.barrelEnableAutomation.get();
     }
 
     @Override
-    protected int getAnalogOutputSignal(BlockState state, Level level, BlockPos pos){
-        final BarrelBlockEntity barrel = level.getBlockEntity(pos, TFCBlockEntities.BARREL.get()).orElse(null);
-        if (barrel != null){
+    protected int getAnalogOutputSignal(BlockState state, Level level, BlockPos pos)
+    {
+        if (level.getBlockEntity(pos) instanceof BarrelBlockEntity barrel)
+        {
             final FluidStack tank = barrel.getInventory().getFluidInTank(0);
-            if (!tank.isEmpty()) {
+            if (!tank.isEmpty())
+            {
                 return tank.getAmount() * 15 / TFCConfig.SERVER.barrelCapacity.get();
             }
         }

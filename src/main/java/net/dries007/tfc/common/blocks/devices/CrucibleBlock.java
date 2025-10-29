@@ -167,16 +167,19 @@ public class CrucibleBlock extends DeviceBlock implements EntityBlockExtension, 
     }
 
     @Override
-    protected boolean hasAnalogOutputSignal(BlockState state){
+    protected boolean hasAnalogOutputSignal(BlockState state)
+    {
         return TFCConfig.SERVER.crucibleEnableAutomation.get();
     }
 
     @Override
-    protected int getAnalogOutputSignal(BlockState state, Level level, BlockPos pos){
-        final CrucibleBlockEntity crucible = level.getBlockEntity(pos, TFCBlockEntities.CRUCIBLE.get()).orElse(null);
-        if (crucible != null) {
+    protected int getAnalogOutputSignal(BlockState state, Level level, BlockPos pos)
+    {
+        if (level.getBlockEntity(pos) instanceof CrucibleBlockEntity crucible)
+        {
             final FluidStack fluid = crucible.getInventory().getFluidInTank(0);
-            if (!fluid.isEmpty()) {
+            if (!fluid.isEmpty())
+            {
                 return fluid.getAmount() * 15 / TFCConfig.SERVER.crucibleCapacity.get();
             }
         }

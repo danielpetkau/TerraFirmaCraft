@@ -94,17 +94,21 @@ public class FireboxBlock extends DeviceBlock implements IBellowsConsumer
     }
 
     @Override
-    protected boolean hasAnalogOutputSignal(BlockState state){
+    protected boolean hasAnalogOutputSignal(BlockState state)
+    {
         return TFCConfig.SERVER.fireboxEnableAutomation.get();
     }
 
     @Override
-    protected int getAnalogOutputSignal(BlockState state, Level level, BlockPos pos) {
-        final FireboxBlockEntity firebox = level.getBlockEntity(pos, TFCBlockEntities.FIREBOX.get()).orElse(null);
-        int maxSlot = FireboxBlockEntity.SLOTS;
-        if (firebox != null && !firebox.getInventory().getStackInSlot(0).isEmpty()){
-            for (int i = 0; i < maxSlot; i++){
-                if (firebox.getInventory().getStackInSlot(i).isEmpty()){
+    protected int getAnalogOutputSignal(BlockState state, Level level, BlockPos pos)
+    {
+        if (level.getBlockEntity(pos) instanceof FireboxBlockEntity firebox)
+        {
+            int maxSlot = FireboxBlockEntity.SLOTS;
+            for (int i = 0; i < maxSlot; i++)
+            {
+                if (firebox.getInventory().getStackInSlot(i).isEmpty())
+                {
                     return i * 15 / (maxSlot);
                 }
             }
