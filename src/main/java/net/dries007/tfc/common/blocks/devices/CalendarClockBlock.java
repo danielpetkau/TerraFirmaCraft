@@ -73,14 +73,14 @@ public class CalendarClockBlock extends DeviceBlock
         {
             return null;
         }
-        final Direction direction = state.getValue(FACING);
+        final Direction facing = state.getValue(FACING);
         final LevelReader level = context.getLevel();
         final BlockPos pos = context.getClickedPos();
-        final BlockState blockState1 = level.getBlockState(pos.relative(direction.getOpposite()));
+        final BlockState facingState = level.getBlockState(pos.relative(facing.getOpposite()));
 
-        if (Helpers.isBlock(blockState1, TFCTags.Blocks.CLOCK_READABLE))
+        if (Helpers.isBlock(facingState, TFCTags.Blocks.CLOCK_READABLE))
         {
-            state = state.setValue(FACING, direction);
+            state = state.setValue(FACING, facing);
         }
         return state;
     }
