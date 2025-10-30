@@ -393,7 +393,9 @@ public enum IngameOverlays
         stack.translate(centerX - 50, y, 0);
         stack.scale(1f, 1f, 1.0f);
 
-        graphics.drawString(gui.getFont(), text, (-1 * gui.getFont().width(text) / 2) + 1, 1, new Color(104, 0, 0, 1).getRGB(), false);
+        final int shadowColor = new Color(104, 0, 0, 1).getRGB();
+
+        graphics.drawString(gui.getFont(), text, (-1 * gui.getFont().width(text) / 2) + 1, 1, shadowColor, false);
         graphics.drawString(gui.getFont(), text, -1 * gui.getFont().width(text) / 2, 1, Color.WHITE.getRGB(), false);
 
         stack.popPose();
