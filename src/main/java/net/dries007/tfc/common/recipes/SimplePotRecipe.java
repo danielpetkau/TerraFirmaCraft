@@ -77,12 +77,15 @@ public class SimplePotRecipe extends PotRecipe
         // Compute the outputs here, before the pot inventory is cleared
         final List<ItemStack> outputs = new ArrayList<>(5);
         final List<ItemStackProvider> providers = new ArrayList<>(outputItems);
-        for (int i = 0; i < inventory.getSlots(); i++)
+        for (int i = PotBlockEntity.SLOT_EXTRA_INPUT_START; i < inventory.getSlots(); i++)
         {
             if (providers.isEmpty())
                 break;
-            final ItemStack input = inventory.getStackInSlot(PotBlockEntity.SLOT_EXTRA_INPUT_START + i);
-            if (!input.isEmpty())
+            final ItemStack input = inventory.getStackInSlot(i);
+
+            // The only case where non-empty itemstacks are actually required by the provider, is if the recipe transforms the input items in some way
+            // If no items are part of the recipe, we can therefore safely add outputs using empty itemstacks without having to worry about breaking anything
+            if (!input.isEmpty() || itemIngredients.isEmpty())
             {
                 outputs.add(providers.removeFirst().getSingleStack(input));
             }
