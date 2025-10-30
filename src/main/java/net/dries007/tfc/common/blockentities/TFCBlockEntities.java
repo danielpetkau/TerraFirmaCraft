@@ -30,7 +30,6 @@ import net.dries007.tfc.common.blockentities.rotation.TripHammerBlockEntity;
 import net.dries007.tfc.common.blockentities.rotation.WaterWheelBlockEntity;
 import net.dries007.tfc.common.blockentities.rotation.WindmillBlockEntity;
 import net.dries007.tfc.common.blocks.TFCBlocks;
-import net.dries007.tfc.common.blocks.devices.CalendarClockBlock;
 import net.dries007.tfc.common.blocks.soil.SoilBlockType;
 import net.dries007.tfc.common.blocks.wood.Wood;
 import net.dries007.tfc.util.Metal;
@@ -151,7 +150,7 @@ public final class TFCBlockEntities
     public static final Id<AnemometerBlockEntity> ANEMOMETER = register("anemometer", AnemometerBlockEntity::new, TFCBlocks.ANEMOMETER);
 
     public static final Id<PumpBlockEntity> PUMP = register("pump", PumpBlockEntity::new, TFCBlocks.STEEL_PUMP);
-    public static final Id<MoldBlockEntity> MOLD_TABLE = register("mold_table", MoldBlockEntity::new, TFCBlocks.MOLD_TABLE);
+    public static final Id<MoldTableBlockEntity> MOLD_TABLE = register("mold_table", MoldTableBlockEntity::new, TFCBlocks.MOLD_TABLE);
     public static final Id<ChannelBlockEntity> CHANNEL = register("channel", ChannelBlockEntity::new, TFCBlocks.CHANNEL);
 
     private static <T extends BlockEntity> Id<T> register(String name, BlockEntityType.BlockEntitySupplier<T> factory, Supplier<? extends Block> block)

@@ -234,6 +234,7 @@ public enum Plant implements RegistryPlant
     private static final EnumSet<Plant> FLOWERPOT_TINTED_PLANTS = EnumSet.of(PHILODENDRON, MOSS, TREE_FERN);
     private static final EnumSet<Plant> FOLIAGE_COLOR_PLANTS = EnumSet.of(SWORD_FERN, OSTRICH_FERN, KING_FERN, TOQUILLA_PALM, LADY_FERN, LICORICE_FERN, BIRD_NEST_FERN);
     private static final EnumSet<Plant> WATER_COLOR_PLANTS = EnumSet.of(TANK_BROMELIAD);
+    private static final EnumSet<Plant> BROWN_COMPOST_PLANTS = EnumSet.of(HANGING_VINES, SPANISH_MOSS, LIANA, TREE_FERN, ARUNDO, DRY_PHRAGMITE, JUNGLE_VINES, CYCAD, FLAME_VINE);
 
     private final @Nullable IntegerProperty ageProperty;
     private final float speedFactor;
@@ -356,6 +357,16 @@ public enum Plant implements RegistryPlant
     public boolean needsItem()
     {
         return !BlockType.NO_ITEM_TYPES.contains(type);
+    }
+
+    public boolean givesBrownCompost()
+    {
+        return BROWN_COMPOST_PLANTS.contains(this) && needsItem();
+    }
+
+    public boolean givesGreenCompost()
+    {
+        return !BROWN_COMPOST_PLANTS.contains(this) && needsItem();
     }
 
     public boolean canBeSnowPiled()

@@ -196,20 +196,16 @@ public class BuiltinItemTags extends TagsProvider<Item> implements Accessors
 
         // Greens and Browns intentionally overlap - we check browns first, then greens, to resolve
         tag(COMPOST_GREENS).addTags(COMPOST_GREENS_LOW, COMPOST_GREENS_MEDIUM, COMPOST_GREENS_HIGH);
-        tag(COMPOST_GREENS_LOW).addTag(PLANTS).add(TFCItems.ALFALFA);
+        tag(COMPOST_GREENS_LOW)
+            .addOnly(TFCBlocks.PLANTS, Plant::givesGreenCompost)
+            .add(TFCItems.ALFALFA);
         tag(COMPOST_GREENS_MEDIUM).addTag(GRAINS);
         tag(COMPOST_GREENS_HIGH).addTags(VEGETABLES, FRUITS).add(TFCBlocks.PUMPKIN, TFCBlocks.MELON);
         tag(COMPOST_BROWNS).addTags(COMPOST_BROWNS_LOW, COMPOST_BROWNS_MEDIUM, COMPOST_BROWNS_HIGH);
         tag(COMPOST_BROWNS_LOW)
             .addTag(ItemTags.LEAVES)
+            .addOnly(TFCBlocks.PLANTS, Plant::givesBrownCompost)
             .add(
-                TFCBlocks.PLANTS.get(Plant.HANGING_VINES),
-                TFCBlocks.PLANTS.get(Plant.SPANISH_MOSS),
-                TFCBlocks.PLANTS.get(Plant.LIANA),
-                TFCBlocks.PLANTS.get(Plant.TREE_FERN),
-                TFCBlocks.PLANTS.get(Plant.ARUNDO),
-                TFCBlocks.PLANTS.get(Plant.DRY_PHRAGMITE),
-                TFCBlocks.PLANTS.get(Plant.JUNGLE_VINES),
                 Items.HANGING_ROOTS,
                 TFCItems.CANOLA);
         tag(COMPOST_BROWNS_MEDIUM).add(

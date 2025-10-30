@@ -40,7 +40,7 @@ import net.neoforged.neoforge.event.entity.player.UseItemOnBlockEvent;
 import org.jetbrains.annotations.NotNull;
 
 import net.dries007.tfc.common.TFCTags;
-import net.dries007.tfc.common.blockentities.MoldBlockEntity;
+import net.dries007.tfc.common.blockentities.MoldTableBlockEntity;
 import net.dries007.tfc.common.blockentities.TFCBlockEntities;
 import net.dries007.tfc.common.blocks.CharcoalPileBlock;
 import net.dries007.tfc.common.blocks.GroundcoverBlockType;
@@ -351,7 +351,7 @@ public final class InteractionManager
             {
                 final Level level = context.getLevel();
                 final BlockPos posClicked = context.getClickedPos();
-                final Optional<MoldBlockEntity> moldTable = level.getBlockEntity(posClicked, TFCBlockEntities.MOLD_TABLE.get());
+                final Optional<MoldTableBlockEntity> moldTable = level.getBlockEntity(posClicked, TFCBlockEntities.MOLD_TABLE.get());
                 if (moldTable.isPresent())
                 {
                     moldTable.get().onRightClick(player);

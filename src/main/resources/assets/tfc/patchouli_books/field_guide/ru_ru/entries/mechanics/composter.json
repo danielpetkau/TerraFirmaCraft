@@ -15,8 +15,8 @@
     },
     {
       "type": "patchouli:text",
-      "text": "Composters operate better in certain conditions. Composters in regions of less than 150mm or greater than 350mm of rainfall operate much slower, with that effect getting stronger closer to the maximum and minimum rainfall. Also, composters that are touching other composters work slower.",
-      "title": "Working Conditions"
+      "text": "Компостеры работают лучше при определённых условиях. В регионах с осадками менее 150 мм или более 350 мм они функционируют значительно медленнее, причём эта задержка усиливается по мере приближения к минимальным и максимальным значениям осадков. Также компостеры, соприкасающиеся друг с другом, работают медленнее.",
+      "title": "Условия работы"
     },
     {
       "type": "tfc:multimultiblock",

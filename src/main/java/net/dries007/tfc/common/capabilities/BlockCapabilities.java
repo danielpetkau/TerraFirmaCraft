@@ -21,6 +21,7 @@ import net.dries007.tfc.common.blockentities.BlastFurnaceBlockEntity;
 import net.dries007.tfc.common.blockentities.CrucibleBlockEntity;
 import net.dries007.tfc.common.blockentities.InventoryBlockEntity;
 import net.dries007.tfc.common.blockentities.LampBlockEntity;
+import net.dries007.tfc.common.blockentities.MoldTableBlockEntity;
 import net.dries007.tfc.common.blockentities.PotBlockEntity;
 import net.dries007.tfc.common.blockentities.TFCBlockEntities;
 import net.dries007.tfc.common.blockentities.TFCChestBlockEntity;
@@ -63,7 +64,8 @@ public final class BlockCapabilities
         registerInventory(event, TFCBlockEntities.QUERN);
         event.registerBlockEntity(ITEM, TFCBlockEntities.CHEST.get(), TFCChestBlockEntity::getInventoryHandler);
         event.registerBlockEntity(ITEM, TFCBlockEntities.TRAPPED_CHEST.get(), TFCChestBlockEntity::getInventoryHandler);
-        event.registerBlockEntity(ITEM, TFCBlockEntities.MOLD_TABLE.get(), (object, context) -> object.getInventory());
+        registerInventory(event, TFCBlockEntities.MOLD_TABLE);
+        event.registerBlockEntity(FLUID, TFCBlockEntities.MOLD_TABLE.get(), MoldTableBlockEntity::getSidedFluidInventory);
     }
 
     private static void registerInventory(RegisterCapabilitiesEvent event, Supplier<? extends BlockEntityType<? extends InventoryBlockEntity<?>>> type)

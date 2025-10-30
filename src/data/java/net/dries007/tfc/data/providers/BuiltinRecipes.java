@@ -260,11 +260,13 @@ public final class BuiltinRecipes extends VanillaRecipeProvider implements
 
             add(new LandslideRecipe(BlockIngredient.of(
                 blocks.get(SoilBlockType.CLAY).get(),
-                blocks.get(SoilBlockType.CLAY_GRASS).get()
+                blocks.get(SoilBlockType.CLAY_GRASS).get(),
+                blocks.get(SoilBlockType.CLAY_DUFF).get()
             ), blocks.get(SoilBlockType.CLAY).get().defaultBlockState()));
             add(new LandslideRecipe(BlockIngredient.of(
                 blocks.get(SoilBlockType.DIRT).get(),
                 blocks.get(SoilBlockType.GRASS).get(),
+                blocks.get(SoilBlockType.DUFF).get(),
                 blocks.get(SoilBlockType.GRASS_PATH).get(),
                 blocks.get(SoilBlockType.FARMLAND).get(),
                 blocks.get(SoilBlockType.ROOTED_DIRT).get()
@@ -273,6 +275,7 @@ public final class BuiltinRecipes extends VanillaRecipeProvider implements
         List.of(Blocks.DIRT, Blocks.GRAVEL, Blocks.SAND, Blocks.COBBLESTONE).forEach(b ->{
             add(new LandslideRecipe(BlockIngredient.of(b), b.defaultBlockState()));
         });
+        add(new LandslideRecipe(BlockIngredient.of(TFCBlocks.KAOLIN_CLAY_GRASS.get()), TFCBlocks.RED_KAOLIN_CLAY.get().defaultBlockState()));
 
     }
 

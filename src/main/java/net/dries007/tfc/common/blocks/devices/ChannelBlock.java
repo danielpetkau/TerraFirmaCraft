@@ -157,7 +157,7 @@ public class ChannelBlock extends ExtendedBlock implements EntityBlockExtension
                 BlockState blockState = level.getBlockState(relative);
                 Block block = blockState.getBlock();
 
-                if (block instanceof ChannelBlock || block instanceof CrucibleBlock || block instanceof MoldBlock)
+                if (block instanceof ChannelBlock || block instanceof CrucibleBlock || block instanceof MoldTableBlock)
                 {
                     isAdjacentConnectable = true;
                     break;

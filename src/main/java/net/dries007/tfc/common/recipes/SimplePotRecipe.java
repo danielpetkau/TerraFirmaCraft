@@ -76,10 +76,19 @@ public class SimplePotRecipe extends PotRecipe
     {
         // Compute the outputs here, before the pot inventory is cleared
         final List<ItemStack> outputs = new ArrayList<>(5);
-        for (int i = 0; i < Math.min(outputItems.size(), inventory.getSlots()); i++)
+        final List<ItemStackProvider> providers = new ArrayList<>(outputItems);
+        for (int i = PotBlockEntity.SLOT_EXTRA_INPUT_START; i < inventory.getSlots(); i++)
         {
-            final ItemStack input = inventory.getStackInSlot(PotBlockEntity.SLOT_EXTRA_INPUT_START + i);
-            outputs.add(outputItems.get(i).getSingleStack(input));
+            if (providers.isEmpty())
+                break;
+            final ItemStack input = inventory.getStackInSlot(i);
+
+            // The only case where non-empty itemstacks are actually required by the provider, is if the recipe transforms the input items in some way
+            // If no items are part of the recipe, we can therefore safely add outputs using empty itemstacks without having to worry about breaking anything
+            if (!input.isEmpty() || itemIngredients.isEmpty())
+            {
+                outputs.add(providers.removeFirst().getSingleStack(input));
+            }
         }
         return new SimpleOutput(usesAllFluid ? outputFluid.copy() : favorNewFluidStack(inventory.getFluidHandler().getFluidInTank(0), outputFluid), outputs);
     }

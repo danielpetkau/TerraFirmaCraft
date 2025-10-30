@@ -10,6 +10,7 @@ import java.util.Map;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
+import javax.annotation.Nullable;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -28,14 +29,12 @@ import net.dries007.tfc.util.Helpers;
 
 public class LoomBlockEntityRenderer implements BlockEntityRenderer<LoomBlockEntity>
 {
-    public static final Map<Block, ResourceLocation> TEXTURES = RenderHelpers.mapOf(map ->
-        TFCBlocks.WOODS.forEach((wood, m) ->
-            map.accept(m.get(Wood.BlockType.LOOM), Helpers.identifier("block/wood/planks/" + wood.getSerializedName()))));
-
     @Override
     public void render(LoomBlockEntity loom, float partialTicks, PoseStack poseStack, MultiBufferSource buffer, int combinedLight, int combinedOverlay)
     {
-        final ResourceLocation texture = TEXTURES.get(loom.getBlockState().getBlock());
+        Block block = loom.getBlockState().getBlock();
+        assert block instanceof TFCLoomBlock;
+        final @Nullable ResourceLocation texture = ((TFCLoomBlock) block).getTextureLocation();
         if (texture == null)
         {
             return;

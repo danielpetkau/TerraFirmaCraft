@@ -378,6 +378,7 @@ def generate(rm: ResourceManager):
 
     rm.blockstate('freshwater_bubble_column', model='minecraft:block/water').with_lang(lang('bubble column'))
     rm.blockstate('saltwater_bubble_column', model='tfc:block/fluid/salt_water').with_lang(lang('bubble column'))
+    rm.blockstate('spring_water_bubble_column', model='tfc:block/fluid/spring_water').with_lang(lang('bubble column'))
 
     for variant in ('raw', 'bricks', 'polished'):
         rm.blockstate(('alabaster', variant)).with_block_model().with_item_model().with_block_loot('tfc:alabaster/%s' % variant).with_lang(lang('%s Plaster', variant) if variant != 'bricks' else lang('Plaster %s', variant))

@@ -1,12 +1,12 @@
 {
   "__comment__": "This file was automatically created by mcresources",
-  "name": "Redstone Devices",
+  "name": "Редстоун-устройства",
   "category": "tfc:mechanics",
   "icon": "tfc:calendar_clock",
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "Once you advance far enough in your world, you may want to measure certain conditions, such as the wind speed or the time of the day. There are several devices that may suit your needs for this."
+      "text": "Когда вы продвинетесь достаточно далеко в своём мире, возможно, вы захотите измерять определённые параметры, такие как скорость ветра или время суток. Для этого существует несколько устройств."
     },
     {
       "type": "patchouli:image",
@@ -18,20 +18,20 @@
     {
       "type": "patchouli:crafting",
       "recipe": "tfc:crafting/calendar_clock",
-      "text": "The first is the $(thing)Precision Clock$(). The Clock detects the hour, or, when toggled with $(item)$(k:key.use)$(), the month."
+      "text": "Первым идут $(thing)прецизионные часы$(). Часы определяют час, или, при переключении с помощью $(item)$(k:key.use)$(), месяц."
     },
     {
       "type": "patchouli:text",
-      "text": "When in hour mode, the clock will output a strong analog signal where signal 0 means midnight or noon, and signal 11 means 11:00 or 23:00. When in month mode, the clock will output a strong analog signal where signal 0 means January, and signal 11 means December. You do not need a comparator to read the Clock's signal strength."
+      "text": "В часовом режиме они выдают сильный аналоговый сигнал, где уровень 0 означает полночь или полдень, а уровень 11 соответствует 11:00 или 23:00. В месячном режиме часы выдают сильный аналоговый сигнал, где уровень 0 означает январь, а уровень 11 — декабрь. Для чтения силы сигнала часов компаратор не требуется."
     },
     {
       "type": "patchouli:crafting",
       "recipe": "tfc:crafting/thermometer",
-      "text": "Next we have the $(thing)Thermometer$(), which detects the ambient temperature, or the temperature of the device it is placed onto."
+      "text": "Далее идёт $(thing)термометр$(), который определяет температуру окружающей среды или температуру устройства, на котором он установлен."
     },
     {
       "type": "patchouli:text",
-      "text": "When reading ambient temperature, the Thermometer will output a strong analog signal where signal 0 means -40C, and signal 15 means +40C. When reading device temperature, the Thermometer will output a weak analog signal where signal 0 means no heat, and signal 15 means Brilliant White. You do not need a comparator to read the Thermometer's signal strength."
+      "text": "При измерении температуры окружающей среды термометр выдаёт сильный аналоговый сигнал, где уровень 0 соответствует −40 °C, а уровень 15 — +40 °C. При измерении температуры устройства термометр выдаёт слабый аналоговый сигнал, где уровень 0 означает отсутствие нагрева, а уровень 15 — Блестящий белый. Для чтения силы сигнала термометра компаратор не требуется."
     },
     {
       "type": "patchouli:crafting",
@@ -40,7 +40,7 @@
     },
     {
       "type": "patchouli:text",
-      "text": "The $(thing)Anemometer$() detects the wind speed. It outputs a strong analog signal where signal 0 means 0kmh, and signal 15 means 115 kmh. You do not need a comparator to read the Anemometer's signal strength."
+      "text": "$(thing)Анемометр$() определяет скорость ветра. Он выдаёт сильный аналоговый сигнал, где уровень 0 соответствует 0 км/ч, а уровень 15 — 115 км/ч. Для чтения силы сигнала анемометра компаратор не требуется."
     },
     {
       "type": "patchouli:crafting",
@@ -49,7 +49,7 @@
     },
     {
       "type": "patchouli:text",
-      "text": "The $(thing)Weather Vane$() detects the wind direction. It outputs a strong analog signal where signal 0 means North, and signal 8 means south. The signal increases as the wind direction proceeds clockwise. You do not need a comparator to read the Weather Vane's signal strength."
+      "text": "$(thing)Флюгер$() определяет направление ветра. Он выдаёт сильный аналоговый сигнал, где уровень 0 соответствует северу, а уровень 8 — югу. Уровень сигнала увеличивается по часовой стрелке. Для чтения силы сигнала флюгера компаратор не требуется."
     }
   ],
   "read_by_default": true

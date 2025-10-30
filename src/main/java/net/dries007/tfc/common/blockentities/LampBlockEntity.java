@@ -103,6 +103,7 @@ public class LampBlockEntity extends TickCounterBlockEntity implements FluidTank
         super.saveAdditional(tag, provider);
     }
 
+    @Nullable
     public IFluidHandler getSidedFluidInventory(@Nullable Direction context)
     {
         return sidedFluidInventory.get(context);

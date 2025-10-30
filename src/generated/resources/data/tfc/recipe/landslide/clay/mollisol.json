@@ -2,7 +2,8 @@
   "type": "tfc:landslide",
   "ingredient": [
     "tfc:clay/mollisol",
-    "tfc:clay_grass/mollisol"
+    "tfc:clay_grass/mollisol",
+    "tfc:clay_duff/mollisol"
   ],
   "result": "tfc:clay/mollisol"
 }

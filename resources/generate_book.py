@@ -1545,19 +1545,30 @@ def make_wild_crop_table(start_index: int, end_index: int) -> List[str | Dict[st
 
 def detail_crop(crop: str) -> str:
     data = CROPS[crop]
+
+    nitrogen = data.nitrogen;
+    phosphorous = data.phosphorous;
+    potassium = data.potassium;
+
+    # Cover crops consume no nutrients, so their max output is 30% of the enumerated value
+    if (data.category == 'cover'):
+        nitrogen = 0.3 * nitrogen;
+        phosphorous = 0.3 * phosphorous;
+        potassium = 0.3 * potassium;
+
     string= '$(bold)$(l:the_world/climate#temperature)Temperature$(): %d - %d °C$(br)$(bold)$(l:mechanics/hydration)Hydration$(): %d - %d %%$(br)$(bold)Category$(): %s$(br)$(br)' % (data.min_temp_growth, data.max_temp_growth, data.min_hydration, data.max_hydration, data.category.title())
-    if data.nitrogen < 0:
-        n = '$(bold)$(b)N: +%s ' % -data.nitrogen
+    if nitrogen < 0:
+        n = '$(bold)$(b)N: +%s ' % -nitrogen
     else:
-        n = '$(bold)$(b)N: %s ' % data.nitrogen
-    if data.phosphorous < 0:
-        p = '$(bold)$(6)P: +%s ' % -data.phosphorous
+        n = '$(bold)$(b)N: %s ' % nitrogen
+    if phosphorous < 0:
+        p = '$(bold)$(6)P: +%s ' % -phosphorous
     else:
-        p = '$(bold)$(6)P: %s ' % data.phosphorous
-    if data.potassium <0:
-        k = '$(bold)$(d)K: +%s$()$(br)' % -data.potassium
+        p = '$(bold)$(6)P: %s ' % phosphorous
+    if potassium <0:
+        k = '$(bold)$(d)K: +%s$()$(br)' % -potassium
     else:
-        k = '$(bold)$(d)K: %s$()$(br)' % data.potassium
+        k = '$(bold)$(d)K: %s$()$(br)' % potassium
 
     return string + n + p + k
 
