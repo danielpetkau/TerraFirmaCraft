@@ -13,29 +13,34 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
-public class SeasonalPlantBlockEntity extends TickCounterBlockEntity
+public class TickingPlantBlockEntity extends TickCounterBlockEntity
 {
     public static void reset(Level level, BlockPos pos)
     {
-        level.getBlockEntity(pos, TFCBlockEntities.SEASONAL_PLANT.get()).ifPresent(TickCounterBlockEntity::resetCounter);
+        level.getBlockEntity(pos, TFCBlockEntities.TICK_COUNTING_BRANCH.get()).ifPresent(TickCounterBlockEntity::resetCounter);
     }
 
     public static void addTicks(Level level, BlockPos pos, long ticks)
     {
-        level.getBlockEntity(pos, TFCBlockEntities.SEASONAL_PLANT.get()).ifPresent(entity -> entity.increaseCounter(ticks));
+        level.getBlockEntity(pos, TFCBlockEntities.TICK_COUNTING_BRANCH.get()).ifPresent(entity -> entity.increaseCounter(ticks));
+    }
+
+    public static void setStemPos(Level level, BlockPos pos, BlockPos stemPos)
+    {
+        level.getBlockEntity(pos, TFCBlockEntities.TICK_COUNTING_BRANCH.get()).ifPresent(entity -> entity.setStemPos(stemPos));
     }
 
     private BlockPos stemPos;
 
-    public SeasonalPlantBlockEntity(BlockPos pos, BlockState state)
+    public TickingPlantBlockEntity(BlockPos pos, BlockState state)
     {
-        this(TFCBlockEntities.SEASONAL_PLANT.get(), pos, state, pos);
+        this(TFCBlockEntities.TICK_COUNTING_BRANCH.get(), pos, state);
     }
 
-    protected SeasonalPlantBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state, BlockPos stemPos)
+    public TickingPlantBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
         super(type, pos, state);
-        this.stemPos = stemPos;
+        stemPos = pos;
     }
 
     @Override
@@ -48,7 +53,7 @@ public class SeasonalPlantBlockEntity extends TickCounterBlockEntity
         }
         else
         {
-            stemPos = nbt.contains("stemPos", CompoundTag.TAG_LONG) ? BlockPos.of(nbt.getLong("stemPos")) : worldPosition;
+            stemPos = nbt.contains("stemPos", CompoundTag.TAG_LONG) ? BlockPos.of(nbt.getLong("stemPos")) : worldPosition; // todo: remove this array handling, its handling old worlds
         }
         super.loadAdditional(nbt, provider);
     }

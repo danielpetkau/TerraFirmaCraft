@@ -32,14 +32,12 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 
 import net.dries007.tfc.TerraFirmaCraft;
 import net.dries007.tfc.common.TFCTags;
-import net.dries007.tfc.common.blockentities.SeasonalPlantBlockEntity;
-import net.dries007.tfc.common.blockentities.TFCBlockEntities;
+import net.dries007.tfc.common.blockentities.SpreadingBushBlockEntity;
 import net.dries007.tfc.common.blocks.ExtendedProperties;
 import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.blocks.soil.FarmlandBlock;
 import net.dries007.tfc.common.blocks.soil.HoeOverlayBlock;
 import net.dries007.tfc.util.Helpers;
-import net.dries007.tfc.util.calendar.Calendars;
 import net.dries007.tfc.util.calendar.ICalendar;
 import net.dries007.tfc.util.climate.Climate;
 import net.dries007.tfc.util.climate.ClimateRange;
@@ -80,7 +78,7 @@ public class BananaPlantBlock extends SeasonalPlantBlock implements HoeOverlayBl
     protected void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random)
     {
         final BlockPos basePos;
-        if (level.getBlockEntity(pos) instanceof SeasonalPlantBlockEntity plant)
+        if (level.getBlockEntity(pos) instanceof SpreadingBushBlockEntity plant)
         {
             basePos = plant.getStemPos();
         }
@@ -93,7 +91,7 @@ public class BananaPlantBlock extends SeasonalPlantBlock implements HoeOverlayBl
 
         if (!climateRange.get().checkBoth(hydration, temp, false))
         {
-            SeasonalPlantBlockEntity.reset(level, pos);
+            SpreadingBushBlockEntity.reset(level, pos);
         }
         else
         {
@@ -110,7 +108,7 @@ public class BananaPlantBlock extends SeasonalPlantBlock implements HoeOverlayBl
     public void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource rand)
     {
         super.tick(state, level, pos, rand);
-        if (level.getBlockEntity(pos) instanceof SeasonalPlantBlockEntity counter)
+        if (level.getBlockEntity(pos) instanceof SpreadingBushBlockEntity counter)
         {
             int cycles = (int) (counter.getTicksSinceUpdate() / TICKS_TO_GROW_BANANA_PLANT);
             if (cycles >= 1)
@@ -141,7 +139,7 @@ public class BananaPlantBlock extends SeasonalPlantBlock implements HoeOverlayBl
     @Override
     public void addHoeOverlayInfo(Level level, BlockPos pos, BlockState state, Consumer<Component> text, boolean isDebug)
     {
-        if (level.getBlockEntity(pos) instanceof SeasonalPlantBlockEntity bush)
+        if (level.getBlockEntity(pos) instanceof SpreadingBushBlockEntity bush)
         {
             final ClimateRange range = climateRange.get();
             final BlockPos sourcePos = bush.getStemPos().below();
@@ -217,7 +215,7 @@ public class BananaPlantBlock extends SeasonalPlantBlock implements HoeOverlayBl
         level.setBlockAndUpdate(newPos, newPosState);
         level.setBlockAndUpdate(oldPos, oldPosState);
         // If block grows, set the new block's stem position to match the original
-        if (level.getBlockEntity(oldPos) instanceof SeasonalPlantBlockEntity sourceBush && level.getBlockEntity(newPos) instanceof SeasonalPlantBlockEntity newBush)
+        if (level.getBlockEntity(oldPos) instanceof SpreadingBushBlockEntity sourceBush && level.getBlockEntity(newPos) instanceof SpreadingBushBlockEntity newBush)
         {
             newBush.resetCounter();
             newBush.increaseCounter(TICKS_TO_GROW_BANANA_PLANT * cycles);
@@ -228,7 +226,7 @@ public class BananaPlantBlock extends SeasonalPlantBlock implements HoeOverlayBl
         {
             TerraFirmaCraft.LOGGER.error("Failed to update growing berry bush block entity at: {}", oldPos);
         }
-        level.getBlockState(newPos).randomTick(level, newPos, level.random);
+        level.getBlockState(newPos).tick(level, newPos, level.random);
     }
 
     @Override

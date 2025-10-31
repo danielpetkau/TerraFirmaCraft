@@ -38,7 +38,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 
 import net.dries007.tfc.client.particle.TFCParticles;
 import net.dries007.tfc.common.TFCTags;
-import net.dries007.tfc.common.blockentities.SeasonalPlantBlockEntity;
+import net.dries007.tfc.common.blockentities.SpreadingBushBlockEntity;
 import net.dries007.tfc.common.blocks.ExtendedProperties;
 import net.dries007.tfc.common.blocks.IForgeBlockExtension;
 import net.dries007.tfc.common.blocks.TFCBlockStateProperties;
@@ -135,7 +135,7 @@ public class FruitTreeLeavesBlock extends SeasonalPlantBlock implements IForgeBl
         final ClimateRange range = climateRange.get();
 
         final BlockPos stemPos;
-        if (level.getBlockEntity(pos) instanceof SeasonalPlantBlockEntity bush)
+        if (level.getBlockEntity(pos) instanceof SpreadingBushBlockEntity bush)
         {
             stemPos = bush.getStemPos();
         }

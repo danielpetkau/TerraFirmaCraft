@@ -20,7 +20,6 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -46,9 +45,8 @@ import org.jetbrains.annotations.Nullable;
 import net.dries007.tfc.TerraFirmaCraft;
 import net.dries007.tfc.client.overworld.SolarCalculator;
 import net.dries007.tfc.common.TFCTags;
-import net.dries007.tfc.common.blockentities.SeasonalPlantBlockEntity;
+import net.dries007.tfc.common.blockentities.SpreadingBushBlockEntity;
 import net.dries007.tfc.common.blockentities.TickCounterBlockEntity;
-import net.dries007.tfc.common.blockentities.TickCountingBranchBlockEntity;
 import net.dries007.tfc.common.blocks.EntityBlockExtension;
 import net.dries007.tfc.common.blocks.ExtendedProperties;
 import net.dries007.tfc.common.blocks.IForgeBlockExtension;
@@ -84,7 +82,7 @@ public abstract class SeasonalPlantBlock extends BushBlock implements IForgeBloc
     // By default, we only keep track of the life cycle with this method as that functionality is shared by all seasonal plant blocks
     public void onUpdate(Level level, BlockPos pos, BlockState state)
     {
-        if (level.getBlockEntity(pos) instanceof SeasonalPlantBlockEntity plant)
+        if (level.getBlockEntity(pos) instanceof SpreadingBushBlockEntity plant)
         {
             final BlockPos stemPos = plant.getStemPos();
             Lifecycle currentLifecycle = state.getValue(LIFECYCLE);
@@ -263,12 +261,12 @@ public abstract class SeasonalPlantBlock extends BushBlock implements IForgeBloc
 
     /**
      * Evaluates hydration at the base of the tree/bush/plant
-     * @param leafPos Must be the position of a valid {@link SeasonalPlantBlockEntity}
+     * @param leafPos Must be the position of a valid {@link SpreadingBushBlockEntity}
      */
     protected static int getFruitBushHydration(Level level, BlockPos leafPos)
     {
         final BlockPos sourcePos;
-        if (level.getBlockEntity(leafPos) instanceof SeasonalPlantBlockEntity bush)
+        if (level.getBlockEntity(leafPos) instanceof SpreadingBushBlockEntity bush)
         {
             sourcePos = bush.getStemPos().below();
         }

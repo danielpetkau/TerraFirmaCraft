@@ -27,8 +27,8 @@ import org.jetbrains.annotations.Nullable;
 
 import net.dries007.tfc.TerraFirmaCraft;
 import net.dries007.tfc.common.TFCTags;
-import net.dries007.tfc.common.blockentities.SeasonalPlantBlockEntity;
-import net.dries007.tfc.common.blockentities.TickCountingBranchBlockEntity;
+import net.dries007.tfc.common.blockentities.SpreadingBushBlockEntity;
+import net.dries007.tfc.common.blockentities.TickingPlantBlockEntity;
 import net.dries007.tfc.common.blocks.EntityBlockExtension;
 import net.dries007.tfc.common.blocks.ExtendedProperties;
 import net.dries007.tfc.common.blocks.TFCBlockStateProperties;
@@ -98,7 +98,7 @@ public class GrowingFruitTreeBranchBlock extends FruitTreeBranchBlock implements
         FruitTreeBranchBlock body = (FruitTreeBranchBlock) this.body.get();
         BlockPos abovePos = pos.above();
         final boolean natural = state.getValue(NATURAL);
-        if (canGrowInto(level, abovePos) && abovePos.getY() < level.getMaxBuildHeight() - 1 && level.getBlockEntity(pos) instanceof TickCountingBranchBlockEntity activeBranch)
+        if (canGrowInto(level, abovePos) && abovePos.getY() < level.getMaxBuildHeight() - 1 && level.getBlockEntity(pos) instanceof TickingPlantBlockEntity activeBranch)
         {
             final BlockPos stemPos = activeBranch.getStemPos();
             int stage = state.getValue(STAGE);
@@ -223,7 +223,7 @@ public class GrowingFruitTreeBranchBlock extends FruitTreeBranchBlock implements
         final float temp = Climate.getAverageTemperature(level, pos);
         if (!climateRange.get().checkBoth(hydration, temp, false) && !state.getValue(NATURAL))
         {
-            TickCountingBranchBlockEntity.reset(level, pos);
+            TickingPlantBlockEntity.reset(level, pos);
         }
         else
         {
@@ -236,7 +236,7 @@ public class GrowingFruitTreeBranchBlock extends FruitTreeBranchBlock implements
     public void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource rand)
     {
         super.tick(state, level, pos, rand);
-        if (level.getBlockEntity(pos) instanceof TickCountingBranchBlockEntity counter)
+        if (level.getBlockEntity(pos) instanceof TickingPlantBlockEntity counter)
         {
             long days = counter.getTicksSinceUpdate() / ICalendar.CALENDAR_TICKS_IN_DAY;
             int cycles = (int) (days / 5);
@@ -255,7 +255,7 @@ public class GrowingFruitTreeBranchBlock extends FruitTreeBranchBlock implements
     {
         final BlockState newState = getStateForPlacement(level, childPos).setValue(STAGE, stage).setValue(SAPLINGS, saplings).setValue(NATURAL, natural);
         level.setBlock(childPos, newState, Block.UPDATE_ALL);
-        if (level.getBlockEntity(childPos) instanceof TickCountingBranchBlockEntity counter)
+        if (level.getBlockEntity(childPos) instanceof TickingPlantBlockEntity counter)
         {
             counter.resetCounter();
             counter.increaseCounter((long) ICalendar.CALENDAR_TICKS_IN_DAY * cycles * 5);
@@ -296,7 +296,7 @@ public class GrowingFruitTreeBranchBlock extends FruitTreeBranchBlock implements
             if (level.isEmptyBlock(mutablePos))
             {
                 level.setBlock(mutablePos, leaves, Block.UPDATE_ALL);
-                if (level.getBlockEntity(mutablePos) instanceof SeasonalPlantBlockEntity leaf)
+                if (level.getBlockEntity(mutablePos) instanceof SpreadingBushBlockEntity leaf)
                 {
                     leaf.setStemPos(stemPos);
                 }
@@ -306,12 +306,12 @@ public class GrowingFruitTreeBranchBlock extends FruitTreeBranchBlock implements
 
     /**
      * Evaluates hydration at the base of the tree
-     * @param leafPos Must be the position of a valid {@link TickCountingBranchBlockEntity}
+     * @param leafPos Must be the position of a valid {@link TickingPlantBlockEntity}
      */
     protected static int getFruitBranchHydration(Level level, BlockPos leafPos)
     {
         final BlockPos sourcePos;
-        if (level.getBlockEntity(leafPos) instanceof TickCountingBranchBlockEntity branch)
+        if (level.getBlockEntity(leafPos) instanceof TickingPlantBlockEntity branch)
         {
             sourcePos = branch.getStemPos().below();
         }

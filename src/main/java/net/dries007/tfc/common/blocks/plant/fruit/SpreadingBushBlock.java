@@ -19,11 +19,10 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.neoforged.neoforge.common.Tags;
 
 import net.dries007.tfc.TerraFirmaCraft;
 import net.dries007.tfc.common.TFCTags;
-import net.dries007.tfc.common.blockentities.SeasonalPlantBlockEntity;
+import net.dries007.tfc.common.blockentities.SpreadingBushBlockEntity;
 import net.dries007.tfc.common.blocks.ExtendedProperties;
 import net.dries007.tfc.common.blocks.IForgeBlockExtension;
 import net.dries007.tfc.common.blocks.soil.HoeOverlayBlock;
@@ -73,7 +72,7 @@ public class SpreadingBushBlock extends StationaryBerryBushBlock implements IFor
     protected void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random)
     {
         final BlockPos climatePos;
-        if (level.getBlockEntity(pos) instanceof SeasonalPlantBlockEntity plant)
+        if (level.getBlockEntity(pos) instanceof SpreadingBushBlockEntity plant)
         {
             climatePos = plant.getStemPos();
         }
@@ -86,7 +85,7 @@ public class SpreadingBushBlock extends StationaryBerryBushBlock implements IFor
 
         if (!climateRange.get().checkBoth(hydration, temp, false))
         {
-            SeasonalPlantBlockEntity.reset(level, pos);
+            SpreadingBushBlockEntity.reset(level, pos);
         }
         else
         {
@@ -96,7 +95,7 @@ public class SpreadingBushBlock extends StationaryBerryBushBlock implements IFor
     }
 
     @Override
-    protected void growAndPropagate(BlockState state, ServerLevel level, BlockPos pos, RandomSource random, int cycles)
+    protected void growAndPropagate(BlockState state, ServerLevel level, BlockPos pos, RandomSource random, int cycles, int growthsRemaining)
     {
         cycles--;
 
@@ -107,7 +106,7 @@ public class SpreadingBushBlock extends StationaryBerryBushBlock implements IFor
         {
             // Stage 0 -> grow into stage 1
             final BlockState newState = state.setValue(STAGE, 1);
-            placeBlockAndResetCounter(level, pos, newState, cycles);
+            placeBlockAndResetCounter(level, pos, newState, cycles, growthsRemaining);
             return;
         }
         if (originalStage == 1)
@@ -117,7 +116,7 @@ public class SpreadingBushBlock extends StationaryBerryBushBlock implements IFor
             final BlockPos adjacentPos = pos.relative(dir);
             if (level.getBlockState(adjacentPos).isEmpty())
             {
-                placeNewBushAndResetCounters(level, adjacentPos, pos, companion.get().defaultBlockState().setValue(SpreadingCaneBlock.FACING, dir).setValue(LIFECYCLE, state.getValue(LIFECYCLE)), cycles);
+                placeNewBushAndResetCounters(level, adjacentPos, pos, companion.get().defaultBlockState().setValue(SpreadingCaneBlock.FACING, dir).setValue(LIFECYCLE, state.getValue(LIFECYCLE)), cycles, growthsRemaining);
                 maybeStopGrowing(level, pos, state, random);
             }
             else
@@ -128,7 +127,7 @@ public class SpreadingBushBlock extends StationaryBerryBushBlock implements IFor
                 {
                     // Growing upwards grows at stage = 1, because stage = 0 is just newly planted bushes.
                     state.setValue(STAGE, 1).setValue(LIFECYCLE, state.getValue(LIFECYCLE));
-                    placeNewBushAndResetCounters(level, abovePos, pos, state, cycles);
+                    placeNewBushAndResetCounters(level, abovePos, pos, state, cycles, growthsRemaining);
 
                     // Increase age to stop this block from growing again in future
                     level.setBlock(pos, state.setValue(STAGE, 2), Block.UPDATE_ALL);
@@ -173,17 +172,20 @@ public class SpreadingBushBlock extends StationaryBerryBushBlock implements IFor
         return Helpers.isBlock(state, TFCTags.Blocks.SPREADING_FRUIT_GROWS_ON);
     }
 
-    private void placeNewBushAndResetCounters(ServerLevel level, BlockPos newPos, BlockPos oldPos, BlockState state, int cycles)
+    private void placeNewBushAndResetCounters(ServerLevel level, BlockPos newPos, BlockPos oldPos, BlockState state, int cycles, int growths)
     {
         level.setBlockAndUpdate(newPos, state);
         // If block grows, set the new block's stem position to match the original
-        if (level.getBlockEntity(oldPos) instanceof SeasonalPlantBlockEntity sourceBush && level.getBlockEntity(newPos) instanceof SeasonalPlantBlockEntity newBush)
+        if (level.getBlockEntity(oldPos) instanceof SpreadingBushBlockEntity sourceBush && level.getBlockEntity(newPos) instanceof SpreadingBushBlockEntity newBush)
         {
             sourceBush.resetCounter();
             sourceBush.increaseCounter(TICKS_TO_GROW_BERRY_BUSH * cycles);
+            // It is assumed that the number of growths remaining has already been reduced prior to calling this method
+            sourceBush.setGrowthsRemaining(growths);
 
             newBush.resetCounter();
             newBush.increaseCounter(TICKS_TO_GROW_BERRY_BUSH * cycles);
+            newBush.setGrowthsRemaining(growths);
 
             newBush.setStemPos(sourceBush.getStemPos());
         }
@@ -191,7 +193,7 @@ public class SpreadingBushBlock extends StationaryBerryBushBlock implements IFor
         {
             TerraFirmaCraft.LOGGER.error("Failed to update growing berry bush block entity at: {}", oldPos);
         }
-        level.getBlockState(oldPos).randomTick(level, oldPos, level.random);
-        level.getBlockState(newPos).randomTick(level, newPos, level.random);
+        level.getBlockState(oldPos).tick(level, oldPos, level.random);
+        level.getBlockState(newPos).tick(level, newPos, level.random);
     }
 }

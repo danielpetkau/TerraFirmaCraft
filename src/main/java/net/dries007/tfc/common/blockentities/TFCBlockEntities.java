@@ -73,7 +73,8 @@ public final class TFCBlockEntities
         ).flatMap(e -> e)
     );
 
-    public static final Id<TickCountingBranchBlockEntity> TICK_COUNTING_BRANCH = register("tick_counting_branch", TickCountingBranchBlockEntity::new, Stream.of(
+    // TODO: Does changing block entity IDs break existing blocks?
+    public static final Id<TickingPlantBlockEntity> TICK_COUNTING_BRANCH = register("tick_counting_branch", TickingPlantBlockEntity::new, Stream.of(
             TFCBlocks.FRUIT_TREE_SAPLINGS.values().stream(),
             TFCBlocks.FRUIT_TREE_GROWING_BRANCHES.values().stream(),
             Stream.of(
@@ -81,6 +82,16 @@ public final class TFCBlockEntities
             )
         ).flatMap(e -> e)
     );
+    public static final Id<SpreadingBushBlockEntity> BERRY_BUSH = register("berry_bush", SpreadingBushBlockEntity::new, Stream.of(
+        List.of(
+            TFCBlocks.BANANA_PLANT,
+            TFCBlocks.CRANBERRY_BUSH
+        ),
+        TFCBlocks.SPREADING_BUSHES.values(),
+        TFCBlocks.SPREADING_CANES.values(),
+        TFCBlocks.STATIONARY_BUSHES.values(),
+        TFCBlocks.FRUIT_TREE_LEAVES.values()
+    ).flatMap(Collection::stream));
 
     public static final Id<LogPileBlockEntity> LOG_PILE = register("log_pile", LogPileBlockEntity::new, TFCBlocks.LOG_PILE);
     public static final Id<BurningLogPileBlockEntity> BURNING_LOG_PILE = register("burning_log_pile", BurningLogPileBlockEntity::new, TFCBlocks.BURNING_LOG_PILE);
@@ -112,17 +123,6 @@ public final class TFCBlockEntities
     ).flatMap(woodMap -> woodMap.values().stream().flatMap(metalMap -> metalMap.values().stream())));
     public static final Id<LampBlockEntity> LAMP = register("lamp", LampBlockEntity::new, TFCBlocks.METALS.values().stream().filter(map -> map.get(Metal.BlockType.LAMP) != null).map(map -> map.get(Metal.BlockType.LAMP)));
     public static final Id<ThatchBedBlockEntity> THATCH_BED = register("thatch_bed", ThatchBedBlockEntity::new, TFCBlocks.THATCH_BED);
-    // TODO: The "berry_bush" name for this block entity that needs to be used on anything that extends SeasonalPlantBlock is misleading, but I don't want to make a breaking change at the moment
-    public static final Id<SeasonalPlantBlockEntity> SEASONAL_PLANT = register("berry_bush", SeasonalPlantBlockEntity::new, Stream.of(
-        List.of(
-            TFCBlocks.BANANA_PLANT,
-            TFCBlocks.CRANBERRY_BUSH
-        ),
-        TFCBlocks.SPREADING_BUSHES.values(),
-        TFCBlocks.SPREADING_CANES.values(),
-        TFCBlocks.STATIONARY_BUSHES.values(),
-        TFCBlocks.FRUIT_TREE_LEAVES.values()
-    ).flatMap(Collection::stream));
     public static final Id<CropBlockEntity> CROP = register("crop", CropBlockEntity::new, TFCBlocks.CROPS.values().stream());
     public static final Id<DecayingBlockEntity> DECAYING = register("decaying", DecayingBlockEntity::new, Stream.of(TFCBlocks.MELON, TFCBlocks.PUMPKIN));
     public static final Id<NestBoxBlockEntity> NEST_BOX = register("nest_box", NestBoxBlockEntity::new, TFCBlocks.NEST_BOX);

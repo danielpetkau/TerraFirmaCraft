@@ -30,7 +30,7 @@ import org.jetbrains.annotations.NotNull;
 
 import net.dries007.tfc.TerraFirmaCraft;
 import net.dries007.tfc.common.TFCTags;
-import net.dries007.tfc.common.blockentities.SeasonalPlantBlockEntity;
+import net.dries007.tfc.common.blockentities.SpreadingBushBlockEntity;
 import net.dries007.tfc.common.blocks.ExtendedProperties;
 import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.util.Helpers;
@@ -79,7 +79,7 @@ public class SpreadingCaneBlock extends SpreadingBushBlock
     protected void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random)
     {
         final BlockPos climatePos;
-        if (level.getBlockEntity(pos) instanceof SeasonalPlantBlockEntity plant)
+        if (level.getBlockEntity(pos) instanceof SpreadingBushBlockEntity plant)
         {
             climatePos = plant.getStemPos();
         }
@@ -92,7 +92,7 @@ public class SpreadingCaneBlock extends SpreadingBushBlock
 
         if (!climateRange.get().checkBoth(hydration, temp, false))
         {
-            SeasonalPlantBlockEntity.reset(level, pos);
+            SpreadingBushBlockEntity.reset(level, pos);
         }
         else
         {
@@ -102,32 +102,33 @@ public class SpreadingCaneBlock extends SpreadingBushBlock
     }
 
     @Override
-    protected void growAndPropagate(BlockState state, ServerLevel level, BlockPos pos, RandomSource random, int cycles)
+    protected void growAndPropagate(BlockState state, ServerLevel level, BlockPos pos, RandomSource random, int cycles, int growthsRemaining)
     {
         final int oldStage = state.getValue(STAGE);
         if (oldStage < 2)
         {
             final BlockState newState = state.setValue(STAGE, state.getValue(STAGE) + 1);
-            placeBlockAndResetCounter(level, pos, newState, cycles);
+            placeBlockAndResetCounter(level, pos, newState, cycles, growthsRemaining);
             level.getBlockState(pos).randomTick(level, pos, level.random);
             return; // Increment stage if possible
         }
 
         // Otherwise, try and convert to a bush bock
-        placeCompanionBlockAndResetCounter(level, pos, state, cycles);
+        placeCompanionBlockAndResetCounter(level, pos, state, cycles, growthsRemaining);
     }
 
-    private void placeCompanionBlockAndResetCounter(ServerLevel level, BlockPos pos, BlockState oldState, int cycles)
+    private void placeCompanionBlockAndResetCounter(ServerLevel level, BlockPos pos, BlockState oldState, int cycles, int growths)
     {
         // Bush blocks start at stage = 1 when they're grown from another bush block, as stage = 0 is just for newly planted
         final BlockState placeState = companion.get().defaultBlockState().setValue(STAGE, 1).setValue(LIFECYCLE, oldState.getValue(LIFECYCLE));
         if (placeState.canSurvive(level, pos))
         {
             level.setBlock(pos, placeState, Block.UPDATE_ALL);
-            if (level.getBlockEntity(pos) instanceof SeasonalPlantBlockEntity bush)
+            if (level.getBlockEntity(pos) instanceof SpreadingBushBlockEntity bush)
             {
                 bush.resetCounter();
                 bush.increaseCounter(TICKS_TO_GROW_BERRY_BUSH * cycles);
+                bush.setGrowthsRemaining(growths);
 
                 bush.setStemPos(pos);
             }
@@ -135,7 +136,7 @@ public class SpreadingCaneBlock extends SpreadingBushBlock
             {
                 TerraFirmaCraft.LOGGER.error("Failed to update growing berry bush block entity at: {}", pos);
             }
-            level.getBlockState(pos).randomTick(level, pos, level.random);
+            level.getBlockState(pos).tick(level, pos, level.random);
         }
     }
 

@@ -26,7 +26,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 
 import net.dries007.tfc.TerraFirmaCraft;
-import net.dries007.tfc.common.blockentities.SeasonalPlantBlockEntity;
+import net.dries007.tfc.common.blockentities.SpreadingBushBlockEntity;
 import net.dries007.tfc.common.blocks.ExtendedProperties;
 import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.blocks.soil.FarmlandBlock;
@@ -69,7 +69,7 @@ public class StationaryBerryBushBlock extends SeasonalPlantBlock implements HoeO
 
         if (!climateRange.get().checkBoth(hydration, temp, false))
         {
-            SeasonalPlantBlockEntity.reset(level, pos);
+            SpreadingBushBlockEntity.reset(level, pos);
         }
         else
         {
@@ -86,8 +86,8 @@ public class StationaryBerryBushBlock extends SeasonalPlantBlock implements HoeO
     {
         super.tick(state, level, pos, rand);
 
-        // Must be in an active lifecycle to consider growing
-        if (state.getValue(LIFECYCLE).active() && level.getBlockEntity(pos) instanceof SeasonalPlantBlockEntity counter)
+        // Must be in an active lifecycle and have remaining growths to consider growing
+        if (state.getValue(LIFECYCLE).active() && level.getBlockEntity(pos) instanceof SpreadingBushBlockEntity counter && counter.getGrowthsRemaining() > 0)
         {
             // Then find the max number of times the plant could have grown in the time since the last update
             int maxCycles = (int) (counter.getTicksSinceUpdate() / TICKS_TO_GROW_BERRY_BUSH);
@@ -157,7 +157,7 @@ public class StationaryBerryBushBlock extends SeasonalPlantBlock implements HoeO
                 // Verify we actually had enough time to grow
                 if (cycles > 0)
                 {
-                    growAndPropagate(state, level, pos, rand, cycles);
+                    growAndPropagate(state, level, pos, rand, cycles, counter.getGrowthsRemaining() - 1);
                 }
             }
         }
@@ -166,7 +166,7 @@ public class StationaryBerryBushBlock extends SeasonalPlantBlock implements HoeO
     @Override
     public void addHoeOverlayInfo(Level level, BlockPos pos, BlockState state, Consumer<Component> text, boolean isDebug)
     {
-        if (level.getBlockEntity(pos) instanceof SeasonalPlantBlockEntity bush)
+        if (level.getBlockEntity(pos) instanceof SpreadingBushBlockEntity bush)
         {
             final ClimateRange range = climateRange.get();
             final BlockPos sourcePos = bush.getStemPos().below();
@@ -179,7 +179,7 @@ public class StationaryBerryBushBlock extends SeasonalPlantBlock implements HoeO
     @Override
     public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack)
     {
-        SeasonalPlantBlockEntity.reset(level, pos);
+        SpreadingBushBlockEntity.reset(level, pos);
         super.setPlacedBy(level, pos, state, placer, stack);
     }
 
@@ -187,7 +187,7 @@ public class StationaryBerryBushBlock extends SeasonalPlantBlock implements HoeO
      * Performs growth and (optional) propagation of the bush.
      * Propagation should be naturally limited to not cause runaway generation.
      */
-    protected void growAndPropagate(BlockState state, ServerLevel level, BlockPos pos, RandomSource random, int cycles)
+    protected void growAndPropagate(BlockState state, ServerLevel level, BlockPos pos, RandomSource random, int cycles, int growthsRemaining)
     {
         cycles--;
 
@@ -196,7 +196,7 @@ public class StationaryBerryBushBlock extends SeasonalPlantBlock implements HoeO
         {
             // Increment stage by one if not fully grown
             final BlockState newState = state.setValue(STAGE, state.getValue(STAGE) + 1);
-            placeBlockAndResetCounter(level, pos, newState, cycles);
+            placeBlockAndResetCounter(level, pos, newState, cycles, growthsRemaining);
             return;
         }
 
@@ -226,25 +226,26 @@ public class StationaryBerryBushBlock extends SeasonalPlantBlock implements HoeO
             final BlockState placementState = getNewState(level, newPos);
             if (canPlaceNewBushAt(level, newPos, placementState))
             {
-                placeBlockAndResetCounter(level, newPos, placementState, cycles);
+                placeBlockAndResetCounter(level, newPos, placementState, cycles, growthsRemaining - random.nextInt(1, 3));
                 return;
             }
         }
     }
 
-    protected void placeBlockAndResetCounter(ServerLevel level, BlockPos pos, BlockState state, int cycles)
+    protected void placeBlockAndResetCounter(ServerLevel level, BlockPos pos, BlockState state, int cycles, int growths)
     {
         level.setBlock(pos, state, Block.UPDATE_ALL);
-        if (level.getBlockEntity(pos) instanceof SeasonalPlantBlockEntity bush)
+        if (level.getBlockEntity(pos) instanceof SpreadingBushBlockEntity bush)
         {
             bush.resetCounter();
             bush.increaseCounter(TICKS_TO_GROW_BERRY_BUSH * cycles);
+            bush.setGrowthsRemaining(growths);
         }
         else
         {
             TerraFirmaCraft.LOGGER.error("Failed to update propagated berry bush block entity at: {}", pos);
         }
-        level.getBlockState(pos).tick(level, pos, level.random); // TODO: Decide if we are using, tick, random tick, or schedule tick for this, and stick to it in all versions of this method
+        level.getBlockState(pos).tick(level, pos, level.random);
     }
 
     protected BlockState getNewState(Level level, BlockPos pos)
