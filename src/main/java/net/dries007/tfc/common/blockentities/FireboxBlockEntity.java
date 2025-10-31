@@ -21,6 +21,7 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -28,6 +29,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.DoorBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.phys.AABB;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.ItemStackHandler;
 
@@ -71,7 +74,7 @@ public class FireboxBlockEntity extends TickableInventoryBlockEntity<ItemStackHa
             box.airTicks--;
         }
 
-        // Always update temperature / cooking, until the fire pit is not hot anymore
+        // Always update temperature / cooking, until the fire box is not hot anymore
         if (box.temperature > 0 || box.burnTemperature > 0)
         {
             box.temperature = HeatCapability.adjustDeviceTemp(box.temperature, box.burnTemperature, box.airTicks, false);
@@ -89,12 +92,23 @@ public class FireboxBlockEntity extends TickableInventoryBlockEntity<ItemStackHa
         if (level.getGameTime() % 200 == 0)
         {
             final int oldCap = box.heatingCount;
-            box.operableBlocks = floodfill(level, pos.above(), box);
+            box.operableBlocks = floodfill(level, pos, box);
             if (oldCap != box.operableBlocks.size())
             {
                 box.heatingCount = box.operableBlocks.size();
                 box.heatingTimestamp = Calendars.SERVER.getTicks();
                 box.markForSync();
+            }
+        }
+        if (level.getGameTime() % 40 == 0 && box.temperature > 300)
+        {
+            for (BlockPos operablePos : box.operableBlocks)
+            {
+                final List<LivingEntity> livingEntities = level.getEntitiesOfClass(LivingEntity.class, new AABB(operablePos));
+                for (LivingEntity living : livingEntities)
+                {
+                    living.igniteForTicks(80);
+                }
             }
         }
         if (box.temperature == 0 || box.heatingCount < 4 || Math.abs(box.temperature - box.burnTemperature) > BellowsBlockEntity.MAX_DEVICE_AIR_TICKS + 1)
@@ -116,8 +130,8 @@ public class FireboxBlockEntity extends TickableInventoryBlockEntity<ItemStackHa
         final List<BlockPos> positions = new ArrayList<>(!firebox.operableBlocks.isEmpty() ? firebox.operableBlocks.size() : 16);
         final Queue<Path> queue = new ArrayDeque<>();
 
-        positions.add(pos);
-        queue.add(new Path(pos, 0));
+        positions.add(pos.above());
+        queue.add(new Path(pos.above(), 0));
 
         int capacity = firebox.getTotalHeatableBlocks();
 
@@ -132,10 +146,11 @@ public class FireboxBlockEntity extends TickableInventoryBlockEntity<ItemStackHa
                 break;
             }
 
-            for (Direction direction : NOT_DOWN)
+            for (Direction direction : Direction.values())
             {
+
                 cursor.setWithOffset(current.pos, direction);
-                if (!positions.contains(cursor.immutable()))
+                if (!positions.contains(cursor.immutable()) && !cursor.equals(pos))
                 {
                     final BlockState state = level.getBlockState(cursor);
                     if (!isValidExterior(level, cursor, state, direction))
@@ -143,6 +158,20 @@ public class FireboxBlockEntity extends TickableInventoryBlockEntity<ItemStackHa
                         if (isValidInterior(state))
                         {
                             final BlockPos posNext = cursor.immutable();
+
+                            // check if this block is adjacent to or below the firebox, which invalidates the kiln
+                            // (in this case the firebox is not below the structure, or is inside the structure)
+                            for (Direction direction1 : Direction.values())
+                            {
+                                if (direction1 != Direction.UP)
+                                {
+                                    if (posNext.equals(pos.relative(direction1)))
+                                    {
+                                        positions.clear();
+                                        break;
+                                    }
+                                }
+                            }
 
                             queue.add(new Path(posNext, current.cost + 1));
                             positions.add(posNext);
@@ -190,7 +219,8 @@ public class FireboxBlockEntity extends TickableInventoryBlockEntity<ItemStackHa
                         }
                     }
                 }
-            }});
+            }
+        });
     }
 
     private static boolean isValidInterior(BlockState state)
