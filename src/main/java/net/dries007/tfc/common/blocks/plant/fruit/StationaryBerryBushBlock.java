@@ -67,15 +67,14 @@ public class StationaryBerryBushBlock extends SeasonalPlantBlock implements HoeO
         final int hydration = getFruitBushHydration(level, pos);
         final float temp = Climate.getAverageTemperature(level, pos);
 
-        if (!climateRange.get().checkBoth(hydration, temp, false))
-        {
-            SpreadingBushBlockEntity.reset(level, pos);
-        }
-        else
+        if (climateRange.get().checkBoth(hydration, temp, false))
         {
             this.tick(state, level, pos, random);
         }
-        super.randomTick(state, level, pos, random);
+        else
+        {
+            SpreadingBushBlockEntity.reset(level, pos);
+        }
     }
 
     /**
@@ -84,11 +83,11 @@ public class StationaryBerryBushBlock extends SeasonalPlantBlock implements HoeO
     @Override
     public void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource rand)
     {
-        super.tick(state, level, pos, rand);
-
         // Must be in an active lifecycle and have remaining growths to consider growing
         if (state.getValue(LIFECYCLE).active() && level.getBlockEntity(pos) instanceof SpreadingBushBlockEntity counter && counter.getGrowthsRemaining() > 0)
         {
+            onUpdate(level, pos, state);
+
             // Then find the max number of times the plant could have grown in the time since the last update
             int maxCycles = (int) (counter.getTicksSinceUpdate() / TICKS_TO_GROW_BERRY_BUSH);
             if (maxCycles >= 1)
@@ -161,6 +160,10 @@ public class StationaryBerryBushBlock extends SeasonalPlantBlock implements HoeO
                 }
             }
         }
+        else if (state.getBlock() instanceof SeasonalPlantBlock plant)
+        {
+            updateSometimes(plant, state, level, pos, rand);
+        }
     }
 
     @Override
@@ -189,8 +192,6 @@ public class StationaryBerryBushBlock extends SeasonalPlantBlock implements HoeO
      */
     protected void growAndPropagate(BlockState state, ServerLevel level, BlockPos pos, RandomSource random, int cycles, int growthsRemaining)
     {
-        cycles--;
-
         final int oldStage = state.getValue(STAGE);
         if (oldStage < 2)
         {

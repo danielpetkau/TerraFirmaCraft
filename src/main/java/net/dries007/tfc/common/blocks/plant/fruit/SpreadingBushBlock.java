@@ -83,22 +83,19 @@ public class SpreadingBushBlock extends StationaryBerryBushBlock implements IFor
         final int hydration = getFruitBushHydrationFromRootPos(level, climatePos);
         final float temp = Climate.getAverageTemperature(level, climatePos);
 
-        if (!climateRange.get().checkBoth(hydration, temp, false))
-        {
-            SpreadingBushBlockEntity.reset(level, pos);
-        }
-        else
+        if (climateRange.get().checkBoth(hydration, temp, false))
         {
             this.tick(state, level, pos, random);
         }
-        super.randomTick(state, level, pos, random);
+        else
+        {
+            SpreadingBushBlockEntity.reset(level, pos);
+        }
     }
 
     @Override
     protected void growAndPropagate(BlockState state, ServerLevel level, BlockPos pos, RandomSource random, int cycles, int growthsRemaining)
     {
-        cycles--;
-
         // Increment stage by one
         final int originalStage = state.getValue(STAGE);
 

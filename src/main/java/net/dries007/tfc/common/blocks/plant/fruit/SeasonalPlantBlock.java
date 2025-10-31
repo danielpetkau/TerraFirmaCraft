@@ -72,6 +72,11 @@ public abstract class SeasonalPlantBlock extends BushBlock implements IForgeBloc
 
     public void randomTick(SeasonalPlantBlock plant, BlockState state, ServerLevel level, BlockPos pos, RandomSource random)
     {
+        updateSometimes(plant, state, level, pos, random);
+    }
+
+    public void updateSometimes(SeasonalPlantBlock plant, BlockState state, ServerLevel level, BlockPos pos, RandomSource random)
+    {
         final int rarity = Math.max(1, (int) (ICalendar.TICKS_IN_DAY * level.getGameRules().getInt(GameRules.RULE_RANDOMTICKING) * (1 / 4096f)));
         if (random.nextInt(rarity) == 0)
         {
@@ -84,7 +89,6 @@ public abstract class SeasonalPlantBlock extends BushBlock implements IForgeBloc
     {
         if (level.getBlockEntity(pos) instanceof SpreadingBushBlockEntity plant)
         {
-            final BlockPos stemPos = plant.getStemPos();
             Lifecycle currentLifecycle = state.getValue(LIFECYCLE);
             Lifecycle expectedLifecycle = getLifecycleForCurrentMonth(level, pos);
             // if we are not working with a plant that is or should be dormant
@@ -92,6 +96,7 @@ public abstract class SeasonalPlantBlock extends BushBlock implements IForgeBloc
             {
                 final ClimateRange range = climateRange.get();
 
+                final BlockPos stemPos = plant.getStemPos();
                 final int hydration = getFruitBushHydrationFromRootPos(level, stemPos.below());
 
                 if (range.checkBoth(hydration, Climate.getAverageTemperature(level, stemPos), false))

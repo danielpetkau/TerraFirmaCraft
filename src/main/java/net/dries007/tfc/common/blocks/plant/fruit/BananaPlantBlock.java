@@ -89,18 +89,19 @@ public class BananaPlantBlock extends SeasonalPlantBlock implements HoeOverlayBl
         final int hydration = getFruitBushHydrationFromRootPos(level, basePos);
         final float temp = Climate.getAverageTemperature(level, basePos);
 
-        if (!climateRange.get().checkBoth(hydration, temp, false))
-        {
-            SpreadingBushBlockEntity.reset(level, pos);
-        }
-        else
+        if (climateRange.get().checkBoth(hydration, temp, false))
         {
             this.tick(state, level, pos, random);
         }
-        super.randomTick(state, level, pos, random); // TODO: Verify needed
+        else
+        {
+            SpreadingBushBlockEntity.reset(level, pos);
+            super.randomTick(state, level, pos, random);
+        }
     }
 
     // TODO: Update this comment if I re-imagine how these things check climate
+
     /**
      * Should only be called after the climate range has been checked
      */
@@ -110,12 +111,17 @@ public class BananaPlantBlock extends SeasonalPlantBlock implements HoeOverlayBl
         super.tick(state, level, pos, rand);
         if (level.getBlockEntity(pos) instanceof SpreadingBushBlockEntity counter)
         {
+            onUpdate(level, pos, state);
             int cycles = (int) (counter.getTicksSinceUpdate() / TICKS_TO_GROW_BANANA_PLANT);
             if (cycles >= 1)
             {
                 grow(state, level, pos, rand, cycles);
                 counter.resetCounter();
             }
+        }
+        else if (state.getBlock() instanceof SeasonalPlantBlock plant)
+        {
+            updateSometimes(plant, state, level, pos, rand);
         }
     }
 
@@ -186,7 +192,6 @@ public class BananaPlantBlock extends SeasonalPlantBlock implements HoeOverlayBl
         cycles--;
 
         // TODO: I don't expect this to work in its current state
-        onUpdate(level, pos, state);
 
         final int oldStage = state.getValue(STAGE);
 
