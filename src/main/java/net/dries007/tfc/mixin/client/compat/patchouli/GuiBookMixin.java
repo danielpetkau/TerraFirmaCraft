@@ -35,7 +35,8 @@ public abstract class GuiBookMixin extends Screen
     @Shadow
     public final Book book;
 
-    @Shadow public abstract Minecraft getMinecraft();
+    @Shadow
+    public abstract Minecraft getMinecraft();
 
     protected GuiBookMixin(Component title, Book book)
     {
@@ -65,8 +66,12 @@ public abstract class GuiBookMixin extends Screen
     @Inject(method = "render", at = @At("HEAD"), cancellable = false)
     public void injectRenderConsistentBackground(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks, CallbackInfo ci)
     {
-        graphics.pose().pushPose();
-        renderTransparentBackground(graphics);
-        graphics.pose().popPose();
+        if (book.id.equals(Helpers.resourceLocation("tfc", "field_guide")))
+        {
+            graphics.pose().pushPose();
+            graphics.pose().scale(8, 8, 1);
+            renderTransparentBackground(graphics);
+            graphics.pose().popPose();
+        }
     }
 }
