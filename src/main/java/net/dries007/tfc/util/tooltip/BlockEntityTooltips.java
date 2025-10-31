@@ -227,15 +227,16 @@ public final class BlockEntityTooltips
     public static final BlockEntityTooltip CALENDAR_CLOCK = (level, state, pos, entity, tooltip) -> {
         if (entity instanceof CalendarClockBlockEntity clock)
         {
-            if (clock.getBlockState().getValue(TFCBlockStateProperties.CLOCK_MODE).equals(CalendarClockBlock.Mode.HOUR))
+            if (clock.getBlockState().getValue(CalendarClockBlock.MODE).equals(CalendarClockBlock.Mode.HOUR))
             {
                 tooltip.accept(Component.translatable("tfc.tooltip.calendar_clock_hour_mode"));
             }
-            else if (clock.getBlockState().getValue(TFCBlockStateProperties.CLOCK_MODE).equals(CalendarClockBlock.Mode.MONTH))
+            else if (clock.getBlockState().getValue(CalendarClockBlock.MODE).equals(CalendarClockBlock.Mode.MONTH))
             {
                 tooltip.accept(Component.translatable("tfc.tooltip.calendar_clock_month_mode"));
             }
-            else {
+            else
+            {
                 tooltip.accept(Component.translatable("tfc.tooltip.calendar_clock_timer_mode"));
             }
 

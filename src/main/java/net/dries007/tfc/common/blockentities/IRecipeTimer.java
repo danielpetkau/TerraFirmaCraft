@@ -5,7 +5,8 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 /**
  * This is implemented in {@link BlockEntity}s with a timer based recipe, to interact with the clocks timer mode.
  */
-public interface IRecipeTimer {
+public interface IRecipeTimer
+{
     int getRecipeDuration();
 
     long getRemainingTime();

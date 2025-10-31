@@ -1313,6 +1313,7 @@ DEFAULT_LANG = {
     'tfc.tooltip.windmill_not_enough_space': 'There is not enough space to place a windmill here!',
     'tfc.tooltip.calendar_clock_month_mode': 'Month Mode',
     'tfc.tooltip.calendar_clock_hour_mode': 'Hour Mode',
+    'tfc.tooltip.calendar_clock_timer_mode': 'Timer Mode',
     'tfc.tooltip.thermometer_ambient_mode': 'Reading Ambient Temperature',
     'tfc.tooltip.thermometer_device_mode': 'Reading Device Temperature',
     'tfc.tooltip.anemometer_speed': 'Wind Speed: %skmh',

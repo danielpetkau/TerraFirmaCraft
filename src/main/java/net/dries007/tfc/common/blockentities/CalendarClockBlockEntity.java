@@ -6,8 +6,8 @@
 
 package net.dries007.tfc.common.blockentities;
 
-import net.dries007.tfc.common.blocks.devices.CalendarClockBlock;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Mth;
@@ -18,6 +18,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 
 import net.dries007.tfc.common.blocks.TFCBlockStateProperties;
+import net.dries007.tfc.common.blocks.devices.CalendarClockBlock;
 import net.dries007.tfc.util.calendar.Calendars;
 
 import static net.dries007.tfc.util.calendar.ICalendar.*;
@@ -58,16 +59,17 @@ public class CalendarClockBlockEntity extends TickableBlockEntity
                 int recipeDuration = 0;
                 long remainingTime = 0;
                 // checks for block entities behind it
-                BlockEntity attachedTo = level.getBlockEntity(pos.relative(state.getValue(CalendarClockBlock.FACING).getOpposite()));
+                final Direction facing = state.getValue(CalendarClockBlock.FACING);
+                BlockEntity attachedTo = level.getBlockEntity(pos.relative(facing.getOpposite()));
                 // if there is none it checks for the one behind that
                 if (attachedTo == null)
                 {
-                    attachedTo = level.getBlockEntity(pos.relative(state.getValue(CalendarClockBlock.FACING).getOpposite()).relative(state.getValue(CalendarClockBlock.FACING).getOpposite()));
+                    attachedTo = level.getBlockEntity(pos.relative(facing.getOpposite()).relative(facing.getOpposite()));
                 }
-                if (attachedTo instanceof IRecipeTimer)
+                if (attachedTo instanceof IRecipeTimer attachedTimer)
                 {
-                    recipeDuration = ((IRecipeTimer) attachedTo).getRecipeDuration();
-                    remainingTime = ((IRecipeTimer) attachedTo).getRemainingTime();
+                    recipeDuration = attachedTimer.getRecipeDuration();
+                    remainingTime = attachedTimer.getRemainingTime();
                 }
                 // if there is still no block entity it boots out of timer mode
                 else

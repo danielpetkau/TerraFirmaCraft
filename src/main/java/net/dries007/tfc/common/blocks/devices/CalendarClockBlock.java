@@ -6,7 +6,7 @@
 
 package net.dries007.tfc.common.blocks.devices;
 
-import net.dries007.tfc.common.TFCTags;
+import java.util.Locale;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.StringRepresentable;
@@ -24,7 +24,6 @@ import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.gameevent.GameEvent;
@@ -33,12 +32,11 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 
+import net.dries007.tfc.common.TFCTags;
 import net.dries007.tfc.common.blockentities.CalendarClockBlockEntity;
 import net.dries007.tfc.common.blocks.ExtendedProperties;
 import net.dries007.tfc.common.blocks.TFCBlockStateProperties;
 import net.dries007.tfc.util.Helpers;
-
-import java.util.Locale;
 
 public class CalendarClockBlock extends DeviceBlock
 {
@@ -112,10 +110,9 @@ public class CalendarClockBlock extends DeviceBlock
             {
                 BlockState blockState;
                 Direction direction = state.getValue(FACING);
-                switch (state.getValue(MODE)) {
-                    case Mode.HOUR:
-                    default: blockState = state.setValue(MODE, Mode.MONTH);
-                        break;
+                switch (state.getValue(MODE))
+                {
+                    case HOUR:
                     case MONTH:
                         final Direction oppositeDirection = direction.getOpposite();
                         final BlockState blockState1 = level.getBlockState(pos.relative(oppositeDirection));
@@ -136,6 +133,9 @@ public class CalendarClockBlock extends DeviceBlock
                         break;
                     case TIMER:
                         blockState = state.setValue(MODE, Mode.HOUR);
+                        break;
+                    default:
+                        blockState = state.setValue(MODE, Mode.MONTH);
                 }
                 level.setBlock(pos, blockState, 2);
                 level.gameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Context.of(player, blockState));

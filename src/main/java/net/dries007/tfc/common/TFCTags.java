@@ -253,7 +253,9 @@ public class TFCTags
         public static final TagKey<Block> COLD_OCEAN_BLOCKS = tag("cold_ocean_blocks");
         /** Hardened rock blocks only. Used in worldgen to determine in what rock types sea stacks can generate. **/
         public static final TagKey<Block> SEA_STACK_ROCKS = tag("sea_stack_rocks");
+        /** Blocks that the thermometer will visually attach to. */
         public static final TagKey<Block> THERMOMETER_READABLE = tag("thermometer_readable");
+        /**  */
         public static final TagKey<Block> CLOCK_READABLE = tag("clock_readable");
 
         private static TagKey<Block> tag(String name)
