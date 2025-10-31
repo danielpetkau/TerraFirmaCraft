@@ -100,17 +100,9 @@ public class FireboxBlockEntity extends TickableInventoryBlockEntity<ItemStackHa
                 box.markForSync();
             }
         }
-        if (level.getGameTime() % 40 == 0 && box.temperature > 300)
-        {
-            for (BlockPos operablePos : box.operableBlocks)
-            {
-                final List<LivingEntity> livingEntities = level.getEntitiesOfClass(LivingEntity.class, new AABB(operablePos));
-                for (LivingEntity living : livingEntities)
-                {
-                    living.igniteForTicks(80);
-                }
-            }
-        }
+
+        // todo: the kiln should light players on fire
+
         if (box.temperature == 0 || box.heatingCount < 4 || Math.abs(box.temperature - box.burnTemperature) > BellowsBlockEntity.MAX_DEVICE_AIR_TICKS + 1)
             box.heatingTimestamp = Calendars.SERVER.getTicks();
         if (box.getTimeLeft() <= 0)
@@ -130,8 +122,9 @@ public class FireboxBlockEntity extends TickableInventoryBlockEntity<ItemStackHa
         final List<BlockPos> positions = new ArrayList<>(!firebox.operableBlocks.isEmpty() ? firebox.operableBlocks.size() : 16);
         final Queue<Path> queue = new ArrayDeque<>();
 
-        positions.add(pos.above());
-        queue.add(new Path(pos.above(), 0));
+        final BlockPos abovePos = pos.above();
+        positions.add(abovePos);
+        queue.add(new Path(abovePos, 0));
 
         int capacity = firebox.getTotalHeatableBlocks();
 
@@ -146,9 +139,8 @@ public class FireboxBlockEntity extends TickableInventoryBlockEntity<ItemStackHa
                 break;
             }
 
-            for (Direction direction : Direction.values())
+            for (Direction direction : Helpers.DIRECTIONS)
             {
-
                 cursor.setWithOffset(current.pos, direction);
                 if (!positions.contains(cursor.immutable()) && !cursor.equals(pos))
                 {
@@ -161,7 +153,7 @@ public class FireboxBlockEntity extends TickableInventoryBlockEntity<ItemStackHa
 
                             // check if this block is adjacent to or below the firebox, which invalidates the kiln
                             // (in this case the firebox is not below the structure, or is inside the structure)
-                            for (Direction direction1 : Direction.values())
+                            for (Direction direction1 : Helpers.DIRECTIONS)
                             {
                                 if (direction1 != Direction.UP)
                                 {
