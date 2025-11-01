@@ -77,11 +77,12 @@ public abstract class SeasonalPlantBlock extends BushBlock implements IForgeBloc
 
     public void updateSometimes(SeasonalPlantBlock plant, BlockState state, ServerLevel level, BlockPos pos, RandomSource random)
     {
-        final int rarity = Math.max(1, (int) (ICalendar.TICKS_IN_DAY * level.getGameRules().getInt(GameRules.RULE_RANDOMTICKING) * (1 / 4096f)));
-        if (random.nextInt(rarity) == 0)
-        {
+        // TODO: Decide what to do here, but for testing it is annoying to have this slowed down
+//        final int rarity = Math.max(1, (int) (ICalendar.TICKS_IN_DAY * level.getGameRules().getInt(GameRules.RULE_RANDOMTICKING) * (1 / 4096f)));
+//        if (random.nextInt(rarity) == 0)
+//        {
             plant.onUpdate(level, pos, state);
-        }
+//        }
     }
 
     // By default, we only keep track of the life cycle with this method as that functionality is shared by all seasonal plant blocks

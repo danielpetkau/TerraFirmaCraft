@@ -17,7 +17,7 @@ public class TickingPlantBlockEntity extends TickCounterBlockEntity
 {
     public static void reset(Level level, BlockPos pos)
     {
-        level.getBlockEntity(pos, TFCBlockEntities.TICK_COUNTING_BRANCH.get()).ifPresent(TickCounterBlockEntity::resetCounter);
+        level.getBlockEntity(pos, TFCBlockEntities.TICK_COUNTER.get()).ifPresent(TickCounterBlockEntity::resetCounter);
     }
 
     public static void addTicks(Level level, BlockPos pos, long ticks)

@@ -90,15 +90,14 @@ public class SpreadingCaneBlock extends SpreadingBushBlock
         final int hydration = getFruitBushHydrationFromRootPos(level, climatePos);
         final float temp = Climate.getAverageTemperature(level, climatePos);
 
-        if (!climateRange.get().checkBoth(hydration, temp, false))
-        {
-            SpreadingBushBlockEntity.reset(level, pos);
-        }
-        else
+        if (climateRange.get().checkBoth(hydration, temp, false))
         {
             this.tick(state, level, pos, random);
         }
-        super.randomTick(state, level, pos, random);
+        else
+        {
+            level.setBlockAndUpdate(pos, getDeadState(state));
+        }
     }
 
     @Override

@@ -89,7 +89,7 @@ public class SpreadingBushBlock extends StationaryBerryBushBlock implements IFor
         }
         else
         {
-            SpreadingBushBlockEntity.reset(level, pos);
+            level.setBlockAndUpdate(pos, getDeadState(state));
         }
     }
 

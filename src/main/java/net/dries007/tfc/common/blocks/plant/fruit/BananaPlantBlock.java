@@ -49,7 +49,7 @@ public class BananaPlantBlock extends SeasonalPlantBlock implements HoeOverlayBl
 
     public static void kill(Level level, BlockPos pos)
     {
-        // picking bananas kills the plant. this propagates death to the whole stalk.
+        // picking bananas or being in the wrong climate kills the plant. this propagates death to the whole stalk.
         Block deadBlock = TFCBlocks.DEAD_BANANA_PLANT.get();
         if (!level.isClientSide)
         {
@@ -95,8 +95,7 @@ public class BananaPlantBlock extends SeasonalPlantBlock implements HoeOverlayBl
         }
         else
         {
-            SpreadingBushBlockEntity.reset(level, pos);
-            super.randomTick(state, level, pos, random);
+            kill(level, pos);
         }
     }
 
@@ -251,4 +250,5 @@ public class BananaPlantBlock extends SeasonalPlantBlock implements HoeOverlayBl
         BlockState belowState = level.getBlockState(belowPos);
         return Helpers.isBlock(belowState, TFCTags.Blocks.BUSH_PLANTABLE_ON) || Helpers.isBlock(belowState, this);
     }
+
 }

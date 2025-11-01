@@ -36,6 +36,7 @@ import org.jetbrains.annotations.Nullable;
 
 import net.dries007.tfc.client.overworld.SolarCalculator;
 import net.dries007.tfc.common.TFCTags;
+import net.dries007.tfc.common.blockentities.TickCounterBlockEntity;
 import net.dries007.tfc.common.blockentities.TickingPlantBlockEntity;
 import net.dries007.tfc.common.blocks.EntityBlockExtension;
 import net.dries007.tfc.common.blocks.ExtendedProperties;
@@ -215,7 +216,7 @@ public class FruitTreeSaplingBlock extends BushBlock implements IForgeBlockExten
             TickingPlantBlockEntity.setStemPos(level, pos, findBaseOfTree(level, downPos, downState));
         }
 
-        TickingPlantBlockEntity.reset(level, pos);
+        TickCounterBlockEntity.reset(level, pos);
         super.setPlacedBy(level, pos, state, placer, stack);
     }
 

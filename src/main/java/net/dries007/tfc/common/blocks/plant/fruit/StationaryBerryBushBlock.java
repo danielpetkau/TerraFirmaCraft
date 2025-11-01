@@ -73,7 +73,7 @@ public class StationaryBerryBushBlock extends SeasonalPlantBlock implements HoeO
         }
         else
         {
-            SpreadingBushBlockEntity.reset(level, pos);
+            level.setBlockAndUpdate(pos, getDeadState(state));
         }
     }
 
@@ -99,8 +99,8 @@ public class StationaryBerryBushBlock extends SeasonalPlantBlock implements HoeO
                 final long currentTick = Calendars.SERVER.getTicks();
                 final long previousTick = counter.getLastUpdateTick();
 
-                // If it's been 6+ months, skip the simulation and set cycles to the max value
-                if (currentTick - previousTick >= (long) ICalendar.CALENDAR_TICKS_IN_DAY * daysInMonth * 6)
+                // If it's been 8+ months, skip the simulation and set cycles to the max value
+                if (currentTick - previousTick >= (long) ICalendar.CALENDAR_TICKS_IN_DAY * daysInMonth * 8)
                 {
                     cycles = 8;
                 }
