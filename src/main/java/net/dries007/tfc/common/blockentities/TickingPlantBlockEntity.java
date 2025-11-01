@@ -17,24 +17,24 @@ public class TickingPlantBlockEntity extends TickCounterBlockEntity
 {
     public static void reset(Level level, BlockPos pos)
     {
-        level.getBlockEntity(pos, TFCBlockEntities.TICK_COUNTER.get()).ifPresent(TickCounterBlockEntity::resetCounter);
+        level.getBlockEntity(pos, TFCBlockEntities.TICK_COUNTING_PLANT.get()).ifPresent(TickCounterBlockEntity::resetCounter);
     }
 
     public static void addTicks(Level level, BlockPos pos, long ticks)
     {
-        level.getBlockEntity(pos, TFCBlockEntities.TICK_COUNTING_BRANCH.get()).ifPresent(entity -> entity.increaseCounter(ticks));
+        level.getBlockEntity(pos, TFCBlockEntities.TICK_COUNTING_PLANT.get()).ifPresent(entity -> entity.increaseCounter(ticks));
     }
 
     public static void setStemPos(Level level, BlockPos pos, BlockPos stemPos)
     {
-        level.getBlockEntity(pos, TFCBlockEntities.TICK_COUNTING_BRANCH.get()).ifPresent(entity -> entity.setStemPos(stemPos));
+        level.getBlockEntity(pos, TFCBlockEntities.TICK_COUNTING_PLANT.get()).ifPresent(entity -> entity.setStemPos(stemPos));
     }
 
     private BlockPos stemPos;
 
     public TickingPlantBlockEntity(BlockPos pos, BlockState state)
     {
-        this(TFCBlockEntities.TICK_COUNTING_BRANCH.get(), pos, state);
+        this(TFCBlockEntities.TICK_COUNTING_PLANT.get(), pos, state);
     }
 
     public TickingPlantBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)

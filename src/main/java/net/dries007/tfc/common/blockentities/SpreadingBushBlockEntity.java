@@ -15,6 +15,11 @@ import net.minecraft.world.level.block.state.BlockState;
 
 public class SpreadingBushBlockEntity extends TickingPlantBlockEntity
 {
+    public static void reset(Level level, BlockPos pos)
+    {
+        level.getBlockEntity(pos, TFCBlockEntities.BERRY_BUSH.get()).ifPresent(TickCounterBlockEntity::resetCounter);
+    }
+
     // TODO: Initialize this better
     private int growthsRemaining = 24;
 

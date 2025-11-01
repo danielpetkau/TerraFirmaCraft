@@ -27,6 +27,7 @@ import org.jetbrains.annotations.Nullable;
 
 import net.dries007.tfc.TerraFirmaCraft;
 import net.dries007.tfc.common.blockentities.SpreadingBushBlockEntity;
+import net.dries007.tfc.common.blockentities.TickingPlantBlockEntity;
 import net.dries007.tfc.common.blocks.ExtendedProperties;
 import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.blocks.soil.FarmlandBlock;
@@ -177,13 +178,6 @@ public class StationaryBerryBushBlock extends SeasonalPlantBlock implements HoeO
             text.accept(FarmlandBlock.getHydrationTooltip(range, false, hydration));
             text.accept(FarmlandBlock.getAverageTemperatureTooltip(level, sourcePos, range, false));
         }
-    }
-
-    @Override
-    public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack)
-    {
-        SpreadingBushBlockEntity.reset(level, pos);
-        super.setPlacedBy(level, pos, state, placer, stack);
     }
 
     /**

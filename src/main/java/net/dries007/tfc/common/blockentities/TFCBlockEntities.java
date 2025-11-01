@@ -74,7 +74,7 @@ public final class TFCBlockEntities
     );
 
     // TODO: Does changing block entity IDs break existing blocks?
-    public static final Id<TickingPlantBlockEntity> TICK_COUNTING_BRANCH = register("tick_counting_branch", TickingPlantBlockEntity::new, Stream.of(
+    public static final Id<TickingPlantBlockEntity> TICK_COUNTING_PLANT = register("tick_counting_branch", TickingPlantBlockEntity::new, Stream.of(
             TFCBlocks.FRUIT_TREE_SAPLINGS.values().stream(),
             TFCBlocks.FRUIT_TREE_GROWING_BRANCHES.values().stream(),
             Stream.of(

@@ -216,7 +216,7 @@ public class FruitTreeSaplingBlock extends BushBlock implements IForgeBlockExten
             TickingPlantBlockEntity.setStemPos(level, pos, findBaseOfTree(level, downPos, downState));
         }
 
-        TickCounterBlockEntity.reset(level, pos);
+        TickingPlantBlockEntity.reset(level, pos);
         super.setPlacedBy(level, pos, state, placer, stack);
     }
 
