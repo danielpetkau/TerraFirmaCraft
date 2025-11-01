@@ -118,7 +118,7 @@ public class StationaryBerryBushBlock extends SeasonalPlantBlock implements HoeO
                         if (lifecycle != Lifecycle.DORMANT)
                         {
                             cycles++;
-                            simulatedTick = simulatedTick + TICKS_TO_GROW_BERRY_BUSH;
+                            simulatedTick += TICKS_TO_GROW_BERRY_BUSH;
                         }
                         else
                         {
@@ -139,7 +139,7 @@ public class StationaryBerryBushBlock extends SeasonalPlantBlock implements HoeO
                             if (lifecycle != Lifecycle.DORMANT)
                             {
                                 cycles++;
-                                simulatedTick = simulatedTick + TICKS_TO_GROW_BERRY_BUSH;
+                                simulatedTick -= TICKS_TO_GROW_BERRY_BUSH;
                             }
                             else
                             {
@@ -157,7 +157,8 @@ public class StationaryBerryBushBlock extends SeasonalPlantBlock implements HoeO
                 // Verify we actually had enough time to grow
                 if (cycles > 0)
                 {
-                    growAndPropagate(state, level, pos, rand, cycles, counter.getGrowthsRemaining() - 1);
+                    // Count down cycles and growths remaining
+                    growAndPropagate(state, level, pos, rand, cycles - 1, counter.getGrowthsRemaining() - 1);
                 }
             }
         }

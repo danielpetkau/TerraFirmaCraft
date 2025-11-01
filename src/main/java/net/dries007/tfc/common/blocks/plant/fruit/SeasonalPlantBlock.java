@@ -68,7 +68,7 @@ import net.dries007.tfc.util.tracker.WorldTracker;
 
 public abstract class SeasonalPlantBlock extends BushBlock implements IForgeBlockExtension, EntityBlockExtension, ISlowEntities
 {
-    public static final long TICKS_TO_BLOOM_AFTER_PICKING = ICalendar.CALENDAR_TICKS_IN_DAY * 10; // TODO: Should be a config, should have a similar config for fruit trees
+    public static final long TICKS_TO_BLOOM_AFTER_PICKING = ICalendar.CALENDAR_TICKS_IN_DAY * 10; // TODO: Should be a config
 
     public static final VoxelShape PLANT_SHAPE = box(2.0, 0.0, 2.0, 14.0, 16.0, 14.0);
 
