@@ -163,7 +163,7 @@ public class StationaryBerryBushBlock extends SeasonalPlantBlock implements HoeO
         }
         else if (state.getBlock() instanceof SeasonalPlantBlock plant)
         {
-            updateSometimes(plant, state, level, pos, rand);
+            plant.onUpdate(level, pos, state);
         }
     }
 

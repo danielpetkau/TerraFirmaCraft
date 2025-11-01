@@ -120,7 +120,7 @@ public class BananaPlantBlock extends SeasonalPlantBlock implements HoeOverlayBl
         }
         else if (state.getBlock() instanceof SeasonalPlantBlock plant)
         {
-            updateSometimes(plant, state, level, pos, rand);
+            plant.onUpdate(level, pos, state);
         }
     }
 

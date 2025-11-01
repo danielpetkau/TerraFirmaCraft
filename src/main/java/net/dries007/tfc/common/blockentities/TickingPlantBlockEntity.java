@@ -13,6 +13,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
+import net.dries007.tfc.util.calendar.Calendars;
+
 public class TickingPlantBlockEntity extends TickCounterBlockEntity
 {
     public static void reset(Level level, BlockPos pos)
@@ -30,7 +32,8 @@ public class TickingPlantBlockEntity extends TickCounterBlockEntity
         level.getBlockEntity(pos, TFCBlockEntities.TICK_COUNTING_PLANT.get()).ifPresent(entity -> entity.setStemPos(stemPos));
     }
 
-    private BlockPos stemPos;
+    protected BlockPos stemPos;
+    protected long lastPickedTick = Integer.MIN_VALUE;
 
     public TickingPlantBlockEntity(BlockPos pos, BlockState state)
     {
@@ -46,15 +49,8 @@ public class TickingPlantBlockEntity extends TickCounterBlockEntity
     @Override
     public void loadAdditional(CompoundTag nbt, HolderLookup.Provider provider)
     {
-        if (nbt.contains("stemPos", CompoundTag.TAG_INT_ARRAY))
-        {
-            final int[] stemArray = nbt.getIntArray("stemPos");
-            stemPos = new BlockPos(stemArray[0], stemArray[1], stemArray[2]);
-        }
-        else
-        {
-            stemPos = nbt.contains("stemPos", CompoundTag.TAG_LONG) ? BlockPos.of(nbt.getLong("stemPos")) : worldPosition; // todo: remove this array handling, its handling old worlds
-        }
+        stemPos = nbt.contains("stemPos", CompoundTag.TAG_LONG) ? BlockPos.of(nbt.getLong("stemPos")) : worldPosition;
+        lastPickedTick = nbt.getLong("lastPickedTick");
         super.loadAdditional(nbt, provider);
     }
 
@@ -62,7 +58,7 @@ public class TickingPlantBlockEntity extends TickCounterBlockEntity
     public void saveAdditional(CompoundTag nbt, HolderLookup.Provider provider)
     {
         nbt.putLong("stemPos", stemPos.asLong());
-        nbt.putIntArray("stemPos", new int[] {stemPos.getX(), stemPos.getY(), stemPos.getZ()});
+        nbt.putLong("lastPickedTick", lastPickedTick);
         super.saveAdditional(nbt, provider);
     }
 
@@ -75,5 +71,22 @@ public class TickingPlantBlockEntity extends TickCounterBlockEntity
     public BlockPos getStemPos()
     {
         return stemPos;
+    }
+
+    public void setLastPickedTick(long tick)
+    {
+        lastPickedTick = tick;
+        setChanged();
+    }
+
+    public long getLastPickedTick()
+    {
+        return lastPickedTick;
+    }
+
+    public void resetLastPickedCounter()
+    {
+        lastPickedTick = Calendars.SERVER.getTicks();
+        setChanged();
     }
 }

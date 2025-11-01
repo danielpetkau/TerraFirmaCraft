@@ -20,6 +20,11 @@ public class SpreadingBushBlockEntity extends TickingPlantBlockEntity
         level.getBlockEntity(pos, TFCBlockEntities.BERRY_BUSH.get()).ifPresent(TickCounterBlockEntity::resetCounter);
     }
 
+    public static void resetPickedTick(Level level, BlockPos pos)
+    {
+        level.getBlockEntity(pos, TFCBlockEntities.BERRY_BUSH.get()).ifPresent(SpreadingBushBlockEntity::resetLastPickedCounter);
+    }
+
     // TODO: Initialize this better
     private int growthsRemaining = 24;
 

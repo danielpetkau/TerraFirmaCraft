@@ -47,6 +47,7 @@ import net.dries007.tfc.TerraFirmaCraft;
 import net.dries007.tfc.client.overworld.SolarCalculator;
 import net.dries007.tfc.common.TFCTags;
 import net.dries007.tfc.common.blockentities.SpreadingBushBlockEntity;
+import net.dries007.tfc.common.blockentities.TFCBlockEntities;
 import net.dries007.tfc.common.blockentities.TickCounterBlockEntity;
 import net.dries007.tfc.common.blockentities.TickingPlantBlockEntity;
 import net.dries007.tfc.common.blocks.EntityBlockExtension;
@@ -67,6 +68,8 @@ import net.dries007.tfc.util.tracker.WorldTracker;
 
 public abstract class SeasonalPlantBlock extends BushBlock implements IForgeBlockExtension, EntityBlockExtension, ISlowEntities
 {
+    public static final long TICKS_TO_BLOOM_AFTER_PICKING = ICalendar.CALENDAR_TICKS_IN_DAY * 10; // TODO: Should be a config, should have a similar config for fruit trees
+
     public static final VoxelShape PLANT_SHAPE = box(2.0, 0.0, 2.0, 14.0, 16.0, 14.0);
 
     public static final IntegerProperty STAGE = TFCBlockStateProperties.STAGE_2;
@@ -74,17 +77,7 @@ public abstract class SeasonalPlantBlock extends BushBlock implements IForgeBloc
 
     public void randomTick(SeasonalPlantBlock plant, BlockState state, ServerLevel level, BlockPos pos, RandomSource random)
     {
-        updateSometimes(plant, state, level, pos, random);
-    }
-
-    public void updateSometimes(SeasonalPlantBlock plant, BlockState state, ServerLevel level, BlockPos pos, RandomSource random)
-    {
-        // TODO: Decide what to do here, but for testing it is annoying to have this slowed down
-//        final int rarity = Math.max(1, (int) (ICalendar.TICKS_IN_DAY * level.getGameRules().getInt(GameRules.RULE_RANDOMTICKING) * (1 / 4096f)));
-//        if (random.nextInt(rarity) == 0)
-//        {
-            plant.onUpdate(level, pos, state);
-//        }
+        plant.onUpdate(level, pos, state);
     }
 
     // By default, we only keep track of the life cycle with this method as that functionality is shared by all seasonal plant blocks
@@ -113,7 +106,8 @@ public abstract class SeasonalPlantBlock extends BushBlock implements IForgeBloc
 
                 BlockState newState = state.setValue(LIFECYCLE, currentLifecycle);
 
-                if (state != newState)
+                if (state != newState && (currentLifecycle != Lifecycle.FLOWERING ||
+                    Calendars.SERVER.getCalendarTicks() - plant.getLastPickedTick() > TICKS_TO_BLOOM_AFTER_PICKING))
                 {
                     level.setBlock(pos, newState, 3);
                 }
@@ -202,6 +196,7 @@ public abstract class SeasonalPlantBlock extends BushBlock implements IForgeBloc
             {
                 ItemHandlerHelper.giveItemToPlayer(player, getProductItem(level.random));
             }
+            SpreadingBushBlockEntity.resetPickedTick(level, pos);
             level.setBlockAndUpdate(pos, stateAfterPicking(state));
             return ItemInteractionResult.sidedSuccess(level.isClientSide);
         }
