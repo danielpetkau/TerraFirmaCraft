@@ -224,7 +224,8 @@ public final class WeatherHelpers
 
         final ChunkPos chunkPos = chunk.getPos();
         final BlockPos surfacePos = getSequentialSurfacePos(level, chunkPos, chunk, data, false);
-        final float rainfall = model.getRainfall(level, surfacePos, lastRandomTick, currentTick, Calendars.SERVER.getCalendarDaysInMonth());
+
+        final float rainfall = model.getTimeAverageRainfall(level, surfacePos, lastRandomTick, currentTick, Calendars.SERVER.getCalendarDaysInMonth());
         final int daysInMonth = Calendars.SERVER.getCalendarDaysInMonth();
 
         if (timeSinceTick > 4_000)

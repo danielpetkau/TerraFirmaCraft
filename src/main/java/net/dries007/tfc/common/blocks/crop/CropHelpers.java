@@ -76,18 +76,18 @@ public final class CropHelpers
         // Calculate invariants
         final ICalendar calendar = Calendars.get(level);
         final BlockPos sourcePos = pos.below();
-        final long firstCalendarTick = calendar.getCalendarTicks() + calendar.getFixedCalendarTicksFromTick(fromTick - calendar.getTicks());
-        final long secondCalendarTick = calendar.getCalendarTicks() + calendar.getFixedCalendarTicksFromTick(toTick - calendar.getTicks());
+        // This whole rigamarole is because we need to use calendar ticks to sample climate, but cannot store calendar ticks as time stamps
+        final long firstCalendarTick = calendar.getCalendarTickFromOffset(fromTick - calendar.getTicks());
+        final long secondCalendarTick = calendar.getCalendarTickFromOffset(toTick - calendar.getTicks());
         final float startTemperature = Climate.getTemperature(level, pos, calendar, firstCalendarTick);
         final float endTemperature = Climate.getTemperature(level, pos, calendar, secondCalendarTick);
+        final int startHydration = FarmlandBlock.getHydration(level, sourcePos, firstCalendarTick);
+        final int endHydration = FarmlandBlock.getHydration(level, sourcePos, secondCalendarTick);
         final long tickDelta = toTick - fromTick;
 
         final ICropBlock cropBlock = (ICropBlock) state.getBlock();
         final ClimateRange range = cropBlock.getClimateRange();
 
-        // This is based on an average hydration over the skipped period, and the current storm hydration
-        final int startHydration = FarmlandBlock.getHydration(level, sourcePos, fromTick);
-        final int endHydration = FarmlandBlock.getHydration(level, sourcePos, toTick);
         final boolean growing = checkClimate(range, startHydration, endHydration, startTemperature, endTemperature, false);
         final boolean healthy = growing || checkClimate(range, startHydration, endHydration, startTemperature, endTemperature, true);
 

@@ -92,12 +92,12 @@ public interface ClimateModel
     }
 
     /**
-     * @return The average temperature, in {@code mm/year}, at the given {@code pos} over the time delta given by {@code fromTick} and {@code toTick}.
+     * @return The short-term average temperature, in {@code mm/year}, at the given {@code pos} over the time delta given by {@code fromTick} and {@code toTick}.
      * This is typically in the range {@code [-40, 40]} but is not required to be.
      *
      * This is done to properly consider the impact of any time-based variation of temperature
      */
-    default float getTemperature(LevelReader level, BlockPos pos, long fromTick, long toTick, int daysInMonth)
+    default float getTimeAverageTemperature(LevelReader level, BlockPos pos, long fromTick, long toTick, int daysInMonth)
     {
         final long deltaTicks = toTick - fromTick;
 
@@ -138,11 +138,21 @@ public interface ClimateModel
     }
 
     /**
-     * @return The instantaneous rainfall, in {@code mm/year}, at the given {@code pos} over the time delta given by {@code fromTick} and {@code toTick}.
+     * @return The average rainfall, in {@code mm/year}, at the given {@code pos} and timestamp given by {@code calendarTicks} and
+     * {@code daysInMonth}. Note that this is allowed to vary with seasonal effects, but still returns an average.
+     * <strong>Must</strong> be within the range {@code [0, 500]}.
+     */
+    default float getRainfall(LevelReader level, BlockPos pos, long calendarTicks, int daysInMonth)
+    {
+        return getAverageRainfall(level, pos);
+    }
+
+    /**
+     * @return The short-term average rainfall, in {@code mm/year}, at the given {@code pos} over the time delta given by {@code fromTick} and {@code toTick}.
      *
      * This is done to properly consider the impact of any time-based variation of rainfall
      */
-    default float getRainfall(LevelReader level, BlockPos pos, long fromTick, long toTick, int daysInMonth)
+    default float getTimeAverageRainfall(LevelReader level, BlockPos pos, long fromTick, long toTick, int daysInMonth)
     {
         final long deltaTicks = toTick - fromTick;
 
@@ -154,16 +164,6 @@ public interface ClimateModel
         }
 
         return rainfallSum / NUM_SAMPLES_FOR_DELTAS;
-    }
-
-    /**
-     * @return The average rainfall, in {@code mm/year}, at the given {@code pos} and timestamp given by {@code calendarTicks} and
-     * {@code daysInMonth}. Note that this is allowed to vary with seasonal effects, but still returns an average.
-     * <strong>Must</strong> be within the range {@code [0, 500]}.
-     */
-    default float getRainfall(LevelReader level, BlockPos pos, long calendarTicks, int daysInMonth)
-    {
-        return getAverageRainfall(level, pos);
     }
 
     /**
@@ -207,11 +207,11 @@ public interface ClimateModel
     }
 
     /**
-     * @return The average groundwater, in {@code mm/year}, at the given {@code pos} over the time delta given by {@code fromTick} and {@code toTick}.
+     * @return The short-term average groundwater, in {@code mm/year}, at the given {@code pos} over the time delta given by {@code fromTick} and {@code toTick}.
      *
      * This is done to properly consider the impact of any time-based variation of groundwater
      */
-    default float getGroundwater(LevelReader level, BlockPos pos, long fromTick, long toTick, int daysInMonth)
+    default float getTimeAverageGroundwater(LevelReader level, BlockPos pos, long fromTick, long toTick, int daysInMonth)
     {
         final long deltaTicks = toTick - fromTick;
 
