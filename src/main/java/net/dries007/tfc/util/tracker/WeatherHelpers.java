@@ -223,9 +223,10 @@ public final class WeatherHelpers
         final long timeSinceTick = currentTick - lastRandomTick;
 
         final ChunkPos chunkPos = chunk.getPos();
-        final BlockPos surfacePos = getSequentialSurfacePos(level, chunkPos, chunk, data, false);
+        final BlockPos snowPlacementSurfacePos = getSequentialSurfacePos(level, chunkPos, chunk, data, false);
+        final BlockPos climateCheckSurfacePos = getRandomSurfacePos(level, chunkPos);
 
-        final float rainfall = model.getTimeAverageRainfall(level, surfacePos, lastRandomTick, currentTick, Calendars.SERVER.getCalendarDaysInMonth());
+        final float rainfall = model.getTimeAverageRainfall(level, climateCheckSurfacePos, lastRandomTick, currentTick, Calendars.SERVER.getCalendarDaysInMonth());
         final int daysInMonth = Calendars.SERVER.getCalendarDaysInMonth();
 
         if (timeSinceTick > 4_000)
@@ -240,7 +241,9 @@ public final class WeatherHelpers
             while (calendarTick < currentCalendarTick)
             {
                 calendarTick += 4_000;
-                final float estimatedTemperature = model.getTemperature(level, surfacePos, calendarTick, daysInMonth);
+                // Take the max of the two temperatures to ensure that snow will not accumulate in too-warm spots in the autumn
+                final float estimatedTemperature = Math.max(model.getTemperature(level, climateCheckSurfacePos, calendarTick, daysInMonth),
+                    model.getTemperature(level, snowPlacementSurfacePos, calendarTick, daysInMonth));
                 if (estimatedTemperature > 2f)
                 {
                     netChangeInSnow = netChangeInSnow - UPDATES_PER_SNOW_MELT_SKIP;
@@ -275,19 +278,21 @@ public final class WeatherHelpers
         }
         else if (level.random.nextInt(TICKS_PER_SNOW_ACCUMULATION) == 0)
         {
-            // Trigger either snow melting, or accumulation event
-            final float realTemperature = model.getTemperature(level, surfacePos);
-            if (realTemperature > 2f && level.random.nextInt(TICKS_PER_SNOW_MELT_PER_SNOW_ACCUMULATION) == 0)
+            // Trigger either accumulation event or snow melt
+            final float realTemperature = model.getTemperature(level, snowPlacementSurfacePos);
+            // Use the actual temperature for accumulation to avoid placing snow somewhere too warm
+            if (realTemperature < -2f && isPrecipitating(model.getRain(currentCalendarTick), rainfall))
+            {
+                // Trigger accumulation
+                handleSnowAccumulation(level, snowPlacementSurfacePos);
+                // We delay iterating the position until we know whether snow will actually get placed
+                data.iterateSnowPos(chunk);
+            }
+            // Use the random surface pos for melting to avoid getting stuck on a block
+            else if (model.getTemperature(level, climateCheckSurfacePos) > 2f && level.random.nextInt(TICKS_PER_SNOW_MELT_PER_SNOW_ACCUMULATION) == 0)
             {
                 // Trigger melting
                 handleSnowMelting(level, chunkPos, 1);
-            }
-            else if (realTemperature < -2f && isPrecipitating(model.getRain(currentCalendarTick), rainfall))
-            {
-                // Trigger accumulation
-                handleSnowAccumulation(level, surfacePos);
-                // We delay iterating the position until we know whether snow will actually get placed
-                data.iterateSnowPos(chunk);
             }
         }
 
@@ -302,6 +307,12 @@ public final class WeatherHelpers
             data.iterateSnowPos(access);
         }
         return level.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING, pos);
+    }
+
+    private static BlockPos getRandomSurfacePos(ServerLevel level, ChunkPos chunkPos)
+    {
+        final BlockPos randomPos = level.getBlockRandomPos(chunkPos.getMinBlockX(), 0, chunkPos.getMinBlockZ(), 15);
+        return level.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING, randomPos);
     }
 
     private static int countExistingSnowInChunk(ServerLevel level, ChunkPos chunkPos)
@@ -383,8 +394,7 @@ public final class WeatherHelpers
 
     private static void handleSnowAccumulation(ServerLevel level, BlockPos surfacePos)
     {
-        // Handle smoother snow placement: if there's an adjacent position with less snow, switch to that position instead
-        // Additionally, handle up to two block tall plants if they can be piled
+        // Handle up to two block tall plants if they can be piled
         // This means we need to check three levels deep
         BlockPos groundPos, belowGroundPos;
 
@@ -744,7 +754,8 @@ public final class WeatherHelpers
     {
         final float angle = wrappedPositiveAngle((float) Mth.atan2(wind.y, wind.x));
         int direction = granularCardinalIntFromAngle(angle);
-        switch (direction) {
+        switch (direction)
+        {
             case 0 -> {return Helpers.translateEnum(Direction.NORTH);}
             case 1 -> {return Component.translatable("tfc.direction.cardinal_granular", Helpers.translateEnum(Direction.NORTH), Component.translatable("tfc.direction.cardinal_northeast"));}
             case 2 -> {return Component.translatable("tfc.direction.cardinal_northeast");}

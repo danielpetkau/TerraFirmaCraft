@@ -354,6 +354,7 @@ public sealed class ChunkData
             nbt.put("temperature", temperatureLayer.write());
             nbt.putByte("forestType", (byte) forestType.ordinal());
             nbt.putLong("lastRandomTick", lastRandomTick);
+            nbt.putByte("nextSnowPosition", nextSnowPosition);
         }
         return nbt;
     }
@@ -376,6 +377,7 @@ public sealed class ChunkData
             temperatureLayer = new LerpFloatLayer(nbt.getCompound("temperature"));
             forestType = ForestType.valueOf(nbt.getByte("forestType"));
             lastRandomTick = nbt.getLong("lastRandomTick");
+            nextSnowPosition = nbt.getByte("nextSnowPosition");
         }
     }
 
