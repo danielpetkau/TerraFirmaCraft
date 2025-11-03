@@ -68,6 +68,7 @@ public enum IngameOverlays
     public static final ResourceLocation TEXTURE = Helpers.identifier("textures/gui/icons/overlay.png");
     public static final ResourceLocation INK_TEXTURE = Helpers.identifier("textures/misc/ink_splatter.png");
     public static final ResourceLocation GLOW_INK_TEXTURE = Helpers.identifier("textures/misc/glow_ink_splatter.png");
+    final static int HEALTH_TEXT_SHADOW_COLOR = new Color(104,0,0).getRGB();
 
     private static final ResourceLocation VANILLA_HEALTH = VanillaGuiLayers.PLAYER_HEALTH;
     private static final ResourceLocation VANILLA_MOUNT_HEALTH = VanillaGuiLayers.VEHICLE_HEALTH;
@@ -393,9 +394,7 @@ public enum IngameOverlays
         stack.translate(centerX - 50, y, 0);
         stack.scale(1f, 1f, 1.0f);
 
-        final int shadowColor = 23592960;
-
-        graphics.drawString(gui.getFont(), text, (-1 * gui.getFont().width(text) / 2) + 1, 1, shadowColor, false);
+        graphics.drawString(gui.getFont(), text, (-1 * gui.getFont().width(text) / 2) + 1, 1, HEALTH_TEXT_SHADOW_COLOR, false);
         graphics.drawString(gui.getFont(), text, -1 * gui.getFont().width(text) / 2, 1, Color.WHITE.getRGB(), false);
 
         stack.popPose();
