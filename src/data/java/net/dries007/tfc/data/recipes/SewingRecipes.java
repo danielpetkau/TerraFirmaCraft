@@ -90,6 +90,18 @@ public interface SewingRecipes extends Recipes
             "########"
         ), Items.MOJANG_BANNER_PATTERN);
         sewingRecipe(List.of(
+            "         ",
+            "   # #   ",
+            "  #   #  ",
+            "    #    ",
+            "    #    "
+        ), List.of(
+            "   ##   ",
+            " ###### ",
+            "  ####  ",
+            "   ##   "
+        ), Items.GUSTER_BANNER_PATTERN);
+        sewingRecipe(List.of(
             "     # # ",
             "    #    ",
             "         ",
