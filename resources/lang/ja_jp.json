@@ -1018,7 +1018,7 @@
   "Compost Browns": "Compost Browns",
   "Some $(4)brown$() items contribute little to the composter, such as tall plants like dry phragmite, tree ferns, and vines, as well as fallen leaves. To fill a composter's appetite of brown items, you need 16 of them.": "$(4)brown$() アイテムの中には、乾燥したフラムタイト、木生シダ、蔓植物などの背の高い植物や落ち葉など、コンポスターにほとんど寄与しないものもあります。 コンポスターの茶アイテムの需要を満たすには、16 個のアイテムが必要です。",
   "Some $(4)brown$() items contribute moderately to the composter, such as wood ash and jute. To fill a composter's appetite of brown items, you need 8 of them.": "木の灰やジュートなど、一部の $(4)茶$() アイテムはコンポスターに適度に貢献します。 コンポスターの茶アイテムの需要を満たすには、8 個のアイテムが必要です。",
-  "Some $(4)brown$() items contribute a great amount to the composter, such as melons, pumpkins, dead grass, pinecones, humus, and driftwood. To fill a composter's appetite of brown items, you need 4 of them.": "メロン、カボチャ、枯れ草、松ぼっくり、腐葉土、流木など、一部の $(4)茶$() アイテムはコンポスターに多大な貢献をします。 コンポスターの茶アイテムの需要を満たすには、それらが 4 つ必要です。",
+  "Some $(4)brown$() items contribute a great amount to the composter, such as dead grass, pinecones, humus, and driftwood. To fill a composter's appetite of brown items, you need 4 of them.": "メロン、カボチャ、枯れ草、松ぼっくり、腐葉土、流木など、一部の $(4)茶$() アイテムはコンポスターに多大な貢献をします。 コンポスターの茶アイテムの需要を満たすには、それらが 4 つ必要です。",
   "Compost Poisons": "Compost Poisons",
   "Some items will $(c)poison$() your compost. These include $(c)meat$() and $(c)bones$(). Poison compost, when used on a crop, instantly kills it.": "一部のアイテムはあなたの堆肥を $(c)毒性化$() します。 これらには、$(c)肉$() や $(c)骨$() が含まれます。 毒堆肥を作物に使用すると、即座に枯れてしまいます。",
   "Flux": "融剤",

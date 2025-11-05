@@ -126,7 +126,7 @@
       "item": "tag:tfc:compost_browns/high",
       "title": "Compost Browns",
       "link_recipes": false,
-      "text": "Some $(4)brown$() items contribute a great amount to the composter, such as melons, pumpkins, dead grass, pinecones, humus, and driftwood. To fill a composter's appetite of brown items, you need 4 of them."
+      "text": "Some $(4)brown$() items contribute a great amount to the composter, such as dead grass, pinecones, humus, and driftwood. To fill a composter's appetite of brown items, you need 4 of them."
     },
     {
       "type": "patchouli:spotlight",
