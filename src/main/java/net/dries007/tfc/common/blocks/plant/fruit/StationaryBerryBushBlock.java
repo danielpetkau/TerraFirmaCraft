@@ -29,6 +29,7 @@ import net.dries007.tfc.common.blocks.ExtendedProperties;
 import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.blocks.soil.FarmlandBlock;
 import net.dries007.tfc.common.blocks.soil.HoeOverlayBlock;
+import net.dries007.tfc.config.TFCConfig;
 import net.dries007.tfc.util.Helpers;
 import net.dries007.tfc.util.calendar.Calendars;
 import net.dries007.tfc.util.calendar.ICalendar;
@@ -38,7 +39,7 @@ import net.dries007.tfc.util.climate.ClimateRange;
 
 public class StationaryBerryBushBlock extends SeasonalPlantBlock implements HoeOverlayBlock
 {
-    public static final long TICKS_TO_GROW_BERRY_BUSH = ICalendar.CALENDAR_TICKS_IN_DAY * 2; // TODO: Should be a config, should have a similar config for fruit trees
+    public static final long TICKS_TO_GROW_BERRY_BUSH = (long) TFCConfig.SERVER.berryBushGrowthTicks.get();
 
     private static final VoxelShape HALF_PLANT = box(2, 0, 2, 14, 8, 14);
 

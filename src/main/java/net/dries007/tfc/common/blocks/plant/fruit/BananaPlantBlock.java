@@ -38,6 +38,7 @@ import net.dries007.tfc.common.blocks.ExtendedProperties;
 import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.blocks.soil.FarmlandBlock;
 import net.dries007.tfc.common.blocks.soil.HoeOverlayBlock;
+import net.dries007.tfc.config.TFCConfig;
 import net.dries007.tfc.util.Helpers;
 import net.dries007.tfc.util.calendar.Calendars;
 import net.dries007.tfc.util.calendar.ICalendar;
@@ -48,7 +49,7 @@ import net.dries007.tfc.util.climate.ClimateRanges;
 
 public class BananaPlantBlock extends SeasonalPlantBlock implements HoeOverlayBlock
 {
-    public static final long TICKS_TO_GROW_BANANA_PLANT = ICalendar.CALENDAR_TICKS_IN_DAY * 4; // TODO: Should be a config, should have a similar config for fruit trees
+    public static final long TICKS_TO_GROW_BANANA_PLANT = (long) TFCConfig.SERVER.bananaPlantGrowthTicks.get();
 
     public static void kill(Level level, BlockPos pos)
     {
@@ -258,8 +259,6 @@ public class BananaPlantBlock extends SeasonalPlantBlock implements HoeOverlayBl
     protected void grow(BlockState state, ServerLevel level, BlockPos pos, RandomSource random, int cycles)
     {
         cycles--;
-
-        // TODO: I don't expect this to work in its current state
 
         final int oldStage = state.getValue(STAGE);
 

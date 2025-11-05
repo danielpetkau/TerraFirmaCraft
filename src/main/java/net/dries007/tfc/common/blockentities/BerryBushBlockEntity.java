@@ -25,7 +25,7 @@ public class BerryBushBlockEntity extends TickingPlantBlockEntity
         level.getBlockEntity(pos, TFCBlockEntities.BERRY_BUSH.get()).ifPresent(BerryBushBlockEntity::resetLastPickedCounter);
     }
 
-    // TODO: Initialize this better
+    // Allows for large bushes without runaway spreading
     private int growthsRemaining = 24;
 
     protected BerryBushBlockEntity(BlockPos pos, BlockState state)

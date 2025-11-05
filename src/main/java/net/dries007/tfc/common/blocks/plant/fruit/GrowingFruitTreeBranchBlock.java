@@ -33,6 +33,7 @@ import net.dries007.tfc.common.blocks.EntityBlockExtension;
 import net.dries007.tfc.common.blocks.ExtendedProperties;
 import net.dries007.tfc.common.blocks.TFCBlockStateProperties;
 import net.dries007.tfc.common.blocks.soil.FarmlandBlock;
+import net.dries007.tfc.config.TFCConfig;
 import net.dries007.tfc.util.Helpers;
 import net.dries007.tfc.util.calendar.ICalendar;
 import net.dries007.tfc.util.climate.Climate;
@@ -46,6 +47,7 @@ import net.dries007.tfc.util.tracker.WorldTracker;
  */
 public class GrowingFruitTreeBranchBlock extends FruitTreeBranchBlock implements EntityBlockExtension
 {
+    public static final long TICKS_TO_GROW_FRUIT_TREE_BRANCH = (long) TFCConfig.SERVER.fruitBranchGrowthTicks.get();
     public static final IntegerProperty SAPLINGS = TFCBlockStateProperties.SAPLINGS;
     public static final BooleanProperty NATURAL = TFCBlockStateProperties.NATURAL; // prevents climate check
     private static final Direction[] NOT_DOWN = new Direction[] {Direction.WEST, Direction.EAST, Direction.SOUTH, Direction.NORTH, Direction.UP};
@@ -238,8 +240,7 @@ public class GrowingFruitTreeBranchBlock extends FruitTreeBranchBlock implements
         super.tick(state, level, pos, rand);
         if (level.getBlockEntity(pos) instanceof TickingPlantBlockEntity counter)
         {
-            long days = counter.getTicksSinceUpdate() / ICalendar.CALENDAR_TICKS_IN_DAY;
-            int cycles = (int) (days / 5);
+            int cycles = (int) (counter.getTicksSinceUpdate() / TICKS_TO_GROW_FRUIT_TREE_BRANCH);
             if (cycles >= 1)
             {
                 counter.resetCounter();

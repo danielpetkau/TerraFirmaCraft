@@ -154,7 +154,11 @@ public class ServerConfig extends BaseConfig
     public final Supplier<Double> saplingGrowthModifier;
     public final Map<Wood, Supplier<Integer>> saplingGrowthTicks;
     public final Map<FruitBlocks.Tree, Supplier<Integer>> fruitSaplingGrowthTicks;
+    public final Supplier<Integer> fruitBranchGrowthTicks;
     public final Supplier<Integer> bananaSaplingGrowthTicks;
+    public final Supplier<Integer> bananaPlantGrowthTicks;
+    public final Supplier<Integer> fruitPickBloomDelayTicks;
+    public final Supplier<Integer> berryBushGrowthTicks;
     // Blocks - Crops
     public final Supplier<Double> cropGrowthModifier;
     public final Supplier<Double> cropExpiryModifier;
@@ -504,9 +508,21 @@ public class ServerConfig extends BaseConfig
         fruitSaplingGrowthTicks = Helpers.mapOf(FruitBlocks.Tree.class, type -> builder
             .comment("Ticks required before a %s sapling can grow into a tree".formatted(getUserFriendlyName(type)))
             .define(getConfigName(type, "SaplingGrowthTicks"), type.defaultTicksToGrow(), 0, Integer.MAX_VALUE));
+        fruitBranchGrowthTicks = builder
+            .comment("Ticks required between fruit branch growth steps")
+            .define("fruitBranchGrowthTicks", 5 * ICalendar.CALENDAR_TICKS_IN_DAY, 0, Integer.MAX_VALUE);
         bananaSaplingGrowthTicks = builder
             .comment("Ticks required before a banana sapling can grow into a tree")
             .define("bananaSaplingGrowthTicks", 6 * ICalendar.CALENDAR_TICKS_IN_DAY, 0, Integer.MAX_VALUE);
+        bananaPlantGrowthTicks = builder
+            .comment("Ticks required between banana tree growth steps")
+            .define("bananaPlantGrowthTicks", 4 * ICalendar.CALENDAR_TICKS_IN_DAY, 0, Integer.MAX_VALUE);
+        fruitPickBloomDelayTicks = builder
+            .comment("Ticks required for fruit blocks to bloom after being placed/picked")
+            .define("fruitPickBloomDelayTicks", 10 * ICalendar.CALENDAR_TICKS_IN_DAY, 0, Integer.MAX_VALUE);
+        berryBushGrowthTicks = builder
+            .comment("Ticks required between berry bush growth steps")
+            .define("bananaPlantGrowthTicks", 4 * ICalendar.CALENDAR_TICKS_IN_DAY, 0, Integer.MAX_VALUE);
 
         builder.swap("crops");
 
