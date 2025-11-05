@@ -87,7 +87,8 @@ public class StationaryBerryBushBlock extends SeasonalPlantBlock implements HoeO
         }
 
         // Must be in an active lifecycle and have remaining growths to consider growing
-        if (state.getValue(LIFECYCLE).active() && level.getBlockEntity(pos) instanceof BerryBushBlockEntity counter && counter.getGrowthsRemaining() > 0)
+        // We get the blockstate from the pos in case the state has been updated by onUpdate
+        if (level.getBlockState(pos).getValue(LIFECYCLE).active() && level.getBlockEntity(pos) instanceof BerryBushBlockEntity counter && counter.getGrowthsRemaining() > 0)
         {
             // Then find the max number of times the plant could have grown in the time since the last update
             int maxCycles = (int) (counter.getTicksSinceUpdate() / TICKS_TO_GROW_BERRY_BUSH);

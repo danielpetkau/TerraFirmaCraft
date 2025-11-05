@@ -31,6 +31,7 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 import net.dries007.tfc.TerraFirmaCraft;
+import net.dries007.tfc.client.overworld.SolarCalculator;
 import net.dries007.tfc.common.TFCTags;
 import net.dries007.tfc.common.blockentities.BerryBushBlockEntity;
 import net.dries007.tfc.common.blocks.ExtendedProperties;
@@ -38,7 +39,9 @@ import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.blocks.soil.FarmlandBlock;
 import net.dries007.tfc.common.blocks.soil.HoeOverlayBlock;
 import net.dries007.tfc.util.Helpers;
+import net.dries007.tfc.util.calendar.Calendars;
 import net.dries007.tfc.util.calendar.ICalendar;
+import net.dries007.tfc.util.calendar.Month;
 import net.dries007.tfc.util.climate.Climate;
 import net.dries007.tfc.util.climate.ClimateRange;
 import net.dries007.tfc.util.climate.ClimateRanges;
@@ -99,28 +102,94 @@ public class BananaPlantBlock extends SeasonalPlantBlock implements HoeOverlayBl
         }
     }
 
-    // TODO: Update this comment if I re-imagine how these things check climate
-
     /**
      * Should only be called after the climate range has been checked
      */
     @Override
     public void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource rand)
     {
-        super.tick(state, level, pos, rand);
-        if (level.getBlockEntity(pos) instanceof BerryBushBlockEntity counter)
-        {
-            onUpdate(level, pos, state);
-            int cycles = (int) (counter.getTicksSinceUpdate() / TICKS_TO_GROW_BANANA_PLANT);
-            if (cycles >= 1)
-            {
-                grow(state, level, pos, rand, cycles);
-                counter.resetCounter();
-            }
-        }
-        else if (state.getBlock() instanceof SeasonalPlantBlock plant)
+        if (state.getBlock() instanceof SeasonalPlantBlock plant)
         {
             plant.onUpdate(level, pos, state);
+        }
+
+        // Must be in an active lifecycle to consider growing
+        // We get the blockstate from the pos in case the state has been updated by onUpdate
+        if (level.getBlockState(pos).getValue(LIFECYCLE).active() && level.getBlockEntity(pos) instanceof BerryBushBlockEntity counter)
+        {
+            // Then find the max number of times the plant could have grown in the time since the last update
+            int maxCycles = (int) (counter.getTicksSinceUpdate() / TICKS_TO_GROW_BANANA_PLANT);
+            if (maxCycles >= 1)
+            {
+                // Cap the number of cycles for longer time skips
+                maxCycles = Math.min(maxCycles, 8);
+                int cycles = 0;
+                final int daysInMonth = Calendars.SERVER.getCalendarDaysInMonth();
+                final long currentTick = Calendars.SERVER.getTicks();
+                final long previousTick = counter.getLastUpdateTick();
+
+                // If it's been 8+ months, skip the simulation and set cycles to the max value
+                if (currentTick - previousTick >= (long) ICalendar.CALENDAR_TICKS_IN_DAY * daysInMonth * 8)
+                {
+                    cycles = 8;
+                }
+                else
+                {
+                    long simulatedTick = previousTick;
+                    boolean checkReverseDirection = false;
+
+                    // Check through the skipped time and only add growth if the plant was not dormant
+                    while (cycles < maxCycles && simulatedTick < currentTick)
+                    {
+                        final long simulatedCalendarTick = Calendars.SERVER.getCalendarTickFromOffset(simulatedTick - currentTick);
+                        Month month = Calendars.SERVER.getHemispheralCalendarMonthOfYear(SolarCalculator.getInNorthernHemisphere(pos, level), simulatedCalendarTick, daysInMonth);
+                        Lifecycle lifecycle = this.getLifecycleForMonth(month);
+                        if (lifecycle != Lifecycle.DORMANT)
+                        {
+                            cycles++;
+                            simulatedTick += TICKS_TO_GROW_BANANA_PLANT;
+                        }
+                        else
+                        {
+                            // Stop checking the forward direction and check the reverse direction if we hit a dormant season
+                            checkReverseDirection = true;
+                            break;
+                        }
+                    }
+                    if (checkReverseDirection)
+                    {
+                        // Check through the skipped time and only add growth if the plant was not dormant, but in the opposite direction
+                        simulatedTick = currentTick;
+                        while (cycles < maxCycles && simulatedTick > previousTick)
+                        {
+                            final long simulatedCalendarTick = Calendars.SERVER.getCalendarTickFromOffset(simulatedTick - currentTick);
+                            Month month = Calendars.SERVER.getHemispheralCalendarMonthOfYear(SolarCalculator.getInNorthernHemisphere(pos, level), simulatedCalendarTick, daysInMonth);
+                            Lifecycle lifecycle = this.getLifecycleForMonth(month);
+                            if (lifecycle != Lifecycle.DORMANT)
+                            {
+                                cycles++;
+                                simulatedTick -= TICKS_TO_GROW_BANANA_PLANT;
+                            }
+                            else
+                            {
+                                // If this state is reached, we have found both ends of a dormant period and all uncounted time is dormancy
+                                // We can be sure it is the same dormant period because only one such period can be found in a 6-month span
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                // Reset the counter because at this point we are either growing or in the middle of a dormant season
+                counter.resetCounter();
+
+                // Verify we actually had enough time to grow
+                if (cycles > 0)
+                {
+                    // Count down cycles
+                    grow(state, level, pos, rand, cycles - 1);
+                }
+            }
         }
     }
 
