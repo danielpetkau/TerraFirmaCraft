@@ -60,35 +60,35 @@ public class BuiltinClimateRanges extends DataManagerProvider<ClimateRange>
         add(CRANBERRY_BUSH, new ClimateRange.Builder().minHydration(25).temperature(-15.4f, 9.8f).build());
         // DO NOT EDIT CROPS DIRECTLY - Imported directly from spreadsheet
         // https://docs.google.com/spreadsheets/d/1USmCWiRrj5205WyoRNNTUkoNrqm9AStRzwnD1v6633o
-        add(CROPS, CASSAVA, b -> b.hydration(45, 100).temperature(10, 47));
-        add(CROPS, GREEN_BEAN, b -> b.hydration(25, 90).temperature(-4, 30));
-        add(CROPS, LENTIL, b -> b.hydration(15, 50).temperature(-7, 30));
-        add(CROPS, PEANUT, b -> b.hydration(20, 80).temperature(12, 47));
-        add(CROPS, SOYBEAN, b -> b.hydration(25, 90).temperature(-9, 27));
-        add(CROPS, BARLEY, b -> b.hydration(10, 70).temperature(-9, 29));
-        add(CROPS, OAT, b -> b.hydration(25, 85).temperature(-9, 27));
-        add(CROPS, RYE, b -> b.hydration(15, 80).temperature(-9, 23));
-        add(CROPS, MAIZE, b -> b.hydration(50, 100).temperature(-9, 32));
-        add(CROPS, WHEAT, b -> b.hydration(15, 85).temperature(-9, 27));
-        add(CROPS, RICE, b -> b.hydration(35, 100).temperature(8, 47));
-        add(CROPS, BEET, b -> b.hydration(10, 70).temperature(-13, 32));
-        add(CROPS, CABBAGE, b -> b.hydration(10, 65).temperature(-13, 32));
-        add(CROPS, CARROT, b -> b.hydration(15, 85).temperature(-13, 32));
-        add(CROPS, GARLIC, b -> b.hydration(10, 70).temperature(-5, 27));
-        add(CROPS, ONION, b -> b.hydration(15, 85).temperature(-7, 31));
-        add(CROPS, POTATO, b -> b.hydration(15, 85).temperature(-9, 27));
-        add(CROPS, SQUASH, b -> b.hydration(15, 85).temperature(-9, 30));
-        add(CROPS, TOMATO, b -> b.hydration(20, 85).temperature(1, 47));
-        add(CROPS, RED_BELL_PEPPER, b -> b.hydration(30, 95).temperature(12, 47));
-        add(CROPS, YELLOW_BELL_PEPPER, b -> b.hydration(30, 95).temperature(12, 47));
-        add(CROPS, PUMPKIN, b -> b.hydration(20, 85).temperature(-9, 32));
-        add(CROPS, MELON, b -> b.hydration(35, 100).temperature(5, 47));
-        add(CROPS, CANOLA, b -> b.hydration(20, 75).temperature(-35, 17));
-        add(CROPS, RADISH, b -> b.hydration(30, 90).temperature(-33, 21));
-        add(CROPS, ALFALFA, b -> b.hydration(40, 100).temperature(-30, 14));
-        add(CROPS, JUTE, b -> b.hydration(15, 90).temperature(1, 30));
-        add(CROPS, PAPYRUS, b -> b.hydration(50, 100).temperature(12, 47));
-        add(CROPS, SUGARCANE, b -> b.hydration(25, 100).temperature(17, 47));
+        add(CROPS, CASSAVA, b -> b.hydration(45, 100).temperature(4, 36));
+        add(CROPS, GREEN_BEAN, b -> b.hydration(25, 90).temperature(-11, 22));
+        add(CROPS, LENTIL, b -> b.hydration(15, 50).temperature(-15, 22));
+        add(CROPS, PEANUT, b -> b.hydration(20, 80).temperature(6, 36));
+        add(CROPS, SOYBEAN, b -> b.hydration(25, 90).temperature(-17, 19));
+        add(CROPS, BARLEY, b -> b.hydration(10, 70).temperature(-17, 21));
+        add(CROPS, OAT, b -> b.hydration(25, 85).temperature(-17, 19));
+        add(CROPS, RYE, b -> b.hydration(15, 80).temperature(-17, 13));
+        add(CROPS, MAIZE, b -> b.hydration(50, 100).temperature(-17, 25));
+        add(CROPS, WHEAT, b -> b.hydration(15, 85).temperature(-17, 19));
+        add(CROPS, RICE, b -> b.hydration(35, 100).temperature(2, 36));
+        add(CROPS, BEET, b -> b.hydration(10, 70).temperature(-21, 25));
+        add(CROPS, CABBAGE, b -> b.hydration(10, 65).temperature(-21, 25));
+        add(CROPS, CARROT, b -> b.hydration(15, 85).temperature(-21, 25));
+        add(CROPS, GARLIC, b -> b.hydration(10, 70).temperature(-13, 19));
+        add(CROPS, ONION, b -> b.hydration(15, 85).temperature(-15, 24));
+        add(CROPS, POTATO, b -> b.hydration(35, 90).temperature(-17, 19));
+        add(CROPS, SQUASH, b -> b.hydration(15, 85).temperature(-17, 22));
+        add(CROPS, TOMATO, b -> b.hydration(20, 85).temperature(-5, 36));
+        add(CROPS, RED_BELL_PEPPER, b -> b.hydration(30, 95).temperature(6, 36));
+        add(CROPS, YELLOW_BELL_PEPPER, b -> b.hydration(30, 95).temperature(6, 36));
+        add(CROPS, PUMPKIN, b -> b.hydration(20, 85).temperature(-17, 25));
+        add(CROPS, MELON, b -> b.hydration(35, 100).temperature(-1, 36));
+        add(CROPS, CANOLA, b -> b.hydration(20, 75).temperature(-35, -5));
+        add(CROPS, RADISH, b -> b.hydration(30, 90).temperature(-33, -1));
+        add(CROPS, ALFALFA, b -> b.hydration(40, 100).temperature(-37, -3));
+        add(CROPS, JUTE, b -> b.hydration(15, 90).temperature(-5, 22));
+        add(CROPS, PAPYRUS, b -> b.hydration(50, 100).temperature(6, 36));
+        add(CROPS, SUGARCANE, b -> b.hydration(25, 100).temperature(12, 36));
     }
 
     private <T> void add(Map<T, DataManager.Reference<ClimateRange>> map, T value, UnaryOperator<ClimateRange.Builder> builder)
