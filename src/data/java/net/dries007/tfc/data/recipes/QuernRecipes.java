@@ -87,7 +87,7 @@ public interface QuernRecipes extends Recipes
 
     private void addDye(ItemLike item, Plant... plants)
     {
-        add(Ingredient.of(Arrays.stream(plants).map(TFCBlocks.PLANTS::get).toArray(ItemLike[]::new)), item, 1);
+        add(Ingredient.of(Arrays.stream(plants).map(TFCBlocks.PLANTS::get).toArray(ItemLike[]::new)), item, 2);
     }
 
     private void add(ItemLike input, ItemLike output, int count)

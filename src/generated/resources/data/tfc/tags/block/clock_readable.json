@@ -1,6 +1,5 @@
 {
   "values": [
-    "tfc:bloomery",
     "tfc:wood/barrel/acacia",
     "tfc:wood/barrel/ash",
     "tfc:wood/barrel/aspen",
@@ -21,6 +20,7 @@
     "tfc:wood/barrel/sycamore",
     "tfc:wood/barrel/white_cedar",
     "tfc:wood/barrel/willow",
+    "tfc:bloomery",
     "tfc:firebox"
   ]
 }
