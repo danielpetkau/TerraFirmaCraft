@@ -26,7 +26,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
@@ -46,10 +45,8 @@ import org.jetbrains.annotations.Nullable;
 import net.dries007.tfc.TerraFirmaCraft;
 import net.dries007.tfc.client.overworld.SolarCalculator;
 import net.dries007.tfc.common.TFCTags;
-import net.dries007.tfc.common.blockentities.SpreadingBushBlockEntity;
-import net.dries007.tfc.common.blockentities.TFCBlockEntities;
+import net.dries007.tfc.common.blockentities.BerryBushBlockEntity;
 import net.dries007.tfc.common.blockentities.TickCounterBlockEntity;
-import net.dries007.tfc.common.blockentities.TickingPlantBlockEntity;
 import net.dries007.tfc.common.blocks.EntityBlockExtension;
 import net.dries007.tfc.common.blocks.ExtendedProperties;
 import net.dries007.tfc.common.blocks.IForgeBlockExtension;
@@ -83,7 +80,7 @@ public abstract class SeasonalPlantBlock extends BushBlock implements IForgeBloc
     // By default, we only keep track of the life cycle with this method as that functionality is shared by all seasonal plant blocks
     public void onUpdate(Level level, BlockPos pos, BlockState state)
     {
-        if (level.getBlockEntity(pos) instanceof SpreadingBushBlockEntity plant)
+        if (level.getBlockEntity(pos) instanceof BerryBushBlockEntity plant)
         {
             Lifecycle currentLifecycle = state.getValue(LIFECYCLE);
             Lifecycle expectedLifecycle = getLifecycleForCurrentMonth(level, pos);
@@ -196,7 +193,7 @@ public abstract class SeasonalPlantBlock extends BushBlock implements IForgeBloc
             {
                 ItemHandlerHelper.giveItemToPlayer(player, getProductItem(level.random));
             }
-            SpreadingBushBlockEntity.resetPickedTick(level, pos);
+            BerryBushBlockEntity.resetPickedTick(level, pos);
             level.setBlockAndUpdate(pos, stateAfterPicking(state));
             return ItemInteractionResult.sidedSuccess(level.isClientSide);
         }
@@ -260,7 +257,7 @@ public abstract class SeasonalPlantBlock extends BushBlock implements IForgeBloc
     @Override
     public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack)
     {
-        SpreadingBushBlockEntity.reset(level, pos);
+        BerryBushBlockEntity.reset(level, pos);
         super.setPlacedBy(level, pos, state, placer, stack);
     }
 
@@ -271,12 +268,12 @@ public abstract class SeasonalPlantBlock extends BushBlock implements IForgeBloc
 
     /**
      * Evaluates hydration at the base of the tree/bush/plant
-     * @param leafPos Must be the position of a valid {@link SpreadingBushBlockEntity}
+     * @param leafPos Must be the position of a valid {@link BerryBushBlockEntity}
      */
     protected static int getFruitBushHydration(Level level, BlockPos leafPos)
     {
         final BlockPos sourcePos;
-        if (level.getBlockEntity(leafPos) instanceof SpreadingBushBlockEntity bush)
+        if (level.getBlockEntity(leafPos) instanceof BerryBushBlockEntity bush)
         {
             sourcePos = bush.getStemPos().below();
         }

@@ -38,7 +38,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 
 import net.dries007.tfc.client.particle.TFCParticles;
 import net.dries007.tfc.common.TFCTags;
-import net.dries007.tfc.common.blockentities.SpreadingBushBlockEntity;
+import net.dries007.tfc.common.blockentities.BerryBushBlockEntity;
 import net.dries007.tfc.common.blocks.ExtendedProperties;
 import net.dries007.tfc.common.blocks.IForgeBlockExtension;
 import net.dries007.tfc.common.blocks.TFCBlockStateProperties;
@@ -78,6 +78,12 @@ public class FruitTreeLeavesBlock extends SeasonalPlantBlock implements IForgeBl
         registerDefaultState(getStateDefinition().any().setValue(PERSISTENT, false).setValue(LIFECYCLE, Lifecycle.HEALTHY));
     }
 
+    public void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random)
+    {
+        if (state.getBlock() instanceof FruitTreeLeavesBlock leaves)
+            leaves.onUpdate(level, pos, state);
+    }
+
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context)
     {
@@ -115,7 +121,6 @@ public class FruitTreeLeavesBlock extends SeasonalPlantBlock implements IForgeBl
         TFCLeavesBlock.dripRainwater(level, pos, random);
     }
 
-    // this is superficially the same as the StationaryBerryBushBlock onUpdate, we can condense them
     @Override
     public void onUpdate(Level level, BlockPos pos, BlockState state)
     {
@@ -135,7 +140,7 @@ public class FruitTreeLeavesBlock extends SeasonalPlantBlock implements IForgeBl
         final ClimateRange range = climateRange.get();
 
         final BlockPos stemPos;
-        if (level.getBlockEntity(pos) instanceof SpreadingBushBlockEntity bush)
+        if (level.getBlockEntity(pos) instanceof BerryBushBlockEntity bush)
         {
             stemPos = bush.getStemPos();
         }

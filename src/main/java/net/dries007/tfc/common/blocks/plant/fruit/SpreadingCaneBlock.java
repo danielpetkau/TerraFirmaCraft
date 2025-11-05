@@ -30,7 +30,7 @@ import org.jetbrains.annotations.NotNull;
 
 import net.dries007.tfc.TerraFirmaCraft;
 import net.dries007.tfc.common.TFCTags;
-import net.dries007.tfc.common.blockentities.SpreadingBushBlockEntity;
+import net.dries007.tfc.common.blockentities.BerryBushBlockEntity;
 import net.dries007.tfc.common.blocks.ExtendedProperties;
 import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.util.Helpers;
@@ -79,7 +79,7 @@ public class SpreadingCaneBlock extends SpreadingBushBlock
     protected void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random)
     {
         final BlockPos climatePos;
-        if (level.getBlockEntity(pos) instanceof SpreadingBushBlockEntity plant)
+        if (level.getBlockEntity(pos) instanceof BerryBushBlockEntity plant)
         {
             climatePos = plant.getStemPos();
         }
@@ -123,7 +123,7 @@ public class SpreadingCaneBlock extends SpreadingBushBlock
         if (placeState.canSurvive(level, pos))
         {
             level.setBlock(pos, placeState, Block.UPDATE_ALL);
-            if (level.getBlockEntity(pos) instanceof SpreadingBushBlockEntity bush)
+            if (level.getBlockEntity(pos) instanceof BerryBushBlockEntity bush)
             {
                 bush.resetCounter();
                 bush.increaseCounter(TICKS_TO_GROW_BERRY_BUSH * cycles);

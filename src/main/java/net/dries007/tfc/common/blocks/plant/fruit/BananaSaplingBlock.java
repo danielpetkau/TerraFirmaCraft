@@ -22,7 +22,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.ticks.TickPriority;
 
 import net.dries007.tfc.common.TFCTags;
-import net.dries007.tfc.common.blockentities.SpreadingBushBlockEntity;
+import net.dries007.tfc.common.blockentities.BerryBushBlockEntity;
 import net.dries007.tfc.common.blocks.ExtendedProperties;
 import net.dries007.tfc.util.Helpers;
 import net.dries007.tfc.util.climate.ClimateRanges;
@@ -45,10 +45,10 @@ public class BananaSaplingBlock extends FruitTreeSaplingBlock
     {
         level.setBlockAndUpdate(pos, block.get().defaultBlockState().setValue(SeasonalPlantBlock.STAGE, 1).setValue(SeasonalPlantBlock.LIFECYCLE, Lifecycle.HEALTHY));
         // The following carries over time since planting the sapling block to the growth of the plant
-        if (level.getBlockEntity(pos) instanceof SpreadingBushBlockEntity plant)
+        if (level.getBlockEntity(pos) instanceof BerryBushBlockEntity plant)
         {
-            SpreadingBushBlockEntity.reset(level, pos);
-            SpreadingBushBlockEntity.addTicks(level, pos, ticksToAdd);
+            BerryBushBlockEntity.reset(level, pos);
+            BerryBushBlockEntity.addTicks(level, pos, ticksToAdd);
         }
         level.scheduleTick(pos, block.get(), 20, TickPriority.NORMAL);
     }

@@ -82,7 +82,7 @@ public final class TFCBlockEntities
             )
         ).flatMap(e -> e)
     );
-    public static final Id<SpreadingBushBlockEntity> BERRY_BUSH = register("berry_bush", SpreadingBushBlockEntity::new, Stream.of(
+    public static final Id<BerryBushBlockEntity> BERRY_BUSH = register("berry_bush", BerryBushBlockEntity::new, Stream.of(
         List.of(
             TFCBlocks.BANANA_PLANT,
             TFCBlocks.CRANBERRY_BUSH

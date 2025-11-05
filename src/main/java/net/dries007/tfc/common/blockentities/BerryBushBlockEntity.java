@@ -13,7 +13,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
-public class SpreadingBushBlockEntity extends TickingPlantBlockEntity
+public class BerryBushBlockEntity extends TickingPlantBlockEntity
 {
     public static void reset(Level level, BlockPos pos)
     {
@@ -22,18 +22,18 @@ public class SpreadingBushBlockEntity extends TickingPlantBlockEntity
 
     public static void resetPickedTick(Level level, BlockPos pos)
     {
-        level.getBlockEntity(pos, TFCBlockEntities.BERRY_BUSH.get()).ifPresent(SpreadingBushBlockEntity::resetLastPickedCounter);
+        level.getBlockEntity(pos, TFCBlockEntities.BERRY_BUSH.get()).ifPresent(BerryBushBlockEntity::resetLastPickedCounter);
     }
 
     // TODO: Initialize this better
     private int growthsRemaining = 24;
 
-    protected SpreadingBushBlockEntity(BlockPos pos, BlockState state)
+    protected BerryBushBlockEntity(BlockPos pos, BlockState state)
     {
         this(TFCBlockEntities.BERRY_BUSH.get(), pos, state);
     }
 
-    protected SpreadingBushBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
+    protected BerryBushBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
         super(type, pos, state);
     }

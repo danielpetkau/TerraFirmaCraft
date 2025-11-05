@@ -12,9 +12,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -23,18 +21,15 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import org.jetbrains.annotations.Nullable;
 
 import net.dries007.tfc.TerraFirmaCraft;
 import net.dries007.tfc.client.overworld.SolarCalculator;
-import net.dries007.tfc.common.blockentities.SpreadingBushBlockEntity;
-import net.dries007.tfc.common.blockentities.TickingPlantBlockEntity;
+import net.dries007.tfc.common.blockentities.BerryBushBlockEntity;
 import net.dries007.tfc.common.blocks.ExtendedProperties;
 import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.blocks.soil.FarmlandBlock;
 import net.dries007.tfc.common.blocks.soil.HoeOverlayBlock;
 import net.dries007.tfc.util.Helpers;
-import net.dries007.tfc.util.calendar.Calendar;
 import net.dries007.tfc.util.calendar.Calendars;
 import net.dries007.tfc.util.calendar.ICalendar;
 import net.dries007.tfc.util.calendar.Month;
@@ -92,7 +87,7 @@ public class StationaryBerryBushBlock extends SeasonalPlantBlock implements HoeO
         }
 
         // Must be in an active lifecycle and have remaining growths to consider growing
-        if (state.getValue(LIFECYCLE).active() && level.getBlockEntity(pos) instanceof SpreadingBushBlockEntity counter && counter.getGrowthsRemaining() > 0)
+        if (state.getValue(LIFECYCLE).active() && level.getBlockEntity(pos) instanceof BerryBushBlockEntity counter && counter.getGrowthsRemaining() > 0)
         {
             // Then find the max number of times the plant could have grown in the time since the last update
             int maxCycles = (int) (counter.getTicksSinceUpdate() / TICKS_TO_GROW_BERRY_BUSH);
@@ -173,7 +168,7 @@ public class StationaryBerryBushBlock extends SeasonalPlantBlock implements HoeO
     @Override
     public void addHoeOverlayInfo(Level level, BlockPos pos, BlockState state, Consumer<Component> text, boolean isDebug)
     {
-        if (level.getBlockEntity(pos) instanceof SpreadingBushBlockEntity bush)
+        if (level.getBlockEntity(pos) instanceof BerryBushBlockEntity bush)
         {
             final ClimateRange range = climateRange.get();
             final BlockPos sourcePos = bush.getStemPos().below();
@@ -233,7 +228,7 @@ public class StationaryBerryBushBlock extends SeasonalPlantBlock implements HoeO
     protected void placeBlockAndResetCounter(ServerLevel level, BlockPos pos, BlockState state, int cycles, int growths)
     {
         level.setBlock(pos, state, Block.UPDATE_ALL);
-        if (level.getBlockEntity(pos) instanceof SpreadingBushBlockEntity bush)
+        if (level.getBlockEntity(pos) instanceof BerryBushBlockEntity bush)
         {
             bush.resetCounter();
             bush.increaseCounter(TICKS_TO_GROW_BERRY_BUSH * cycles);

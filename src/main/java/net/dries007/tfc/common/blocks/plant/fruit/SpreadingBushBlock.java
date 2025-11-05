@@ -22,7 +22,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 
 import net.dries007.tfc.TerraFirmaCraft;
 import net.dries007.tfc.common.TFCTags;
-import net.dries007.tfc.common.blockentities.SpreadingBushBlockEntity;
+import net.dries007.tfc.common.blockentities.BerryBushBlockEntity;
 import net.dries007.tfc.common.blocks.ExtendedProperties;
 import net.dries007.tfc.common.blocks.IForgeBlockExtension;
 import net.dries007.tfc.common.blocks.soil.HoeOverlayBlock;
@@ -72,7 +72,7 @@ public class SpreadingBushBlock extends StationaryBerryBushBlock implements IFor
     protected void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random)
     {
         final BlockPos climatePos;
-        if (level.getBlockEntity(pos) instanceof SpreadingBushBlockEntity plant)
+        if (level.getBlockEntity(pos) instanceof BerryBushBlockEntity plant)
         {
             climatePos = plant.getStemPos();
         }
@@ -173,7 +173,7 @@ public class SpreadingBushBlock extends StationaryBerryBushBlock implements IFor
     {
         level.setBlockAndUpdate(newPos, state);
         // If block grows, set the new block's stem position to match the original
-        if (level.getBlockEntity(oldPos) instanceof SpreadingBushBlockEntity sourceBush && level.getBlockEntity(newPos) instanceof SpreadingBushBlockEntity newBush)
+        if (level.getBlockEntity(oldPos) instanceof BerryBushBlockEntity sourceBush && level.getBlockEntity(newPos) instanceof BerryBushBlockEntity newBush)
         {
             sourceBush.resetCounter();
             sourceBush.increaseCounter(TICKS_TO_GROW_BERRY_BUSH * cycles);
