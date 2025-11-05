@@ -26,6 +26,7 @@ import net.dries007.tfc.common.blockentities.BerryBushBlockEntity;
 import net.dries007.tfc.common.blocks.ExtendedProperties;
 import net.dries007.tfc.common.blocks.IForgeBlockExtension;
 import net.dries007.tfc.common.blocks.soil.HoeOverlayBlock;
+import net.dries007.tfc.config.TFCConfig;
 import net.dries007.tfc.util.Helpers;
 import net.dries007.tfc.util.climate.Climate;
 import net.dries007.tfc.util.climate.ClimateRange;
@@ -176,12 +177,12 @@ public class SpreadingBushBlock extends StationaryBerryBushBlock implements IFor
         if (level.getBlockEntity(oldPos) instanceof BerryBushBlockEntity sourceBush && level.getBlockEntity(newPos) instanceof BerryBushBlockEntity newBush)
         {
             sourceBush.resetCounter();
-            sourceBush.increaseCounter(TICKS_TO_GROW_BERRY_BUSH * cycles);
+            sourceBush.increaseCounter((long) TFCConfig.SERVER.berryBushGrowthTicks.get() * cycles);
             // It is assumed that the number of growths remaining has already been reduced prior to calling this method
             sourceBush.setGrowthsRemaining(growths);
 
             newBush.resetCounter();
-            newBush.increaseCounter(TICKS_TO_GROW_BERRY_BUSH * cycles);
+            newBush.increaseCounter((long) TFCConfig.SERVER.berryBushGrowthTicks.get() * cycles);
             newBush.setGrowthsRemaining(growths);
 
             newBush.setStemPos(sourceBush.getStemPos());

@@ -49,8 +49,6 @@ import net.dries007.tfc.util.climate.ClimateRanges;
 
 public class BananaPlantBlock extends SeasonalPlantBlock implements HoeOverlayBlock
 {
-    public static final long TICKS_TO_GROW_BANANA_PLANT = (long) TFCConfig.SERVER.bananaPlantGrowthTicks.get();
-
     public static void kill(Level level, BlockPos pos)
     {
         // picking bananas or being in the wrong climate kills the plant. this propagates death to the whole stalk.
@@ -119,7 +117,7 @@ public class BananaPlantBlock extends SeasonalPlantBlock implements HoeOverlayBl
         if (level.getBlockState(pos).getValue(LIFECYCLE).active() && level.getBlockEntity(pos) instanceof BerryBushBlockEntity counter)
         {
             // Then find the max number of times the plant could have grown in the time since the last update
-            int maxCycles = (int) (counter.getTicksSinceUpdate() / TICKS_TO_GROW_BANANA_PLANT);
+            int maxCycles = (int) (counter.getTicksSinceUpdate() / (long) TFCConfig.SERVER.bananaPlantGrowthTicks.get());
             if (maxCycles >= 1)
             {
                 // Cap the number of cycles for longer time skips
@@ -148,7 +146,7 @@ public class BananaPlantBlock extends SeasonalPlantBlock implements HoeOverlayBl
                         if (lifecycle != Lifecycle.DORMANT)
                         {
                             cycles++;
-                            simulatedTick += TICKS_TO_GROW_BANANA_PLANT;
+                            simulatedTick += (long) TFCConfig.SERVER.bananaPlantGrowthTicks.get();
                         }
                         else
                         {
@@ -169,7 +167,7 @@ public class BananaPlantBlock extends SeasonalPlantBlock implements HoeOverlayBl
                             if (lifecycle != Lifecycle.DORMANT)
                             {
                                 cycles++;
-                                simulatedTick -= TICKS_TO_GROW_BANANA_PLANT;
+                                simulatedTick -= (long) TFCConfig.SERVER.bananaPlantGrowthTicks.get();
                             }
                             else
                             {
@@ -290,7 +288,7 @@ public class BananaPlantBlock extends SeasonalPlantBlock implements HoeOverlayBl
         if (level.getBlockEntity(oldPos) instanceof BerryBushBlockEntity sourceBush && level.getBlockEntity(newPos) instanceof BerryBushBlockEntity newBush)
         {
             newBush.resetCounter();
-            newBush.increaseCounter(TICKS_TO_GROW_BANANA_PLANT * cycles);
+            newBush.increaseCounter((long) TFCConfig.SERVER.bananaPlantGrowthTicks.get() * cycles);
 
             newBush.setStemPos(sourceBush.getStemPos());
         }

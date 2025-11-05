@@ -65,7 +65,6 @@ import net.dries007.tfc.util.tracker.WorldTracker;
 
 public abstract class SeasonalPlantBlock extends BushBlock implements IForgeBlockExtension, EntityBlockExtension, ISlowEntities
 {
-    public static final long TICKS_TO_BLOOM_AFTER_PICKING = (long) TFCConfig.SERVER.fruitPickBloomDelayTicks.get();
 
     public static final VoxelShape PLANT_SHAPE = box(2.0, 0.0, 2.0, 14.0, 16.0, 14.0);
 
@@ -104,7 +103,7 @@ public abstract class SeasonalPlantBlock extends BushBlock implements IForgeBloc
                 BlockState newState = state.setValue(LIFECYCLE, currentLifecycle);
 
                 if (state != newState && (currentLifecycle != Lifecycle.FLOWERING ||
-                    Calendars.SERVER.getTicks() - plant.getLastPickedTick() > TICKS_TO_BLOOM_AFTER_PICKING))
+                    Calendars.SERVER.getTicks() - plant.getLastPickedTick() > (long) TFCConfig.SERVER.fruitPickBloomDelayTicks.get()))
                 {
                     level.setBlock(pos, newState, 3);
                 }

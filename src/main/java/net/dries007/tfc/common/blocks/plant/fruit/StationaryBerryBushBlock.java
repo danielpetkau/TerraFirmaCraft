@@ -39,8 +39,6 @@ import net.dries007.tfc.util.climate.ClimateRange;
 
 public class StationaryBerryBushBlock extends SeasonalPlantBlock implements HoeOverlayBlock
 {
-    public static final long TICKS_TO_GROW_BERRY_BUSH = (long) TFCConfig.SERVER.berryBushGrowthTicks.get();
-
     private static final VoxelShape HALF_PLANT = box(2, 0, 2, 14, 8, 14);
 
     public StationaryBerryBushBlock(ExtendedProperties properties, Supplier<? extends Item> productItem, Lifecycle[] lifecycle, Supplier<ClimateRange> climateRange)
@@ -92,7 +90,7 @@ public class StationaryBerryBushBlock extends SeasonalPlantBlock implements HoeO
         if (level.getBlockState(pos).getValue(LIFECYCLE).active() && level.getBlockEntity(pos) instanceof BerryBushBlockEntity counter && counter.getGrowthsRemaining() > 0)
         {
             // Then find the max number of times the plant could have grown in the time since the last update
-            int maxCycles = (int) (counter.getTicksSinceUpdate() / TICKS_TO_GROW_BERRY_BUSH);
+            int maxCycles = (int) (counter.getTicksSinceUpdate() / TFCConfig.SERVER.berryBushGrowthTicks.get());
             if (maxCycles >= 1)
             {
                 // Cap the number of cycles for longer time skips
@@ -121,7 +119,7 @@ public class StationaryBerryBushBlock extends SeasonalPlantBlock implements HoeO
                         if (lifecycle != Lifecycle.DORMANT)
                         {
                             cycles++;
-                            simulatedTick += TICKS_TO_GROW_BERRY_BUSH;
+                            simulatedTick += (long) TFCConfig.SERVER.berryBushGrowthTicks.get();
                         }
                         else
                         {
@@ -142,7 +140,7 @@ public class StationaryBerryBushBlock extends SeasonalPlantBlock implements HoeO
                             if (lifecycle != Lifecycle.DORMANT)
                             {
                                 cycles++;
-                                simulatedTick -= TICKS_TO_GROW_BERRY_BUSH;
+                                simulatedTick -= (long) TFCConfig.SERVER.berryBushGrowthTicks.get();
                             }
                             else
                             {
@@ -233,7 +231,7 @@ public class StationaryBerryBushBlock extends SeasonalPlantBlock implements HoeO
         if (level.getBlockEntity(pos) instanceof BerryBushBlockEntity bush)
         {
             bush.resetCounter();
-            bush.increaseCounter(TICKS_TO_GROW_BERRY_BUSH * cycles);
+            bush.increaseCounter((long) TFCConfig.SERVER.berryBushGrowthTicks.get() * cycles);
             bush.setGrowthsRemaining(growths);
         }
         else

@@ -33,6 +33,7 @@ import net.dries007.tfc.common.TFCTags;
 import net.dries007.tfc.common.blockentities.BerryBushBlockEntity;
 import net.dries007.tfc.common.blocks.ExtendedProperties;
 import net.dries007.tfc.common.blocks.TFCBlocks;
+import net.dries007.tfc.config.TFCConfig;
 import net.dries007.tfc.util.Helpers;
 import net.dries007.tfc.util.climate.Climate;
 import net.dries007.tfc.util.climate.ClimateRange;
@@ -126,7 +127,7 @@ public class SpreadingCaneBlock extends SpreadingBushBlock
             if (level.getBlockEntity(pos) instanceof BerryBushBlockEntity bush)
             {
                 bush.resetCounter();
-                bush.increaseCounter(TICKS_TO_GROW_BERRY_BUSH * cycles);
+                bush.increaseCounter((long) TFCConfig.SERVER.berryBushGrowthTicks.get() * cycles);
                 bush.setGrowthsRemaining(growths);
 
                 bush.setStemPos(pos);
