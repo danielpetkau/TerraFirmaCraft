@@ -305,19 +305,26 @@ public interface TFCAnimalProperties extends GenderedRenderAnimal, BrainAnimalBe
     @Nullable
     default AgeableMob getBreedOffspring(ServerLevel level, AgeableMob other)
     {
-        // Cancel default vanilla behaviour (immediately spawns children of this animal) and set this female as fertilized
-        // This method may be called multiple times from BreedGoal so we need to check !isFertilized to prevent spammy addition of uses
-        if (other != this && other instanceof TFCAnimalProperties otherFertile && !isFertilized())
+        // Checking gender here fixes multiple issues, see:
+        // https://github.com/TerraFirmaCraft/TerraFirmaCraft/issues/3254
+        // https://github.com/TerraFirmaCraft/TerraFirmaCraft/issues/3250
+        // This does get called by both horses, which the methods used below expect only the female to call them
+        if (this.getGender().equals(Gender.FEMALE))
         {
-            this.onFertilized(otherFertile);
-        }
-        else if (other == this)
-        {
-            final Entity baby = getEntityTypeForBaby().create(level);
-            if (baby instanceof TFCAnimalProperties properties && baby instanceof AgeableMob ageable)
+            // Cancel default vanilla behaviour (immediately spawns children of this animal) and set this female as fertilized
+            // This method may be called multiple times from BreedGoal so we need to check !isFertilized to prevent spammy addition of uses
+            if (other != this && other instanceof TFCAnimalProperties otherFertile && !isFertilized())
             {
-                setBabyTraits(properties);
-                return ageable;
+                this.onFertilized(otherFertile);
+            }
+            else if (other == this)
+            {
+                final Entity baby = getEntityTypeForBaby().create(level);
+                if (baby instanceof TFCAnimalProperties properties && baby instanceof AgeableMob ageable)
+                {
+                    setBabyTraits(properties);
+                    return ageable;
+                }
             }
         }
         return null;
