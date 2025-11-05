@@ -106,4 +106,20 @@ public class WaterloggedBerryBushBlock extends StationaryBerryBushBlock implemen
     {
         return placementState.canSurvive(level, pos) && (FluidHelpers.isAirOrEmptyFluid(level.getBlockState(pos)) && getFluidProperty().canContain(level.getFluidState(pos).getType()));
     }
+
+    @Override
+    public void onUpdate(Level level, BlockPos pos, BlockState state)
+    {
+        if (state.getValue(getFluidProperty()).getFluid() == Fluids.EMPTY)
+        {
+            if (state.getBlock() instanceof WaterloggedBerryBushBlock)
+            {
+                level.setBlock(pos, state.setValue(LIFECYCLE, Lifecycle.DORMANT), 3);
+            }
+        }
+        else
+        {
+            super.onUpdate(level, pos, state);
+        }
+    }
 }

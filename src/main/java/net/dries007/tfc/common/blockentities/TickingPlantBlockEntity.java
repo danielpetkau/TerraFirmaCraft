@@ -44,6 +44,7 @@ public class TickingPlantBlockEntity extends TickCounterBlockEntity
     {
         super(type, pos, state);
         stemPos = pos;
+        resetLastPickedCounter();
     }
 
     @Override

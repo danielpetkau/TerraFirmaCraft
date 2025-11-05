@@ -26,6 +26,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 
 import net.dries007.tfc.TerraFirmaCraft;
+import net.dries007.tfc.client.overworld.SolarCalculator;
 import net.dries007.tfc.common.blockentities.SpreadingBushBlockEntity;
 import net.dries007.tfc.common.blockentities.TickingPlantBlockEntity;
 import net.dries007.tfc.common.blocks.ExtendedProperties;
@@ -33,6 +34,7 @@ import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.blocks.soil.FarmlandBlock;
 import net.dries007.tfc.common.blocks.soil.HoeOverlayBlock;
 import net.dries007.tfc.util.Helpers;
+import net.dries007.tfc.util.calendar.Calendar;
 import net.dries007.tfc.util.calendar.Calendars;
 import net.dries007.tfc.util.calendar.ICalendar;
 import net.dries007.tfc.util.calendar.Month;
@@ -84,11 +86,14 @@ public class StationaryBerryBushBlock extends SeasonalPlantBlock implements HoeO
     @Override
     public void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource rand)
     {
+        if (state.getBlock() instanceof SeasonalPlantBlock plant)
+        {
+            plant.onUpdate(level, pos, state);
+        }
+
         // Must be in an active lifecycle and have remaining growths to consider growing
         if (state.getValue(LIFECYCLE).active() && level.getBlockEntity(pos) instanceof SpreadingBushBlockEntity counter && counter.getGrowthsRemaining() > 0)
         {
-            onUpdate(level, pos, state);
-
             // Then find the max number of times the plant could have grown in the time since the last update
             int maxCycles = (int) (counter.getTicksSinceUpdate() / TICKS_TO_GROW_BERRY_BUSH);
             if (maxCycles >= 1)
@@ -113,7 +118,8 @@ public class StationaryBerryBushBlock extends SeasonalPlantBlock implements HoeO
                     // Check through the skipped time and only add growth if the plant was not dormant
                     while (cycles < maxCycles && simulatedTick < currentTick)
                     {
-                        Month month = ICalendar.getMonthOfYear(simulatedTick, daysInMonth);
+                        final long simulatedCalendarTick = Calendars.SERVER.getCalendarTickFromOffset(simulatedTick - currentTick);
+                        Month month = Calendars.SERVER.getHemispheralCalendarMonthOfYear(SolarCalculator.getInNorthernHemisphere(pos, level), simulatedCalendarTick, daysInMonth);
                         Lifecycle lifecycle = this.getLifecycleForMonth(month);
                         if (lifecycle != Lifecycle.DORMANT)
                         {
@@ -129,12 +135,12 @@ public class StationaryBerryBushBlock extends SeasonalPlantBlock implements HoeO
                     }
                     if (checkReverseDirection)
                     {
-
                         // Check through the skipped time and only add growth if the plant was not dormant, but in the opposite direction
                         simulatedTick = currentTick;
                         while (cycles < maxCycles && simulatedTick > previousTick)
                         {
-                            Month month = ICalendar.getMonthOfYear(simulatedTick, daysInMonth);
+                            final long simulatedCalendarTick = Calendars.SERVER.getCalendarTickFromOffset(simulatedTick - currentTick);
+                            Month month = Calendars.SERVER.getHemispheralCalendarMonthOfYear(SolarCalculator.getInNorthernHemisphere(pos, level), simulatedCalendarTick, daysInMonth);
                             Lifecycle lifecycle = this.getLifecycleForMonth(month);
                             if (lifecycle != Lifecycle.DORMANT)
                             {
@@ -161,10 +167,6 @@ public class StationaryBerryBushBlock extends SeasonalPlantBlock implements HoeO
                     growAndPropagate(state, level, pos, rand, cycles - 1, counter.getGrowthsRemaining() - 1);
                 }
             }
-        }
-        else if (state.getBlock() instanceof SeasonalPlantBlock plant)
-        {
-            plant.onUpdate(level, pos, state);
         }
     }
 
@@ -218,7 +220,7 @@ public class StationaryBerryBushBlock extends SeasonalPlantBlock implements HoeO
         for (int tries = 0; tries < 3; tries++)
         {
             cursor.setWithOffset(pos, Helpers.triangle(random, 3), 0, Helpers.triangle(random, 3));
-            final BlockPos newPos = level.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, cursor);
+            final BlockPos newPos = level.getHeightmapPos(Heightmap.Types.OCEAN_FLOOR, cursor);
             final BlockState placementState = getNewState(level, newPos);
             if (canPlaceNewBushAt(level, newPos, placementState))
             {

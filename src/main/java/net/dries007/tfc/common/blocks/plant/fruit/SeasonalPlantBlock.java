@@ -107,7 +107,7 @@ public abstract class SeasonalPlantBlock extends BushBlock implements IForgeBloc
                 BlockState newState = state.setValue(LIFECYCLE, currentLifecycle);
 
                 if (state != newState && (currentLifecycle != Lifecycle.FLOWERING ||
-                    Calendars.SERVER.getCalendarTicks() - plant.getLastPickedTick() > TICKS_TO_BLOOM_AFTER_PICKING))
+                    Calendars.SERVER.getTicks() - plant.getLastPickedTick() > TICKS_TO_BLOOM_AFTER_PICKING))
                 {
                     level.setBlock(pos, newState, 3);
                 }
