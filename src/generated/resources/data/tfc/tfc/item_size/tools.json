@@ -13,6 +13,12 @@
       "tag": "c:tools/ranged_weapon"
     },
     {
+      "tag": "c:tools/blowpipe"
+    },
+    {
+      "tag": "c:tools/glassworking"
+    },
+    {
       "tag": "c:tools/mace"
     }
   ],

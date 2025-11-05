@@ -99,8 +99,6 @@ public class BuiltinItemSizes extends DataManagerProvider<ItemSizeDefinition> im
             Ingredient.of(TFCTags.Items.TOOLS_CHISEL),
             Ingredient.of(TFCTags.Items.TOOLS_KNIFE),
             Ingredient.of(Tags.Items.TOOLS_SHEAR),
-            Ingredient.of(TFCTags.Items.TOOLS_GLASSWORKING),
-            Ingredient.of(TFCTags.Items.TOOLS_BLOWPIPE),
             Ingredient.of(TFCItems.FIRESTARTER.get())
         ), Size.LARGE, Weight.MEDIUM);
         add("tools", ingredientOf(
@@ -108,6 +106,8 @@ public class BuiltinItemSizes extends DataManagerProvider<ItemSizeDefinition> im
             Ingredient.of(Tags.Items.TOOLS_SHIELD),
             Ingredient.of(Tags.Items.MELEE_WEAPON_TOOLS),
             Ingredient.of(Tags.Items.RANGED_WEAPON_TOOLS),
+            Ingredient.of(TFCTags.Items.TOOLS_BLOWPIPE),
+            Ingredient.of(TFCTags.Items.TOOLS_GLASSWORKING),
             Ingredient.of(Tags.Items.TOOLS_MACE)
         ), Size.VERY_LARGE, Weight.VERY_HEAVY);
         add("plants", TFCTags.Items.PLANTS, Size.TINY, Weight.VERY_LIGHT);
