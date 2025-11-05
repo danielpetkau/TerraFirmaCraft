@@ -2266,9 +2266,6 @@
           "fill": "0xa8986a"
         },
         {
-          "fill": "0xa8986a"
-        },
-        {
           "fill": "0x6ab553"
         },
         {
@@ -2288,6 +2285,9 @@
         },
         {
           "fill": "0xa217ff"
+        },
+        {
+          "fill": "0xa8986a"
         },
         {
           "fill": "0xa8986a"
@@ -2749,6 +2749,237 @@
           }
         }
       ]
+    },
+    {
+      "type": "tfc:table",
+      "strings": [
+        {
+          "text": ""
+        },
+        {
+          "text": "Jan"
+        },
+        {
+          "text": "Feb"
+        },
+        {
+          "text": "Mar"
+        },
+        {
+          "text": "Apr"
+        },
+        {
+          "text": "May"
+        },
+        {
+          "text": "Jun"
+        },
+        {
+          "text": "Jul"
+        },
+        {
+          "text": "Aug"
+        },
+        {
+          "text": "Sep"
+        },
+        {
+          "text": "Oct"
+        },
+        {
+          "text": "Nov"
+        },
+        {
+          "text": "Dec"
+        },
+        {
+          "text": "Blackberry"
+        },
+        {
+          "fill": "0xa8986a"
+        },
+        {
+          "fill": "0x6ab553"
+        },
+        {
+          "fill": "0x6ab553"
+        },
+        {
+          "fill": "0x6ab553"
+        },
+        {
+          "fill": "0x6ab553"
+        },
+        {
+          "fill": "0xcca0db"
+        },
+        {
+          "fill": "0xcca0db"
+        },
+        {
+          "fill": "0xa217ff"
+        },
+        {
+          "fill": "0xa8986a"
+        },
+        {
+          "fill": "0xa8986a"
+        },
+        {
+          "fill": "0xa8986a"
+        },
+        {
+          "fill": "0xa8986a"
+        },
+        {
+          "text": "Raspberry"
+        },
+        {
+          "fill": "0xa8986a"
+        },
+        {
+          "fill": "0xa8986a"
+        },
+        {
+          "fill": "0xa8986a"
+        },
+        {
+          "fill": "0x6ab553"
+        },
+        {
+          "fill": "0x6ab553"
+        },
+        {
+          "fill": "0x6ab553"
+        },
+        {
+          "fill": "0x6ab553"
+        },
+        {
+          "fill": "0xcca0db"
+        },
+        {
+          "fill": "0xcca0db"
+        },
+        {
+          "fill": "0xa217ff"
+        },
+        {
+          "fill": "0xa8986a"
+        },
+        {
+          "fill": "0xa8986a"
+        },
+        {
+          "text": "Blueberry"
+        },
+        {
+          "fill": "0xa8986a"
+        },
+        {
+          "fill": "0x6ab553"
+        },
+        {
+          "fill": "0x6ab553"
+        },
+        {
+          "fill": "0x6ab553"
+        },
+        {
+          "fill": "0x6ab553"
+        },
+        {
+          "fill": "0xcca0db"
+        },
+        {
+          "fill": "0xcca0db"
+        },
+        {
+          "fill": "0xa217ff"
+        },
+        {
+          "fill": "0xa8986a"
+        },
+        {
+          "fill": "0xa8986a"
+        },
+        {
+          "fill": "0xa8986a"
+        },
+        {
+          "fill": "0xa8986a"
+        },
+        {
+          "text": "Elderberry"
+        },
+        {
+          "fill": "0xa8986a"
+        },
+        {
+          "fill": "0x6ab553"
+        },
+        {
+          "fill": "0x6ab553"
+        },
+        {
+          "fill": "0x6ab553"
+        },
+        {
+          "fill": "0x6ab553"
+        },
+        {
+          "fill": "0xcca0db"
+        },
+        {
+          "fill": "0xcca0db"
+        },
+        {
+          "fill": "0xa217ff"
+        },
+        {
+          "fill": "0xa8986a"
+        },
+        {
+          "fill": "0xa8986a"
+        },
+        {
+          "fill": "0xa8986a"
+        },
+        {
+          "fill": "0xa8986a"
+        }
+      ],
+      "text": "The fruiting calendar for large berry bushes.",
+      "title": "Large Berry Bushes",
+      "legend": [
+        {
+          "text": "Dormant",
+          "color": "0xa8986a"
+        },
+        {
+          "text": "Healthy",
+          "color": "0x6ab553"
+        },
+        {
+          "text": "Flowering",
+          "color": "0xcca0db"
+        },
+        {
+          "text": "Fruiting",
+          "color": "0xa217ff"
+        }
+      ],
+      "columns": 12,
+      "first_column_width": 45,
+      "column_width": 15,
+      "row_height": 10,
+      "left_buffer": 5,
+      "top_buffer": 11,
+      "draw_background": true
+    },
+    {
+      "type": "patchouli:empty",
+      "draw_filler": false
     },
     {
       "type": "patchouli:text",
@@ -3292,45 +3523,6 @@
           "text": "Dec"
         },
         {
-          "text": "Snowberry"
-        },
-        {
-          "fill": "0xa8986a"
-        },
-        {
-          "fill": "0xa8986a"
-        },
-        {
-          "fill": "0x6ab553"
-        },
-        {
-          "fill": "0x6ab553"
-        },
-        {
-          "fill": "0x6ab553"
-        },
-        {
-          "fill": "0x6ab553"
-        },
-        {
-          "fill": "0xcca0db"
-        },
-        {
-          "fill": "0xcca0db"
-        },
-        {
-          "fill": "0xa217ff"
-        },
-        {
-          "fill": "0xa8986a"
-        },
-        {
-          "fill": "0xa8986a"
-        },
-        {
-          "fill": "0xa8986a"
-        },
-        {
           "text": "Bunchberry"
         },
         {
@@ -3401,6 +3593,45 @@
         },
         {
           "fill": "0xa217ff"
+        },
+        {
+          "fill": "0xa8986a"
+        },
+        {
+          "fill": "0xa8986a"
+        },
+        {
+          "text": "Snowberry"
+        },
+        {
+          "fill": "0xa8986a"
+        },
+        {
+          "fill": "0xa8986a"
+        },
+        {
+          "fill": "0x6ab553"
+        },
+        {
+          "fill": "0x6ab553"
+        },
+        {
+          "fill": "0x6ab553"
+        },
+        {
+          "fill": "0x6ab553"
+        },
+        {
+          "fill": "0xcca0db"
+        },
+        {
+          "fill": "0xcca0db"
+        },
+        {
+          "fill": "0xa217ff"
+        },
+        {
+          "fill": "0xa8986a"
         },
         {
           "fill": "0xa8986a"
@@ -3499,6 +3730,9 @@
           "fill": "0xa8986a"
         },
         {
+          "fill": "0xa8986a"
+        },
+        {
           "fill": "0x6ab553"
         },
         {
@@ -3521,9 +3755,6 @@
         },
         {
           "fill": "0xa217ff"
-        },
-        {
-          "fill": "0xa8986a"
         },
         {
           "text": "Cranberry"
@@ -3565,8 +3796,8 @@
           "fill": "0xa8986a"
         }
       ],
-      "text": "Календарь плодоношения ягодных кустов.",
-      "title": "Ягодные кусты",
+      "text": "The fruiting calendar for small berry bushes.",
+      "title": "Small Berry Bushes",
       "legend": [
         {
           "text": "Dormant",
@@ -3627,19 +3858,19 @@
     "tfc:plant/blueberry_bush": 36,
     "tfc:food/elderberry": 38,
     "tfc:plant/elderberry_bush": 38,
-    "tfc:food/bunchberry": 42,
-    "tfc:plant/bunchberry_bush": 42,
-    "tfc:food/gooseberry": 44,
-    "tfc:plant/gooseberry_bush": 44,
-    "tfc:food/snowberry": 46,
-    "tfc:plant/snowberry_bush": 46,
-    "tfc:food/cloudberry": 48,
-    "tfc:plant/cloudberry_bush": 48,
-    "tfc:food/strawberry": 50,
-    "tfc:plant/strawberry_bush": 50,
-    "tfc:food/wintergreen_berry": 52,
-    "tfc:plant/wintergreen_berry_bush": 52,
-    "tfc:food/cranberry": 54,
-    "tfc:plant/cranberry_bush": 54
+    "tfc:food/bunchberry": 44,
+    "tfc:plant/bunchberry_bush": 44,
+    "tfc:food/gooseberry": 46,
+    "tfc:plant/gooseberry_bush": 46,
+    "tfc:food/snowberry": 48,
+    "tfc:plant/snowberry_bush": 48,
+    "tfc:food/cloudberry": 50,
+    "tfc:plant/cloudberry_bush": 50,
+    "tfc:food/strawberry": 52,
+    "tfc:plant/strawberry_bush": 52,
+    "tfc:food/wintergreen_berry": 54,
+    "tfc:plant/wintergreen_berry_bush": 54,
+    "tfc:food/cranberry": 56,
+    "tfc:plant/cranberry_bush": 56
   }
 }
