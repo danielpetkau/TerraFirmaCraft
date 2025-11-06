@@ -476,6 +476,8 @@ public final class ClientEventHandler
         ItemBlockRenderTypes.setRenderLayer(TFCBlocks.FIREPIT.get(), ghostBlock);
         ItemBlockRenderTypes.setRenderLayer(TFCBlocks.GRILL.get(), ghostBlock);
         ItemBlockRenderTypes.setRenderLayer(TFCBlocks.POT.get(), ghostBlock);
+        ItemBlockRenderTypes.setRenderLayer(TFCBlocks.STOVE.get(), cutout);
+        ItemBlockRenderTypes.setRenderLayer(TFCBlocks.STOVE_POT.get(), cutout);
         ItemBlockRenderTypes.setRenderLayer(TFCBlocks.CERAMIC_BOWL.get(), cutout);
         ItemBlockRenderTypes.setRenderLayer(TFCBlocks.TORCH.get(), cutout);
         ItemBlockRenderTypes.setRenderLayer(TFCBlocks.WALL_TORCH.get(), cutout);
