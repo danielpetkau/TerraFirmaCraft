@@ -16,6 +16,8 @@ import net.dries007.tfc.util.tracker.WorldTracker;
 
 public class WeatherCommand
 {
+    private static final String DISABLED = "tfc.commands.disabled_by_tfc";
+
     public static LiteralArgumentBuilder<CommandSourceStack> create()
     {
         return Commands.literal("weather").requires(source -> source.hasPermission(2))
@@ -24,6 +26,12 @@ public class WeatherCommand
             )
             .then(Commands.literal("disable")
                 .executes(context -> setEnabled(context.getSource(), false))
+            )
+            .then(Commands.literal("clear")
+                .executes(context -> { context.getSource().sendFailure(Component.translatable(DISABLED, "/time set clear")); return 0; })
+            )
+            .then(Commands.literal("rain")
+                .executes(context -> { context.getSource().sendFailure(Component.translatable(DISABLED, "/time set rain")); return 0; })
             );
     }
 
