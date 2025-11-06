@@ -115,7 +115,7 @@ public sealed class ChunkData
         this.status = Status.EMPTY;
         this.rockData = new RockData(generator);
         this.forestType = ForestType.GRASSLAND;
-        this.lastRandomTick = -1;
+        this.lastRandomTick = Integer.MIN_VALUE;
         this.nextSnowPosition = 0;
     }
 
