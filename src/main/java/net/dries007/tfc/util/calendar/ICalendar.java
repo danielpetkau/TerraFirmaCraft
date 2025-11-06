@@ -298,13 +298,18 @@ public interface ICalendar
      */
     default Month getHemispheralCalendarMonthOfYear(boolean northernHemisphere)
     {
+        return getHemispheralCalendarMonthOfYear(northernHemisphere, getCalendarTicks(), getCalendarDaysInMonth());
+    }
+
+    default Month getHemispheralCalendarMonthOfYear(boolean northernHemisphere, long calendarTicks, long daysInMonth)
+    {
         if (northernHemisphere)
         {
-            return ICalendar.getMonthOfYear(getCalendarTicks(), getCalendarDaysInMonth());
+            return ICalendar.getMonthOfYear(calendarTicks, daysInMonth);
         }
         else
         {
-            return ICalendar.getMonthOfYear(getCalendarTicks(), getCalendarDaysInMonth()).opposite();
+            return ICalendar.getMonthOfYear(calendarTicks, daysInMonth).opposite();
         }
     }
 

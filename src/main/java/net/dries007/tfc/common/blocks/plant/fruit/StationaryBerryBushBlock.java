@@ -16,31 +16,30 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
+import net.dries007.tfc.TerraFirmaCraft;
+import net.dries007.tfc.client.overworld.SolarCalculator;
 import net.dries007.tfc.common.blockentities.BerryBushBlockEntity;
 import net.dries007.tfc.common.blocks.ExtendedProperties;
 import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.blocks.soil.FarmlandBlock;
 import net.dries007.tfc.common.blocks.soil.HoeOverlayBlock;
+import net.dries007.tfc.config.TFCConfig;
 import net.dries007.tfc.util.Helpers;
 import net.dries007.tfc.util.calendar.Calendars;
 import net.dries007.tfc.util.calendar.ICalendar;
+import net.dries007.tfc.util.calendar.Month;
 import net.dries007.tfc.util.climate.Climate;
 import net.dries007.tfc.util.climate.ClimateRange;
 
-public class StationaryBerryBushBlock extends SeasonalPlantBlock implements HoeOverlayBlock, IBushBlock
+public class StationaryBerryBushBlock extends SeasonalPlantBlock implements HoeOverlayBlock
 {
     private static final VoxelShape HALF_PLANT = box(2, 0, 2, 14, 8, 14);
-
-    /**
-     * Any bush that spends four consecutive months dormant when it shouldn't be, should die.
-     * Since most bushes have a 7 month non-dormant cycle, this means that it just needs to be in valid conditions for about 1 month a year in order to not die.
-     * It won't produce (it needs more months to properly advance the cycle from dormant -> healthy -> flowering -> fruiting, requiring 4 months at least), but it won't outright die.
-     */
-    private static final int MONTHS_SPENT_DORMANT_TO_DIE = 4;
 
     public StationaryBerryBushBlock(ExtendedProperties properties, Supplier<? extends Item> productItem, Lifecycle[] lifecycle, Supplier<ClimateRange> climateRange)
     {
@@ -62,7 +61,108 @@ public class StationaryBerryBushBlock extends SeasonalPlantBlock implements HoeO
     @Override
     protected void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random)
     {
-        IBushBlock.randomTick(this, state, level, pos, random);
+        final int hydration = getFruitBushHydration(level, pos);
+        final float temp = Climate.getAverageTemperature(level, pos);
+
+        if (climateRange.get().checkBoth(hydration, temp, false))
+        {
+            this.tick(state, level, pos, random);
+        }
+        else
+        {
+            level.setBlockAndUpdate(pos, getDeadState(state));
+        }
+    }
+
+    /**
+     * Should only be called after the climate range has been checked
+     */
+    @Override
+    public void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource rand)
+    {
+        if (state.getBlock() instanceof SeasonalPlantBlock plant)
+        {
+            plant.onUpdate(level, pos, state);
+        }
+
+        // Must be in an active lifecycle and have remaining growths to consider growing
+        // We get the blockstate from the pos in case the state has been updated by onUpdate
+        if (level.getBlockState(pos).getValue(LIFECYCLE).active() && level.getBlockEntity(pos) instanceof BerryBushBlockEntity counter && counter.getGrowthsRemaining() > 0)
+        {
+            // Then find the max number of times the plant could have grown in the time since the last update
+            int maxCycles = (int) (counter.getTicksSinceUpdate() / TFCConfig.SERVER.berryBushGrowthTicks.get());
+            if (maxCycles >= 1)
+            {
+                // Cap the number of cycles for longer time skips
+                maxCycles = Math.min(maxCycles, 8);
+                int cycles = 0;
+                final int daysInMonth = Calendars.SERVER.getCalendarDaysInMonth();
+                final long currentTick = Calendars.SERVER.getTicks();
+                final long previousTick = counter.getLastUpdateTick();
+
+                // If it's been 8+ months, skip the simulation and set cycles to the max value
+                if (currentTick - previousTick >= (long) ICalendar.CALENDAR_TICKS_IN_DAY * daysInMonth * 8)
+                {
+                    cycles = 8;
+                }
+                else
+                {
+                    long simulatedTick = previousTick;
+                    boolean checkReverseDirection = false;
+
+                    // Check through the skipped time and only add growth if the plant was not dormant
+                    while (cycles < maxCycles && simulatedTick < currentTick)
+                    {
+                        final long simulatedCalendarTick = Calendars.SERVER.getCalendarTickFromOffset(simulatedTick - currentTick);
+                        Month month = Calendars.SERVER.getHemispheralCalendarMonthOfYear(SolarCalculator.getInNorthernHemisphere(pos, level), simulatedCalendarTick, daysInMonth);
+                        Lifecycle lifecycle = this.getLifecycleForMonth(month);
+                        if (lifecycle != Lifecycle.DORMANT)
+                        {
+                            cycles++;
+                            simulatedTick += (long) TFCConfig.SERVER.berryBushGrowthTicks.get();
+                        }
+                        else
+                        {
+                            // Stop checking the forward direction and check the reverse direction if we hit a dormant season
+                            checkReverseDirection = true;
+                            break;
+                        }
+                    }
+                    if (checkReverseDirection)
+                    {
+                        // Check through the skipped time and only add growth if the plant was not dormant, but in the opposite direction
+                        simulatedTick = currentTick;
+                        while (cycles < maxCycles && simulatedTick > previousTick)
+                        {
+                            final long simulatedCalendarTick = Calendars.SERVER.getCalendarTickFromOffset(simulatedTick - currentTick);
+                            Month month = Calendars.SERVER.getHemispheralCalendarMonthOfYear(SolarCalculator.getInNorthernHemisphere(pos, level), simulatedCalendarTick, daysInMonth);
+                            Lifecycle lifecycle = this.getLifecycleForMonth(month);
+                            if (lifecycle != Lifecycle.DORMANT)
+                            {
+                                cycles++;
+                                simulatedTick -= (long) TFCConfig.SERVER.berryBushGrowthTicks.get();
+                            }
+                            else
+                            {
+                                // If this state is reached, we have found both ends of a dormant period and all uncounted time is dormancy
+                                // We can be sure it is the same dormant period because only one such period can be found in a 6-month span
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                // Reset the counter because at this point we are either growing or in the middle of a dormant season
+                counter.resetCounter();
+
+                // Verify we actually had enough time to grow
+                if (cycles > 0)
+                {
+                    // Count down cycles and growths remaining
+                    growAndPropagate(state, level, pos, rand, cycles - 1, counter.getGrowthsRemaining() - 1);
+                }
+            }
+        }
     }
 
     @Override
@@ -78,85 +178,67 @@ public class StationaryBerryBushBlock extends SeasonalPlantBlock implements HoeO
         }
     }
 
-    @Override
-    public void onUpdate(Level level, BlockPos pos, BlockState state)
+    /**
+     * Performs growth and (optional) propagation of the bush.
+     * Propagation should be naturally limited to not cause runaway generation.
+     */
+    protected void growAndPropagate(BlockState state, ServerLevel level, BlockPos pos, RandomSource random, int cycles, int growthsRemaining)
     {
-        if (level.getBlockEntity(pos) instanceof BerryBushBlockEntity bush)
+        final int oldStage = state.getValue(STAGE);
+        if (oldStage < 2)
         {
-            Lifecycle currentLifecycle = state.getValue(LIFECYCLE);
-            Lifecycle expectedLifecycle = getLifecycleForCurrentMonth(level, pos);
-            // if we are not working with a plant that is or should be dormant
-            if (!checkAndSetDormant(level, pos, state, currentLifecycle, expectedLifecycle))
+            // Increment stage by one if not fully grown
+            final BlockState newState = state.setValue(STAGE, state.getValue(STAGE) + 1);
+            placeBlockAndResetCounter(level, pos, newState, cycles, growthsRemaining);
+            return;
+        }
+
+        // Otherwise, attempt to propagate
+        // Conditions to propagate:
+        // 1. Must be in max growth stage, and an active lifecycle
+        // 2. Must not have more than 3 total bushes within the expansion radius
+        int count = 0;
+        for (BlockPos target : BlockPos.betweenClosed(pos.offset(-2, -1, -2), pos.offset(2, 1, 2)))
+        {
+            if (level.getBlockState(target).getBlock() == this)
             {
-                // Otherwise, we do a month-by-month evaluation of how the bush should have grown.
-                // We only do this up to a year. Why? Because eventually, it will have become dormant, and any 'progress' during that year would've been lost anyway because it would unconditionally become dormant.
-                long deltaTicks = Math.min(bush.getTicksSinceBushUpdate(), Calendars.SERVER.getCalendarTicksInYear());
-                long currentCalendarTick = Calendars.SERVER.getCalendarTicks();
-                long nextCalendarTick = currentCalendarTick - deltaTicks;
-
-                final BlockPos stemPos = bush.getStemPos();
-                float temperature = Climate.getAverageTemperature(level, pos);
-                final int hydration = getFruitBushHydrationFromRootPos(level, stemPos.below());
-
-                final ClimateRange range = climateRange.get();
-                int monthsSpentDying = 0;
-                do
+                count++;
+                if (count > 3)
                 {
-                    // This always runs at least once. It is called through random ticks, and calendar updates - although calendar updates will only call this if they've waited at least a day, or the average delta between random ticks.
-                    // Otherwise it will just wait for the next random tick.
-
-                    // Jump forward to nextTick.
-                    // Advance both the stage (randomly, if the previous month was healthy), and lifecycle (if the at-the-time conditions were valid)
-                    nextCalendarTick = Math.min(nextCalendarTick + Calendars.SERVER.getCalendarTicksInMonth(), currentCalendarTick);
-
-                    Lifecycle lifecycleAtNextTick = getLifecycleForMonth(ICalendar.getMonthOfYear(nextCalendarTick, Calendars.SERVER.getCalendarDaysInMonth()));
-                    if (range.checkBoth(hydration, temperature, false))
-                    {
-                        currentLifecycle = currentLifecycle.advanceTowards(lifecycleAtNextTick);
-                    }
-                    else
-                    {
-                        currentLifecycle = Lifecycle.DORMANT;
-                    }
-
-                    if (lifecycleAtNextTick != Lifecycle.DORMANT && currentLifecycle == Lifecycle.DORMANT)
-                    {
-                        monthsSpentDying++; // consecutive months spent where the conditions were invalid, but they shouldn't've been
-                    }
-                    else
-                    {
-                        monthsSpentDying = 0;
-                    }
-
-                } while (nextCalendarTick < currentCalendarTick);
-
-                BlockState newState;
-
-                if (mayDie(level, pos, state, monthsSpentDying))
-                {
-                    newState = getDeadState(state);
-                }
-                else
-                {
-                    // It's not dead! Now, perform the actual update over the time taken.
-                    newState = growAndPropagate(level, pos, level.getRandom(), state.setValue(LIFECYCLE, currentLifecycle));
-                }
-
-                // And update the block
-                if (state != newState)
-                {
-                    level.setBlock(pos, newState, 3);
+                    return;
                 }
             }
         }
+
+        // Then, try and pick a random position within the expansion radius, and place a bush there.
+        final BlockPos.MutableBlockPos cursor = pos.mutable();
+        for (int tries = 0; tries < 3; tries++)
+        {
+            cursor.setWithOffset(pos, Helpers.triangle(random, 3), 0, Helpers.triangle(random, 3));
+            final BlockPos newPos = level.getHeightmapPos(Heightmap.Types.OCEAN_FLOOR, cursor);
+            final BlockState placementState = getNewState(level, newPos);
+            if (canPlaceNewBushAt(level, newPos, placementState))
+            {
+                placeBlockAndResetCounter(level, newPos, placementState, cycles, growthsRemaining - random.nextInt(1, 3));
+                return;
+            }
+        }
     }
-    
-    /**
-     * Can this bush die, given that it spent {@code monthsSpentDying} consecutive months in a dormant state, when it should've been in a non-dormant state.
-     */
-    protected boolean mayDie(Level level, BlockPos pos, BlockState state, int monthsSpentDying)
+
+    protected void placeBlockAndResetCounter(ServerLevel level, BlockPos pos, BlockState state, int cycles, int growths)
     {
-        return monthsSpentDying >= MONTHS_SPENT_DORMANT_TO_DIE;
+        level.setBlock(pos, state, Block.UPDATE_ALL);
+        if (level.getBlockEntity(pos) instanceof BerryBushBlockEntity bush)
+        {
+            bush.resetCounter();
+            bush.increaseCounter((long) TFCConfig.SERVER.berryBushGrowthTicks.get() * cycles);
+            bush.setGrowthsRemaining(growths);
+        }
+        else
+        {
+            TerraFirmaCraft.LOGGER.error("Failed to update propagated berry bush block entity at: {}", pos);
+        }
+        level.getBlockState(pos).tick(level, pos, level.random);
     }
 
     protected BlockState getNewState(Level level, BlockPos pos)
@@ -172,57 +254,5 @@ public class StationaryBerryBushBlock extends SeasonalPlantBlock implements HoeO
     protected BlockState getDeadState(BlockState state)
     {
         return TFCBlocks.DEAD_BERRY_BUSH.get().defaultBlockState().setValue(STAGE, state.getValue(STAGE));
-    }
-
-    /**
-     * Performs growth and (optional) propagation of the bush.
-     * Propagation should be naturally limited to not cause runaway generation.
-     *
-     * @return The new state of the bush at {@code pos}. This will be set by the caller.
-     */
-    protected BlockState growAndPropagate(Level level, BlockPos pos, RandomSource random, BlockState state)
-    {
-        if (state.getValue(LIFECYCLE).active())
-        {
-            return state; // Only grow when active
-        }
-
-        // Increment stage by one
-        final BlockState newState = state.setValue(STAGE, Math.min(2, state.getValue(STAGE) + 1));
-
-        // Conditions:
-        // 1. Must be in max growth stage, and an active lifecycle
-        // 2. Must not have more than 3 other bushes within the expansion radius
-        if (newState.getValue(STAGE) != 2)
-        {
-            return newState;
-        }
-
-        int count = 0;
-        for (BlockPos target : BlockPos.betweenClosed(pos.offset(-2, -1, -2), pos.offset(2, 1, 2)))
-        {
-            if (level.getBlockState(target).getBlock() == this)
-            {
-                count++;
-                if (count > 3)
-                {
-                    return newState;
-                }
-            }
-        }
-
-        // Then, try and pick a random position within the expansion radius, and place a bush there.
-        final BlockPos.MutableBlockPos cursor = pos.mutable();
-        for (int tries = 0; tries < 6; tries++)
-        {
-            cursor.setWithOffset(pos, Helpers.triangle(random, 3), Helpers.triangle(random, 2), Helpers.triangle(random, 3));
-            final BlockState placementState = getNewState(level, cursor);
-            if (canPlaceNewBushAt(level, pos, placementState))
-            {
-                level.setBlockAndUpdate(cursor, placementState);
-                return newState;
-            }
-        }
-        return newState;
     }
 }
