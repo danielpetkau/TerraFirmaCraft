@@ -7,7 +7,7 @@
   },
   "input_item": {
     "count": 1,
-    "tag": "tfc:colored_banners"
+    "tag": "minecraft:banners"
   },
   "output_item": {
     "count": 1,

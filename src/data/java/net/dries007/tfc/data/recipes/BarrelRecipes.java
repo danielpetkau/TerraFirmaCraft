@@ -182,7 +182,7 @@ public interface BarrelRecipes extends Recipes
         removeDye(TFCTags.Items.COLORED_WOOL, Items.WHITE_WOOL);
         removeDye(TFCTags.Items.COLORED_CARPETS, Items.WHITE_CARPET);
         removeDye(TFCTags.Items.COLORED_BEDS, Items.WHITE_BED);
-        removeDye(TFCTags.Items.COLORED_BANNERS, Items.WHITE_BANNER);
+        removeDye(ItemTags.BANNERS, Items.WHITE_BANNER); // White banner should still be lye-able to clear patterns
         removeDye(TFCTags.Items.COLORED_TERRACOTTA, Items.WHITE_TERRACOTTA);
         removeDye(TFCTags.Items.COLORED_GLAZED_TERRACOTTA, Items.WHITE_GLAZED_TERRACOTTA);
         removeDye(TFCTags.Items.COLORED_SHULKER_BOXES, Items.SHULKER_BOX);
