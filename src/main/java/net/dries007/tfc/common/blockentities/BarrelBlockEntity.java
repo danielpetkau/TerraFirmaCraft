@@ -344,6 +344,12 @@ public class BarrelBlockEntity extends TickableInventoryBlockEntity<BarrelBlockE
             inventory.setStackInSlot(SLOT_ITEM, iter.next()); // First slot goes into the item slot
             while (iter.hasNext()) inventory.excess.add(iter.next()); // Any others go into excess
             inventory.tank.setFluid(barrel.fluidContent().copy());
+
+            //TODO should we reset the recipe tick instead to prevent this?
+            // Currently, barrels are able to complete recipes while the barrel is in item form
+            // This does not change current behavior but prevents recipes from completing instantly when the barrel is picked up and placed again
+            sealedTick = barrel.sealedTick();
+            recipeTick = barrel.recipeTick();
         }
         super.applyImplicitComponents(components);
     }
