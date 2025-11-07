@@ -30,6 +30,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.common.util.INBTSerializable;
 import net.neoforged.neoforge.fluids.FluidStack;
@@ -397,6 +398,27 @@ public class BarrelBlockEntity extends TickableInventoryBlockEntity<BarrelBlockE
         super.ejectInventory();
         assert level != null;
         inventory.excess.stream().filter(item -> !item.isEmpty()).forEach(item -> Helpers.spawnItem(level, worldPosition, item));
+
+        final FluidStack fluid = inventory.tank.getFluid();
+        if (level instanceof ServerLevel server && !fluid.isEmpty())
+        {
+            final double fill = (double) inventory.getFluidInTank(0).getAmount() / inventory.getTankCapacity(0);
+            final VoxelShape shape = getBlockState().getShape(level, worldPosition);
+            Helpers.playSound(level, worldPosition, SoundEvents.PLAYER_SPLASH);
+
+            for (int i = 0; i < Math.ceil(25 * fill); i++)
+            {
+                RandomSource random = server.getRandom();
+                final double xMax = shape.max(Direction.Axis.X);
+                final double xMin = shape.min(Direction.Axis.X);
+                final double zMax = shape.max(Direction.Axis.Z);
+                final double zMin = shape.min(Direction.Axis.Z);
+                final double dx = xMin + (xMax - xMin) * random.nextDouble();
+                final double dy = shape.max(Direction.Axis.Y) * fill * random.nextDouble();
+                final double dz = zMin + (zMax - zMin) * random.nextDouble();
+                server.sendParticles(new FluidParticleOption(TFCParticles.BARREL_SPILL.get(), fluid.getFluid()), worldPosition.getX() + dx, worldPosition.getY() + dy, worldPosition.getZ() + dz, 1, 0, 0, 0, 1f);
+            }
+        }
     }
 
     public void tickPouring(Level level, BlockPos pos, boolean sealed, Direction facing)
