@@ -12,7 +12,6 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.tags.BlockTags;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -56,13 +55,7 @@ public class ComposterBlockEntity extends InventoryBlockEntity<ItemStackHandler>
         assert level != null;
 
         // If the compost is ready but the item has been already been extracted, empty the composter
-        // TODO: This avoids item duplications, but does not instantaneously update the blockstate when an item is extracted
-        if (isReady() && inventory.getStackInSlot(0).isEmpty())
-        {
-            reset();
-            markForSync();
-        }
-        else if (green >= MAX_AMOUNT && brown >= MAX_AMOUNT & !isRotten())
+        if (!checkAndSetEmpty() && green >= MAX_AMOUNT && brown >= MAX_AMOUNT & !isRotten())
         {
             if (getTicksSinceUpdate() > getReadyTicks())
             {
@@ -75,6 +68,24 @@ public class ComposterBlockEntity extends InventoryBlockEntity<ItemStackHandler>
         {
             Helpers.tickInfestation(level, getBlockPos(), 5, null);
         }
+    }
+
+    private boolean checkAndSetEmpty()
+    {
+        if (isReady() && inventory.getStackInSlot(0).isEmpty())
+        {
+            reset();
+            markForSync();
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public void setAndUpdateSlots(int slot)
+    {
+        super.setAndUpdateSlots(slot);
+        checkAndSetEmpty();
     }
 
     public long getReadyTicks()
