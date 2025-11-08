@@ -183,30 +183,28 @@ public class FireboxBlockEntity extends TickableInventoryBlockEntity<ItemStackHa
     private static void performHeating(Level level, FireboxBlockEntity firebox, List<BlockPos> filled)
     {
         filled.forEach(testPos -> {
-            if (level.getBlockEntity(testPos) instanceof PlacedItemBlockEntity)
+            if (level.getBlockEntity(testPos) instanceof PlacedItemBlockEntity placedItem)
             {
                 if (level instanceof ServerLevel server && level.random.nextFloat() < 0.01f)
                     server.sendParticles(ParticleTypes.FLAME, testPos.getX() + 0.5, testPos.getY() + 0.5, testPos.getZ() + 0.5, 1, 0, 0, 0, 0.01);
-                if (level.getBlockEntity(testPos) instanceof PlacedItemBlockEntity placedItem)
+                final IItemHandler inv = placedItem.getInventory();
+                for (int i = 0; i < inv.getSlots(); i++)
                 {
-                    final IItemHandler inv = placedItem.getInventory();
-                    for (int i = 0; i < inv.getSlots(); i++)
+                    final ItemStack item = inv.getStackInSlot(i);
+                    final IHeat heat = HeatCapability.get(item);
+                    if (heat != null)
                     {
-                        final ItemStack item = inv.getStackInSlot(i);
-                        final IHeat heat = HeatCapability.get(item);
-                        if (heat != null)
+                        HeatCapability.addTemp(heat, firebox.temperature);
+                        if (level.getGameTime() % 20 == 0)
                         {
-                            HeatCapability.addTemp(heat, firebox.temperature);
-                            if (level.getGameTime() % 20 == 0)
+                            final HeatingRecipe recipe = HeatingRecipe.getRecipe(item);
+                            if (recipe != null && recipe.matches(item) && recipe.isValidTemperature(heat.getTemperature()))
                             {
-                                final HeatingRecipe recipe = HeatingRecipe.getRecipe(item);
-                                if (recipe != null && recipe.matches(item) && recipe.isValidTemperature(heat.getTemperature()))
-                                {
-                                    final ItemStack output = recipe.assembleItem(item);
-                                    item.setCount(0);
-                                    inv.insertItem(i, output, false);
-                                    placedItem.markForSync();
-                                }
+                                final ItemStack output = recipe.assembleItem(item);
+                                item.setCount(0);
+                                inv.insertItem(i, output, false);
+                                placedItem.markForSync();
+                                placedItem.updateBlock();
                             }
                         }
                     }
