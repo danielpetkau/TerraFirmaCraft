@@ -54,7 +54,15 @@ public class ComposterBlockEntity extends InventoryBlockEntity<ItemStackHandler>
     public void randomTick()
     {
         assert level != null;
-        if (green >= MAX_AMOUNT && brown >= MAX_AMOUNT & !isRotten())
+
+        // If the compost is ready but the item has been already been extracted, empty the composter
+        // TODO: This avoids item duplications, but does not instantaneously update the blockstate when an item is extracted
+        if (isReady() && inventory.getStackInSlot(0).isEmpty())
+        {
+            reset();
+            markForSync();
+        }
+        else if (green >= MAX_AMOUNT && brown >= MAX_AMOUNT & !isRotten())
         {
             if (getTicksSinceUpdate() > getReadyTicks())
             {
