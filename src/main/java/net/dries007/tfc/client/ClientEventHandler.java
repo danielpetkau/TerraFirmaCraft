@@ -982,6 +982,7 @@ public final class ClientEventHandler
         event.registerSpriteSet(TFCParticles.FLUID_FALL.get(), set -> FluidDripParticle.provider(set, FluidDripParticle.FluidFallAndLandParticle::new));
         event.registerSpriteSet(TFCParticles.FLUID_LAND.get(), set -> FluidDripParticle.provider(set, FluidDripParticle.FluidLandParticle::new));
         event.registerSpriteSet(TFCParticles.BARREL_DRIP.get(), set -> FluidDripParticle.provider(set, FluidDripParticle.BarrelDripParticle::new));
+        event.registerSpriteSet(TFCParticles.BARREL_SPILL.get(), set -> FluidDripParticle.provider(set, FluidDripParticle.BarrelSpillParticle::new));
 
         for (int i = 0; i < 5; i++)
         {
