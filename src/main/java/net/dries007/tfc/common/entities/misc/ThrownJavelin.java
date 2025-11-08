@@ -11,14 +11,18 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
@@ -67,7 +71,44 @@ public class ThrownJavelin extends AbstractArrow
         {
             TFCAdvancements.STAB_ENTITY.trigger((ServerPlayer) this.getOwner(), result.getEntity());
         }
-        super.onHitEntity(result);
+        final Entity entity = result.getEntity();
+        float dmg = 8.0F;
+        final Entity owner = this.getOwner();
+        final DamageSource src = this.damageSources().trident(this, (owner == null ? this : owner));
+        final Level level = this.level();
+        if (level instanceof ServerLevel server)
+        {
+            dmg = EnchantmentHelper.modifyDamage(server, this.getWeaponItem(), entity, src, dmg);
+        }
+
+        this.dealtDamage = true;
+        if (entity.hurt(src, dmg))
+        {
+            if (entity.getType() == EntityType.ENDERMAN)
+            {
+                return;
+            }
+
+            if (level instanceof ServerLevel server)
+            {
+                EnchantmentHelper.doPostAttackEffectsWithItemSource(server, entity, src, this.getWeaponItem());
+            }
+
+            if (entity instanceof LivingEntity livingentity)
+            {
+                this.doKnockback(livingentity, src);
+                this.doPostHurtEffects(livingentity);
+            }
+        }
+
+        this.setDeltaMovement(this.getDeltaMovement().multiply(-0.01, -0.1, -0.01));
+        this.playSound(SoundEvents.TRIDENT_HIT, 1.0F, 1.0F);
+    }
+
+    @Override
+    public ItemStack getWeaponItem()
+    {
+        return this.getPickupItemStackOrigin();
     }
 
     @Override
