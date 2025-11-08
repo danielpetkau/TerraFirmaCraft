@@ -707,8 +707,6 @@ FLOWERPOT_CROSS_PLANTS = {
     'perovskia': 'perovskia_0',
     'poppy': 'poppy_0',
     'primrose': 'primrose',
-    'prickly_pear': 'potted',
-    'prickly_pear_purple': 'potted',
     'pulsatilla': 'pulsatilla_0',
     'ramunda': 'ramunda_0',
     'rose': 'classic',
@@ -734,7 +732,7 @@ FLOWERPOT_CROSS_PLANTS = {
     'yucca': 'potted'
 }
 
-MISC_POTTED_PLANTS = ('barrel_cactus', 'morning_glory', 'moss', 'reindeer_lichen', 'rose', 'toquilla_palm', 'tree_fern', 'sea_palm', 'philodendron', 'golden_bamboo', 'moss_campion', 'shawiash', 'kinnikinnick', 'azalea', 'cycad', 'ostrich_fern', 'elegant_sunburst_lichen')
+MISC_POTTED_PLANTS = ('barrel_cactus', 'morning_glory', 'moss', 'reindeer_lichen', 'rose', 'toquilla_palm', 'tree_fern', 'sea_palm', 'philodendron', 'golden_bamboo', 'moss_campion', 'shawiash', 'kinnikinnick', 'azalea', 'cycad', 'ostrich_fern', 'elegant_sunburst_lichen', 'silken_pincushion_cactus', 'hibiscus', 'mountain_hullwort', 'lilac', 'palash', 'penwortel', 'prickly_pear', 'prickly_pear_purple', 'qantu', 'sunflower')
 
 # Single block, cross model, just say how many stages
 SIMPLE_STAGE_PLANTS: dict[str, int] = {
