@@ -15,7 +15,7 @@
       "max_temperature": 5,
       "min_groundwater": 240,
       "max_groundwater": 480,
-      "max_forest": "edge"
+      "max_forest": 2
     }
   ]
 }
