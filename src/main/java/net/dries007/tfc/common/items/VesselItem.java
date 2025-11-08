@@ -209,7 +209,7 @@ public class VesselItem extends Item
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag tooltipFlag)
     {
         final @Nullable Vessel vessel = Vessel.get(stack);
-        if (vessel != null && vessel.isEmpty()) // Only show the 'contents' label if we actually have contents
+        if (vessel != null && !vessel.isEmpty()) // Only show the 'contents' label if we actually have contents
         {
             if (vessel.isInventory())
             {
@@ -219,7 +219,7 @@ public class VesselItem extends Item
                     Helpers.addInventoryTooltipInfo(vessel.contents(), tooltip);
                 }
             }
-            else if (!vessel.isEmpty())
+            else
             {
                 tooltip.add(Component.translatable("tfc.tooltip.small_vessel.contents").withStyle(ChatFormatting.DARK_GREEN));
                 tooltip.add(Tooltips.fluidUnitsAndCapacityOf(vessel.getFluidInTank(0).getHoverName(), vessel.getFluidInTank(0).getAmount(), containerInfo.fluidCapacity())
