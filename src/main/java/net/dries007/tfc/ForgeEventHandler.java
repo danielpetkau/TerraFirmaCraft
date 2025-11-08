@@ -21,6 +21,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
@@ -850,7 +851,6 @@ public final class ForgeEventHandler
         float damageModifier = 1f;
         final Item useItem = event.getEntity().getUseItem().getItem();
 
-        // todo: the original code here was broken during porting, what do we even want to do here?
         if (useItem == Items.SHIELD)
         {
             damageModifier = 0.25f;
@@ -860,7 +860,8 @@ public final class ForgeEventHandler
             damageModifier = shield.getDamageBlocked();
         }
 
-        event.setBlockedDamage(event.getOriginalBlockedDamage() * damageModifier);
+        if (!event.getDamageSource().is(DamageTypeTags.IS_PROJECTILE))
+            event.setBlockedDamage(event.getOriginalBlockedDamage() * damageModifier);
     }
 
     public static void onItemStacked(ItemStackedOnOtherEvent event)
