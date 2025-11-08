@@ -1,30 +1,44 @@
 ### Changes
-- Add EMI support, special thanks to Charnuz to his hard work on this
-- Update Russian localization
-- Made tree selection in forests respect rainfall variance and elevation
-- Made wooden door and trapdoor recipes more logical
-- Renamed alabaster blocks to plaster to be more consistent with the crafting recipes
-- Removed snow speedup from composters
-- Removed drops from snow blocks
+- Crop climate ranges have been re-balanced
+  - In previous versions of 1.21, crops were designed to always grow at least 6 months of the year in any climate they could generate in, and a lot of extra wiggle room was added on top of that, only some of which was intended
+  - In this version, crops are guaranteed to survive during the 4 warmest months of the year (or 6 coldest for cover crops) in any climate that they spawn in, though they may survive slightly longer if you are lucky with daily temperature variations
+- Added error messages to the /weather command to redirect users
+- Added "spill" particles when an open barrel block is broken
+- Changes to the default HUD textures/arrangement
+- Added flower pot models to more plants (closes #3142)
 
 ### Bug Fixes
-- Fixed Kaolin Clay generation, especially in finite continents (closes #3058)
-- Fixed adding water to pots with soup in them (closes #3287)
-- Fixed sewing recipes not being repeatable without relog (closes #3273)
-- Fixed field guide showing incorrect nutrient values for cover crops (closes #3269)
-- Fixed dyeing with barrels. Dying with barrels unchanged. Dieing with barrels not planned. (closes #3288)
-- Fixed missing lang key for fruit tree temperature (closes #3278)
-- Fixed animal familiarity shift overlay (closes #3285)
-- Fixed issues with pot recipes and jars (closes #3284) (closes #3283)
-- Fixed the inventory/capability model for Mold Tables (closes #3260)
-- Fixed the twig model (closes #3265)
-- Fixed some landslide recipes (closes #3262) (closes #3263)
-- Fixed some compost items having both green and brown tags (closes #3267)
-- Fixed bubble columns and particles 
-- Fixed some floating river terrain (closes #3176)
-- Remove ocean features from freshwater biomes (closes #3115)
-- Fixed table and basin pours not working with weathered brass blocks
-- Fixed fissures intersecting rivers and caves (closes #3092)
-- Fixed fissures from generating lava exposed to seawater (closes #3149)
-- Fixed lakes generating in bamboo (closes #3194)
-- Fixed stars rendering in front of the sun and moon
+- Fixed crops dying apparently at random (closes #3164)
+- Made berry bushes spread properly, both when loaded and unloaded (closes #3148)
+- Fixed cranberries being very difficult to find. Look for them in lowlands as they should only generate submerged
+- Made shields effective against projectiles (closes #3261)
+- Fixed chance recipes glitching the kiln (closes #3306)
+- Fixed javelins disappearing when hitting a mob (closes #3189)
+- Fixed mobs not spawning in saltwater (closes #3213)
+- Fixed compost duplication bug with hoppers (closes #3327)
+- Fixed vessel tooltips not appearing
+- Keep sealed and recipe tick when a sealed barrel is placed
+- Fixed clay and kaolin indicators not being placeable on clay/kaolin blocks
+- Consistently place catch-up snow on initial worldgen (closes #3239)
+- Fixed rendering of the stove with pot block
+- Allow bleaching white banners (closes #3307)
+- Remove reference to pumpkins/melons as brown compost items (closes #3333)
+- Prevent blowpipes from stacking (closes #3331)
+- Fixed querns giving less dye than expected from plants
+- Add missing guster and flow pattern recipes (closes #3308)
+- Prevent male animals calling breeding methods (closes #3250 closes #3254)
+- Fixed horse armor textures (closes #3326)
+- Fixed snow not melting in spring (closes #3270)
+- Fixed floating point precision issue (closes #3314)
+- Fixed some bugs with the kiln multiblock
+  - Stop fireboxes from working when inside the kiln structure
+  - Fireboxes will now always heat the entire structure they are heating
+  - Fireboxes must still be placed underneath the kiln structure for it to work
+- Fixed pot recipes that were using no item inputs causing a crash (closes #3311) and not getting any outputs (closes #3312)
+- Various fixes, changes, and additions to comparator outputs from devices
+- Various fixes and changes to what the thermometer will attach to and what it will output
+- Made sign placement more consistent with vanilla
+- Added drop shadow to hoe overlay
+- Fixed sky rendering issues with Sodium installed (#3301)
+- Fixed missing hanging sign textures (closes #3296)
+
