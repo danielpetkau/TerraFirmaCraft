@@ -84,6 +84,10 @@ public class StationaryBerryBushBlock extends SeasonalPlantBlock implements HoeO
         {
             plant.onUpdate(level, pos, state);
         }
+        else
+        {
+            return;
+        }
 
         // Must be in an active lifecycle and have remaining growths to consider growing
         // We get the blockstate from the pos in case the state has been updated by onUpdate
