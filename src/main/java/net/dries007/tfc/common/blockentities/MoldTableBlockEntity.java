@@ -19,8 +19,10 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
+import net.neoforged.neoforge.client.model.data.ModelData;
 import net.neoforged.neoforge.common.crafting.SizedIngredient;
 import net.neoforged.neoforge.common.util.INBTSerializable;
 import net.neoforged.neoforge.fluids.FluidStack;
@@ -30,6 +32,7 @@ import net.neoforged.neoforge.items.IItemHandlerModifiable;
 import net.neoforged.neoforge.items.ItemHandlerHelper;
 import org.apache.commons.lang3.tuple.Pair;
 
+import net.dries007.tfc.client.model.MoldTableBlockModel;
 import net.dries007.tfc.common.TFCTags;
 import net.dries007.tfc.common.capabilities.DelegateItemHandler;
 import net.dries007.tfc.common.capabilities.InventoryItemHandler;
@@ -254,6 +257,12 @@ public class MoldTableBlockEntity extends TickableInventoryBlockEntity<MoldTable
         return blockEntity.get().isLinkBroken();
     }
 
+    @Override
+    public ModelData getModelData()
+    {
+        return ModelData.of(MoldTableBlockModel.MoldModelData.PROPERTY, MoldTableBlockModel.getMoldModelData(getMoldStack()));
+    }
+
     public Fluid getFluidToRender()
     {
         return fluid.orElseThrow();
@@ -301,26 +310,18 @@ public class MoldTableBlockEntity extends TickableInventoryBlockEntity<MoldTable
                 {
                     final ItemStack extracted = inventory.extractItem(MOLD_SLOT, 1, false);
                     inventory.insertItem(MOLD_SLOT, heldItem.split(1), false);
-                    if (!level.isClientSide)
-                    {
-                        ItemHandlerHelper.giveItemToPlayer(player, extracted, player.getInventory().selected);
-                    }
+                    ItemHandlerHelper.giveItemToPlayer(player, extracted, player.getInventory().selected);
                 }
                 else
                 {
                     // Just extract
-                    if (!level.isClientSide)
-                    {
-                        ItemHandlerHelper.giveItemToPlayer(player, inventory.extractItem(MOLD_SLOT, 1, false),
-                            player.getInventory().selected);
-                    }
+                    ItemHandlerHelper.giveItemToPlayer(player, inventory.extractItem(MOLD_SLOT, 1, false),
+                        player.getInventory().selected);
+
                 }
 
                 final ItemStack extracted = inventory.extractItem(OUTPUT_SLOT, 99, false);
-                if (!level.isClientSide)
-                {
-                    ItemHandlerHelper.giveItemToPlayer(player, extracted, player.getInventory().selected);
-                }
+                ItemHandlerHelper.giveItemToPlayer(player, extracted, player.getInventory().selected);
 
                 markForSync();
                 return ItemInteractionResult.sidedSuccess(level.isClientSide);
@@ -337,11 +338,9 @@ public class MoldTableBlockEntity extends TickableInventoryBlockEntity<MoldTable
             final boolean shouldExtract = !inventory.getStackInSlot(OUTPUT_SLOT).isEmpty();
             if (shouldExtract)
             {
-                if (!level.isClientSide)
-                {
-                    ItemHandlerHelper.giveItemToPlayer(player, inventory.extractItem(OUTPUT_SLOT, 1, false),
-                        player.getInventory().selected);
-                }
+                ItemHandlerHelper.giveItemToPlayer(player, inventory.extractItem(OUTPUT_SLOT, 1, false),
+                    player.getInventory().selected);
+
                 markForSync();
                 return ItemInteractionResult.sidedSuccess(level.isClientSide);
             }
@@ -415,6 +414,12 @@ public class MoldTableBlockEntity extends TickableInventoryBlockEntity<MoldTable
     {
         super.setAndUpdateSlots(slot);
         markForSync();
+        if (level != null && level.isClientSide)
+        {
+            // Need to make sure that this gets called at least on the client
+            // TODO figure out why requestModelDataUpdate() does not update the already rendered model
+            level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_CLIENTS);
+        }
     }
 
     /**

@@ -47,11 +47,9 @@ import org.jetbrains.annotations.Nullable;
 import net.dries007.tfc.TerraFirmaCraft;
 import net.dries007.tfc.client.RenderHelpers;
 import net.dries007.tfc.common.TFCTags;
-import net.dries007.tfc.common.blockentities.MoldTableBlockEntity;
 import net.dries007.tfc.common.blockentities.TFCBlockEntities;
 import net.dries007.tfc.util.collections.IndirectHashCollection;
 
-//TODO does not update when BE changes
 public class MoldTableBlockModel implements IDynamicBakedModel, IUnbakedGeometry<MoldTableBlockModel>
 {
     private final BlockModel model;
@@ -68,21 +66,9 @@ public class MoldTableBlockModel implements IDynamicBakedModel, IUnbakedGeometry
         final BlockEntity blockEntity = level.getBlockEntity(pos);
         if (blockEntity != null && blockEntity.getType() == TFCBlockEntities.MOLD_TABLE.get())
         {
-            return modelData.derive()
-                .with(MoldModelData.PROPERTY, loadMoldModel((MoldTableBlockEntity) blockEntity))
-                .build();
+            return blockEntity.getModelData();
         }
         return modelData;
-    }
-
-    private MoldModelData loadMoldModel(MoldTableBlockEntity moldTable)
-    {
-        ItemStack mold = moldTable.getMoldStack();
-        if (!mold.isEmpty())
-        {
-            return new MoldModelData(MOLD_MODEL_CACHE.values.get(mold.getItem()));
-        }
-        return new MoldModelData(null);
     }
 
     @Override
@@ -145,7 +131,7 @@ public class MoldTableBlockModel implements IDynamicBakedModel, IUnbakedGeometry
         return this;
     }
 
-    private record MoldModelData(@Nullable BakedModel model)
+    public record MoldModelData(@Nullable BakedModel model)
     {
         public static final ModelProperty<MoldModelData> PROPERTY = new ModelProperty<>();
     }
@@ -164,6 +150,16 @@ public class MoldTableBlockModel implements IDynamicBakedModel, IUnbakedGeometry
             BlockModel model = context.deserialize(json, BlockModel.class);
             return new MoldTableBlockModel(model);
         }
+    }
+
+    // Beyond this point could go in MoldTableBlockEntity but that file is already very long
+    public static MoldModelData getMoldModelData(ItemStack stack)
+    {
+        if (!stack.isEmpty())
+        {
+            return new MoldModelData(MOLD_MODEL_CACHE.values.get(stack.getItem()));
+        }
+        return new MoldModelData(null);
     }
 
     private static final MoldModelCache MOLD_MODEL_CACHE = IndirectHashCollection.create(new MoldModelCache(new IdentityHashMap<>()));
