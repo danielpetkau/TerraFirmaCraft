@@ -23,7 +23,6 @@ import java.util.stream.Stream;
 import com.google.common.base.Stopwatch;
 import com.google.common.collect.ImmutableSet;
 import com.mojang.logging.LogUtils;
-import net.dries007.tfc.common.blocks.plant.*;
 import net.minecraft.SharedConstants;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.BlockModelShaper;
@@ -67,6 +66,12 @@ import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.blocks.devices.IngotPileBlock;
 import net.dries007.tfc.common.blocks.devices.MoldTableBlock;
 import net.dries007.tfc.common.blocks.devices.ScrapingBlock;
+import net.dries007.tfc.common.blocks.plant.BodyPlantBlock;
+import net.dries007.tfc.common.blocks.plant.BranchingCactusBlock;
+import net.dries007.tfc.common.blocks.plant.GrowingBranchingCactusBlock;
+import net.dries007.tfc.common.blocks.plant.Plant;
+import net.dries007.tfc.common.blocks.plant.PlantBlock;
+import net.dries007.tfc.common.blocks.plant.TopPlantBlock;
 import net.dries007.tfc.common.blocks.plant.fruit.GrowingFruitTreeBranchBlock;
 import net.dries007.tfc.common.blocks.rock.RockDisplayCategory;
 import net.dries007.tfc.common.component.food.Nutrient;
@@ -320,18 +325,18 @@ public final class SelfTests
         }));
 
         final Set<Item> technicalItemsWithNoTab = Stream.of(
-            List.of(
-                TFCBlocks.SNOW_PILE,
-                TFCBlocks.ICE_PILE,
-                TFCBlocks.BLOOM,
-                TFCBlocks.MOLTEN,
-                TFCBlocks.LIGHT,
-                TFCBlocks.POURED_GLASS,
-                TFCItems.FILLED_PAN
-            ),
-            TFCBlocks.COLORED_POURED_GLASS.values(),
-            TFCBlocks.ROCK_ANVILS.values()
-        )
+                List.of(
+                    TFCBlocks.SNOW_PILE,
+                    TFCBlocks.ICE_PILE,
+                    TFCBlocks.BLOOM,
+                    TFCBlocks.MOLTEN,
+                    TFCBlocks.LIGHT,
+                    TFCBlocks.POURED_GLASS,
+                    TFCItems.FILLED_PAN
+                ),
+                TFCBlocks.COLORED_POURED_GLASS.values(),
+                TFCBlocks.ROCK_ANVILS.values()
+            )
             .<ItemLike>flatMap(Collection::stream)
             .map(ItemLike::asItem)
             .collect(Collectors.toSet());
