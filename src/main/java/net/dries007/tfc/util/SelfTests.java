@@ -65,6 +65,7 @@ import net.dries007.tfc.common.blockentities.TFCBlockEntities;
 import net.dries007.tfc.common.blocks.PouredGlassBlock;
 import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.blocks.devices.IngotPileBlock;
+import net.dries007.tfc.common.blocks.devices.MoldTableBlock;
 import net.dries007.tfc.common.blocks.devices.ScrapingBlock;
 import net.dries007.tfc.common.blocks.plant.fruit.GrowingFruitTreeBranchBlock;
 import net.dries007.tfc.common.blocks.rock.RockDisplayCategory;
@@ -294,7 +295,7 @@ public final class SelfTests
             .toList();
         final List<BlockState> missingParticleErrors = TFCBlocks.BLOCKS.getEntries()
             .stream()
-            .flatMap(states(s -> !s.isAir() && !(s.getBlock() instanceof IngotPileBlock) && !(s.getBlock() instanceof PlantBlock) && !(s.getBlock() instanceof BodyPlantBlock) && !(s.getBlock() instanceof TopPlantBlock) && !(s.getBlock() instanceof ScrapingBlock) && shaper.getParticleIcon(s) == missingParticle))
+            .flatMap(states(s -> !s.isAir() && !(s.getBlock() instanceof IngotPileBlock) && !(s.getBlock() instanceof PlantBlock) && !(s.getBlock() instanceof BodyPlantBlock) && !(s.getBlock() instanceof TopPlantBlock) && !(s.getBlock() instanceof ScrapingBlock) && !(s.getBlock() instanceof MoldTableBlock) && shaper.getParticleIcon(s) == missingParticle))
             .toList();
 
         return logErrors("{} block states with missing models:", missingModelErrors, LOGGER)

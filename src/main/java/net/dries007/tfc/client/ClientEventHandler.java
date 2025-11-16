@@ -89,10 +89,11 @@ import net.dries007.tfc.client.extensions.ItemRendererExtension;
 import net.dries007.tfc.client.model.ContainedFluidModel;
 import net.dries007.tfc.client.model.DoubleIngotPileBlockModel;
 import net.dries007.tfc.client.model.IngotPileBlockModel;
+import net.dries007.tfc.client.model.MoldTableBlockModel;
+import net.dries007.tfc.client.model.MoldsModelLoader;
 import net.dries007.tfc.client.model.PlantBlockModel;
 import net.dries007.tfc.client.model.ScrapingBlockModel;
 import net.dries007.tfc.client.model.TrimmedItemModel;
-import net.dries007.tfc.client.model.MoldsModelLoader;
 import net.dries007.tfc.client.model.entity.AlpacaModel;
 import net.dries007.tfc.client.model.entity.AnemometerModel;
 import net.dries007.tfc.client.model.entity.BisonModel;
@@ -824,6 +825,7 @@ public final class ClientEventHandler
         event.register(Helpers.identifier("scraping"), ScrapingBlockModel.INSTANCE);
         event.register(Helpers.identifier("plant"), PlantBlockModel.Loader.INSTANCE);
         event.register(Helpers.identifier("mold"), new MoldsModelLoader());
+        event.register(Helpers.identifier("mold_table"), MoldTableBlockModel.Loader.INSTANCE);
     }
 
     public static void registerColorHandlerBlocks(RegisterColorHandlersEvent.Block event)

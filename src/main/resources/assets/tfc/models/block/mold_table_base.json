@@ -1,5 +1,6 @@
 {
 	"credit": "Made with Blockbench",
+	"loader": "tfc:mold_table",
 	"ambientocclusion": false,
 	"textures": {
 		"0": "tfc:block/crucible_like",
