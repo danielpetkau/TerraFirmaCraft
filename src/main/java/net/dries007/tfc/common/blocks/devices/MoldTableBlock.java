@@ -6,10 +6,8 @@
 
 package net.dries007.tfc.common.blocks.devices;
 
-import java.util.Optional;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -68,15 +66,11 @@ public class MoldTableBlock extends ExtendedBlock implements EntityBlockExtensio
     @Override
     protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult)
     {
-        if (player instanceof ServerPlayer serverPlayer)
-        {
-            Optional<MoldTableBlockEntity> mold = level.getBlockEntity(pos, TFCBlockEntities.MOLD_TABLE.get());
-            if (mold.isPresent())
-            {
-                return mold.get().onRightClick(serverPlayer);
-            }
-        }
-        return ItemInteractionResult.sidedSuccess(level.isClientSide);
+        return level.getBlockEntity(pos, TFCBlockEntities.MOLD_TABLE.get()).map(
+            moldTable -> moldTable.onRightClick(player)
+        ).orElse(
+            ItemInteractionResult.sidedSuccess(level.isClientSide)
+        );
     }
 
     @Override

@@ -89,10 +89,11 @@ import net.dries007.tfc.client.extensions.ItemRendererExtension;
 import net.dries007.tfc.client.model.ContainedFluidModel;
 import net.dries007.tfc.client.model.DoubleIngotPileBlockModel;
 import net.dries007.tfc.client.model.IngotPileBlockModel;
+import net.dries007.tfc.client.model.MoldTableBlockModel;
+import net.dries007.tfc.client.model.MoldsModelLoader;
 import net.dries007.tfc.client.model.PlantBlockModel;
 import net.dries007.tfc.client.model.ScrapingBlockModel;
 import net.dries007.tfc.client.model.TrimmedItemModel;
-import net.dries007.tfc.client.model.MoldsModelLoader;
 import net.dries007.tfc.client.model.entity.AlpacaModel;
 import net.dries007.tfc.client.model.entity.AnemometerModel;
 import net.dries007.tfc.client.model.entity.BisonModel;
@@ -119,6 +120,7 @@ import net.dries007.tfc.client.model.entity.JavelinModel;
 import net.dries007.tfc.client.model.entity.JellyfishModel;
 import net.dries007.tfc.client.model.entity.JerboaModel;
 import net.dries007.tfc.client.model.entity.LemmingModel;
+import net.dries007.tfc.client.model.entity.LeopardSealModel;
 import net.dries007.tfc.client.model.entity.LionModel;
 import net.dries007.tfc.client.model.entity.LobsterModel;
 import net.dries007.tfc.client.model.entity.ManateeModel;
@@ -133,7 +135,6 @@ import net.dries007.tfc.client.model.entity.PolarBearModel;
 import net.dries007.tfc.client.model.entity.QuailModel;
 import net.dries007.tfc.client.model.entity.RatModel;
 import net.dries007.tfc.client.model.entity.SabertoothModel;
-import net.dries007.tfc.client.model.entity.LeopardSealModel;
 import net.dries007.tfc.client.model.entity.TFCChickenModel;
 import net.dries007.tfc.client.model.entity.TFCCowModel;
 import net.dries007.tfc.client.model.entity.TFCGoatModel;
@@ -153,9 +154,9 @@ import net.dries007.tfc.client.model.entity.YakModel;
 import net.dries007.tfc.client.overworld.LevelRendererExtension;
 import net.dries007.tfc.client.overworld.StarsReloadListener;
 import net.dries007.tfc.client.particle.AnimatedParticle;
-import net.dries007.tfc.client.particle.BubbleParticle;
 import net.dries007.tfc.client.particle.BubbleColumnDownParticle;
 import net.dries007.tfc.client.particle.BubbleColumnUpParticle;
+import net.dries007.tfc.client.particle.BubbleParticle;
 import net.dries007.tfc.client.particle.FallingLeafParticle;
 import net.dries007.tfc.client.particle.FluidDripParticle;
 import net.dries007.tfc.client.particle.GlintParticleProvider;
@@ -167,6 +168,7 @@ import net.dries007.tfc.client.particle.TFCParticles;
 import net.dries007.tfc.client.particle.VariableHeightSmokeParticle;
 import net.dries007.tfc.client.particle.WaterFlowParticle;
 import net.dries007.tfc.client.particle.WindParticle;
+import net.dries007.tfc.client.render.blockentity.AnemometerBlockEntityRenderer;
 import net.dries007.tfc.client.render.blockentity.AnvilBlockEntityRenderer;
 import net.dries007.tfc.client.render.blockentity.AxleBlockEntityRenderer;
 import net.dries007.tfc.client.render.blockentity.BarrelBlockEntityRenderer;
@@ -200,7 +202,6 @@ import net.dries007.tfc.client.render.blockentity.TFCSignBlockEntityRenderer;
 import net.dries007.tfc.client.render.blockentity.ToolRackBlockEntityRenderer;
 import net.dries007.tfc.client.render.blockentity.TripHammerBlockEntityRenderer;
 import net.dries007.tfc.client.render.blockentity.VaneBlockEntityRenderer;
-import net.dries007.tfc.client.render.blockentity.AnemometerBlockEntityRenderer;
 import net.dries007.tfc.client.render.blockentity.WaterWheelBlockEntityRenderer;
 import net.dries007.tfc.client.render.blockentity.WindmillBlockEntityRenderer;
 import net.dries007.tfc.client.render.entity.AnimalRenderer;
@@ -279,7 +280,9 @@ public final class ClientEventHandler
     public static final ResourceLocation WATER_STILL = Helpers.identifierMC("block/water_still");
     public static final ResourceLocation WATER_FLOW = Helpers.identifierMC("block/water_flow");
     public static final ResourceLocation WATER_OVERLAY = Helpers.identifierMC("block/water_overlay");
-    /** @see net.minecraft.client.renderer.ScreenEffectRenderer#UNDERWATER_LOCATION */
+    /**
+     * @see net.minecraft.client.renderer.ScreenEffectRenderer#UNDERWATER_LOCATION
+     */
     public static final ResourceLocation UNDERWATER_LOCATION = Helpers.identifierMC("textures/misc/underwater.png");
 
     public static final ResourceLocation MOLTEN_STILL = Helpers.identifier("block/molten_still");
@@ -582,10 +585,10 @@ public final class ClientEventHandler
         }
         event.registerEntityRenderer(TFCEntities.COD.get(), CodRenderer::new);
         event.registerEntityRenderer(TFCEntities.FRESHWATER_FISH.get(Fish.SALMON).get(), SalmonRenderer::new);
-        event.registerEntityRenderer(TFCEntities.FRESHWATER_FISH.get(Fish.LARGEMOUTH_BASS).get(),  ctx -> new SimpleMobRenderer.Builder<>(ctx, CodModel::new, "largemouth_bass").flops().build());
-        event.registerEntityRenderer(TFCEntities.FRESHWATER_FISH.get(Fish.SMALLMOUTH_BASS).get(),  ctx -> new SimpleMobRenderer.Builder<>(ctx, CodModel::new, "smallmouth_bass").flops().build());
-        event.registerEntityRenderer(TFCEntities.FRESHWATER_FISH.get(Fish.LAKE_TROUT).get(),  ctx -> new SimpleMobRenderer.Builder<>(ctx, CodModel::new, "lake_trout").flops().build());
-        event.registerEntityRenderer(TFCEntities.FRESHWATER_FISH.get(Fish.RAINBOW_TROUT).get(),  ctx -> new SimpleMobRenderer.Builder<>(ctx, CodModel::new, "rainbow_trout").flops().build());
+        event.registerEntityRenderer(TFCEntities.FRESHWATER_FISH.get(Fish.LARGEMOUTH_BASS).get(), ctx -> new SimpleMobRenderer.Builder<>(ctx, CodModel::new, "largemouth_bass").flops().build());
+        event.registerEntityRenderer(TFCEntities.FRESHWATER_FISH.get(Fish.SMALLMOUTH_BASS).get(), ctx -> new SimpleMobRenderer.Builder<>(ctx, CodModel::new, "smallmouth_bass").flops().build());
+        event.registerEntityRenderer(TFCEntities.FRESHWATER_FISH.get(Fish.LAKE_TROUT).get(), ctx -> new SimpleMobRenderer.Builder<>(ctx, CodModel::new, "lake_trout").flops().build());
+        event.registerEntityRenderer(TFCEntities.FRESHWATER_FISH.get(Fish.RAINBOW_TROUT).get(), ctx -> new SimpleMobRenderer.Builder<>(ctx, CodModel::new, "rainbow_trout").flops().build());
         event.registerEntityRenderer(TFCEntities.FRESHWATER_FISH.get(Fish.CRAPPIE).get(), ctx -> new SimpleMobRenderer.Builder<>(ctx, CodModel::new, "crappie").flops().build());
         event.registerEntityRenderer(TFCEntities.FRESHWATER_FISH.get(Fish.BLUEGILL).get(), ctx -> new SimpleMobRenderer.Builder<>(ctx, BluegillModel::new, "bluegill").flops().build());
         event.registerEntityRenderer(TFCEntities.TROPICAL_FISH.get(), TropicalFishRenderer::new);
@@ -799,13 +802,13 @@ public final class ClientEventHandler
         event.register(CrankshaftBlockEntityRenderer.WHEEL_MODEL);
 
         ResourceManager rm = Minecraft.getInstance().getResourceManager();
-        Map<ResourceLocation, Resource> resources = rm.listResources("models/block/mold", r -> r.getPath().endsWith(".json")); 
-		for (ResourceLocation model : resources.keySet()) 
+        Map<ResourceLocation, Resource> resources = rm.listResources("models/block/mold", r -> r.getPath().endsWith(".json"));
+        for (ResourceLocation model : resources.keySet())
         {
             String path = model.getPath();
             path = path.substring("models/".length(), path.length() - ".json".length());
             register(event, ResourceLocation.fromNamespaceAndPath(model.getNamespace(), path));
-		}
+        }
 
         TFCConfig.CLIENT.additionalSpecialModels.get().forEach(s -> register(event, Helpers.resourceLocation(s)));
     }
@@ -824,6 +827,7 @@ public final class ClientEventHandler
         event.register(Helpers.identifier("scraping"), ScrapingBlockModel.INSTANCE);
         event.register(Helpers.identifier("plant"), PlantBlockModel.Loader.INSTANCE);
         event.register(Helpers.identifier("mold"), new MoldsModelLoader());
+        event.register(Helpers.identifier("mold_table"), MoldTableBlockModel.Loader.INSTANCE);
     }
 
     public static void registerColorHandlerBlocks(RegisterColorHandlersEvent.Block event)
