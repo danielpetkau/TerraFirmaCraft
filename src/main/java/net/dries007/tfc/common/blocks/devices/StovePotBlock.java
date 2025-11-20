@@ -9,7 +9,6 @@ package net.dries007.tfc.common.blocks.devices;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.ItemInteractionResult;
@@ -37,7 +36,6 @@ import net.dries007.tfc.common.blockentities.PotBlockEntity;
 import net.dries007.tfc.common.blockentities.TFCBlockEntities;
 import net.dries007.tfc.common.blocks.ExtendedProperties;
 import net.dries007.tfc.common.blocks.TFCBlocks;
-import net.dries007.tfc.common.items.Powder;
 import net.dries007.tfc.common.items.TFCItems;
 import net.dries007.tfc.util.Helpers;
 
@@ -90,13 +88,14 @@ public class StovePotBlock extends PotBlock
                 {
                     ItemHandlerHelper.giveItemToPlayer(player, new ItemStack(TFCItems.POT.get()));
                     AbstractFirepitBlockEntity.convertTo(level, pos, state, pot, TFCBlocks.STOVE.get());
+                    return ItemInteractionResult.sidedSuccess(level.isClientSide);
                 }
                 if (state.getValue(LIT))
                 {
                     TFCDamageTypes.pot(player, 1f);
                     Helpers.playSound(level, pos, TFCSounds.ITEM_COOL.get());
+                    return ItemInteractionResult.sidedSuccess(level.isClientSide);
                 }
-                return ItemInteractionResult.sidedSuccess(level.isClientSide);
             }
 
         }
