@@ -183,15 +183,15 @@ public interface BarrelRecipes extends Recipes
         removeDye(TFCTags.Items.COLORED_CARPETS, Items.WHITE_CARPET);
         removeDye(TFCTags.Items.COLORED_BEDS, Items.WHITE_BED);
         removeDye(ItemTags.BANNERS, Items.WHITE_BANNER); // White banner should still be lye-able to clear patterns
-        removeDye(TFCTags.Items.COLORED_TERRACOTTA, Items.WHITE_TERRACOTTA);
-        removeDye(TFCTags.Items.COLORED_GLAZED_TERRACOTTA, Items.WHITE_GLAZED_TERRACOTTA);
+        removeDye(TFCTags.Items.COLORED_TERRACOTTA, Items.TERRACOTTA);
+        removeDye("glazed", TFCTags.Items.COLORED_GLAZED_TERRACOTTA, Items.TERRACOTTA);
         removeDye(TFCTags.Items.COLORED_SHULKER_BOXES, Items.SHULKER_BOX);
         removeDye(TFCTags.Items.COLORED_CONCRETE_POWDER, TFCBlocks.AGGREGATE);
         removeDye(TFCTags.Items.COLORED_CANDLES, TFCBlocks.CANDLE);
         removeDye(TFCTags.Items.COLORED_WINDMILL_BLADES, TFCItems.WINDMILL_BLADES.get(DyeColor.WHITE));
-        removeDye(TFCTags.Items.COLORED_RAW_ALABASTER, TFCBlocks.RAW_ALABASTER.get(DyeColor.WHITE));
-        removeDye(TFCTags.Items.COLORED_ALABASTER_BRICKS, TFCBlocks.ALABASTER_BRICKS.get(DyeColor.WHITE));
-        removeDye(TFCTags.Items.COLORED_POLISHED_ALABASTER, TFCBlocks.POLISHED_ALABASTER.get(DyeColor.WHITE));
+        removeDye(TFCTags.Items.COLORED_RAW_ALABASTER, TFCBlocks.PLAIN_ALABASTER);
+        removeDye(TFCTags.Items.COLORED_ALABASTER_BRICKS, TFCBlocks.PLAIN_ALABASTER_BRICKS);
+        removeDye(TFCTags.Items.COLORED_POLISHED_ALABASTER, TFCBlocks.PLAIN_POLISHED_ALABASTER);
         removeDye(TFCTags.Items.COLORED_VESSELS, TFCItems.UNFIRED_VESSEL);
         removeDye(TFCTags.Items.COLORED_LARGE_VESSELS, TFCItems.UNFIRED_LARGE_VESSEL);
         dye(Items.WHITE_WOOL, "wool");
@@ -334,6 +334,15 @@ public interface BarrelRecipes extends Recipes
     private void removeDye(TagKey<Item> input, ItemLike output)
     {
         barrel("bleaching_" + nameOf(output).replace("white_", "").replace("/white", ""))
+            .input(input)
+            .input(fluidOf(SimpleFluid.LYE), 25)
+            .output(output)
+            .sealed(hours(1));
+    }
+
+    private void removeDye(String prefix, TagKey<Item> input, ItemLike output)
+    {
+        barrel("bleaching_" + prefix + "_" + nameOf(output).replace("white_", "").replace("/white", ""))
             .input(input)
             .input(fluidOf(SimpleFluid.LYE), 25)
             .output(output)
