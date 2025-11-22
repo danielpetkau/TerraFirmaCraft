@@ -2413,6 +2413,7 @@
     "tfc:mold_table",
     "tfc:channel",
     "tfc:calendar_clock",
-    "tfc:thermometer"
+    "tfc:thermometer",
+    "tfc:creative_motor"
   ]
 }
