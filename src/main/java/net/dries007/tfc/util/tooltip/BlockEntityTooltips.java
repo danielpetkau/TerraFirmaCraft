@@ -101,6 +101,7 @@ import net.dries007.tfc.common.blocks.plant.fruit.FruitTreeSaplingBlock;
 import net.dries007.tfc.common.blocks.rotation.AbstractShaftAxleBlock;
 import net.dries007.tfc.common.blocks.rotation.ClutchBlock;
 import net.dries007.tfc.common.blocks.rotation.CrankshaftBlock;
+import net.dries007.tfc.common.blocks.rotation.CreativeRotationBlock;
 import net.dries007.tfc.common.blocks.rotation.EncasedAxleBlock;
 import net.dries007.tfc.common.blocks.rotation.GearBoxBlock;
 import net.dries007.tfc.common.blocks.rotation.WaterWheelBlock;
@@ -166,6 +167,7 @@ public final class BlockEntityTooltips
         callback.register("gearbox", ROTATING, GearBoxBlock.class);
         callback.register("crankshaft", ROTATING, CrankshaftBlock.class);
         callback.register("quern", ROTATING, QuernBlock.class);
+        callback.register("creative_motor", ROTATIONAL_SOURCE, CreativeRotationBlock.class);
         callback.register("water_wheel", ROTATIONAL_SOURCE, WaterWheelBlock.class);
         callback.register("windmill", ROTATIONAL_SOURCE, WindmillBlock.class);
         callback.register("hot_poured_glass", HOT_POURED_GLASS, HotPouredGlassBlock.class);

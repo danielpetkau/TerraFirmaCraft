@@ -23,6 +23,7 @@ import net.dries007.tfc.common.blockentities.rotation.AxleBlockEntity;
 import net.dries007.tfc.common.blockentities.rotation.BladedAxleBlockEntity;
 import net.dries007.tfc.common.blockentities.rotation.ClutchBlockEntity;
 import net.dries007.tfc.common.blockentities.rotation.CrankshaftBlockEntity;
+import net.dries007.tfc.common.blockentities.rotation.CreativeRotationBlockEntity;
 import net.dries007.tfc.common.blockentities.rotation.EncasedAxleBlockEntity;
 import net.dries007.tfc.common.blockentities.rotation.GearBoxBlockEntity;
 import net.dries007.tfc.common.blockentities.rotation.PumpBlockEntity;
@@ -143,6 +144,7 @@ public final class TFCBlockEntities
     public static final Id<AxleBlockEntity> CLUTCH = register("clutch", ClutchBlockEntity::new, woodBlocks(Wood.BlockType.CLUTCH));
     public static final Id<EncasedAxleBlockEntity> ENCASED_AXLE = register("encased_axle", EncasedAxleBlockEntity::new, woodBlocks(Wood.BlockType.ENCASED_AXLE));
     public static final Id<GearBoxBlockEntity> GEAR_BOX = register("gear_box", GearBoxBlockEntity::new, woodBlocks(Wood.BlockType.GEAR_BOX));
+    public static final Id<CreativeRotationBlockEntity> CREATIVE_MOTOR = register("creative_motor", CreativeRotationBlockEntity::new, TFCBlocks.CREATIVE_MOTOR);
     public static final Id<WindmillBlockEntity> WINDMILL = register("windmill", WindmillBlockEntity::new, woodBlocks(Wood.BlockType.WINDMILL));
     public static final Id<WaterWheelBlockEntity> WATER_WHEEL = register("water_wheel", WaterWheelBlockEntity::new, woodBlocks(Wood.BlockType.WATER_WHEEL));
     public static final Id<CrankshaftBlockEntity> CRANKSHAFT = register("crankshaft", CrankshaftBlockEntity::new, TFCBlocks.CRANKSHAFT);

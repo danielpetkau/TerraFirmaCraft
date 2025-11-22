@@ -529,6 +529,8 @@ public final class TFCCreativeTabs
                 out.accept(item);
             }
         });
+
+        out.accept(TFCBlocks.CREATIVE_MOTOR);
     }
 
     private static void fillDecorationsTab(CreativeModeTab.ItemDisplayParameters parameters, CreativeModeTab.Output out)
