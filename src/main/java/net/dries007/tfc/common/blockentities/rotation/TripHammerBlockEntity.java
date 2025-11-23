@@ -8,6 +8,8 @@ package net.dries007.tfc.common.blockentities.rotation;
 
 import com.mojang.math.Constants;
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
@@ -43,11 +45,29 @@ public class TripHammerBlockEntity extends TickableInventoryBlockEntity<ItemStac
         if (rotation != null)
         {
             final float angle = hammer.getRealRotationDegrees(rotation, 1f);
-            if (angle > 180f && angle < 183f)
+            // Guards against:
+            // 1. the angle wrapping around from 360 to 0
+            // 2. the rotation speed being too fast and/or offset enough to sneak past the expected angle
+            if (angle > 180 && hammer.lastAngle < 180 && hammer.lastAngle > 90)
             {
                 if (rotation.positiveDirection() != state.getValue(TripHammerBlock.FACING).getClockWise())
                 {
-                    level.destroyBlock(pos, true);
+                    ItemStack droppedItem = hammer.inventory.extractItem(0, 1, false);
+                    if (droppedItem.isDamageableItem())
+                    {
+                        droppedItem.hurtAndBreak(droppedItem.getMaxDamage() / 4 + 1, (ServerLevel) level, null, i -> {});
+                    }
+                    if (!droppedItem.isEmpty())
+                    {
+                        Helpers.spawnItem(level, pos, droppedItem);
+                    }
+                    else
+                    {
+                        level.playSound(null, pos, SoundEvents.ITEM_BREAK, SoundSource.BLOCKS);
+                    }
+                    level.playSound(null, pos, SoundEvents.VAULT_BREAK, SoundSource.BLOCKS);
+                    hammer.lastAngle = angle;
+                    hammer.checkForLastTickSync();
                     return;
                 }
 
@@ -59,15 +79,24 @@ public class TripHammerBlockEntity extends TickableInventoryBlockEntity<ItemStac
                     if (anvil.workRemotely(ForgeStep.HIT_LIGHT, 12, true))
                     {
                         Helpers.damageItem(item, level);
+                        hammer.markForSync();
                         anvil.markForSync();
                     }
+                    if (item.isEmpty())
+                    {
+                        level.playSound(null, pos, SoundEvents.ITEM_BREAK, SoundSource.BLOCKS);
+                    }
                     hammer.cooldownTicks = Mth.ceil(0.8f * Mth.TWO_PI / rotation.positiveSpeed());
+                    // Update client if the hammer broke
+                    hammer.checkForLastTickSync();
                 }
             }
+            hammer.lastAngle = angle;
         }
     }
 
     private int cooldownTicks = 10;
+    private float lastAngle = 0;
 
     public TripHammerBlockEntity(BlockPos pos, BlockState state)
     {
