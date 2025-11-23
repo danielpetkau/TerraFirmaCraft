@@ -284,7 +284,8 @@ public class BuiltinBlockTags extends TagsProvider<Block> implements Accessors
             .add(TFCBlocks.MOLD_TABLE)
             .add(TFCBlocks.CHANNEL)
             .add(TFCBlocks.CALENDAR_CLOCK)
-            .add(TFCBlocks.THERMOMETER);
+            .add(TFCBlocks.THERMOMETER)
+            .add(TFCBlocks.CREATIVE_MOTOR);
         tag(BlockTags.MINEABLE_WITH_SHOVEL)
             .add2(TFCBlocks.SOIL)
             .add(TFCBlocks.SAND)

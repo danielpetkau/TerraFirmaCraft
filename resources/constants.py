@@ -1476,6 +1476,7 @@ DEFAULT_LANG = {
     'config.jade.plugin_tfc.gearbox': 'Gearbox',
     'config.jade.plugin_tfc.crankshaft': 'Crankshaft',
     'config.jade.plugin_tfc.quern': 'Quern',
+    'config.jade.plugin_tfc.creative_motor': 'Creative Motor',
     'config.jade.plugin_tfc.water_wheel': 'Water Wheel',
     'config.jade.plugin_tfc.windmill': 'Windmill',
     'config.jade.plugin_tfc.hot_poured_glass': 'Hot Poured Glass',

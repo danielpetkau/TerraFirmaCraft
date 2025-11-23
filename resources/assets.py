@@ -2431,6 +2431,14 @@ def generate(rm: ResourceManager):
     rm.custom_block_model('ingot_pile', 'tfc:ingot_pile', {})
     rm.custom_block_model('double_ingot_pile', 'tfc:double_ingot_pile', {})
 
+    rm.block_loot('creative_motor')
+    rm.blockstate('creative_motor', variants={
+        'axis=x': {'model': 'tfc:block/creative_motor', 'y' : 270},
+        'axis=z': {'model': 'tfc:block/creative_motor', 'y': 180},
+        'axis=y': {'model': 'tfc:block/creative_motor', 'y': 180, 'x': 90},
+    }).with_lang(lang('Creative Motor'))
+    rm.item_model('creative_motor', parent='tfc:block/creative_motor', no_textures=True)
+
     for fluid in SIMPLE_FLUIDS:
         water_based_fluid(rm, fluid)
 
@@ -2679,4 +2687,3 @@ def when_sheared(item: str):
 
 def override(model: str, name: str, value: float = 1.0):
     return {'predicate': {name: value}, 'model': model}
-

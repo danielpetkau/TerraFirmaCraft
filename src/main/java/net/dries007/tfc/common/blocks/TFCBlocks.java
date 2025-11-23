@@ -70,6 +70,7 @@ import net.dries007.tfc.common.blockentities.PowderkegBlockEntity;
 import net.dries007.tfc.common.blockentities.QuernBlockEntity;
 import net.dries007.tfc.common.blockentities.TFCBlockEntities;
 import net.dries007.tfc.common.blockentities.ThermometerBlockEntity;
+import net.dries007.tfc.common.blockentities.rotation.CreativeRotationBlockEntity;
 import net.dries007.tfc.common.blockentities.rotation.PumpBlockEntity;
 import net.dries007.tfc.common.blockentities.rotation.TripHammerBlockEntity;
 import net.dries007.tfc.common.blockentities.VaneBlockEntity;
@@ -119,6 +120,7 @@ import net.dries007.tfc.common.blocks.rock.Rock;
 import net.dries007.tfc.common.blocks.rock.RockAnvilBlock;
 import net.dries007.tfc.common.blocks.rock.RockCategory;
 import net.dries007.tfc.common.blocks.rotation.CrankshaftBlock;
+import net.dries007.tfc.common.blocks.rotation.CreativeRotationBlock;
 import net.dries007.tfc.common.blocks.rotation.FluidPipeBlock;
 import net.dries007.tfc.common.blocks.rotation.FluidPumpBlock;
 import net.dries007.tfc.common.blocks.soil.ColoredBlock;
@@ -505,6 +507,8 @@ public final class TFCBlocks
         register("ceramic/large_vessel/" + color.getName(), () -> new LargeVesselBlock(ExtendedProperties.of(MapColor.CLAY).strength(2.5F).noOcclusion().blockEntity(TFCBlockEntities.LARGE_VESSEL)), block -> new TooltipBlockItem(block, new Item.Properties()))
     );
 
+    public static final Id<Block> CREATIVE_MOTOR = register("creative_motor", () -> new CreativeRotationBlock(ExtendedProperties.of(Blocks.IRON_BLOCK).blockEntity(TFCBlockEntities.CREATIVE_MOTOR).ticks(CreativeRotationBlockEntity::serverTick, CreativeRotationBlockEntity::clientTick)));
+
     // Fluids
 
     public static final Map<Metal, Id<LiquidBlock>> METAL_FLUIDS = Helpers.mapOf(Metal.class, metal ->
@@ -623,7 +627,7 @@ public final class TFCBlocks
             register(baseName + "_wall", wall, b -> new BlockItem(b, properties))
         );
     }
-    
+
     public record Id<T extends Block>(DeferredHolder<Block, T> holder) implements RegistryHolder<Block, T>, ItemLike
     {
         @Override
