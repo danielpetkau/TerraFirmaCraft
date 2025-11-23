@@ -158,7 +158,8 @@ public interface CraftingRecipes extends Recipes
             remove(
                 color.getSerializedName() + "_stained_glass",
                 color.getSerializedName() + "_stained_glass_pane",
-                color.getSerializedName() + "_stained_glass_pane_from_glass_pane"
+                color.getSerializedName() + "_stained_glass_pane_from_glass_pane",
+                "dye_" + color.getSerializedName() + "_bed"
             );
         }
 
@@ -584,12 +585,23 @@ public interface CraftingRecipes extends Recipes
 
         for (DyeColor color : DyeColor.values())
         {
-            replace(color.getSerializedName() + "_bed")
-                .input('D', dyeOf(color))
-                .input('H', TFCTags.Items.HIGH_QUALITY_CLOTH)
-                .input('L', TFCTags.Items.LUMBER)
-                .pattern("DDD", "HHH", "LLL")
-                .shaped(dyedOf(color, "bed"));
+            if (color == DyeColor.WHITE)
+            {
+                replace(color.getSerializedName() + "_bed")
+                    .input('H', TFCTags.Items.HIGH_QUALITY_CLOTH)
+                    .input('L', TFCTags.Items.LUMBER)
+                    .pattern("HHH", "LLL")
+                    .shaped(dyedOf(color, "bed"));
+            }
+            else
+            {
+                replace(color.getSerializedName() + "_bed")
+                    .input('D', dyeOf(color))
+                    .input('H', TFCTags.Items.HIGH_QUALITY_CLOTH)
+                    .input('L', TFCTags.Items.LUMBER)
+                    .pattern("DDD", "HHH", "LLL")
+                    .shaped(dyedOf(color, "bed"));
+            }
             replace(color.getSerializedName() + "_concrete_powder")
                 .input(Tags.Items.GRAVELS, 4)
                 .input(Tags.Items.SANDS, 4)
