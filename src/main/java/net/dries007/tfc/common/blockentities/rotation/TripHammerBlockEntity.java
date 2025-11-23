@@ -56,16 +56,15 @@ public class TripHammerBlockEntity extends TickableInventoryBlockEntity<ItemStac
                     if (droppedItem.isDamageableItem())
                     {
                         droppedItem.hurtAndBreak(droppedItem.getMaxDamage() / 4 + 1, (ServerLevel) level, null, i -> {});
-                        if (!droppedItem.isEmpty())
-                        {
-                            Helpers.spawnItem(level, pos, droppedItem);
-                        }
-                        else
-                        {
-                            level.playSound(null, pos, SoundEvents.ITEM_BREAK, SoundSource.BLOCKS);
-                        }
                     }
-                    // If the item is not damageable it gets shredded. Sorry.
+                    if (!droppedItem.isEmpty())
+                    {
+                        Helpers.spawnItem(level, pos, droppedItem);
+                    }
+                    else
+                    {
+                        level.playSound(null, pos, SoundEvents.ITEM_BREAK, SoundSource.BLOCKS);
+                    }
                     level.playSound(null, pos, SoundEvents.VAULT_BREAK, SoundSource.BLOCKS);
                     hammer.lastAngle = angle;
                     hammer.checkForLastTickSync();
