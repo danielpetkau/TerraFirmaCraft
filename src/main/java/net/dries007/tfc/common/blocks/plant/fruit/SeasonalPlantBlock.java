@@ -242,6 +242,7 @@ public abstract class SeasonalPlantBlock extends BushBlock implements IForgeBloc
     public float slowEntityFactor(BlockState state)
     {
         float modifier = TFCConfig.SERVER.leavesMovementModifier.get().floatValue();
+        //TODO does this reference to PlantBlock.AGE need to change?
         if (state.hasProperty(PlantBlock.AGE))
         {
             modifier = Mth.lerp((1f + state.getValue(PlantBlock.AGE)) / 4f, NO_SLOW, modifier);
@@ -267,6 +268,7 @@ public abstract class SeasonalPlantBlock extends BushBlock implements IForgeBloc
 
     /**
      * Evaluates hydration at the base of the tree/bush/plant
+     *
      * @param leafPos Must be the position of a valid {@link BerryBushBlockEntity}
      */
     protected static int getFruitBushHydration(Level level, BlockPos leafPos)
@@ -286,6 +288,7 @@ public abstract class SeasonalPlantBlock extends BushBlock implements IForgeBloc
 
     /**
      * Evaluates hydration at the base of the tree/bush/plant
+     *
      * @param rootPos can be any block location you want to know the hydration level at
      */
     protected static int getFruitBushHydrationFromRootPos(Level level, BlockPos rootPos)

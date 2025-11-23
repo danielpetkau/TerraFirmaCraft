@@ -15,6 +15,7 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -53,10 +54,11 @@ public abstract class FloatingWaterPlantBlock extends PlantBlock
         super.randomTick(state, level, pos, random);
         if (PlantRegrowth.canSpread(level, random, pos))
         {
+            IntegerProperty ageProp = getPlant().getAgeProperty();
             final BlockPos newPos = PlantRegrowth.spreadSelf(state, level, pos, random, 1, 2, 1);
-            if (newPos != null && level.getFluidState(newPos.below(5)).isEmpty() && !(level.getBlockState(newPos.below()).getBlock() instanceof RiverWaterBlock))
+            if (ageProp != null && newPos != null && level.getFluidState(newPos.below(5)).isEmpty() && !(level.getBlockState(newPos.below()).getBlock() instanceof RiverWaterBlock))
             {
-                level.setBlockAndUpdate(newPos, state.setValue(AGE, 0));
+                level.setBlockAndUpdate(newPos, state.setValue(ageProp, 0));
             }
         }
     }

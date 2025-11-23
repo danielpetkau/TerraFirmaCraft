@@ -12,6 +12,7 @@ import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.neoforged.neoforge.common.Tags;
@@ -71,10 +72,11 @@ public abstract class ShortGrassBlock extends PlantBlock implements ISpecialPile
         super.randomTick(state, level, pos, random);
         if (PlantRegrowth.canSpread(level, random, pos))
         {
+            IntegerProperty ageProp = getPlant().getAgeProperty();
             final BlockPos newPos = PlantRegrowth.spreadSelf(state, level, pos, random, 2, 2, 4);
-            if (newPos != null)
+            if (ageProp != null && newPos != null)
             {
-                level.setBlockAndUpdate(newPos, Helpers.setProperty(state, AGE, 0));
+                level.setBlockAndUpdate(newPos, Helpers.setProperty(state, ageProp, 0));
             }
         }
     }
@@ -82,19 +84,29 @@ public abstract class ShortGrassBlock extends PlantBlock implements ISpecialPile
     @Override
     protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context)
     {
-        return switch (state.getValue(AGE))
-            {
-                case 0 -> SHORTEST_GRASS_SHAPE;
-                case 1 -> SHORTER_GRASS_SHAPE;
-                case 2 -> SHORT_GRASS_SHAPE;
-                default -> GRASS_SHAPE;
-            };
+        IntegerProperty ageProp = getPlant().getAgeProperty();
+        if (ageProp == null)
+        {
+            return GRASS_SHAPE;
+        }
+        return switch (state.getValue(ageProp))
+        {
+            case 0 -> SHORTEST_GRASS_SHAPE;
+            case 1 -> SHORTER_GRASS_SHAPE;
+            case 2 -> SHORT_GRASS_SHAPE;
+            default -> GRASS_SHAPE;
+        };
     }
 
     @Override
     public BlockState getHiddenState(BlockState internalState, boolean byPlayer)
     {
-        return internalState.setValue(AGE, 0);
+        IntegerProperty ageProp = getPlant().getAgeProperty();
+        if (ageProp != null)
+        {
+            return internalState.setValue(ageProp, 0);
+        }
+        return internalState;
     }
 
     @Override

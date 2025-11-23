@@ -10,6 +10,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
@@ -50,13 +51,18 @@ public abstract class TFCSeagrassBlock extends WaterPlantBlock
     @Override
     protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context)
     {
-        return switch (state.getValue(AGE))
-            {
-                case 0 -> SHORTEST_GRASS_SHAPE;
-                case 1 -> SHORTER_GRASS_SHAPE;
-                case 2 -> SHORT_GRASS_SHAPE;
-                default -> GRASS_SHAPE;
-            };
+        IntegerProperty ageProp = getPlant().getAgeProperty();
+        if (ageProp == null)
+        {
+            return GRASS_SHAPE;
+        }
+        return switch (state.getValue(ageProp))
+        {
+            case 0 -> SHORTEST_GRASS_SHAPE;
+            case 1 -> SHORTER_GRASS_SHAPE;
+            case 2 -> SHORT_GRASS_SHAPE;
+            default -> GRASS_SHAPE;
+        };
     }
 
     @Override
