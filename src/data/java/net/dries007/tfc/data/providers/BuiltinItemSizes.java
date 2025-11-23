@@ -106,7 +106,7 @@ public class BuiltinItemSizes extends DataManagerProvider<ItemSizeDefinition> im
             Ingredient.of(Tags.Items.TOOLS_SHIELD),
             Ingredient.of(Tags.Items.MELEE_WEAPON_TOOLS),
             Ingredient.of(Tags.Items.RANGED_WEAPON_TOOLS),
-            Ingredient.of(TFCTags.Items.TOOLS_BLOWPIPE),
+            Ingredient.of(TFCTags.Items.BLOWPIPES),
             Ingredient.of(TFCTags.Items.TOOLS_GLASSWORKING),
             Ingredient.of(Tags.Items.TOOLS_MACE)
         ), Size.VERY_LARGE, Weight.VERY_HEAVY);
