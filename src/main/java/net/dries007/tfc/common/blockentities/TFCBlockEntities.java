@@ -65,7 +65,8 @@ public final class TFCBlockEntities
                 TFCBlocks.DEAD_CANE,
                 TFCBlocks.DEAD_BANANA_PLANT,
                 TFCBlocks.JACK_O_LANTERN,
-                TFCBlocks.CANDLE
+                TFCBlocks.CANDLE,
+                TFCBlocks.CANDLE_CAKE
             ),
             TFCBlocks.DYED_CANDLE.values().stream(),
             TFCBlocks.DYED_CANDLE_CAKES.values().stream(),
