@@ -51,7 +51,7 @@ public class CreativeRotationBlock extends ExtendedRotatedPillarBlock implements
     {
         Direction.Axis axis = state.getValue(AXIS);
         Direction direction = result.getDirection();
-        return level.getBlockEntity(pos, TFCBlockEntities.CREATIVE_MOTOR.get()).map(be -> {
+        return level.getBlockEntity(pos, TFCBlockEntities.CREATIVE_MOTOR.get()).map(motor -> {
             Direction.Axis interactableAxis = switch (axis)
             {
                 case X -> Direction.Axis.Z;
@@ -61,11 +61,11 @@ public class CreativeRotationBlock extends ExtendedRotatedPillarBlock implements
             {
                 if (direction.getAxisDirection() == Direction.AxisDirection.POSITIVE)
                 {
-                    be.incrementSpeed();
+                    motor.incrementSpeed();
                 }
                 else
                 {
-                    be.decrementSpeed();
+                    motor.decrementSpeed();
                 }
                 return InteractionResult.SUCCESS;
             }

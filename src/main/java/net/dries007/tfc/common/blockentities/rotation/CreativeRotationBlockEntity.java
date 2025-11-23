@@ -6,6 +6,7 @@
 
 package net.dries007.tfc.common.blockentities.rotation;
 
+import java.util.EnumSet;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
@@ -27,27 +28,29 @@ public class CreativeRotationBlockEntity extends TickableBlockEntity implements 
 {
     // 30 RPM
     public static final float MAX_SPEED = Mth.TWO_PI / (2 * 20);
-    public static final float LERP_SPEED = MAX_SPEED / 8;
+    public static final int MAX_STEPS = 8;
+    public static final float LERP_SPEED = MAX_SPEED / MAX_STEPS;
 
-    public static void serverTick(Level level, BlockPos pos, BlockState state, CreativeRotationBlockEntity be)
+    public static void serverTick(Level level, BlockPos pos, BlockState state, CreativeRotationBlockEntity motor)
     {
-        be.checkForLastTickSync();
+        motor.checkForLastTickSync();
 
-        clientTick(level, pos, state, be);
+        clientTick(level, pos, state, motor);
     }
 
-    public static void clientTick(Level level, BlockPos pos, BlockState state, CreativeRotationBlockEntity be)
+    public static void clientTick(Level level, BlockPos pos, BlockState state, CreativeRotationBlockEntity motor)
     {
-        final Rotation.Tickable rotation = be.node.rotation();
+        final Rotation.Tickable rotation = motor.node.rotation();
         rotation.tick();
-        if (rotation.speed() != be.targetSpeed)
+        float target = Mth.abs(motor.step * LERP_SPEED);
+        if (rotation.speed() != target)
         {
-            rotation.setSpeed(be.targetSpeed);
+            rotation.setSpeed(target);
         }
     }
 
-    private final SourceNode node;
-    private float targetSpeed;
+    private final CreativeSourceNode node;
+    private int step;
 
     public CreativeRotationBlockEntity(BlockPos pos, BlockState state)
     {
@@ -58,7 +61,7 @@ public class CreativeRotationBlockEntity extends TickableBlockEntity implements 
     {
         super(type, pos, state);
         Direction.Axis axis = state.getValue(CreativeRotationBlock.AXIS);
-        this.node = new SourceNode(pos, Node.ofAxis(axis), Direction.fromAxisAndDirection(axis, Direction.AxisDirection.POSITIVE), 0f)
+        this.node = new CreativeSourceNode(pos, Node.ofAxis(axis), Direction.fromAxisAndDirection(axis, Direction.AxisDirection.POSITIVE), 0f)
         {
             @Override
             public String toString()
@@ -71,7 +74,7 @@ public class CreativeRotationBlockEntity extends TickableBlockEntity implements 
     @Override
     public void markAsInvalidInNetwork()
     {
-
+        // Should this do anything?
     }
 
     @Override
@@ -90,14 +93,14 @@ public class CreativeRotationBlockEntity extends TickableBlockEntity implements 
     protected void saveAdditional(CompoundTag tag, HolderLookup.Provider provider)
     {
         super.saveAdditional(tag, provider);
-        tag.putFloat("targetSpeed", targetSpeed);
+        tag.putInt("step", step);
     }
 
     @Override
     protected void loadAdditional(CompoundTag tag, HolderLookup.Provider provider)
     {
         super.loadAdditional(tag, provider);
-        targetSpeed = tag.getFloat("targetSpeed");
+        step = tag.getInt("step");
     }
 
     @Override
@@ -114,11 +117,34 @@ public class CreativeRotationBlockEntity extends TickableBlockEntity implements 
 
     public void incrementSpeed()
     {
-        targetSpeed = Mth.clamp(targetSpeed + LERP_SPEED, -MAX_SPEED, MAX_SPEED);
+        step = Mth.clamp(step + 1, -MAX_STEPS, MAX_STEPS);
+        if (step == 1)
+        {
+            node.setDirection(getBlockState().getValue(CreativeRotationBlock.AXIS), Direction.AxisDirection.POSITIVE);
+            performNetworkAction(NetworkAction.UPDATE);
+        }
     }
 
     public void decrementSpeed()
     {
-        targetSpeed = Mth.clamp(targetSpeed - LERP_SPEED, -MAX_SPEED, MAX_SPEED);
+        step = Mth.clamp(step - 1, -MAX_STEPS, MAX_STEPS);
+        if (step == -1)
+        {
+            node.setDirection(getBlockState().getValue(CreativeRotationBlock.AXIS), Direction.AxisDirection.NEGATIVE);
+            performNetworkAction(NetworkAction.UPDATE);
+        }
+    }
+
+    private static class CreativeSourceNode extends SourceNode
+    {
+        protected CreativeSourceNode(BlockPos pos, EnumSet<Direction> connections, Direction rotationDirection, float speed)
+        {
+            super(pos, connections, rotationDirection, speed);
+        }
+
+        public void setDirection(Direction.Axis axis, Direction.AxisDirection direction)
+        {
+            this.rotation = Rotation.of(Direction.fromAxisAndDirection(axis, direction), 0);
+        }
     }
 }
