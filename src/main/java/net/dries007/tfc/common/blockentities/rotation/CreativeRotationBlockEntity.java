@@ -51,6 +51,7 @@ public class CreativeRotationBlockEntity extends TickableBlockEntity implements 
 
     private final CreativeSourceNode node;
     private int step;
+    private boolean invalid;
 
     public CreativeRotationBlockEntity(BlockPos pos, BlockState state)
     {
@@ -61,26 +62,19 @@ public class CreativeRotationBlockEntity extends TickableBlockEntity implements 
     {
         super(type, pos, state);
         Direction.Axis axis = state.getValue(CreativeRotationBlock.AXIS);
-        this.node = new CreativeSourceNode(pos, Node.ofAxis(axis), Direction.fromAxisAndDirection(axis, Direction.AxisDirection.POSITIVE), 0f)
-        {
-            @Override
-            public String toString()
-            {
-                return "CreativeRotator[pos=%s, axis=%s]".formatted(pos(), axis);
-            }
-        };
+        this.node = new CreativeSourceNode(pos, Node.ofAxis(axis), Direction.fromAxisAndDirection(axis, Direction.AxisDirection.POSITIVE), 0f);
     }
 
     @Override
     public void markAsInvalidInNetwork()
     {
-        // Should this do anything?
+        invalid = true;
     }
 
     @Override
     public boolean isInvalidInNetwork()
     {
-        return false;
+        return invalid;
     }
 
     @Override
@@ -94,6 +88,7 @@ public class CreativeRotationBlockEntity extends TickableBlockEntity implements 
     {
         super.saveAdditional(tag, provider);
         tag.putInt("step", step);
+        tag.putBoolean("invalid", invalid);
     }
 
     @Override
@@ -101,6 +96,7 @@ public class CreativeRotationBlockEntity extends TickableBlockEntity implements 
     {
         super.loadAdditional(tag, provider);
         step = tag.getInt("step");
+        invalid = tag.getBoolean("invalid");
     }
 
     @Override
@@ -145,6 +141,13 @@ public class CreativeRotationBlockEntity extends TickableBlockEntity implements 
         public void setDirection(Direction.Axis axis, Direction.AxisDirection direction)
         {
             this.rotation = Rotation.of(Direction.fromAxisAndDirection(axis, direction), 0);
+        }
+
+        @Override
+        public String toString()
+        {
+            // Using connections() over including a field to track the axis
+            return "CreativeRotator[pos=%s, connections=%s]".formatted(pos(), connections());
         }
     }
 }
