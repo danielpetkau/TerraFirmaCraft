@@ -1,44 +1,17 @@
 ### Changes
-- Crop climate ranges have been re-balanced
-  - In previous versions of 1.21, crops were designed to always grow at least 6 months of the year in any climate they could generate in, and a lot of extra wiggle room was added on top of that, only some of which was intended
-  - In this version, crops are guaranteed to survive during the 4 warmest months of the year (or 6 coldest for cover crops) in any climate that they spawn in, though they may survive slightly longer if you are lucky with daily temperature variations
-- Added error messages to the /weather command to redirect users
-- Added "spill" particles when an open barrel block is broken
-- Changes to the default HUD textures/arrangement
-- Added flower pot models to more plants (closes #3142)
+- Improved Russian localization
+- Modified trip hammer behavior to drop their items when rotated the wrong way (Closes #3345)
 
 ### Bug Fixes
-- Fixed crops dying apparently at random (closes #3164)
-- Made berry bushes spread properly, both when loaded and unloaded (closes #3148)
-- Fixed cranberries being very difficult to find. Look for them in lowlands as they should only generate submerged
-- Made shields effective against projectiles (closes #3261)
-- Fixed chance recipes glitching the kiln (closes #3306)
-- Fixed javelins disappearing when hitting a mob (closes #3189)
-- Fixed mobs not spawning in saltwater (closes #3213)
-- Fixed compost duplication bug with hoppers (closes #3327)
-- Fixed vessel tooltips not appearing
-- Keep sealed and recipe tick when a sealed barrel is placed
-- Fixed clay and kaolin indicators not being placeable on clay/kaolin blocks
-- Consistently place catch-up snow on initial worldgen (closes #3239)
-- Fixed rendering of the stove with pot block
-- Allow bleaching white banners (closes #3307)
-- Remove reference to pumpkins/melons as brown compost items (closes #3333)
-- Prevent blowpipes from stacking (closes #3331)
-- Fixed querns giving less dye than expected from plants
-- Add missing guster and flow pattern recipes (closes #3308)
-- Prevent male animals calling breeding methods (closes #3250 closes #3254)
-- Fixed horse armor textures (closes #3326)
-- Fixed snow not melting in spring (closes #3270)
-- Fixed floating point precision issue (closes #3314)
-- Fixed some bugs with the kiln multiblock
-  - Stop fireboxes from working when inside the kiln structure
-  - Fireboxes will now always heat the entire structure they are heating
-  - Fireboxes must still be placed underneath the kiln structure for it to work
-- Fixed pot recipes that were using no item inputs causing a crash (closes #3311) and not getting any outputs (closes #3312)
-- Various fixes, changes, and additions to comparator outputs from devices
-- Various fixes and changes to what the thermometer will attach to and what it will output
-- Made sign placement more consistent with vanilla
-- Added drop shadow to hoe overlay
-- Fixed sky rendering issues with Sodium installed (#3301)
-- Fixed missing hanging sign textures (closes #3296)
+- Added dynamic models for mold tables, drastically reducing rendering lag when many are placed in the same area (Closes #3347 Closes #3348)
+- Fixed a crash with Berry Bushes (#3352)
+- Make bleaching recipes return the correct items (Closes #3354)
+- Fixed bed recipes being different from 1.20
+- Fixed a crash with Candle Cakes (Closes #3340)
+- Allow ash to be removed from stoves with pots (Closes #3346)
+- Fix loom progress desync on the client (Closes #3276)
+- Fix inconsistent behavior of trip hammers at high rotation speeds (Closes #3349)
+- Added a missing dye recipe for cornflowers
+- Fixed snow accumulating on magma blocks
+- Technical improvements to plant blockstates
 
