@@ -24,6 +24,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
@@ -170,8 +171,16 @@ public abstract class TFCTallGrassBlock extends ShortGrassBlock implements ITall
 
     public void placeTwoHalves(LevelAccessor level, BlockPos pos, int flags, RandomSource random)
     {
-        int age = random.nextInt(3) + 1;
-        level.setBlock(pos, Helpers.setProperty(defaultBlockState().setValue(TFCBlockStateProperties.TALL_PLANT_PART, Part.LOWER), PlantBlock.AGE, age), flags);
-        level.setBlock(pos.above(), Helpers.setProperty(defaultBlockState().setValue(TFCBlockStateProperties.TALL_PLANT_PART, Part.UPPER), PlantBlock.AGE, age), flags);
+        int age = random.nextInt(getMaxAgeValue()) + 1;
+        IntegerProperty ageProp = getPlant().getAgeProperty();
+        BlockState lower = defaultBlockState().setValue(TFCBlockStateProperties.TALL_PLANT_PART, Part.LOWER);
+        BlockState upper = defaultBlockState().setValue(TFCBlockStateProperties.TALL_PLANT_PART, Part.UPPER);
+        if (ageProp != null)
+        {
+            lower = Helpers.setProperty(lower, ageProp, age);
+            upper = Helpers.setProperty(upper, ageProp, age);
+        }
+        level.setBlock(pos, lower, flags);
+        level.setBlock(pos.above(), upper, flags);
     }
 }
