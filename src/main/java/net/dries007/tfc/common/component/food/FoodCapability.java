@@ -63,6 +63,7 @@ public final class FoodCapability
 
     /**
      * Applies {@code trait} to {@code stack}, and updates the creation date to preserve the decay proportion of the food.
+     * Only applies the trait if the food is not rotten.
      */
     public static ItemStack applyTrait(ItemStack stack, Holder<FoodTrait> trait)
     {
@@ -79,11 +80,12 @@ public final class FoodCapability
 
     /**
      * Removes {@code trait} from {@code stack}, and updates the creation date to preserve the decay proportion of the food.
+     * Removes the trait even if the food is rotten, because food rotting in vessels can still be preserved, sealed in vinegar, etc.
      */
     public static ItemStack removeTrait(ItemStack stack, Holder<FoodTrait> trait)
     {
         final @Nullable FoodComponent food = stack.get(TFCComponents.FOOD);
-        if (food != null && food.hasTrait(trait) && !food.isRotten())
+        if (food != null && food.hasTrait(trait))
         {
             stack.set(TFCComponents.FOOD, food.withTraitRemoved(
                 trait,
