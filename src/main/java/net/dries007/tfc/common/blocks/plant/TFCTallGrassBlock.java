@@ -171,12 +171,13 @@ public abstract class TFCTallGrassBlock extends ShortGrassBlock implements ITall
 
     public void placeTwoHalves(LevelAccessor level, BlockPos pos, int flags, RandomSource random)
     {
-        int age = random.nextInt(getMaxAgeValue()) + 1;
         IntegerProperty ageProp = getPlant().getAgeProperty();
         BlockState lower = defaultBlockState().setValue(TFCBlockStateProperties.TALL_PLANT_PART, Part.LOWER);
         BlockState upper = defaultBlockState().setValue(TFCBlockStateProperties.TALL_PLANT_PART, Part.UPPER);
         if (ageProp != null)
         {
+            int maxAge = getMaxAgeValue();
+            int age = maxAge > 0 ? random.nextInt(maxAge) + 1 : 0;
             lower = Helpers.setProperty(lower, ageProp, age);
             upper = Helpers.setProperty(upper, ageProp, age);
         }
