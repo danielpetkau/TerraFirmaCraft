@@ -9,6 +9,7 @@ def generate(rm: ResourceManager):
     def tfc_fluid(tag: str, name: str = None): emi_tag(rm, 'fluid', 'tfc', tag, name)
     def tfc_item(tag: str, name: str = None): emi_tag(rm, 'item', 'tfc', tag, name)
     def c_item(tag: str, name: str = None): emi_tag(rm, 'item', 'c', tag, name)
+    def c_fluid(tag: str, name: str = None): emi_tag(rm, 'fluid', 'c', tag, name)
 
     tfc_fluid('alcohols')
     tfc_fluid('drinkables')
@@ -64,6 +65,7 @@ def generate(rm: ResourceManager):
     c_item('double_sheets', 'Double Metal Sheets')
 
     for metal, info in METALS.items():
+        c_fluid('molten_%s' % metal, lang('molten %s', metal))
         c_item('ingots/%s' % metal, lang('%s ingots', metal))
         if info.type == 'all':
             tfc_item('tools/%s' % metal, lang('%s tools', metal))

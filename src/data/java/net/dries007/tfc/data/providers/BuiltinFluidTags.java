@@ -15,7 +15,6 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.tags.TagsProvider;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.tags.FluidTags;
 import net.minecraft.tags.TagBuilder;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.DyeColor;
@@ -86,6 +85,9 @@ public class BuiltinFluidTags extends TagsProvider<Fluid> implements Accessors
             fluidOf(CORN_WHISKEY),
             fluidOf(RYE_WHISKEY));
         tag(MOLTEN_METALS).add(TFCFluids.METALS);
+        TFCFluids.METALS.forEach((metal, fluid) -> {
+            tag(commonTagOf(Registries.FLUID, "molten_" + metal.getSerializedName())).add(fluid.getSource());
+        });
 
         Drinkable.MANAGER.getValues().forEach(drink -> tag(DRINKABLES).add(drink.ingredient()));
         tag(INGREDIENTS)
@@ -127,9 +129,20 @@ public class BuiltinFluidTags extends TagsProvider<Fluid> implements Accessors
             super(builder);
         }
 
-        FluidTagAppender add(Fluid... fluids) { return add(Arrays.stream(fluids)); }
-        FluidTagAppender add(Stream<Fluid> fluids) { fluids.forEach(b -> add(key(b))); return this; }
-        FluidTagAppender add(Map<?, ? extends FluidHolder<? extends Fluid>> fluids) { fluids.values().forEach(v -> add(v.getSource())); return this; }
+        FluidTagAppender add(Fluid... fluids) {return add(Arrays.stream(fluids));}
+
+        FluidTagAppender add(Stream<Fluid> fluids)
+        {
+            fluids.forEach(b -> add(key(b)));
+            return this;
+        }
+
+        FluidTagAppender add(Map<?, ? extends FluidHolder<? extends Fluid>> fluids)
+        {
+            fluids.values().forEach(v -> add(v.getSource()));
+            return this;
+        }
+
         FluidTagAppender add(FluidIngredient ingredient)
         {
             switch (ingredient)
@@ -142,7 +155,8 @@ public class BuiltinFluidTags extends TagsProvider<Fluid> implements Accessors
             return this;
         }
 
-        @Override public FluidTagAppender addTag(TagKey<Fluid> tag) { return (FluidTagAppender) super.addTag(tag); }
+        @Override
+        public FluidTagAppender addTag(TagKey<Fluid> tag) {return (FluidTagAppender) super.addTag(tag);}
 
         private ResourceKey<Fluid> key(Fluid fluid)
         {
