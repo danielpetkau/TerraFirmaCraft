@@ -3,7 +3,6 @@ package net.dries007.tfc.common.items;
 import java.util.function.Consumer;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
@@ -26,21 +25,12 @@ public interface PlantableInfo
             }
             boolean addedText = false;
 
-            // Growth speed info
-            int growTicks = plantable.getGrowthTimeInfo();
-            if (growTicks > 0)
-            {
-                tooltip.accept(Component.translatable("tfc.tooltip.plantable.growth_speed"));
-                tooltip.accept(indent(Calendars.get().getTimeDelta(growTicks).withStyle(ChatFormatting.GREEN), 1));
-                addedText = true;
-            }
-
             // Climate info
             ClimateRange climate = plantable.getClimateRangeInfo();
             if (climate != null)
             {
                 if (addedText) tooltip.accept(Component.empty());
-                tooltip.accept(Component.translatable("tfc.tooltip.plantable.climate"));
+                tooltip.accept(Component.translatable("tfc.tooltip.plantable.climate").withStyle(ChatFormatting.GRAY));
                 tooltip.accept(indent(Component.translatable("tfc.tooltip.plantable.climate.temperature", climate.minTemperature(), climate.maxTemperature()), 1));
                 tooltip.accept(indent(Component.translatable("tfc.tooltip.plantable.climate.hydration", climate.minHydration(), climate.maxHydration()), 1));
                 addedText = true;
@@ -52,51 +42,101 @@ public interface PlantableInfo
             {
                 if (addedText) tooltip.accept(Component.empty());
                 final float n = nutrients.nitrogen(), p = nutrients.phosphorus(), k = nutrients.potassium();
-                tooltip.accept(Component.translatable("tfc.tooltip.plantable.nutrients"));
-                tooltip.accept(indent(Component.translatable("tfc.tooltip.fertilizer.nitrogen", formatNutrientAmount(n)), 1));
-                tooltip.accept(indent(Component.translatable("tfc.tooltip.fertilizer.phosphorus", formatNutrientAmount(p)), 1));
-                tooltip.accept(indent(Component.translatable("tfc.tooltip.fertilizer.potassium", formatNutrientAmount(k)), 1));
+                boolean consumesNutrients = n > 0 || p > 0 || k > 0;
+                tooltip.accept(Component.translatable("tfc.tooltip.plantable.nutrients").withStyle(ChatFormatting.GRAY));
+                tooltip.accept(indent(Component.translatable("tfc.tooltip.fertilizer.nitrogen", formatNutrientAmount(n, consumesNutrients)), 1));
+                tooltip.accept(indent(Component.translatable("tfc.tooltip.fertilizer.phosphorus", formatNutrientAmount(p, consumesNutrients)), 1));
+                tooltip.accept(indent(Component.translatable("tfc.tooltip.fertilizer.potassium", formatNutrientAmount(k, consumesNutrients)), 1));
                 addedText = true;
             }
 
             // Lifecycle info
-            Lifecycle[] lifecycle = plantable.getLifecycleInfo();
-            if (lifecycle != null)
+            @Nullable Lifecycle[] lifecycle = plantable.getLifecycleInfo();
+            int growTicks = plantable.getGrowthTimeInfo();
+
+            boolean addGrowInfo = growTicks > 0;
+            boolean addLifecycleInfo = lifecycle != null;
+            if (addGrowInfo || addLifecycleInfo)
             {
                 if (addedText) tooltip.accept(Component.empty());
-                tooltip.accept(Component.translatable("tfc.tooltip.plantable.lifecycle"));
-                MutableComponent component = Component.empty();
-                for (Month month : Month.values())
+                tooltip.accept(Component.translatable("tfc.tooltip.plantable.lifecycle").withStyle(ChatFormatting.GRAY));
+            }
+            if (addGrowInfo)
+            {
+                tooltip.accept(
+                    indent(
+                        Component.translatable("tfc.tooltip.plantable.lifecycle.growth_speed")
+                            .withStyle(ChatFormatting.GREEN)
+                            .append(" ")
+                            .append(
+                                Calendars.get().getTimeDelta(growTicks).withStyle(ChatFormatting.WHITE)
+                            ),
+                        1
+                    )
+                );
+            }
+            if (addLifecycleInfo)
+            {
+                Month growMonth = null;
+                Month fruitMonth = null;
+                for (int index = Month.DECEMBER.ordinal(); index > Month.JANUARY.ordinal(); index--)
                 {
-                    int index = month.ordinal();
-                    if (index > lifecycle.length)
-                    {
-                        break;
-                    }
-                    int color = getLifecycleColor(lifecycle[index]);
-                    component.append(Component.translatable(month.getTranslationKey(Month.Style.SHORT_MONTH)).withColor(color).append(" "));
+                    Month month = Month.valueOf(index);
+                    Lifecycle stage = lifecycle[index];
+                    growMonth = findEarliestMonth(Lifecycle.HEALTHY, stage, growMonth, month);
+                    fruitMonth = findEarliestMonth(Lifecycle.FRUITING, stage, fruitMonth, month);
+
                 }
-                tooltip.accept(indent(component, 1));
-                tooltip.accept(Component.empty());
-                for (Lifecycle stage : Lifecycle.values())
+
+                if (growMonth != null)
                 {
-                    tooltip.accept(indent(Component.translatable("tfc.tooltip.plantable.lifecycle." + stage.getSerializedName()).withColor(getLifecycleColor(stage)), 2));
+                    tooltip.accept(
+                        indent(
+                            Component.translatable("tfc.tooltip.plantable.lifecycle.healthy")
+                                .withColor(0x6AB553) // Healthy color (green) from the patchouli lifecycle chart
+                                .append(" ")
+                                .append(
+                                    Component.translatable(growMonth.getTranslationKey(Month.Style.SEASON)).withStyle(ChatFormatting.WHITE)
+                                ),
+                            1
+                        )
+                    );
+                }
+                if (fruitMonth != null)
+                {
+                    tooltip.accept(
+                        indent(
+                            Component.translatable("tfc.tooltip.plantable.lifecycle.fruiting")
+                                .withColor(0xA217FF) // Fruiting color (purple) from the patchouli lifecycle chart
+                                .append(" ")
+                                .append(
+                                    Component.translatable(fruitMonth.getTranslationKey(Month.Style.SEASON)).withStyle(ChatFormatting.WHITE)
+                                ),
+                            1
+                        )
+                    );
                 }
             }
-
         }
     }
 
-    // Colors taken from the patchouli lifecycle chart for fruit trees / bushes
-    private static int getLifecycleColor(Lifecycle stage)
+    private static @Nullable Month findEarliestMonth(Lifecycle targetStage, Lifecycle currentStage, @Nullable Month foundMonth, Month currentMonth)
     {
-        return switch (stage)
+        if (currentStage == targetStage)
         {
-            case DORMANT -> 0xA8986A;
-            case HEALTHY -> 0x6AB553;
-            case FLOWERING -> 0xCCA0DB;
-            case FRUITING -> 0xA217FF;
-        };
+            if (foundMonth == null)
+            {
+                return currentMonth;
+            }
+            else
+            {
+                if (currentMonth.next().equals(foundMonth))
+                {
+                    return currentMonth;
+                }
+            }
+        }
+        return foundMonth;
     }
 
     private static Component indent(Component component, int amount)
@@ -104,11 +144,15 @@ public interface PlantableInfo
         return Component.literal(" ".repeat(amount)).append(component);
     }
 
-    private static String formatNutrientAmount(float value)
+    private static String formatNutrientAmount(float value, boolean consumesNutrients)
     {
         if (value < 0)
         {
-            // Crops that restore nutrients restore 30% of actual value by default with no fertilizer
+            if (consumesNutrients)
+            {
+                return String.format("+%.0f", Math.abs(value) * 100);
+            }
+            // Crops that restore nutrients restore 30% of actual value if they do not consume nutrients
             return String.format("+%.0f", Math.abs(value) * 0.3 * 100);
         }
         return String.format("%.0f", value * 100);
