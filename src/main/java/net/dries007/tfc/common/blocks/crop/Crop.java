@@ -29,33 +29,35 @@ import net.dries007.tfc.util.climate.ClimateRanges;
 
 public enum Crop implements StringRepresentable
 {
+    // DO NOT EDIT DIRECTLY - Imported directly from spreadsheet
+    // https://docs.google.com/spreadsheets/d/1USmCWiRrj5205WyoRNNTUkoNrqm9AStRzwnD1v6633o
 
     // Legumes
     CASSAVA(-0.5f, 0.4f, 0.2f, 6), // Default, 6
     GREEN_BEAN(-0.8f, 0.5f, 0.4f, 4, 4, true), // Double, Stick, 4 -> 4
     LENTIL(-0.8f, 0.2f, 0.2f, 6), // Default, 6
     PEANUT(-0.9f, 0.5f, 0.5f, 6), // Default, 6
-    SOYBEAN(-.80f, .60f, .30f, 7), // Default, 7
+    SOYBEAN(-0.8f, 0.6f, 0.3f, 7), // Default, 7
 
     // Grains
     BARLEY(0.75f, -0.2f, -0.2f, 8), // Default, 8
-    OAT(1f, -.25f, -.35f, 8), // Default, 8
-    RYE(1f, -.35f, -.25f, 8), // Default, 8
-    MAIZE(0.9f, -.25f, -.25f, 3, 3, false), // Double, 3 -> 3
-    WHEAT(1f, -.3f, -.3f, 8), // Default, 8
-    RICE(.4f, .3f, .3f, 8, true), // Default, Waterlogged, 8
+    OAT(1f, -0.35f, -0.25f, 8), // Default, 8
+    RYE(1f, -0.2f, -0.4f, 8), // Default, 8
+    MAIZE(0.9f, -0.25f, -0.25f, 3, 3, false), // Double, 3 -> 3
+    WHEAT(1f, -0.3f, -0.3f, 8), // Default, 8
+    RICE(0.4f, 0.3f, 0.3f, 8, true), // Default, Waterlogged, 8
 
     // Vegetables
     BEET(0.4f, 0.3f, 0.5f, 6), // Default, 6
     CABBAGE(0.5f, 0.2f, 0.4f, 6), // Default, 6
     CARROT(0.5f, 0.3f, 0.4f, 5), // Default, 5
     GARLIC(0.4f, 0.2f, 0.5f, 5), // Default, 5
-    POTATO(0.3f, 0.4f, 0.6f, 7), // Default, 7
-    ONION(0.4f, 0.2f, 0.6f, 7), // Default, 7
+    ONION(0.4f, 0.4f, 0.4f, 7), // Default, 7
+    POTATO(0.4f, 0.2f, 0.6f, 7), // Default, 7
     SQUASH(0.25f, 0.45f, 0.5f, 8), // Default , 8
 
     // Pickable Vegetables
-    TOMATO(0.3f, 0.4f, 0.5f, 4, 4, true, null, () -> TFCItems.FOOD.get(Food.TOMATO)), // Double, Stick, 4 -> 4
+    TOMATO(0.4f, 0.5f, 0.6f, 4, 4, true, null, () -> TFCItems.FOOD.get(Food.TOMATO)), // Double, Stick, 4 -> 4
     RED_BELL_PEPPER(0.3f, 0.4f, 0.5f, 7, () -> TFCItems.FOOD.get(Food.GREEN_BELL_PEPPER), () -> TFCItems.FOOD.get(Food.RED_BELL_PEPPER)), // Pickable, 7
     YELLOW_BELL_PEPPER(0.3f, 0.4f, 0.5f, 7, () -> TFCItems.FOOD.get(Food.GREEN_BELL_PEPPER), () -> TFCItems.FOOD.get(Food.YELLOW_BELL_PEPPER)), // Pickable,
 
@@ -64,14 +66,14 @@ public enum Crop implements StringRepresentable
     MELON(0.3f, 0.4f, 0.65f, 8, () -> TFCBlocks.MELON), // Spreading, 8
 
     // Cover Crops
-    ALFALFA(-0.8f, -0.5f, -0.6f, 6), // Default, 6
     CANOLA(-0.3f, -0.6f, -1f, 6), // Default, 6
     RADISH(-0.5f, -1f, -0.6f, 6), // Default, 6
+    ALFALFA(-0.8f, -0.5f, -0.6f, 6), // Default, 6
 
     // Miscellaneous
     JUTE(0.6f, 0.4f, -0.4f, 3, 3, false), // Double, 3 -> 3
-    SUGARCANE(0.6f, -0.4f, 0.4f, 4, 4, false), // Double, 4 -> 4
-    PAPYRUS(0.5f, 0.5f, 0.5f, 3, 3, false);
+    PAPYRUS(0.6f, -0.4f, 0.4f, 3, 3, false),
+    SUGARCANE(0.5f, 0.5f, 0.5f, 4, 4, false); // Double, 4 -> 4
 
     private static ExtendedProperties doubleCrop()
     {
