@@ -1304,6 +1304,17 @@ DEFAULT_LANG = {
     'tfc.tooltip.fertilizer.nitrogen': '§b(N) Nitrogen: §r%s%%',
     'tfc.tooltip.fertilizer.phosphorus': '§6(P) Phosphorus: §r%s%%',
     'tfc.tooltip.fertilizer.potassium': '§d(K) Potassium: §r%s%%',
+    'tfc.tooltip.plantable.hold_shift': 'Hold (Shift) for Plant Info',
+    'tfc.tooltip.plantable.growth_speed': 'Grows in:',
+    'tfc.tooltip.plantable.climate': 'Climate:',
+    'tfc.tooltip.plantable.climate.temperature': '§1Temperature:§r %s §7-§r %s \u00b0C',
+    'tfc.tooltip.plantable.climate.hydration': '§1Hydration:§r %s%% §7-§r %s%%',
+    'tfc.tooltip.plantable.nutrients': 'Nutrients:',
+    'tfc.tooltip.plantable.lifecycle': 'Lifecycle:',
+    'tfc.tooltip.plantable.lifecycle.dormant': '\u2593 Dormant',
+    'tfc.tooltip.plantable.lifecycle.healthy': '\u2593 Healthy',
+    'tfc.tooltip.plantable.lifecycle.flowering': '\u2593 Flowering',
+    'tfc.tooltip.plantable.lifecycle.fruiting': '\u2593 Fruiting',
     'tfc.tooltip.seal_barrel': 'Seal',
     'tfc.tooltip.unseal_barrel': 'Unseal',
     'tfc.tooltip.while_sealed': 'While sealed',
@@ -1675,6 +1686,11 @@ DEFAULT_LANG = {
     **lang_enum('month', ('january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december')),
     **lang_enum('day', ('monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday')),
     **lang_enum('direction', ('north', 'south', 'east', 'west', 'down', 'up')),
+    **{
+        'tfc.enum.short_month.%s' % full : lang(short)
+        for full, short in
+        list(map(lambda n: (n, n[0:3]), ('january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december')))
+    },
     'tfc.enum.koppenclimateclassification.af': 'Humid Tropical',
     'tfc.enum.koppenclimateclassification.am': 'Tropical Monsoon',
     'tfc.enum.koppenclimateclassification.aw': 'Tropical Wet/Dry',

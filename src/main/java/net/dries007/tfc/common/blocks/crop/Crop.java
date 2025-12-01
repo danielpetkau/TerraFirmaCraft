@@ -14,7 +14,6 @@ import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
-
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 
@@ -97,30 +96,30 @@ public enum Crop implements StringRepresentable
     private final Supplier<Block> deadFactory;
     private final Supplier<Block> wildFactory;
 
-    Crop(float nitrogen, float phosporous, float potassium, int singleBlockStages)
+    Crop(float nitrogen, float phosphorus, float potassium, int singleBlockStages)
     {
-        this(nitrogen, phosporous, potassium, self -> DefaultCropBlock.create(crop(), singleBlockStages, self), self -> new DeadCropBlock(dead(), self.getClimateRange()), self -> new WildCropBlock(dead().randomTicks()));
+        this(nitrogen, phosphorus, potassium, self -> DefaultCropBlock.create(crop(), singleBlockStages, self), self -> new DeadCropBlock(dead(), self.getClimateRange()), self -> new WildCropBlock(dead().randomTicks()));
     }
 
-    Crop(float nitrogen, float phosporous, float potassium, int spreadingSingleBlockStages, Supplier<Supplier<? extends Block>> fruit)
+    Crop(float nitrogen, float phosphorus, float potassium, int spreadingSingleBlockStages, Supplier<Supplier<? extends Block>> fruit)
     {
-        this(nitrogen, phosporous, potassium, self -> SpreadingCropBlock.create(crop(), spreadingSingleBlockStages, self, fruit), self -> new DeadCropBlock(dead(), self.getClimateRange()), self -> new WildSpreadingCropBlock(dead().randomTicks(), fruit));
+        this(nitrogen, phosphorus, potassium, self -> SpreadingCropBlock.create(crop(), spreadingSingleBlockStages, self, fruit), self -> new DeadCropBlock(dead(), self.getClimateRange()), self -> new WildSpreadingCropBlock(dead().randomTicks(), fruit));
     }
 
-    Crop(float nitrogen, float phosporous, float potassium, int spreadingSingleBlockStages, @Nullable Supplier<Supplier<? extends Item>> fruit1, Supplier<Supplier<? extends Item>> fruit2)
+    Crop(float nitrogen, float phosphorus, float potassium, int spreadingSingleBlockStages, @Nullable Supplier<Supplier<? extends Item>> fruit1, Supplier<Supplier<? extends Item>> fruit2)
     {
-        this(nitrogen, phosporous, potassium, self -> PickableCropBlock.create(crop(), spreadingSingleBlockStages, self, fruit1, fruit2), self -> new DeadCropBlock(dead(), self.getClimateRange()), self -> new WildCropBlock(dead().randomTicks()));
+        this(nitrogen, phosphorus, potassium, self -> PickableCropBlock.create(crop(), spreadingSingleBlockStages, self, fruit1, fruit2), self -> new DeadCropBlock(dead(), self.getClimateRange()), self -> new WildCropBlock(dead().randomTicks()));
     }
 
-    Crop(float nitrogen, float phosporous, float potassium, int floodedSingleBlockStages, boolean flooded)
+    Crop(float nitrogen, float phosphorus, float potassium, int floodedSingleBlockStages, boolean flooded)
     {
-        this(nitrogen, phosporous, potassium, self -> FloodedCropBlock.create(crop(), floodedSingleBlockStages, self), self -> new FloodedDeadCropBlock(dead(), self.getClimateRange()), self -> new FloodedWildCropBlock(dead().randomTicks()));
+        this(nitrogen, phosphorus, potassium, self -> FloodedCropBlock.create(crop(), floodedSingleBlockStages, self), self -> new FloodedDeadCropBlock(dead(), self.getClimateRange()), self -> new FloodedWildCropBlock(dead().randomTicks()));
         assert flooded;
     }
 
-    Crop(float nitrogen, float phosporous, float potassium, int doubleBlockBottomStages, int doubleBlockTopStages, boolean requiresStick, @Nullable Supplier<Supplier<? extends Item>> fruit1, Supplier<Supplier<? extends Item>> fruit2)
+    Crop(float nitrogen, float phosphorus, float potassium, int doubleBlockBottomStages, int doubleBlockTopStages, boolean requiresStick, @Nullable Supplier<Supplier<? extends Item>> fruit1, Supplier<Supplier<? extends Item>> fruit2)
     {
-        this(nitrogen, phosporous, potassium,
+        this(nitrogen, phosphorus, potassium,
             requiresStick ?
                 self -> PickableClimbingCropBlock.create(doubleCrop(), doubleBlockBottomStages, doubleBlockTopStages, self, fruit1, fruit2) :
                 self -> DoubleCropBlock.create(doubleCrop(), doubleBlockBottomStages, doubleBlockTopStages, self),
@@ -131,9 +130,9 @@ public enum Crop implements StringRepresentable
         );
     }
 
-    Crop(float nitrogen, float phosporous, float potassium, int doubleBlockBottomStages, int doubleBlockTopStages, boolean requiresStick)
+    Crop(float nitrogen, float phosphorus, float potassium, int doubleBlockBottomStages, int doubleBlockTopStages, boolean requiresStick)
     {
-        this(nitrogen, phosporous, potassium,
+        this(nitrogen, phosphorus, potassium,
             requiresStick ?
                 self -> ClimbingCropBlock.create(doubleCrop(), doubleBlockBottomStages, doubleBlockTopStages, self) :
                 self -> DoubleCropBlock.create(doubleCrop(), doubleBlockBottomStages, doubleBlockTopStages, self),
@@ -144,11 +143,11 @@ public enum Crop implements StringRepresentable
         );
     }
 
-    Crop(float nitrogen, float phosporous, float potassium, Function<Crop, Block> factory, Function<Crop, Block> deadFactory, Function<Crop, Block> wildFactory)
+    Crop(float nitrogen, float phosphorus, float potassium, Function<Crop, Block> factory, Function<Crop, Block> deadFactory, Function<Crop, Block> wildFactory)
     {
         this.serializedName = name().toLowerCase(Locale.ROOT);
         this.nitrogen = nitrogen;
-        this.phosphorous = phosporous;
+        this.phosphorous = phosphorus;
         this.potassium = potassium;
         this.factory = () -> factory.apply(this);
         this.deadFactory = () -> deadFactory.apply(this);

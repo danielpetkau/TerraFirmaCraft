@@ -83,10 +83,11 @@ public enum Month implements StringRepresentable
     public String getTranslationKey(Style style)
     {
         return switch (style)
-            {
-                case LONG_MONTH -> Helpers.getEnumTranslationKey(this);
-                case SEASON -> Helpers.getEnumTranslationKey(this, "season");
-            };
+        {
+            case LONG_MONTH -> Helpers.getEnumTranslationKey(this);
+            case SEASON -> Helpers.getEnumTranslationKey(this, "season");
+            case SHORT_MONTH -> Helpers.getEnumTranslationKey(this, "short_month");
+        };
     }
 
     public Season getSeason()
@@ -102,6 +103,6 @@ public enum Month implements StringRepresentable
 
     public enum Style
     {
-        LONG_MONTH, SEASON
+        LONG_MONTH, SEASON, SHORT_MONTH
     }
 }

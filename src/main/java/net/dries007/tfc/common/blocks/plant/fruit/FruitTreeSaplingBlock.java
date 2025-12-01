@@ -36,7 +36,6 @@ import org.jetbrains.annotations.Nullable;
 
 import net.dries007.tfc.client.overworld.SolarCalculator;
 import net.dries007.tfc.common.TFCTags;
-import net.dries007.tfc.common.blockentities.TickCounterBlockEntity;
 import net.dries007.tfc.common.blockentities.TickingPlantBlockEntity;
 import net.dries007.tfc.common.blocks.EntityBlockExtension;
 import net.dries007.tfc.common.blocks.ExtendedProperties;
@@ -56,6 +55,7 @@ public class FruitTreeSaplingBlock extends BushBlock implements IForgeBlockExten
 {
     /**
      * Checks if splicing, the action with clicking with an offhand knife and a sapling, works.
+     *
      * @param pos   The position the sapling would be or is
      * @param state The state at that position currently
      */
