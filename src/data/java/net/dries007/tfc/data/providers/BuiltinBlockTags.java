@@ -598,7 +598,8 @@ public class BuiltinBlockTags extends TagsProvider<Block> implements Accessors
             .add(TFCBlocks.POURED_GLASS);
 
         tag(PROSPECTABLE).addTags(Tags.Blocks.ORES);
-        
+
+        tag(BlockTags.VALID_SPAWN).addTags(GRASS, DUFF);
         tag(DUFF)
             .add(TFCBlocks.SOIL.get(SoilBlockType.DUFF))
             .add(TFCBlocks.SOIL.get(SoilBlockType.CLAY_DUFF));
