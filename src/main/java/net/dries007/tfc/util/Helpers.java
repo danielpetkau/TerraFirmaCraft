@@ -125,7 +125,6 @@ import net.dries007.tfc.common.effect.TFCEffects;
 import net.dries007.tfc.common.entities.ai.prey.PestAi;
 import net.dries007.tfc.common.entities.prey.Pest;
 import net.dries007.tfc.mixin.accessor.RecipeManagerAccessor;
-import net.dries007.tfc.util.climate.OverworldClimateModel;
 import net.dries007.tfc.util.collections.IndirectHashCollection;
 import net.dries007.tfc.util.data.FluidHeat;
 import net.dries007.tfc.util.data.Support;
@@ -954,6 +953,29 @@ public final class Helpers
             if (!stack.isEmpty())
                 return false;
         return true;
+    }
+
+    /**
+     * @return {@code true} if any slot in the provided BE's inventory is empty.
+     */
+    public static boolean hasOpenSlot(InventoryBlockEntity<?> entity)
+    {
+        return hasOpenSlot(entity.getInventory());
+    }
+
+    /**
+     * @return {@code true} if any slot in the provided inventory is empty.
+     */
+    public static boolean hasOpenSlot(IItemHandler inventory)
+    {
+        for (int slot = 0; slot < inventory.getSlots(); slot++)
+        {
+            if (inventory.getStackInSlot(slot).isEmpty())
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**

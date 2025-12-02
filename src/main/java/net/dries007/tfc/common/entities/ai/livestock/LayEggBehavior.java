@@ -7,15 +7,15 @@
 package net.dries007.tfc.common.entities.ai.livestock;
 
 import java.util.Optional;
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 
+import net.dries007.tfc.common.blockentities.TFCBlockEntities;
 import net.dries007.tfc.common.blocks.TFCBlocks;
-import net.dries007.tfc.common.entities.misc.Seat;
 import net.dries007.tfc.common.entities.ai.TFCBrain;
 import net.dries007.tfc.common.entities.ai.pet.MoveOntoBlockBehavior;
 import net.dries007.tfc.common.entities.livestock.OviparousAnimal;
+import net.dries007.tfc.common.entities.misc.Seat;
 import net.dries007.tfc.util.Helpers;
 
 public class LayEggBehavior extends MoveOntoBlockBehavior<OviparousAnimal>
@@ -52,6 +52,10 @@ public class LayEggBehavior extends MoveOntoBlockBehavior<OviparousAnimal>
     @Override
     protected boolean isTargetAt(ServerLevel level, BlockPos pos)
     {
-        return Helpers.isBlock(level.getBlockState(pos), TFCBlocks.NEST_BOX.get());
+        if (Helpers.isBlock(level.getBlockState(pos), TFCBlocks.NEST_BOX.get()))
+        {
+            return level.getBlockEntity(pos, TFCBlockEntities.NEST_BOX.get()).map(Helpers::hasOpenSlot).orElse(false);
+        }
+        return false;
     }
 }
