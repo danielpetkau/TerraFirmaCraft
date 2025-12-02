@@ -886,15 +886,15 @@ BERRIES: dict[str, Berry] = {
 
 # Generated from Spreadsheet Data
 FRUITS: dict[str, Fruit] = {
-    'banana': Fruit(11., 40, 280, 500, 9.8, 41.2, 25, 100),
+    'banana': Fruit(11, 40, 280, 500, 9.8, 41.2, 25, 100),
 
-    'cherry': Fruit(-5.2, 14., 100, 350, -6.4, 15.2, 7, 80),
+    'cherry': Fruit(-5.2, 14, 100, 350, -6.4, 15.2, 7, 80),
     'green_apple': Fruit(-10.6, 10.4, 130, 280, -11.8, 11.6, 10, 75),
     'red_apple': Fruit(-10.6, 10.4, 190, 310, -11.8, 11.6, 16, 75),
-    'lemon': Fruit(7.4, 24.8, 220, 440, 6.2, 26., 19, 95),
-    'olive': Fruit(2, 23., 250, 450, 0.8, 24.2, 22, 95),
-    'orange': Fruit(9.2, 40, 300, 500, 8., 41.2, 27, 100),
-    'peach': Fruit(-3.4, 15.8, 180, 470, -4.6, 17., 15, 95),
+    'lemon': Fruit(7.4, 24.8, 220, 440, 6.2, 26, 19, 95),
+    'olive': Fruit(2, 23, 250, 450, 0.8, 24.2, 22, 95),
+    'orange': Fruit(9.2, 40, 300, 500, 8, 41.2, 27, 100),
+    'peach': Fruit(-3.4, 15.8, 180, 470, -4.6, 17, 15, 95),
     'plum': Fruit(-7, 12.2, 120, 300, -8.2, 13.4, 9, 75),
 }
 JAR_FRUITS = tuple([*BERRIES.keys(), *FRUITS.keys(), 'pumpkin_chunks', 'melon_slice', 'peanut'])
