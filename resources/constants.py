@@ -114,6 +114,10 @@ class Wood(NamedTuple):
 
 
 class Berry(NamedTuple):
+    wild_min_temp: float
+    wild_max_temp: float
+    wild_min_water: float
+    wild_max_water: float
     min_temp: float
     max_temp: float
     min_water: float
@@ -869,19 +873,19 @@ UNDERGROUND_FEATURES = ('cave_column', 'cave_spike', 'large_cave_spike', 'water_
 # Alternatively, we ditch rainfall and/or hydration entirely.
 # Generated from Spreadsheet Data
 BERRIES: dict[str, Berry] = {
-    'blackberry': Berry(-5.2, 19.4, 200, 500, 'spreading', 0, 2),
-    'raspberry': Berry(-10.6, 14., 180, 450, 'spreading', 0, 2),
-    'blueberry': Berry(-8.8, 8.6, 150, 400, 'spreading', 0, 2),
-    'elderberry': Berry(-5.2, 15.8, 120, 380, 'spreading', 0, 2),
+    'blackberry': Berry(-5.2, 19.4, 200, 500, -6.4, 20.6, 17, 100, 'spreading', 0, 2),
+    'raspberry': Berry(-10.6, 14, 180, 450, -11.8, 15.2, 15, 95, 'spreading', 0, 2),
+    'blueberry': Berry(-8.8, 8.6, 150, 400, -10, 9.8, 12, 90, 'spreading', 0, 2),
+    'elderberry': Berry(-5.2, 15.8, 120, 380, -6.4, 17, 9, 85, 'spreading', 0, 2),
 
-    'snowberry': Berry(-10.6, 5, 200, 500, 'stationary', 2, 4),
-    'bunchberry': Berry(-14.2, 1.4, 280, 500, 'stationary', 2, 4),
-    'gooseberry': Berry(-7, 12.2, 200, 500, 'stationary', 2, 4),
-    'cloudberry': Berry(-14.2, 6.8, 80, 320, 'stationary', 2, 4),
-    'strawberry': Berry(-1.6, 17.6, 140, 400, 'stationary', 2, 4),
-    'wintergreen_berry': Berry(-8.8, 6.8, 100, 370, 'stationary', 2, 4),
+    'snowberry': Berry(-10.6, 5, 200, 500, -11.8, 6.2, 17, 100, 'stationary', 2, 4),
+    'bunchberry': Berry(-14.2, 1.4, 280, 500, -15.4, 2.6, 25, 100, 'stationary', 2, 4),
+    'gooseberry': Berry(-7, 12.2, 200, 500, -8.2, 13.4, 17, 100, 'stationary', 2, 4),
+    'cloudberry': Berry(-14.2, 6.8, 80, 320, -15.4, 8, 5, 80, 'stationary', 2, 4),
+    'strawberry': Berry(-1.6, 17.6, 140, 400, -2.8, 18.8, 11, 90, 'stationary', 2, 4),
+    'wintergreen_berry': Berry(-8.8, 6.8, 100, 370, -10, 8, 7, 85, 'stationary', 2, 4),
 
-    'cranberry': Berry(-14.2, 8.6, 250, 500, 'waterlogged', 2, 4),
+    'cranberry': Berry(-14.2, 8.6, 250, 500, -15.4, 9.8, 25, 100, 'waterlogged', 2, 4),
 }
 
 # Generated from Spreadsheet Data

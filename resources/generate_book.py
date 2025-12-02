@@ -1610,7 +1610,7 @@ def fruit_tree_multiblock(fruit: str, text_contents: str) -> Page:
 
 def tall_bush_text(fruit: str, title: str, text_contents: str) -> Page:
     data = BERRIES[fruit]
-    return text(defer('$(bold)$(l:the_world/climate#temperature)Temperature$(): {0} - {1} °C$(br)$(bold)$(l:mechanics/hydration)Rainfall$(): {2} - {3}mm' + text_contents, data.min_temp, data.max_temp, hydration_from_rainfall(data.min_water), 100), title=title).anchor(fruit).link('tfc:food/%s' % fruit, 'tfc:plant/%s_bush' % fruit)
+    return text(defer('Can be found in regions with: $(br)$(bold)$(l:the_world/climate#temperature)Temperature$(): {0} - {1} °C$(br)$(bold)$(l:the_world/climate#rainfall)Rainfall$(): {2} - {3}mm$(br2)Conditions required for growth:$(br)$(bold)$(l:the_world/climate#temperature)Temperature$(): {4} - {5} °C$(br)$(bold)$(l:mechanics/hydration)Hydration$(): {6} - {7}%' + text_contents, data.wild_min_temp, data.wild_max_temp, data.wild_min_water, data.wild_max_water, data.min_temp, data.max_temp, data.min_water, data.max_water), title=title).anchor(fruit).link('tfc:food/%s' % fruit, 'tfc:plant/%s_bush' % fruit)
 
 
 def tall_bush_multiblock(fruit: str, text_contents: str) -> Page:
@@ -1624,7 +1624,7 @@ def tall_bush_multiblock(fruit: str, text_contents: str) -> Page:
 
 def small_bush_text(fruit: str, title: str, text_contents: str) -> Page:
     data = BERRIES[fruit]
-    return text(defer('$(bold)$(l:the_world/climate#temperature)Temperature$(): {0} - {1} °C$(br)$(bold)$(l:mechanics/hydration)Hydration$(): {2} - {3} %' + text_contents, data.min_temp, data.max_temp, hydration_from_rainfall(data.min_water), 100), title=title).anchor(fruit).link('tfc:food/%s' % fruit, 'tfc:plant/%s_bush' % fruit)
+    return text(defer('Can be found in regions with: $(br)$(bold)$(l:the_world/climate#temperature)Temperature$(): {0} - {1} °C$(br)$(bold)$(l:the_world/climate#rainfall)Rainfall$(): {2} - {3}mm$(br2)Conditions required for growth:$(br)$(bold)$(l:the_world/climate#temperature)Temperature$(): {4} - {5} °C$(br)$(bold)$(l:mechanics/hydration)Hydration$(): {6} - {7}%' + text_contents, data.wild_min_temp, data.wild_max_temp, data.wild_min_water, data.wild_max_water, data.min_temp, data.max_temp, data.min_water, data.max_water), title=title).anchor(fruit).link('tfc:food/%s' % fruit, 'tfc:plant/%s_bush' % fruit)
 
 
 def small_bush_multiblock(fruit: str, text_contents: str) -> Page:
