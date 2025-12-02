@@ -8,7 +8,7 @@ package net.dries007.tfc.common.blocks.plant.fruit;
 
 import java.awt.Color;
 import java.util.Locale;
-import java.util.function.IntSupplier;
+import java.util.function.LongSupplier;
 import java.util.function.Supplier;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.item.BlockItem;
@@ -47,7 +47,7 @@ public final class FruitBlocks
 
     public static BlockItem createCranberryItem(Block block)
     {
-        return new FruitBlockItem(block, ClimateRanges.CRANBERRY_BUSH, CRANBERRY_STAGES);
+        return new BushBlockItem(block, ClimateRanges.CRANBERRY_BUSH, CRANBERRY_STAGES);
     }
 
     public static Block createBananaSapling()
@@ -67,7 +67,7 @@ public final class FruitBlocks
 
     public static BlockItem createBananaSaplingItem(Block block)
     {
-        return new FruitBlockItem(block, ClimateRanges.BANANA_PLANT, BANANA_STAGES, () -> (int) (TFCConfig.SERVER.bananaSaplingGrowthTicks.get() * TFCConfig.SERVER.saplingGrowthModifier.get()));
+        return new FruitTreeSaplingItem(block, ClimateRanges.BANANA_PLANT, BANANA_STAGES);
     }
 
     public static Block createPottedBananaSapling()
@@ -110,7 +110,7 @@ public final class FruitBlocks
 
         public BlockItem createItem(Block block)
         {
-            return new FruitBlockItem(block, ClimateRanges.SPREADING_BUSHES.get(this), stages);
+            return new BushBlockItem(block, ClimateRanges.SPREADING_BUSHES.get(this), stages);
         }
     }
 
@@ -139,7 +139,7 @@ public final class FruitBlocks
 
         public BlockItem createItem(Block block)
         {
-            return new FruitBlockItem(block, ClimateRanges.STATIONARY_BUSHES.get(this), stages);
+            return new BushBlockItem(block, ClimateRanges.STATIONARY_BUSHES.get(this), stages);
         }
     }
 
@@ -207,11 +207,10 @@ public final class FruitBlocks
 
         public BlockItem createSaplingItem(Block block)
         {
-            return new FruitBlockItem(
+            return new FruitTreeSaplingItem(
                 block,
                 ClimateRanges.FRUIT_TREES.get(this),
-                stages,
-                () -> (int) (TFCConfig.SERVER.fruitSaplingGrowthTicks.get(this).get() * TFCConfig.SERVER.saplingGrowthModifier.get())
+                stages
             );
         }
 
@@ -227,30 +226,33 @@ public final class FruitBlocks
         }
     }
 
-    private static class FruitBlockItem extends BlockItem implements PlantableInfo
+    private static class FruitTreeSaplingItem extends BlockItem implements PlantableInfo
     {
-        private final @Nullable Supplier<ClimateRange> climateRange;
-        private final @Nullable Lifecycle[] stages;
-        private final @Nullable IntSupplier ticksToGrow;
+        private final Supplier<ClimateRange> climateRange;
+        private final Lifecycle[] stages;
+        private final LongSupplier ticksToGrow;
 
-        FruitBlockItem(Block block, @Nullable Supplier<ClimateRange> range, @Nullable Lifecycle[] stages, @Nullable IntSupplier ticksToGrow)
+        private FruitTreeSaplingItem(Block block, Supplier<ClimateRange> climateRange, Lifecycle[] lifecycle)
         {
             super(block, new Item.Properties());
-            this.climateRange = range;
-            this.stages = stages;
-            this.ticksToGrow = ticksToGrow;
-        }
-
-        FruitBlockItem(Block block, @Nullable Supplier<ClimateRange> range, @Nullable Lifecycle[] stages)
-        {
-            this(block, range, stages, null);
+            this.climateRange = climateRange;
+            this.stages = lifecycle;
+            // Ideally, this ctor would just take FruitTreeSaplingBlock instead of Block, but too much stuff downcasts to Block before this gets called
+            if (block instanceof FruitTreeSaplingBlock sapling)
+            {
+                this.ticksToGrow = sapling::getTicksToGrow;
+            }
+            else
+            {
+                this.ticksToGrow = () -> -1;
+            }
         }
 
 
         @Override
         public @Nullable ClimateRange getClimateRangeInfo()
         {
-            return climateRange != null ? climateRange.get() : null;
+            return climateRange.get();
         }
 
         @Override
@@ -262,7 +264,33 @@ public final class FruitBlocks
         @Override
         public int getGrowthTimeInfo()
         {
-            return ticksToGrow != null ? ticksToGrow.getAsInt() : -1;
+            return (int) ticksToGrow.getAsLong();
         }
+    }
+
+    private static class BushBlockItem extends BlockItem implements PlantableInfo
+    {
+        private final Supplier<ClimateRange> climateRange;
+        private final Lifecycle[] stages;
+
+        private BushBlockItem(Block block, Supplier<ClimateRange> range, Lifecycle[] stages)
+        {
+            super(block, new Item.Properties());
+            this.climateRange = range;
+            this.stages = stages;
+        }
+
+        @Override
+        public @Nullable ClimateRange getClimateRangeInfo()
+        {
+            return climateRange.get();
+        }
+
+        @Override
+        public @Nullable Lifecycle[] getLifecycleInfo()
+        {
+            return stages;
+        }
+
     }
 }
