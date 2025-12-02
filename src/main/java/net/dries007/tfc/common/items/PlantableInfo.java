@@ -1,5 +1,6 @@
 package net.dries007.tfc.common.items;
 
+import java.util.List;
 import java.util.function.Consumer;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
@@ -29,7 +30,6 @@ public interface PlantableInfo
             ClimateRange climate = plantable.getClimateRangeInfo();
             if (climate != null)
             {
-                if (addedText) tooltip.accept(Component.empty());
                 tooltip.accept(Component.translatable("tfc.tooltip.plantable.climate").withStyle(ChatFormatting.GRAY));
                 tooltip.accept(indent(Component.translatable("tfc.tooltip.plantable.climate.temperature", climate.minTemperature(), climate.maxTemperature()), 1));
                 tooltip.accept(indent(Component.translatable("tfc.tooltip.plantable.climate.hydration", climate.minHydration(), climate.maxHydration()), 1));
@@ -51,7 +51,7 @@ public interface PlantableInfo
             }
 
             // Lifecycle info
-            @Nullable Lifecycle[] lifecycle = plantable.getLifecycleInfo();
+            List<Lifecycle> lifecycle = plantable.getLifecycleInfo();
             int growTicks = plantable.getGrowthTimeInfo();
 
             boolean addGrowInfo = growTicks > 0;
@@ -79,13 +79,13 @@ public interface PlantableInfo
             {
                 Month growMonth = null;
                 Month fruitMonth = null;
+                // Start from the end of the year to find the rising edge of the lifecycles we care about
                 for (int index = Month.DECEMBER.ordinal(); index > Month.JANUARY.ordinal(); index--)
                 {
                     Month month = Month.valueOf(index);
-                    Lifecycle stage = lifecycle[index];
-                    growMonth = findEarliestMonth(Lifecycle.HEALTHY, stage, growMonth, month);
-                    fruitMonth = findEarliestMonth(Lifecycle.FRUITING, stage, fruitMonth, month);
-
+                    Lifecycle stage = lifecycle.get(index);
+                    growMonth = findStartingMonth(Lifecycle.HEALTHY, stage, growMonth, month);
+                    fruitMonth = findStartingMonth(Lifecycle.FRUITING, stage, fruitMonth, month);
                 }
 
                 if (growMonth != null)
@@ -120,7 +120,7 @@ public interface PlantableInfo
         }
     }
 
-    private static @Nullable Month findEarliestMonth(Lifecycle targetStage, Lifecycle currentStage, @Nullable Month foundMonth, Month currentMonth)
+    private static @Nullable Month findStartingMonth(Lifecycle targetStage, Lifecycle currentStage, @Nullable Month foundMonth, Month currentMonth)
     {
         if (currentStage == targetStage)
         {
@@ -158,21 +158,42 @@ public interface PlantableInfo
         return String.format("%.0f", value * 100);
     }
 
+    /**
+     * If not null, displays what nutrients the plant consumes or produces.
+     *
+     * @return {@link PlantNutrients} or null if not applicable
+     */
     default @Nullable PlantableInfo.PlantNutrients getNutrientsInfo()
     {
         return null;
     }
 
+    /**
+     * If not null, displays the plants required temperature and hydration.
+     *
+     * @return a {@link ClimateRange} or null if not applicable
+     */
     default @Nullable ClimateRange getClimateRangeInfo()
     {
         return null;
     }
 
-    default @Nullable Lifecycle[] getLifecycleInfo()
+    /**
+     * If not null, displays what season the plant can start growing and if/when it fruits.
+     *
+     * @return list of 12 {@link Lifecycle} elements or null if not applicable
+     */
+    // Using a list here instead of an array because @Nullable on arrays gets weird.
+    default @Nullable List<Lifecycle> getLifecycleInfo()
     {
         return null;
     }
 
+    /**
+     * If not null, displays how long the plant takes to grow in months and days.
+     *
+     * @return the time in ticks for the plant to grow, or -1 if it does not grow in a set time
+     */
     default int getGrowthTimeInfo()
     {
         return -1;

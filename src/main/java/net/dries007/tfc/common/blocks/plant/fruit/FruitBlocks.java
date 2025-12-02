@@ -7,6 +7,7 @@
 package net.dries007.tfc.common.blocks.plant.fruit;
 
 import java.awt.Color;
+import java.util.List;
 import java.util.Locale;
 import java.util.function.LongSupplier;
 import java.util.function.Supplier;
@@ -229,14 +230,14 @@ public final class FruitBlocks
     private static class FruitTreeSaplingItem extends BlockItem implements PlantableInfo
     {
         private final Supplier<ClimateRange> climateRange;
-        private final Lifecycle[] stages;
+        private final List<Lifecycle> stages;
         private final LongSupplier ticksToGrow;
 
         private FruitTreeSaplingItem(Block block, Supplier<ClimateRange> climateRange, Lifecycle[] lifecycle)
         {
             super(block, new Item.Properties());
             this.climateRange = climateRange;
-            this.stages = lifecycle;
+            this.stages = List.of(lifecycle);
             // Ideally, this ctor would just take FruitTreeSaplingBlock instead of Block, but too much stuff downcasts to Block before this gets called
             if (block instanceof FruitTreeSaplingBlock sapling)
             {
@@ -256,7 +257,7 @@ public final class FruitBlocks
         }
 
         @Override
-        public @Nullable Lifecycle[] getLifecycleInfo()
+        public @Nullable List<Lifecycle> getLifecycleInfo()
         {
             return stages;
         }
@@ -271,13 +272,13 @@ public final class FruitBlocks
     private static class BushBlockItem extends BlockItem implements PlantableInfo
     {
         private final Supplier<ClimateRange> climateRange;
-        private final Lifecycle[] stages;
+        private final List<Lifecycle> stages;
 
         private BushBlockItem(Block block, Supplier<ClimateRange> range, Lifecycle[] stages)
         {
             super(block, new Item.Properties());
             this.climateRange = range;
-            this.stages = stages;
+            this.stages = List.of(stages);
         }
 
         @Override
@@ -287,7 +288,7 @@ public final class FruitBlocks
         }
 
         @Override
-        public @Nullable Lifecycle[] getLifecycleInfo()
+        public @Nullable List<Lifecycle> getLifecycleInfo()
         {
             return stages;
         }
