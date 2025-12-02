@@ -1061,10 +1061,10 @@ def generate(rm: ResourceManager):
 
     for fruit, info in FRUITS.items():
         config = {
-            'min_temperature': info.min_temp,
-            'max_temperature': info.max_temp,
-            'min_groundwater': info.min_water,
-            'max_groundwater': info.max_water,
+            'min_temperature': info.wild_min_temp,
+            'max_temperature': info.wild_max_temp,
+            'min_groundwater': info.wild_min_water,
+            'max_groundwater': info.wild_max_water,
             'max_forest': 3
         }
         feature = 'tfc:fruit_trees'

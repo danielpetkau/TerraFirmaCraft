@@ -1588,7 +1588,7 @@ def detail_crop(crop: str) -> str:
 
 def fruit_tree_text(fruit: str, title: str, text_contents: str) -> Page:
     data = FRUITS[fruit]
-    return text(defer('$(bold)$(l:the_world/climate#temperature)Temperature$(): {0} - {1} °C$(br)$(bold)$(l:mechanics/hydration)Rainfall$(): {2} - {3}mm' + text_contents, data.min_temp, data.max_temp, data.min_water, data.max_water), title=title).anchor(fruit).link('tfc:food/%s' % fruit, 'tfc:plant/%s_sapling' % fruit)
+    return text(defer('Can be found in regions with: $(br)$(bold)$(l:the_world/climate#temperature)Temperature$(): {0} - {1} °C$(br)$(bold)$(l:the_world/climate#rainfall)Rainfall$(): {2} - {3}mm$(br2)Conditions required for growth:$(br)$(bold)$(l:the_world/climate#temperature)Temperature$(): {4} - {5} °C$(br)$(bold)$(l:mechanics/hydration)Hydration$(): {6} - {7}%' + text_contents, data.wild_min_temp, data.wild_max_temp, data.wild_min_water, data.wild_max_water, data.min_temp, data.max_temp, data.min_water, data.max_water), title=title).anchor(fruit).link('tfc:food/%s' % fruit, 'tfc:plant/%s_sapling' % fruit)
 
 
 def fruit_tree_multiblock(fruit: str, text_contents: str) -> Page:
