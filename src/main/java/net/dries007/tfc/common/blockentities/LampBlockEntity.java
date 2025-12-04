@@ -87,6 +87,10 @@ public class LampBlockEntity extends TickCounterBlockEntity implements FluidTank
                 fuel = cachedFuel;
             }
         }
+        else
+        {
+            cachedFuel = fuel;
+        }
 
         // Consume an appropriate amount of fuel based on how long the lamp has been since it last updated
         // N.B. The burn rate is in ticks / mB
