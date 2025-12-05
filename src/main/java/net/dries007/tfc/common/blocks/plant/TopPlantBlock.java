@@ -15,14 +15,11 @@ import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.GrowingPlantHeadBlock;
 import net.minecraft.world.level.block.NetherVines;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.Vec3;
-import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.neoforged.neoforge.common.CommonHooks;
 import org.jetbrains.annotations.Nullable;
@@ -77,8 +74,17 @@ public class TopPlantBlock extends GrowingPlantHeadBlock implements IForgeBlockE
     public BlockState getStateForPlacement(BlockPlaceContext context)
     {
         BlockState state = super.getStateForPlacement(context);
+        if (state == null)
+        {
+            return null;
+        }
+        // Only the head has the age property
+        if (state.getBlock().equals(this.getBodyBlock()))
+        {
+            return state;
+        }
         BlockState belowState = context.getLevel().getBlockState(context.getClickedPos().relative(growthDirection.getOpposite()));
-        return state == null ? null : belowState.getBlock() == this ? state.setValue(AGE, Math.min(belowState.getValue(AGE) + 1, 25)) : state.setValue(AGE, Mth.nextInt(context.getLevel().getRandom(), 26 - maxHeight, 26 - minHeight));
+        return belowState.getBlock() == this ? state.setValue(AGE, Math.min(belowState.getValue(AGE) + 1, 25)) : state.setValue(AGE, Mth.nextInt(context.getLevel().getRandom(), 26 - maxHeight, 26 - minHeight));
     }
 
     @Override
