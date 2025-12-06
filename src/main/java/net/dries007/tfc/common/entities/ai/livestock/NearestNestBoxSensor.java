@@ -9,8 +9,9 @@ package net.dries007.tfc.common.entities.ai.livestock;
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
-
 import com.google.common.collect.ImmutableSet;
+import it.unimi.dsi.fastutil.longs.Long2LongMap;
+import it.unimi.dsi.fastutil.longs.Long2LongOpenHashMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
@@ -18,11 +19,10 @@ import net.minecraft.world.entity.ai.sensing.Sensor;
 import net.minecraft.world.entity.ai.village.poi.PoiManager;
 import net.minecraft.world.level.pathfinder.Path;
 
-import it.unimi.dsi.fastutil.longs.Long2LongMap;
-import it.unimi.dsi.fastutil.longs.Long2LongOpenHashMap;
-
+import net.dries007.tfc.common.blockentities.TFCBlockEntities;
 import net.dries007.tfc.common.entities.ai.TFCBrain;
 import net.dries007.tfc.common.entities.livestock.OviparousAnimal;
+import net.dries007.tfc.util.Helpers;
 
 /**
  * Reimplements {@link net.minecraft.world.entity.ai.sensing.NearestBedSensor}
@@ -57,8 +57,13 @@ public class NearestNestBoxSensor extends Sensor<OviparousAnimal>
                 }
                 else
                 {
-                    batchCache.putIfAbsent(packed, lastUpdate + CACHE_TIMEOUT);
-                    return true;
+                    if (level.getBlockEntity(pos, TFCBlockEntities.NEST_BOX.get()).map(Helpers::hasOpenSlot).orElse(false))
+                    {
+                        batchCache.putIfAbsent(packed, lastUpdate + CACHE_TIMEOUT);
+                        return true;
+                    }
+                    batchCache.putIfAbsent(packed, lastUpdate + CACHE_TIMEOUT * 2);
+                    return false;
                 }
             };
             Stream<BlockPos> found = manager.findAll(p -> p.value() == TFCBrain.NEST_BOX_POI.get(), predicate, animal.blockPosition(), 48, PoiManager.Occupancy.ANY);

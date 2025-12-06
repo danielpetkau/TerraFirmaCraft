@@ -125,7 +125,7 @@ public class GrillBlock extends FirepitBlock implements IHighlightHandler
             {
                 if (!level.isClientSide)
                 {
-                    if (!state.getValue(LIT) && !state.getValue(LIT) && grill.getAsh() > 0)
+                    if (!state.getValue(LIT) && grill.getAsh() > 0)
                     {
                         ItemHandlerHelper.giveItemToPlayer(player, new ItemStack(TFCItems.POWDERS.get(Powder.WOOD_ASH).get(), grill.getAsh()));
                         grill.setAsh(0);

@@ -8,7 +8,6 @@ package net.dries007.tfc.common.blockentities;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Inventory;
@@ -29,8 +28,6 @@ import net.dries007.tfc.common.entities.misc.Seat;
 import net.dries007.tfc.config.TFCConfig;
 import net.dries007.tfc.util.Helpers;
 
-import static net.dries007.tfc.TerraFirmaCraft.*;
-
 public class NestBoxBlockEntity extends TickableInventoryBlockEntity<ItemStackHandler>
 {
     public static final int SLOTS = 4;
@@ -47,13 +44,25 @@ public class NestBoxBlockEntity extends TickableInventoryBlockEntity<ItemStackHa
                 {
                     if (bird.getRandom().nextInt(7) == 0)
                     {
-                        Helpers.playSound(level, pos, SoundEvents.CHICKEN_EGG);
-                        if (Helpers.insertOne(nest, bird.makeEgg()))
+                        if (Helpers.hasOpenSlot(nest))
                         {
+                            Helpers.playSound(level, pos, SoundEvents.CHICKEN_EGG);
+                            ItemStack egg = bird.makeEgg();
+                            if (!Helpers.insertOne(nest, egg))
+                            {
+                                // Nest somehow got full or the produce item is not valid for insertion into the nest?
+                                // Just spawn an egg so that the bird's wear and tear isn't completely wasted
+                                Helpers.spawnItem(level, pos, egg, 0.3f);
+                            }
                             bird.setFertilized(false);
                             bird.setProductsCooldown();
                             bird.stopRiding();
                             nest.markForSync();
+                        }
+                        else
+                        {
+                            // Nest is full, try another to lay in
+                            bird.stopRiding();
                         }
                     }
                 }

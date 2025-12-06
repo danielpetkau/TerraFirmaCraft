@@ -8,8 +8,8 @@ package net.dries007.tfc.common.items;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -24,7 +24,6 @@ import net.minecraft.world.phys.Vec3;
 
 import net.dries007.tfc.client.TFCSounds;
 import net.dries007.tfc.config.TFCConfig;
-import net.dries007.tfc.util.Helpers;
 import net.dries007.tfc.util.events.StartFireEvent;
 
 public class FirestarterItem extends Item
@@ -35,9 +34,9 @@ public class FirestarterItem extends Item
     }
 
     @Override
-    public void onUseTick(Level level, LivingEntity livingEntityIn, ItemStack stack, int countLeft)
+    public void onUseTick(Level level, LivingEntity entity, ItemStack stack, int countLeft)
     {
-        if (livingEntityIn instanceof final Player player)
+        if (entity instanceof final Player player)
         {
             final BlockHitResult result = getPlayerPOVHitResult(level, player, ClipContext.Fluid.NONE);
 
@@ -53,7 +52,13 @@ public class FirestarterItem extends Item
             {
                 if (!player.isCreative())
                 {
-                    Helpers.damageItem(stack, player, InteractionHand.MAIN_HAND);
+                    if (level instanceof ServerLevel serverLevel)
+                    {
+                        stack.hurtAndBreak(1, serverLevel, player, r -> {
+                            // Add a cooldown to the offhand item to make it less likely to immediately use it on top of the fire
+                            player.getCooldowns().addCooldown(player.getOffhandItem().getItem(), 20);
+                        });
+                    }
                 }
                 if (StartFireEvent.startFire(level, pos, level.getBlockState(pos), result.getDirection(), player, stack, StartFireEvent.FireStrength.STRONG, chance))
                 {
