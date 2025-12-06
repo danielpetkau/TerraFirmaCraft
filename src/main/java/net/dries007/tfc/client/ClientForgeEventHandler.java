@@ -13,10 +13,8 @@ import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.toasts.TutorialToast;
-import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.FogRenderer;
@@ -69,11 +67,9 @@ import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.network.PacketDistributor;
 import net.neoforged.neoforge.server.ServerLifecycleHooks;
 import org.jetbrains.annotations.Nullable;
-import vazkii.patchouli.api.BookDrawScreenEvent;
 
 import net.dries007.tfc.TerraFirmaCraft;
 import net.dries007.tfc.client.particle.TFCParticles;
-import net.dries007.tfc.client.screen.TFCContainerScreen;
 import net.dries007.tfc.client.screen.button.PlayerInventoryTabButton;
 import net.dries007.tfc.common.blockentities.SluiceBlockEntity;
 import net.dries007.tfc.common.blocks.devices.SluiceBlock;
@@ -89,6 +85,7 @@ import net.dries007.tfc.common.component.item.ItemListComponent;
 import net.dries007.tfc.common.component.size.ItemSizeManager;
 import net.dries007.tfc.common.items.EmptyPanItem;
 import net.dries007.tfc.common.items.PanItem;
+import net.dries007.tfc.common.items.PlantableInfo;
 import net.dries007.tfc.common.recipes.ChiselRecipe;
 import net.dries007.tfc.common.recipes.HeatingRecipe;
 import net.dries007.tfc.compat.patchouli.PatchouliIntegration;
@@ -98,7 +95,6 @@ import net.dries007.tfc.network.CycleChiselModePacket;
 import net.dries007.tfc.network.PlaceBlockSpecialPacket;
 import net.dries007.tfc.network.RequestClimateModelPacket;
 import net.dries007.tfc.network.StackFoodPacket;
-import net.dries007.tfc.network.SwitchInventoryTabPacket;
 import net.dries007.tfc.util.Helpers;
 import net.dries007.tfc.util.PhysicalDamageType;
 import net.dries007.tfc.util.calendar.Calendars;
@@ -275,6 +271,7 @@ public class ClientForgeEventHandler
                 if (k != 0)
                     tooltip.add(Component.translatable("tfc.tooltip.fertilizer.potassium", String.format("%.1f", k * 100)));
             }
+            PlantableInfo.addTooltipInfo(stack, tooltip::add);
 
             // Metal content, inferred from a matching heat recipe.
             final HeatingRecipe recipe = HeatingRecipe.getRecipe(stack);

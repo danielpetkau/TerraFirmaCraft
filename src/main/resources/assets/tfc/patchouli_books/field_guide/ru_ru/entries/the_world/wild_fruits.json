@@ -44,7 +44,7 @@
     {
       "type": "patchouli:text",
       "anchor": "cherry",
-      "text": "$(bold)$(l:the_world/climate#temperature)Температура$(): -5.2...14.0 °C$(br)$(bold)$(l:mechanics/hydration)Осадки$(): 100–350 мм$(br2)Вишнёвые деревья растут с января по март, начинают цвести в апреле и мае, приносят плоды в июне.",
+      "text": "Can be found in regions with: $(br)$(bold)$(l:the_world/climate#temperature)Temperature$(): -5.2 - 14 °C$(br)$(bold)$(l:the_world/climate#rainfall)Rainfall$(): 100 - 350mm$(br2)Conditions required for growth:$(br)$(bold)$(l:the_world/climate#temperature)Temperature$(): -6.4 - 15.2 °C$(br)$(bold)$(l:mechanics/hydration)Hydration$(): 7 - 80%$(br2)Cherry trees grow in the months of January through March, start flowering in April and May, and bear fruit in June.",
       "title": "Вишнёвое дерево"
     },
     {
@@ -268,7 +268,7 @@
     {
       "type": "patchouli:text",
       "anchor": "green_apple",
-      "text": "$(bold)$(l:the_world/climate#temperature)Температура$(): -10.6...10.4 °C$(br)$(bold)$(l:mechanics/hydration)Осадки$(): 130–280 мм$(br2)Зелёные яблони растут с марта по июль, начинают цвести в августе и сентябре, приносят плоды в октябре.",
+      "text": "Can be found in regions with: $(br)$(bold)$(l:the_world/climate#temperature)Temperature$(): -10.6 - 10.4 °C$(br)$(bold)$(l:the_world/climate#rainfall)Rainfall$(): 130 - 280mm$(br2)Conditions required for growth:$(br)$(bold)$(l:the_world/climate#temperature)Temperature$(): -11.8 - 11.6 °C$(br)$(bold)$(l:mechanics/hydration)Hydration$(): 10 - 75%$(br2)Green apple trees grow from March to July, start flowering in August and September, and bear fruit in October.",
       "title": "Зелёная яблоня"
     },
     {
@@ -492,7 +492,7 @@
     {
       "type": "patchouli:text",
       "anchor": "lemon",
-      "text": "$(bold)$(l:the_world/climate#temperature)Температура$(): 7.4...24.8 °C$(br)$(bold)$(l:mechanics/hydration)Осадки$(): 220–440 мм$(br2)Лимонные деревья растут с февраля по май, начинают цвести в июне и июле, приносят плоды в августе.",
+      "text": "Can be found in regions with: $(br)$(bold)$(l:the_world/climate#temperature)Temperature$(): 7.4 - 24.8 °C$(br)$(bold)$(l:the_world/climate#rainfall)Rainfall$(): 220 - 440mm$(br2)Conditions required for growth:$(br)$(bold)$(l:the_world/climate#temperature)Temperature$(): 6.2 - 26 °C$(br)$(bold)$(l:mechanics/hydration)Hydration$(): 19 - 95%$(br2)Lemon trees grow from February to May, start flowering in June and July, and bear fruit in August.",
       "title": "Лимонное дерево"
     },
     {
@@ -716,7 +716,7 @@
     {
       "type": "patchouli:text",
       "anchor": "olive",
-      "text": "$(bold)$(l:the_world/climate#temperature)Температура$(): 2...23.0 °C$(br)$(bold)$(l:mechanics/hydration)Осадки$(): 250–450 мм$(br2)Оливковые деревья растут с марта по июль, начинают цвести в августе и сентябре, приносят плоды в октябре.$(br2)Оливки можно использовать для производства $(l:mechanics/lamps#olives)оливкового масла$(), которое используется в качестве топлива для ламп.",
+      "text": "Can be found in regions with: $(br)$(bold)$(l:the_world/climate#temperature)Temperature$(): 2 - 23 °C$(br)$(bold)$(l:the_world/climate#rainfall)Rainfall$(): 250 - 450mm$(br2)Conditions required for growth:$(br)$(bold)$(l:the_world/climate#temperature)Temperature$(): 0.8 - 24.2 °C$(br)$(bold)$(l:mechanics/hydration)Hydration$(): 22 - 95%$(br2)Olive trees grow from March to July, start flowering in August and September, and bear fruit in October.$(br2)Olives can be used to produce $(l:mechanics/lamps#olives)Olive Oil$(), which can be used as a fuel for lamps.",
       "title": "Оливковое дерево"
     },
     {
@@ -940,7 +940,7 @@
     {
       "type": "patchouli:text",
       "anchor": "orange",
-      "text": "$(bold)$(l:the_world/climate#temperature)Температура$(): 9.2 - 40 °C$(br)$(bold)$(l:mechanics/hydration)Осадки$(): 300 - 500 мм$(br2)Апельсиновые деревья растут с марта по июнь, начинают цвести в июле и августе, приносят плоды в сентябре.",
+      "text": "Can be found in regions with: $(br)$(bold)$(l:the_world/climate#temperature)Temperature$(): 9.2 - 40 °C$(br)$(bold)$(l:the_world/climate#rainfall)Rainfall$(): 300 - 500mm$(br2)Conditions required for growth:$(br)$(bold)$(l:the_world/climate#temperature)Temperature$(): 8 - 41.2 °C$(br)$(bold)$(l:mechanics/hydration)Hydration$(): 27 - 100%$(br2)Orange trees grow from March to June, start flowering in July and August, and bear fruit in September.",
       "title": "Апельсиновое дерево"
     },
     {
@@ -1164,7 +1164,7 @@
     {
       "type": "patchouli:text",
       "anchor": "peach",
-      "text": "$(bold)$(l:the_world/climate#temperature)Температура$(): -3.4 - 15.8 °C$(br)$(bold)$(l:mechanics/hydration)Осадки$(): 180 - 470 мм$(br2)Персиковые деревья растут с декабря по март, начинают цвести в апреле и мае, приносят плоды в июне.",
+      "text": "Can be found in regions with: $(br)$(bold)$(l:the_world/climate#temperature)Temperature$(): -3.4 - 15.8 °C$(br)$(bold)$(l:the_world/climate#rainfall)Rainfall$(): 180 - 470mm$(br2)Conditions required for growth:$(br)$(bold)$(l:the_world/climate#temperature)Temperature$(): -4.6 - 17 °C$(br)$(bold)$(l:mechanics/hydration)Hydration$(): 15 - 95%$(br2)Peach trees grow from December to March, start flowering in April and May, and bear fruit in June.",
       "title": "Персиковое дерево"
     },
     {
@@ -1388,7 +1388,7 @@
     {
       "type": "patchouli:text",
       "anchor": "plum",
-      "text": "$(bold)$(l:the_world/climate#temperature)Температура$(): -7 - 12.2 °C$(br)$(bold)$(l:mechanics/hydration)Осадки$(): 120 - 300 мм$(br2)Сливовые деревья растут с января по апрель, начинают цветение в мае и июне, приносят плоды в июле.",
+      "text": "Can be found in regions with: $(br)$(bold)$(l:the_world/climate#temperature)Temperature$(): -7 - 12.2 °C$(br)$(bold)$(l:the_world/climate#rainfall)Rainfall$(): 120 - 300mm$(br2)Conditions required for growth:$(br)$(bold)$(l:the_world/climate#temperature)Temperature$(): -8.2 - 13.4 °C$(br)$(bold)$(l:mechanics/hydration)Hydration$(): 9 - 75%$(br2)Plum trees grow from January to April, start flowering in May and June, and bear fruit in July.",
       "title": "Сливовое дерево"
     },
     {
@@ -1612,7 +1612,7 @@
     {
       "type": "patchouli:text",
       "anchor": "red_apple",
-      "text": "$(bold)$(l:the_world/climate#temperature)Температура$(): -10.6 - 10.4 °C$(br)$(bold)$(l:mechanics/hydration)Осадки$(): 190 - 310 мм$(br2)Красные яблони растут с марта по июль, начинают цветение в августе и сентябре, приносят плоды в октябре.",
+      "text": "Can be found in regions with: $(br)$(bold)$(l:the_world/climate#temperature)Temperature$(): -10.6 - 10.4 °C$(br)$(bold)$(l:the_world/climate#rainfall)Rainfall$(): 190 - 310mm$(br2)Conditions required for growth:$(br)$(bold)$(l:the_world/climate#temperature)Temperature$(): -11.8 - 11.6 °C$(br)$(bold)$(l:mechanics/hydration)Hydration$(): 16 - 75%$(br2)Red Apple trees grow from March to July, start flowering in August and September, and bear fruit in October.",
       "title": "Красная яблоня"
     },
     {
@@ -1836,7 +1836,7 @@
     {
       "type": "patchouli:text",
       "anchor": "banana",
-      "text": "$(bold)$(l:the_world/climate#temperature)Температура$(): 11.0...40 °C$(br)$(bold)$(l:mechanics/hydration)Осадки$(): 280–500 мм$(br2)Бананы — особый вид фруктовых деревьев. Их ствол растёт только вертикально, они не имеют листьев и плодоносят только на самом верхнем блоке. Саженцы падают с цветущей части растения. После сбора урожая с бананового растения оно погибает и больше не приносит плодов. Его необходимо пересаживать весной.",
+      "text": "Can be found in regions with: $(br)$(bold)$(l:the_world/climate#temperature)Temperature$(): 11 - 40 °C$(br)$(bold)$(l:the_world/climate#rainfall)Rainfall$(): 280 - 500mm$(br2)Conditions required for growth:$(br)$(bold)$(l:the_world/climate#temperature)Temperature$(): 9.8 - 41.2 °C$(br)$(bold)$(l:mechanics/hydration)Hydration$(): 25 - 100%$(br2)Bananas are a special kind of fruit tree. They grow only vertically, lack leaves, and only fruit at the topmost block. Saplings are dropped from the flowering part of the plant. Once a banana plant is harvested, it dies, and will not produce any more fruit. It must be replanted in the spring.",
       "title": "Банановое дерево"
     },
     {
@@ -2353,7 +2353,7 @@
     {
       "type": "patchouli:text",
       "anchor": "blackberry",
-      "text": "$(bold)$(l:the_world/climate#temperature)Температура$(): -5.2...19.4 °C$(br)$(bold)$(l:mechanics/hydration)Влажность$(): 24–100мм$(br2)Кусты ежевики растут с февраля по май, цветут в июне и июле, плодоносят в августе.$(br2)Их можно найти в местах с небольшим количеством деревьев.",
+      "text": "Can be found in regions with: $(br)$(bold)$(l:the_world/climate#temperature)Temperature$(): -5.2 - 19.4 °C$(br)$(bold)$(l:the_world/climate#rainfall)Rainfall$(): 200 - 500mm$(br2)Conditions required for growth:$(br)$(bold)$(l:the_world/climate#temperature)Temperature$(): -6.4 - 20.6 °C$(br)$(bold)$(l:mechanics/hydration)Hydration$(): 17 - 100%$(br2)Blackberry bushes grow from February to May, start flowering in June and July, and bear fruit in August.$(br2)They can be found in areas with few trees.",
       "title": "Куст ежевики"
     },
     {
@@ -2453,7 +2453,7 @@
     {
       "type": "patchouli:text",
       "anchor": "raspberry",
-      "text": "$(bold)$(l:the_world/climate#temperature)Температура$(): -10.6...14.0 °C$(br)$(bold)$(l:mechanics/hydration)Влажность$(): 21–100мм$(br2)Кусты малины растут с апреля по июль, цветут в августе и сентябре, плодоносят в октябре.$(br2)Их можно найти в местах с небольшим количеством деревьев.",
+      "text": "Can be found in regions with: $(br)$(bold)$(l:the_world/climate#temperature)Temperature$(): -10.6 - 14 °C$(br)$(bold)$(l:the_world/climate#rainfall)Rainfall$(): 180 - 450mm$(br2)Conditions required for growth:$(br)$(bold)$(l:the_world/climate#temperature)Temperature$(): -11.8 - 15.2 °C$(br)$(bold)$(l:mechanics/hydration)Hydration$(): 15 - 95%$(br2)Raspberry bushes grow from April to July, start flowering in August and September, and bear fruit in October.$(br2)They can be found in areas with few trees.",
       "title": "Куст малины"
     },
     {
@@ -2553,7 +2553,7 @@
     {
       "type": "patchouli:text",
       "anchor": "blueberry",
-      "text": "$(bold)$(l:the_world/climate#temperature)Температура$(): -8.8...8.6 °C$(br)$(bold)$(l:mechanics/hydration)Влажность$(): 18–100мм$(br2)Кусты черники растут с февраля по май, цветут в июне и июле, плодоносят в августе.$(br2)Их можно найти в местах с небольшим количеством деревьев.",
+      "text": "Can be found in regions with: $(br)$(bold)$(l:the_world/climate#temperature)Temperature$(): -8.8 - 8.6 °C$(br)$(bold)$(l:the_world/climate#rainfall)Rainfall$(): 150 - 400mm$(br2)Conditions required for growth:$(br)$(bold)$(l:the_world/climate#temperature)Temperature$(): -10 - 9.8 °C$(br)$(bold)$(l:mechanics/hydration)Hydration$(): 12 - 90%$(br2)Blueberry bushes grow from February to May, start flowering in June and July, and bear fruit in August.$(br2)They can be found in areas with few trees.",
       "title": "Куст черники"
     },
     {
@@ -2653,7 +2653,7 @@
     {
       "type": "patchouli:text",
       "anchor": "elderberry",
-      "text": "$(bold)$(l:the_world/climate#temperature)Температура$(): -5.2...15.8 °C$(br)$(bold)$(l:mechanics/hydration)Влажность$(): 14–100мм$(br2)Кусты бузины растут с февраля по май, цветут в июне и июле, и плодоносят в августе.$(br2)Их можно найти в местах с небольшим количеством деревьев.",
+      "text": "Can be found in regions with: $(br)$(bold)$(l:the_world/climate#temperature)Temperature$(): -5.2 - 15.8 °C$(br)$(bold)$(l:the_world/climate#rainfall)Rainfall$(): 120 - 380mm$(br2)Conditions required for growth:$(br)$(bold)$(l:the_world/climate#temperature)Temperature$(): -6.4 - 17 °C$(br)$(bold)$(l:mechanics/hydration)Hydration$(): 9 - 85%$(br2)Elderberry bushes grow from February to May, start flowering in June and July, and bear fruit in August.$(br2)They can be found in areas with few trees.",
       "title": "Куст бузины"
     },
     {
@@ -3035,7 +3035,7 @@
     {
       "type": "patchouli:text",
       "anchor": "bunchberry",
-      "text": "$(bold)$(l:the_world/climate#temperature)Температура$(): -14.2...1.4 °C$(br)$(bold)$(l:mechanics/hydration)Влажность$(): 33–100 %$(br2)Кусты брусники растут с мая по июль, цветут в августе и сентябре, плодоносят в октябре.$(br2)Их можно найти в лесах.",
+      "text": "Can be found in regions with: $(br)$(bold)$(l:the_world/climate#temperature)Temperature$(): -14.2 - 1.4 °C$(br)$(bold)$(l:the_world/climate#rainfall)Rainfall$(): 280 - 500mm$(br2)Conditions required for growth:$(br)$(bold)$(l:the_world/climate#temperature)Temperature$(): -15.4 - 2.6 °C$(br)$(bold)$(l:mechanics/hydration)Hydration$(): 25 - 100%$(br2)Bunchberry bushes grow from May to July, start flowering in August and September, and bear fruit in October.$(br2)They can be found in forests.",
       "title": "Куст брусники"
     },
     {
@@ -3099,7 +3099,7 @@
     {
       "type": "patchouli:text",
       "anchor": "gooseberry",
-      "text": "$(bold)$(l:the_world/climate#temperature)Температура$(): -7...12.2 °C$(br)$(bold)$(l:mechanics/hydration)Влажность$(): 24–100 %$(br2)Кусты крыжовника растут с апреля по июль, цветут в августе и сентябре, плодоносят в октябре.$(br2)Их можно найти в лесах.",
+      "text": "Can be found in regions with: $(br)$(bold)$(l:the_world/climate#temperature)Temperature$(): -7 - 12.2 °C$(br)$(bold)$(l:the_world/climate#rainfall)Rainfall$(): 200 - 500mm$(br2)Conditions required for growth:$(br)$(bold)$(l:the_world/climate#temperature)Temperature$(): -8.2 - 13.4 °C$(br)$(bold)$(l:mechanics/hydration)Hydration$(): 17 - 100%$(br2)Gooseberry bushes grow from April to July, start flowering in August and September, and bear fruit in October.$(br2)They can be found in forests.",
       "title": "Куст крыжовника"
     },
     {
@@ -3163,7 +3163,7 @@
     {
       "type": "patchouli:text",
       "anchor": "snowberry",
-      "text": "$(bold)$(l:the_world/climate#temperature)Температура$(): -10.6...5 °C$(br)$(bold)$(l:mechanics/hydration)Влажность$(): 24–100 %$(br2)Кусты волчьей ягоды растут с марта по июнь, цветут в июле и августе, плодоносят в сентябре.$(br2)Их можно найти в лесах.",
+      "text": "Can be found in regions with: $(br)$(bold)$(l:the_world/climate#temperature)Temperature$(): -10.6 - 5 °C$(br)$(bold)$(l:the_world/climate#rainfall)Rainfall$(): 200 - 500mm$(br2)Conditions required for growth:$(br)$(bold)$(l:the_world/climate#temperature)Temperature$(): -11.8 - 6.2 °C$(br)$(bold)$(l:mechanics/hydration)Hydration$(): 17 - 100%$(br2)Snowberry bushes grow from March to June, start flowering in July and August, and bear fruit in September.$(br2)They can be found in forests.",
       "title": "Куст волчьей ягоды"
     },
     {
@@ -3227,7 +3227,7 @@
     {
       "type": "patchouli:text",
       "anchor": "cloudberry",
-      "text": "$(bold)$(l:the_world/climate#temperature)Температура$(): -14.2...6.8 °C$(br)$(bold)$(l:mechanics/hydration)Влажность$(): 9–100 %$(br2)Кусты морошки растут с февраля по май, цветут в июне и августе, плодоносят в сентябре.$(br2)Их можно найти в лесах.",
+      "text": "Can be found in regions with: $(br)$(bold)$(l:the_world/climate#temperature)Temperature$(): -14.2 - 6.8 °C$(br)$(bold)$(l:the_world/climate#rainfall)Rainfall$(): 80 - 320mm$(br2)Conditions required for growth:$(br)$(bold)$(l:the_world/climate#temperature)Temperature$(): -15.4 - 8 °C$(br)$(bold)$(l:mechanics/hydration)Hydration$(): 5 - 80%$(br2)Cloudberry bushes grow from February to May, start flowering in June to August, and bear fruit in September.$(br2)They can be found in forests.",
       "title": "Куст морошки"
     },
     {
@@ -3291,7 +3291,7 @@
     {
       "type": "patchouli:text",
       "anchor": "strawberry",
-      "text": "$(bold)$(l:the_world/climate#temperature)Температура$(): -1.6...17.6 °C$(br)$(bold)$(l:mechanics/hydration)Влажность$(): 16–100 %$(br2)Кусты клубники растут с октября по декабрь, цветут в январе и феврале, плодоносят в марте.$(br2)Их можно найти в лесах.",
+      "text": "Can be found in regions with: $(br)$(bold)$(l:the_world/climate#temperature)Temperature$(): -1.6 - 17.6 °C$(br)$(bold)$(l:the_world/climate#rainfall)Rainfall$(): 140 - 400mm$(br2)Conditions required for growth:$(br)$(bold)$(l:the_world/climate#temperature)Temperature$(): -2.8 - 18.8 °C$(br)$(bold)$(l:mechanics/hydration)Hydration$(): 11 - 90%$(br2)Strawberry bushes grow from October to December, start flowering in January and February, and bear fruit in March.$(br2)They can be found in forests.",
       "title": "Куст клубники"
     },
     {
@@ -3355,7 +3355,7 @@
     {
       "type": "patchouli:text",
       "anchor": "wintergreen_berry",
-      "text": "$(bold)$(l:the_world/climate#temperature)Температура$(): -8.8...6.8 °C$(br)$(bold)$(l:mechanics/hydration)Влажность$(): 12–100 %$(br2)Кусты брусники растут с мая по сентябрь, цветут в октябре и ноябре, плодоносят в декабре.$(br2)Их можно найти в лесах.",
+      "text": "Can be found in regions with: $(br)$(bold)$(l:the_world/climate#temperature)Temperature$(): -8.8 - 6.8 °C$(br)$(bold)$(l:the_world/climate#rainfall)Rainfall$(): 100 - 370mm$(br2)Conditions required for growth:$(br)$(bold)$(l:the_world/climate#temperature)Temperature$(): -10 - 8 °C$(br)$(bold)$(l:mechanics/hydration)Hydration$(): 7 - 85%$(br2)Wintergreen berry bushes grow from May to September, start flowering in October and November, and bear fruit in December.$(br2)They can be found in forests.",
       "title": "Куст брусники"
     },
     {
@@ -3419,7 +3419,7 @@
     {
       "type": "patchouli:text",
       "anchor": "cranberry",
-      "text": "$(bold)$(l:the_world/climate#temperature)Температура$(): -14.2...8.6 °C$(br)$(bold)$(l:mechanics/hydration)Влажность$(): 30–100 %$(br2)Кусты клюквы растут с марта по июнь, цветут в июле и августе, плодоносят в сентябре.$(br2)Их можно найти в лесах. В отличие от большинства низких кустов, кусты клюквы выращиваются под водой.",
+      "text": "Can be found in regions with: $(br)$(bold)$(l:the_world/climate#temperature)Temperature$(): -14.2 - 8.6 °C$(br)$(bold)$(l:the_world/climate#rainfall)Rainfall$(): 250 - 500mm$(br2)Conditions required for growth:$(br)$(bold)$(l:the_world/climate#temperature)Temperature$(): -15.4 - 9.8 °C$(br)$(bold)$(l:mechanics/hydration)Hydration$(): 25 - 100%$(br2)Cranberry bushes grow from March to June, start flowering in July and August, and bear fruit in September.$(br2)They can be found in forests. Unlike most small bushes, cranberry bushes are grown underwater.",
       "title": "Куст клюквы"
     },
     {

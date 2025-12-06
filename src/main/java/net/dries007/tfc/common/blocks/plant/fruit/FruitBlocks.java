@@ -7,8 +7,13 @@
 package net.dries007.tfc.common.blocks.plant.fruit;
 
 import java.awt.Color;
+import java.util.List;
 import java.util.Locale;
+import java.util.function.LongSupplier;
+import java.util.function.Supplier;
 import net.minecraft.util.StringRepresentable;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.FlowerPotBlock;
@@ -16,14 +21,17 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
+import org.jetbrains.annotations.Nullable;
 
 import net.dries007.tfc.common.blockentities.TFCBlockEntities;
 import net.dries007.tfc.common.blocks.ExtendedProperties;
 import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.items.Food;
+import net.dries007.tfc.common.items.PlantableInfo;
 import net.dries007.tfc.common.items.TFCItems;
 import net.dries007.tfc.config.TFCConfig;
 import net.dries007.tfc.util.calendar.ICalendar;
+import net.dries007.tfc.util.climate.ClimateRange;
 import net.dries007.tfc.util.climate.ClimateRanges;
 
 import static net.dries007.tfc.common.blocks.plant.fruit.Lifecycle.*;
@@ -36,6 +44,11 @@ public final class FruitBlocks
     public static WaterloggedBerryBushBlock createCranberry()
     {
         return new WaterloggedBerryBushBlock(ExtendedProperties.of(MapColor.PLANT).strength(0.6f).noOcclusion().randomTicks().sound(SoundType.SWEET_BERRY_BUSH).blockEntity(TFCBlockEntities.BERRY_BUSH).flammableLikeLeaves(), TFCItems.FOOD.get(Food.CRANBERRY), CRANBERRY_STAGES, ClimateRanges.CRANBERRY_BUSH);
+    }
+
+    public static BlockItem createCranberryItem(Block block)
+    {
+        return new BushBlockItem(block, ClimateRanges.CRANBERRY_BUSH, CRANBERRY_STAGES);
     }
 
     public static Block createBananaSapling()
@@ -51,6 +64,11 @@ public final class FruitBlocks
             BANANA_STAGES,
             TFCBlocks.BANANA_PLANT,
             TFCConfig.SERVER.bananaSaplingGrowthTicks);
+    }
+
+    public static BlockItem createBananaSaplingItem(Block block)
+    {
+        return new FruitTreeSaplingItem(block, ClimateRanges.BANANA_PLANT, BANANA_STAGES);
     }
 
     public static Block createPottedBananaSapling()
@@ -90,6 +108,11 @@ public final class FruitBlocks
         {
             return new SpreadingCaneBlock(ExtendedProperties.of(MapColor.PLANT).strength(0.6f).noOcclusion().randomTicks().sound(SoundType.SWEET_BERRY_BUSH).blockEntity(TFCBlockEntities.BERRY_BUSH).flammableLikeLeaves(), TFCItems.FOOD.get(product), stages, TFCBlocks.SPREADING_BUSHES.get(this), maxHeight, ClimateRanges.SPREADING_BUSHES.get(this));
         }
+
+        public BlockItem createItem(Block block)
+        {
+            return new BushBlockItem(block, ClimateRanges.SPREADING_BUSHES.get(this), stages);
+        }
     }
 
     public enum StationaryBush
@@ -113,6 +136,11 @@ public final class FruitBlocks
         public Block create()
         {
             return new StationaryBerryBushBlock(ExtendedProperties.of(MapColor.PLANT).strength(0.6f).noOcclusion().randomTicks().sound(SoundType.SWEET_BERRY_BUSH).blockEntity(TFCBlockEntities.BERRY_BUSH).flammableLikeLeaves(), TFCItems.FOOD.get(product), stages, ClimateRanges.STATIONARY_BUSHES.get(this));
+        }
+
+        public BlockItem createItem(Block block)
+        {
+            return new BushBlockItem(block, ClimateRanges.STATIONARY_BUSHES.get(this), stages);
         }
     }
 
@@ -178,6 +206,15 @@ public final class FruitBlocks
             return new GrowingFruitTreeBranchBlock(ExtendedProperties.of(MapColor.WOOD).sound(SoundType.SCAFFOLDING).randomTicks().strength(1.0f).pushReaction(PushReaction.DESTROY).blockEntity(TFCBlockEntities.TICK_COUNTING_PLANT).flammableLikeLogs().cloneEmpty(), TFCBlocks.FRUIT_TREE_BRANCHES.get(this), TFCBlocks.FRUIT_TREE_LEAVES.get(this), ClimateRanges.FRUIT_TREES.get(this));
         }
 
+        public BlockItem createSaplingItem(Block block)
+        {
+            return new FruitTreeSaplingItem(
+                block,
+                ClimateRanges.FRUIT_TREES.get(this),
+                stages
+            );
+        }
+
         public int defaultTicksToGrow()
         {
             return defaultTicksToGrow;
@@ -188,5 +225,73 @@ public final class FruitBlocks
         {
             return serializedName;
         }
+    }
+
+    private static class FruitTreeSaplingItem extends BlockItem implements PlantableInfo
+    {
+        private final Supplier<ClimateRange> climateRange;
+        private final List<Lifecycle> stages;
+        private final LongSupplier ticksToGrow;
+
+        private FruitTreeSaplingItem(Block block, Supplier<ClimateRange> climateRange, Lifecycle[] lifecycle)
+        {
+            super(block, new Item.Properties());
+            this.climateRange = climateRange;
+            this.stages = List.of(lifecycle);
+            // Ideally, this ctor would just take FruitTreeSaplingBlock instead of Block, but too much stuff downcasts to Block before this gets called
+            if (block instanceof FruitTreeSaplingBlock sapling)
+            {
+                this.ticksToGrow = sapling::getTicksToGrow;
+            }
+            else
+            {
+                this.ticksToGrow = () -> -1;
+            }
+        }
+
+
+        @Override
+        public @Nullable ClimateRange getClimateRangeInfo()
+        {
+            return climateRange.get();
+        }
+
+        @Override
+        public @Nullable List<Lifecycle> getLifecycleInfo()
+        {
+            return stages;
+        }
+
+        @Override
+        public int getGrowthTimeInfo()
+        {
+            return (int) ticksToGrow.getAsLong();
+        }
+    }
+
+    private static class BushBlockItem extends BlockItem implements PlantableInfo
+    {
+        private final Supplier<ClimateRange> climateRange;
+        private final List<Lifecycle> stages;
+
+        private BushBlockItem(Block block, Supplier<ClimateRange> range, Lifecycle[] stages)
+        {
+            super(block, new Item.Properties());
+            this.climateRange = range;
+            this.stages = List.of(stages);
+        }
+
+        @Override
+        public @Nullable ClimateRange getClimateRangeInfo()
+        {
+            return climateRange.get();
+        }
+
+        @Override
+        public @Nullable List<Lifecycle> getLifecycleInfo()
+        {
+            return stages;
+        }
+
     }
 }

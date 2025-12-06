@@ -114,6 +114,10 @@ class Wood(NamedTuple):
 
 
 class Berry(NamedTuple):
+    wild_min_temp: float
+    wild_max_temp: float
+    wild_min_water: float
+    wild_max_water: float
     min_temp: float
     max_temp: float
     min_water: float
@@ -124,6 +128,10 @@ class Berry(NamedTuple):
 
 
 class Fruit(NamedTuple):
+    wild_min_temp: float
+    wild_max_temp: float
+    wild_min_water: float
+    wild_max_water: float
     min_temp: float
     max_temp: float
     min_water: float
@@ -865,33 +873,33 @@ UNDERGROUND_FEATURES = ('cave_column', 'cave_spike', 'large_cave_spike', 'water_
 # Alternatively, we ditch rainfall and/or hydration entirely.
 # Generated from Spreadsheet Data
 BERRIES: dict[str, Berry] = {
-    'blackberry': Berry(-5.2, 19.4, 200, 500, 'spreading', 0, 2),
-    'raspberry': Berry(-10.6, 14., 180, 450, 'spreading', 0, 2),
-    'blueberry': Berry(-8.8, 8.6, 150, 400, 'spreading', 0, 2),
-    'elderberry': Berry(-5.2, 15.8, 120, 380, 'spreading', 0, 2),
+    'blackberry': Berry(-5.2, 19.4, 200, 500, -6.4, 20.6, 17, 100, 'spreading', 0, 2),
+    'raspberry': Berry(-10.6, 14, 180, 450, -11.8, 15.2, 15, 95, 'spreading', 0, 2),
+    'blueberry': Berry(-8.8, 8.6, 150, 400, -10, 9.8, 12, 90, 'spreading', 0, 2),
+    'elderberry': Berry(-5.2, 15.8, 120, 380, -6.4, 17, 9, 85, 'spreading', 0, 2),
 
-    'snowberry': Berry(-10.6, 5, 200, 500, 'stationary', 2, 4),
-    'bunchberry': Berry(-14.2, 1.4, 280, 500, 'stationary', 2, 4),
-    'gooseberry': Berry(-7, 12.2, 200, 500, 'stationary', 2, 4),
-    'cloudberry': Berry(-14.2, 6.8, 80, 320, 'stationary', 2, 4),
-    'strawberry': Berry(-1.6, 17.6, 140, 400, 'stationary', 2, 4),
-    'wintergreen_berry': Berry(-8.8, 6.8, 100, 370, 'stationary', 2, 4),
+    'snowberry': Berry(-10.6, 5, 200, 500, -11.8, 6.2, 17, 100, 'stationary', 2, 4),
+    'bunchberry': Berry(-14.2, 1.4, 280, 500, -15.4, 2.6, 25, 100, 'stationary', 2, 4),
+    'gooseberry': Berry(-7, 12.2, 200, 500, -8.2, 13.4, 17, 100, 'stationary', 2, 4),
+    'cloudberry': Berry(-14.2, 6.8, 80, 320, -15.4, 8, 5, 80, 'stationary', 2, 4),
+    'strawberry': Berry(-1.6, 17.6, 140, 400, -2.8, 18.8, 11, 90, 'stationary', 2, 4),
+    'wintergreen_berry': Berry(-8.8, 6.8, 100, 370, -10, 8, 7, 85, 'stationary', 2, 4),
 
-    'cranberry': Berry(-14.2, 8.6, 250, 500, 'waterlogged', 2, 4),
+    'cranberry': Berry(-14.2, 8.6, 250, 500, -15.4, 9.8, 25, 100, 'waterlogged', 2, 4),
 }
 
 # Generated from Spreadsheet Data
 FRUITS: dict[str, Fruit] = {
-    'banana': Fruit(11., 40, 280, 500),
+    'banana': Fruit(11, 40, 280, 500, 9.8, 41.2, 25, 100),
 
-    'cherry': Fruit(-5.2, 14., 100, 350),
-    'green_apple': Fruit(-10.6, 10.4, 130, 280),
-    'red_apple': Fruit(-10.6, 10.4, 190, 310),
-    'lemon': Fruit(7.4, 24.8, 220, 440),
-    'olive': Fruit(2, 23., 250, 450),
-    'orange': Fruit(9.2, 40, 300, 500),
-    'peach': Fruit(-3.4, 15.8, 180, 470),
-    'plum': Fruit(-7, 12.2, 120, 300),
+    'cherry': Fruit(-5.2, 14, 100, 350, -6.4, 15.2, 7, 80),
+    'green_apple': Fruit(-10.6, 10.4, 130, 280, -11.8, 11.6, 10, 75),
+    'red_apple': Fruit(-10.6, 10.4, 190, 310, -11.8, 11.6, 16, 75),
+    'lemon': Fruit(7.4, 24.8, 220, 440, 6.2, 26, 19, 95),
+    'olive': Fruit(2, 23, 250, 450, 0.8, 24.2, 22, 95),
+    'orange': Fruit(9.2, 40, 300, 500, 8, 41.2, 27, 100),
+    'peach': Fruit(-3.4, 15.8, 180, 470, -4.6, 17, 15, 95),
+    'plum': Fruit(-7, 12.2, 120, 300, -8.2, 13.4, 9, 75),
 }
 JAR_FRUITS = tuple([*BERRIES.keys(), *FRUITS.keys(), 'pumpkin_chunks', 'melon_slice', 'peanut'])
 
@@ -1304,6 +1312,15 @@ DEFAULT_LANG = {
     'tfc.tooltip.fertilizer.nitrogen': '§b(N) Nitrogen: §r%s%%',
     'tfc.tooltip.fertilizer.phosphorus': '§6(P) Phosphorus: §r%s%%',
     'tfc.tooltip.fertilizer.potassium': '§d(K) Potassium: §r%s%%',
+    'tfc.tooltip.plantable.hold_shift': 'Hold (Shift) for Plant Info',
+    'tfc.tooltip.plantable.climate': 'Climate:',
+    'tfc.tooltip.plantable.climate.temperature': '§1Temperature:§r %s §7-§r %s \u00b0C',
+    'tfc.tooltip.plantable.climate.hydration': '§1Hydration:§r %s%% §7-§r %s%%',
+    'tfc.tooltip.plantable.nutrients': 'Nutrients:',
+    'tfc.tooltip.plantable.lifecycle': 'Lifecycle:',
+    'tfc.tooltip.plantable.lifecycle.healthy': 'Can Plant:',
+    'tfc.tooltip.plantable.lifecycle.fruiting': 'Starts Fruiting:',
+    'tfc.tooltip.plantable.lifecycle.growth_speed': 'Grows in:',
     'tfc.tooltip.seal_barrel': 'Seal',
     'tfc.tooltip.unseal_barrel': 'Unseal',
     'tfc.tooltip.while_sealed': 'While sealed',

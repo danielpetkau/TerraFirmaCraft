@@ -1048,23 +1048,23 @@ def generate(rm: ResourceManager):
 
     for berry, info in BERRIES.items():
         if info.type == 'spreading':
-            configured_placed_feature(rm, ('plant', berry + '_bush'), 'tfc:spreading_bush', {'block': 'tfc:plant/%s_bush' % berry}, decorate_climate(info.min_temp, info.max_temp, info.min_water, info.max_water, min_forest=info.min_forest, max_forest=info.max_forest), decorate_heightmap('world_surface_wg'), decorate_square(), decorate_chance(22))
+            configured_placed_feature(rm, ('plant', berry + '_bush'), 'tfc:spreading_bush', {'block': 'tfc:plant/%s_bush' % berry}, decorate_climate(info.wild_min_temp, info.wild_max_temp, info.wild_min_water, info.wild_max_water, min_forest=info.min_forest, max_forest=info.max_forest), decorate_heightmap('world_surface_wg'), decorate_square(), decorate_chance(22))
             rm.placed_feature_tag('feature/berry_bushes', 'tfc:plant/%s_bush' % berry)
         elif info.type == 'waterlogged':
             bush_block = 'tfc:plant/%s_bush[lifecycle=healthy,stage=0,fluid=empty]' % berry
-            configured_patch_feature(rm, ('plant', berry + '_bush'), patch_config(bush_block, 1, 4, 4, 'fresh'), decorate_climate(info.min_temp, info.max_temp, info.min_water, info.max_water, min_forest=info.min_forest, max_forest=info.max_forest), decorate_square(), decorate_chance(5), biome_check=False)
+            configured_patch_feature(rm, ('plant', berry + '_bush'), patch_config(bush_block, 1, 4, 4, 'fresh'), decorate_climate(info.wild_min_temp, info.wild_max_temp, info.wild_min_water, info.wild_max_water, min_forest=info.min_forest, max_forest=info.max_forest), decorate_square(), decorate_chance(5), biome_check=False)
             rm.placed_feature_tag('feature/berry_bushes', 'tfc:plant/%s_bush_patch' % berry)
         else:
             bush_block = 'tfc:plant/%s_bush[lifecycle=healthy,stage=0]' % berry
-            configured_patch_feature(rm, ('plant', berry + '_bush'), patch_config(bush_block, 1, 4, 4, False), decorate_climate(info.min_temp, info.max_temp, info.min_water, info.max_water, min_forest=info.min_forest, max_forest=info.max_forest), decorate_square(), decorate_chance(30), biome_check=False)
+            configured_patch_feature(rm, ('plant', berry + '_bush'), patch_config(bush_block, 1, 4, 4, False), decorate_climate(info.wild_min_temp, info.wild_max_temp, info.wild_min_water, info.wild_max_water, min_forest=info.min_forest, max_forest=info.max_forest), decorate_square(), decorate_chance(30), biome_check=False)
             rm.placed_feature_tag('feature/berry_bushes', 'tfc:plant/%s_bush_patch' % berry)
 
     for fruit, info in FRUITS.items():
         config = {
-            'min_temperature': info.min_temp,
-            'max_temperature': info.max_temp,
-            'min_groundwater': info.min_water,
-            'max_groundwater': info.max_water,
+            'min_temperature': info.wild_min_temp,
+            'max_temperature': info.wild_max_temp,
+            'min_groundwater': info.wild_min_water,
+            'max_groundwater': info.wild_max_water,
             'max_forest': 3
         }
         feature = 'tfc:fruit_trees'
