@@ -42,7 +42,7 @@ public class CreativeRotationBlockEntity extends TickableBlockEntity implements 
     {
         final Rotation.Tickable rotation = motor.node.rotation();
         rotation.tick();
-        float target = Mth.abs(motor.step * LERP_SPEED);
+        float target = motor.step * LERP_SPEED;
         if (rotation.speed() != target)
         {
             rotation.setSpeed(target);
@@ -53,6 +53,7 @@ public class CreativeRotationBlockEntity extends TickableBlockEntity implements 
     private int step;
     private boolean invalid;
 
+    //TODO add a function to change rotation axis
     public CreativeRotationBlockEntity(BlockPos pos, BlockState state)
     {
         this(TFCBlockEntities.CREATIVE_MOTOR.get(), pos, state);
@@ -87,6 +88,7 @@ public class CreativeRotationBlockEntity extends TickableBlockEntity implements 
     protected void saveAdditional(CompoundTag tag, HolderLookup.Provider provider)
     {
         super.saveAdditional(tag, provider);
+        node.rotation().saveToTag(tag);
         tag.putInt("step", step);
         tag.putBoolean("invalid", invalid);
     }
@@ -95,6 +97,7 @@ public class CreativeRotationBlockEntity extends TickableBlockEntity implements 
     protected void loadAdditional(CompoundTag tag, HolderLookup.Provider provider)
     {
         super.loadAdditional(tag, provider);
+        node.rotation().loadFromTag(tag);
         step = tag.getInt("step");
         invalid = tag.getBoolean("invalid");
     }
@@ -114,21 +117,11 @@ public class CreativeRotationBlockEntity extends TickableBlockEntity implements 
     public void incrementSpeed()
     {
         step = Mth.clamp(step + 1, -MAX_STEPS, MAX_STEPS);
-        if (step == 1)
-        {
-            node.setDirection(getBlockState().getValue(CreativeRotationBlock.AXIS), Direction.AxisDirection.POSITIVE);
-            performNetworkAction(NetworkAction.UPDATE);
-        }
     }
 
     public void decrementSpeed()
     {
         step = Mth.clamp(step - 1, -MAX_STEPS, MAX_STEPS);
-        if (step == -1)
-        {
-            node.setDirection(getBlockState().getValue(CreativeRotationBlock.AXIS), Direction.AxisDirection.NEGATIVE);
-            performNetworkAction(NetworkAction.UPDATE);
-        }
     }
 
     private static class CreativeSourceNode extends SourceNode
