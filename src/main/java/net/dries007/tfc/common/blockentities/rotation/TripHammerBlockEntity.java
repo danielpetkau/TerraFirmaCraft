@@ -107,7 +107,7 @@ public class TripHammerBlockEntity extends TickableInventoryBlockEntity<ItemStac
     }
 
     private int cooldownTicks = 10;
-    private float lastAngle = 0;
+    private float lastAngle = Float.NEGATIVE_INFINITY;
 
     public TripHammerBlockEntity(BlockPos pos, BlockState state)
     {
