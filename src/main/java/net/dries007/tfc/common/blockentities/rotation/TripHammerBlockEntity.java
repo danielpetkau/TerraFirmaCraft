@@ -34,21 +34,27 @@ public class TripHammerBlockEntity extends TickableInventoryBlockEntity<ItemStac
 {
     public static void serverTick(Level level, BlockPos pos, BlockState state, TripHammerBlockEntity hammer)
     {
-        if (hammer.cooldownTicks-- > 0)
-        {
-            return;
-        }
-        final ItemStack item = hammer.inventory.getStackInSlot(0);
-        if (item.isEmpty())
-            return;
+        int cooldown = hammer.cooldownTicks--;
         final Rotation rotation = hammer.getRotation();
         if (rotation != null)
         {
             final float angle = hammer.getRealRotationDegrees(rotation, 1f);
-            // Guards against:
+            final ItemStack item = hammer.inventory.getStackInSlot(0);
+            if (cooldown > 0 || item.isEmpty())
+            {
+                // If we don't track the angle when on cooldown/no item there may be large jumps between the last angle and current angle
+                hammer.lastAngle = angle;
+                return;
+            }
+            // Must account for:
             // 1. the angle wrapping around from 360 to 0
             // 2. the rotation speed being too fast and/or offset enough to sneak past the expected angle
-            if (angle > 180 && hammer.lastAngle < 180 && hammer.lastAngle > 90)
+            // 3. negative rotational speeds
+            // 4. no last angle (Float.NEGATIVE_INFINITY), e.g. rotation was just applied
+            float lastAngle = hammer.lastAngle;
+            float minAngle = Math.min(angle, lastAngle);
+            float maxAngle = Math.max(angle, lastAngle);
+            if (angle > 90 && angle < 270 && minAngle > 0 && minAngle < 180 && maxAngle > 180)
             {
                 if (rotation.positiveDirection() != state.getValue(TripHammerBlock.FACING).getClockWise())
                 {
@@ -92,6 +98,11 @@ public class TripHammerBlockEntity extends TickableInventoryBlockEntity<ItemStac
                 }
             }
             hammer.lastAngle = angle;
+        }
+        else
+        {
+            // No last angle
+            hammer.lastAngle = Float.NEGATIVE_INFINITY;
         }
     }
 
