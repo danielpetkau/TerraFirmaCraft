@@ -21,6 +21,7 @@ import net.neoforged.neoforge.registries.RegistryBuilder;
 import org.jetbrains.annotations.Nullable;
 
 import net.dries007.tfc.TerraFirmaCraft;
+import net.dries007.tfc.common.blockentities.IPotInventory;
 import net.dries007.tfc.common.blockentities.PotBlockEntity;
 import net.dries007.tfc.common.recipes.JamPotRecipe;
 import net.dries007.tfc.common.recipes.PotRecipe;
@@ -31,7 +32,7 @@ import net.dries007.tfc.util.Helpers;
 /**
  * The output of a pot recipe. This output can be fairly complex, but follows a specific contract:
  * <ol>
- *     <li>The output is created, with access to the inventory, populated with the ingredient items (in {@link PotRecipe#getOutput(PotBlockEntity.PotInventory)})</li>
+ *     <li>The output is created, with access to the inventory, populated with the ingredient items (in {@link PotRecipe#getOutput(IPotInventory)})</li>
  *     <li>{@link PotOutput#onFinish(PotBlockEntity.PotInventory)} is called, with a completely empty inventory. The output can then add fluids or items back into the pot as necessary</li>
  *     <li>THEN, if {@link PotOutput#isEmpty()} returns true, the output is discarded. Otherwise...</li>
  *     <li>The output is saved to the tile entity. On a right click, {@link PotOutput#onInteract(PotBlockEntity, Player, ItemStack)} is called, and after each call, {@link PotOutput#isEmpty()} will be queried to see if the output is empty. The pot will not resume functionality until the output is empty</li>
@@ -119,7 +120,7 @@ public interface PotOutput
      * checking {@link #isEmpty()}. Fills the inventory with immediate outputs from the output. Note that any outputs that depend
      * on the inventory must be computed <strong>before</strong> this method.
      */
-    default void onFinish(PotBlockEntity.PotInventory inventory) {}
+    default void onFinish(IPotInventory inventory) {}
 
     /**
      * Called when a player interacts with the pot inventory, using the specific item stack, to try and extract output.

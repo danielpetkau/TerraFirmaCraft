@@ -27,7 +27,7 @@
     },
     {
       "type": "tfc:sealed_barrel_recipe",
-      "recipe": "tfc:barrel/red_leather",
+      "recipe": "tfc:barrel/red_dyeable",
       "text": "Dye fluids can even dye leather as if it were crafted!"
     },
     {

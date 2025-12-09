@@ -885,7 +885,7 @@ def make_book(rm: ResourceManager, i18n: I18n, local_instance: bool = False, rev
         )),
         entry('bowls', 'Bowls', 'tfc:ceramic/bowl', pages=(
             text('$(thing)Bowls$() are a versatile tool which can be used to make $(l:mechanics/salad)Salads$(), to make $(l:mechanics/pot)Soups$(), to $(l:mechanics/decay#salting)Salt$() meat, or to apply $(thing)Powder$() to $(l:mechanics/glassworking_applications#coloring)Glass$() in order to change the resulting glass\'s color.$(br2)Bowls can be made both from $(thing)Ceramic$(), by knapping a bowl out of clay, and then firing them.'),
-            knapping('tfc:knapping/ceramic/unfired_bowl_2', 'Multiple unfired bowls can be made from one knapping.').link('tfc:ceramic/unfired_bowl', 'tfc:ceramic/bowl'),
+            knapping('tfc:knapping/ceramic/unfired_bowl_1', 'Multiple unfired bowls can be made from one knapping.').link('tfc:ceramic/unfired_bowl', 'tfc:ceramic/bowl'),
             crafting('minecraft:bowl', text_contents='Bowls can also be made out of wood via crafting them together with $(thing)Glue$()$(br2)$(thing)Glue$() can be made by soaking $(thing)Bone Meal$() in a barrel of $(l:mechanics/barrels#limewater)Limewater$().', title='Wooden Bowls').link('minecraft:bowl'),
             sealed_barrel_recipe('tfc:barrel/glue', 'Bowls can also be placed on the ground like blocks. When placed, they can be filled with any type of $(thing)Powder$() - the results of grinding ores, minerals, or gems in the $(l:mechanics/quern)Quern$().'),
             item_spotlight('#tfc:powders', 'Powders', text_contents='The Powder Bowl can hold up to 16 of a given powder. To insert items, $(item)$(k:key.use)$() while holding the powder. To extract items, $(item)$(k:key.use)$() with an empty hand.$(br2)$(item)$(k:key.sneak)$() allows extracting the entire contents of the bowl.'),
@@ -1077,7 +1077,7 @@ def make_book(rm: ResourceManager, i18n: I18n, local_instance: bool = False, rev
         )),
         entry('channels', 'Casting with Channels', 'tfc:channel', pages=(
             text('You can cast from a $(l:mechanics/crucible)Crucible$() to more than one mold at a time using $(thing)Channels$() and $(thing)Mold Tables$(). Simply connect the $(thing)Mold Tables$() to the $(thing)Crucible$() using $(thing)Channels$() and right-click on the $(thing)Channel$() next to the $(thing)Crucible$(). Shift-right-click the $(thing)Mold Table$() with a $(l:getting_started/pottery#mold)Mold$() to place it or remove it.'),
-            knapping('tfc:knapping/ceramic/unfired_channel_4', '$(l:getting_started/pottery#knapping)Knapping$() several $(thing)Unfired Channels$().'),
+            knapping('tfc:knapping/ceramic/unfired_channel_2', '$(l:getting_started/pottery#knapping)Knapping$() several $(thing)Unfired Channels$().'),
             knapping('tfc:knapping/ceramic/unfired_mold_table', '$(l:getting_started/pottery#knapping)Knapping$() an $(thing)Unfired Mold Table$().'),
             heat_recipe('tfc:heating/channel', 'After the channels and mold table are knapped, they will need to be $(thing)fired$(), like any piece of pottery.'),
             multiblock('A casting set up', '', False, multiblock_id='tfc:channel_casting'),
@@ -1352,7 +1352,7 @@ def make_book(rm: ResourceManager, i18n: I18n, local_instance: bool = False, rev
             item_spotlight('tfc:bucket/red_dye', 'Dye Liquids', text_contents='Dyes can also be made into fluids. A dye item and 1000mB of $(item)Water$() boiled in a $(l:mechanics/pot)Pot$() produces the same amount of $(thing)Dye Fluid$(). Dye fluids are used in $(l:mechanics/barrels)Barrels$() to color items.'),
             sealed_barrel_recipe('tfc:barrel/red_concrete_powder', 'Dyeing items in a barrel is cheaper than using items, requiring only 25mB of dyed fluid.'),
             sealed_barrel_recipe('tfc:barrel/music_disc_chirp', 'Dye fluids can be used to finish $(item)Music Discs$().'),
-            sealed_barrel_recipe('tfc:barrel/red_leather', 'Dye fluids can even dye leather as if it were crafted!'),
+            sealed_barrel_recipe('tfc:barrel/red_dyeable', 'Dye fluids can even dye leather as if it were crafted!'),
             sealed_barrel_recipe('tfc:barrel/bleaching_bed', 'Five $(item)Wood Ash$() and 1000mB of $(item)Water$() boiled in a $(l:mechanics/pot)Pot$() produces lye. 25mB of Lye removes the color from a colored item.').anchor('lye'),
             text('$(li)$(item)Black Dye$() is used for $(l:mechanics/scribing_table)Scribing Tables$().$(li)$(item)Red Dye$() is used for $(l:mechanics/powderkegs)Powderkegs$(). $(li)Unfired $(l:mechanics/decay#small_vessels)Small Vessels$() and $(l:mechanics/decay#large_vessels)Large Vessels$() can be dyed$().', title='Miscellaneous'),
             empty_last_page()
