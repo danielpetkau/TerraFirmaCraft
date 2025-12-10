@@ -21,6 +21,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ShieldItem;
 import net.neoforged.neoforge.client.model.data.ModelData;
 import net.neoforged.neoforge.items.ItemStackHandler;
 import org.jetbrains.annotations.Nullable;
@@ -126,8 +127,10 @@ public class PlacedItemBlockEntityRenderer<T extends PlacedItemBlockEntity> impl
             // model is properly 'sitting' on the surface
             final BakedModel model = mc.getItemRenderer().getModel(stack, entity.getLevel(), null, 0);
 
-            // Javelins are rendered in the hand as 3d, but render flat in the inventory and when placed
-            final boolean renderAsBlock = model.isGui3d() && !(stack.getItem() instanceof JavelinItem);
+            // Javelins and shields have special handling in the vanilla code, since they have custom rendering behavior when held.
+            // They are hardcoded to behave differently in Neo's ItemRenderer#render and BlockEntityWithoutLevelRenderer#renderByItem methods,
+            // so we have to hardcode them to be rendered as items here as well.
+            final boolean renderAsBlock = model.isGui3d() && !(stack.getItem() instanceof JavelinItem || stack.getItem() instanceof ShieldItem);
 
             if (isLarge)
             {
