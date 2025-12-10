@@ -91,7 +91,7 @@ public class ClientConfig extends BaseConfig
         ).define("foodExpiryTooltipStyle", FoodExpiryTooltipStyle.BOTH);
         foodExpiryOverlayColor = builder
             .comment("The overlay color to indicate rotten foods, in ARGB. Default = 0xFF88CC33")
-            .define("foodExpiryOverlayColor", 0xFF88CC33);
+            .define("foodExpiryOverlayColor1", 0xFF88CC33);
 
         final var temperatureDisplayStyle = new String[] {
             "  COLOR = Approximate, color based tooltips (like Very Hot**, Brilliant White)",
