@@ -90,7 +90,7 @@ public class AnvilScreen extends BlockEntityScreen<AnvilBlockEntity, AnvilContai
                     final int xOffset = i * 19;
 
                     // The rule icon
-                    graphics.blit(texture, guiLeft + 64 + xOffset, guiTop + 10, 10, 10, rule.iconX(), rule.iconY(), 32, 32, 256, 256);
+                    graphics.blit(texture, guiLeft + 64 + xOffset, guiTop + 10, 10, 10, rule.iconX(), rule.iconY(), 16, 16, 256, 256);
 
                     // The overlay
                     if (forging.matches(rule))
@@ -112,7 +112,7 @@ public class AnvilScreen extends BlockEntityScreen<AnvilBlockEntity, AnvilContai
         int index = 0;
         for (ForgeStep step : forging.lastSteps())
         {
-            graphics.blit(texture, guiLeft + 102 - (index * 19), guiTop + 31, 10, 10, step.iconX(), step.iconY(), 32, 32, 256, 256);
+            graphics.blit(texture, guiLeft + 102 - (index * 19), guiTop + 31, 10, 10, step.iconX(), step.iconY(), 16, 16, 256, 256);
             index++;
         }
     }
