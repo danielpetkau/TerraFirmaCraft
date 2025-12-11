@@ -8,7 +8,6 @@ package net.dries007.tfc.util;
 
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -102,9 +101,9 @@ public final class FluidAlloy
     public void copyFrom(FluidAlloy alloy)
     {
         amount = alloy.amount;
-        content = alloy.content;
-        cachedContent = alloy.cachedContent;
-        cachedResult = alloy.cachedResult;
+        content = alloy.content == null ? null : new Object2DoubleOpenHashMap<>(alloy.content);
+        cachedContent = alloy.cachedContent == null ? null : new Object2DoubleOpenHashMap<>(alloy.cachedContent);
+        cachedResult = alloy.cachedResult == null ? null : alloy.cachedResult.copy();
     }
 
     /**
