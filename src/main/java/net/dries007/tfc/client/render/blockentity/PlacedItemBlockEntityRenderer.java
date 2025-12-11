@@ -156,6 +156,13 @@ public class PlacedItemBlockEntityRenderer<T extends PlacedItemBlockEntity> impl
                 pose.mulPose(Axis.ZP.rotationDegrees(entity.getRotations(slot)));
             }
 
+            // Shields are very large when rendered with their in hand model, so we scale them down here. There might be a better way to do this,
+            // but we're already giving shields a special case, so this is good enough.
+            if (stack.getItem() instanceof ShieldItem)
+            {
+                pose.scale(0.5f, 0.5f, 0.5f);
+            }
+
             // Then render the model
             // This is copying what renderStatic() would've done
             mc.getItemRenderer().render(stack, ItemDisplayContext.FIXED, false, pose, buffers, packedLight, packedOverlay, model);
