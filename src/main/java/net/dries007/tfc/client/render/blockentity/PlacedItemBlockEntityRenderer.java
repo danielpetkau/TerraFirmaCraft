@@ -17,6 +17,7 @@ import net.minecraft.client.renderer.block.ModelBlockRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemDisplayContext;
@@ -137,12 +138,23 @@ public class PlacedItemBlockEntityRenderer<T extends PlacedItemBlockEntity> impl
             {
                 // Large items, translate to center
                 pose.translate(0.5, renderAsBlock ? 0.25 : 0.03125, 0.5);
+
+                // Translate the item slightly down to prevent z-fighting between neighboring items
+                // We can't use the slot to figure out the height, so use the blockpos instead
+                // Make sure items 1 block diagonally from each other are at different heights too
+                final BlockPos pos = entity.getBlockPos();
+                final float adjust = (pos.getX() % 2 == 0 ? -0.001f : 0f) + (pos.getZ() % 2 == 0 ? -0.002f : 0f);
+                pose.translate(0, adjust, 0);
             }
             else
             {
                 // For small items, translate to the center of the slot, and then scale down by half
                 pose.translate(0.25 + slotX * 0.5, renderAsBlock ? 0.125 : 0.03125, 0.25 + slotZ * 0.5);
                 pose.scale(0.5f, 0.5f, 0.5f);
+
+                // Translate the item slightly down to prevent z-fighting between neighboring items
+                // Items that are next to each other need to be at slightly different heights
+                pose.translate(0, slot * -0.0001f, 0);
             }
 
             if (renderAsBlock)
