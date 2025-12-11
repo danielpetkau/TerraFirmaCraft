@@ -30,6 +30,7 @@ import net.dries007.tfc.client.RenderHelpers;
 import net.dries007.tfc.common.blockentities.PlacedItemBlockEntity;
 import net.dries007.tfc.common.items.JavelinItem;
 import net.dries007.tfc.common.items.TFCItems;
+import net.dries007.tfc.common.items.TFCShieldItem;
 
 public class PlacedItemBlockEntityRenderer<T extends PlacedItemBlockEntity> implements BlockEntityRenderer<T>
 {
@@ -156,9 +157,9 @@ public class PlacedItemBlockEntityRenderer<T extends PlacedItemBlockEntity> impl
                 pose.mulPose(Axis.ZP.rotationDegrees(entity.getRotations(slot)));
             }
 
-            // Shields are very large when rendered with their in hand model, so we scale them down here. There might be a better way to do this,
+            // Our shields are very large when rendered with their in hand model, so we scale them down here. There might be a better way to do this,
             // but we're already giving shields a special case, so this is good enough.
-            if (stack.getItem() instanceof ShieldItem)
+            if (stack.getItem() instanceof TFCShieldItem)
             {
                 pose.scale(0.5f, 0.5f, 0.5f);
             }
