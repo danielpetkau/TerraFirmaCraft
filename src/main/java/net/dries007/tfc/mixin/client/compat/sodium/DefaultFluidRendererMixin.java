@@ -16,7 +16,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 
 /**
- * Sodium uses its own fluid renderer, which water differently from other fluids. This makes
+ * Sodium uses its own fluid renderer, which colors water differently from other fluids. This makes
  * TFC's water types have an unwanted visual difference, so make Sodium count them as water too.
  */
 @Pseudo
