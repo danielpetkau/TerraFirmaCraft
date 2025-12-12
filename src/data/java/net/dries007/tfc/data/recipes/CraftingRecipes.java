@@ -299,7 +299,7 @@ public interface CraftingRecipes extends Recipes
                 .input('X', brick)
                 .input('M', TFCItems.MORTAR)
                 .pattern("X X", "MXM")
-                .shaped(blocks.get(Rock.BlockType.AQUEDUCT));
+                .shaped(blocks.get(Rock.BlockType.AQUEDUCT), 2);
             recipe()
                 .input(Ingredient.of(
                     blocks.get(Rock.BlockType.LOOSE),
