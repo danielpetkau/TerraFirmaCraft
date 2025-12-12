@@ -713,7 +713,7 @@ def make_book(rm: ResourceManager, i18n: I18n, local_instance: bool = False, rev
         # todo: entity renderers have issues. squids don't work.
         entry('aqueducts', 'Aqueducts', 'tfc:rock/aqueduct/shale', pages=(
             text('$(thing)Aqueducts$() are a tool used for moving $(thing)Water$() around. Unlike $(l:mechanics/wooden_buckets)Wooden Buckets$(), which are not able to transport water sources, $(thing)Aqueducts$() are able to move source blocks horizontally any distance to their destination. They can be used to transport any type of water, including $(thing)Fresh Water$(), $(thing)Salt Water$(), and even $()Hot Spring Water$().').link('#tfc:aqueducts'),
-            crafting('tfc:crafting/rock/aqueduct/shale', text_contents='A singe aqueduct block can be crafted with some $(l:mechanics/advanced_building_materials#bricks_and_mortar)Bricks and Mortar$().'),
+            crafting('tfc:crafting/rock/aqueduct/shale', text_contents='Aqueduct blocks can be crafted with some $(l:mechanics/advanced_building_materials#bricks_and_mortar)Bricks and Mortar$().'),
             text('In order to use an $(thing)Aqueduct$(), you must simply connect them in a horizontal pattern, and place one end adjacent to either a $(thing)Source$() or $(thing)Falling$() water. After waiting a short while, water will begin to flow through the aqueduct network, and out the other end.$(br2)Note if aqueducts are removed, water will cease flowing, and $(thing)Aqueducts$() will not create permanent source blocks - any water will disappear after the aqueducts are removed.'),
             multiblock('An Aqueduct Network', '', False, (
                 ('     ', '     ', '  0  ', '     ', '     '),
