@@ -923,7 +923,7 @@ TFC_BIOMES = ['badlands', 'canyons', 'low_canyons', 'plains', 'plateau', 'platea
 KAOLIN_BIOMES = ['rolling_hills', 'highlands', 'plateau', 'plateau_wide', 'old_mountains', 'tower_karst_hills', 'tower_karst_highlands', 'extreme_doline_plateau', 'extreme_doline_mountains', 'doline_rolling_hills', 'doline_highlands', 'doline_plateau', 'cenote_rolling_hills', 'cenote_highlands', 'cenote_plateau', 'shilin_hills', 'shilin_highlands', 'shilin_plateau', 'buttes', 'mesas', 'stair_step_canyons', 'dormant_shield_volcano', 'extinct_shield_volcano', 'ancient_shield_volcano', 'badlands', 'canyons']
 VANILLA_TRIMS = ('coast', 'sentry', 'dune', 'wild', 'ward', 'eye', 'vex', 'tide', 'snout', 'rib', 'spire', 'wayfinder', 'shaper', 'silence', 'raiser', 'host', 'flow', 'bolt')
 
-BUTTERFLIES = ('golden_birdwing', 'papilio_rumanzovia', 'papilio_palinurus', 'moth_diaphora', 'peacock', 'sericinus', 'papilio_blumei', 'adonis_blue', 'silverwashed_frittilary', 'moth_saturnia', 'moth_argema', 'moth_attacus', 'moth_luna', 'moth_trosia')
+BUTTERFLIES = ('golden_birdwing', 'papilio_rumanzovia', 'papilio_palinurus', 'moth_diaphora', 'peacock', 'sericinus', 'papilio_blumei', 'adonis_blue', 'silverwashed_fritillary', 'moth_saturnia', 'moth_argema', 'moth_attacus', 'moth_luna', 'moth_trosia')
 
 ALLOYS: Dict[str, Tuple[Tuple[str, float, float], ...]] = {
     'bismuth_bronze': (('zinc', 0.2, 0.3), ('copper', 0.5, 0.65), ('bismuth', 0.1, 0.2)),
