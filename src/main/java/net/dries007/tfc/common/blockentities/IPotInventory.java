@@ -13,4 +13,8 @@ import net.dries007.tfc.common.recipes.input.NonEmptyInput;
 public interface IPotInventory extends NonEmptyInput, DelegateItemHandler, DelegateFluidHandler
 {
     void clearFluid();
+
+    int inputStart();
+
+    int inputEnd();
 }

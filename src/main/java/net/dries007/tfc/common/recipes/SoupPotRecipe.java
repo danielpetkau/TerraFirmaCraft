@@ -70,7 +70,7 @@ public class SoupPotRecipe extends PotRecipe
         float[] nutrition = new float[Nutrient.TOTAL];
         ItemStack soupStack = ItemStack.EMPTY;
         final List<ItemStack> itemIngredients = new ArrayList<>();
-        for (int i = PotBlockEntity.SLOT_EXTRA_INPUT_START; i <= PotBlockEntity.SLOT_EXTRA_INPUT_END; i++)
+        for (int i = inventory.inputStart(); i <= inventory.inputEnd(); i++)
         {
             final ItemStack stack = inventory.getStackInSlot(i);
             final @Nullable IFood food = FoodCapability.get(stack);
@@ -135,7 +135,7 @@ public class SoupPotRecipe extends PotRecipe
         }
 
         @Override
-        public ItemInteractionResult onInteract(PotBlockEntity entity, Player player, ItemStack clickedWith)
+        public ItemInteractionResult onInteract(IPotInventory entity, Player player, ItemStack clickedWith)
         {
             if (Helpers.isItem(clickedWith.getItem(), TFCTags.Items.SOUP_BOWLS) && !stack.isEmpty())
             {

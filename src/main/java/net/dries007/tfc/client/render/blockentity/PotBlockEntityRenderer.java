@@ -65,7 +65,7 @@ public class PotBlockEntityRenderer extends FirepitBlockEntityRenderer<PotBlockE
         }
 
         int ordinal = 0;
-        for (int slot = SLOT_EXTRA_INPUT_START; slot <= SLOT_EXTRA_INPUT_END; slot++)
+        for (int slot = pot.getInventory().inputStart(); slot <= pot.getInventory().inputEnd(); slot++)
         {
             ItemStack item = pot.getInventory().getStackInSlot(slot);
             if (!item.isEmpty())
