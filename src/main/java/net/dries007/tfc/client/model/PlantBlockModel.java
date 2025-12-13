@@ -213,7 +213,7 @@ public class PlantBlockModel implements IDynamicBakedModel, IUnbakedGeometry<Pla
         final Level level = ClientHelpers.getLevel();
         if (level != null)
         {
-            final long dayTime = ClientSolarCalculatorBridge.getDayTime(level);
+            final long dayTime = ClientSolarCalculatorBridge.getDayTime(level) % 24000L;
             if ((endTime < dayTime && dayTime < startTime) || (startTime < endTime && (dayTime < startTime || endTime < dayTime)))
             {
                 assert buddingBakedModel != null;
