@@ -22,6 +22,11 @@ import net.dries007.tfc.util.climate.Climate;
  */
 public final class ClientSolarCalculatorBridge
 {
+    /**
+     * Mimic behavior of vanilla day time, which is just the number of ticks from work creation
+     * This version is instead based on the number of calendar days,
+     * plus a remainder based on a time of day that roughly matches the position of the sun
+     */
     public static long getDayTime(LevelAccessor maybeLevel)
     {
         if (maybeLevel instanceof Level level && level.dimension() == Level.OVERWORLD)
@@ -29,7 +34,7 @@ public final class ClientSolarCalculatorBridge
             final Player player = ClientHelpers.getPlayer();
             if (player != null)
             {
-                return SolarCalculator.getSunBasedDayTime(
+                return Calendars.CLIENT.getTotalCalendarDays() * 24000L + SolarCalculator.getSunBasedDayTime(
                     player.blockPosition().getZ(),
                     Climate.get(level).hemisphereScale(),
                     Calendars.CLIENT.getCalendarFractionOfYear(),
