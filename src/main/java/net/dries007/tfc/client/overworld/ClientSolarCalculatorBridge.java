@@ -34,7 +34,7 @@ public final class ClientSolarCalculatorBridge
             final Player player = ClientHelpers.getPlayer();
             if (player != null)
             {
-                return Calendars.CLIENT.getTotalCalendarDays() * 24000L + SolarCalculator.getSunBasedDayTime(
+                return Calendars.CLIENT.getTotalCalendarDays() * ICalendar.CALENDAR_TICKS_IN_DAY + SolarCalculator.getSunBasedDayTime(
                     player.blockPosition().getZ(),
                     Climate.get(level).hemisphereScale(),
                     Calendars.CLIENT.getCalendarFractionOfYear(),

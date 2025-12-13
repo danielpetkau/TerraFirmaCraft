@@ -47,6 +47,7 @@ import net.dries007.tfc.common.blocks.plant.PlantBlock;
 import net.dries007.tfc.common.blocks.plant.TopPlantBlock;
 import net.dries007.tfc.util.Helpers;
 import net.dries007.tfc.util.calendar.Calendars;
+import net.dries007.tfc.util.calendar.ICalendar;
 import net.dries007.tfc.util.climate.Climate;
 import net.dries007.tfc.util.registry.RegistryPlant;
 
@@ -213,7 +214,7 @@ public class PlantBlockModel implements IDynamicBakedModel, IUnbakedGeometry<Pla
         final Level level = ClientHelpers.getLevel();
         if (level != null)
         {
-            final long dayTime = ClientSolarCalculatorBridge.getDayTime(level) % 24000L;
+            final long dayTime = ClientSolarCalculatorBridge.getDayTime(level) % ICalendar.CALENDAR_TICKS_IN_DAY;
             if ((endTime < dayTime && dayTime < startTime) || (startTime < endTime && (dayTime < startTime || endTime < dayTime)))
             {
                 assert buddingBakedModel != null;
