@@ -80,7 +80,7 @@ public class CharcoalForgeBlockEntity extends TickableInventoryBlockEntity<ItemS
             Helpers.gatherAndConsumeItems(level, bounds, forge.inventory, SLOT_FUEL_MIN, SLOT_FUEL_MAX);
         }
 
-        boolean isRaining = level.isRainingAt(pos);
+        boolean isRaining = level.isRainingAt(pos.above());
         if (state.getValue(CharcoalForgeBlock.HEAT) > 0)
         {
             if (isRaining && level.random.nextFloat() < 0.15F)
