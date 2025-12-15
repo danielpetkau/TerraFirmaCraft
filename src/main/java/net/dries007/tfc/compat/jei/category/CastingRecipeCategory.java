@@ -17,7 +17,7 @@ import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
@@ -25,7 +25,6 @@ import org.jetbrains.annotations.Nullable;
 
 import net.dries007.tfc.common.component.heat.Heat;
 import net.dries007.tfc.common.component.heat.HeatCapability;
-import net.dries007.tfc.common.component.mold.IMold;
 import net.dries007.tfc.common.items.TFCItems;
 import net.dries007.tfc.common.recipes.CastingRecipe;
 import net.dries007.tfc.compat.jei.JEIIntegration;
@@ -35,7 +34,7 @@ public class CastingRecipeCategory extends BaseRecipeCategory<CastingRecipe>
 {
     private static final String INPUT_SLOT = "input";
 
-    public CastingRecipeCategory(RecipeType<CastingRecipe> type, IGuiHelper helper)
+    public CastingRecipeCategory(RecipeType<RecipeHolder<CastingRecipe>> type, IGuiHelper helper)
     {
         super(type, helper, 98, 26, new ItemStack(TFCItems.MOLDS.get(Metal.ItemType.INGOT).get()));
     }

@@ -19,6 +19,7 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.neoforged.neoforge.fluids.FluidStack;
 
 import net.dries007.tfc.common.blocks.TFCBlocks;
@@ -35,7 +36,7 @@ public class AlloyRecipeCategory extends BaseRecipeCategory<AlloyRecipe>
     private static final int FIRST_COLUMN_X = 4;
     private static final int SECOND_COLUMN_X = 70;
 
-    public AlloyRecipeCategory(RecipeType<AlloyRecipe> type, IGuiHelper helper)
+    public AlloyRecipeCategory(RecipeType<RecipeHolder<AlloyRecipe>> type, IGuiHelper helper)
     {
         super(type, helper, 170, MAX_HEIGHT, new ItemStack(TFCBlocks.CRUCIBLE.get()));
     }

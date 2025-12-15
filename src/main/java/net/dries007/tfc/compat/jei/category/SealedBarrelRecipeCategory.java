@@ -21,6 +21,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.neoforged.neoforge.fluids.FluidStack;
 
 import net.dries007.tfc.common.blocks.wood.Wood;
@@ -29,7 +30,7 @@ import net.dries007.tfc.util.calendar.Calendars;
 
 public class SealedBarrelRecipeCategory extends BarrelRecipeCategory<SealedBarrelRecipe>
 {
-    public SealedBarrelRecipeCategory(RecipeType<SealedBarrelRecipe> type, IGuiHelper helper)
+    public SealedBarrelRecipeCategory(RecipeType<RecipeHolder<SealedBarrelRecipe>> type, IGuiHelper helper)
     {
         super(type, helper, 148, 32, Wood.MAPLE);
     }

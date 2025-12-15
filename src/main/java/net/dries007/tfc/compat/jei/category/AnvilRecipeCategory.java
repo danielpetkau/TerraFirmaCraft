@@ -16,6 +16,7 @@ import mezz.jei.api.recipe.RecipeType;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeHolder;
 
 import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.recipes.AnvilRecipe;
@@ -24,7 +25,7 @@ import net.dries007.tfc.util.tooltip.Tooltips;
 
 public class AnvilRecipeCategory extends BaseRecipeCategory<AnvilRecipe>
 {
-    public AnvilRecipeCategory(RecipeType<AnvilRecipe> type, IGuiHelper helper)
+    public AnvilRecipeCategory(RecipeType<RecipeHolder<AnvilRecipe>> type, IGuiHelper helper)
     {
         super(type, helper, 98, 26, new ItemStack(TFCBlocks.METALS.get(Metal.BRONZE).get(Metal.BlockType.ANVIL).get()));
     }

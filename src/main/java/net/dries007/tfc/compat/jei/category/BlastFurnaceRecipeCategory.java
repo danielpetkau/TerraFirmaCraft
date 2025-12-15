@@ -14,6 +14,7 @@ import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeHolder;
 
 import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.recipes.BlastFurnaceRecipe;
@@ -21,7 +22,7 @@ import net.dries007.tfc.compat.jei.JEIIntegration;
 
 public class BlastFurnaceRecipeCategory extends BaseRecipeCategory<BlastFurnaceRecipe>
 {
-    public BlastFurnaceRecipeCategory(RecipeType<BlastFurnaceRecipe> type, IGuiHelper helper)
+    public BlastFurnaceRecipeCategory(RecipeType<RecipeHolder<BlastFurnaceRecipe>> type, IGuiHelper helper)
     {
         super(type, helper, 98, 26, new ItemStack(TFCBlocks.BLAST_FURNACE.get()));
     }

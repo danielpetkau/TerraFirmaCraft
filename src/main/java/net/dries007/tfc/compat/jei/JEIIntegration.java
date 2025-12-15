@@ -115,50 +115,49 @@ public final class JEIIntegration implements IModPlugin
     public static final IIngredientTypeWithSubtypes<Item, ItemStack> ITEM_STACK = VanillaTypes.ITEM_STACK;
     public static final IIngredientType<FluidStack> FLUID_STACK = NeoForgeTypes.FLUID_STACK;
 
-    public static final RecipeType<HeatingRecipe> HEATING = type("heating", HeatingRecipe.class);
-    public static final RecipeType<ScrapingRecipe> SCRAPING = type("scraping", ScrapingRecipe.class);
-    public static final RecipeType<QuernRecipe> QUERN = type("quern", QuernRecipe.class);
-    public static final RecipeType<PotRecipe> SOUP_POT = type("soup_pot", PotRecipe.class);
-    public static final RecipeType<PotRecipe> SIMPLE_POT = type("simple_pot", PotRecipe.class);
-    public static final RecipeType<PotRecipe> JAM_POT = type("jam_pot", PotRecipe.class);
-    public static final RecipeType<CastingRecipe> CASTING = type("casting", CastingRecipe.class);
-    public static final RecipeType<LoomRecipe> LOOM = type("loom", LoomRecipe.class);
-    public static final RecipeType<AlloyRecipe> ALLOYING = type("alloying", AlloyRecipe.class);
-    public static final RecipeType<SealedBarrelRecipe> SEALED_BARREL = type("sealed_barrel", SealedBarrelRecipe.class);
-    public static final RecipeType<InstantBarrelRecipe> INSTANT_BARREL = type("instant_barrel", InstantBarrelRecipe.class);
-    public static final RecipeType<InstantFluidBarrelRecipe> INSTANT_FLUID_BARREL = type("instant_fluid_barrel", InstantFluidBarrelRecipe.class);
-    public static final RecipeType<BloomeryRecipe> BLOOMERY = type("bloomery", BloomeryRecipe.class);
-    public static final RecipeType<WeldingRecipe> WELDING = type("welding", WeldingRecipe.class);
-    public static final RecipeType<AnvilRecipe> ANVIL = type("anvil", AnvilRecipe.class);
-    public static final RecipeType<ChiselRecipe> CHISEL = type("chisel", ChiselRecipe.class);
-    public static final RecipeType<GlassworkingRecipe> GLASSWORKING = type("glassworking", GlassworkingRecipe.class);
-    public static final RecipeType<BlastFurnaceRecipe> BLAST_FURNACE = type("blast_furnace", BlastFurnaceRecipe.class);
-    public static final RecipeType<SewingRecipe> SEWING = type("sewing", SewingRecipe.class);
+    public static final RecipeType<RecipeHolder<HeatingRecipe>> HEATING = type("heating", HeatingRecipe.class);
+    public static final RecipeType<RecipeHolder<ScrapingRecipe>> SCRAPING = type("scraping", ScrapingRecipe.class);
+    public static final RecipeType<RecipeHolder<QuernRecipe>> QUERN = type("quern", QuernRecipe.class);
+    public static final RecipeType<RecipeHolder<PotRecipe>> SOUP_POT = type("soup_pot", PotRecipe.class);
+    public static final RecipeType<RecipeHolder<PotRecipe>> SIMPLE_POT = type("simple_pot", PotRecipe.class);
+    public static final RecipeType<RecipeHolder<PotRecipe>> JAM_POT = type("jam_pot", PotRecipe.class);
+    public static final RecipeType<RecipeHolder<CastingRecipe>> CASTING = type("casting", CastingRecipe.class);
+    public static final RecipeType<RecipeHolder<LoomRecipe>> LOOM = type("loom", LoomRecipe.class);
+    public static final RecipeType<RecipeHolder<AlloyRecipe>> ALLOYING = type("alloying", AlloyRecipe.class);
+    public static final RecipeType<RecipeHolder<SealedBarrelRecipe>> SEALED_BARREL = type("sealed_barrel", SealedBarrelRecipe.class);
+    public static final RecipeType<RecipeHolder<InstantBarrelRecipe>> INSTANT_BARREL = type("instant_barrel", InstantBarrelRecipe.class);
+    public static final RecipeType<RecipeHolder<InstantFluidBarrelRecipe>> INSTANT_FLUID_BARREL = type("instant_fluid_barrel", InstantFluidBarrelRecipe.class);
+    public static final RecipeType<RecipeHolder<BloomeryRecipe>> BLOOMERY = type("bloomery", BloomeryRecipe.class);
+    public static final RecipeType<RecipeHolder<WeldingRecipe>> WELDING = type("welding", WeldingRecipe.class);
+    public static final RecipeType<RecipeHolder<AnvilRecipe>> ANVIL = type("anvil", AnvilRecipe.class);
+    public static final RecipeType<RecipeHolder<ChiselRecipe>> CHISEL = type("chisel", ChiselRecipe.class);
+    public static final RecipeType<RecipeHolder<GlassworkingRecipe>> GLASSWORKING = type("glassworking", GlassworkingRecipe.class);
+    public static final RecipeType<RecipeHolder<BlastFurnaceRecipe>> BLAST_FURNACE = type("blast_furnace", BlastFurnaceRecipe.class);
+    public static final RecipeType<RecipeHolder<SewingRecipe>> SEWING = type("sewing", SewingRecipe.class);
 
-    private static final Map<KnappingType, RecipeType<KnappingRecipe>> KNAPPING_TYPES = new HashMap<>();
+    private static final Map<KnappingType, RecipeType<RecipeHolder<KnappingRecipe>>> KNAPPING_TYPES = new HashMap<>();
 
-    public static RecipeType<KnappingRecipe> getKnappingType(Map.Entry<ResourceLocation, KnappingType> entry)
+    public static RecipeType<RecipeHolder<KnappingRecipe>> getKnappingType(Map.Entry<ResourceLocation, KnappingType> entry)
     {
         return KNAPPING_TYPES.computeIfAbsent(entry.getValue(), key -> type(entry.getKey().getPath() + "_knapping", KnappingRecipe.class));
     }
 
-    private static <T> RecipeType<T> type(String name, Class<T> clazz)
+    private static <T extends Recipe<?>> RecipeType<RecipeHolder<T>> type(String name, Class<T> kind)
     {
-        return RecipeType.create(TerraFirmaCraft.MOD_ID, name, clazz);
+        return RecipeType.createRecipeHolderType(ResourceLocation.fromNamespaceAndPath(TerraFirmaCraft.MOD_ID, name));
     }
 
-    private static <C extends RecipeInput, T extends Recipe<C>> List<T> recipes(Supplier<net.minecraft.world.item.crafting.RecipeType<T>> type)
+    private static <C extends RecipeInput, T extends Recipe<C>> List<RecipeHolder<T>> recipes(Supplier<net.minecraft.world.item.crafting.RecipeType<T>> type)
     {
         return recipes(type, e -> true);
     }
 
-    private static <C extends RecipeInput, T extends Recipe<C>> List<T> recipes(Supplier<net.minecraft.world.item.crafting.RecipeType<T>> type, Predicate<T> filter)
+    private static <C extends RecipeInput, T extends Recipe<C>> List<RecipeHolder<T>> recipes(Supplier<net.minecraft.world.item.crafting.RecipeType<T>> type, Predicate<T> filter)
     {
         return ClientHelpers.getLevelOrThrow().getRecipeManager()
             .getAllRecipesFor(type.get())
             .stream()
-            .map(RecipeHolder::value)
-            .filter(filter)
+            .filter(holder -> filter.test(holder.value()))
             .toList();
     }
 
@@ -276,7 +275,7 @@ public final class JEIIntegration implements IModPlugin
 
         for (var entry : KnappingType.MANAGER.getElements().entrySet())
         {
-            final RecipeType<KnappingRecipe> recipeType = getKnappingType(entry);
+            final RecipeType<RecipeHolder<KnappingRecipe>> recipeType = getKnappingType(entry);
             for (ItemStack item : entry.getValue().inputItem().ingredient().getItems())
             {
                 registry.addRecipeCatalyst(item, recipeType);

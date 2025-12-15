@@ -14,12 +14,13 @@ import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.world.item.crafting.RecipeHolder;
 
 import net.dries007.tfc.common.recipes.PotRecipe;
 
 public class JamPotRecipeCategory extends PotRecipeCategory<PotRecipe>
 {
-    public JamPotRecipeCategory(RecipeType<PotRecipe> type, IGuiHelper helper)
+    public JamPotRecipeCategory(RecipeType<RecipeHolder<PotRecipe>> type, IGuiHelper helper)
     {
         super(type, helper, 175, 50);
     }
