@@ -31,7 +31,6 @@ import net.dries007.tfc.client.RenderHelpers;
 import net.dries007.tfc.common.blockentities.PlacedItemBlockEntity;
 import net.dries007.tfc.common.items.JavelinItem;
 import net.dries007.tfc.common.items.TFCItems;
-import net.dries007.tfc.common.items.TFCShieldItem;
 
 public class PlacedItemBlockEntityRenderer<T extends PlacedItemBlockEntity> implements BlockEntityRenderer<T>
 {
@@ -119,6 +118,8 @@ public class PlacedItemBlockEntityRenderer<T extends PlacedItemBlockEntity> impl
             }
             pose.translate(0, -0.0001, 0);
 
+            baked.applyTransform(RenderHelpers.PLACED_ITEM_CONTEXT, pose, false);
+
             blockRenderer.tesselateWithAO(entity.getLevel(), baked, entity.getBlockState(), entity.getBlockPos(), pose, buffer, true, random, packedLight, packedOverlay, ModelData.EMPTY, RenderType.translucent());
         }
         else
@@ -169,12 +170,7 @@ public class PlacedItemBlockEntityRenderer<T extends PlacedItemBlockEntity> impl
                 pose.mulPose(Axis.ZP.rotationDegrees(entity.getRotations(slot)));
             }
 
-            // Our shields are very large when rendered with their in hand model, so we scale them down here. There might be a better way to do this,
-            // but we're already giving shields a special case, so this is good enough.
-            if (stack.getItem() instanceof TFCShieldItem)
-            {
-                pose.scale(0.5f, 0.5f, 0.5f);
-            }
+            model.applyTransform(RenderHelpers.PLACED_ITEM_CONTEXT, pose, false);
 
             // Then render the model
             // This is copying what renderStatic() would've done

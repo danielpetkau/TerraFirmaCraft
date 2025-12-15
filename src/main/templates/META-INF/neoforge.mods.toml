@@ -12,6 +12,7 @@ issueTrackerURL = "https://github.com/TerraFirmaCraft/TerraFirmaCraft/issues"
     credits = "By AlcatrazEscapee, Disastermoo, Dries007, Bunsan, Claycorp, DavidTriphon, EERussianguy, Gaelmare, and many others. Based on the original work by Bioxx, Dunk, and Kitty. Music by Mike \"Menoch\" Pelaez"
     authors = "AlcatrazEscapee"
     description = '''TerraFirmaCraft - The Next Generation'''
+    enumExtensions = "META-INF/enumextensions.json"
 
 # Dependencies
 [[dependencies.tfc]]
