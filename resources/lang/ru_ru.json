@@ -67,6 +67,7 @@
   "Lignite": "Лигнит",
   "Lignite is a type of low-grade $(thing)Coal$() ore. It can be found in very large flat deposits near the surface in $(l:the_world/geology#sedimentary)Sedimentary$() rocks.": "Лигнит — низкосортная $(thing)угольная$() руда. Его можно найти в очень больших плоских месторождениях у поверхности в $(l:the_world/geology#sedimentary)осадочных$() породах.",
   "": "",
+  "Lignite.": "Lignite.",
   "Bituminous Coal": "Битумный уголь",
   "Bituminous Coal is a type of mid-grade $(thing)Coal$() ore. It can be found in very large flat deposits near the surface in $(l:the_world/geology#sedimentary)Sedimentary$() rocks.": "Битумный уголь — среднесортная $(thing)угольная$() руда. Его можно найти в очень больших плоских месторождениях у поверхности в $(l:the_world/geology#sedimentary)осадочных$() породах.",
   "Bituminous Coal.": "Битумный уголь",
