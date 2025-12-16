@@ -6,11 +6,8 @@
 
 package net.dries007.tfc.client.model;
 
-import java.util.HashMap;
-import java.util.IdentityHashMap;
 import java.util.Map;
 import java.util.function.Function;
-import com.google.common.collect.Maps;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
@@ -25,7 +22,6 @@ import net.minecraft.client.resources.model.BlockModelRotation;
 import net.minecraft.client.resources.model.Material;
 import net.minecraft.client.resources.model.ModelBaker;
 import net.minecraft.client.resources.model.ModelState;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
@@ -42,7 +38,6 @@ import net.neoforged.neoforge.client.model.geometry.IUnbakedGeometry;
 import net.neoforged.neoforge.client.model.geometry.StandaloneGeometryBakingContext;
 import net.neoforged.neoforge.client.model.geometry.UnbakedGeometryHelper;
 import net.neoforged.neoforge.fluids.FluidStack;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
@@ -59,8 +54,9 @@ import net.dries007.tfc.util.Helpers;
 public record ContainedFluidModel(Fluid fluid) implements IUnbakedGeometry<ContainedFluidModel>
 {
     // Depth offsets to prevent Z-fighting
+    // Add a slight translation to the fluid transform to fix z fighting with transparent fluids
     // Make public since we use them elsewhere
-    public static final Transformation FLUID_TRANSFORM = new Transformation(new Vector3f(), new Quaternionf(), new Vector3f(1, 1, 1.002f), new Quaternionf());
+    public static final Transformation FLUID_TRANSFORM = new Transformation(new Vector3f(0.001f, 0.001f, 0f), new Quaternionf(), new Vector3f(1, 1, 1.002f), new Quaternionf());
     public static final Transformation COVER_TRANSFORM = new Transformation(new Vector3f(), new Quaternionf(), new Vector3f(1, 1, 1.004f), new Quaternionf());
 
     public static final ItemColor COLOR = (stack, tintIndex) -> {
