@@ -12,7 +12,6 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -20,8 +19,11 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.items.ItemStackHandler;
+
+import org.jetbrains.annotations.Nullable;
 
 import net.dries007.tfc.client.TFCSounds;
 import net.dries007.tfc.common.TFCTags;
@@ -35,8 +37,6 @@ import net.dries007.tfc.util.Helpers;
 import net.dries007.tfc.util.rotation.NetworkAction;
 import net.dries007.tfc.util.rotation.Node;
 import net.dries007.tfc.util.rotation.SinkNode;
-
-import static net.dries007.tfc.TerraFirmaCraft.*;
 
 public class QuernBlockEntity extends TickableInventoryBlockEntity<ItemStackHandler> implements RotationSinkBlockEntity
 {
@@ -129,6 +129,7 @@ public class QuernBlockEntity extends TickableInventoryBlockEntity<ItemStackHand
     private boolean needsStateUpdate = false;
     private float previousRotationDirection = 1;
     private float previousRotationSpeed = MANUAL_SPEED;
+    @Nullable private Block axleAboveOverride = null; // For rendering in the field guide
 
     public QuernBlockEntity(BlockPos pos, BlockState state)
     {
@@ -280,6 +281,22 @@ public class QuernBlockEntity extends TickableInventoryBlockEntity<ItemStackHand
     public void setHandstoneFromOutsideWorld()
     {
         inventory.setStackInSlot(SLOT_HANDSTONE, new ItemStack(TFCItems.HANDSTONE.get()));
+    }
+
+    public void setAxleAboveFromOutsideWorld(Block axle)
+    {
+        this.axleAboveOverride = axle;
+    }
+
+    /**
+     * Returns the axle block above, if set from the outside world for
+     * rendering in the field guide.
+     * @return The axle block above, or null
+     */
+    @Nullable
+    public Block getAxleAboveOverride()
+    {
+        return axleAboveOverride;
     }
 
     private void finishGrinding()
