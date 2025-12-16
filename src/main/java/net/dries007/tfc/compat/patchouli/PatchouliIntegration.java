@@ -348,6 +348,7 @@ public final class PatchouliIntegration
             access.getBlockEntity(new BlockPos(0, 1, 0), TFCBlockEntities.QUERN.get()).ifPresent(quern -> {
                 quern.getRotationNode().setRotationFromOutsideWorld();
                 quern.setHandstoneFromOutsideWorld();
+                quern.setAxleAboveFromOutsideWorld(TFCBlocks.WOODS.get(Wood.OAK).get(Wood.BlockType.AXLE).get());
             });
             access.getBlockEntity(new BlockPos(0, 2, 0), TFCBlockEntities.AXLE.get()).ifPresent(axle -> axle.getRotationNode().setRotationFromOutsideWorld());
         });
