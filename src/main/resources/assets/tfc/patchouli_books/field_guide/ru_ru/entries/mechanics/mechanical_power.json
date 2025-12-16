@@ -135,7 +135,7 @@
         ],
         "mapping": {
           "X": "tfc:wood/bladed_axle/oak[axis=x]",
-          "Y": "tfc:trip_hammer[facing=north]",
+          "Y": "tfc:trip_hammer[facing=south]",
           "Z": "tfc:metal/anvil/copper[facing=west]"
         }
       },

@@ -1511,7 +1511,7 @@ def make_book(rm: ResourceManager, i18n: I18n, local_instance: bool = False, rev
             crafting('tfc:crafting/wood/bladed_axle/oak', 'tfc:crafting/trip_hammer'),
             multiblock('', 'A setup for a trip hammer.', pattern=(('X ',), ('YZ',), ('0 ',)), mapping={
                 'X': 'tfc:wood/bladed_axle/oak[axis=x]',
-                'Y': 'tfc:trip_hammer[facing=north]',
+                'Y': 'tfc:trip_hammer[facing=south]',
                 'Z': 'tfc:metal/anvil/copper[facing=west]'
             }),
             text('Place a trip hammer below the axle, and $(item)$(k:key.use)$() to add a hammer to it. The hammer must be a metal hammer. Make sure the trip hammer is oriented such that the bladed axle will push the hammer handle down. The hammer will then hit an anvil placed in front of it. The trip hammer always records the $(thing)\'Light Hit\'$() action, and always moves the cursor closer towards the target, requiring no input from the player. If an ingot is not hot enough or the anvil is the incorrect tier, a deep metal banging sound will alert you. '),
