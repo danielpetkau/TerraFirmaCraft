@@ -47,9 +47,9 @@ import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.FastColor.ARGB32;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
-import net.minecraft.util.FastColor.ARGB32;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.inventory.InventoryMenu;
@@ -64,7 +64,6 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.neoforged.neoforge.client.model.data.ModelData;
 import net.neoforged.neoforge.fluids.FluidStack;
-
 import org.apache.commons.lang3.tuple.Pair;
 import org.joml.Matrix4f;
 
@@ -78,6 +77,11 @@ import net.dries007.tfc.util.Helpers;
 
 public final class RenderHelpers
 {
+    /**
+     * Optional transform for items to used when placed on the ground.
+     * Name controlled via resources/META-INF/enumextensions.json
+     */
+    public static final ItemDisplayContext PLACED_ITEM_CONTEXT = ItemDisplayContext.valueOf("TFC_PLACED_ITEM");
     @SuppressWarnings("deprecation") public static final ResourceLocation BLOCKS_ATLAS = TextureAtlas.LOCATION_BLOCKS;
     public static final Button.CreateNarration NARRATION = Supplier::get;
 
