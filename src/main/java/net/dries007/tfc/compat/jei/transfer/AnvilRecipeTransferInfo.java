@@ -11,6 +11,7 @@ import mezz.jei.api.recipe.transfer.IRecipeTransferError;
 import mezz.jei.api.recipe.transfer.IRecipeTransferHandlerHelper;
 import mezz.jei.api.recipe.transfer.IRecipeTransferInfo;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import org.jetbrains.annotations.Nullable;
 
 import net.dries007.tfc.common.blockentities.AnvilBlockEntity;
@@ -20,8 +21,8 @@ import net.dries007.tfc.common.recipes.AnvilRecipe;
 import net.dries007.tfc.compat.jei.JEIIntegration;
 
 public class AnvilRecipeTransferInfo
-    extends BaseTransferInfo<AnvilContainer, AnvilRecipe>
-    implements IRecipeTransferInfo<AnvilContainer, AnvilRecipe>
+    extends BaseTransferInfo<AnvilContainer, RecipeHolder<AnvilRecipe>>
+    implements IRecipeTransferInfo<AnvilContainer, RecipeHolder<AnvilRecipe>>
 {
     private final IRecipeTransferHandlerHelper transferHelper;
 
@@ -32,14 +33,14 @@ public class AnvilRecipeTransferInfo
     }
 
     @Override
-    public boolean canHandle(AnvilContainer container, AnvilRecipe recipe)
+    public boolean canHandle(AnvilContainer container, RecipeHolder<AnvilRecipe> recipe)
     {
-        return recipe.isCorrectTier(container.getBlockEntity().getTier());
+        return recipe.value().isCorrectTier(container.getBlockEntity().getTier());
     }
 
     @Nullable
     @Override
-    public IRecipeTransferError getHandlingError(AnvilContainer container, AnvilRecipe recipe)
+    public IRecipeTransferError getHandlingError(AnvilContainer container, RecipeHolder<AnvilRecipe> recipe)
     {
         return transferHelper.createUserErrorWithTooltip(Component.translatable("tfc.jei.transfer.error.anvil_forging_tier_too_low"));
     }
