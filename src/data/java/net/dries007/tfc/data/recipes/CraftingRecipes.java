@@ -1131,6 +1131,7 @@ public interface CraftingRecipes extends Recipes
             .input(TFCItems.POWDERS.get(Powder.SALT))
             .copyInput()
             .addTrait(FoodTraits.SALTED)
+            .roundCreationDate()
             .shapeless("salting");
         recipe()
             .input(Items.PAPER)

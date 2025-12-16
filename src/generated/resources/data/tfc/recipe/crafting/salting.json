@@ -43,6 +43,9 @@
       {
         "type": "tfc:add_trait",
         "trait": "tfc:salted"
+      },
+      {
+        "type": "tfc:round_creation_date"
       }
     ]
   }
