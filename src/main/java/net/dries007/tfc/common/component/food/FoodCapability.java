@@ -336,6 +336,25 @@ public final class FoodCapability
         return ((tick - 1) / window + 1) * window;
     }
 
+    public static ItemStack roundCreationDate(ItemStack stack)
+    {
+        final @Nullable FoodComponent food = stack.get(TFCComponents.FOOD);
+        
+        if (food != null)
+        {
+            if (food.getCreationDate() == IFood.ROTTEN_FLAG
+                || food.getCreationDate() == IFood.NEVER_DECAY_FLAG
+                || food.getCreationDate() == IFood.INVISIBLE_NEVER_DECAY_FLAG
+                || food.getCreationDate() == IFood.TRANSIENT_NEVER_DECAY_FLAG)
+            {
+                return stack;
+            }
+            
+            stack.set(TFCComponents.FOOD, food.with(getRoundedCreationDate(food.getCreationDate())));
+        }
+        return stack;
+    }
+
     /**
      * @return {@code true} if the food is rotten based on the internal (flagged) creation date, and the decay date modifier
      */
@@ -402,7 +421,7 @@ public final class FoodCapability
      *
      * @param ci The initial creation date
      * @param p  The decay date modifier (1 / standard decay modifier)
-     * @return cf the final creation date, rounded to the nearest hour, for ease of stackability.
+     * @return cf the final creation date
      */
     private static long calculateNewCreationDate(long ci, float p)
     {

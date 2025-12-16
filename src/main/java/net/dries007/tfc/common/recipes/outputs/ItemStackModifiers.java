@@ -41,6 +41,7 @@ public class ItemStackModifiers
 
     public static final Id<AddTraitModifier> ADD_TRAIT = register("add_trait", AddTraitModifier.CODEC, AddTraitModifier.STREAM_CODEC);
     public static final Id<RemoveTraitModifier> REMOVE_TRAIT = register("remove_trait", RemoveTraitModifier.CODEC, RemoveTraitModifier.STREAM_CODEC);
+    public static final Id<RoundCreationDateModifier> ROUND_CREATION_DATE = register("round_creation_date", RoundCreationDateModifier.INSTANCE);
     public static final Id<AddHeatModifier> ADD_HEAT = register("add_heat", AddHeatModifier.CODEC, AddHeatModifier.STREAM_CODEC);
     public static final Id<DyeLeatherModifier> DYE_LEATHER = register("dye_leather", DyeLeatherModifier.CODEC, DyeLeatherModifier.STREAM_CODEC);
     public static final Id<RemoveDyeModifier> REMOVE_DYE = register("remove_dye", RemoveDyeModifier.INSTANCE);
