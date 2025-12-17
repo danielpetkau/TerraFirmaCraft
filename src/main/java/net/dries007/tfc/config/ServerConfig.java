@@ -152,6 +152,8 @@ public class ServerConfig extends BaseConfig
     public final Supplier<Boolean> fireboxEnableAutomation;
     // Blocks - Hot Water
     public final Supplier<Double> hotWaterHealAmount;
+    // Blocks - Bubble Column
+    public final Supplier<Boolean> bubbleColumnsProvideAir;
     // Blocks - Sapling
     public final Supplier<Double> saplingGrowthModifier;
     public final Map<Wood, Supplier<Integer>> saplingGrowthTicks;
@@ -500,6 +502,10 @@ public class ServerConfig extends BaseConfig
         builder.swap("hotWater");
 
         hotWaterHealAmount = builder.comment("An amount that sitting in hot water will restore health, approximately twice per second.").define("hotWaterHealAmount", 0.08, 0.0, 20.0);
+
+        builder.swap("bubbleColumn");
+
+        bubbleColumnsProvideAir = builder.comment("If true, bubble columns will provide air to player and mobs, as in vanilla.").define("bubbleColumnsProvideAir", false);
 
         builder.swap("saplings");
 
