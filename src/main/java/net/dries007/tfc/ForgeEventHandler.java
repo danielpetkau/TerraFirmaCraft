@@ -505,7 +505,7 @@ public final class ForgeEventHandler
     public static void onLivingBreathe(LivingBreatheEvent event)
     {
         final LivingEntity entity = event.getEntity();
-        if (TFCConfig.SERVER.bubbleColumnsProvideAir.get() && entity.level().getBlockState(BlockPos.containing(entity.getEyePosition())).getBlock() instanceof TFCBubbleColumnBlock)
+        if (TFCConfig.SERVER.bubbleColumnProvidesAir.get() && entity.level().getBlockState(BlockPos.containing(entity.getEyePosition())).getBlock() instanceof TFCBubbleColumnBlock)
         {
             event.setCanBreathe(true);
         }

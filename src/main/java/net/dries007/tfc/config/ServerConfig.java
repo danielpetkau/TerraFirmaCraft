@@ -153,7 +153,7 @@ public class ServerConfig extends BaseConfig
     // Blocks - Hot Water
     public final Supplier<Double> hotWaterHealAmount;
     // Blocks - Bubble Column
-    public final Supplier<Boolean> bubbleColumnsProvideAir;
+    public final Supplier<Boolean> bubbleColumnProvidesAir;
     // Blocks - Sapling
     public final Supplier<Double> saplingGrowthModifier;
     public final Map<Wood, Supplier<Integer>> saplingGrowthTicks;
@@ -505,7 +505,7 @@ public class ServerConfig extends BaseConfig
 
         builder.swap("bubbleColumn");
 
-        bubbleColumnsProvideAir = builder.comment("If true, bubble columns will provide air to player and mobs, as in vanilla.").define("bubbleColumnsProvideAir", false);
+        bubbleColumnProvidesAir = builder.comment("If true, bubble columns will provide air to player and mobs, as in vanilla.").define("bubbleColumnProvidesAir", false);
 
         builder.swap("saplings");
 
