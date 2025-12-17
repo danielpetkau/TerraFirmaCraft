@@ -88,6 +88,34 @@ public final class ItemStackHooks
     }
 
     /**
+     * Components stored in a {@link PatchedDataComponentMap} may not have their
+     * equality methods called by {@link PatchedDataComponentMap#equals},
+     * so we must sanitize them first here.
+     * @see HeatComponent#sanitize()
+     * @see FoodComponent#sanitize()
+     */
+    public static void onCompareItemStackComponents(ItemStack stack, ItemStack other)
+    {
+        final DataComponentMap components = stack.getComponents();
+        final DataComponentMap otherComponents = other.getComponents();
+
+        if (TFCComponents.HEAT.holder().isBound())
+        {
+            final @Nullable HeatComponent heat = components.get(TFCComponents.HEAT.get());
+            if (heat != null) heat.sanitize();
+            final @Nullable HeatComponent otherHeat = otherComponents.get(TFCComponents.HEAT.get());
+            if (otherHeat != null) otherHeat.sanitize();
+        }
+        if (TFCComponents.FOOD.holder().isBound())
+        {
+            final @Nullable FoodComponent food = components.get(TFCComponents.FOOD.get());
+            if (food != null) food.sanitize();
+            final @Nullable FoodComponent otherFood = otherComponents.get(TFCComponents.FOOD.get());
+            if (otherFood != null) otherFood.sanitize();
+        }
+    }
+
+    /**
      * Modifies the attached components whenever an item stack is copied
      * <p>
      * Since we edit the default components of item stacks on the fly, we also want to ensure that the stack reflects the updated {@code prototype}
