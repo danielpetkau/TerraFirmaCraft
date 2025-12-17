@@ -316,7 +316,7 @@ public class ServerConfig extends BaseConfig
             "TFC will try and infer metals from tags that match the pattern 'c:type/...', where 'type' is one of 'ingots' or 'double_ingots'",
             "These will be used to determine what metal is an item for the purpose of rendering it in an ingot pile",
             "This is a list of tag names (not including the 'c' namespace), that look like the above (so i.e. 'ingots/not_a_real_metal') that should not be included"
-        ).define("", List.of(), e -> true);
+        ).define("inferredMetals", List.of(), e -> true);
 
         builder.swap("blocks").push("farmland");
 
