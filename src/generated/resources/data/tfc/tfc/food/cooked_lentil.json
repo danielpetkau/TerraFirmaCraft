@@ -2,9 +2,9 @@
   "decay_modifier": 2.5,
   "hunger": 4,
   "ingredient": {
-    "item": "tfc:food/lentil"
+    "item": "tfc:food/cooked_lentil"
   },
-  "protein": 0.3,
+  "protein": 0.8,
   "saturation": 2.0,
-  "vegetables": 0.3
+  "vegetables": 0.7
 }

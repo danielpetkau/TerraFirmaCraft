@@ -500,7 +500,7 @@ CROPS: dict[str, Crop] = {
     'peanut': Crop('default', 'legume', 6, 12.2, 40, 130, 360, 11, 31, 20, 80, -90, 50, 50, None, None),
     'soybean': Crop('default', 'legume', 7, -9.4, 15.8, 160, 410, -7, 22, 25, 90, -80, 60, 30, 3, None),
     'barley': Crop('default', 'cereal', 8, -9.4, 17.6, 70, 310, -7, 23, 10, 70, 75, -20, -20, None, 2),
-    'oat': Crop('default', 'cereal', 8, -9.4, 15.8, 140, 400, -7, 22, 25, 85, 100, -35, -25, None, 2),
+    'oat': Crop('default', 'cereal', 8, -9.4, 15.8, 140, 400, -7, 22, 25, 85, 100, -40, -30, None, 2),
     'rye': Crop('default', 'cereal', 8, -9.4, 8.6, 100, 350, -7, 18, 15, 80, 100, -20, -40, None, 2),
     'maize': Crop('double', 'cereal', 6, -9.4, 23., 300, 500, -7, 27, 50, 100, 90, -25, -25, None, 2),
     'wheat': Crop('default', 'cereal', 8, -9.4, 15.8, 100, 400, -7, 22, 15, 85, 100, -30, -30, None, 2),

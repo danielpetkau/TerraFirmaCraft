@@ -2,7 +2,7 @@
   "decay_modifier": 2.0,
   "hunger": 4,
   "ingredient": {
-    "item": "tfc:food/dried_seaweed"
+    "item": "tfc:food/bison"
   },
-  "vegetables": 0.5
+  "protein": 1.0
 }
