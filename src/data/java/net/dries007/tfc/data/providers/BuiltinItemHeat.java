@@ -178,6 +178,7 @@ public class BuiltinItemHeat extends DataManagerProvider<HeatDefinition> impleme
             TFCBlocks.PLANTS.get(Plant.GIANT_KELP_FLOWER)
         ), 1.0f);
         add(TFCItems.FOOD.get(Food.POTATO), 1.0f);
+        add(TFCItems.FOOD.get(Food.CASSAVA), 1.0f);
         add(Items.EGG, 1.0f);
         add(TFCItems.POWDERS.get(Powder.FLUX), 0.7f);
     }

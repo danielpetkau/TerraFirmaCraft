@@ -8,7 +8,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "tfc:food/beef",
+          "name": "tfc:food/venison",
           "conditions": [
             {
               "condition": "tfc:not_predated"

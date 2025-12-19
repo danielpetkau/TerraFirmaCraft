@@ -108,6 +108,7 @@ public interface HeatRecipes extends Recipes
         addFood(Food.FOX, Food.COOKED_FOX);
 
         addFood(Food.POTATO, Food.BAKED_POTATO);
+        addFood(Food.CASSAVA, Food.COOKED_CASSAVA);
         addFood(Food.FRESH_SEAWEED, Food.DRIED_SEAWEED);
         add(TFCBlocks.PLANTS.get(Plant.GIANT_KELP_FLOWER), TFCItems.FOOD.get(Food.DRIED_KELP), 200);
         add("from_seaweed", notRotten(TFCItems.FOOD.get(Food.DRIED_SEAWEED)), ItemStackProvider.of(TFCItems.POWDERS.get(Powder.SODA_ASH), 3), 500);
