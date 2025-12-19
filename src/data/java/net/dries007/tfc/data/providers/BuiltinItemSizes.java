@@ -102,6 +102,14 @@ public class BuiltinItemSizes extends DataManagerProvider<ItemSizeDefinition> im
             Ingredient.of(TFCItems.FIRESTARTER.get())
         ), Size.LARGE, Weight.MEDIUM);
         add("tools", ingredientOf(
+            Ingredient.of(ItemTags.PICKAXES),
+            Ingredient.of(ItemTags.SHOVELS),
+            Ingredient.of(ItemTags.HOES),
+            Ingredient.of(TFCTags.Items.TOOLS_HAMMER),
+            Ingredient.of(TFCTags.Items.TOOLS_SAW),
+            Ingredient.of(TFCTags.Items.TOOLS_SCYTHE),
+            Ingredient.of(TFCTags.Items.TOOLS_PROPICK),
+
             Ingredient.of(Tags.Items.TOOLS_FISHING_ROD),
             Ingredient.of(Tags.Items.TOOLS_SHIELD),
             Ingredient.of(Tags.Items.MELEE_WEAPON_TOOLS),
