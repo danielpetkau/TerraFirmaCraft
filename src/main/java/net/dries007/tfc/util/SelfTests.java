@@ -103,7 +103,7 @@ import net.dries007.tfc.world.chunkdata.ForestType;
  */
 public final class SelfTests
 {
-    public static final boolean THROW_ON_FAIL = true; // todo 1.21, re-enable
+    public static final boolean THROW_ON_FAIL = true;
     public static final boolean ENABLED = Boolean.getBoolean("tfc.enableDebugSelfTests");
 
     private static final Logger LOGGER = LogUtils.getLogger();
