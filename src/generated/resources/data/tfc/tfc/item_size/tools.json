@@ -1,6 +1,27 @@
 {
   "ingredient": [
     {
+      "tag": "minecraft:pickaxes"
+    },
+    {
+      "tag": "minecraft:shovels"
+    },
+    {
+      "tag": "minecraft:hoes"
+    },
+    {
+      "tag": "c:tools/hammer"
+    },
+    {
+      "tag": "c:tools/saw"
+    },
+    {
+      "tag": "c:tools/scythe"
+    },
+    {
+      "tag": "c:tools/propick"
+    },
+    {
       "tag": "c:tools/fishing_rod"
     },
     {
