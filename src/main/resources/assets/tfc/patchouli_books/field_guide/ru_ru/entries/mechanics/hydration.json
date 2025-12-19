@@ -1,6 +1,6 @@
 {
   "__comment__": "This file was automatically created by mcresources",
-  "name": "Поддержание влажности почвы",
+  "name": "Поддержание влажности",
   "category": "tfc:mechanics",
   "icon": "tfc:textures/gui/book/icons/hydrated.png",
   "pages": [
