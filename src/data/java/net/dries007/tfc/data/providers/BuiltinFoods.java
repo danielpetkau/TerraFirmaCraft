@@ -40,6 +40,8 @@ public class BuiltinFoods extends DataManagerProvider<FoodDefinition> implements
         add(Food.BANANA, ofFood(0.2f, 0, 2).fruit(1f));
         add(Food.BLACKBERRY, ofFood(0.5f, 5, 4.9f).fruit(0.9f));
         add(Food.BLUEBERRY, ofFood(0.5f, 5, 4.9f).fruit(0.9f));
+        add(Food.BUNCHBERRY, ofFood(0.5f, 5, 4.9f).fruit(0.9f));
+        add(Food.CHERRY, ofFood(0.3f, 5, 4).fruit(1f));
         add(Food.CLOUDBERRY, ofFood(0.5f, 5, 4.9f).fruit(0.9f));
         add(Food.CRANBERRY, ofFood(0.2f, 5, 1.8f).fruit(1f));
         add(Food.ELDERBERRY, ofFood(0.2f, 5, 4.9f).fruit(1.1f));

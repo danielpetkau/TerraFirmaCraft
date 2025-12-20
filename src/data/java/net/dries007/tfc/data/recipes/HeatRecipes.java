@@ -85,6 +85,7 @@ public interface HeatRecipes extends Recipes
         addFood(Food.PEAFOWL, Food.COOKED_PEAFOWL);
         addFood(Food.GROUSE, Food.COOKED_GROUSE);
         addFood(Food.VENISON, Food.COOKED_VENISON);
+        addFood(Food.BISON, Food.COOKED_BISON);
         addFood(Food.WOLF, Food.COOKED_WOLF);
         addFood(Food.RABBIT, Food.COOKED_RABBIT);
         addFood(Food.HYENA, Food.COOKED_HYENA);
