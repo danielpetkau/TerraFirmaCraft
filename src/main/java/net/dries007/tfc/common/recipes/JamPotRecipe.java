@@ -99,7 +99,7 @@ public class JamPotRecipe extends PotRecipe
         }
 
         @Override
-        public ItemInteractionResult onInteract(PotBlockEntity entity, Player player, ItemStack clickedWith)
+        public ItemInteractionResult onInteract(IPotInventory entity, Player player, ItemStack clickedWith)
         {
             if (Helpers.isItem(clickedWith, TFCItems.EMPTY_JAR) && !unsealedStack.isEmpty())
             {

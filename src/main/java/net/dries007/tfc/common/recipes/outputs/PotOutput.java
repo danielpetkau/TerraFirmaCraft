@@ -125,7 +125,7 @@ public interface PotOutput
     /**
      * Called when a player interacts with the pot inventory, using the specific item stack, to try and extract output.
      */
-    default ItemInteractionResult onInteract(PotBlockEntity entity, Player player, ItemStack clickedWith)
+    default ItemInteractionResult onInteract(IPotInventory entity, Player player, ItemStack clickedWith)
     {
         return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
     }

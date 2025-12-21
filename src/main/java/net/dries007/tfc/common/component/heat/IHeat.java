@@ -6,7 +6,6 @@
 
 package net.dries007.tfc.common.component.heat;
 
-import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
 import net.dries007.tfc.common.recipes.ingredients.HeatIngredient;

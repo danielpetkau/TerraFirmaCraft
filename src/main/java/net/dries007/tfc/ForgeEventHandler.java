@@ -8,7 +8,6 @@ package net.dries007.tfc;
 
 import com.mojang.logging.LogUtils;
 import net.minecraft.advancements.CriteriaTriggers;
-import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponents;
@@ -96,6 +95,7 @@ import net.neoforged.neoforge.event.entity.ProjectileImpactEvent;
 import net.neoforged.neoforge.event.entity.item.ItemExpireEvent;
 import net.neoforged.neoforge.event.entity.living.AnimalTameEvent;
 import net.neoforged.neoforge.event.entity.living.FinalizeSpawnEvent;
+import net.neoforged.neoforge.event.entity.living.LivingBreatheEvent;
 import net.neoforged.neoforge.event.entity.living.LivingEntityUseItemEvent;
 import net.neoforged.neoforge.event.entity.living.LivingEvent;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
@@ -117,7 +117,6 @@ import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
-import vazkii.patchouli.api.BookDrawScreenEvent;
 
 import net.dries007.tfc.client.TFCSounds;
 import net.dries007.tfc.common.TFCTags;
@@ -136,6 +135,7 @@ import net.dries007.tfc.common.blockentities.TickCounterBlockEntity;
 import net.dries007.tfc.common.blocks.CharcoalPileBlock;
 import net.dries007.tfc.common.blocks.FireboxBlock;
 import net.dries007.tfc.common.blocks.TFCBlocks;
+import net.dries007.tfc.common.blocks.TFCBubbleColumnBlock;
 import net.dries007.tfc.common.blocks.TFCCandleBlock;
 import net.dries007.tfc.common.blocks.TFCCandleCakeBlock;
 import net.dries007.tfc.common.blocks.devices.AnvilBlock;
@@ -222,6 +222,7 @@ public final class ForgeEventHandler
         bus.addListener(ForgeEventHandler::onCreateNetherPortal);
         bus.addListener(ForgeEventHandler::onFluidPlaceBlock);
         bus.addListener(ForgeEventHandler::onFluidCreateSource);
+        bus.addListener(ForgeEventHandler::onLivingBreathe);
         bus.addListener(ForgeEventHandler::onFireStart);
         bus.addListener(ForgeEventHandler::onFireStop);
         bus.addListener(ForgeEventHandler::onProjectileImpact);
@@ -498,6 +499,15 @@ public final class ForgeEventHandler
             {
                 event.setCanConvert(false); // This block might be being fed by a sluice - so don't allow it to create more source blocks.
             }
+        }
+    }
+
+    public static void onLivingBreathe(LivingBreatheEvent event)
+    {
+        final LivingEntity entity = event.getEntity();
+        if (TFCConfig.SERVER.bubbleColumnProvidesAir.get() && entity.level().getBlockState(BlockPos.containing(entity.getEyePosition())).getBlock() instanceof TFCBubbleColumnBlock)
+        {
+            event.setCanBreathe(true);
         }
     }
 

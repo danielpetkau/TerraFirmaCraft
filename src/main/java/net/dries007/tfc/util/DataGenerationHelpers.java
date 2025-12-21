@@ -41,6 +41,7 @@ import net.dries007.tfc.common.recipes.outputs.DamageCraftingRemainderModifier;
 import net.dries007.tfc.common.recipes.outputs.ExtraProductModifier;
 import net.dries007.tfc.common.recipes.outputs.ItemStackModifier;
 import net.dries007.tfc.common.recipes.outputs.ItemStackProvider;
+import net.dries007.tfc.common.recipes.outputs.RoundCreationDateModifier;
 
 public interface DataGenerationHelpers
 {
@@ -146,6 +147,8 @@ public interface DataGenerationHelpers
         }
 
         public Builder addTrait(Holder<FoodTrait> trait) {return addOutputModifier(AddTraitModifier.of(trait));}
+
+        public Builder roundCreationDate() {return addOutputModifier(RoundCreationDateModifier.INSTANCE);}
 
         public Builder addOutputModifier(ItemStackModifier modifier)
         {

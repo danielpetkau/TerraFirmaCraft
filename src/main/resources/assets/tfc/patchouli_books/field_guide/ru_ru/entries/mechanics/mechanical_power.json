@@ -135,7 +135,7 @@
         ],
         "mapping": {
           "X": "tfc:wood/bladed_axle/oak[axis=x]",
-          "Y": "tfc:trip_hammer[facing=north]",
+          "Y": "tfc:trip_hammer[facing=south]",
           "Z": "tfc:metal/anvil/copper[facing=west]"
         }
       },
@@ -145,7 +145,7 @@
     },
     {
       "type": "patchouli:text",
-      "text": "Установите отбойный молот под осью и нажмите $(item)$(k:key.use)$(), чтобы установить в него молот. Молот должен быть металлическим. Убедитесь, что отбойный молот ориентирован так, чтобы ось со вставкой толкала рукоятку молота вниз. Тогда молот ударит по наковальне перед ним. Отбойный молот всегда выполняет действие $(thing)'Легкий удар'$() и всегда перемещает курсор ближе к цели, без вмешательства игрока. Если слиток недостаточно горяч или наковальня неправильного уровня, глубокий звук удара по металлу предупредит вас об этом."
+      "text": "Place a trip hammer below the axle, and $(item)$(k:key.use)$() to add a hammer to it. The hammer must be a metal hammer. Make sure the trip hammer is oriented such that the bladed axle will push the hammer handle down. The hammer will then hit an anvil placed in front of it. The trip hammer always records the $(thing)'Light Hit'$() action, and always moves the cursor closer towards the target. If an ingot is not hot enough or the anvil is the incorrect tier, a deep metal banging sound will alert you. "
     }
   ],
   "read_by_default": true,

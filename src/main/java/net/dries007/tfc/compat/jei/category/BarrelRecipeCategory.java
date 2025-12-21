@@ -16,6 +16,7 @@ import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.neoforged.neoforge.fluids.FluidStack;
 import org.jetbrains.annotations.Nullable;
 
@@ -31,12 +32,12 @@ public class BarrelRecipeCategory<T extends BarrelRecipe> extends BaseRecipeCate
     protected @Nullable IRecipeSlotBuilder outputFluidSlot;
     protected @Nullable IRecipeSlotBuilder outputItemSlot;
 
-    public BarrelRecipeCategory(RecipeType<T> type, IGuiHelper helper, int width, int height, Wood iconType)
+    public BarrelRecipeCategory(RecipeType<RecipeHolder<T>> type, IGuiHelper helper, int width, int height, Wood iconType)
     {
         this(type, helper, width, height, new ItemStack(TFCBlocks.WOODS.get(iconType).get(Wood.BlockType.BARREL).get()));
     }
 
-    public BarrelRecipeCategory(RecipeType<T> type, IGuiHelper helper, int width, int height, ItemStack iconType)
+    public BarrelRecipeCategory(RecipeType<RecipeHolder<T>> type, IGuiHelper helper, int width, int height, ItemStack iconType)
     {
         super(type, helper, width, height, iconType);
     }

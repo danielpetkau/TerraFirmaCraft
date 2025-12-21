@@ -3,10 +3,10 @@
   "category": "misc",
   "ingredients": [
     {
-      "tag": "tfc:mud_brick_items"
+      "item": "tfc:daub"
     },
     {
-      "item": "tfc:daub"
+      "tag": "tfc:mud_bricks"
     }
   ],
   "result": {

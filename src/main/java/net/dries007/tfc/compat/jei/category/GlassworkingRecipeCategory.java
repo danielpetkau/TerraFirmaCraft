@@ -21,6 +21,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeHolder;
 
 import net.dries007.tfc.common.blocks.PouredGlassBlock;
 import net.dries007.tfc.common.component.glass.GlassOperation;
@@ -33,7 +34,7 @@ import net.dries007.tfc.common.recipes.GlassworkingRecipe;
 public class GlassworkingRecipeCategory extends BaseRecipeCategory<GlassworkingRecipe>
 {
 
-    public GlassworkingRecipeCategory(RecipeType<GlassworkingRecipe> type, IGuiHelper helper)
+    public GlassworkingRecipeCategory(RecipeType<RecipeHolder<GlassworkingRecipe>> type, IGuiHelper helper)
     {
         super(type, helper, 175, 110, new ItemStack(TFCItems.BLOWPIPE_WITH_GLASS.get()));
     }

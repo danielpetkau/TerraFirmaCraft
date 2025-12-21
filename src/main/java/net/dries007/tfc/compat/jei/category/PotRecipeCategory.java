@@ -9,12 +9,12 @@ package net.dries007.tfc.compat.jei.category;
 
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.builder.IRecipeSlotBuilder;
-import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeHolder;
 
 import net.dries007.tfc.common.items.TFCItems;
 import net.dries007.tfc.common.recipes.PotRecipe;
@@ -22,7 +22,7 @@ import net.dries007.tfc.compat.jei.JEIIntegration;
 
 public abstract class PotRecipeCategory<T extends PotRecipe> extends BaseRecipeCategory<T>
 {
-    public PotRecipeCategory(RecipeType<T> type, IGuiHelper helper, int width, int height)
+    public PotRecipeCategory(RecipeType<RecipeHolder<T>> type, IGuiHelper helper, int width, int height)
     {
         super(type, helper, width, height, new ItemStack(TFCItems.POT.get()));
     }

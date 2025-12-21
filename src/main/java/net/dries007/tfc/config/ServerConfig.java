@@ -152,6 +152,8 @@ public class ServerConfig extends BaseConfig
     public final Supplier<Boolean> fireboxEnableAutomation;
     // Blocks - Hot Water
     public final Supplier<Double> hotWaterHealAmount;
+    // Blocks - Bubble Column
+    public final Supplier<Boolean> bubbleColumnProvidesAir;
     // Blocks - Sapling
     public final Supplier<Double> saplingGrowthModifier;
     public final Map<Wood, Supplier<Integer>> saplingGrowthTicks;
@@ -314,7 +316,7 @@ public class ServerConfig extends BaseConfig
             "TFC will try and infer metals from tags that match the pattern 'c:type/...', where 'type' is one of 'ingots' or 'double_ingots'",
             "These will be used to determine what metal is an item for the purpose of rendering it in an ingot pile",
             "This is a list of tag names (not including the 'c' namespace), that look like the above (so i.e. 'ingots/not_a_real_metal') that should not be included"
-        ).define("", List.of(), e -> true);
+        ).define("inferredMetals", List.of(), e -> true);
 
         builder.swap("blocks").push("farmland");
 
@@ -500,6 +502,10 @@ public class ServerConfig extends BaseConfig
         builder.swap("hotWater");
 
         hotWaterHealAmount = builder.comment("An amount that sitting in hot water will restore health, approximately twice per second.").define("hotWaterHealAmount", 0.08, 0.0, 20.0);
+
+        builder.swap("bubbleColumn");
+
+        bubbleColumnProvidesAir = builder.comment("If true, bubble columns will provide air to player and mobs, as in vanilla.").define("bubbleColumnProvidesAir", false);
 
         builder.swap("saplings");
 

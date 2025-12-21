@@ -7,13 +7,10 @@
 package net.dries007.tfc.client.render.blockentity;
 
 import java.util.Map;
-import java.util.Objects;
 import java.util.function.Function;
-import com.google.common.collect.ImmutableMap;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.math.Axis;
-import net.minecraft.Util;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
@@ -38,7 +35,6 @@ import net.dries007.tfc.client.model.entity.WindmillBladeRusticModel;
 import net.dries007.tfc.common.blockentities.rotation.WindmillBlockEntity;
 import net.dries007.tfc.common.blocks.rotation.WindmillBlock;
 import net.dries007.tfc.common.items.TFCItems;
-import net.dries007.tfc.common.items.WindmillBladeItem;
 import net.dries007.tfc.util.Helpers;
 
 public class WindmillBlockEntityRenderer implements BlockEntityRenderer<WindmillBlockEntity>

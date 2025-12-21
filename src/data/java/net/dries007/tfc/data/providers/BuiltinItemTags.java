@@ -587,6 +587,7 @@ public class BuiltinItemTags extends TagsProvider<Item> implements Accessors
             .addAll(TFCItems.GRADED_ORES);
 
         tag(MUD_BRICK_ITEMS)
+            .addTag(MUD_BRICKS)
             .add(TFCItems.ENTISOL_MUD_BRICK)
             .add(TFCItems.ALFISOL_MUD_BRICK)
             .add(TFCItems.PODZOL_MUD_BRICK)
@@ -816,7 +817,7 @@ public class BuiltinItemTags extends TagsProvider<Item> implements Accessors
         copy(TFCTags.Blocks.GRASS, GRASS);
         copy(TFCTags.Blocks.COARSE_DIRT, COARSE_DIRT);
         copy(TFCTags.Blocks.MUD, MUD);
-        copy(TFCTags.Blocks.MUD_BRICKS, MUD_BRICK_ITEMS);
+        copy(TFCTags.Blocks.MUD_BRICKS, MUD_BRICKS);
 
         copy(TFCTags.Blocks.ANVILS, ANVILS);
         copy(TFCTags.Blocks.WORKBENCHES, WORKBENCHES);

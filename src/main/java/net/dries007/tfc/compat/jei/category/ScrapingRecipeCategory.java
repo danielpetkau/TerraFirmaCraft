@@ -13,6 +13,7 @@ import mezz.jei.api.recipe.RecipeType;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeHolder;
 
 import net.dries007.tfc.common.TFCTags;
 import net.dries007.tfc.common.items.TFCItems;
@@ -21,7 +22,7 @@ import net.dries007.tfc.util.Metal;
 
 public class ScrapingRecipeCategory extends SimpleItemRecipeCategory<ScrapingRecipe>
 {
-    public ScrapingRecipeCategory(RecipeType<ScrapingRecipe> type, IGuiHelper helper)
+    public ScrapingRecipeCategory(RecipeType<RecipeHolder<ScrapingRecipe>> type, IGuiHelper helper)
     {
         super(type, helper, new ItemStack(TFCItems.METAL_ITEMS.get(Metal.BLACK_BRONZE).get(Metal.ItemType.KNIFE).get()));
     }

@@ -8,6 +8,7 @@ package net.dries007.tfc.mixin;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+
 import net.minecraft.core.component.PatchedDataComponentMap;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
@@ -33,6 +34,17 @@ public abstract class ItemStackMixin
     private void modifyItemStackOnConstructing(CallbackInfo ci)
     {
         ItemStackHooks.onModifyItemStackComponents((ItemStack) (Object) this);
+    }
+
+    /**
+     * Before performing an equality comparison of components on item
+     * stacks, make sure both are sanitized.
+     * @see ItemStackHooks#onCompareItemStackComponents
+     */
+    @Inject(method = "isSameItemSameComponents", at = @At("HEAD"))
+    private static void sanitizeComponentsBeforeComparing(ItemStack stack, ItemStack other, CallbackInfoReturnable<Boolean> cir)
+    {
+        ItemStackHooks.onCompareItemStackComponents(stack, other);
     }
 
     /**

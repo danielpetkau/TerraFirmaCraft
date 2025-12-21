@@ -15,6 +15,7 @@ import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeHolder;
 
 import net.dries007.tfc.client.screen.SewingTableScreen;
 import net.dries007.tfc.common.container.SewingTableContainer;
@@ -28,7 +29,7 @@ public class SewingRecipeCategory extends BaseRecipeCategory<SewingRecipe>
     private final IDrawable wool;
     private final IDrawable burlap;
 
-    public SewingRecipeCategory(RecipeType<SewingRecipe> type, IGuiHelper helper)
+    public SewingRecipeCategory(RecipeType<RecipeHolder<SewingRecipe>> type, IGuiHelper helper)
     {
         super(type, helper, 144, 70, new ItemStack(TFCItems.BONE_NEEDLE.get()));
 

@@ -16,13 +16,12 @@ import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
-import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.neoforged.neoforge.fluids.FluidStack;
 
 import net.dries007.tfc.common.blocks.TFCBlocks;
@@ -33,7 +32,7 @@ import net.dries007.tfc.config.TFCConfig;
 
 public class HeatingRecipeCategory extends BaseRecipeCategory<HeatingRecipe>
 {
-    public HeatingRecipeCategory(RecipeType<HeatingRecipe> type, IGuiHelper helper)
+    public HeatingRecipeCategory(RecipeType<RecipeHolder<HeatingRecipe>> type, IGuiHelper helper)
     {
         super(type, helper, 120, 38, new ItemStack(TFCBlocks.FIREPIT.get()));
     }
@@ -45,7 +44,7 @@ public class HeatingRecipeCategory extends BaseRecipeCategory<HeatingRecipe>
         IRecipeSlotBuilder outputSlot = builder.addSlot(RecipeIngredientRole.OUTPUT, 85, 17);
 
         inputSlot.addIngredients(recipe.getIngredient());
-        inputSlot.setBackground(slot, -1,-1);
+        inputSlot.setBackground(slot, -1, -1);
 
         final List<ItemStack> outputItems = Arrays.stream(recipe.getIngredient().getItems())
             .map(stack -> recipe.assembleStacked(stack, Integer.MAX_VALUE, true))
@@ -64,7 +63,7 @@ public class HeatingRecipeCategory extends BaseRecipeCategory<HeatingRecipe>
             outputSlot.addIngredient(JEIIntegration.FLUID_STACK, resultFluid);
             outputSlot.setFluidRenderer(1, false, 16, 16);
         }
-        outputSlot.setBackground(slot, -1,-1);
+        outputSlot.setBackground(slot, -1, -1);
     }
 
     @Override

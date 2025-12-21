@@ -13,6 +13,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Blocks;
@@ -23,6 +24,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.AttachFace;
 import net.minecraft.world.level.block.state.properties.RedstoneSide;
 import net.minecraft.world.level.material.Fluids;
+import net.neoforged.neoforge.items.ItemStackHandler;
+
 import org.slf4j.Logger;
 import vazkii.patchouli.api.IMultiblock;
 import vazkii.patchouli.api.IStateMatcher;
@@ -256,7 +259,14 @@ public final class PatchouliIntegration
 
         sneakIntoMultiblock(multiblock)
             .flatMap(access -> access.getBlockEntity(new BlockPos(0, 6, 6), TFCBlockEntities.WINDMILL.get()))
-            .ifPresent(entity -> entity.getRotationNode().setRotationFromOutsideWorld());
+            .ifPresent(entity -> {
+                entity.getRotationNode().setRotationFromOutsideWorld();
+                final ItemStackHandler inventory = entity.getInventory();
+                for (int i = 0; i < inventory.getSlots(); i++)
+                {
+                    inventory.setStackInSlot(i, new ItemStack(TFCItems.WINDMILL_BLADES.get(DyeColor.WHITE)));
+                }
+            });
 
         return multiblock;
     }
@@ -338,6 +348,7 @@ public final class PatchouliIntegration
             access.getBlockEntity(new BlockPos(0, 1, 0), TFCBlockEntities.QUERN.get()).ifPresent(quern -> {
                 quern.getRotationNode().setRotationFromOutsideWorld();
                 quern.setHandstoneFromOutsideWorld();
+                quern.setAxleAboveFromOutsideWorld(TFCBlocks.WOODS.get(Wood.OAK).get(Wood.BlockType.AXLE).get());
             });
             access.getBlockEntity(new BlockPos(0, 2, 0), TFCBlockEntities.AXLE.get()).ifPresent(axle -> axle.getRotationNode().setRotationFromOutsideWorld());
         });
