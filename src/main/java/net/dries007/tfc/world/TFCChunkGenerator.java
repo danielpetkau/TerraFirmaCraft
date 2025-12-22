@@ -94,7 +94,6 @@ import net.dries007.tfc.world.layer.framework.ConcurrentArea;
 import net.dries007.tfc.world.noise.ChunkNoiseSamplingSettings;
 import net.dries007.tfc.world.noise.Noise2D;
 import net.dries007.tfc.world.noise.NoiseSampler;
-import net.dries007.tfc.world.noise.OpenSimplex2D;
 import net.dries007.tfc.world.region.RegionGenerator;
 import net.dries007.tfc.world.river.RiverBlendType;
 import net.dries007.tfc.world.river.RiverNoiseSampler;
@@ -305,14 +304,15 @@ public class TFCChunkGenerator extends ChunkGenerator implements ChunkGeneratorE
         final WorldgenRandom random = new WorldgenRandom(new XoroshiroRandomSource(RandomSupport.generateUniqueSeed()));
         final long baseSeed = Helpers.hash(128739412341L, originPos);
 
-        final Set<Biome> allAdjacentBiomes = new ObjectArraySet<>();
+        final Set<Holder<Biome>> allAdjacentBiomes = new ObjectArraySet<>();
         ChunkPos.rangeClosed(sectionPos.chunk(), 1).forEach((chunkPos1_) -> {
             final ChunkAccess adjChunk = level.getChunk(chunkPos1_.x, chunkPos1_.z);
             for (LevelChunkSection adjSection : adjChunk.getSections())
             {
-                adjSection.getBiomes().getAll(biome -> allAdjacentBiomes.add(biome.value()));
+                adjSection.getBiomes().getAll(allAdjacentBiomes::add);
             }
         });
+        allAdjacentBiomes.retainAll(this.biomeSource.possibleBiomes());
 
         for (int decorationIndex = 0; decorationIndex < Math.max(DECORATION_STEPS, orderedFeatures.size()); ++decorationIndex)
         {
@@ -333,8 +333,9 @@ public class TFCChunkGenerator extends ChunkGenerator implements ChunkGeneratorE
             if (decorationIndex < orderedFeatures.size())
             {
                 final IntSet featureIndices = new IntArraySet();
-                for (Biome biome : allAdjacentBiomes)
+                for (Holder<Biome> biomeHolder : allAdjacentBiomes)
                 {
+                    final Biome biome = biomeHolder.value();
                     List<HolderSet<PlacedFeature>> featuresPerBiome = TFCBiomes.getExtensionOrThrow(level, biome).getFlattenedFeatures(biome);
                     if (decorationIndex < featuresPerBiome.size())
                     {
