@@ -200,9 +200,4 @@ public final class BiomeExtension
         return flattenedFeatures;
     }
 
-    public Set<PlacedFeature> getFlattenedFeatureSet(Biome biome)
-    {
-        getFlattenedFeatures(biome);
-        return Objects.requireNonNull(flattenedFeatureSet);
-    }
 }
