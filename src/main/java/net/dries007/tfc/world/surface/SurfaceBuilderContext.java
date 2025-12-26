@@ -80,7 +80,7 @@ public class SurfaceBuilderContext
         this.slope = slope;
         this.temperature = chunkData.getAverageSeaLevelTemp(x, z);
         this.baseGroundwater = chunkData.getBaseGroundwater(x, z);
-        this.rainfall = chunkData.getRainfall(x, z);
+        this.rainfall = chunkData.getAverageRainfall(x, z);
         this.rainVariance = chunkData.getRainVariance(x, z);
         this.salty = salty;
 

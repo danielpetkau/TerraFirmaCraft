@@ -55,7 +55,7 @@ public class LooseRockFeature extends Feature<NoneFeatureConfiguration>
         final BlockState stateAt = level.getBlockState(pos);
         BlockState rockState;
 
-        if (mossyLooseRock != null && data.getRainfall(pos) > 250f && random.nextBoolean() && stateAt.getFluidState().isEmpty())
+        if (mossyLooseRock != null && data.getAverageRainfall(pos) > 250f && random.nextBoolean() && stateAt.getFluidState().isEmpty())
         {
             rockState = FluidHelpers.fillWithFluid(mossyLooseRock.defaultBlockState(), stateAt.getFluidState().getType());
         }

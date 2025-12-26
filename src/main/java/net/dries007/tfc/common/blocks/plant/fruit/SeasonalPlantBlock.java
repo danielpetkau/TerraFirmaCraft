@@ -294,7 +294,7 @@ public abstract class SeasonalPlantBlock extends BushBlock implements IForgeBloc
     protected static int getFruitBushHydrationFromRootPos(Level level, BlockPos rootPos)
     {
         final float averageRainfall = WorldTracker.get(level).getClimateModel().getAverageRainfall(level, rootPos);
-        return FarmlandBlock.getHydrationFromRainHydration(level, rootPos, FarmlandBlock.getRainHydration(averageRainfall));
+        return FarmlandBlock.getInstantHydrationFromRainHydration(level, rootPos, FarmlandBlock.getInstantRainHydration(averageRainfall));
     }
 
     protected Lifecycle getLifecycleForCurrentMonth(Level level, BlockPos pos)

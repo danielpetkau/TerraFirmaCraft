@@ -344,7 +344,7 @@ public class TFCRabbit extends Rabbit implements MammalProperties
     {
         final int i = random.nextInt(100);
         final ChunkData data = ChunkData.get(level, pos);
-        final float rain = data.getRainfall(pos);
+        final float rain = data.getAverageRainfall(pos);
         final float temp = data.getAverageSeaLevelTemp(pos);
         if (temp < 0)
         {

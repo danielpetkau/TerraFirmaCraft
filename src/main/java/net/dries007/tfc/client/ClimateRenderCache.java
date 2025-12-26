@@ -55,13 +55,13 @@ public enum ClimateRenderCache
 
             averageSeaLevelTemperature = model.getAverageTemperature(level, seaLevelPos);
             averageTemperature = model.getAverageTemperature(level, pos);
-            temperature = model.getTemperature(level, pos);
+            temperature = model.getInstantTemperature(level, pos);
             averageRainfall = model.getAverageRainfall(level, pos);
             rainVariance = model.getRainfallVariance(level, pos);
-            rainfall = model.getRainfall(level, pos);
+            rainfall = model.getInstantRainfall(level, pos);
             baseGroundwater = model.getBaseGroundwater(level, pos);
             averageGroundwater = model.getAverageGroundwater(level, pos);
-            groundwater = model.getGroundwater(level, pos);
+            groundwater = model.getInstantGroundwater(level, pos);
             wind = model.getWind(level, pos);
             hemisphereScale = model.hemisphereScale();
 
@@ -96,12 +96,12 @@ public enum ClimateRenderCache
         return averageTemperature;
     }
 
-    public float getTemperature()
+    public float getInstantTemperature()
     {
         return temperature;
     }
 
-    public float getRainfall()
+    public float getInstantRainfall()
     {
         return rainfall;
     }
@@ -131,7 +131,7 @@ public enum ClimateRenderCache
         return averageGroundwater;
     }
 
-    public float getGroundwater()
+    public float getInstantGroundwater()
     {
         return groundwater;
     }

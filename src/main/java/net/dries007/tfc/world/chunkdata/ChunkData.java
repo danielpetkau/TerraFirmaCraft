@@ -6,9 +6,6 @@
 
 package net.dries007.tfc.world.chunkdata;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import java.util.Random;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -143,7 +140,7 @@ public sealed class ChunkData
     {
         final int x = pos.getX();
         final int y = pos.getY();
-        final float rainfall = getRainfall(x, y);
+        final float rainfall = getAverageRainfall(x, y);
         final float rainVar = Math.abs(getRainVariance(x, y));
         // Max instantaneous rainfall value is actually double the max rainfall, this caps rainfall contribution at the max average rainfall
         return rainfall * (1 - rainVar) * (MAX_RAINFALL_CONTRIBUTION / ClimateModel.MAX_CROP_RAINFALL);
@@ -154,7 +151,7 @@ public sealed class ChunkData
     {
         final int x = pos.getX();
         final int y = pos.getY();
-        final float rainfall = getRainfall(x, y);
+        final float rainfall = getAverageRainfall(x, y);
         final float rainVar = Math.abs(getRainVariance(x, y));
         // Max instantaneous rainfall value is actually double the max rainfall, this caps rainfall contribution at the max average rainfall
         return Math.min(rainfall * (1 + rainVar) * (MAX_RAINFALL_CONTRIBUTION / ClimateModel.MAX_CROP_RAINFALL), MAX_RAINFALL_CONTRIBUTION);
@@ -163,15 +160,15 @@ public sealed class ChunkData
     /**
      * Returns the time-invariant rainfall for this position.
      */
-    public float getRainfall(BlockPos pos)
+    public float getAverageRainfall(BlockPos pos)
     {
-        return getRainfall(pos.getX(), pos.getZ());
+        return getAverageRainfall(pos.getX(), pos.getZ());
     }
 
     /**
      * Returns the time-invariant rainfall for this position.
      */
-    public float getRainfall(int x, int z)
+    public float getAverageRainfall(int x, int z)
     {
         return rainfallLayer == null ? UNKNOWN_RAINFALL : rainfallLayer.getValue((x & 15) / 16f, (z & 15) / 16f);
     }
@@ -199,17 +196,17 @@ public sealed class ChunkData
     /**
      * Returns the time-invariant total groundwater (rivers + rainfall) for this position.
      */
-    public float getGroundwater(BlockPos pos)
+    public float getAverageGroundwater(BlockPos pos)
     {
-        return getGroundwater(pos.getX(), pos.getZ());
+        return getAverageGroundwater(pos.getX(), pos.getZ());
     }
 
     /**
      * Returns the time-invariant total groundwater (rivers + rainfall) for this position.
      */
-    public float getGroundwater(int x, int z)
+    public float getAverageGroundwater(int x, int z)
     {
-        return Math.min(getBaseGroundwater(x, z) + getRainfall(x, z), 500f);
+        return Math.min(getBaseGroundwater(x, z) + getAverageRainfall(x, z), 500f);
     }
 
     public float getAverageSeaLevelTemp(BlockPos pos)

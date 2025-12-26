@@ -591,7 +591,7 @@ public final class Helpers
         }
         else if (level.random.nextFloat() <= 0.7) // Otherwise, 30% chance to just skip checking for climate-specific pests and spawning a rat
         {
-            final float rainfall = data.getRainfall(pos);
+            final float rainfall = data.getAverageRainfall(pos);
             if (rainfall < 160)
             {
                 return Helpers.randomEntity(TFCTags.Entities.DESERT_PESTS, level.random);

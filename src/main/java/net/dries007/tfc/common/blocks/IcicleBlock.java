@@ -56,7 +56,7 @@ public class IcicleBlock extends ThinSpikeBlock
     @Override
     public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random)
     {
-        final float temperature = Climate.getTemperature(level, pos);
+        final float temperature = Climate.getInstantTemperature(level, pos);
         if (state.getValue(TIP) && state.getValue(FLUID).getFluid() == Fluids.EMPTY && temperature > 0 && random.nextFloat() < 0.15f)
         {
             if (random.nextFloat() < 0.15f)

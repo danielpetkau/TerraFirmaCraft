@@ -269,7 +269,7 @@ public final class BlockEntityTooltips
                 tooltip.accept(Component.translatable("tfc.tooltip.thermometer_ambient_mode"));
 
                 final TemperatureDisplayStyle style = TFCConfig.CLIENT.climateTooltipStyle.get();
-                final Component temperatureComponent = Objects.requireNonNull(style.formatRange(ClimateRenderCache.INSTANCE.getTemperature()));
+                final Component temperatureComponent = Objects.requireNonNull(style.formatRange(ClimateRenderCache.INSTANCE.getInstantTemperature()));
 
                 tooltip.accept(temperatureComponent);
             }

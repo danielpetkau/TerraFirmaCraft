@@ -61,8 +61,8 @@ public class ClimateScreen extends TFCContainerScreen<Container>
         final float averageTemp = ClimateRenderCache.INSTANCE.getAverageTemperature();
         final float averageRainfall = ClimateRenderCache.INSTANCE.getAverageRainfall();
         final float rainVar = ClimateRenderCache.INSTANCE.getRainVariance();
-        final float currentTemp = ClimateRenderCache.INSTANCE.getTemperature();
-        final float currentRainfall = ClimateRenderCache.INSTANCE.getRainfall();
+        final float currentTemp = ClimateRenderCache.INSTANCE.getInstantTemperature();
+        final float currentRainfall = ClimateRenderCache.INSTANCE.getInstantRainfall();
 
         final TemperatureDisplayStyle style = TFCConfig.CLIENT.climateTooltipStyle.get();
 

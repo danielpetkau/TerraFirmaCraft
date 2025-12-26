@@ -155,7 +155,7 @@ public final class PlayerInfo extends net.minecraft.world.food.FoodData implemen
     {
         if (TFCConfig.SERVER.enableThirstOverheating.get())
         {
-            final float temp = Climate.getTemperature(player.level(), player.blockPosition());
+            final float temp = Climate.getInstantTemperature(player.level(), player.blockPosition());
             return Mth.clampedMap(temp, 22f, 34f, 0f, MAX_TEMPERATURE_THIRST_DECAY);
         }
         return 0;

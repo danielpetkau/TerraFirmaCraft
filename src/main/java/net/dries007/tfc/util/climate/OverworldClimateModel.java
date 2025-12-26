@@ -6,7 +6,6 @@
 
 package net.dries007.tfc.util.climate;
 
-import com.mojang.datafixers.util.Pair;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
@@ -64,7 +63,7 @@ public class OverworldClimateModel implements ClimateModel
     private static final long RAIN_SEGMENT_LENGTH = 66_000;
 
     // On average, the game will rain for 18 ticks out of a 66 tick segment, then repeat, given that the
-    // climate's rainfall is at MAX_RAINFALL (since it will be considered raining if there any any raining
+    // climate's rainfall is at MAX_RAINFALL (since it will be considered raining if there are any raining
     // intensity at all). This value is the percentage of the time that it will rain in a MAX_RAINFALL climate,
     // and is used to scale the number of ticks that are considered raining to get a baseline precipitation value.
     //
@@ -128,7 +127,7 @@ public class OverworldClimateModel implements ClimateModel
     }
 
     @Override
-    public float getTemperature(LevelReader level, BlockPos pos, long calendarTicks, int daysInMonth)
+    public float getInstantTemperature(LevelReader level, BlockPos pos, long calendarTicks, int daysInMonth)
     {
         final ChunkData data = ChunkData.get(level, pos);
 
@@ -146,7 +145,7 @@ public class OverworldClimateModel implements ClimateModel
     @Override
     public float getAverageRainfall(LevelReader level, BlockPos pos)
     {
-        return ChunkData.get(level, pos).getRainfall(pos);
+        return ChunkData.get(level, pos).getAverageRainfall(pos);
     }
 
     @Override
@@ -156,11 +155,11 @@ public class OverworldClimateModel implements ClimateModel
     }
 
     @Override
-    public float getRainfall(LevelReader level, BlockPos pos, long calendarTicks, int daysInMonth)
+    public float getInstantRainfall(LevelReader level, BlockPos pos, long calendarTicks, int daysInMonth)
     {
         final ChunkData data = ChunkData.get(level, pos);
         final float rainVariance = data.getRainVariance(pos);
-        final float rainAverage = data.getRainfall(pos);
+        final float rainAverage = data.getAverageRainfall(pos);
         final float fractionOfYear = ICalendar.getFractionOfYear(calendarTicks, daysInMonth);
 
         // For positive values of variance, drought in winter, rain in summer, reverse for negative values
@@ -177,14 +176,14 @@ public class OverworldClimateModel implements ClimateModel
     public float getAverageGroundwater(LevelReader level, BlockPos pos)
     {
         final ChunkData data = ChunkData.get(level, pos);
-        return Math.clamp(data.getBaseGroundwater(pos) + data.getRainfall(pos), MIN_RAINFALL, MAX_RAINFALL);
+        return Math.clamp(data.getBaseGroundwater(pos) + data.getAverageRainfall(pos), MIN_AVERAGE_RAINFALL, MAX_AVERAGE_RAINFALL);
     }
 
     @Override
-    public float getGroundwater(LevelReader level, BlockPos pos, long calendarTicks, int daysInMonth)
+    public float getInstantGroundwater(LevelReader level, BlockPos pos, long calendarTicks, int daysInMonth)
     {
         final float baseGroundwater = getBaseGroundwater(level, pos);
-        final float monthlyRainfall = getRainfall(level, pos, calendarTicks, daysInMonth);
+        final float monthlyRainfall = getInstantRainfall(level, pos, calendarTicks, daysInMonth);
 
         return Math.clamp(baseGroundwater + monthlyRainfall, 0f, 1000f);
     }
@@ -293,7 +292,7 @@ public class OverworldClimateModel implements ClimateModel
             scaledTime = 0;
         }
 
-        final float rainfall = getRainfall(level, pos);
+        final float rainfall = getInstantRainfall(level, pos);
         final float rainfallModifier = Mth.clampedMap(rainfall, FOGGY_RAINFALL_MINIMUM, FOGGY_RAINFALL_PEAK, 0, 1);
         final float skylightModifier = Mth.clampedMap(level.getBrightness(LightLayer.SKY, pos), 0f, 10f, 0f, 1f);
 
@@ -311,7 +310,7 @@ public class OverworldClimateModel implements ClimateModel
         }
 
         final RandomSource random = seededRandom(ICalendar.getTotalCalendarDays(calendarTicks), 129341623413L);
-        final boolean isRaining = WeatherHelpers.isPrecipitating(getRain(calendarTicks), getRainfall(level, pos, calendarTicks, daysInMonth));
+        final boolean isRaining = WeatherHelpers.isPrecipitating(getRain(calendarTicks), getInstantRainfall(level, pos, calendarTicks, daysInMonth));
         final Holder<Biome> biome = level.getBiome(pos);
 
         // the distribution of wind speed should be based relatively in reality -- we should be using a Weibull distribution
