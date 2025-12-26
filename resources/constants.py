@@ -500,7 +500,7 @@ CROPS: dict[str, Crop] = {
     'peanut': Crop('default', 'legume', 6, 12.2, 40, 130, 360, 11, 31, 20, 80, -90, 50, 50, None, None),
     'soybean': Crop('default', 'legume', 7, -9.4, 15.8, 160, 410, -7, 22, 25, 90, -80, 60, 30, 3, None),
     'barley': Crop('default', 'cereal', 8, -9.4, 17.6, 70, 310, -7, 23, 10, 70, 75, -20, -20, None, 2),
-    'oat': Crop('default', 'cereal', 8, -9.4, 15.8, 140, 400, -7, 22, 25, 85, 100, -35, -25, None, 2),
+    'oat': Crop('default', 'cereal', 8, -9.4, 15.8, 140, 400, -7, 22, 25, 85, 100, -40, -30, None, 2),
     'rye': Crop('default', 'cereal', 8, -9.4, 8.6, 100, 350, -7, 18, 15, 80, 100, -20, -40, None, 2),
     'maize': Crop('double', 'cereal', 6, -9.4, 23., 300, 500, -7, 27, 50, 100, 90, -25, -25, None, 2),
     'wheat': Crop('default', 'cereal', 8, -9.4, 15.8, 100, 400, -7, 22, 15, 85, 100, -30, -30, None, 2),
@@ -908,8 +908,8 @@ ADVANCEMENT_FISH = ('cod', 'calamari', 'shellfish', 'tropical_fish', *SIMPLE_FRE
 
 GRAINS = ('barley', 'maize', 'oat', 'rice', 'rye', 'wheat')
 GRAIN_SUFFIXES = ('', '_grain', '_flour', '_dough', '_bread', '_bread_sandwich', '_bread_jam_sandwich')
-MISC_FOODS = ('beet', 'cabbage', 'carrot', 'garlic', 'green_bean', 'green_bell_pepper', 'onion', 'potato', 'baked_potato', 'red_bell_pepper', 'soybean', 'squash', 'tomato', 'yellow_bell_pepper', 'cheese', 'cooked_egg', 'boiled_egg', 'fresh_seaweed', 'dried_seaweed', 'dried_kelp', 'cattail_root', 'taro_root', 'sugarcane', 'cooked_rice', 'pumpkin_chunks', 'melon_slice', 'cassava', 'lentil', 'peanut', 'radish')
-MEATS = ('beef', 'pork', 'chicken', 'quail', 'mutton', 'bear', 'horse_meat', 'pheasant', 'turkey', 'peafowl', 'grouse', 'venison', 'wolf', 'rabbit', 'hyena', 'duck', 'chevon', 'gran_feline', 'camelidae', 'cod', 'tropical_fish', 'turtle', 'calamari', 'shellfish', *SIMPLE_FRESHWATER_FISH, 'frog_legs', 'fox')
+MISC_FOODS = ('beet', 'cabbage', 'carrot', 'garlic', 'green_bean', 'green_bell_pepper', 'onion', 'potato', 'baked_potato', 'red_bell_pepper', 'soybean', 'squash', 'tomato', 'yellow_bell_pepper', 'cheese', 'cooked_egg', 'boiled_egg', 'fresh_seaweed', 'dried_seaweed', 'dried_kelp', 'cattail_root', 'taro_root', 'sugarcane', 'cooked_rice', 'pumpkin_chunks', 'melon_slice', 'cassava', 'cooked_cassava', 'lentil', 'cooked_lentil', 'peanut', 'radish')
+MEATS = ('beef', 'pork', 'chicken', 'quail', 'mutton', 'bear', 'horse_meat', 'pheasant', 'turkey', 'peafowl', 'grouse', 'venison', 'bison', 'wolf', 'rabbit', 'hyena', 'duck', 'chevon', 'gran_feline', 'camelidae', 'cod', 'tropical_fish', 'turtle', 'calamari', 'shellfish', *SIMPLE_FRESHWATER_FISH, 'frog_legs', 'fox')
 NUTRIENTS = ('grain', 'fruit', 'vegetables', 'protein', 'dairy')
 
 SPAWN_EGG_ENTITIES = ('isopod', 'lobster', 'crayfish', 'cod', 'pufferfish', 'tropical_fish', 'jellyfish', 'orca', 'dolphin', 'manatee', 'penguin', 'leopard_seal', 'frog', 'turtle', 'horseshoe_crab', 'polar_bear', 'grizzly_bear', 'black_bear', 'cougar', 'panther', 'lion', 'sabertooth', 'squid', 'octopoteuthis', 'pig', 'cow', 'goat', 'yak', 'alpaca', 'musk_ox', 'sheep', 'chicken', 'duck', 'quail', 'rabbit', 'fox', 'boar', 'donkey', 'mule', 'horse', 'deer', 'moose', 'boar', 'rat', 'cat', 'dog', 'wolf', 'panda', 'grouse', 'pheasant', 'turkey', 'ocelot', 'direwolf', 'hyena', 'tiger', 'crocodile', 'bongo', 'caribou', 'gazelle', 'wildebeest', 'bison', 'peafowl', 'jerboa', 'lemming', 'mongoose', *SIMPLE_FRESHWATER_FISH)

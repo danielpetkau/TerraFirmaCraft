@@ -66,7 +66,7 @@ public class SoupPotRecipe extends PotRecipe
     {
         inventory.clearFluid();
         int ingredientCount = 0;
-        float water = 20, saturation = 2;
+        float water = 20, saturation = 2, extraWater = 0, extraSaturation = 0;
         float[] nutrition = new float[Nutrient.TOTAL];
         ItemStack soupStack = ItemStack.EMPTY;
         final List<ItemStack> itemIngredients = new ArrayList<>();
@@ -83,8 +83,8 @@ public class SoupPotRecipe extends PotRecipe
                     break;
                 }
                 final FoodData data = food.getData();
-                water += data.water();
-                saturation += data.saturation();
+                extraWater += data.water();
+                extraSaturation += data.saturation();
                 for (Nutrient nutrient : Nutrient.VALUES)
                 {
                     nutrition[nutrient.ordinal()] += data.nutrient(nutrient);
@@ -94,9 +94,10 @@ public class SoupPotRecipe extends PotRecipe
         }
         if (ingredientCount > 0)
         {
-            float multiplier = 1 - (0.05f * ingredientCount); // per-serving multiplier of nutrition
-            water *= multiplier;
-            saturation *= multiplier;
+            int outputCount = ingredientsToServings(ingredientCount);
+            float multiplier = 1.2f / outputCount; // per-serving multiplier of nutrition.
+            water += extraWater * multiplier;
+            saturation += extraSaturation * multiplier;
             Nutrient maxNutrient = Nutrient.GRAIN; // determines what item you get. this is a default
             float maxNutrientValue = 0;
             for (Nutrient nutrient : Nutrient.VALUES)
@@ -109,8 +110,7 @@ public class SoupPotRecipe extends PotRecipe
                     maxNutrient = nutrient;
                 }
             }
-
-            soupStack = new ItemStack(TFCItems.SOUPS.get(maxNutrient).get(), ingredientsToServings(ingredientCount));
+            soupStack = new ItemStack(TFCItems.SOUPS.get(maxNutrient).get(), outputCount);
             soupStack.set(TFCComponents.INGREDIENTS, ItemListComponent.of(itemIngredients));
             FoodCapability.setFoodForDynamicItemOnCreate(
                 soupStack,
