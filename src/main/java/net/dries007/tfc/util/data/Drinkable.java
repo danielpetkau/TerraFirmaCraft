@@ -83,6 +83,8 @@ public record Drinkable(
 
     /** Amount of mB drank when drinking by hand on a source block */
     private static final int HAND_DRINK_MB = 25;
+    /** Amount of mB drank when drinking from a ceramic jug */
+    private static final int JUG_DRINK_MB = 100;
 
     @Nullable
     public static Drinkable get(Fluid fluid)
@@ -137,7 +139,7 @@ public record Drinkable(
         info.onDrink();
         level.playSound(null, pos, SoundEvents.GENERIC_DRINK, SoundSource.PLAYERS, 1.0f, 1.0f);
 
-        drinkable.onDrink(player, HAND_DRINK_MB);
+        drinkable.onDrink(player, JUG_DRINK_MB);
 
         if (drinkable.consumeChance > 0 && drinkable.consumeChance > level.getRandom().nextFloat())
         {

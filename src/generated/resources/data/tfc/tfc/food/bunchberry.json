@@ -1,6 +1,6 @@
 {
   "decay_modifier": 4.9,
-  "fruit": 0.75,
+  "fruit": 0.9,
   "hunger": 4,
   "ingredient": {
     "item": "tfc:food/bunchberry"

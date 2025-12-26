@@ -41,7 +41,7 @@ public enum Crop implements StringRepresentable
 
     // Grains
     BARLEY(0.75f, -0.2f, -0.2f, 8), // Default, 8
-    OAT(1f, -0.35f, -0.25f, 8), // Default, 8
+    OAT(1f, -0.4f, -0.3f, 8), // Default, 8
     RYE(1f, -0.2f, -0.4f, 8), // Default, 8
     MAIZE(0.9f, -0.25f, -0.25f, 3, 3, false), // Double, 3 -> 3
     WHEAT(1f, -0.3f, -0.3f, 8), // Default, 8
