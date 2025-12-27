@@ -12,6 +12,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 
 import net.dries007.tfc.client.ClientHelpers;
+import net.dries007.tfc.config.TFCConfig;
 import net.dries007.tfc.util.calendar.Calendars;
 import net.dries007.tfc.util.calendar.ICalendar;
 import net.dries007.tfc.util.climate.Climate;
@@ -23,7 +24,7 @@ import net.dries007.tfc.util.climate.Climate;
 public final class ClientSolarCalculatorBridge
 {
     /**
-     * Mimic behavior of vanilla day time, which is just the number of ticks from work creation
+     * Mimic behavior of vanilla day time, which is just the number of ticks from world creation
      * This version is instead based on the number of calendar days,
      * plus a remainder based on a time of day that roughly matches the position of the sun
      */
@@ -34,7 +35,9 @@ public final class ClientSolarCalculatorBridge
             final Player player = ClientHelpers.getPlayer();
             if (player != null)
             {
-                return Calendars.CLIENT.getTotalCalendarDays() * ICalendar.CALENDAR_TICKS_IN_DAY + SolarCalculator.getSunBasedDayTime(
+                return Calendars.CLIENT.getTotalCalendarDays() * ICalendar.CALENDAR_TICKS_IN_DAY
+                    - TFCConfig.COMMON.defaultCalendarStartDay.get() * ICalendar.CALENDAR_TICKS_IN_DAY
+                    + SolarCalculator.getSunBasedDayTime(
                     player.blockPosition().getZ(),
                     Climate.get(level).hemisphereScale(),
                     Calendars.CLIENT.getCalendarFractionOfYear(),
