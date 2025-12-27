@@ -40,7 +40,6 @@ public final class RockData
      * Return the rock at the position {@code (x, z)}, at the surface. Note that this method <strong>may be used</strong>
      * without populating the chunk data's surface height cache, because it queries not for a specific position, but a specific height.
      */
-    @SuppressWarnings("unused") // API
     public RockSettings getSurfaceRock(int x, int z)
     {
         assert generator != null;

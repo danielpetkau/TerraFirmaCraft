@@ -42,7 +42,7 @@ public class LooseRockFeature extends Feature<NoneFeatureConfiguration>
         final var random = context.random();
 
         final ChunkData data = ChunkData.get(level, pos);
-        final RockSettings rock = data.getRockData().getRock(pos);
+        final RockSettings rock = data.getRockData().getSurfaceRock(pos.getX(), pos.getZ());
 
         final @Nullable Block looseRock = rock.loose().orElse(null);
         final @Nullable Block mossyLooseRock = rock.mossyLoose().orElse(null);

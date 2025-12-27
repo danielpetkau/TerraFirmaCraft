@@ -47,7 +47,7 @@ public class SeaStacksFeature extends Feature<NoneFeatureConfiguration>
         {
             return false; // only place in water
         }
-        final BlockState rock = data.getRock(cursor).hardened().defaultBlockState();
+        final BlockState rock = data.getSurfaceRock(cursor.getX(), cursor.getY()).hardened().defaultBlockState();
         if (!Helpers.isBlock(rock, TFCTags.Blocks.SEA_STACK_ROCKS))
         {
             return false;
