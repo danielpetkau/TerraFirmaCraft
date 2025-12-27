@@ -1094,7 +1094,7 @@ public final class ForgeEventHandler
                             level.destroyBlock(belowPos, false);
                         }
                     }
-                    else if (belowState.getBlock() == Blocks.ICE || belowState.getBlock() == Blocks.FROSTED_ICE)
+                    else if (belowState.getBlock() == Blocks.ICE || belowState.getBlock() == Blocks.FROSTED_ICE || Helpers.isBlock(belowState, TFCBlocks.SEA_ICE.get()))
                     {
                         coolAmount = 100f;
                         if (level.random.nextFloat() < 0.01F)
