@@ -2191,7 +2191,7 @@ DEFAULT_LANG = {
     'tfc.config.server.fireboxEnableAutomation': 'Enable Automation',
     'tfc.config.server.firePitEnableAutomation': 'Enable Automation',
     'tfc.config.server.foodDecayModifier': 'Food Decay Modifier',
-    'tfc.config.server.foodDecayStackTicks': 'Food Decay Stack Ticks',
+    'tfc.config.server.foodDecayStackTicks1': 'Food Decay Stack Ticks',
     'tfc.config.server.fruitBranchGrowthTicks': 'Fruit Branch Growth Ticks',
     'tfc.config.server.fruitPickBloomDelayTicks': 'Fruit Pick Bloom Delay Ticks',
     'tfc.config.server.saplingGrowthModifier': 'Sapling Growth Modifier',

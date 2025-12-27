@@ -17,6 +17,7 @@ import net.dries007.tfc.common.component.food.FoodDefinition;
 import net.dries007.tfc.common.component.heat.HeatCapability;
 import net.dries007.tfc.common.component.heat.HeatComponent;
 import net.dries007.tfc.common.component.heat.HeatDefinition;
+import net.dries007.tfc.config.TFCConfig;
 import net.dries007.tfc.mixin.accessor.PatchedDataComponentMapAccessor;
 
 /**
@@ -113,6 +114,61 @@ public final class ItemStackHooks
             final @Nullable FoodComponent otherFood = otherComponents.get(TFCComponents.FOOD.get());
             if (otherFood != null) otherFood.sanitize();
         }
+    }
+
+    private static final ThreadLocal<Boolean> IN_FOOD_STACK_CHECK = ThreadLocal.withInitial(() -> false);
+
+    /**
+     * Check if foods with slightly different expiration dates should be able to be stacked
+     * together anyways.
+     * @return true if the food should stack, false to defer to vanilla logic
+     */
+    public static boolean shouldFoodStacksStack(ItemStack stack, ItemStack other)
+    {
+        // Prevent recursion
+        if (IN_FOOD_STACK_CHECK.get())
+        {
+            return false;
+        }
+
+        if (TFCComponents.FOOD.holder().isBound())
+        {
+            final @Nullable FoodComponent food = stack.get(TFCComponents.FOOD);
+            final @Nullable FoodComponent otherFood = other.get(TFCComponents.FOOD);
+            if (food != null && otherFood != null)
+            {
+                try
+                {
+                    IN_FOOD_STACK_CHECK.set(true);
+                    // This would call back into isSameItemSameComponents, so we need to prevent recursion
+                    if (!FoodCapability.areStacksStackableExceptCreationDate(stack, other))
+                    {
+                        return false;
+                    }
+                }
+                finally 
+                {
+                    IN_FOOD_STACK_CHECK.set(false);
+                }
+
+                final long creationDate = food.getCreationDate();
+                final long otherCreationDate = otherFood.getCreationDate();
+
+                if (creationDate == otherCreationDate)
+                {
+                    return true;
+                }
+
+                if (creationDate < 0 || otherCreationDate < 0)
+                {
+                    // If one of the creation dates is a special flag, do not stack
+                    return false;
+                }
+
+                return Math.abs(creationDate - otherCreationDate) <= TFCConfig.SERVER.foodDecayStackTicks.get();
+            }
+        }
+        return false;
     }
 
     /**
