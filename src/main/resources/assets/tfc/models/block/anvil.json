@@ -123,5 +123,10 @@
 				"down": {"uv": [0, 11, 3, 13], "texture": "#all"}
 			}
 		}
-	]
+	],
+	"display": {
+		"tfc:placed_item": {
+			"translation": [0, 2, 0]
+		}
+	}
 }
