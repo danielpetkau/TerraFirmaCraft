@@ -108,6 +108,15 @@ public class BuiltinItemTags extends TagsProvider<Item> implements Accessors
         tag(Tags.Items.STRINGS).add(TFCItems.WOOL_YARN);
         tag(Tags.Items.SEEDS).add(TFCItems.CROP_SEEDS);
         tag(Tags.Items.RODS_WOODEN).add(TFCBlocks.WOODS, Wood.BlockType.TWIG);
+        tag(Tags.Items.BUCKETS).add(
+            TFCItems.WOODEN_BUCKET,
+            TFCItems.RED_STEEL_BUCKET,
+            TFCItems.BLUE_STEEL_BUCKET);
+
+        tag(Tags.Items.GEMS_AMETHYST).add(TFCItems.GEMS.get(Ore.AMETHYST));
+        tag(Tags.Items.GEMS_DIAMOND).add(TFCItems.GEMS.get(Ore.DIAMOND));
+        tag(Tags.Items.GEMS_EMERALD).add(TFCItems.GEMS.get(Ore.EMERALD));
+        tag(Tags.Items.GEMS_LAPIS).add(TFCItems.GEMS.get(Ore.LAPIS_LAZULI));
 
         // ===== TFC Tags ===== //
 
@@ -294,10 +303,6 @@ public class BuiltinItemTags extends TagsProvider<Item> implements Accessors
         tag(TWIGS).add(TFCBlocks.WOODS, Wood.BlockType.TWIG);
         tag(ItemTags.BOATS).add(TFCItems.BOATS);
         copy(TFCTags.Blocks.LAMPS, LAMPS);
-        tag(Tags.Items.BUCKETS).add(
-            TFCItems.WOODEN_BUCKET,
-            TFCItems.RED_STEEL_BUCKET,
-            TFCItems.BLUE_STEEL_BUCKET);
         tag(MINECARTS)
             .add(Items.MINECART)
             .add(TFCItems.CHEST_MINECARTS);
