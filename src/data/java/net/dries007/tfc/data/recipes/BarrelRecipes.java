@@ -333,7 +333,7 @@ public interface BarrelRecipes extends Recipes
 
     private void removeDye(TagKey<Item> input, ItemLike output)
     {
-        barrel("bleaching_" + nameOf(output).replace("white_", "").replace("/white", ""))
+        barrel("bleach_" + nameOf(output).replace("white_", "").replace("/white", ""))
             .input(input)
             .input(fluidOf(SimpleFluid.LYE), 25)
             .output(output)
@@ -342,7 +342,7 @@ public interface BarrelRecipes extends Recipes
 
     private void removeDye(String prefix, TagKey<Item> input, ItemLike output)
     {
-        barrel("bleaching_" + prefix + "_" + nameOf(output).replace("white_", "").replace("/white", ""))
+        barrel("bleach_" + prefix + "_" + nameOf(output).replace("white_", "").replace("/white", ""))
             .input(input)
             .input(fluidOf(SimpleFluid.LYE), 25)
             .output(output)
