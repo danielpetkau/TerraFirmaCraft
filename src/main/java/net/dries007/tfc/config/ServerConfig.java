@@ -720,31 +720,31 @@ public class ServerConfig extends BaseConfig
         rabbitConfig = MammalConfig.build(builder, "rabbit", 0.35, 30, 40, true, 19, 6);
 
         builder.swap("cow");
-        cowConfig = ProducingMammalConfig.build(builder, "cow", 0.35, 192, 128, true, 58, 2, 24000, 0.15);
+        cowConfig = ProducingMammalConfig.build(builder, "cow", 0.35, 192, 128, true, 58, 2, 24 * ICalendar.PLAYER_TICKS_IN_DEFAULT_HOUR, 0.15);
 
         builder.swap("goat");
-        goatConfig = ProducingMammalConfig.build(builder, "goat", 0.35, 96, 60, true, 32, 2, 72000, 0.15);
+        goatConfig = ProducingMammalConfig.build(builder, "goat", 0.35, 96, 60, true, 32, 2, 72 * ICalendar.PLAYER_TICKS_IN_DEFAULT_HOUR, 0.15);
 
         builder.swap("yak");
-        yakConfig = ProducingMammalConfig.build(builder, "yak", 0.35, 180, 230, false, 64, 1, 23500, 0.15);
+        yakConfig = ProducingMammalConfig.build(builder, "yak", 0.35, 180, 230, false, 64, 1, 24 * ICalendar.PLAYER_TICKS_IN_DEFAULT_HOUR, 0.15);
 
         builder.swap("alpaca");
-        alpacaConfig = ProducingMammalConfig.build(builder, "alpaca", 0.35, 98, 128, false, 36, 2, 120000, 0.15);
+        alpacaConfig = ProducingMammalConfig.build(builder, "alpaca", 0.35, 98, 128, false, 36, 2, 120 * ICalendar.PLAYER_TICKS_IN_DEFAULT_HOUR, 0.15);
 
         builder.swap("sheep");
-        sheepConfig = ProducingMammalConfig.build(builder, "sheep", 0.35, 56, 60, false, 32, 2, 168000, 0.15);
+        sheepConfig = ProducingMammalConfig.build(builder, "sheep", 0.35, 56, 60, false, 32, 2, 168 * ICalendar.PLAYER_TICKS_IN_DEFAULT_HOUR, 0.15);
 
         builder.swap("muskOx");
-        muskOxConfig = ProducingMammalConfig.build(builder, "muskOx", 0.35, 168, 160, false, 64, 1, 96000, 0.15);
+        muskOxConfig = ProducingMammalConfig.build(builder, "muskOx", 0.35, 168, 160, false, 64, 1, 96 * ICalendar.PLAYER_TICKS_IN_DEFAULT_HOUR, 0.15);
 
         builder.swap("chicken");
-        chickenConfig = OviparousAnimalConfig.build(builder, "chicken", 0.35, 24, 100, true, 30000, 0.15, 8);
+        chickenConfig = OviparousAnimalConfig.build(builder, "chicken", 0.35, 24, 100, true, 30 * ICalendar.PLAYER_TICKS_IN_DEFAULT_HOUR, 0.15, 8);
 
         builder.swap("duck");
-        duckConfig = OviparousAnimalConfig.build(builder, "duck", 0.35, 32, 72, false, 32000, 0.15, 8);
+        duckConfig = OviparousAnimalConfig.build(builder, "duck", 0.35, 32, 72, false, 32 * ICalendar.PLAYER_TICKS_IN_DEFAULT_HOUR, 0.15, 8);
 
         builder.swap("quail");
-        quailConfig = OviparousAnimalConfig.build(builder, "quail", 0.35, 22, 48, true, 28000, 0.15, 8);
+        quailConfig = OviparousAnimalConfig.build(builder, "quail", 0.35, 22, 48, true, 28 * ICalendar.PLAYER_TICKS_IN_DEFAULT_HOUR, 0.15, 8);
         builder.pop(2);
 
         familiarityDecayLimit = builder.comment("Familiarity value above which familiarity no longer will decay. Default is 0.3, or 30%. Setting it to 0 will cause familiarity to never decay.").define("familiarityDecayLimit", 0.3, 0.0, 1.0);
