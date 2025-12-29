@@ -261,10 +261,10 @@ public class BuiltinItemTags extends TagsProvider<Item> implements Accessors
         tag(COLORED_CARPETS).addNotWhite("carpet");
         tag(COLORED_BEDS).addNotWhite("bed");
         tag(COLORED_BANNERS).addNotWhite("banner");
-        tag(COLORED_TERRACOTTA).addNotWhite("terracotta");
-        tag(COLORED_GLAZED_TERRACOTTA).addNotWhite("glazed_terracotta");
-        tag(COLORED_SHULKER_BOXES).addNotWhite("shulker_box");
-        tag(COLORED_CONCRETE_POWDER).addNotWhite("concrete_powder");
+        tag(COLORED_TERRACOTTA).addAllColors("terracotta");
+        tag(COLORED_GLAZED_TERRACOTTA).addAllColors("glazed_terracotta");
+        tag(COLORED_SHULKER_BOXES).addAllColors("shulker_box");
+        tag(COLORED_CONCRETE_POWDER).addAllColors("concrete_powder");
         tag(COLORED_CANDLES).add(TFCBlocks.DYED_CANDLE);
         tag(COLORED_WINDMILL_BLADES)
             .addOnly(TFCItems.WINDMILL_BLADES, c -> c != DyeColor.WHITE);
@@ -921,6 +921,12 @@ public class BuiltinItemTags extends TagsProvider<Item> implements Accessors
         <T> ItemTagAppender addOnly(Map<T, ? extends ItemLike> items, Predicate<T> only)
         {
             return add(items.entrySet().stream().filter(e -> only.test(e.getKey())).map(Map.Entry::getValue));
+        }
+
+        ItemTagAppender addAllColors(String itemName)
+        {
+            for (DyeColor c : Helpers.DYE_COLORS) add(itemOf(ResourceLocation.withDefaultNamespace(c.getSerializedName() + "_" + itemName)));
+            return this;
         }
 
         ItemTagAppender addNotWhite(String itemName)
