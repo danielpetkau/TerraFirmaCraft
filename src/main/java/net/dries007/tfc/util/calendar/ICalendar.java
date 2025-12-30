@@ -218,16 +218,6 @@ public interface ICalendar
     long getFixedCalendarTicksFromTick(long playerTick);
 
     /**
-     * Gets the total amount of days passed
-     * @deprecated almost everything counting days in player ticks is now wrong.
-     */
-    @Deprecated
-    default long getTotalDays()
-    {
-        return ICalendar.getTotalCalendarDays(getTicks());
-    }
-
-    /**
      * Gets the total amount of days passed since Jan 1, 1000
      */
     default long getTotalCalendarDays()

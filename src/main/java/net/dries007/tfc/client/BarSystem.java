@@ -107,7 +107,7 @@ public final class BarSystem
             final @Nullable EggComponent egg = stack.get(TFCComponents.EGG);
             if (egg != null)
             {
-                final int incubationDays = maxDays - Mth.clamp((int) (egg.hatchDay() - Calendars.CLIENT.getTotalDays()), 0, maxDays);
+                final int incubationDays = maxDays - Mth.clamp((int) (egg.hatchDay() - Calendars.CLIENT.getTotalCalendarDays()), 0, maxDays);
                 return Math.round(13f * incubationDays / maxDays);
             }
             return 0;
