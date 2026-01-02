@@ -5,10 +5,10 @@
     "id": "minecraft:globe_banner_pattern"
   },
   "squares": [
-    "  ####  ",
-    "  #  #  ",
-    "  #  #  ",
-    "  ####  "
+    "BBWWWWBB",
+    "BBWBBWBB",
+    "BBWBBWBB",
+    "BBWWWWBB"
   ],
   "stitches": [
     "  ## ##  ",

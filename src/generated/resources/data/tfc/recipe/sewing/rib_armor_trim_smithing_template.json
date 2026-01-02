@@ -5,10 +5,10 @@
     "id": "minecraft:rib_armor_trim_smithing_template"
   },
   "squares": [
-    "  # # # ",
-    "  # # # ",
-    " # # #  ",
-    " # # #  "
+    "BBWBWBWB",
+    "BBWBWBWB",
+    "BWBWBWBB",
+    "BWBWBWBB"
   ],
   "stitches": [
     "  # # #  ",

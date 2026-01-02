@@ -5,10 +5,10 @@
     "id": "minecraft:tide_armor_trim_smithing_template"
   },
   "squares": [
-    " ###    ",
-    "    ### ",
-    "    ### ",
-    " ###    "
+    "BWWWBBBB",
+    "BBBBWWWB",
+    "BBBBWWWB",
+    "BWWWBBBB"
   ],
   "stitches": [
     " # #     ",

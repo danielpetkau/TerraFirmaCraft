@@ -5,10 +5,10 @@
     "id": "minecraft:eye_armor_trim_smithing_template"
   },
   "squares": [
-    "   ##   ",
-    "  #  #  ",
-    "  #  #  ",
-    "   ##   "
+    "BBBWWBBB",
+    "BBWBBWBB",
+    "BBWBBWBB",
+    "BBBWWBBB"
   ],
   "stitches": [
     "   # #   ",

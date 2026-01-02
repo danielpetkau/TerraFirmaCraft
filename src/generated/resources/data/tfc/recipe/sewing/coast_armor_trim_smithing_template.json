@@ -5,10 +5,10 @@
     "id": "minecraft:coast_armor_trim_smithing_template"
   },
   "squares": [
-    "     ## ",
-    "    ##  ",
-    "    ##  ",
-    "     ## "
+    "BBBBBWWB",
+    "BBBBWWBB",
+    "BBBBWWBB",
+    "BBBBBWWB"
   ],
   "stitches": [
     "     # # ",

@@ -5,10 +5,10 @@
     "id": "minecraft:creeper_banner_pattern"
   },
   "squares": [
-    "  #  #  ",
-    "        ",
-    "  ####  ",
-    "  #  #  "
+    "BBWBBWBB",
+    "BBBBBBBB",
+    "BBWWWWBB",
+    "BBWBBWBB"
   ],
   "stitches": [
     "  ## ##  ",
