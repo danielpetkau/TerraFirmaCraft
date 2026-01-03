@@ -64,42 +64,42 @@ public interface BarrelRecipes extends Recipes
             barrel()
                 .input(itemOf(HideItemType.RAW, size)).input(fluidOf(SimpleFluid.LIMEWATER), amount)
                 .output(itemOf(HideItemType.SOAKED, size))
-                .sealed(hours(8));
+                .sealed(hours(6));
             barrel()
                 .input(itemOf(HideItemType.SCRAPED, size)).input(SizedFluidIngredient.of(Fluids.WATER, amount))
                 .output(TFCItems.HIDES.get(HideItemType.PREPARED).get(size))
-                .sealed(hours(8));
+                .sealed(hours(6));
             barrel(size.name() + "_leather")
                 .input(itemOf(HideItemType.PREPARED, size)).input(fluidOf(SimpleFluid.TANNIN), amount)
                 .output(ItemStackProvider.of(Items.LEATHER, 1 + size.ordinal()))
-                .sealed(hours(8));
+                .sealed(hours(6));
         }
 
         barrel()
             .input(TFCTags.Items.TANNIN_LOGS)
             .input(Fluids.WATER, 1000)
             .output(fluidOf(SimpleFluid.TANNIN), 1000)
-            .sealed(hours(8));
+            .sealed(hours(6));
         barrel()
             .input(TFCItems.JUTE)
             .input(Fluids.WATER, 200)
             .output(TFCItems.JUTE_FIBER)
-            .sealed(hours(8));
+            .sealed(hours(6));
         barrel()
             .input(notRotten(of(TFCItems.FOOD.get(Food.SUGARCANE))))
             .input(Fluids.WATER, 600)
             .output(Items.SUGAR)
-            .sealed(hours(8));
+            .sealed(hours(6));
         barrel()
             .input(Items.BONE_MEAL)
             .input(fluidOf(SimpleFluid.LIMEWATER), 600)
             .output(TFCItems.GLUE)
-            .sealed(hours(8));
+            .sealed(hours(6));
         barrel()
             .input(TFCItems.PAPYRUS_STRIP)
             .input(Fluids.WATER, 200)
             .output(TFCItems.SOAKED_PAPYRUS_STRIP)
-            .sealed(hours(8));
+            .sealed(hours(6));
         alcohol(of(TFCItems.FOOD.get(Food.BARLEY_FLOUR)), SimpleFluid.BEER);
         alcohol(of(TFCItems.FOOD.get(Food.RED_APPLE), TFCItems.FOOD.get(Food.GREEN_APPLE)), SimpleFluid.CIDER);
         alcohol(of(Items.SUGAR), SimpleFluid.RUM);
@@ -112,7 +112,7 @@ public interface BarrelRecipes extends Recipes
             .input(notRotten(of(TFCTags.Items.FRUITS)))
             .input(TFCTags.Fluids.ALCOHOLS, 250)
             .output(fluidOf(SimpleFluid.VINEGAR), 250)
-            .sealed(hours(8));
+            .sealed(hours(6));
 
         final Ingredient foods = ingredientOf(
             Ingredient.of(TFCTags.Items.FRUITS),
@@ -131,7 +131,7 @@ public interface BarrelRecipes extends Recipes
                 CopyInputModifier.INSTANCE,
                 AddTraitModifier.of(FoodTraits.BRINED)
             ))
-            .sealed(hours(4));
+            .sealed(hours(3));
         barrel("pickled")
             .input(AndIngredient.of(
                 foods,
@@ -144,7 +144,7 @@ public interface BarrelRecipes extends Recipes
                 CopyInputModifier.INSTANCE,
                 AddTraitModifier.of(FoodTraits.PICKLED)
             ))
-            .sealed(hours(4));
+            .sealed(hours(3));
         barrel("preserved_in_vinegar")
             .input(AndIngredient.of(
                 foods,
@@ -160,7 +160,7 @@ public interface BarrelRecipes extends Recipes
             .input(Tags.Items.SANDS)
             .input(fluidOf(SimpleFluid.LIMEWATER), 100)
             .output(ItemStackProvider.of(TFCItems.MORTAR, 16))
-            .sealed(hours(8));
+            .sealed(hours(6));
         barrel()
             .input(fluidOf(SimpleFluid.MILK_VINEGAR), 1)
             .output(fluidOf(SimpleFluid.CURDLED_MILK), 1)
@@ -178,7 +178,7 @@ public interface BarrelRecipes extends Recipes
             .input(Tags.Items.STRINGS)
             .input(fluidOf(SimpleFluid.TALLOW), 40)
             .output(TFCBlocks.CANDLE)
-            .sealed(hours(4));
+            .sealed(hours(3));
         removeDye(TFCTags.Items.COLORED_WOOL, Items.WHITE_WOOL);
         removeDye(TFCTags.Items.COLORED_CARPETS, Items.WHITE_CARPET);
         removeDye(TFCTags.Items.COLORED_BEDS, Items.WHITE_BED);
@@ -315,7 +315,7 @@ public interface BarrelRecipes extends Recipes
             .input(notRotten(item))
             .input(Fluids.WATER, 500)
             .output(fluidOf(fluid), 500)
-            .sealed(hours(72));
+            .sealed(hours(60));
     }
 
     private void cooling(Fluid fluid, float amount)

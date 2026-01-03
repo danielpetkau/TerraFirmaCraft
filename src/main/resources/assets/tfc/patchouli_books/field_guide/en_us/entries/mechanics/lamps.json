@@ -49,12 +49,12 @@
     },
     {
       "type": "patchouli:text",
-      "text": "Boil the $(thing)Olive Paste$() with $(thing)Water$() in a $(l:mechanics/pot)Pot$() to make $(thing)Olive Oil Water$(). Seal that in a $(l:mechanics/barrels)Barrel$() with your $(thing)Jute Net$() to produce $(thing)Olive Oil$(). Olive oil burns for 8 in-game hours for every unit of fluid."
+      "text": "Boil the $(thing)Olive Paste$() with $(thing)Water$() in a $(l:mechanics/pot)Pot$() to make $(thing)Olive Oil Water$(). Seal that in a $(l:mechanics/barrels)Barrel$() with your $(thing)Jute Net$() to produce $(thing)Olive Oil$(). Olive oil burns for 6 in-game hours for every unit of fluid."
     },
     {
       "type": "patchouli:text",
       "anchor": "tallow",
-      "text": "Another lamp fuel is $(thing)Tallow$(). To make it, cook 5 $(thing)Blubber$(), in a $(l:mechanics/pot)Pot$() of water. Tallow burns for less than 2 in-game hours per unit. It can be used to make $(l:mechanics/lighting#candles)Candles$()"
+      "text": "Another lamp fuel is $(thing)Tallow$(). To make it, cook 5 $(thing)Blubber$(), in a $(l:mechanics/pot)Pot$() of water. Tallow burns for 2 in-game hours per unit. It can be used to make $(l:mechanics/lighting#candles)Candles$()"
     },
     {
       "type": "patchouli:multiblock",

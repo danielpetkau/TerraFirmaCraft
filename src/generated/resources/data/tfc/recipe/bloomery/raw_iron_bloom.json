@@ -4,7 +4,7 @@
     "count": 2,
     "item": "minecraft:charcoal"
   },
-  "duration": 15000,
+  "duration": 14400,
   "fluid": {
     "amount": 100,
     "fluid": "tfc:metal/cast_iron"

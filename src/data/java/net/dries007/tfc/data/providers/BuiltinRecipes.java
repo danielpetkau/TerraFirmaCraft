@@ -188,7 +188,7 @@ public final class BuiltinRecipes extends VanillaRecipeProvider implements
             SizedFluidIngredient.of(fluidOf(Metal.CAST_IRON), 100),
             SizedIngredient.of(Items.CHARCOAL, 2),
             ItemStackProvider.of(TFCItems.RAW_IRON_BLOOM),
-            hours(15)
+            hours(12)
         ));
 
         // Blast Furnace Recipes

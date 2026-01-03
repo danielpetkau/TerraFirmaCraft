@@ -1,6 +1,6 @@
 {
   "type": "tfc:barrel_sealed",
-  "duration": 12000,
+  "duration": 14400,
   "input_fluid": {
     "amount": 1,
     "fluid": "tfc:milk_vinegar"
