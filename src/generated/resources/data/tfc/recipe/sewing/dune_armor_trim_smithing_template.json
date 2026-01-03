@@ -5,10 +5,10 @@
     "id": "minecraft:dune_armor_trim_smithing_template"
   },
   "squares": [
-    "        ",
-    "   ##   ",
-    "  ####  ",
-    " ###### "
+    "BBBBBBBB",
+    "BBBWWBBB",
+    "BBWWWWBB",
+    "BWWWWWWB"
   ],
   "stitches": [
     "         ",

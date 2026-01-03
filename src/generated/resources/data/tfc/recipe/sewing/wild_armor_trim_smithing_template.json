@@ -5,10 +5,10 @@
     "id": "minecraft:wild_armor_trim_smithing_template"
   },
   "squares": [
-    "##    ##",
-    " ##  ## ",
-    "   ##   ",
-    "   ##   "
+    "WWBBBBWW",
+    "BWWBBWWB",
+    "BBBWWBBB",
+    "BBBWWBBB"
   ],
   "stitches": [
     "         ",

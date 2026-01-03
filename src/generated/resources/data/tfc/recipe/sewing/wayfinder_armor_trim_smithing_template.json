@@ -5,10 +5,10 @@
     "id": "minecraft:wayfinder_armor_trim_smithing_template"
   },
   "squares": [
-    " #   ## ",
-    " ##  # #",
-    "  # # # ",
-    "  ##   #"
+    "BWBBBWWB",
+    "BWWBBWBW",
+    "BBWBWBWB",
+    "BBWWBBBW"
   ],
   "stitches": [
     " #       ",
