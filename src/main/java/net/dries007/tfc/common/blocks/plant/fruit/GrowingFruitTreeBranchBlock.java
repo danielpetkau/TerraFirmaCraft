@@ -28,11 +28,12 @@ import org.jetbrains.annotations.Nullable;
 import net.dries007.tfc.TerraFirmaCraft;
 import net.dries007.tfc.common.TFCTags;
 import net.dries007.tfc.common.blockentities.BerryBushBlockEntity;
-import net.dries007.tfc.common.blockentities.TickCountingBranchBlockEntity;
+import net.dries007.tfc.common.blockentities.TickingPlantBlockEntity;
 import net.dries007.tfc.common.blocks.EntityBlockExtension;
 import net.dries007.tfc.common.blocks.ExtendedProperties;
 import net.dries007.tfc.common.blocks.TFCBlockStateProperties;
 import net.dries007.tfc.common.blocks.soil.FarmlandBlock;
+import net.dries007.tfc.config.TFCConfig;
 import net.dries007.tfc.util.Helpers;
 import net.dries007.tfc.util.calendar.ICalendar;
 import net.dries007.tfc.util.climate.Climate;
@@ -93,10 +94,12 @@ public class GrowingFruitTreeBranchBlock extends FruitTreeBranchBlock implements
 
     public void grow(BlockState state, ServerLevel level, BlockPos pos, RandomSource random, int cyclesLeft)
     {
+        cyclesLeft--;
+
         FruitTreeBranchBlock body = (FruitTreeBranchBlock) this.body.get();
         BlockPos abovePos = pos.above();
         final boolean natural = state.getValue(NATURAL);
-        if (canGrowInto(level, abovePos) && abovePos.getY() < level.getMaxBuildHeight() - 1 && level.getBlockEntity(pos) instanceof TickCountingBranchBlockEntity activeBranch)
+        if (canGrowInto(level, abovePos) && abovePos.getY() < level.getMaxBuildHeight() - 1 && level.getBlockEntity(pos) instanceof TickingPlantBlockEntity activeBranch)
         {
             final BlockPos stemPos = activeBranch.getStemPos();
             int stage = state.getValue(STAGE);
@@ -138,7 +141,7 @@ public class GrowingFruitTreeBranchBlock extends FruitTreeBranchBlock implements
                 if (willGrowUpward && allNeighborsEmpty(level, abovePos, null) && canGrowInto(level, pos.above(2)))
                 {
                     placeBody(level, pos, stemPos, stage);
-                    placeGrownFlower(level, abovePos, stemPos, stage, state.getValue(SAPLINGS), cyclesLeft - 1, natural);
+                    placeGrownFlower(level, abovePos, stemPos, stage, state.getValue(SAPLINGS), cyclesLeft, natural);
                 }
                 // Try and branch if near enough to the trunk
                 else if (stage < 2)
@@ -162,13 +165,13 @@ public class GrowingFruitTreeBranchBlock extends FruitTreeBranchBlock implements
                                         mutablePos.move(test, -1);
                                         placeBody(level, mutablePos, stemPos, stage);
                                         mutablePos.move(test, 1);
-                                        placeGrownFlower(level, mutablePos, stemPos, stage + 1, state.getValue(SAPLINGS), cyclesLeft - 1, natural);
+                                        placeGrownFlower(level, mutablePos, stemPos, stage + 1, state.getValue(SAPLINGS), cyclesLeft, natural);
                                         doubleBranch = true;
                                     }
                                 }
                                 if (!doubleBranch)
                                 {
-                                    placeGrownFlower(level, mutablePos, stemPos, stage + 1, state.getValue(SAPLINGS), cyclesLeft - 1, natural);
+                                    placeGrownFlower(level, mutablePos, stemPos, stage + 1, state.getValue(SAPLINGS), cyclesLeft, natural);
                                 }
                             }
                             directions.remove(test);
@@ -221,7 +224,7 @@ public class GrowingFruitTreeBranchBlock extends FruitTreeBranchBlock implements
         final float temp = Climate.getAverageTemperature(level, pos);
         if (!climateRange.get().checkBoth(hydration, temp, false) && !state.getValue(NATURAL))
         {
-            TickCountingBranchBlockEntity.reset(level, pos);
+            TickingPlantBlockEntity.reset(level, pos);
         }
         else
         {
@@ -234,14 +237,13 @@ public class GrowingFruitTreeBranchBlock extends FruitTreeBranchBlock implements
     public void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource rand)
     {
         super.tick(state, level, pos, rand);
-        if (level.getBlockEntity(pos) instanceof TickCountingBranchBlockEntity counter)
+        if (level.getBlockEntity(pos) instanceof TickingPlantBlockEntity counter)
         {
-            long days = counter.getTicksSinceUpdate() / ICalendar.CALENDAR_TICKS_IN_DAY;
-            int cycles = (int) (days / 5);
+            int cycles = (int) (counter.getTicksSinceUpdate() / TFCConfig.SERVER.fruitBranchGrowthTicks.get());
             if (cycles >= 1)
             {
-                grow(state, level, pos, rand, cycles);
                 counter.resetCounter();
+                grow(state, level, pos, rand, cycles);
             }
         }
     }
@@ -253,7 +255,7 @@ public class GrowingFruitTreeBranchBlock extends FruitTreeBranchBlock implements
     {
         final BlockState newState = getStateForPlacement(level, childPos).setValue(STAGE, stage).setValue(SAPLINGS, saplings).setValue(NATURAL, natural);
         level.setBlock(childPos, newState, Block.UPDATE_ALL);
-        if (level.getBlockEntity(childPos) instanceof TickCountingBranchBlockEntity counter)
+        if (level.getBlockEntity(childPos) instanceof TickingPlantBlockEntity counter)
         {
             counter.resetCounter();
             counter.increaseCounter((long) ICalendar.CALENDAR_TICKS_IN_DAY * cycles * 5);
@@ -263,7 +265,7 @@ public class GrowingFruitTreeBranchBlock extends FruitTreeBranchBlock implements
         }
         else
         {
-            TerraFirmaCraft.LOGGER.error("Failed to update block entity at: " + childPos);
+            TerraFirmaCraft.LOGGER.error("Failed to update fruit tree branch block entity at: {}", childPos);
         }
         level.getBlockState(childPos).randomTick(level, childPos, level.random);
     }
@@ -304,18 +306,18 @@ public class GrowingFruitTreeBranchBlock extends FruitTreeBranchBlock implements
 
     /**
      * Evaluates hydration at the base of the tree
-     * @param leafPos Must be the position of a valid {@link TickCountingBranchBlockEntity}
+     * @param leafPos Must be the position of a valid {@link TickingPlantBlockEntity}
      */
     protected static int getFruitBranchHydration(Level level, BlockPos leafPos)
     {
         final BlockPos sourcePos;
-        if (level.getBlockEntity(leafPos) instanceof TickCountingBranchBlockEntity branch)
+        if (level.getBlockEntity(leafPos) instanceof TickingPlantBlockEntity branch)
         {
             sourcePos = branch.getStemPos().below();
         }
         else
         {
-            TerraFirmaCraft.LOGGER.error("Fruit tree leaf block entity not present");
+            TerraFirmaCraft.LOGGER.error("Fruit tree leaf block entity not present at {}", leafPos);
             sourcePos = leafPos;
         }
         return getFruitBranchHydrationFromRootPos(level, sourcePos);
@@ -328,6 +330,6 @@ public class GrowingFruitTreeBranchBlock extends FruitTreeBranchBlock implements
     protected static int getFruitBranchHydrationFromRootPos(Level level, BlockPos rootPos)
     {
         final float averageRainfall = WorldTracker.get(level).getClimateModel().getAverageRainfall(level, rootPos);
-        return FarmlandBlock.getHydrationFromRainHydration(level, rootPos, FarmlandBlock.getRainHydration(averageRainfall));
+        return FarmlandBlock.getInstantHydrationFromRainHydration(level, rootPos, FarmlandBlock.getInstantRainHydration(averageRainfall));
     }
 }

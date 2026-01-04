@@ -4,7 +4,7 @@
   "ingredient": {
     "item": "tfc:food/cassava"
   },
-  "protein": 0.5,
-  "saturation": 2.0,
-  "vegetables": 1.0
+  "protein": 0.2,
+  "saturation": 0.5,
+  "vegetables": 0.4
 }

@@ -2,9 +2,6 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "D": {
-      "item": "minecraft:white_dye"
-    },
     "H": {
       "tag": "tfc:high_quality_cloth"
     },
@@ -13,7 +10,6 @@
     }
   },
   "pattern": [
-    "DDD",
     "HHH",
     "LLL"
   ],

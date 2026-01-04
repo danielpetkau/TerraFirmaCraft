@@ -5,10 +5,10 @@
     "id": "minecraft:flower_banner_pattern"
   },
   "squares": [
-    "   ##   ",
-    "  ####  ",
-    "  ####  ",
-    "   ##   "
+    "BBBWWBBB",
+    "BBWWWWBB",
+    "BBWWWWBB",
+    "BBBWWBBB"
   ],
   "stitches": [
     "   # #   ",

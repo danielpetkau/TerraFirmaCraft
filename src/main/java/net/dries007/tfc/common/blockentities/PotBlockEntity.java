@@ -10,7 +10,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.Component;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -24,13 +23,10 @@ import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
 import net.neoforged.neoforge.items.IItemHandlerModifiable;
 import net.neoforged.neoforge.items.ItemStackHandler;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import net.dries007.tfc.common.TFCTags;
 import net.dries007.tfc.common.blocks.devices.FirepitBlock;
-import net.dries007.tfc.common.capabilities.DelegateFluidHandler;
-import net.dries007.tfc.common.capabilities.DelegateItemHandler;
 import net.dries007.tfc.common.capabilities.InventoryItemHandler;
 import net.dries007.tfc.common.capabilities.PartialFluidHandler;
 import net.dries007.tfc.common.capabilities.PartialItemHandler;
@@ -41,15 +37,14 @@ import net.dries007.tfc.common.fluids.FluidHelpers;
 import net.dries007.tfc.common.recipes.PotRecipe;
 import net.dries007.tfc.common.recipes.RecipeHelpers;
 import net.dries007.tfc.common.recipes.TFCRecipeTypes;
-import net.dries007.tfc.common.recipes.input.NonEmptyInput;
 import net.dries007.tfc.common.recipes.outputs.PotOutput;
 import net.dries007.tfc.config.TFCConfig;
 import net.dries007.tfc.util.Helpers;
 
 public class PotBlockEntity extends AbstractFirepitBlockEntity<PotBlockEntity.PotInventory>
 {
-    public static final int SLOT_EXTRA_INPUT_START = 4;
-    public static final int SLOT_EXTRA_INPUT_END = 8;
+    private static final int SLOT_EXTRA_INPUT_START = 4;
+    private static final int SLOT_EXTRA_INPUT_END = 8;
 
     /**
      * A number of ticks that a recipe needs to start "boiling" before the slots lock. This is to assist players which
@@ -125,7 +120,7 @@ public class PotBlockEntity extends AbstractFirepitBlockEntity<PotBlockEntity.Po
     @Override
     public boolean isItemValid(int slot, ItemStack stack)
     {
-        return (slot >= SLOT_EXTRA_INPUT_START && slot <= SLOT_EXTRA_INPUT_END) || super.isItemValid(slot, stack);
+        return (slot >= inventory.inputStart() && slot <= inventory.inputEnd()) || super.isItemValid(slot, stack);
     }
 
     @Override
@@ -152,7 +147,7 @@ public class PotBlockEntity extends AbstractFirepitBlockEntity<PotBlockEntity.Po
             {
                 // Create output
                 // Set the crafting input, so providers can access all pot recipe inputs
-                RecipeHelpers.setCraftingInput(inventory, SLOT_EXTRA_INPUT_START, SLOT_EXTRA_INPUT_END + 1);
+                RecipeHelpers.setCraftingInput(inventory, inventory.inputStart(), inventory.inputEnd() + 1);
 
                 // Save the recipe here, as setting inventory will call setAndUpdateSlots, which will clear the cached recipe before output is created
                 final PotRecipe recipe = cachedRecipe;
@@ -161,7 +156,7 @@ public class PotBlockEntity extends AbstractFirepitBlockEntity<PotBlockEntity.Po
                 RecipeHelpers.clearCraftingInput();
 
                 // Clear inputs
-                for (int slot = SLOT_EXTRA_INPUT_START; slot <= SLOT_EXTRA_INPUT_END; slot++)
+                for (int slot = inventory.inputStart(); slot <= inventory.inputEnd(); slot++)
                 {
                     // Consume items, but set container items if they exist
                     inventory.setStackInSlot(slot, inventory.getStackInSlot(slot).getCraftingRemainingItem());
@@ -271,7 +266,7 @@ public class PotBlockEntity extends AbstractFirepitBlockEntity<PotBlockEntity.Po
     {
         if (output != null)
         {
-            final ItemInteractionResult result = output.onInteract(this, player, stack);
+            final ItemInteractionResult result = output.onInteract(getInventory(), player, stack);
             if (output.isEmpty())
             {
                 output = null;
@@ -295,7 +290,7 @@ public class PotBlockEntity extends AbstractFirepitBlockEntity<PotBlockEntity.Po
         return PotContainer.create(this, playerInv, windowID);
     }
 
-    public static class PotInventory implements NonEmptyInput, DelegateItemHandler, DelegateFluidHandler, INBTSerializable<CompoundTag>
+    public static class PotInventory implements IPotInventory, INBTSerializable<CompoundTag>
     {
         private final PotBlockEntity pot;
         private final ItemStackHandler inventory;
@@ -305,14 +300,25 @@ public class PotBlockEntity extends AbstractFirepitBlockEntity<PotBlockEntity.Po
         {
             this.pot = (PotBlockEntity) entity;
             this.inventory = new InventoryItemHandler(entity, 9);
-            this.tank = new FluidTank(FluidHelpers.BUCKET_VOLUME, fluid -> Helpers.isFluid(fluid.getFluid(), TFCTags.Fluids.USABLE_IN_POT));
+            this.tank = new FluidTank(FluidHelpers.BUCKET_VOLUME, this::canInsertFluid);
         }
 
-        @NotNull
+        @Override
+        public int inputStart()
+        {
+            return SLOT_EXTRA_INPUT_START;
+        }
+
+        @Override
+        public int inputEnd()
+        {
+            return SLOT_EXTRA_INPUT_END;
+        }
+
         @Override
         public ItemStack extractItem(int slot, int amount, boolean simulate)
         {
-            return pot.hasRecipeStarted() && slot >= SLOT_EXTRA_INPUT_START ? ItemStack.EMPTY : inventory.extractItem(slot, amount, simulate);
+            return pot.hasRecipeStarted() && slot >= inputStart() ? ItemStack.EMPTY : inventory.extractItem(slot, amount, simulate);
         }
 
         @Override
@@ -343,9 +349,15 @@ public class PotBlockEntity extends AbstractFirepitBlockEntity<PotBlockEntity.Po
             tank.readFromNBT(provider, nbt.getCompound("tank"));
         }
 
+        @Override
         public void clearFluid()
         {
             tank.setFluid(FluidStack.EMPTY);
+        }
+
+        private boolean canInsertFluid(FluidStack fluid)
+        {
+            return pot.output == null && Helpers.isFluid(fluid.getFluid(), TFCTags.Fluids.USABLE_IN_POT);
         }
     }
 }

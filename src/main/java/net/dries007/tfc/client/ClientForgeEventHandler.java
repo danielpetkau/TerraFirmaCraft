@@ -85,6 +85,7 @@ import net.dries007.tfc.common.component.item.ItemListComponent;
 import net.dries007.tfc.common.component.size.ItemSizeManager;
 import net.dries007.tfc.common.items.EmptyPanItem;
 import net.dries007.tfc.common.items.PanItem;
+import net.dries007.tfc.common.items.PlantableInfo;
 import net.dries007.tfc.common.recipes.ChiselRecipe;
 import net.dries007.tfc.common.recipes.HeatingRecipe;
 import net.dries007.tfc.compat.patchouli.PatchouliIntegration;
@@ -94,8 +95,6 @@ import net.dries007.tfc.network.CycleChiselModePacket;
 import net.dries007.tfc.network.PlaceBlockSpecialPacket;
 import net.dries007.tfc.network.RequestClimateModelPacket;
 import net.dries007.tfc.network.StackFoodPacket;
-import net.dries007.tfc.network.SwitchInventoryTabPacket;
-import net.dries007.tfc.util.EnvironmentHelpers;
 import net.dries007.tfc.util.Helpers;
 import net.dries007.tfc.util.PhysicalDamageType;
 import net.dries007.tfc.util.calendar.Calendars;
@@ -108,6 +107,7 @@ import net.dries007.tfc.util.tooltip.Tooltips;
 import net.dries007.tfc.world.ChunkGeneratorExtension;
 import net.dries007.tfc.world.chunkdata.ChunkData;
 
+import static net.dries007.tfc.util.tracker.WeatherHelpers.*;
 import static net.minecraft.ChatFormatting.*;
 
 public class ClientForgeEventHandler
@@ -134,7 +134,9 @@ public class ClientForgeEventHandler
         bus.addListener(ClientForgeEventHandler::onEffectRender);
         bus.addListener(ClientForgeEventHandler::onRecipesUpdated);
         bus.addListener(IngameOverlays::checkGuiOverlays);
+
     }
+
 
     public static void onRenderGameOverlayText(CustomizeGuiOverlayEvent.DebugText event)
     {
@@ -158,25 +160,25 @@ public class ClientForgeEventHandler
                 tooltip.add("Temperature: Sea Level Avg: %.3f Avg: %.3f Now: %.3f".formatted(
                     ClimateRenderCache.INSTANCE.getAverageSeaLevelTemperature(),
                     ClimateRenderCache.INSTANCE.getAverageTemperature(),
-                    ClimateRenderCache.INSTANCE.getTemperature()
+                    ClimateRenderCache.INSTANCE.getInstantTemperature()
                 ));
                 tooltip.add("Rain: Avg: %.3f Var: %.3f Now: %.3f".formatted(
                     ClimateRenderCache.INSTANCE.getAverageRainfall(),
                     ClimateRenderCache.INSTANCE.getRainVariance(),
-                    ClimateRenderCache.INSTANCE.getRainfall()
+                    ClimateRenderCache.INSTANCE.getInstantRainfall()
                 ));
                 tooltip.add("Water: Avg: %.3f Base: %.3f Now: %.3f".formatted(
                     ClimateRenderCache.INSTANCE.getAverageGroundwater(),
                     ClimateRenderCache.INSTANCE.getBaseGroundwater(),
-                    ClimateRenderCache.INSTANCE.getGroundwater()
+                    ClimateRenderCache.INSTANCE.getInstantGroundwater()
                 ));
                 final Vec2 wind = ClimateRenderCache.INSTANCE.getWind();
                 tooltip.add(Component.translatable("tfc.tooltip.wind_speed",
-                    Mth.floor(320 * wind.length()),
-                    String.format("%.0f", Mth.abs(wind.x * 100)),
-                    Helpers.translateEnum(wind.x > 0 ? Direction.EAST : Direction.WEST),
-                    String.format("%.0f", Mth.abs(wind.y * 100)),
-                    Helpers.translateEnum(wind.y > 0 ? Direction.SOUTH : Direction.NORTH))
+                        Mth.floor(windKMH(wind)),
+                        String.format("%.0f", Mth.abs(wind.x * 100)),
+                        Helpers.translateEnum(wind.x > 0 ? Direction.EAST : Direction.WEST),
+                        String.format("%.0f", Mth.abs(wind.y * 100)),
+                        Helpers.translateEnum(wind.y > 0 ? Direction.SOUTH : Direction.NORTH))
                     .getString());
 
                 final ChunkData data = ChunkData.get(mc.level, pos);
@@ -269,6 +271,7 @@ public class ClientForgeEventHandler
                 if (k != 0)
                     tooltip.add(Component.translatable("tfc.tooltip.fertilizer.potassium", String.format("%.1f", k * 100)));
             }
+            PlantableInfo.addTooltipInfo(stack, tooltip::add);
 
             // Metal content, inferred from a matching heat recipe.
             final HeatingRecipe recipe = HeatingRecipe.getRecipe(stack);
@@ -306,10 +309,10 @@ public class ClientForgeEventHandler
                         first = false;
                     }
                     tooltip.add(Component.literal(DARK_GRAY
-                        + typeOfComponent(stack.getComponentsPatch().get(component.type()))
-                        + BuiltInRegistries.DATA_COMPONENT_TYPE.getKey(component.type())
-                        + " = "
-                        + component.value()
+                            + typeOfComponent(stack.getComponentsPatch().get(component.type()))
+                            + BuiltInRegistries.DATA_COMPONENT_TYPE.getKey(component.type())
+                            + " = "
+                            + component.value()
                         // Avoid showing the encoding, it's interesting but not necessary. Uncomment if needing to debug
                         //+ " = "
                         //+ component.encodeValue(RegistryOps.create(NbtOps.INSTANCE, Minecraft.getInstance().level.registryAccess()))
@@ -360,11 +363,11 @@ public class ClientForgeEventHandler
             int guiLeft = screen.getGuiLeft();
             int guiTop = screen.getGuiTop();
 
-            event.addListener(new PlayerInventoryTabButton(guiLeft, guiTop, 176 - 3, 4, 20 + 3, 22, 128 + 20, 0, 1, 3, 0, 0, button -> {}).setRecipeBookCallback(screen));
-            event.addListener(new PlayerInventoryTabButton(guiLeft, guiTop, 176, 27, 20, 22, 128, 0, 1, 3, 32, 0, SwitchInventoryTabPacket.Tab.CALENDAR).setRecipeBookCallback(screen));
-            event.addListener(new PlayerInventoryTabButton(guiLeft, guiTop, 176, 50, 20, 22, 128, 0, 1, 3, 64, 0, SwitchInventoryTabPacket.Tab.NUTRITION).setRecipeBookCallback(screen));
-            event.addListener(new PlayerInventoryTabButton(guiLeft, guiTop, 176, 73, 20, 22, 128, 0, 1, 3, 96, 0, SwitchInventoryTabPacket.Tab.CLIMATE).setRecipeBookCallback(screen));
-            PatchouliIntegration.ifEnabled(() -> event.addListener(new PlayerInventoryTabButton(guiLeft, guiTop, 176, 96, 20, 22, 128, 0, 1, 3, 0, 32, SwitchInventoryTabPacket.Tab.BOOK).setRecipeBookCallback(screen)));
+            event.addListener(new PlayerInventoryTabButton(guiLeft, guiTop, true, false, PlayerInventoryTabButton.Tab.INVENTORY, button -> {}).setRecipeBookCallback(screen));
+            event.addListener(new PlayerInventoryTabButton(guiLeft, guiTop, false, false, PlayerInventoryTabButton.Tab.CALENDAR).setRecipeBookCallback(screen));
+            event.addListener(new PlayerInventoryTabButton(guiLeft, guiTop, false, false, PlayerInventoryTabButton.Tab.NUTRITION).setRecipeBookCallback(screen));
+            event.addListener(new PlayerInventoryTabButton(guiLeft, guiTop, false, false, PlayerInventoryTabButton.Tab.CLIMATE).setRecipeBookCallback(screen));
+            PatchouliIntegration.ifEnabled(() -> event.addListener(new PlayerInventoryTabButton(guiLeft, guiTop, false, false, PlayerInventoryTabButton.Tab.BOOK).setRecipeBookCallback(screen)));
         }
     }
 
@@ -416,7 +419,7 @@ public class ClientForgeEventHandler
             final Vec2 wind = ClimateRenderCache.INSTANCE.getWind();
             final float windStrength = wind.length();
             int count = 0;
-            if (windStrength > 0.3f)
+            if (windStrength > 0.07f) // spawn wind particles starting at ~8 kmh
             {
                 count = (int) (windStrength * 8);
             }
@@ -428,15 +431,20 @@ public class ClientForgeEventHandler
                 return;
             final double xBias = wind.x > 0 ? 6 : -6;
             final double zBias = wind.y > 0 ? 6 : -6;
-            final ParticleOptions particle = ClimateRenderCache.INSTANCE.getTemperature() < 0f && level.getRainLevel(0) > 0 ? TFCParticles.SNOWFLAKE.get() : TFCParticles.WIND.get();
-            for (int i = 0; i < count; i++)
+
+            // don't spawn wind particles in rain
+            if (!(ClimateRenderCache.INSTANCE.getInstantTemperature() > 0f && level.getRainLevel(0) > 0))
             {
-                final double x = pos.getX() + Mth.nextDouble(level.random, -12 - xBias, 12 - xBias);
-                final double y = pos.getY() + Mth.nextDouble(level.random, -1, 6);
-                final double z = pos.getZ() + Mth.nextDouble(level.random, -12 - zBias, 12 - zBias);
-                if (level.canSeeSky(BlockPos.containing(x, y, z)))
+                final ParticleOptions particle = ClimateRenderCache.INSTANCE.getInstantTemperature() < 0f && level.getRainLevel(0) > 0 ? TFCParticles.SNOWFLAKE.get() : TFCParticles.WIND.get();
+                for (int i = 0; i < count; i++)
                 {
-                    level.addParticle(particle, x, y, z, 0D, 0D, 0D);
+                    final double x = pos.getX() + Mth.nextDouble(level.random, -12 - xBias, 12 - xBias);
+                    final double y = pos.getY() + Mth.nextDouble(level.random, -1, 6);
+                    final double z = pos.getZ() + Mth.nextDouble(level.random, -12 - zBias, 12 - zBias);
+                    if (level.canSeeSky(BlockPos.containing(x, y, z)))
+                    {
+                        level.addParticle(particle, x, y, z, 0D, 0D, 0D);
+                    }
                 }
             }
         }
@@ -461,7 +469,7 @@ public class ClientForgeEventHandler
             Slot slot = inv.getSlotUnderMouse();
             if (slot != null)
             {
-               PacketDistributor.sendToServer(new StackFoodPacket(slot.index));
+                PacketDistributor.sendToServer(new StackFoodPacket(slot.index));
             }
         }
     }

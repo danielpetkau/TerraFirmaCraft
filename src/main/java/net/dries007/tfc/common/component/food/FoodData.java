@@ -206,7 +206,7 @@ public record FoodData(
         {
             return hunger == that.hunger
                 && water == that.water
-                && saturation == that.saturation
+                && Math.round(saturation * 100) == Math.round(that.saturation * 100)
                 && intoxication == that.intoxication
                 && Arrays.equals(nutrients, that.nutrients)
                 && decayModifier == that.decayModifier;

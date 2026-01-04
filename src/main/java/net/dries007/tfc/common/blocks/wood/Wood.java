@@ -11,7 +11,6 @@ import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
-import com.google.common.base.CaseFormat;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
@@ -192,7 +191,7 @@ public enum Wood implements RegistryWood
         STRIPPED_WOOD(wood -> new LogBlock(properties(wood).strength(7.5f).requiresCorrectToolForDrops().flammableLikeLogs(), null)),
         LEAVES((self, wood) -> new TFCLeavesBlock(ExtendedProperties.of().mapColor(MapColor.PLANT).strength(0.5F).sound(SoundType.GRASS).defaultInstrument().randomTicks().noOcclusion().isViewBlocking(TFCBlocks::never).flammableLikeLeaves(), wood.autumnIndex(), wood.getBlock(self.fallenLeaves()), wood.getBlock(self.twig()))),
         PLANKS(wood -> new ExtendedBlock(properties(wood).strength(1.5f, 3.0F).flammableLikePlanks())),
-        SAPLING(wood -> new TFCSaplingBlock(wood.tree(), ExtendedProperties.of(MapColor.PLANT).noCollission().randomTicks().strength(0).sound(SoundType.GRASS).flammableLikeLeaves().blockEntity(TFCBlockEntities.TICK_COUNTER), wood.ticksToGrow(), wood == Wood.PALM)),
+        SAPLING((self, wood) -> new TFCSaplingBlock(wood.tree(), ExtendedProperties.of(MapColor.PLANT).noCollission().randomTicks().strength(0).sound(SoundType.GRASS).flammableLikeLeaves().blockEntity(TFCBlockEntities.TICK_COUNTER), wood.ticksToGrow(), wood == Wood.PALM), TFCSaplingBlock.TFCSaplingBlockItem::new),
         POTTED_SAPLING(wood -> new FlowerPotBlock(() -> (FlowerPotBlock) Blocks.FLOWER_POT, wood.getBlock(SAPLING), BlockBehaviour.Properties.ofFullCopy(Blocks.POTTED_ACACIA_SAPLING))),
         BOOKSHELF(wood -> new BookshelfBlock(properties(wood).strength(2.0F, 3.0F).flammable(20, 30).enchantPower(BookshelfBlock::getEnchantPower).blockEntity(TFCBlockEntities.BOOKSHELF))),
         DOOR(wood -> new TFCDoorBlock(properties(wood).strength(3.0F).noOcclusion().flammableLikePlanks(), wood.getBlockSet())),
@@ -212,7 +211,7 @@ public enum Wood implements RegistryWood
         WORKBENCH(wood -> new TFCCraftingTableBlock(properties(wood).strength(2.5F).flammableLikeLogs())),
         TRAPPED_CHEST((self, wood) -> new TFCTrappedChestBlock(properties(wood).strength(2.5F).flammableLikeLogs().blockEntity(TFCBlockEntities.TRAPPED_CHEST).clientTicks(ChestBlockEntity::lidAnimateTick), wood.getSerializedName()), ChestBlockItem::new),
         CHEST((self, wood) -> new TFCChestBlock(properties(wood).strength(2.5F).flammableLikeLogs().blockEntity(TFCBlockEntities.CHEST).clientTicks(ChestBlockEntity::lidAnimateTick), wood.getSerializedName()), ChestBlockItem::new),
-        LOOM((self, wood) -> new TFCLoomBlock(properties(wood).strength(2.5F).noOcclusion().flammableLikePlanks().blockEntity(TFCBlockEntities.LOOM).ticks(LoomBlockEntity::tick))),
+        LOOM((self, wood) -> new TFCLoomBlock(properties(wood).strength(2.5F).noOcclusion().flammableLikePlanks().blockEntity(TFCBlockEntities.LOOM).ticks(LoomBlockEntity::tick), self.planksTexture(wood))),
         SLUICE(wood -> new SluiceBlock(properties(wood).strength(3F).noOcclusion().flammableLikeLogs().blockEntity(TFCBlockEntities.SLUICE).serverTicks(SluiceBlockEntity::serverTick))),
         SIGN(wood -> new TFCStandingSignBlock(properties(wood).noCollission().strength(1F).flammableLikePlanks().blockEntity(TFCBlockEntities.SIGN).ticks(SignBlockEntity::tick), wood.getVanillaWoodType())),
         WALL_SIGN(wood -> new TFCWallSignBlock(properties(wood).noCollission().strength(1F).dropsLike(wood.getBlock(SIGN)).flammableLikePlanks().blockEntity(TFCBlockEntities.SIGN).ticks(SignBlockEntity::tick), wood.getVanillaWoodType())),
@@ -227,8 +226,7 @@ public enum Wood implements RegistryWood
         CLUTCH((self, wood) -> new ClutchBlock(properties(wood).strength(2.5F).flammableLikeLogs().pushReaction(PushReaction.DESTROY).blockEntity(TFCBlockEntities.CLUTCH), getBlock(wood, self.axle()))),
         GEAR_BOX((self, wood) -> new GearBoxBlock(properties(wood).strength(2f).noOcclusion().blockEntity(TFCBlockEntities.GEAR_BOX), getBlock(wood, self.axle()))),
         WINDMILL((self, wood) -> new WindmillBlock(properties(wood).strength(9f).noOcclusion().blockEntity(TFCBlockEntities.WINDMILL).ticks(WindmillBlockEntity::serverTick, WindmillBlockEntity::clientTick), getBlock(wood, self.axle()))),
-        WATER_WHEEL((self, wood) -> new WaterWheelBlock(properties(wood).strength(9f).noOcclusion().blockEntity(TFCBlockEntities.WATER_WHEEL).ticks(WaterWheelBlockEntity::serverTick, WaterWheelBlockEntity::clientTick), getBlock(wood, self.axle())))
-        ;
+        WATER_WHEEL((self, wood) -> new WaterWheelBlock(properties(wood).strength(9f).noOcclusion().blockEntity(TFCBlockEntities.WATER_WHEEL).ticks(WaterWheelBlockEntity::serverTick, WaterWheelBlockEntity::clientTick), getBlock(wood, self.axle()), self.waterWheelTexture(wood)));
 
         private static ExtendedProperties properties(RegistryWood wood)
         {
@@ -273,7 +271,7 @@ public enum Wood implements RegistryWood
 
         public String nameFor(RegistryWood wood)
         {
-            return switch(this)
+            return switch (this)
             {
                 // N.B. Only stairs and slabs use the variant of planks, this is consistent with stairs + slabs in the rest of the mod
                 // and also with that these stair and slabs are based on the planks block
@@ -285,21 +283,21 @@ public enum Wood implements RegistryWood
 
         public boolean needsItem()
         {
-            return switch(this)
-                {
-                    case VERTICAL_SUPPORT, HORIZONTAL_SUPPORT, SIGN, WALL_SIGN, POTTED_SAPLING, WINDMILL -> false;
-                    default -> true;
-                };
+            return switch (this)
+            {
+                case VERTICAL_SUPPORT, HORIZONTAL_SUPPORT, SIGN, WALL_SIGN, POTTED_SAPLING, WINDMILL -> false;
+                default -> true;
+            };
         }
 
         private BlockType stripped()
         {
             return switch (this)
-                {
-                    case LOG -> STRIPPED_LOG;
-                    case WOOD -> STRIPPED_WOOD;
-                    default -> throw new IllegalStateException("Block type " + name() + " does not have a stripped variant");
-                };
+            {
+                case LOG -> STRIPPED_LOG;
+                case WOOD -> STRIPPED_WOOD;
+                default -> throw new IllegalStateException("Block type " + name() + " does not have a stripped variant");
+            };
         }
 
         private ResourceLocation planksTexture(RegistryWood wood)
@@ -307,11 +305,20 @@ public enum Wood implements RegistryWood
             return Helpers.identifier("block/wood/planks/" + wood.getSerializedName());
         }
 
-        private BlockType twig() { return TWIG; }
-        private BlockType fallenLeaves() { return FALLEN_LEAVES; }
-        private BlockType leaves() { return LEAVES; }
-        private BlockType axle() { return AXLE; }
-        private BlockType windmill() { return WINDMILL; }
+        private ResourceLocation waterWheelTexture(RegistryWood wood)
+        {
+            return Helpers.identifier("textures/entity/water_wheel/" + wood.getSerializedName() + ".png");
+        }
+
+        private BlockType twig() {return TWIG;}
+
+        private BlockType fallenLeaves() {return FALLEN_LEAVES;}
+
+        private BlockType leaves() {return LEAVES;}
+
+        private BlockType axle() {return AXLE;}
+
+        private BlockType windmill() {return WINDMILL;}
 
         public Supplier<Block> create(RegistryWood wood)
         {

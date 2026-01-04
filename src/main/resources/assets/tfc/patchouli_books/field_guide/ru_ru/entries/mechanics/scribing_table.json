@@ -6,7 +6,7 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "$(thing)Стол для письма$() используется для переименования предметов. Для переименования предметов требуется $(l:mechanics/dye)Черный краситель$(), который может быть предоставлен как традиционный предмет красителя или как ведро с красящей жидкостью."
+      "text": "$(thing)Стол для письма$() используется для переименования предметов. Для этого требуется $(l:mechanics/dye)чёрный краситель$(), который может быть как в виде предмета, так и в виде ведра с красящей жидкостью."
     },
     {
       "type": "patchouli:multiblock",
@@ -30,14 +30,14 @@
     {
       "type": "patchouli:crafting",
       "recipe": "tfc:crafting/wood/scribing_table/birch",
-      "text": "Рецепт крафта стола для письма."
+      "text": "Рецепт стола для письма.$(br2)Текст вводится в верхней части интерфейса, предмет для переименования кладется слева, а краситель по центру. Готовый предмет берётся из правого слота."
     },
     {
       "type": "patchouli:image",
       "images": [
         "tfc:textures/gui/book/gui/scribing.png"
       ],
-      "text": "The scribing screen takes text entry at the top, an input on the left, a dye in the center. The output is taken from the right slot. Using fluid dye only costs 250mb instead of 1000mb, if possible.",
+      "text": "Интерфейс стола для письма.$(br)Жидкий краситель в 4 раза выгоднее, чем твёрдый!",
       "border": false
     }
   ],

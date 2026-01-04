@@ -49,6 +49,11 @@ public final class TimeCommand
                 .then(Commands.literal("noon").executes(c -> setTimeFromDayTime(c, 0.5f)))
                 .then(Commands.literal("night").executes(c -> setTimeFromDayTime(c, 0.8f)))
                 .then(Commands.literal("midnight").executes(c -> setTimeFromDayTime(c, 0f)))
+                .then(Commands.literal("hour")
+                    .then(Commands.argument("hour", IntegerArgumentType.integer(0, 24))
+                        .executes(c -> setTimeFromDayTime(c, IntegerArgumentType.getInteger(c, "hour") == 24 ? 0 : IntegerArgumentType.getInteger(c, "hour") * 0.041666f))
+                    )
+                )
                 .then(Commands.literal("rain").executes(c -> setTimeFromWeather(c, true)))
                 .then(Commands.literal("clear").executes(c -> setTimeFromWeather(c, false)))
             )
@@ -112,7 +117,7 @@ public final class TimeCommand
         final CommandSourceStack source = context.getSource();
         final ClimateModel model = Climate.get(source.getLevel());
         final long calendarTick = Calendars.SERVER.getCalendarTicks();
-        final float rainfall = model.getRainfall(source.getLevel(), BlockPos.containing(source.getPosition()));
+        final float rainfall = model.getInstantRainfall(source.getLevel(), BlockPos.containing(source.getPosition()));
         for (int tick = 0; tick < 400_000; tick += 1_000)
         {
             if (WeatherHelpers.isPrecipitating(model.getRain(calendarTick + tick), rainfall) == rain)

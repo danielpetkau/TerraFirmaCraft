@@ -29,7 +29,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BedPart;
-import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
@@ -41,10 +40,9 @@ import net.neoforged.neoforge.event.entity.player.UseItemOnBlockEvent;
 import org.jetbrains.annotations.NotNull;
 
 import net.dries007.tfc.common.TFCTags;
-import net.dries007.tfc.common.blockentities.MoldBlockEntity;
+import net.dries007.tfc.common.blockentities.MoldTableBlockEntity;
 import net.dries007.tfc.common.blockentities.TFCBlockEntities;
 import net.dries007.tfc.common.blocks.CharcoalPileBlock;
-import net.dries007.tfc.common.blocks.DirectionPropertyBlock;
 import net.dries007.tfc.common.blocks.GroundcoverBlockType;
 import net.dries007.tfc.common.blocks.SnowPileBlock;
 import net.dries007.tfc.common.blocks.TFCBlocks;
@@ -64,8 +62,6 @@ import net.dries007.tfc.util.collections.IndirectHashCollection;
 import net.dries007.tfc.util.data.KnappingType;
 import net.dries007.tfc.util.events.DouseFireEvent;
 import net.dries007.tfc.util.events.StartFireEvent;
-
-import static net.neoforged.neoforge.event.entity.player.PlayerInteractEvent.*;
 
 /**
  * This handles interactions with generic items and their {@code useItemOn()} behavior. We handle multiple different calls through here:
@@ -355,7 +351,7 @@ public final class InteractionManager
             {
                 final Level level = context.getLevel();
                 final BlockPos posClicked = context.getClickedPos();
-                final Optional<MoldBlockEntity> moldTable = level.getBlockEntity(posClicked, TFCBlockEntities.MOLD_TABLE.get());
+                final Optional<MoldTableBlockEntity> moldTable = level.getBlockEntity(posClicked, TFCBlockEntities.MOLD_TABLE.get());
                 if (moldTable.isPresent())
                 {
                     moldTable.get().onRightClick(player);
@@ -545,7 +541,7 @@ public final class InteractionManager
     /**
      * Which targets an action accepts - blocks, air, or both
      */
-    enum Target
+    public enum Target
     {
         AIR, BLOCKS, BOTH;
 

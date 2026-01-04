@@ -181,9 +181,16 @@ public interface Accessors
         return FluidHeat.MANAGER.getOrThrow(Helpers.identifier(metal.getSerializedName())).meltTemperature();
     }
 
+    /**
+     * Converts a number of hours into player ticks, since recipe durations are defined in player ticks.
+     * Recipes using this will take the same amount of real-world time to complete regardless of the
+     * server config's specified day length.
+     * @param hours The number of in-game hours
+     * @return The equivalent number of player ticks
+     */
     default int hours(int hours)
     {
-        return hours * ICalendar.CALENDAR_TICKS_IN_HOUR;
+        return hours * ICalendar.PLAYER_TICKS_IN_DEFAULT_HOUR;
     }
 
     /**

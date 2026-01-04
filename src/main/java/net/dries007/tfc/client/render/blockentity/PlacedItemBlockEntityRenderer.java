@@ -17,16 +17,19 @@ import net.minecraft.client.renderer.block.ModelBlockRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ShieldItem;
 import net.neoforged.neoforge.client.model.data.ModelData;
 import net.neoforged.neoforge.items.ItemStackHandler;
 import org.jetbrains.annotations.Nullable;
 
 import net.dries007.tfc.client.RenderHelpers;
 import net.dries007.tfc.common.blockentities.PlacedItemBlockEntity;
+import net.dries007.tfc.common.items.JavelinItem;
 import net.dries007.tfc.common.items.TFCItems;
 
 public class PlacedItemBlockEntityRenderer<T extends PlacedItemBlockEntity> implements BlockEntityRenderer<T>
@@ -115,6 +118,8 @@ public class PlacedItemBlockEntityRenderer<T extends PlacedItemBlockEntity> impl
             }
             pose.translate(0, -0.0001, 0);
 
+            baked.applyTransform(RenderHelpers.PLACED_ITEM_CONTEXT, pose, false);
+
             blockRenderer.tesselateWithAO(entity.getLevel(), baked, entity.getBlockState(), entity.getBlockPos(), pose, buffer, true, random, packedLight, packedOverlay, ModelData.EMPTY, RenderType.translucent());
         }
         else
@@ -125,19 +130,35 @@ public class PlacedItemBlockEntityRenderer<T extends PlacedItemBlockEntity> impl
             // model is properly 'sitting' on the surface
             final BakedModel model = mc.getItemRenderer().getModel(stack, entity.getLevel(), null, 0);
 
+            // Tridents (which javelins borrow code from) and shields have special handling in the vanilla code, since they have custom rendering behavior when held.
+            // They are hardcoded to behave differently, such as in Neo's ItemRenderer#render and BlockEntityWithoutLevelRenderer#renderByItem methods,
+            // so we have to hardcode them to be rendered as items here as well.
+            final boolean renderAsBlock = model.isGui3d() && !(stack.getItem() instanceof JavelinItem || stack.getItem() instanceof ShieldItem);
+
             if (isLarge)
             {
                 // Large items, translate to center
-                pose.translate(0.5, model.isGui3d() ? 0.25 : 0.03125, 0.5);
+                pose.translate(0.5, renderAsBlock ? 0.25 : 0.03125, 0.5);
+
+                // Translate the item slightly down to prevent z-fighting between neighboring items
+                // We can't use the slot to figure out the height, so use the blockpos instead
+                // Make sure items 1 block diagonally from each other are at different heights too
+                final BlockPos pos = entity.getBlockPos();
+                final float adjust = (pos.getX() % 2 == 0 ? -0.001f : 0f) + (pos.getZ() % 2 == 0 ? -0.002f : 0f);
+                pose.translate(0, adjust, 0);
             }
             else
             {
                 // For small items, translate to the center of the slot, and then scale down by half
-                pose.translate(0.25 + slotX * 0.5, model.isGui3d() ? 0.125 : 0.03125, 0.25 + slotZ * 0.5);
+                pose.translate(0.25 + slotX * 0.5, renderAsBlock ? 0.125 : 0.03125, 0.25 + slotZ * 0.5);
                 pose.scale(0.5f, 0.5f, 0.5f);
+
+                // Translate the item slightly down to prevent z-fighting between neighboring items
+                // Items that are next to each other need to be at slightly different heights
+                pose.translate(0, slot * -0.0001f, 0);
             }
 
-            if (model.isGui3d())
+            if (renderAsBlock)
             {
                 // Rotate around the center axis
                 pose.mulPose(Axis.YP.rotationDegrees(entity.getRotations(slot)));
@@ -148,6 +169,8 @@ public class PlacedItemBlockEntityRenderer<T extends PlacedItemBlockEntity> impl
                 pose.mulPose(Axis.XP.rotationDegrees(90f));
                 pose.mulPose(Axis.ZP.rotationDegrees(entity.getRotations(slot)));
             }
+
+            model.applyTransform(RenderHelpers.PLACED_ITEM_CONTEXT, pose, false);
 
             // Then render the model
             // This is copying what renderStatic() would've done

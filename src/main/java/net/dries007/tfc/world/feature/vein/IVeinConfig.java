@@ -63,9 +63,4 @@ public interface IVeinConfig extends FeatureConfiguration
         }
         return null;
     }
-
-    default boolean canSpawnAt(BlockPos pos, Function<BlockPos, Holder<Biome>> biomeQuery)
-    {
-        return config().biomes().map(tag -> biomeQuery.apply(pos).is(tag)).orElse(true);
-    }
 }

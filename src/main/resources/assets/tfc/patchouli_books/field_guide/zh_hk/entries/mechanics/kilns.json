@@ -23,7 +23,7 @@
     },
     {
       "type": "patchouli:text",
-      "text": "The exterior of a Kiln must be made of fireproof blocks. These include Bricks, Fire Bricks, Tinted Glass, and Fireproof Doors. If the structure is broken during heating, then the heating will be lost and must start over once the seal is re-made. The timer will also restart if the temperature increases or decreases from the initial setpoint."
+      "text": "The exterior of a Kiln must be made of some combination of Clay Bricks, Fire Bricks, Tinted Glass, or Fireproof Doors. Stone bricks don't work. If the structure is broken during heating, then the heating will be lost and must start over once the seal is re-made. The timer will also restart if the temperature increases or decreases from the initial setpoint."
     },
     {
       "type": "patchouli:crafting",

@@ -18,21 +18,37 @@ import net.dries007.tfc.util.Helpers;
  */
 public interface ICalendar
 {
-    /** The number of calendar hours in the day. */
+    /**
+     * The number of calendar hours in the day.
+     */
     int HOURS_IN_DAY = 24;
 
-    /** The number of months in a year. */
+    /**
+     * The number of months in a year.
+     */
     int MONTHS_IN_YEAR = 12;
 
     /**
      * For both these measurements, there is a distinction between the default value of an hour and a player-tick hour.
+     *
      * @deprecated because uses need to be audited to make sure they want calendar or player tick values
      */
     @Deprecated int TICKS_IN_DAY = 1000 * HOURS_IN_DAY;
 
-    /** Use if you're specifically trying to measure calendar ticks in a day, not player ticks. */
+    /**
+     * Use if you're specifically trying to measure calendar ticks in a day, not player ticks.
+     * Most use cases want player ticks instead.
+     */
     int CALENDAR_TICKS_IN_HOUR = 1000;
     int CALENDAR_TICKS_IN_DAY = CALENDAR_TICKS_IN_HOUR * HOURS_IN_DAY;
+
+    /**
+     * Use to create constants in player ticks from hours, days, etc.
+     * Only for things that must be constant such as configs and recipes.
+     * DO NOT use in game logic since day lengths can be changed.
+     */
+    int PLAYER_TICKS_IN_DEFAULT_HOUR = 60 * 20;
+    int PLAYER_TICKS_IN_DEFAULT_DAY = PLAYER_TICKS_IN_DEFAULT_HOUR * HOURS_IN_DAY;
 
     static MutableComponent getTimeAndDate(long calendarTick, long daysInMonth)
     {
@@ -41,6 +57,11 @@ public interface ICalendar
             Helpers.translateEnum(getMonthOfYear(calendarTick, daysInMonth)),
             getDayOfMonth(calendarTick, daysInMonth),
             getCalendarYear(calendarTick, daysInMonth));
+    }
+
+    static MutableComponent getDayTime(long calendarTick)
+    {
+        return Component.literal(String.format("%d:%02d", getHourOfDay(calendarTick), getMinuteOfHour(calendarTick)));
     }
 
     static MutableComponent getTimeDelta(long calendarTick, int daysInMonth)
@@ -78,7 +99,7 @@ public interface ICalendar
         return (int) (60f * (calendarTick % CALENDAR_TICKS_IN_HOUR) / CALENDAR_TICKS_IN_HOUR);
     }
 
-    private static int getHourOfDay(long calendarTick)
+    static int getHourOfDay(long calendarTick)
     {
         return (int) ((calendarTick / CALENDAR_TICKS_IN_HOUR) % HOURS_IN_DAY);
     }
@@ -106,6 +127,11 @@ public interface ICalendar
     static long getTotalCalendarDays(long calendarTick)
     {
         return calendarTick / CALENDAR_TICKS_IN_DAY;
+    }
+
+    static float getFractionOfHour(long calendarTick)
+    {
+        return (float) (calendarTick % CALENDAR_TICKS_IN_HOUR) / CALENDAR_TICKS_IN_HOUR;
     }
 
     static float getFractionOfDay(long calendarTick)
@@ -192,16 +218,6 @@ public interface ICalendar
     long getFixedCalendarTicksFromTick(long playerTick);
 
     /**
-     * Gets the total amount of days passed
-     * @deprecated almost everything counting days in player ticks is now wrong.
-     */
-    @Deprecated
-    default long getTotalDays()
-    {
-        return ICalendar.getTotalCalendarDays(getTicks());
-    }
-
-    /**
      * Gets the total amount of days passed since Jan 1, 1000
      */
     default long getTotalCalendarDays()
@@ -223,6 +239,15 @@ public interface ICalendar
     default int getCalendarDayOfMonth()
     {
         return ICalendar.getDayOfMonth(getCalendarTicks(), getCalendarDaysInMonth());
+    }
+
+    /**
+     * @return The progress through the current day from the calendar time. A value between {@code [0, 1]} where {@code 0} indicates midnight,
+     * and {@code 0.5} indicates noon.
+     */
+    default float getCalendarFractionOfHour()
+    {
+        return ICalendar.getFractionOfHour(getCalendarTicks());
     }
 
     /**
@@ -259,17 +284,30 @@ public interface ICalendar
     }
 
     /**
+     * Returns the birthday if present, empty component if not
+     */
+    default MutableComponent getBirthday()
+    {
+        return Day.getBirthday(getTotalCalendarDays(), getAbsoluteCalendarMonthOfYear(), getCalendarDayOfMonth()).orElse(Component.empty());
+    }
+
+    /**
      * Gets the current month of the year in calendar time
      */
     default Month getHemispheralCalendarMonthOfYear(boolean northernHemisphere)
     {
+        return getHemispheralCalendarMonthOfYear(northernHemisphere, getCalendarTicks(), getCalendarDaysInMonth());
+    }
+
+    default Month getHemispheralCalendarMonthOfYear(boolean northernHemisphere, long calendarTicks, long daysInMonth)
+    {
         if (northernHemisphere)
         {
-            return ICalendar.getMonthOfYear(getCalendarTicks(), getCalendarDaysInMonth());
+            return ICalendar.getMonthOfYear(calendarTicks, daysInMonth);
         }
         else
         {
-            return ICalendar.getMonthOfYear(getCalendarTicks(), getCalendarDaysInMonth()).opposite();
+            return ICalendar.getMonthOfYear(calendarTicks, daysInMonth).opposite();
         }
     }
 
@@ -305,6 +343,24 @@ public interface ICalendar
     default MutableComponent getTimeAndDate()
     {
         return getOffsetTimeAndDate(0);
+    }
+
+    /**
+     * @return A formatted component for displaying an exact day time of the current tick. Like "00:00"
+     */
+    default MutableComponent getDayTime()
+    {
+        return getDayTime(getCalendarTicks());
+    }
+
+    default int getHourOfDay()
+    {
+        return getHourOfDay(getCalendarTicks());
+    }
+
+    default int getMinuteOfHour()
+    {
+        return getMinuteOfHour(getCalendarTicks());
     }
 
     /**

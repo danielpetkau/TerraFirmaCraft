@@ -8,42 +8,40 @@ package net.dries007.tfc.client.particle;
 
 import net.minecraft.client.particle.*;
 import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.SimpleParticleType;
-
-/**
- * This is {@link BubbleColumnUpParticle} minus the fluid tag check and with a short lifecycle
+/*
+ * Implementation for generic bubble particles, overriding default bubble particles to work in any liquid not just water.
  */
 public class BubbleParticle extends TextureSheetParticle
 {
     public BubbleParticle(ClientLevel worldIn, double x, double y, double z, double motionX, double motionY, double motionZ)
     {
+        // Sets Bubble particle paramters
         super(worldIn, x, y, z);
         this.setSize(0.02F, 0.02F);
         this.quadSize *= random.nextFloat() * 0.6F + 0.2F;
         this.xd = motionX * 0.2D + (Math.random() * 2.0D - 1.0D) * 0.02D;
         this.yd = motionY * 0.2D + (Math.random() * 2.0D - 1.0D) * 0.02D;
         this.zd = motionZ * 0.2D + (Math.random() * 2.0D - 1.0D) * 0.02D;
-        this.lifetime = 3 + random.nextInt(3);
+        this.lifetime = (int)(8.0 / (Math.random() * 0.8 + 0.2));
     }
 
     @Override
     public void tick()
     {
-        xo = x;
-        yo = y;
-        zo = z;
-        yd += 0.005D;
-        if (lifetime-- <= 0)
-        {
-            remove();
-        }
-        else
-        {
-            move(xd, yd, zd);
-            xd *= 0.85F;
-            yd *= 0.85F;
-            zd *= 0.85F;
-        }
+        this.xo = this.x;
+        this.yo = this.y;
+        this.zo = this.z;
+        if (this.age++ >= this.lifetime)
+            this.remove();
+        yd += 0.002D;
+        move(xd, yd, zd);
+        xd *= 0.85F;
+        yd *= 0.85F;
+        zd *= 0.85F;
+        if (this.level.getFluidState(BlockPos.containing(this.x, this.y, this.z)).isEmpty())
+            this.remove();
     }
 
     @Override

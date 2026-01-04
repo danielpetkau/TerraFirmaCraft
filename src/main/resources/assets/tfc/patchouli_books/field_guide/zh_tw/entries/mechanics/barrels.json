@@ -61,7 +61,7 @@
     },
     {
       "type": "patchouli:text",
-      "text": "Barrels have the ability to $(l:mechanics/dye)Dye$() and $(l:mechanics/dye#lye)Bleach$() items. Most color-able things, like carpet, candles, and $(l:mechanics/advanced_building_materials#alabaster)Alabaster$() can be dyed by sealing them in a barrel of dye or bleached by sealing them in a barrel of lye. See the dye chapter for more information."
+      "text": "Barrels have the ability to $(l:mechanics/dye)Dye$() and $(l:mechanics/dye#lye)Bleach$() items. Most color-able things, like carpet, candles, and $(l:mechanics/advanced_building_materials#plaster)Plaster$() can be dyed by sealing them in a barrel of dye or bleached by sealing them in a barrel of lye. See the dye chapter for more information."
     },
     {
       "type": "patchouli:text",

@@ -129,12 +129,12 @@ public class ConfigBuilder
         return builder;
     }
 
-    interface Factory
+    public interface Factory
     {
         <T, V extends ConfigValue<T>> Supplier<T> create(V value);
     }
 
-    record CommonValue<T>(ConfigValue<T> value) implements Supplier<T>
+    public record CommonValue<T>(ConfigValue<T> value) implements Supplier<T>
     {
         @Override
         public T get()
@@ -143,7 +143,7 @@ public class ConfigBuilder
         }
     }
 
-    record ClientValue<T>(ConfigValue<T> value) implements Supplier<T>
+    public record ClientValue<T>(ConfigValue<T> value) implements Supplier<T>
     {
         @Override
         public T get()
@@ -152,7 +152,7 @@ public class ConfigBuilder
         }
     }
 
-    record ServerValue<T>(ConfigValue<T> value) implements Supplier<T>
+    public record ServerValue<T>(ConfigValue<T> value) implements Supplier<T>
     {
         @Override
         public T get()

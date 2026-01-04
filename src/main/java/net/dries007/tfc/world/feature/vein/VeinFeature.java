@@ -8,14 +8,11 @@ package net.dries007.tfc.world.feature.vein;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Function;
 import com.mojang.serialization.Codec;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Holder;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.WorldGenLevel;
-import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
@@ -50,7 +47,7 @@ public abstract class VeinFeature<C extends IVeinConfig, V extends IVein> extend
         final WorldGenerationContext generationContext = new WorldGenerationContext(context.chunkGenerator(), level);
 
         final ChunkPos chunkPos = new ChunkPos(pos);
-        final List<V> veins = getNearbyVeins(level, generationContext, chunkPos, config.chunkRadius(), config, p -> level.getUncachedNoiseBiome(p.getX(), p.getY(), p.getZ()));
+        final List<V> veins = getNearbyVeins(level, generationContext, chunkPos, config.chunkRadius(), config);
         if (!veins.isEmpty())
         {
             for (V vein : veins)
@@ -62,29 +59,26 @@ public abstract class VeinFeature<C extends IVeinConfig, V extends IVein> extend
         return false;
     }
 
-    public final List<V> getNearbyVeins(WorldGenLevel level, WorldGenerationContext context, ChunkPos pos, int radius, C config, Function<BlockPos, Holder<Biome>> biomeQuery)
+    public final List<V> getNearbyVeins(WorldGenLevel level, WorldGenerationContext context, ChunkPos pos, int radius, C config)
     {
         final List<V> veins = new ArrayList<>();
         for (int x = pos.x - radius; x <= pos.x + radius; x++)
         {
             for (int z = pos.z - radius; z <= pos.z + radius; z++)
             {
-                getVeinsAtChunk(level, context, x, z, veins, config, biomeQuery);
+                getVeinsAtChunk(level, context, x, z, veins, config);
             }
         }
         return veins;
     }
 
-    public final void getVeinsAtChunk(WorldGenLevel level, WorldGenerationContext context, int chunkPosX, int chunkPosZ, List<V> veins, C config, Function<BlockPos, Holder<Biome>> biomeQuery)
+    public final void getVeinsAtChunk(WorldGenLevel level, WorldGenerationContext context, int chunkPosX, int chunkPosZ, List<V> veins, C config)
     {
         final RandomSource random = new XoroshiroRandomSource(level.getSeed() ^ chunkPosX * 61728364132L, config.config().seed() ^ chunkPosZ * 16298364123L);
         if (random.nextInt(config.config().rarity()) == 0)
         {
             final V vein = createVein(context, chunkPosX << 4, chunkPosZ << 4, random, config);
-            if (config.canSpawnAt(vein.pos(), biomeQuery))
-            {
-                veins.add(vein);
-            }
+            veins.add(vein);
         }
     }
 

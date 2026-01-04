@@ -8,10 +8,7 @@ package net.dries007.tfc.world.region;
 
 import it.unimi.dsi.fastutil.ints.IntArrayFIFOQueue;
 
-import net.dries007.tfc.world.Seed;
-import net.dries007.tfc.world.biome.BiomeNoise;
 import net.dries007.tfc.world.noise.Cellular2D;
-import net.dries007.tfc.world.noise.Noise2D;
 
 public enum AddHotspots implements RegionTask
 {
@@ -29,18 +26,22 @@ public enum AddHotspots implements RegionTask
         // If a location reaches a value of at least exceeding a threshold value, a hot spot is placed in the region
         for (final var point : region.points())
         {
-            final Cellular2D.Cell cell = context.generator().plateRegionNoise.cell(point.x, point.z);
-            final double edgeDist = Math.abs(cell.f1() - cell.f2());
-
-            double val = context.generator().hotSpotIntensityNoise.noise(shift(point.x), shift(point.z));
-            if (val > threshold && edgeDist > 0.05)
+            if (context.generator().continentFactor(point) > 0.5f)
             {
-                final byte age = (byte) (int) context.generator().hotSpotAgeNoise.noise(shift(point.x), shift(point.z));
-                point.hotSpotAge = age;
-                if (age != 4)
-                    point.setLand();
-                queue.enqueue(point.index);
+                final Cellular2D.Cell cell = context.generator().plateRegionNoise.cell(point.x, point.z);
+                final double edgeDist = Math.abs(cell.f1() - cell.f2());
+
+                double val = context.generator().hotSpotIntensityNoise.noise(shift(point.x), shift(point.z));
+                if (val > threshold && edgeDist > 0.05)
+                {
+                    final byte age = (byte) (int) context.generator().hotSpotAgeNoise.noise(shift(point.x), shift(point.z));
+                    point.hotSpotAge = age;
+                    if (age != 4)
+                        point.setLand();
+                    queue.enqueue(point.index);
+                }
             }
+
         }
 
         // From the above crater locations, the hotspots are extended outwards

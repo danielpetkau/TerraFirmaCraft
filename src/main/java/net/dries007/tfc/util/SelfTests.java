@@ -23,7 +23,6 @@ import java.util.stream.Stream;
 import com.google.common.base.Stopwatch;
 import com.google.common.collect.ImmutableSet;
 import com.mojang.logging.LogUtils;
-import net.dries007.tfc.common.blocks.plant.*;
 import net.minecraft.SharedConstants;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.BlockModelShaper;
@@ -65,7 +64,14 @@ import net.dries007.tfc.common.blockentities.TFCBlockEntities;
 import net.dries007.tfc.common.blocks.PouredGlassBlock;
 import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.blocks.devices.IngotPileBlock;
+import net.dries007.tfc.common.blocks.devices.MoldTableBlock;
 import net.dries007.tfc.common.blocks.devices.ScrapingBlock;
+import net.dries007.tfc.common.blocks.plant.BodyPlantBlock;
+import net.dries007.tfc.common.blocks.plant.BranchingCactusBlock;
+import net.dries007.tfc.common.blocks.plant.GrowingBranchingCactusBlock;
+import net.dries007.tfc.common.blocks.plant.Plant;
+import net.dries007.tfc.common.blocks.plant.PlantBlock;
+import net.dries007.tfc.common.blocks.plant.TopPlantBlock;
 import net.dries007.tfc.common.blocks.plant.fruit.GrowingFruitTreeBranchBlock;
 import net.dries007.tfc.common.blocks.rock.RockDisplayCategory;
 import net.dries007.tfc.common.component.food.Nutrient;
@@ -97,7 +103,7 @@ import net.dries007.tfc.world.chunkdata.ForestType;
  */
 public final class SelfTests
 {
-    public static final boolean THROW_ON_FAIL = true; // todo 1.21, re-enable
+    public static final boolean THROW_ON_FAIL = true;
     public static final boolean ENABLED = Boolean.getBoolean("tfc.enableDebugSelfTests");
 
     private static final Logger LOGGER = LogUtils.getLogger();
@@ -294,7 +300,7 @@ public final class SelfTests
             .toList();
         final List<BlockState> missingParticleErrors = TFCBlocks.BLOCKS.getEntries()
             .stream()
-            .flatMap(states(s -> !s.isAir() && !(s.getBlock() instanceof IngotPileBlock) && !(s.getBlock() instanceof PlantBlock) && !(s.getBlock() instanceof BodyPlantBlock) && !(s.getBlock() instanceof TopPlantBlock) && !(s.getBlock() instanceof ScrapingBlock) && shaper.getParticleIcon(s) == missingParticle))
+            .flatMap(states(s -> !s.isAir() && !(s.getBlock() instanceof IngotPileBlock) && !(s.getBlock() instanceof PlantBlock) && !(s.getBlock() instanceof BodyPlantBlock) && !(s.getBlock() instanceof TopPlantBlock) && !(s.getBlock() instanceof ScrapingBlock) && !(s.getBlock() instanceof MoldTableBlock) && shaper.getParticleIcon(s) == missingParticle))
             .toList();
 
         return logErrors("{} block states with missing models:", missingModelErrors, LOGGER)
@@ -319,18 +325,18 @@ public final class SelfTests
         }));
 
         final Set<Item> technicalItemsWithNoTab = Stream.of(
-            List.of(
-                TFCBlocks.SNOW_PILE,
-                TFCBlocks.ICE_PILE,
-                TFCBlocks.BLOOM,
-                TFCBlocks.MOLTEN,
-                TFCBlocks.LIGHT,
-                TFCBlocks.POURED_GLASS,
-                TFCItems.FILLED_PAN
-            ),
-            TFCBlocks.COLORED_POURED_GLASS.values(),
-            TFCBlocks.ROCK_ANVILS.values()
-        )
+                List.of(
+                    TFCBlocks.SNOW_PILE,
+                    TFCBlocks.ICE_PILE,
+                    TFCBlocks.BLOOM,
+                    TFCBlocks.MOLTEN,
+                    TFCBlocks.LIGHT,
+                    TFCBlocks.POURED_GLASS,
+                    TFCItems.FILLED_PAN
+                ),
+                TFCBlocks.COLORED_POURED_GLASS.values(),
+                TFCBlocks.ROCK_ANVILS.values()
+            )
             .<ItemLike>flatMap(Collection::stream)
             .map(ItemLike::asItem)
             .collect(Collectors.toSet());

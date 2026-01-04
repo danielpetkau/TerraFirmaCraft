@@ -46,6 +46,7 @@ public class ClientConfig extends BaseConfig
     public final Supplier<Boolean> displayItemContentsAsImages;
     public final Supplier<Boolean> displayItemHeatBars;
     public final Supplier<Boolean> enableWindParticles;
+    public final Supplier<RotationDisplayStyle> rotationDisplayStyle;
 
     // Compatibility
     public final Supplier<List<String>> additionalSpecialModels;
@@ -90,7 +91,7 @@ public class ClientConfig extends BaseConfig
         ).define("foodExpiryTooltipStyle", FoodExpiryTooltipStyle.BOTH);
         foodExpiryOverlayColor = builder
             .comment("The overlay color to indicate rotten foods, in ARGB. Default = 0xFF88CC33")
-            .define("foodExpiryOverlayColor", 0xFF88CC33);
+            .define("foodExpiryOverlayColor1", 0xFF88CC33);
 
         final var temperatureDisplayStyle = new String[] {
             "  COLOR = Approximate, color based tooltips (like Very Hot**, Brilliant White)",
@@ -116,6 +117,14 @@ public class ClientConfig extends BaseConfig
             "  BUMP = Move elements closer to the hotbar; when fishing or riding a jumping entity, other elements move to their default positions",
             "  LEFT_HOTBAR = Move elements closer to the hotbar; when fishing or riding a jumping entity, those elements will appear as a vertical bar between the hotbar and offhand slot"
         ).define("disabledExperienceBarStyle", DisabledExperienceBarStyle.HOVER);
+
+        rotationDisplayStyle = builder.comment(
+            "Changes the units that rotational speed is displayed in.",
+            "  ROTATIONS_PER_SECOND - Shows rotational speed as a measure of full rotations per second",
+            "  DEGREES_PER_SECOND - Shows rotational speed as a measure of degrees per second",
+            "  REVOLUTIONS_PER_SECOND - Shows rotational speed as a measure of revolutions per second",
+            "  REVOLUTIONS_PER_MINUTE - Shows rotational speed as a measure of revolutions per minute"
+        ).define("rotationDisplayStyle", RotationDisplayStyle.REVOLUTIONS_PER_MINUTE);
 
         sendProspectResultsToActionbar = builder.comment("If prospect information should appear in the space above the hotbar (the actionbar). False will put them in the chat window.").define("sendProspectResultsToActionbar", true);
 

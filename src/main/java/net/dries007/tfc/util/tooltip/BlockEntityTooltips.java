@@ -7,12 +7,15 @@
 package net.dries007.tfc.util.tooltip;
 
 import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.util.Mth;
@@ -22,39 +25,47 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.FireBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import org.jetbrains.annotations.Nullable;
 
+import net.dries007.tfc.client.ClimateRenderCache;
 import net.dries007.tfc.common.blockentities.AbstractFirepitBlockEntity;
+import net.dries007.tfc.common.blockentities.AnemometerBlockEntity;
 import net.dries007.tfc.common.blockentities.BarrelBlockEntity;
 import net.dries007.tfc.common.blockentities.BellowsBlockEntity;
 import net.dries007.tfc.common.blockentities.BlastFurnaceBlockEntity;
 import net.dries007.tfc.common.blockentities.BloomBlockEntity;
 import net.dries007.tfc.common.blockentities.BloomeryBlockEntity;
+import net.dries007.tfc.common.blockentities.CalendarClockBlockEntity;
 import net.dries007.tfc.common.blockentities.CharcoalForgeBlockEntity;
 import net.dries007.tfc.common.blockentities.ComposterBlockEntity;
 import net.dries007.tfc.common.blockentities.CropBlockEntity;
 import net.dries007.tfc.common.blockentities.CrucibleBlockEntity;
 import net.dries007.tfc.common.blockentities.DecayingBlockEntity;
 import net.dries007.tfc.common.blockentities.FireboxBlockEntity;
+import net.dries007.tfc.common.blockentities.IHeatable;
 import net.dries007.tfc.common.blockentities.IngotPileBlockEntity;
 import net.dries007.tfc.common.blockentities.LampBlockEntity;
 import net.dries007.tfc.common.blockentities.LoomBlockEntity;
-import net.dries007.tfc.common.blockentities.MoldBlockEntity;
+import net.dries007.tfc.common.blockentities.MoldTableBlockEntity;
 import net.dries007.tfc.common.blockentities.NestBoxBlockEntity;
 import net.dries007.tfc.common.blockentities.PitKilnBlockEntity;
 import net.dries007.tfc.common.blockentities.PlacedItemBlockEntity;
 import net.dries007.tfc.common.blockentities.PotBlockEntity;
 import net.dries007.tfc.common.blockentities.PowderkegBlockEntity;
+import net.dries007.tfc.common.blockentities.ThermometerBlockEntity;
 import net.dries007.tfc.common.blockentities.TickCounterBlockEntity;
-import net.dries007.tfc.common.blockentities.TickCountingBranchBlockEntity;
+import net.dries007.tfc.common.blockentities.TickingPlantBlockEntity;
+import net.dries007.tfc.common.blockentities.VaneBlockEntity;
 import net.dries007.tfc.common.blockentities.rotation.RotatingBlockEntity;
+import net.dries007.tfc.common.blockentities.rotation.WaterWheelBlockEntity;
+import net.dries007.tfc.common.blockentities.rotation.WindmillBlockEntity;
 import net.dries007.tfc.common.blocks.BloomBlock;
 import net.dries007.tfc.common.blocks.FireboxBlock;
 import net.dries007.tfc.common.blocks.HotPouredGlassBlock;
-import net.dries007.tfc.common.blocks.ShelfBlock;
-import net.dries007.tfc.common.blocks.TFCBlocks;
+import net.dries007.tfc.common.blocks.TFCBlockStateProperties;
 import net.dries007.tfc.common.blocks.TFCCandleBlock;
 import net.dries007.tfc.common.blocks.TFCCandleCakeBlock;
 import net.dries007.tfc.common.blocks.TFCTorchBlock;
@@ -63,10 +74,12 @@ import net.dries007.tfc.common.blocks.crop.CropBlock;
 import net.dries007.tfc.common.blocks.crop.DecayingBlock;
 import net.dries007.tfc.common.blocks.crop.DoubleCropBlock;
 import net.dries007.tfc.common.blocks.crop.DoubleCropBlock.Part;
+import net.dries007.tfc.common.blocks.devices.AnemometerBlock;
 import net.dries007.tfc.common.blocks.devices.BarrelBlock;
 import net.dries007.tfc.common.blocks.devices.BellowsBlock;
 import net.dries007.tfc.common.blocks.devices.BlastFurnaceBlock;
 import net.dries007.tfc.common.blocks.devices.BloomeryBlock;
+import net.dries007.tfc.common.blocks.devices.CalendarClockBlock;
 import net.dries007.tfc.common.blocks.devices.CharcoalForgeBlock;
 import net.dries007.tfc.common.blocks.devices.CrucibleBlock;
 import net.dries007.tfc.common.blocks.devices.DryingBricksBlock;
@@ -74,17 +87,20 @@ import net.dries007.tfc.common.blocks.devices.FirepitBlock;
 import net.dries007.tfc.common.blocks.devices.IngotPileBlock;
 import net.dries007.tfc.common.blocks.devices.JackOLanternBlock;
 import net.dries007.tfc.common.blocks.devices.LampBlock;
-import net.dries007.tfc.common.blocks.devices.MoldBlock;
+import net.dries007.tfc.common.blocks.devices.MoldTableBlock;
 import net.dries007.tfc.common.blocks.devices.NestBoxBlock;
 import net.dries007.tfc.common.blocks.devices.PitKilnBlock;
 import net.dries007.tfc.common.blocks.devices.PlacedItemBlock;
 import net.dries007.tfc.common.blocks.devices.PowderkegBlock;
 import net.dries007.tfc.common.blocks.devices.QuernBlock;
 import net.dries007.tfc.common.blocks.devices.TFCComposterBlock;
+import net.dries007.tfc.common.blocks.devices.ThermometerBlock;
+import net.dries007.tfc.common.blocks.devices.VaneBlock;
 import net.dries007.tfc.common.blocks.plant.fruit.FruitTreeSaplingBlock;
 import net.dries007.tfc.common.blocks.rotation.AbstractShaftAxleBlock;
 import net.dries007.tfc.common.blocks.rotation.ClutchBlock;
 import net.dries007.tfc.common.blocks.rotation.CrankshaftBlock;
+import net.dries007.tfc.common.blocks.rotation.CreativeRotationBlock;
 import net.dries007.tfc.common.blocks.rotation.EncasedAxleBlock;
 import net.dries007.tfc.common.blocks.rotation.GearBoxBlock;
 import net.dries007.tfc.common.blocks.rotation.WaterWheelBlock;
@@ -102,11 +118,12 @@ import net.dries007.tfc.common.items.TFCItems;
 import net.dries007.tfc.common.recipes.BloomeryRecipe;
 import net.dries007.tfc.common.recipes.LoomRecipe;
 import net.dries007.tfc.config.TFCConfig;
+import net.dries007.tfc.config.TemperatureDisplayStyle;
 import net.dries007.tfc.util.Helpers;
 import net.dries007.tfc.util.calendar.Calendars;
-import net.dries007.tfc.util.calendar.ICalendar;
 import net.dries007.tfc.util.data.LampFuel;
 import net.dries007.tfc.util.rotation.Rotation;
+import net.dries007.tfc.util.tracker.WeatherHelpers;
 
 /**
  * Common tooltips that can be displayed for various block entities via external sources.
@@ -149,12 +166,16 @@ public final class BlockEntityTooltips
         callback.register("gearbox", ROTATING, GearBoxBlock.class);
         callback.register("crankshaft", ROTATING, CrankshaftBlock.class);
         callback.register("quern", ROTATING, QuernBlock.class);
-        callback.register("water_wheel", ROTATING, WaterWheelBlock.class);
-        callback.register("windmill", ROTATING, WindmillBlock.class);
+        callback.register("creative_motor", ROTATIONAL_SOURCE, CreativeRotationBlock.class);
+        callback.register("water_wheel", ROTATIONAL_SOURCE, WaterWheelBlock.class);
+        callback.register("windmill", ROTATIONAL_SOURCE, WindmillBlock.class);
         callback.register("hot_poured_glass", HOT_POURED_GLASS, HotPouredGlassBlock.class);
-        callback.register("mold_table", MOLD_TABLE, MoldBlock.class);
+        callback.register("mold_table", MOLD_TABLE, MoldTableBlock.class);
         callback.register("placed_item", PLACED_ITEM, PlacedItemBlock.class);
-        callback.register("shelf", PLACED_ITEM, ShelfBlock.class);
+        callback.register("calendar_clock", CALENDAR_CLOCK, CalendarClockBlock.class);
+        callback.register("thermometer", THERMOMETER, ThermometerBlock.class);
+        callback.register("anemometer", ANEMOMETER, AnemometerBlock.class);
+        callback.register("vane", VANE, VaneBlock.class);
     }
 
     public static final BlockEntityTooltip HOT_POURED_GLASS = (level, state, pos, entity, tooltip) -> {
@@ -167,10 +188,31 @@ public final class BlockEntityTooltips
     public static final BlockEntityTooltip ROTATING = (level, state, pos, entity, tooltip) -> {
         if (entity instanceof RotatingBlockEntity rotating)
         {
-            final Rotation rotation = rotating.getRotationNode().rotation();
-            if (rotation != null && rotation.speed() != 0)
+            getRotationComponent(rotating).ifPresent(tooltip);
+        }
+    };
+
+    public static final BlockEntityTooltip ROTATIONAL_SOURCE = (level, state, pos, entity, tooltip) -> {
+        if (entity instanceof RotatingBlockEntity rotating)
+        {
+            getRotationComponent(rotating).ifPresent(tooltip);
+        }
+        if (entity instanceof WindmillBlockEntity windmill)
+        {
+            if (level.getBlockState(pos).getValue(WindmillBlock.COUNT) == 1)
             {
-                tooltip.accept(Component.translatable("tfc.tooltip.rotation.angular_velocity", String.format("%.2f", Math.abs(rotation.positiveSpeed()) * 20f)));
+                tooltip.accept(Component.translatable("tfc.tooltip.rotation.cannot_rotate.too_few_blades"));
+            }
+            if (windmill.isObstructed())
+            {
+                tooltip.accept(Component.translatable("tfc.tooltip.rotation.cannot_rotate.obstructed"));
+            }
+        }
+        if (entity instanceof WaterWheelBlockEntity wheel)
+        {
+            if (wheel.isObstructed())
+            {
+                tooltip.accept(Component.translatable("tfc.tooltip.rotation.cannot_rotate.obstructed"));
             }
         }
     };
@@ -179,6 +221,71 @@ public final class BlockEntityTooltips
         if (entity instanceof IngotPileBlockEntity pile)
         {
             pile.fillTooltip(tooltip);
+        }
+    };
+
+    public static final BlockEntityTooltip CALENDAR_CLOCK = (level, state, pos, entity, tooltip) -> {
+        if (entity instanceof CalendarClockBlockEntity clock)
+        {
+            if (clock.getBlockState().getValue(CalendarClockBlock.MODE).equals(CalendarClockBlock.Mode.HOUR))
+            {
+                tooltip.accept(Component.translatable("tfc.tooltip.calendar_clock_hour_mode"));
+            }
+            else if (clock.getBlockState().getValue(CalendarClockBlock.MODE).equals(CalendarClockBlock.Mode.MONTH))
+            {
+                tooltip.accept(Component.translatable("tfc.tooltip.calendar_clock_month_mode"));
+            }
+            else
+            {
+                tooltip.accept(Component.translatable("tfc.tooltip.calendar_clock_timer_mode"));
+            }
+
+            tooltip.accept(Calendars.CLIENT.getTimeAndDate());
+        }
+    };
+
+    public static final BlockEntityTooltip THERMOMETER = (level, state, pos, entity, tooltip) -> {
+        if (entity instanceof ThermometerBlockEntity thermometer)
+        {
+            if (thermometer.getBlockState().getValue(TFCBlockStateProperties.THERMOMETER_ATTACHED))
+            {
+                tooltip.accept(Component.translatable("tfc.tooltip.thermometer_device_mode"));
+                final Direction direction = state.getValue(BlockStateProperties.HORIZONTAL_FACING).getOpposite();
+                float temperature = 0;
+                if (level.getBlockEntity(pos.relative(direction)) instanceof IHeatable heatable)
+                {
+                    temperature = heatable.getTemperature();
+                }
+
+                final TemperatureDisplayStyle style = TFCConfig.CLIENT.climateTooltipStyle.get();
+                final Component temperatureComponent = Objects.requireNonNull(style.formatRange(temperature));
+
+                tooltip.accept(temperatureComponent);
+            }
+            else
+            {
+                tooltip.accept(Component.translatable("tfc.tooltip.thermometer_ambient_mode"));
+
+                final TemperatureDisplayStyle style = TFCConfig.CLIENT.climateTooltipStyle.get();
+                final Component temperatureComponent = Objects.requireNonNull(style.formatRange(ClimateRenderCache.INSTANCE.getInstantTemperature()));
+
+                tooltip.accept(temperatureComponent);
+            }
+        }
+    };
+
+    public static final BlockEntityTooltip ANEMOMETER = (level, state, pos, entity, tooltip) -> {
+        if (entity instanceof AnemometerBlockEntity anemometer)
+        {
+            float speed = WeatherHelpers.windKMH(ClimateRenderCache.INSTANCE.getWind());
+            tooltip.accept(Component.translatable("tfc.tooltip.anemometer_speed", String.format("%.0f", speed)));
+        }
+    };
+
+    public static final BlockEntityTooltip VANE = (level, state, pos, entity, tooltip) -> {
+        if (entity instanceof VaneBlockEntity vane)
+        {
+            tooltip.accept(Component.translatable("tfc.tooltip.vane_direction", WeatherHelpers.windGranularCardinal(ClimateRenderCache.INSTANCE.getWind())));
         }
     };
 
@@ -306,7 +413,7 @@ public final class BlockEntityTooltips
             {
                 entity = level.getBlockEntity(pos.below());
             }
-            if (entity != null && entity instanceof CropBlockEntity crop )
+            if (entity != null && entity instanceof CropBlockEntity crop)
             {
                 tooltip.accept(Component.translatable("tfc.jade.yield", String.format("%.0f", crop.getYield() * 100)));
             }
@@ -354,7 +461,7 @@ public final class BlockEntityTooltips
     };
 
     public static final BlockEntityTooltip FRUIT_TREE_SAPLING = (level, state, pos, entity, tooltip) -> {
-        if (entity instanceof TickCountingBranchBlockEntity counter && state.getBlock() instanceof FruitTreeSaplingBlock sapling)
+        if (entity instanceof TickingPlantBlockEntity counter && state.getBlock() instanceof FruitTreeSaplingBlock sapling)
         {
             timeLeft(level, tooltip, sapling.getTicksToGrow() - counter.getTicksSinceUpdate(), Component.translatable("tfc.jade.ready_to_grow"));
         }
@@ -486,7 +593,7 @@ public final class BlockEntityTooltips
     };
 
     public static final BlockEntityTooltip MOLD_TABLE = (level, state, pos, entity, tooltip) -> {
-        if (entity instanceof MoldBlockEntity mold)
+        if (entity instanceof MoldTableBlockEntity mold)
         {
             heat(tooltip, mold.getInventory().getTemperature());
         }
@@ -510,6 +617,38 @@ public final class BlockEntityTooltips
         }
     };
 
+    public static Optional<Component> getRotationComponent(RotatingBlockEntity rotating)
+    {
+        final Rotation rotation = rotating.getRotationNode().rotation();
+        if (rotation != null && rotation.speed() != 0)
+        {
+            float speed = Math.abs(rotation.positiveSpeed());
+            switch (TFCConfig.CLIENT.rotationDisplayStyle.get())
+            {
+                case RADIANS_PER_SECOND ->
+                {
+                    speed *= 20f;
+                    return Optional.of(Component.translatable("tfc.tooltip.rotation.angular_velocity.radians_per_second", String.format("%.2f", speed)));
+                }
+                case DEGREES_PER_SECOND ->
+                {
+                    speed = (speed / Mth.TWO_PI) * 360f * 20f;
+                    return Optional.of(Component.translatable("tfc.tooltip.rotation.angular_velocity.degrees_per_second", String.format("%.2f", speed)));
+                }
+                case REVOLUTIONS_PER_SECOND ->
+                {
+                    speed /= Mth.TWO_PI * 20f;
+                    return Optional.of(Component.translatable("tfc.tooltip.rotation.angular_velocity.revolutions_per_second", String.format("%.4f", speed)));
+                }
+                case REVOLUTIONS_PER_MINUTE ->
+                {
+                    speed = ((speed / Mth.TWO_PI) * 20f) * 60f;
+                    return Optional.of(Component.translatable("tfc.tooltip.rotation.angular_velocity.revolutions_per_minute", String.format("%.1f", speed)));
+                }
+            }
+        }
+        return Optional.empty();
+    }
 
     private static void pitKiln(Level level, BlockPos pos, Consumer<Component> tooltip)
     {

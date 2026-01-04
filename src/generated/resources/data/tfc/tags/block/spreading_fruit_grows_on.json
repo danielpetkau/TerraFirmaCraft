@@ -1,7 +1,5 @@
 {
   "values": [
-    "#minecraft:dirt",
-    "#tfc:farmlands",
-    "#c:gravels"
+    "#tfc:bush_plantable_on"
   ]
 }

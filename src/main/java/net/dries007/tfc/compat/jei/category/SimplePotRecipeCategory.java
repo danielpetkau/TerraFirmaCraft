@@ -17,6 +17,7 @@ import mezz.jei.api.recipe.RecipeType;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.neoforged.neoforge.fluids.FluidStack;
 
 import net.dries007.tfc.common.recipes.PotRecipe;
@@ -31,7 +32,7 @@ public class SimplePotRecipeCategory extends PotRecipeCategory<PotRecipe>
     private static final int[] OUTPUT_X = {75, 65, 85, 65, 85};
     private static final int[] OUTPUT_Y = {5, 25, 25, 45, 45};
 
-    public SimplePotRecipeCategory(RecipeType<PotRecipe> type, IGuiHelper helper)
+    public SimplePotRecipeCategory(RecipeType<RecipeHolder<PotRecipe>> type, IGuiHelper helper)
     {
         super(type, helper, 110, 100);
     }

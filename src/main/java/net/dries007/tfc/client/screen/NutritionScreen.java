@@ -38,15 +38,15 @@ public class NutritionScreen extends TFCContainerScreen<Container>
     public void init()
     {
         super.init();
-        addRenderableWidget(new PlayerInventoryTabButton(leftPos, topPos, 176, 4, 20, 22, 128, 0, 1, 3, 0, 0, button -> {
+        addRenderableWidget(new PlayerInventoryTabButton(leftPos, topPos, false, false, PlayerInventoryTabButton.Tab.INVENTORY, button -> {
             playerInventory.player.containerMenu = playerInventory.player.inventoryMenu;
             Minecraft.getInstance().setScreen(new InventoryScreen(playerInventory.player));
-            PacketDistributor.sendToServer(new SwitchInventoryTabPacket(SwitchInventoryTabPacket.Tab.INVENTORY));
+            PacketDistributor.sendToServer(new SwitchInventoryTabPacket(PlayerInventoryTabButton.Tab.INVENTORY));
         }));
-        addRenderableWidget(new PlayerInventoryTabButton(leftPos, topPos, 176, 27, 20, 22, 128, 0, 1, 3, 32, 0, SwitchInventoryTabPacket.Tab.CALENDAR));
-        addRenderableWidget(new PlayerInventoryTabButton(leftPos, topPos, 176 - 3, 50, 20 + 3, 22, 128 + 20, 0, 1, 3, 64, 0, SwitchInventoryTabPacket.Tab.NUTRITION));
-        addRenderableWidget(new PlayerInventoryTabButton(leftPos, topPos, 176, 73, 20, 22, 128, 0, 1, 3, 96, 0, SwitchInventoryTabPacket.Tab.CLIMATE));
-        PatchouliIntegration.ifEnabled(() -> addRenderableWidget(new PlayerInventoryTabButton(leftPos, topPos, 176, 96, 20, 22, 128, 0, 1, 3, 0, 32, SwitchInventoryTabPacket.Tab.BOOK)));
+        addRenderableWidget(new PlayerInventoryTabButton(leftPos, topPos, false, false, PlayerInventoryTabButton.Tab.CALENDAR));
+        addRenderableWidget(new PlayerInventoryTabButton(leftPos, topPos, true, false, PlayerInventoryTabButton.Tab.NUTRITION));
+        addRenderableWidget(new PlayerInventoryTabButton(leftPos, topPos, false, false, PlayerInventoryTabButton.Tab.CLIMATE));
+        PatchouliIntegration.ifEnabled(() -> addRenderableWidget(new PlayerInventoryTabButton(leftPos, topPos, false, false, PlayerInventoryTabButton.Tab.BOOK)));
     }
 
     @Override
@@ -60,8 +60,8 @@ public class NutritionScreen extends TFCContainerScreen<Container>
             final INutritionData nutrition = IPlayerInfo.get(player).nutrition();
             for (Nutrient nutrient : Nutrient.VALUES)
             {
-                final int width = (int) (nutrition.getNutrient(nutrient) * 50);
-                graphics.blit(texture, leftPos + 118, topPos + 21 + 13 * nutrient.ordinal(), 176, 0, width, 5);
+                final int width = (int) (nutrition.getNutrient(nutrient) * 93);
+                graphics.blit(texture, leftPos + 76, topPos + 18 + 11 * nutrient.ordinal(), 0, 166, width, 5);
             }
         }
     }
@@ -73,8 +73,8 @@ public class NutritionScreen extends TFCContainerScreen<Container>
 
         for (Nutrient nutrient : Nutrient.VALUES)
         {
-            final Component text = Helpers.translateEnum(nutrient).withStyle(nutrient.getColor());
-            graphics.drawString(font, text, 112 - font.width(text), 19 + 13 * nutrient.ordinal(), 0x404040, false);
+            final Component text = Helpers.translateEnum(nutrient);
+            drawLine(graphics, text, TextAlignment.RIGHT, -1, 105, 17 + 11 * nutrient.ordinal());
         }
     }
 }

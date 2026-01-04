@@ -6,7 +6,6 @@
 
 package net.dries007.tfc.common.blocks.crop;
 
-import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 import net.minecraft.core.BlockPos;
@@ -35,7 +34,6 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 
 import net.dries007.tfc.common.TFCTags;
 import net.dries007.tfc.common.blockentities.CropBlockEntity;
-import net.dries007.tfc.common.blockentities.FarmlandBlockEntity;
 import net.dries007.tfc.common.blockentities.IFarmland;
 import net.dries007.tfc.common.blocks.EntityBlockExtension;
 import net.dries007.tfc.common.blocks.ExtendedProperties;
@@ -168,7 +166,7 @@ public abstract class CropBlock extends net.minecraft.world.level.block.CropBloc
         final ClimateRange range = climateRange.get();
         final BlockPos sourcePos = pos.below();
 
-        text.accept(FarmlandBlock.getTemperatureTooltip(level, pos, range, false));
+        text.accept(FarmlandBlock.getInstantTemperatureTooltip(level, pos, range, false));
         text.accept(FarmlandBlock.getHydrationTooltip(level, sourcePos, range, false));
 
         IFarmland farmland = null;

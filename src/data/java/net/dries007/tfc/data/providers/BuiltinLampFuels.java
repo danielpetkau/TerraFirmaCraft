@@ -32,9 +32,9 @@ public class BuiltinLampFuels extends DataManagerProvider<LampFuel> implements A
     @Override
     protected void addData(HolderLookup.Provider provider)
     {
-        add("tallow", fluidOf(SimpleFluid.TALLOW), BlockIngredient.of(TFCTags.Blocks.LAMPS), 1800);
-        add("olive_oil", fluidOf(SimpleFluid.OLIVE_OIL), BlockIngredient.of(TFCTags.Blocks.LAMPS), 8000);
-        add("canola_oil", fluidOf(SimpleFluid.CANOLA_OIL), BlockIngredient.of(TFCTags.Blocks.LAMPS), 6400);
+        add("tallow", fluidOf(SimpleFluid.TALLOW), BlockIngredient.of(TFCTags.Blocks.LAMPS), hours(2));
+        add("olive_oil", fluidOf(SimpleFluid.OLIVE_OIL), BlockIngredient.of(TFCTags.Blocks.LAMPS), hours(6));
+        add("canola_oil", fluidOf(SimpleFluid.CANOLA_OIL), BlockIngredient.of(TFCTags.Blocks.LAMPS), hours(5));
         add("lava", Fluids.LAVA, BlockIngredient.of(Stream.of(
             TFCBlocks.METALS.get(Metal.BLUE_STEEL).get(Metal.BlockType.LAMP).get(),
             TFCBlocks.METALS.get(Metal.RED_STEEL).get(Metal.BlockType.LAMP).get()

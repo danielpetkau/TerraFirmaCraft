@@ -10,9 +10,7 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import net.dries007.tfc.common.blockentities.IFarmland;
-import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.util.calendar.Calendars;
-import net.dries007.tfc.util.calendar.ICalendar;
 import net.dries007.tfc.util.climate.ClimateModel;
 import net.dries007.tfc.util.tracker.WorldTracker;
 import net.dries007.tfc.world.chunkdata.ChunkData;
@@ -59,14 +57,14 @@ public class FarmlandBlock extends Block implements ISoilBlock, HoeOverlayBlock,
     public static Component getHydrationTooltip(Level level, BlockPos pos, ClimateRange validRange, boolean allowWiggle)
     {
         final ChunkData data = ChunkData.get(level, pos);
-        final int totalRainHydration = FarmlandBlock.getRainHydration(level, pos);
-        final int hydrationValue = FarmlandBlock.getHydrationFromRainHydration(level, pos, totalRainHydration);
+        final int totalRainHydration = FarmlandBlock.getInstantRainHydration(level, pos);
+        final int hydrationValue = FarmlandBlock.getInstantHydrationFromRainHydration(level, pos, totalRainHydration);
         if (level.getBlockEntity(pos) instanceof IFarmland farmland)
         {
             final int minRainfallHydration = (int) data.getMinRainfallHydration(pos);
-            final int minHydrationValue = FarmlandBlock.getHydrationFromRainHydration(level, pos, minRainfallHydration);
+            final int minHydrationValue = FarmlandBlock.getInstantHydrationFromRainHydration(level, pos, minRainfallHydration);
             final int maxRainfallHydration = (int) data.getMaxRainfallHydration(pos);
-            final int maxHydrationValue = FarmlandBlock.getHydrationFromRainHydration(level, pos, maxRainfallHydration);
+            final int maxHydrationValue = FarmlandBlock.getInstantHydrationFromRainHydration(level, pos, maxRainfallHydration);
             final MutableComponent tooltip = Component.translatable("tfc.tooltip.farmland.hydration", hydrationValue, minHydrationValue, maxHydrationValue);
 
             tooltip.append(switch (validRange.checkHydration(hydrationValue, allowWiggle))
@@ -94,17 +92,17 @@ public class FarmlandBlock extends Block implements ISoilBlock, HoeOverlayBlock,
         return tooltip;
     }
 
-    public static Component getTemperatureTooltip(Level level, BlockPos pos, ClimateRange validRange, boolean allowWiggle)
+    public static Component getInstantTemperatureTooltip(Level level, BlockPos pos, ClimateRange validRange, boolean allowWiggle)
     {
-        return getTemperatureTooltip(level, pos, validRange, Climate.getTemperature(level, pos), allowWiggle, "tfc.tooltip.farmland.temperature");
+        return getInstantTemperatureTooltip(level, pos, validRange, Climate.getInstantTemperature(level, pos), allowWiggle, "tfc.tooltip.farmland.temperature");
     }
 
     public static Component getAverageTemperatureTooltip(Level level, BlockPos pos, ClimateRange validRange, boolean allowWiggle)
     {
-        return getTemperatureTooltip(level, pos, validRange, Climate.getAverageTemperature(level, pos), allowWiggle, "tfc.tooltip.climate_average_temperature");
+        return getInstantTemperatureTooltip(level, pos, validRange, Climate.getAverageTemperature(level, pos), allowWiggle, "tfc.tooltip.climate_average_temperature");
     }
 
-    public static Component getTemperatureTooltip(Level level, BlockPos pos, ClimateRange validRange, float temperature, boolean allowWiggle, String translationKey)
+    public static Component getInstantTemperatureTooltip(Level level, BlockPos pos, ClimateRange validRange, float temperature, boolean allowWiggle, String translationKey)
     {
         final MutableComponent tooltip = Component.translatable(translationKey, String.format("%.1f", temperature));
 
@@ -120,23 +118,23 @@ public class FarmlandBlock extends Block implements ISoilBlock, HoeOverlayBlock,
     /**
      * @return A value in the range [0, 100] representing total hydration at a given pos at the current time
      */
-    public static int getHydration(Level level, BlockPos pos)
+    public static int getInstantHydration(Level level, BlockPos pos)
     {
-        return getHydration(level, pos, Calendars.get(level).getCalendarTicks());
+        return getInstantHydration(level, pos, Calendars.get(level).getCalendarTicks());
     }
 
     /**
      * @return A value in the range [0, 100] representing total hydration at a given pos and time
      */
-    public static int getHydration(Level level, BlockPos pos, long calendarTick)
+    public static int getInstantHydration(Level level, BlockPos pos, long calendarTick)
     {
-        return getHydrationFromRainHydration(level, pos, getRainHydration(level, pos, calendarTick));
+        return getInstantHydrationFromRainHydration(level, pos, getInstantRainHydration(level, pos, calendarTick));
     }
 
     /**
      * @return A value in the range [0, 100] representing total hydration at a given pos at the current time
      */
-    public static int getHydrationFromRainHydration(Level level, BlockPos pos, int rainHydration)
+    public static int getInstantHydrationFromRainHydration(Level level, BlockPos pos, int rainHydration)
     {
         if (Helpers.isFluid(level.getFluidState(pos.above()), TFCTags.Fluids.HYDRATING))
         {
@@ -152,30 +150,30 @@ public class FarmlandBlock extends Block implements ISoilBlock, HoeOverlayBlock,
     /**
      * @return A value in the range [0, 60] representing total hydration from RAIN ONLY at the current time
      */
-    public static int getRainHydration(Level level, BlockPos pos)
+    public static int getInstantRainHydration(Level level, BlockPos pos)
     {
-        return getRainHydration(level, pos, Calendars.get(level).getCalendarTicks());
+        return getInstantRainHydration(level, pos, Calendars.get(level).getCalendarTicks());
     }
 
     /**
      * @return A value in the range [0, 60] representing total hydration from RAIN ONLY at a specified time
      */
-    public static int getRainHydration(Level level, BlockPos pos, long calendarTick)
+    public static int getInstantRainHydration(Level level, BlockPos pos, long calendarTick)
     {
         final WorldTracker tracker = WorldTracker.get(level);
         final ClimateModel model = tracker.getClimateModel();
         final int daysInMonth = Calendars.get(level).getCalendarDaysInMonth();
-        final float rainfall = model.getRainfall(level, pos, calendarTick, daysInMonth);
+        final float rainfall = model.getInstantRainfall(level, pos, calendarTick, daysInMonth);
 
-        return getRainHydration(rainfall);
+        return getInstantRainHydration(rainfall);
     }
 
     /**
      * @return A value in the range [0, 60] representing total hydration from RAIN ONLY
      */
-    public static int getRainHydration(float rainfall)
+    public static int getInstantRainHydration(float rainfall)
     {
-        return (int) Mth.clampedMap(rainfall, ClimateModel.MIN_RAINFALL, ClimateModel.MAX_CROP_RAINFALL, 0, ChunkData.MAX_RAINFALL_CONTRIBUTION);
+        return (int) Mth.clampedMap(rainfall, ClimateModel.MIN_AVERAGE_RAINFALL, ClimateModel.MAX_CROP_RAINFALL, 0, ChunkData.MAX_RAINFALL_CONTRIBUTION);
     }
 
     public static void turnToDirt(BlockState state, Level level, BlockPos pos)

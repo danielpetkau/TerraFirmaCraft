@@ -6,39 +6,39 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "Все 16 стандартных $(thing)Цветов красителей$() можно получить в виде предметов. Большинство цветов и других цветных растений можно измельчить в краситель с помощью $(l:mechanics/quern)Жернова$(). Порошки $(l:the_world/ores_and_minerals)металлических руд$() можно напрямую превратить в краситель. $(l:the_world/ores_and_minerals#graphite)Графит$(), $(l:the_world/ores_and_minerals#kaolinite)каолинит$(), $(l:the_world/ores_and_minerals#sylvite)Сильвит$(), $(l:the_world/ores_and_minerals#lapis_lazuli)лазурит$(), Кокс и порошок угля также можно превратить в краситель."
+      "text": "Все 16 стандартных $(thing)красителей$() можно получить в виде предметов. Большинство ярко-окрашенных растений можно измельчить в краситель с помощью $(l:mechanics/quern)жёрнова$(). Порошки $(l:the_world/ores_and_minerals)металлических руд$() можно напрямую превратить в краситель. $(l:the_world/ores_and_minerals#graphite)графит$(), $(l:the_world/ores_and_minerals#kaolinite)каолинит$(), $(l:the_world/ores_and_minerals#sylvite)сильвит$(), $(l:the_world/ores_and_minerals#lapis_lazuli)лазурит$(), кокс и порошок древесного угля также можно превратить в краситель."
     },
     {
       "type": "patchouli:spotlight",
       "item": "tfc:bucket/red_dye",
       "title": "Жидкие красители",
       "link_recipes": false,
-      "text": "Красители также можно превратить в жидкости. Предмет красителя и 1000мБ $(item)Воды$(), вскипяченные в $(l:mechanics/pot)Котле$(), дают такое же количество $(thing)Жидкого красителя$(). Жидкие красители используются в $(l:mechanics/barrels)Бочках$() для окрашивания предметов."
+      "text": "Красители можно растворить. Красителя и 1000 мБ $(item)воды$(), доведённые до кипения в $(l:mechanics/pot)горшке$(), дают 1000 мБ $(thing)жидкого красителя$(). Жидкие красители используются в $(l:mechanics/barrels)бочках$() для окрашивания предметов."
     },
     {
       "type": "tfc:sealed_barrel_recipe",
       "recipe": "tfc:barrel/red_concrete_powder",
-      "text": "Окрашивание предметов в бочке обходится дешевле, чем использование предметов, требуя всего 25мБ окрашенной жидкости."
+      "text": "Окрашивание предметов в бочке обходится дешевле, чем прямое окрашивание, требуя всего 25 мБ красильной жидкости."
     },
     {
       "type": "tfc:sealed_barrel_recipe",
       "recipe": "tfc:barrel/music_disc_chirp",
-      "text": "Жидкие красители можно использовать для окончательной обработки $(item)Музыкальных дисков$()."
+      "text": "Жидкие красители можно использовать для окончательной обработки $(item)музыкальных дисков$()."
     },
     {
       "type": "tfc:sealed_barrel_recipe",
-      "recipe": "tfc:barrel/red_leather",
-      "text": "Жидкие красители даже могут красить кожу, как если бы она была изготовлена!"
+      "recipe": "tfc:barrel/red_dyeable",
+      "text": "Жидкие красители даже могут красить кожу, как если бы она была изготовлена такого цвета!"
     },
     {
       "type": "tfc:sealed_barrel_recipe",
       "anchor": "lye",
       "recipe": "tfc:barrel/bleaching_bed",
-      "text": "Пять $(item)Древесной золы$() и 1000мБ $(item)Воды$(), вскипяченные в $(l:mechanics/pot)Котле$(), дают щелок. 25мБ Щелока удаляют цвет с окрашенного предмета."
+      "text": "Пять кучек $(item)золы$() и 1000 мБ $(item)воды$(), доведённые до кипения в $(l:mechanics/pot)горшке$(), дают щелочь. 25 мБ щёлочи стирают окраску предмета."
     },
     {
       "type": "patchouli:text",
-      "text": "$(li)$(item)Черный краситель$() используется для $(l:mechanics/scribing_table)Столов для письма$().$(li)$(item)Красный краситель$() используется для $(l:mechanics/powderkegs)Пороховых бочек$(). $(li)Необожженные $(l:mechanics/decay#small_vessels)Малые сосуды$() и $(l:mechanics/decay#large_vessels)Большие сосуды$() могут быть окрашены$().",
+      "text": "$(li)$(item)Чёрный краситель$() используется в $(l:mechanics/scribing_table)столе для пимсьма$().$(li)$(item)Красный краситель$() используется в $(l:mechanics/powderkegs)пороховых бочках$(). $(li)Необожжённые $(l:mechanics/decay#small_vessels)малые сосуды$() и $(l:mechanics/decay#large_vessels)большие сосуды$() могут быть окрашены$().",
       "title": "Разное"
     }
   ],

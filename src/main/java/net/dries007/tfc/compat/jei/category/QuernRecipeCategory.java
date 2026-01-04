@@ -11,6 +11,7 @@ import mezz.jei.api.recipe.RecipeType;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeHolder;
 
 import net.dries007.tfc.common.TFCTags;
 import net.dries007.tfc.common.blocks.TFCBlocks;
@@ -18,7 +19,7 @@ import net.dries007.tfc.common.recipes.QuernRecipe;
 
 public class QuernRecipeCategory extends SimpleItemRecipeCategory<QuernRecipe>
 {
-    public QuernRecipeCategory(RecipeType<QuernRecipe> type, IGuiHelper helper)
+    public QuernRecipeCategory(RecipeType<RecipeHolder<QuernRecipe>> type, IGuiHelper helper)
     {
         super(type, helper, new ItemStack(TFCBlocks.QUERN.get()));
     }

@@ -122,6 +122,13 @@ public class HotSpringFeature extends Feature<HotSpringConfig>
                 }
 
                 boolean edge = false;
+
+                // Similar to for loop below, except water above the position also matters
+                if (level.getBlockState(mutablePos.set(localX, y, localZ).move(Direction.UP)).liquid())
+                {
+                    touchedWater = true;
+                }
+
                 for (Direction direction : Direction.Plane.HORIZONTAL)
                 {
                     mutablePos.set(localX, y, localZ).move(direction);

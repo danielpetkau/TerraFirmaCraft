@@ -16,9 +16,6 @@
       "min_groundwater": 0,
       "max_groundwater": 100,
       "fuzzy": true
-    },
-    {
-      "type": "tfc:biome"
     }
   ]
 }

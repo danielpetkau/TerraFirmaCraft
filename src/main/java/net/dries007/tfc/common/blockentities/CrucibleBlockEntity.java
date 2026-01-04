@@ -25,7 +25,6 @@ import net.neoforged.neoforge.common.util.INBTSerializable;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.items.IItemHandlerModifiable;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import net.dries007.tfc.common.capabilities.DelegateItemHandler;
@@ -54,7 +53,7 @@ import net.dries007.tfc.util.SyncableContainerData;
 import net.dries007.tfc.util.calendar.ICalendarTickable;
 import net.dries007.tfc.util.data.FluidHeat;
 
-public class CrucibleBlockEntity extends TickableInventoryBlockEntity<CrucibleBlockEntity.CrucibleInventory> implements ICalendarTickable
+public class CrucibleBlockEntity extends TickableInventoryBlockEntity<CrucibleBlockEntity.CrucibleInventory> implements ICalendarTickable, IHeatable
 {
     public static final int SLOTS = 10;
     public static final int SLOT_INPUT_START = 0;
@@ -421,7 +420,6 @@ public class CrucibleBlockEntity extends TickableInventoryBlockEntity<CrucibleBl
             alloy.deserializeNBT(nbt.getCompound("alloy"));
         }
 
-        @NotNull
         @Override
         public FluidStack getFluidInTank(int tank)
         {
@@ -436,7 +434,7 @@ public class CrucibleBlockEntity extends TickableInventoryBlockEntity<CrucibleBl
         }
 
         @Override
-        public boolean isFluidValid(int tank, @NotNull FluidStack stack)
+        public boolean isFluidValid(int tank, FluidStack stack)
         {
             return FluidHeat.get(stack.getFluid()) != null;
         }
@@ -447,7 +445,6 @@ public class CrucibleBlockEntity extends TickableInventoryBlockEntity<CrucibleBl
             return alloy.fill(resource, action, INFO);
         }
 
-        @NotNull
         @Override
         public FluidStack drain(int maxDrain, IFluidHandler.FluidAction action)
         {

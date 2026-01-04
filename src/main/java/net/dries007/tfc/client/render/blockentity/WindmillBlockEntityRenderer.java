@@ -7,13 +7,10 @@
 package net.dries007.tfc.client.render.blockentity;
 
 import java.util.Map;
-import java.util.Objects;
 import java.util.function.Function;
-import com.google.common.collect.ImmutableMap;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.math.Axis;
-import net.minecraft.Util;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
@@ -38,7 +35,6 @@ import net.dries007.tfc.client.model.entity.WindmillBladeRusticModel;
 import net.dries007.tfc.common.blockentities.rotation.WindmillBlockEntity;
 import net.dries007.tfc.common.blocks.rotation.WindmillBlock;
 import net.dries007.tfc.common.items.TFCItems;
-import net.dries007.tfc.common.items.WindmillBladeItem;
 import net.dries007.tfc.util.Helpers;
 
 public class WindmillBlockEntityRenderer implements BlockEntityRenderer<WindmillBlockEntity>
@@ -99,12 +95,18 @@ public class WindmillBlockEntityRenderer implements BlockEntityRenderer<Windmill
 
         final boolean axisX = state.getValue(WindmillBlock.AXIS) == Direction.Axis.X;
 
+
         if (!axisX)
         {
             stack.mulPose(Axis.YN.rotationDegrees(90f));
+            stack.mulPose(Axis.XN.rotationDegrees(90f));
+        }
+        else
+        {
+            stack.mulPose(Axis.XN.rotationDegrees(90f));
         }
 
-        stack.translate(0.5f, -1, axisX ? 0.5f : -0.5f);
+        stack.translate(0.5f, axisX ? -2 : -1, 0.5f);
 
         // First, figure out if we have all identical models
         boolean hasFullIdenticalSet = bladeCount == 5;
@@ -142,7 +144,8 @@ public class WindmillBlockEntityRenderer implements BlockEntityRenderer<Windmill
             stack.pushPose();
 
             // nudge to avoid Z-fighting
-            stack.translate(0.0001f * i, 0.0001f * i,0.0001f * i);
+            stack.translate(0.0001f * i, 0.0001f * i, 0.0001f * i);
+
             bladeModel.setupAnim(windmill, partialTick, offsetAngle * i);
             bladeModel.renderToBuffer(stack, bufferSource.getBuffer(RenderType.entityCutoutNoCull(bladeTexture)), packedLight, packedOverlay, color);
 

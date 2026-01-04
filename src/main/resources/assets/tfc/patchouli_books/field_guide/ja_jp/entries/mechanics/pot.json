@@ -55,7 +55,7 @@
       "item": "tfc:food/fruit_soup",
       "title": "スープのレシピ",
       "link_recipes": false,
-      "text": "スープは、$(thing)水$() 入りポットに 3 ～ 5 個の $(thing)果物$()、$(thing)野菜$()、または $(thing)肉を$() 入れることで作成できます。 レシピが完成すると、鍋の水が赤くなります。 $(item)$(k:key.use)$() と $(thing)ボウル$() を組み合わせて回収します。 スープは複数の栄養素を 1 つの食事に組み合わせて摂取することができます。"
+      "text": "Soup is made from 3-5 $(thing)fruits$(), $(thing)vegetables$(), or $(thing)meats$() in a pot of $(thing)water$(). When the recipe is done, the water in the pot will turn red. $(item)$(k:key.use)$() with a $(l:mechanics/bowls)bowl$() to retrieve it. Soup combines multiple nutrients into a number of output meals depending on how much food is added. They are cheaper, but not as nutrition-dense as other meals."
     },
     {
       "type": "patchouli:spotlight",

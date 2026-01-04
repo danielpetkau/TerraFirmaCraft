@@ -9,10 +9,10 @@ package net.dries007.tfc.common.blocks.plant.fruit;
 import java.util.function.Supplier;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
@@ -20,10 +20,15 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
+import net.dries007.tfc.TerraFirmaCraft;
+import net.dries007.tfc.common.TFCTags;
 import net.dries007.tfc.common.blockentities.BerryBushBlockEntity;
 import net.dries007.tfc.common.blocks.ExtendedProperties;
 import net.dries007.tfc.common.blocks.IForgeBlockExtension;
 import net.dries007.tfc.common.blocks.soil.HoeOverlayBlock;
+import net.dries007.tfc.config.TFCConfig;
+import net.dries007.tfc.util.Helpers;
+import net.dries007.tfc.util.climate.Climate;
 import net.dries007.tfc.util.climate.ClimateRange;
 
 /**
@@ -40,7 +45,7 @@ import net.dries007.tfc.util.climate.ClimateRange;
  * </ul>
  * The player can harvest bush blocks, stage 2 for a guaranteed drop, all other stages for 1/2 chance.
  */
-public class SpreadingBushBlock extends StationaryBerryBushBlock implements IForgeBlockExtension, IBushBlock, HoeOverlayBlock
+public class SpreadingBushBlock extends StationaryBerryBushBlock implements IForgeBlockExtension, HoeOverlayBlock
 {
     protected final Supplier<? extends Block> companion;
     protected final int maxHeight;
@@ -65,62 +70,90 @@ public class SpreadingBushBlock extends StationaryBerryBushBlock implements IFor
     }
 
     @Override
-    protected BlockState growAndPropagate(Level level, BlockPos pos, RandomSource random, BlockState state)
+    protected void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random)
     {
-        if (!state.getValue(LIFECYCLE).active())
+        final BlockPos climatePos;
+        if (level.getBlockEntity(pos) instanceof BerryBushBlockEntity plant)
         {
-            // Only grow when active
-            return state;
+            climatePos = plant.getStemPos();
         }
+        else
+        {
+            climatePos = pos;
+        }
+        final int hydration = getFruitBushHydrationFromRootPos(level, climatePos);
+        final float temp = Climate.getAverageTemperature(level, climatePos);
 
+        if (climateRange.get().checkBoth(hydration, temp, false))
+        {
+            this.tick(state, level, pos, random);
+        }
+        else
+        {
+            level.setBlockAndUpdate(pos, getDeadState(state));
+        }
+    }
+
+    @Override
+    protected void growAndPropagate(BlockState state, ServerLevel level, BlockPos pos, RandomSource random, int cycles, int growthsRemaining)
+    {
         // Increment stage by one
         final int originalStage = state.getValue(STAGE);
 
         if (originalStage == 0)
         {
             // Stage 0 -> grow into stage 1
-            return state.setValue(STAGE, 1);
+            final BlockState newState = state.setValue(STAGE, 1);
+            placeBlockAndResetCounter(level, pos, newState, cycles, growthsRemaining);
+            return;
         }
         if (originalStage == 1)
         {
-            // Stage 1: either grow upwards, or attempt to grow a cane and move to stage 2
-            // Grow a bush upwards
-            final BlockPos abovePos = pos.above();
-            if (level.isEmptyBlock(abovePos) && distanceToGround(level, pos, maxHeight) < maxHeight)
+            // Stage 1: Check a random horizontal direction, and try to grow that way
+            final Direction dir = Direction.Plane.HORIZONTAL.getRandomDirection(random);
+            final BlockPos adjacentPos = pos.relative(dir);
+            if (level.getBlockState(adjacentPos).isEmpty())
             {
-                // Growing upwards grows at stage = 1, because stage = 0 is just newly planted bushes.
-                level.setBlockAndUpdate(abovePos, state.setValue(STAGE, 1).setValue(LIFECYCLE, state.getValue(LIFECYCLE)));
-
-                // If block grows, set the new block's stem position to match the original
-                if (level.getBlockEntity(pos) instanceof BerryBushBlockEntity sourceBush && level.getBlockEntity(abovePos) instanceof BerryBushBlockEntity newBush)
-                {
-                    newBush.setStemPos(sourceBush.getStemPos());
-                }
-
-                return state; // Stay in stage 1, if we only grew upwards.
+                placeNewBushAndResetCounters(level, adjacentPos, pos, companion.get().defaultBlockState().setValue(SpreadingCaneBlock.FACING, dir).setValue(LIFECYCLE, state.getValue(LIFECYCLE)), cycles, growthsRemaining);
+                maybeStopGrowing(level, pos, state, random);
             }
-
-            if (random.nextBoolean())
+            else
             {
-                // Optionally cause a cane to grow on an adjacent block
-                final Direction offset = Direction.Plane.HORIZONTAL.getRandomDirection(random);
-                final BlockPos offsetPos = pos.relative(offset);
-                if (level.isEmptyBlock(offsetPos))
+                // If it can't grow in that direction, attempt to grow the bush upwards
+                final BlockPos abovePos = pos.above();
+                if (level.isEmptyBlock(abovePos) && distanceToGround(level, pos, maxHeight) < maxHeight)
                 {
-                    level.setBlockAndUpdate(offsetPos, companion.get().defaultBlockState().setValue(SpreadingCaneBlock.FACING, offset).setValue(LIFECYCLE, state.getValue(LIFECYCLE)));
+                    // Growing upwards grows at stage = 1, because stage = 0 is just newly planted bushes.
+                    state.setValue(STAGE, 1).setValue(LIFECYCLE, state.getValue(LIFECYCLE));
+                    placeNewBushAndResetCounters(level, abovePos, pos, state, cycles, growthsRemaining);
 
-                    // If block grows, set the new block's stem position to match the original
-                    if (level.getBlockEntity(pos) instanceof BerryBushBlockEntity sourceBush && level.getBlockEntity(offsetPos) instanceof BerryBushBlockEntity newBush)
-                    {
-                        newBush.setStemPos(sourceBush.getStemPos());
-                    }
-
+                    // Increase age to stop this block from growing again in future
+                    level.setBlock(pos, state.setValue(STAGE, 2), Block.UPDATE_ALL);
                 }
             }
-
-            return state.setValue(STAGE, 2);
         }
-        return state; // Stay at stage 2, and don't grow
+    }
+
+    private void maybeStopGrowing(ServerLevel level, BlockPos pos, BlockState state, RandomSource random)
+    {
+        if (random.nextBoolean())
+        {
+            // Before allowing this to propagate multiple times, check that there aren't too many bush blocks nearby
+            int count = 0;
+            for (BlockPos target : BlockPos.betweenClosed(pos.offset(-2, 0, -2), pos.offset(2, 1, 2)))
+            {
+                if (level.getBlockState(target).getBlock() == this)
+                {
+                    count++;
+                    if (count > 10)
+                    {
+                        return;
+                    }
+                }
+            }
+        }
+        // Otherwise, stop growing
+        level.setBlock(pos, state.setValue(STAGE, 2), Block.UPDATE_ALL);
     }
 
     @Override
@@ -129,5 +162,36 @@ public class SpreadingBushBlock extends StationaryBerryBushBlock implements IFor
         final BlockPos belowPos = pos.below();
         final BlockState belowState = level.getBlockState(belowPos);
         return mayPlaceOn(belowState, level, belowPos) || (belowState.getBlock() == this && belowState.getValue(STAGE) != 0);
+    }
+
+    @Override
+    protected boolean mayPlaceOn(BlockState state, BlockGetter level, BlockPos pos)
+    {
+        return Helpers.isBlock(state, TFCTags.Blocks.SPREADING_FRUIT_GROWS_ON);
+    }
+
+    private void placeNewBushAndResetCounters(ServerLevel level, BlockPos newPos, BlockPos oldPos, BlockState state, int cycles, int growths)
+    {
+        level.setBlockAndUpdate(newPos, state);
+        // If block grows, set the new block's stem position to match the original
+        if (level.getBlockEntity(oldPos) instanceof BerryBushBlockEntity sourceBush && level.getBlockEntity(newPos) instanceof BerryBushBlockEntity newBush)
+        {
+            sourceBush.resetCounter();
+            sourceBush.increaseCounter((long) TFCConfig.SERVER.berryBushGrowthTicks.get() * cycles);
+            // It is assumed that the number of growths remaining has already been reduced prior to calling this method
+            sourceBush.setGrowthsRemaining(growths);
+
+            newBush.resetCounter();
+            newBush.increaseCounter((long) TFCConfig.SERVER.berryBushGrowthTicks.get() * cycles);
+            newBush.setGrowthsRemaining(growths);
+
+            newBush.setStemPos(sourceBush.getStemPos());
+        }
+        else
+        {
+            TerraFirmaCraft.LOGGER.error("Failed to update growing berry bush block entity at: {}", oldPos);
+        }
+        level.getBlockState(oldPos).tick(level, oldPos, level.random);
+        level.getBlockState(newPos).tick(level, newPos, level.random);
     }
 }

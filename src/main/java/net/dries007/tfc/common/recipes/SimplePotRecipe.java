@@ -20,6 +20,7 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 
+import net.dries007.tfc.common.blockentities.IPotInventory;
 import net.dries007.tfc.common.blockentities.PotBlockEntity;
 import net.dries007.tfc.common.recipes.outputs.ItemStackProvider;
 import net.dries007.tfc.common.recipes.outputs.PotOutput;
@@ -72,14 +73,23 @@ public class SimplePotRecipe extends PotRecipe
     }
 
     @Override
-    public PotOutput getOutput(PotBlockEntity.PotInventory inventory)
+    public PotOutput getOutput(IPotInventory inventory)
     {
         // Compute the outputs here, before the pot inventory is cleared
         final List<ItemStack> outputs = new ArrayList<>(5);
-        for (int i = 0; i < Math.min(outputItems.size(), inventory.getSlots()); i++)
+        final List<ItemStackProvider> providers = new ArrayList<>(outputItems);
+        for (int i = inventory.inputStart(); i <= inventory.inputEnd(); i++)
         {
-            final ItemStack input = inventory.getStackInSlot(PotBlockEntity.SLOT_EXTRA_INPUT_START + i);
-            outputs.add(outputItems.get(i).getSingleStack(input));
+            if (providers.isEmpty())
+                break;
+            final ItemStack input = inventory.getStackInSlot(i);
+
+            // The only case where non-empty itemstacks are actually required by the provider, is if the recipe transforms the input items in some way
+            // If no items are part of the recipe, we can therefore safely add outputs using empty itemstacks without having to worry about breaking anything
+            if (!input.isEmpty() || itemIngredients.isEmpty())
+            {
+                outputs.add(providers.removeFirst().getSingleStack(input));
+            }
         }
         return new SimpleOutput(usesAllFluid ? outputFluid.copy() : favorNewFluidStack(inventory.getFluidHandler().getFluidInTank(0), outputFluid), outputs);
     }
@@ -107,12 +117,12 @@ public class SimplePotRecipe extends PotRecipe
     record SimpleOutput(FluidStack fluidOutput, List<ItemStack> itemOutputs) implements PotOutput
     {
         @Override
-        public void onFinish(PotBlockEntity.PotInventory inventory)
+        public void onFinish(IPotInventory inventory)
         {
             // Copy the outputs to the pot inventory
             for (int i = 0; i < itemOutputs.size(); i++)
             {
-                inventory.setStackInSlot(PotBlockEntity.SLOT_EXTRA_INPUT_START + i, itemOutputs.get(i));
+                inventory.setStackInSlot(inventory.inputStart() + i, itemOutputs.get(i));
             }
             inventory.clearFluid();
             inventory.fill(fluidOutput, IFluidHandler.FluidAction.EXECUTE);

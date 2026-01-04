@@ -22,6 +22,7 @@ import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.fluids.crafting.SizedFluidIngredient;
 
+import net.dries007.tfc.common.blockentities.IPotInventory;
 import net.dries007.tfc.common.blockentities.PotBlockEntity;
 import net.dries007.tfc.common.recipes.outputs.PotOutput;
 import net.dries007.tfc.util.Helpers;
@@ -29,7 +30,7 @@ import net.dries007.tfc.util.Helpers;
 /**
  * Recipe type for all cooking pot recipes
  */
-public class PotRecipe implements ISimpleRecipe<PotBlockEntity.PotInventory>
+public class PotRecipe implements ISimpleRecipe<IPotInventory>
 {
     public static final MapCodec<PotRecipe> CODEC = RecordCodecBuilder.mapCodec(i -> i.group(
         Ingredient.CODEC.listOf(0, 5).fieldOf("ingredients").forGetter(c -> c.itemIngredients),
@@ -65,14 +66,14 @@ public class PotRecipe implements ISimpleRecipe<PotBlockEntity.PotInventory>
     }
 
     @Override
-    public boolean matches(PotBlockEntity.PotInventory inventory, Level worldIn)
+    public boolean matches(IPotInventory inventory, Level worldIn)
     {
         if (!fluidIngredient.test(inventory.getFluidInTank(0)))
         {
             return false;
         }
         final List<ItemStack> stacks = new ArrayList<>();
-        for (int i = PotBlockEntity.SLOT_EXTRA_INPUT_START; i <= PotBlockEntity.SLOT_EXTRA_INPUT_END; i++)
+        for (int i = inventory.inputStart(); i <= inventory.inputEnd(); i++)
         {
             ItemStack stack = inventory.getStackInSlot(i);
             if (!stack.isEmpty())
@@ -84,7 +85,7 @@ public class PotRecipe implements ISimpleRecipe<PotBlockEntity.PotInventory>
     }
 
     @Override
-    public ItemStack assemble(PotBlockEntity.PotInventory input, HolderLookup.Provider registries)
+    public ItemStack assemble(IPotInventory input, HolderLookup.Provider registries)
     {
         throw new UnsupportedOperationException();
     }
@@ -130,7 +131,7 @@ public class PotRecipe implements ISimpleRecipe<PotBlockEntity.PotInventory>
     /**
      * @return The output of the pot recipe.
      */
-    public PotOutput getOutput(PotBlockEntity.PotInventory inventory)
+    public PotOutput getOutput(IPotInventory inventory)
     {
         return PotOutput.EMPTY_INSTANCE;
     }

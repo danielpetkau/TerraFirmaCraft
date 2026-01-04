@@ -11,6 +11,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
@@ -24,6 +25,7 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.phys.AABB;
 import org.jetbrains.annotations.Nullable;
 
 import net.dries007.tfc.common.TFCTags;
@@ -153,17 +155,24 @@ public abstract class CreepingWaterPlantBlock extends CreepingPlantBlock impleme
     {
         if (!level.isClientSide && level.getFluidState(pos).getType().isSame(TFCFluids.SALT_WATER.getSource()))
         {
-            level.setBlock(pos, state.setValue(OPEN, true), Block.UPDATE_ALL);
+            if (level.getEntitiesOfClass(LivingEntity.class, AABB.ofSize(pos.getCenter(), 1, 1, 1)).isEmpty())
+            {
+                level.setBlock(pos, state.setValue(OPEN, true), Block.UPDATE_ALL);
+            }
+            else
+            {
+                level.scheduleTick(pos, this, 160);
+            }
         }
     }
 
     @Override
     protected void entityInside(BlockState state, Level level, BlockPos pos, Entity entity)
     {
-        if (!level.isClientSide)
+        if (!level.isClientSide && state.getValue(OPEN))
         {
             level.setBlock(pos, state.setValue(OPEN, false), Block.UPDATE_ALL);
-            level.scheduleTick(pos, this, 150);
+            level.scheduleTick(pos, this, level.random.nextInt(40, 160));
         }
     }
 }

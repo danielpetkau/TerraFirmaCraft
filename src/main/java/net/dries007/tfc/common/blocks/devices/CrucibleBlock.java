@@ -13,6 +13,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -164,6 +165,26 @@ public class CrucibleBlock extends DeviceBlock implements EntityBlockExtension, 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(EAST, SOUTH, WEST, NORTH);
+    }
+
+    @Override
+    protected boolean hasAnalogOutputSignal(BlockState state)
+    {
+        return TFCConfig.SERVER.crucibleEnableAutomation.get();
+    }
+
+    @Override
+    protected int getAnalogOutputSignal(BlockState state, Level level, BlockPos pos)
+    {
+        if (level.getBlockEntity(pos) instanceof CrucibleBlockEntity crucible)
+        {
+            final FluidStack fluid = crucible.getInventory().getFluidInTank(0);
+            if (!fluid.isEmpty())
+            {
+                return Mth.clamp(fluid.getAmount() * 15 / TFCConfig.SERVER.crucibleCapacity.get(), 1, 15);
+            }
+        }
+        return 0;
     }
 
     @Override

@@ -11,6 +11,7 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.ItemInteractionResult;
@@ -81,6 +82,25 @@ public class BlastFurnaceBlock extends DeviceBlock implements IBellowsConsumer
         super(properties, InventoryRemoveBehavior.DROP);
 
         registerDefaultState(getStateDefinition().any().setValue(LIT, false));
+    }
+
+    @Override
+    protected boolean hasAnalogOutputSignal(BlockState state)
+    {
+        return TFCConfig.SERVER.blastFurnaceEnableAutomation.get();
+    }
+
+    @Override
+    protected int getAnalogOutputSignal(BlockState state, Level level, BlockPos pos)
+    {
+        if (level.getBlockEntity(pos) instanceof BlastFurnaceBlockEntity blastFurnace)
+        {
+            if (blastFurnace.getFuelCount() > 0 && blastFurnace.getCapacity() != 0)
+            {
+                return Mth.clamp(blastFurnace.getFuelCount() * 15 / blastFurnace.getCapacity(), 1, 15);
+            }
+        }
+        return 0;
     }
 
     @Override

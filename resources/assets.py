@@ -2,6 +2,7 @@
 #  See the project README.md and LICENSE.txt for more information.
 
 import itertools
+import math
 from typing import List
 
 from mcresources import ResourceManager, ItemContext, utils, block_states, loot_tables, atlases, BlockContext
@@ -279,6 +280,9 @@ def generate(rm: ResourceManager):
                     if ore == 'pyrite':
                         name = lang('native gold?')
                     rm.block('tfc:ore/%s/%s/prospected' % (ore, rock)).with_lang(name)
+            else:
+                name = lang(ore)
+                rm.block('tfc:%s/prospected' % (ore)).with_lang(name)
 
     # Loose Ore Items
     for ore, ore_data in ORES.items():
@@ -356,6 +360,10 @@ def generate(rm: ResourceManager):
     for block in SIMPLE_BLOCKS:
         rm.blockstate(block).with_block_model().with_item_model().with_block_loot('tfc:%s' % block).with_lang(lang(block))
     rm.blockstate('thatch').with_block_model({'texture': 'tfc:block/thatch'}, parent='block/powder_snow').with_item_model().with_block_loot('tfc:thatch').with_lang(lang('thatch'))
+    rm.blockstate('golden_bamboo_block', variants=dict(('axis=%s' % a, {'model': 'tfc:block/golden_bamboo_%s' % a}) for a in ('x', 'y', 'z'))).with_block_loot('tfc:golden_bamboo_block').with_lang(lang('golden bamboo block'))
+    for a in ('x', 'y', 'z'):
+        rm.block_model('golden_bamboo_%s' % a, {'side': 'tfc:block/golden_bamboo_side', 'end': 'tfc:block/golden_bamboo_top'}, 'minecraft:block/bamboo_block_%s' % a)
+        rm.item_model('golden_bamboo_block', parent='tfc:block/golden_bamboo_y', no_textures=True)
 
     for name in ('pumpkin', 'melon'):
         # Loot table for the non-rotten block is done via code, as we need to select rotten/not via tile entity
@@ -370,23 +378,24 @@ def generate(rm: ResourceManager):
 
     rm.blockstate('freshwater_bubble_column', model='minecraft:block/water').with_lang(lang('bubble column'))
     rm.blockstate('saltwater_bubble_column', model='tfc:block/fluid/salt_water').with_lang(lang('bubble column'))
+    rm.blockstate('spring_water_bubble_column', model='tfc:block/fluid/spring_water').with_lang(lang('bubble column'))
 
     for variant in ('raw', 'bricks', 'polished'):
-        rm.blockstate(('alabaster', variant)).with_block_model().with_item_model().with_block_loot('tfc:alabaster/%s' % variant).with_lang(lang('%s Alabaster', variant) if variant != 'bricks' else lang('Alabaster %s', variant))
+        rm.blockstate(('alabaster', variant)).with_block_model().with_item_model().with_block_loot('tfc:alabaster/%s' % variant).with_lang(lang('%s Plaster', variant) if variant != 'bricks' else lang('Plaster %s', variant))
 
     for color in COLORS:
-        rm.blockstate(('alabaster', 'raw', color)).with_block_model().with_item_model().with_block_loot('tfc:alabaster/raw/%s' % color).with_lang(lang('%s Raw Alabaster', color))
-        bricks = rm.blockstate(('alabaster', 'bricks', color)).with_block_model().with_item_model().with_block_loot('tfc:alabaster/bricks/%s' % color).with_lang(lang('%s Alabaster Bricks', color))
-        polished = rm.blockstate(('alabaster', 'polished', color)).with_block_model().with_item_model().with_block_loot('tfc:alabaster/polished/%s' % color).with_lang(lang('%s Polished Alabaster', color))
+        rm.blockstate(('alabaster', 'raw', color)).with_block_model().with_item_model().with_block_loot('tfc:alabaster/raw/%s' % color).with_lang(lang('%s Raw Plaster', color))
+        bricks = rm.blockstate(('alabaster', 'bricks', color)).with_block_model().with_item_model().with_block_loot('tfc:alabaster/bricks/%s' % color).with_lang(lang('%s Plaster Bricks', color))
+        polished = rm.blockstate(('alabaster', 'polished', color)).with_block_model().with_item_model().with_block_loot('tfc:alabaster/polished/%s' % color).with_lang(lang('%s Polished Plaster', color))
         bricks.make_slab().make_stairs().make_wall()
         polished.make_slab().make_stairs().make_wall()
         for extra in ('slab', 'stairs', 'wall'):
-            block = rm.block(('alabaster', 'bricks', color + '_' + extra)).with_lang(lang('%s Alabaster Brick %s', color, extra))
+            block = rm.block(('alabaster', 'bricks', color + '_' + extra)).with_lang(lang('%s Plaster Brick %s', color, extra))
             if extra != 'slab':
                 block.with_block_loot('tfc:alabaster/bricks/%s_%s' % (color, extra))
             else:
                 slab_loot(rm, 'tfc:alabaster/bricks/%s_%s' % (color, extra))
-            block = rm.block(('alabaster', 'polished', color + '_' + extra)).with_lang(lang('%s Polished Alabaster %s', color, extra))
+            block = rm.block(('alabaster', 'polished', color + '_' + extra)).with_lang(lang('%s Polished Plaster %s', color, extra))
             if extra != 'slab':
                 block.with_block_loot('tfc:alabaster/polished/%s_%s' % (color, extra))
             else:
@@ -601,6 +610,18 @@ def generate(rm: ResourceManager):
     }).with_lang(lang('Firepit')).with_block_loot('tfc:powder/wood_ash')
     rm.item_model('firepit', 'tfc:item/firepit')
 
+    rm.blockstate('stove', variants={
+        'lit=true,facing=north': {'model': 'tfc:block/stove_lit', 'y' : 270},
+        'lit=true,facing=south': {'model': 'tfc:block/stove_lit', 'y': 90},
+        'lit=true,facing=east': {'model': 'tfc:block/stove_lit'},
+        'lit=true,facing=west': {'model': 'tfc:block/stove_lit', 'y': 180},
+        'lit=false,facing=north': {'model': 'tfc:block/stove_unlit', 'y' : 270},
+        'lit=false,facing=south': {'model': 'tfc:block/stove_unlit', 'y': 90},
+        'lit=false,facing=east': {'model': 'tfc:block/stove_unlit'},
+        'lit=false,facing=west': {'model': 'tfc:block/stove_unlit', 'y': 180},
+    }).with_lang(lang('Stove')).with_block_loot('tfc:stove')
+    rm.item_model('stove', 'tfc:item/stove')
+
     for stage in ('cold', 'dried', 'fresh', 'white', 'red'):
         for i in range(1, 5):
             rm.block_model('firepit_log_%s_%s' % (i, stage), {'all': 'tfc:block/devices/firepit/log_%s' % stage}, parent='tfc:block/firepit_log_%s' % i)
@@ -624,6 +645,31 @@ def generate(rm: ResourceManager):
         ({'lit': False, 'axis': 'z'}, {'model': 'tfc:block/firepit_unlit', 'y': 90})
     ).with_lang(lang('Pot')).with_block_loot('tfc:powder/wood_ash', 'tfc:ceramic/pot')
     rm.item_model('pot', 'tfc:item/firepit_pot')
+
+    rm.blockstate_multipart('stove_pot',
+        ({'facing': 'north'}, {'model': 'tfc:block/pot_stove', 'y' : 270}),
+        ({'facing': 'south'}, {'model': 'tfc:block/pot_stove', 'y': 90}),
+        ({'facing': 'east'}, {'model': 'tfc:block/pot_stove'}),
+        ({'facing': 'west'}, {'model': 'tfc:block/pot_stove', 'y': 180}),
+        ({'lit': True, 'facing': 'north'}, {'model': 'tfc:block/stove_lit', 'y' : 270}),
+        ({'lit': True, 'facing': 'south'}, {'model': 'tfc:block/stove_lit', 'y': 90}),
+        ({'lit': True, 'facing': 'east'}, {'model': 'tfc:block/stove_lit'}),
+        ({'lit': True, 'facing': 'west'}, {'model': 'tfc:block/stove_lit', 'y': 180}),
+        ({'lit': False, 'facing': 'north'}, {'model': 'tfc:block/stove_unlit', 'y' : 270}),
+        ({'lit': False, 'facing': 'south'}, {'model': 'tfc:block/stove_unlit', 'y': 90}),
+        ({'lit': False, 'facing': 'east'}, {'model': 'tfc:block/stove_unlit'}),
+        ({'lit': False, 'facing': 'west'}, {'model': 'tfc:block/stove_unlit', 'y': 180}),
+        ).with_lang(lang('Pot')).with_block_loot('tfc:stove', 'tfc:ceramic/pot')
+    rm.item_model('stove_pot', 'tfc:item/stove_pot')
+    # easier to just use a loop since 0 - 15 power needs to be mapped to 0 - 10 models
+    thermometer_states = {}
+    for p in range (0, 16):
+        for f, y in {'north': None, 'south': 180, 'east': 90, 'west': 270}.items():
+            m = math.floor(p * (11/16))
+            thermometer_states.update({'power=%s,facing=%s' % (p, f) : {'model': 'tfc:block/thermometer/thermometer_%s' % m, 'y': y}})
+
+    rm.blockstate('thermometer', variants=thermometer_states).with_lang(lang('Thermometer')).with_block_loot('tfc:thermometer')
+    rm.item_model('thermometer')
 
     block = rm.blockstate('powderkeg', variants={
         'lit=false,sealed=true': {'model': 'tfc:block/powderkeg_sealed'},
@@ -759,8 +805,9 @@ def generate(rm: ResourceManager):
         block.with_block_model({'end': 'tfc:block/dirt/%s_top' % soil, 'side': 'tfc:block/dirt/%s' % soil}, 'minecraft:block/cube_column').with_item_model().with_block_loot('tfc:dirt/%s' % soil).with_lang(lang('%s Dirt', soil))
         block = rm.blockstate(('coarse_dirt', soil), variants={'': [{'model': 'tfc:block/coarse_dirt/%s' % soil}]}, use_default_model=False)
         block.with_block_model({'end': 'tfc:block/coarse_dirt/%s_top' % soil, 'side': 'tfc:block/coarse_dirt/%s' % soil}, 'minecraft:block/cube_column').with_item_model().with_block_loot('tfc:coarse_dirt/%s' % soil).with_lang(lang('Coarse %s', soil))
-        for variant in ('mud', 'rooted_dirt', 'mud_bricks'):
-            rm.blockstate((variant, soil)).with_block_model().with_item_model().with_block_loot('tfc:%s/%s' % (variant, soil)).with_lang(lang('%s %s', soil, variant))
+        for variant in ('rooted_dirt', 'mud'):
+            rm.blockstate((variant, soil)).with_block_model({'end': 'tfc:block/%s/%s_top' % (variant, soil), 'side': 'tfc:block/%s/%s' % (variant, soil)}, 'minecraft:block/cube_column').with_item_model().with_block_loot('tfc:%s/%s' % (variant, soil)).with_lang(lang('%s %s', soil, variant))
+        rm.blockstate(('mud_bricks', soil)).with_block_model().with_item_model().with_block_loot('tfc:mud_bricks/%s' % soil).with_lang(lang('%s mud bricks', soil))
 
         # Clay Dirt
         block = rm.blockstate(('clay', soil), use_default_model=False)
@@ -888,19 +935,10 @@ def generate(rm: ResourceManager):
     block.with_block_loot(when_silk_touch('minecraft:ice'))
     rm.item_model('ice_pile', parent='minecraft:item/ice', no_textures=True)
 
-    # Loot table for snow blocks and snow piles - override the vanilla one to only return one snowball per layer
-    def snow_block_loot_table(block: str):
-        rm.block_loot(block, loot_tables.pool(loot_tables.alternatives(
-            when_silk_touch('minecraft:snow'),
-            'minecraft:snowball'
-        ), conditions=({
-            'condition': 'minecraft:entity_properties',
-            'predicate': {},
-            'entity': 'this'
-        })))
-
-    snow_block_loot_table('snow_pile')
-    snow_block_loot_table('minecraft:snow')
+    # Loot table for snow blocks and snow piles - override the vanilla one to return nothing (snowballs are useless and annoying)
+    rm.block_loot('snow_pile', when_silk_touch('minecraft:snow'))
+    rm.block_loot('minecraft:snow', when_silk_touch('minecraft:snow'))
+    rm.block_loot('minecraft:snow_block', when_silk_touch('minecraft:snow_block'))
 
     # Sea Ice
     block = rm.blockstate('sea_ice').with_block_model().with_item_model().with_lang(lang('sea ice'))
@@ -1098,6 +1136,7 @@ def generate(rm: ResourceManager):
     for item in SIMPLE_ITEMS:
         rm.item_model(item).with_lang(lang(item))
 
+    rm.item_model('alabaster_brick', 'tfc:item/alabaster_brick').with_lang(lang('Plaster Brick'))
     rm.item_model('blowpipe/empty_gui', 'tfc:item/blowpipe')
     rm.item_model('blowpipe/ceramic_empty_gui', 'tfc:item/ceramic_blowpipe')
     rm.item_model('blowpipe/empty_held', parent='tfc:item/blowpipe/empty', no_textures=True)
@@ -1545,8 +1584,8 @@ def generate(rm: ResourceManager):
     for plant in ('duckweed', 'lotus', 'sargassum', 'white_water_lily', 'yellow_water_lily', 'purple_water_lily', 'green_algae', 'red_algae'):
         if plant not in ('purple_water_lily', 'yellow_water_lily', 'white_water_lily', 'lotus'):
             rm.blockstate(('plant', plant), variants={'': four_ways('tfc:block/plant/%s' % plant)}, use_default_model=False)
-        tinted = plant not in ('green_algae', 'sargassum', 'red_algae')
-        rm.block_model(('plant', plant), parent='tfc:block/plant/template_floating%s' % ('_tinted' if tinted else ''), textures={'pad': 'tfc:block/plant/%s/%s' % (plant, plant)})
+            tinted = plant not in ('green_algae', 'sargassum', 'red_algae')
+            rm.block_model(('plant', plant), parent='tfc:block/plant/template_floating%s' % ('_tinted' if tinted else ''), textures={'pad': 'tfc:block/plant/%s/%s' % (plant, plant)})
         rm.item_model(('plant', plant), 'tfc:item/plant/%s' % plant)
 
     # Food
@@ -2283,6 +2322,17 @@ def generate(rm: ResourceManager):
     block.with_block_loot('tfc:trip_hammer')
     rm.item_model('trip_hammer', parent='tfc:block/trip_hammer', no_textures=True)
 
+    block = rm.blockstate('vane').with_block_model({'particle': 'tfc:block/metal/block/wrought_iron'}, parent=None)
+    block.with_lang(lang('weather vane')).with_block_loot('tfc:vane')
+    rm.item_model('vane')
+
+    block = rm.blockstate('anemometer').with_block_model({'particle': 'tfc:block/metal/block/brass'}, parent=None)
+    block.with_lang(lang('anemometer')).with_block_loot('tfc:anemometer')
+    rm.item_model('anemometer')
+    block = rm.blockstate('calendar_clock').with_block_model({'particle': 'tfc:block/metal/block/brass'}, parent=None)
+    block.with_lang(lang('precision clock')).with_block_loot('tfc:calendar_clock')
+    rm.item_model('calendar_clock')
+
     # Candles
     for color in [None, *COLORS]:
         namespace = 'tfc:candle' + ('/' + color if color else '')
@@ -2381,6 +2431,13 @@ def generate(rm: ResourceManager):
     rm.custom_block_model('ingot_pile', 'tfc:ingot_pile', {})
     rm.custom_block_model('double_ingot_pile', 'tfc:double_ingot_pile', {})
 
+    rm.block_loot('creative_motor')
+    rm.blockstate('creative_motor', variants={
+        'axis=x': {'model': 'tfc:block/creative_motor', 'y' : 270},
+        'axis=z': {'model': 'tfc:block/creative_motor', 'y': 180},
+        'axis=y': {'model': 'tfc:block/creative_motor', 'y': 180, 'x': 90},
+    }).with_lang(lang('Creative Motor'))
+    rm.item_model('creative_motor', parent='tfc:block/creative_motor', no_textures=True)
 
     for fluid in SIMPLE_FLUIDS:
         water_based_fluid(rm, fluid)
@@ -2630,4 +2687,3 @@ def when_sheared(item: str):
 
 def override(model: str, name: str, value: float = 1.0):
     return {'predicate': {name: value}, 'model': model}
-

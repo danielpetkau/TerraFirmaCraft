@@ -106,6 +106,8 @@ public final class HeatComponent implements IHeatView
     }
 
     /**
+     * <strong>Important:</strong> This method may mutate the component by sanitizing it,
+     * do not call it in a context where mutation is not allowed.
      * @return The current temperature, or an estimation of it
      */
     @Override
@@ -169,7 +171,7 @@ public final class HeatComponent implements IHeatView
      *
      * @return This heat component
      */
-    HeatComponent sanitize()
+    public HeatComponent sanitize()
     {
         if ((parent != null || heatCapacity != 0f) && (lastTemperature != 0f || lastTick != 0L))
         {
@@ -218,11 +220,10 @@ public final class HeatComponent implements IHeatView
     @Override
     public String toString()
     {
-        return "Heat[parent=%s%s,lastTick=%s,lastTemperature=%5.0f,temperature=%5.0f]".formatted(
+        return "Heat[parent=%s%s,lastTick=%s,lastTemperature=%5.0f]".formatted(
             parent != null ? Objects.requireNonNullElse(HeatCapability.MANAGER.getId(parent), "<custom>") : "<null>",
             heatCapacity == 0f ? "" : ",heatCapacity=" + heatCapacity,
             lastTick == Calendars.get().getTicks() ? "<now>" : "%8d".formatted(lastTick),
-            lastTemperature,
-            getTemperature());
+            lastTemperature);
     }
 }

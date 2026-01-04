@@ -34,11 +34,9 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraft.world.ticks.TickPriority;
 import org.jetbrains.annotations.Nullable;
 
-import net.dries007.tfc.TerraFirmaCraft;
 import net.dries007.tfc.client.overworld.SolarCalculator;
 import net.dries007.tfc.common.TFCTags;
-import net.dries007.tfc.common.blockentities.TickCounterBlockEntity;
-import net.dries007.tfc.common.blockentities.TickCountingBranchBlockEntity;
+import net.dries007.tfc.common.blockentities.TickingPlantBlockEntity;
 import net.dries007.tfc.common.blocks.EntityBlockExtension;
 import net.dries007.tfc.common.blocks.ExtendedProperties;
 import net.dries007.tfc.common.blocks.IForgeBlockExtension;
@@ -52,12 +50,12 @@ import net.dries007.tfc.util.Helpers;
 import net.dries007.tfc.util.calendar.Calendars;
 import net.dries007.tfc.util.climate.Climate;
 import net.dries007.tfc.util.climate.ClimateRange;
-import net.dries007.tfc.world.chunkdata.ChunkData;
 
 public class FruitTreeSaplingBlock extends BushBlock implements IForgeBlockExtension, EntityBlockExtension, HoeOverlayBlock
 {
     /**
      * Checks if splicing, the action with clicking with an offhand knife and a sapling, works.
+     *
      * @param pos   The position the sapling would be or is
      * @param state The state at that position currently
      */
@@ -95,7 +93,7 @@ public class FruitTreeSaplingBlock extends BushBlock implements IForgeBlockExten
     @Override
     public void addHoeOverlayInfo(Level level, BlockPos pos, BlockState state, Consumer<Component> text, boolean isDebug)
     {
-        if (level.getBlockEntity(pos) instanceof TickCountingBranchBlockEntity sapling)
+        if (level.getBlockEntity(pos) instanceof TickingPlantBlockEntity sapling)
         {
             final ClimateRange range = climateRange.get();
 
@@ -146,7 +144,7 @@ public class FruitTreeSaplingBlock extends BushBlock implements IForgeBlockExten
         // only go through this check if we are reasonably sure the plant would actually live
         if (stages[Calendars.SERVER.getHemispheralCalendarMonthOfYear(SolarCalculator.getInNorthernHemisphere(pos, level)).ordinal()].active())
         {
-            if (level.getBlockEntity(pos) instanceof TickCountingBranchBlockEntity counter)
+            if (level.getBlockEntity(pos) instanceof TickingPlantBlockEntity counter)
             {
                 final long elapsedTicks = counter.getTicksSinceUpdate();
                 if (elapsedTicks > getTicksToGrow())
@@ -174,10 +172,10 @@ public class FruitTreeSaplingBlock extends BushBlock implements IForgeBlockExten
         if (internalSapling == 1 && random.nextBoolean()) internalSapling += 1;
         level.setBlockAndUpdate(pos, block.get().defaultBlockState().setValue(PipeBlock.DOWN, true).setValue(TFCBlockStateProperties.SAPLINGS, internalSapling).setValue(TFCBlockStateProperties.STAGE_3, onBranch ? 1 : 0));
         // The following carries over time since planting the sapling block to the growth of the tree
-        if (level.getBlockEntity(pos) instanceof TickCountingBranchBlockEntity branch)
+        if (level.getBlockEntity(pos) instanceof TickingPlantBlockEntity branch)
         {
-            TickCountingBranchBlockEntity.reset(level, pos);
-            TickCountingBranchBlockEntity.addTicks(level, pos, ticksToAdd);
+            TickingPlantBlockEntity.reset(level, pos);
+            TickingPlantBlockEntity.addTicks(level, pos, ticksToAdd);
             branch.setStemPos(stemPos);
         }
         level.scheduleTick(pos, block.get(), 20, TickPriority.NORMAL);
@@ -215,10 +213,10 @@ public class FruitTreeSaplingBlock extends BushBlock implements IForgeBlockExten
 
         if (Helpers.isBlock(downState, TFCTags.Blocks.FRUIT_TREE_BRANCH))
         {
-            TickCountingBranchBlockEntity.setStemPos(level, pos, findBaseOfTree(level, downPos, downState));
+            TickingPlantBlockEntity.setStemPos(level, pos, findBaseOfTree(level, downPos, downState));
         }
 
-        TickCountingBranchBlockEntity.reset(level, pos);
+        TickingPlantBlockEntity.reset(level, pos);
         super.setPlacedBy(level, pos, state, placer, stack);
     }
 

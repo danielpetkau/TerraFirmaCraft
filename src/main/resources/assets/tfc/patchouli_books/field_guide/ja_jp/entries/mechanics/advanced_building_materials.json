@@ -15,20 +15,20 @@
     },
     {
       "type": "patchouli:text",
-      "anchor": "alabaster",
+      "anchor": "plaster",
       "text": "アラバスターは $(l:the_world/ores_and_minerals#gypsum)石膏$() から作られた建築ブロックです。 アラバスターは $(l:the_world/ores_and_minerals#gypsum)石膏$() を使って直接クラフトすることで作成できますが、一部の $(l:the_world/ores_and_minerals#gypsum)石膏$() を 100 mB で封印するとより効率的に作成できます。 樽の中に $(thing)石灰水$()を入れて石膏を密封します。",
-      "title": "アラバスター"
+      "title": "Plaster"
     },
     {
       "type": "patchouli:crafting",
       "recipe": "tfc:crafting/alabaster_brick",
       "recipe2": "tfc:crafting/alabaster/bricks",
-      "title": "アラバスターレンガ"
+      "title": "Plaster Bricks"
     },
     {
       "type": "patchouli:text",
-      "text": "Alabaster can be $(l:mechanics/dye)dyed$() in a $(l:mechanics/barrels)Barrel$() of dye into any color. Raw Alabaster blocks can also be $(l:mechanics/chisel)chiseled$() into $(thing)Polished Alabaster$() using the $(thing)Smooth$() chisel mode, or crafted into stairs, slabs, or walls.",
-      "title": "アラバスター装飾"
+      "text": "Plaster can be $(l:mechanics/dye)dyed$() in a $(l:mechanics/barrels)Barrel$() of dye into any color. Raw Plaster blocks can also be $(l:mechanics/chisel)chiseled$() into $(thing)Polished Plaster$() using the $(thing)Smooth$() chisel mode, or crafted into stairs, slabs, or walls.",
+      "title": "Plaster Decorations"
     },
     {
       "type": "patchouli:crafting",

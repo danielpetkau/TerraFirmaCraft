@@ -5,10 +5,10 @@
     "id": "minecraft:skull_banner_pattern"
   },
   "squares": [
-    "  ####  ",
-    "  #  #  ",
-    "  ####  ",
-    "  ####  "
+    "BBWWWWBB",
+    "BBWBBWBB",
+    "BBWWWWBB",
+    "BBWWWWBB"
   ],
   "stitches": [
     "  #   #  ",

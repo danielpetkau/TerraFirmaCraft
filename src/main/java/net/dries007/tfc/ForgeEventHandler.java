@@ -20,6 +20,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
@@ -94,6 +95,7 @@ import net.neoforged.neoforge.event.entity.ProjectileImpactEvent;
 import net.neoforged.neoforge.event.entity.item.ItemExpireEvent;
 import net.neoforged.neoforge.event.entity.living.AnimalTameEvent;
 import net.neoforged.neoforge.event.entity.living.FinalizeSpawnEvent;
+import net.neoforged.neoforge.event.entity.living.LivingBreatheEvent;
 import net.neoforged.neoforge.event.entity.living.LivingEntityUseItemEvent;
 import net.neoforged.neoforge.event.entity.living.LivingEvent;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
@@ -133,6 +135,7 @@ import net.dries007.tfc.common.blockentities.TickCounterBlockEntity;
 import net.dries007.tfc.common.blocks.CharcoalPileBlock;
 import net.dries007.tfc.common.blocks.FireboxBlock;
 import net.dries007.tfc.common.blocks.TFCBlocks;
+import net.dries007.tfc.common.blocks.TFCBubbleColumnBlock;
 import net.dries007.tfc.common.blocks.TFCCandleBlock;
 import net.dries007.tfc.common.blocks.TFCCandleCakeBlock;
 import net.dries007.tfc.common.blocks.devices.AnvilBlock;
@@ -219,6 +222,7 @@ public final class ForgeEventHandler
         bus.addListener(ForgeEventHandler::onCreateNetherPortal);
         bus.addListener(ForgeEventHandler::onFluidPlaceBlock);
         bus.addListener(ForgeEventHandler::onFluidCreateSource);
+        bus.addListener(ForgeEventHandler::onLivingBreathe);
         bus.addListener(ForgeEventHandler::onFireStart);
         bus.addListener(ForgeEventHandler::onFireStop);
         bus.addListener(ForgeEventHandler::onProjectileImpact);
@@ -498,6 +502,15 @@ public final class ForgeEventHandler
         }
     }
 
+    public static void onLivingBreathe(LivingBreatheEvent event)
+    {
+        final LivingEntity entity = event.getEntity();
+        if (TFCConfig.SERVER.bubbleColumnProvidesAir.get() && entity.level().getBlockState(BlockPos.containing(entity.getEyePosition())).getBlock() instanceof TFCBubbleColumnBlock)
+        {
+            event.setCanBreathe(true);
+        }
+    }
+
     public static void onFireStart(StartFireEvent event)
     {
         Level level = event.getLevel();
@@ -505,7 +518,7 @@ public final class ForgeEventHandler
         BlockState state = event.getState();
         Block block = state.getBlock();
 
-        if ((block == TFCBlocks.FIREPIT.get() || block == TFCBlocks.POT.get() || block == TFCBlocks.GRILL.get()) && event.isStrong())
+        if ((block == TFCBlocks.FIREPIT.get() || block == TFCBlocks.POT.get() || block == TFCBlocks.GRILL.get() || block == TFCBlocks.STOVE.get() || block == TFCBlocks.STOVE_POT.get()) && event.isStrong())
         {
             final BlockEntity entity = level.getBlockEntity(pos);
             if (entity instanceof AbstractFirepitBlockEntity<?> firepit && firepit.light(state))
@@ -817,7 +830,7 @@ public final class ForgeEventHandler
     public static void onLivingHurt(LivingIncomingDamageEvent event)
     {
         float amount = event.getAmount();
-        
+
         // Vanilla kill command uses Float.MAX_VALUE, possibly others
         if (amount == Float.MAX_VALUE)
         {
@@ -848,7 +861,6 @@ public final class ForgeEventHandler
         float damageModifier = 1f;
         final Item useItem = event.getEntity().getUseItem().getItem();
 
-        // todo: the original code here was broken during porting, what do we even want to do here?
         if (useItem == Items.SHIELD)
         {
             damageModifier = 0.25f;
@@ -858,7 +870,8 @@ public final class ForgeEventHandler
             damageModifier = shield.getDamageBlocked();
         }
 
-        event.setBlockedDamage(event.getOriginalBlockedDamage() * damageModifier);
+        if (!event.getDamageSource().is(DamageTypeTags.IS_PROJECTILE))
+            event.setBlockedDamage(event.getOriginalBlockedDamage() * damageModifier);
     }
 
     public static void onItemStacked(ItemStackedOnOtherEvent event)
@@ -869,8 +882,8 @@ public final class ForgeEventHandler
         {
             final ItemStack newItem = new ItemStack(BlowpipeItem.transform(pipe.getItem()));
             GlassWorking.createNewBatch(newItem, batch);
-            event.getCarriedSlotAccess().set(newItem);
-            event.getSlot().getItem().shrink(1);
+            event.getSlot().set(newItem);
+            event.getCarriedSlotAccess().get().shrink(1);
             event.setCanceled(true);
         }
     }
@@ -1081,7 +1094,7 @@ public final class ForgeEventHandler
                             level.destroyBlock(belowPos, false);
                         }
                     }
-                    else if (belowState.getBlock() == Blocks.ICE || belowState.getBlock() == Blocks.FROSTED_ICE)
+                    else if (belowState.getBlock() == Blocks.ICE || belowState.getBlock() == Blocks.FROSTED_ICE || Helpers.isBlock(belowState, TFCBlocks.SEA_ICE.get()))
                     {
                         coolAmount = 100f;
                         if (level.random.nextFloat() < 0.01F)

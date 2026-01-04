@@ -20,6 +20,7 @@ import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.material.Fluid;
 
+import net.dries007.tfc.common.TFCTags;
 import net.dries007.tfc.common.blocks.soil.IGrassBlock;
 import net.dries007.tfc.common.blocks.wood.ILeavesBlock;
 
@@ -152,9 +153,14 @@ public class FloodFillLakeFeature extends Feature<FloodFillLakeConfig>
                         }
                         else
                         {
-                            // Invalid boundary condition
+                            // Invalid boundary condition (distance)
                             return false;
                         }
+                    }
+                    else if (isIllegalBorderState(stateAt))
+                    {
+                        // Invalid boundary condition (border block)
+                        return false;
                     }
                 }
             }
@@ -165,5 +171,10 @@ public class FloodFillLakeFeature extends Feature<FloodFillLakeConfig>
     private boolean isFloodFillable(BlockState state, FloodFillLakeConfig config)
     {
         return !state.isSolid() && !(state.getBlock() instanceof ILeavesBlock) && config.shouldReplace(state.getFluidState().getType());
+    }
+
+    private boolean isIllegalBorderState(BlockState state)
+    {
+        return state.is(TFCTags.Blocks.CANCELS_FLOOD_FILL_LAKE);
     }
 }

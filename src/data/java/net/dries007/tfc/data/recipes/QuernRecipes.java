@@ -69,7 +69,7 @@ public interface QuernRecipes extends Recipes
         addDye(Items.PINK_DYE, Plant.FOXGLOVE, Plant.SACRED_DATURA, Plant.TULIP_PINK, Plant.SNAPDRAGON_PINK, Plant.HIBISCUS, Plant.LOTUS, Plant.MAIDEN_PINK, Plant.MOSS_CAMPION, Plant.RAMUNDA);
         addDye(Items.LIGHT_GRAY_DYE, Plant.YUCCA, Plant.SILVER_BROMELIAD);
         addDye(Items.PURPLE_DYE, Plant.ALLIUM, Plant.BLACK_ORCHID, Plant.PEROVSKIA, Plant.BLUE_GINGER, Plant.PICKERELWEED, Plant.HEATHER, Plant.PURPLE_WATER_LILY, Plant.SHAWIASH);
-        addDye(Items.BLUE_DYE, Plant.BLUE_ORCHID, Plant.GRAPE_HYACINTH);
+        addDye(Items.BLUE_DYE, Plant.BLUE_ORCHID, Plant.GRAPE_HYACINTH, Plant.CORNFLOWER);
         addDye(Items.BROWN_DYE, Plant.FIELD_HORSETAIL, Plant.SARGASSUM);
         addDye(Items.GREEN_DYE, Plant.BARREL_CACTUS, Plant.REINDEER_LICHEN, Plant.SILKEN_PINCUSHION_CACTUS, Plant.PRICKLY_PEAR, Plant.PRICKLY_PEAR_PURPLE);
         addDye(Items.RED_DYE, Plant.GUZMANIA, Plant.POPPY, Plant.ROSE, Plant.SNAPDRAGON_RED, Plant.TROPICAL_MILKWEED, Plant.TULIP_RED, Plant.VRIESEA, Plant.ANTHURIUM, Plant.BLOOD_LILY, Plant.HELICONIA, Plant.KANGAROO_PAW, Plant.TANK_BROMELIAD, Plant.KINNIKINNICK);
@@ -87,7 +87,7 @@ public interface QuernRecipes extends Recipes
 
     private void addDye(ItemLike item, Plant... plants)
     {
-        add(Ingredient.of(Arrays.stream(plants).map(TFCBlocks.PLANTS::get).toArray(ItemLike[]::new)), item, 1);
+        add(Ingredient.of(Arrays.stream(plants).map(TFCBlocks.PLANTS::get).toArray(ItemLike[]::new)), item, 2);
     }
 
     private void add(ItemLike input, ItemLike output, int count)

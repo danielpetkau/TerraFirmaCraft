@@ -20,14 +20,11 @@ import net.dries007.tfc.common.component.food.FoodCapability;
 import net.dries007.tfc.config.TFCConfig;
 
 /**
- * Priority after default, which should let us inject into the method that sodium adds.
+ * Priority after default, which should let us inject into the method that Sodium adds.
  * <p>
- * This implements a default value in the new color accessor added by both Rubidium and Embeddium,
+ * This implements a default value in the new color accessor added by Sodium,
  * which bypasses vanilla's query entirely (and so our normal default mixin does not get used)
- * <ul>
- *     <li>Rubidium adds {@code getColorProvider} in <a href="https://github.com/Asek3/Rubidium/blob/1.20/dev/src/main/java/me/jellysquid/mods/sodium/mixin/core/model/MixinItemColors.java">{@code ItemColorsMixin}</a></li>
- *     <li>Embeddum adds {@code sodium$getColorProvider} in <a href="https://github.com/embeddedt/embeddium/blob/20.1/forge/src/main/java/me/jellysquid/mods/sodium/mixin/core/model/colors/ItemColorsMixin.java">{@code ItemColorsMixin}</a></li>
- * </ul>
+ * <li>Sodium adds {@code sodium$getColorProvider} in <a href="https://github.com/CaffeineMC/sodium/blob/1.21.1/stable/common/src/main/java/net/caffeinemc/mods/sodium/mixin/core/model/colors/ItemColorsMixin.java">{@code ItemColorsMixin}</a></li>
  */
 @Mixin(value = ItemColors.class, priority = 2000)
 public abstract class ItemColorsMixin
@@ -36,8 +33,7 @@ public abstract class ItemColorsMixin
     @Inject(
         at = @At("TAIL"),
         target = {
-            @Desc(value = "getColorProvider", args = {ItemStack.class}, ret = ItemColor.class), // Rubidium
-            @Desc(value = "sodium$getColorProvider", args = {ItemStack.class}, ret = ItemColor.class) // Embeddium
+            @Desc(value = "sodium$getColorProvider", args = {ItemStack.class}, ret = ItemColor.class)
         },
         cancellable = true,
         require = 0,

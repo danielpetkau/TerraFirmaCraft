@@ -7,17 +7,16 @@
 package net.dries007.tfc.common.blockentities;
 
 import java.util.Optional;
-
-import org.apache.commons.lang3.tuple.Pair;
-
-import net.dries007.tfc.common.blocks.devices.ChannelBlock;
-import net.dries007.tfc.util.Helpers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.state.BlockState;
+import org.apache.commons.lang3.tuple.Pair;
+
+import net.dries007.tfc.common.blocks.devices.ChannelBlock;
+import net.dries007.tfc.util.Helpers;
 
 public class ChannelBlockEntity extends TFCBlockEntity
 {
@@ -29,7 +28,7 @@ public class ChannelBlockEntity extends TFCBlockEntity
     /***
      * The direction where the flow is coming from,
      * as well as the distance (for downwards flow)
-     * 
+     *
      * Empty if the channel does not have a flow currently.
      */
     private Optional<Pair<Direction, Byte>> flowSource = Optional.empty();
@@ -42,7 +41,7 @@ public class ChannelBlockEntity extends TFCBlockEntity
 
     /***
      * Number of flows that go through this channel.
-     * 
+     *
      * If a crucible is connected to 3 mold tables, each connection
      * has a path of channels from crucible to mold table. numFlows
      * is a counter of how many connections go through this channel.
@@ -83,7 +82,7 @@ public class ChannelBlockEntity extends TFCBlockEntity
     }
 
     public void setLinkProperties(Pair<Direction, Byte> flowSource, boolean isConnectedToAnotherChannel, int numFlows,
-            ResourceLocation fluid)
+                                  ResourceLocation fluid)
     {
         this.flowSource = Optional.of(flowSource);
         this.isConnectedToAnotherChannel = isConnectedToAnotherChannel;
@@ -101,7 +100,7 @@ public class ChannelBlockEntity extends TFCBlockEntity
      * it filled the mold, it was broken, etc.) it notifies to its
      * source channel that it has finished accepting flow. This
      * notification is propagated upstream the channels.
-     * 
+     *
      * Every channel that is notified reduces the internal counter of
      * flows going through the channel, and when this counter reaches
      * 0 then all flows through the channel are finished and this
@@ -109,16 +108,15 @@ public class ChannelBlockEntity extends TFCBlockEntity
      */
     public void notifyBrokenLink(int linksBroken)
     {
+        if (level == null)
+            return;
         numFlows -= linksBroken;
 
-        if (level != null)
-        {
-            flowSource.ifPresent(
-                    fs -> level.getBlockEntity(
-                            worldPosition.relative(fs.getLeft(), fs.getRight()), TFCBlockEntities.CHANNEL.get())
-                            .ifPresent(
-                                    channel -> channel.notifyBrokenLink(linksBroken)));
-        }
+        flowSource.ifPresent(
+            fs -> level.getBlockEntity(
+                    worldPosition.relative(fs.getLeft(), fs.getRight()), TFCBlockEntities.CHANNEL.get())
+                .ifPresent(
+                    channel -> channel.notifyBrokenLink(linksBroken)));
 
         if (numFlows <= 0)
         {
@@ -152,8 +150,8 @@ public class ChannelBlockEntity extends TFCBlockEntity
         if (isConnectedToAnotherChannel)
         {
             Optional<ChannelBlockEntity> blockEntity = level.getBlockEntity(
-                    expectedSourcePos,
-                    TFCBlockEntities.CHANNEL.get());
+                expectedSourcePos,
+                TFCBlockEntities.CHANNEL.get());
 
             if (blockEntity.isEmpty())
             {
@@ -174,8 +172,8 @@ public class ChannelBlockEntity extends TFCBlockEntity
         else // If expecting a crucible, then set broken only if crucible is not there
         {
             Optional<CrucibleBlockEntity> blockEntity = level.getBlockEntity(
-                    expectedSourcePos,
-                    TFCBlockEntities.CRUCIBLE.get());
+                expectedSourcePos,
+                TFCBlockEntities.CRUCIBLE.get());
 
             return blockEntity.isEmpty();
         }
@@ -192,8 +190,8 @@ public class ChannelBlockEntity extends TFCBlockEntity
         byte flowSourceDistance = nbt.contains("flowSourceDistance") ? nbt.getByte("flowSourceDistance") : 1;
 
         flowSource = flowSourceByte != NO_FLOW_BYTE
-                ? Optional.of(Pair.of(Helpers.DIRECTIONS[flowSourceByte], flowSourceDistance))
-                : Optional.empty();
+            ? Optional.of(Pair.of(Helpers.DIRECTIONS[flowSourceByte], flowSourceDistance))
+            : Optional.empty();
 
         fluid = ResourceLocation.parse(nbt.getString("texture"));
         super.loadAdditional(nbt, provider);
@@ -204,7 +202,7 @@ public class ChannelBlockEntity extends TFCBlockEntity
     {
         nbt.putByte("numFlowsOut", (byte) numFlows);
         nbt.putBoolean("useLongRenderBox", isConnectedToAnotherChannel);
-        nbt.putByte("flowSource", flowSource.isPresent() ? (byte) flowSource.get().getLeft().ordinal() : NO_FLOW_BYTE);
+        nbt.putByte("flowSource", flowSource.map(directionBytePair -> (byte) directionBytePair.getLeft().ordinal()).orElse(NO_FLOW_BYTE));
         nbt.putByte("flowSourceDistance", flowSource.isPresent() ? flowSource.get().getRight() : 1);
         nbt.putString("texture", fluid.toString());
         super.saveAdditional(nbt, provider);

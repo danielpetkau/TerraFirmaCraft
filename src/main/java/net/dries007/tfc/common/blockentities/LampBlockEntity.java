@@ -28,6 +28,7 @@ public class LampBlockEntity extends TickCounterBlockEntity implements FluidTank
 {
     protected FluidTank tank;
     private final SidedHandler<IFluidHandler> sidedFluidInventory;
+    private @Nullable LampFuel cachedFuel;
 
     public LampBlockEntity(BlockPos pos, BlockState state)
     {
@@ -46,8 +47,7 @@ public class LampBlockEntity extends TickCounterBlockEntity implements FluidTank
     @Nullable
     public LampFuel getFuel()
     {
-        assert level != null;
-        return LampFuel.get(tank.getFluid().getFluid(), level.getBlockState(getBlockPos()));
+        return LampFuel.get(tank.getFluid().getFluid(), getBlockState());
     }
 
     /**
@@ -64,13 +64,32 @@ public class LampBlockEntity extends TickCounterBlockEntity implements FluidTank
             return;
         }
 
-        final @Nullable LampFuel fuel = getFuel();
+        @Nullable LampFuel fuel = getFuel();
         if (fuel == null)
         {
-            // No fuel, so always unlit
-            resetCounter();
-            level.setBlockAndUpdate(worldPosition, state.setValue(LampBlock.LIT, false));
-            return;
+            // getFuel can also return null if called by a random tick during world close, but the LampFuel cache will be empty by that point
+            // which turns the lamp off even if it has actual fuel in it.
+
+            // This has to cover multiple cases:
+            // - tank is empty = lamp is truly empty
+            // - cachedFuel is not null = still fuel
+            // - cachedFuel is null and the tank is not empty = the fluid in the lamp is not a fuel
+            if (cachedFuel == null || tank.isEmpty())
+            {
+                // No fuel, so always unlit
+                resetCounter();
+                level.setBlockAndUpdate(worldPosition, state.setValue(LampBlock.LIT, false));
+                return;
+            }
+            else
+            {
+                // Hopefully this is safe to use here
+                fuel = cachedFuel;
+            }
+        }
+        else
+        {
+            cachedFuel = fuel;
         }
 
         // Consume an appropriate amount of fuel based on how long the lamp has been since it last updated
@@ -93,6 +112,7 @@ public class LampBlockEntity extends TickCounterBlockEntity implements FluidTank
     public void loadAdditional(CompoundTag tag, HolderLookup.Provider provider)
     {
         tank.readFromNBT(provider, tag.getCompound("tank"));
+        cachedFuel = getFuel();
         super.loadAdditional(tag, provider);
     }
 
@@ -103,6 +123,7 @@ public class LampBlockEntity extends TickCounterBlockEntity implements FluidTank
         super.saveAdditional(tag, provider);
     }
 
+    @Nullable
     public IFluidHandler getSidedFluidInventory(@Nullable Direction context)
     {
         return sidedFluidInventory.get(context);

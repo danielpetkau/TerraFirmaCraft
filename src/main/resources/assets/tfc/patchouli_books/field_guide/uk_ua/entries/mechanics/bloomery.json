@@ -34,7 +34,7 @@
     },
     {
       "type": "patchouli:text",
-      "text": "The bloomery consumes $(thing)2 Charcoal$(), and $(thing)100 mB of Cast Iron$() to produce one $(thing)Bloom$(). After filling the bloomery with a combination of $(thing)Charcoal$() and $(thing)Ore$(), light the bloomery block, and wait 15 hours for the bloomery to smelt. When the bloomery shuts off, it leaves behind a $(thing)Bloom$() block. This contains $(thing)Raw Iron Blooms$() which can be obtained by mining the $(thing)Bloom$() repeatedly with a pickaxe."
+      "text": "The bloomery consumes $(thing)2 Charcoal$(), and $(thing)100 mB of Cast Iron$() to produce one $(thing)Bloom$(). After filling the bloomery with a combination of $(thing)Charcoal$() and $(thing)Ore$(), light the bloomery block, and wait 12 hours for the bloomery to smelt. When the bloomery shuts off, it leaves behind a $(thing)Bloom$() block. This contains $(thing)Raw Iron Blooms$() which can be obtained by mining the $(thing)Bloom$() repeatedly with a pickaxe."
     },
     {
       "type": "patchouli:multiblock",

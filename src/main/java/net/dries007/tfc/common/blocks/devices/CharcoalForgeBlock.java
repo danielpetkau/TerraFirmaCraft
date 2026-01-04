@@ -7,6 +7,8 @@
 package net.dries007.tfc.common.blocks.devices;
 
 import java.util.function.BiPredicate;
+
+import net.dries007.tfc.config.TFCConfig;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
@@ -14,6 +16,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.ItemInteractionResult;
@@ -134,6 +137,33 @@ public class CharcoalForgeBlock extends DeviceBlock implements IBellowsConsumer
     protected BlockState updateShape(BlockState state, Direction facing, BlockState facingState, LevelAccessor world, BlockPos currentPos, BlockPos facingPos)
     {
         return state.getValue(HEAT) > 0 && !isValid(world, currentPos) ? state.setValue(HEAT, 0) : state;
+    }
+
+    @Override
+    protected boolean hasAnalogOutputSignal(BlockState state)
+    {
+        return TFCConfig.SERVER.charcoalForgeEnableAutomation.get();
+    }
+
+    @Override
+    protected int getAnalogOutputSignal(BlockState state, Level level, BlockPos pos)
+    {
+        if (level.getBlockEntity(pos) instanceof CharcoalForgeBlockEntity charcoalForge)
+        {
+            if (!charcoalForge.getInventory().getStackInSlot(0).isEmpty())
+            {
+                final int maxSlot = CharcoalForgeBlockEntity.SLOT_FUEL_MAX;
+                for (int i = 0; i <= maxSlot; i++)
+                {
+                    if (charcoalForge.getInventory().getStackInSlot(i).isEmpty())
+                    {
+                        return Mth.clamp(i * 15 / (maxSlot + 1), 1, 15);
+                    }
+                }
+                return 15;
+            }
+        }
+        return 0;
     }
 
     @Override

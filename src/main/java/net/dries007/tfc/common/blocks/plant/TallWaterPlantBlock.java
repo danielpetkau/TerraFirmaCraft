@@ -9,7 +9,10 @@ package net.dries007.tfc.common.blocks.plant;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
@@ -72,6 +75,8 @@ public abstract class TallWaterPlantBlock extends TFCTallGrassBlock implements I
         BlockState belowState = level.getBlockState(pos.below());
         if (state.getValue(PART) == Part.LOWER)
         {
+            if (state.getValue(getFluidProperty()).getFluid().getFluidType().isAir())
+                return false;
             if (Helpers.isBlock(state, TFCTags.Blocks.HALOPHYTE))
             {
                 return Helpers.isBlock(belowState, TFCTags.Blocks.HALOPHYTE_PLANTABLE_ON);
@@ -88,7 +93,9 @@ public abstract class TallWaterPlantBlock extends TFCTallGrassBlock implements I
         }
     }
 
-    //Used on player placement, not worldgen
+    /**
+     *  Used on player placement, not worldgen
+     */
     @Override
     @Nullable
     public BlockState getStateForPlacement(BlockPlaceContext context)
@@ -101,8 +108,30 @@ public abstract class TallWaterPlantBlock extends TFCTallGrassBlock implements I
         {
             state = state.setValue(getFluidProperty(), getFluidProperty().keyFor(fluidState.getType()));
         }
+        else
+        {
+            return null;
+        }
+
+        FluidState fluidState2 = context.getLevel().getFluidState(pos.above());
+        if (!getFluidProperty().canContain(fluidState2.getType()))
+        {
+            return null;
+        }
 
         return pos.getY() < context.getLevel().getMaxBuildHeight() - 1 && context.getLevel().getBlockState(pos.above()).canBeReplaced(context) ? state : null;
+    }
+
+    @Override
+    public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack)
+    {
+        final BlockState upper = FluidHelpers.fillWithFluid(defaultBlockState().setValue(PART, Part.UPPER), level.getFluidState(pos.above()).getType());
+        if (upper == null)
+        {
+            level.destroyBlock(pos, true);
+            return;
+        }
+        level.setBlockAndUpdate(pos.above(), upper);
     }
 
     @Override
@@ -111,7 +140,9 @@ public abstract class TallWaterPlantBlock extends TFCTallGrassBlock implements I
         super.createBlockStateDefinition(builder.add(getFluidProperty()));
     }
 
-    //Used in worldgen, not on player placement
+    /**
+     *  Used on world gen, not player placement
+     */
     @Override
     public void placeTwoHalves(LevelAccessor level, BlockPos pos, int flags, RandomSource random)
     {

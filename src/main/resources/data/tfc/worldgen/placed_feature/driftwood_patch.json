@@ -8,9 +8,6 @@
     },
     {
       "type": "minecraft:in_square"
-    },
-    {
-      "type": "tfc:biome"
     }
   ]
 }

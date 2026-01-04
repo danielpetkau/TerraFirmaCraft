@@ -15,19 +15,19 @@
     "tfc:seeds/cabbage",
     "tfc:seeds/carrot",
     "tfc:seeds/garlic",
-    "tfc:seeds/potato",
     "tfc:seeds/onion",
+    "tfc:seeds/potato",
     "tfc:seeds/squash",
     "tfc:seeds/tomato",
     "tfc:seeds/red_bell_pepper",
     "tfc:seeds/yellow_bell_pepper",
     "tfc:seeds/pumpkin",
     "tfc:seeds/melon",
-    "tfc:seeds/alfalfa",
     "tfc:seeds/canola",
     "tfc:seeds/radish",
+    "tfc:seeds/alfalfa",
     "tfc:seeds/jute",
-    "tfc:seeds/sugarcane",
-    "tfc:seeds/papyrus"
+    "tfc:seeds/papyrus",
+    "tfc:seeds/sugarcane"
   ]
 }

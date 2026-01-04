@@ -72,6 +72,7 @@ public class BuiltinItemSizes extends DataManagerProvider<ItemSizeDefinition> im
         add("large_vessels", TFCTags.Items.LARGE_VESSELS, Size.HUGE, Weight.HEAVY);
         add("unfired_molds", TFCTags.Items.UNFIRED_MOLDS, Size.NORMAL, Weight.MEDIUM);
         add("fired_molds", TFCTags.Items.FIRED_MOLDS, Size.NORMAL, Weight.MEDIUM);
+        add("unfired_crucible", TFCItems.UNFIRED_CRUCIBLE, Size.LARGE, Weight.HEAVY);
         add("powders", TFCTags.Items.BOWL_POWDERS, Size.TINY, Weight.VERY_LIGHT);
         add("stick_bunch", TFCItems.STICK_BUNCH, Size.NORMAL, Weight.LIGHT);
         add("stick_bundle", TFCItems.STICK_BUNDLE, Size.VERY_LARGE, Weight.MEDIUM);
@@ -88,23 +89,34 @@ public class BuiltinItemSizes extends DataManagerProvider<ItemSizeDefinition> im
         add("soups", TFCTags.Items.SOUPS, Size.VERY_SMALL, Weight.MEDIUM);
         add("salads", TFCTags.Items.SALADS, Size.VERY_SMALL, Weight.MEDIUM);
         add("bloomery", TFCBlocks.BLOOMERY, Size.LARGE, Weight.VERY_HEAVY);
+        add("calendar_clock", TFCBlocks.CALENDAR_CLOCK, Size.NORMAL, Weight.MEDIUM);
         add("mold_tables", ingredientOf(
             Ingredient.of(TFCItems.UNFIRED_MOLD_TABLE), 
             Ingredient.of(TFCBlocks.MOLD_TABLE)
         ), Size.HUGE, Weight.HEAVY);
+        add("vane", TFCBlocks.VANE, Size.NORMAL, Weight.MEDIUM);
+        add("anemometer", TFCBlocks.VANE, Size.NORMAL, Weight.MEDIUM);
         add("small_tools", ingredientOf(
             Ingredient.of(TFCTags.Items.TOOLS_CHISEL),
             Ingredient.of(TFCTags.Items.TOOLS_KNIFE),
             Ingredient.of(Tags.Items.TOOLS_SHEAR),
-            Ingredient.of(TFCTags.Items.TOOLS_GLASSWORKING),
-            Ingredient.of(TFCTags.Items.TOOLS_BLOWPIPE),
             Ingredient.of(TFCItems.FIRESTARTER.get())
         ), Size.LARGE, Weight.MEDIUM);
         add("tools", ingredientOf(
+            Ingredient.of(ItemTags.PICKAXES),
+            Ingredient.of(ItemTags.SHOVELS),
+            Ingredient.of(ItemTags.HOES),
+            Ingredient.of(TFCTags.Items.TOOLS_HAMMER),
+            Ingredient.of(TFCTags.Items.TOOLS_SAW),
+            Ingredient.of(TFCTags.Items.TOOLS_SCYTHE),
+            Ingredient.of(TFCTags.Items.TOOLS_PROPICK),
+
             Ingredient.of(Tags.Items.TOOLS_FISHING_ROD),
             Ingredient.of(Tags.Items.TOOLS_SHIELD),
             Ingredient.of(Tags.Items.MELEE_WEAPON_TOOLS),
             Ingredient.of(Tags.Items.RANGED_WEAPON_TOOLS),
+            Ingredient.of(TFCTags.Items.BLOWPIPES),
+            Ingredient.of(TFCTags.Items.TOOLS_GLASSWORKING),
             Ingredient.of(Tags.Items.TOOLS_MACE)
         ), Size.VERY_LARGE, Weight.VERY_HEAVY);
         add("plants", TFCTags.Items.PLANTS, Size.TINY, Weight.VERY_LIGHT);

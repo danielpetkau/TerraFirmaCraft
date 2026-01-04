@@ -45,6 +45,11 @@ public class PotBlock extends FirepitBlock
         super(properties, POT_SHAPE);
     }
 
+    public PotBlock(ExtendedProperties properties, VoxelShape shape)
+    {
+        super(properties, shape);
+    }
+
     @Override
     public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random)
     {
@@ -71,7 +76,7 @@ public class PotBlock extends FirepitBlock
         {
             if (!pot.isBoiling() && stack.isEmpty() && player.isShiftKeyDown())
             {
-                if (!state.getValue(LIT) && !pot.isBoiling() && !state.getValue(LIT) && pot.getAsh() > 0)
+                if (!state.getValue(LIT) && !pot.isBoiling() && pot.getAsh() > 0)
                 {
                     ItemHandlerHelper.giveItemToPlayer(player, new ItemStack(TFCItems.POWDERS.get(Powder.WOOD_ASH).get(), pot.getAsh()));
                     pot.setAsh(0);

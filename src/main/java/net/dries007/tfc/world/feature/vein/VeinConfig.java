@@ -32,7 +32,6 @@ public record VeinConfig(
     boolean projectToSurface,
     boolean projectOffset,
     long seed,
-    Optional<TagKey<Biome>> biomes,
     boolean nearLava
 ) {
     public static final MapCodec<VeinConfig> CODEC = RecordCodecBuilder.mapCodec(instance -> {
@@ -53,7 +52,6 @@ public record VeinConfig(
                 VeinConfig::hash,
                 l -> l
             ), Either::right).fieldOf("random_name").forGetter(c -> c.seed),
-            codec.optionalFieldOf("biomes").forGetter(c -> c.biomes),
             Codec.BOOL.optionalFieldOf("near_lava", false).forGetter(c -> c.nearLava)
         ).apply(instance, VeinConfig::new);
     });

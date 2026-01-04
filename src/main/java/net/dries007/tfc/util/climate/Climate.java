@@ -9,7 +9,6 @@ package net.dries007.tfc.util.climate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
 import net.neoforged.neoforge.common.NeoForge;
 
 import net.dries007.tfc.util.calendar.Calendars;
@@ -43,24 +42,24 @@ public final class Climate
         WorldTracker.get(level).setClimateModel(event.getModel());
     }
 
-    public static float getTemperature(Level level, BlockPos pos, long calendarTick, int daysInMonth)
+    public static float getInstantTemperature(Level level, BlockPos pos, long calendarTick, int daysInMonth)
     {
-        return get(level).getTemperature(level, pos, calendarTick, daysInMonth);
+        return get(level).getInstantTemperature(level, pos, calendarTick, daysInMonth);
     }
 
-    public static float getTemperature(Level level, BlockPos pos, ICalendar calendar, long calendarTick)
+    public static float getInstantTemperature(Level level, BlockPos pos, ICalendar calendar, long calendarTick)
     {
-        return get(level).getTemperature(level, pos, calendarTick, calendar.getCalendarDaysInMonth());
+        return get(level).getInstantTemperature(level, pos, calendarTick, calendar.getCalendarDaysInMonth());
     }
 
-    public static float getTemperature(Level level, BlockPos pos, ICalendar calendar)
+    public static float getInstantTemperature(Level level, BlockPos pos, ICalendar calendar)
     {
-        return get(level).getTemperature(level, pos, calendar.getCalendarTicks(), calendar.getCalendarDaysInMonth());
+        return get(level).getInstantTemperature(level, pos, calendar.getCalendarTicks(), calendar.getCalendarDaysInMonth());
     }
 
-    public static float getTemperature(Level level, BlockPos pos)
+    public static float getInstantTemperature(Level level, BlockPos pos)
     {
-        return getTemperature(level, pos, Calendars.get(level));
+        return getInstantTemperature(level, pos, Calendars.get(level));
     }
 
     public static float getAverageTemperature(Level level, BlockPos pos)
@@ -68,7 +67,7 @@ public final class Climate
         return get(level).getAverageTemperature(level, pos);
     }
 
-    public static float getRainfall(Level level, BlockPos pos)
+    public static float getAverageRainfall(Level level, BlockPos pos)
     {
         return get(level).getAverageRainfall(level, pos);
     }
@@ -78,7 +77,7 @@ public final class Climate
         return get(level).getRainfallVariance(level, pos);
     }
 
-    public static float getGroundwater(Level level, BlockPos pos)
+    public static float getAverageGroundwater(Level level, BlockPos pos)
     {
         return get(level).getAverageGroundwater(level, pos);
     }

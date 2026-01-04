@@ -10,7 +10,7 @@
     },
     {
       "type": "tfc:knapping_recipe",
-      "recipe": "tfc:knapping/ceramic/unfired_channel_4",
+      "recipe": "tfc:knapping/ceramic/unfired_channel_2",
       "text": "$(l:getting_started/pottery#knapping)Knapping$() several $(thing)Unfired Channels$()."
     },
     {

@@ -63,6 +63,7 @@ public final class FoodCapability
 
     /**
      * Applies {@code trait} to {@code stack}, and updates the creation date to preserve the decay proportion of the food.
+     * Only applies the trait if the food is not rotten.
      */
     public static ItemStack applyTrait(ItemStack stack, Holder<FoodTrait> trait)
     {
@@ -79,11 +80,12 @@ public final class FoodCapability
 
     /**
      * Removes {@code trait} from {@code stack}, and updates the creation date to preserve the decay proportion of the food.
+     * Removes the trait even if the food is rotten, because food rotting in vessels can still be preserved, sealed in vinegar, etc.
      */
     public static ItemStack removeTrait(ItemStack stack, Holder<FoodTrait> trait)
     {
         final @Nullable FoodComponent food = stack.get(TFCComponents.FOOD);
-        if (food != null && food.hasTrait(trait) && !food.isRotten())
+        if (food != null && food.hasTrait(trait))
         {
             stack.set(TFCComponents.FOOD, food.withTraitRemoved(
                 trait,
@@ -334,12 +336,31 @@ public final class FoodCapability
         return ((tick - 1) / window + 1) * window;
     }
 
+    public static ItemStack roundCreationDate(ItemStack stack)
+    {
+        final @Nullable FoodComponent food = stack.get(TFCComponents.FOOD);
+        
+        if (food != null)
+        {
+            if (food.getCreationDate() == IFood.ROTTEN_FLAG
+                || food.getCreationDate() == IFood.NEVER_DECAY_FLAG
+                || food.getCreationDate() == IFood.INVISIBLE_NEVER_DECAY_FLAG
+                || food.getCreationDate() == IFood.TRANSIENT_NEVER_DECAY_FLAG)
+            {
+                return stack;
+            }
+            
+            stack.set(TFCComponents.FOOD, food.with(getRoundedCreationDate(food.getCreationDate())));
+        }
+        return stack;
+    }
+
     /**
      * @return {@code true} if the food is rotten based on the internal (flagged) creation date, and the decay date modifier
      */
     public static boolean isRotten(long creationDate, float decayDateModifier)
     {
-        if (creationDate == IFood.TRANSIENT_NEVER_DECAY_FLAG || creationDate == IFood.NEVER_DECAY_FLAG)
+        if (creationDate == IFood.TRANSIENT_NEVER_DECAY_FLAG || creationDate == IFood.NEVER_DECAY_FLAG || creationDate == IFood.INVISIBLE_NEVER_DECAY_FLAG)
         {
             return false; // Food can never be rotten
         }
@@ -397,12 +418,24 @@ public final class FoodCapability
      * via 1. > (1 - p) * T + p * T = T
      * QED
      * </pre>
+     *
      * @param ci The initial creation date
      * @param p  The decay date modifier (1 / standard decay modifier)
-     * @return cf the final creation date, rounded to the nearest hour, for ease of stackability.
+     * @return cf the final creation date
      */
     private static long calculateNewCreationDate(long ci, float p)
     {
+        if (ci == IFood.ROTTEN_FLAG)
+        {
+            // Shouldn't be possible to reach this normally, but if it's rotten it should stay rotten
+            return ci;
+        }
+        if (ci == IFood.INVISIBLE_NEVER_DECAY_FLAG || ci == IFood.NEVER_DECAY_FLAG)
+        {
+            // Without this, foods with these flags will result in
+            // fresh OR rotten food depending on how old the world is
+            ci = getRoundedCreationDate();
+        }
         // Cf = (1 - p) * T + p * Ci
         return (long) ((1 - p) * Calendars.get().getTicks() + p * ci);
     }

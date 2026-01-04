@@ -2377,6 +2377,12 @@
     "tfc:fire_brick_shelf",
     "tfc:fireproof_door",
     "tfc:firebox",
+    "tfc:vane",
+    "tfc:anemometer",
+    "tfc:stove",
+    "tfc:stove_pot",
+    "tfc:stove",
+    "tfc:stove_pot",
     "tfc:icicle",
     "tfc:sea_ice",
     "tfc:ice_pile",
@@ -2405,6 +2411,9 @@
     "tfc:brass_bell",
     "tfc:ceramic/large_vessel",
     "tfc:mold_table",
-    "tfc:channel"
+    "tfc:channel",
+    "tfc:calendar_clock",
+    "tfc:thermometer",
+    "tfc:creative_motor"
   ]
 }

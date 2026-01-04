@@ -11,6 +11,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
 import javax.annotation.Nullable;
+
+import net.dries007.tfc.common.capabilities.PartialItemHandler;
+import net.dries007.tfc.config.TFCConfig;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
@@ -18,6 +21,7 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -25,6 +29,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.DoorBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.phys.AABB;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.ItemStackHandler;
 
@@ -41,7 +47,7 @@ import net.dries007.tfc.util.calendar.ICalendar;
 import net.dries007.tfc.util.calendar.ICalendarTickable;
 import net.dries007.tfc.util.data.Fuel;
 
-public class FireboxBlockEntity extends TickableInventoryBlockEntity<ItemStackHandler> implements ICalendarTickable
+public class FireboxBlockEntity extends TickableInventoryBlockEntity<ItemStackHandler> implements ICalendarTickable, IHeatable, IRecipeTimer
 {
     public static void serverTick(Level level, BlockPos pos, BlockState state, FireboxBlockEntity box)
     {
@@ -68,7 +74,7 @@ public class FireboxBlockEntity extends TickableInventoryBlockEntity<ItemStackHa
             box.airTicks--;
         }
 
-        // Always update temperature / cooking, until the fire pit is not hot anymore
+        // Always update temperature / cooking, until the fire box is not hot anymore
         if (box.temperature > 0 || box.burnTemperature > 0)
         {
             box.temperature = HeatCapability.adjustDeviceTemp(box.temperature, box.burnTemperature, box.airTicks, false);
@@ -86,7 +92,7 @@ public class FireboxBlockEntity extends TickableInventoryBlockEntity<ItemStackHa
         if (level.getGameTime() % 200 == 0)
         {
             final int oldCap = box.heatingCount;
-            box.operableBlocks = floodfill(level, pos.above(), box);
+            box.operableBlocks = floodfill(level, pos, box);
             if (oldCap != box.operableBlocks.size())
             {
                 box.heatingCount = box.operableBlocks.size();
@@ -94,6 +100,9 @@ public class FireboxBlockEntity extends TickableInventoryBlockEntity<ItemStackHa
                 box.markForSync();
             }
         }
+
+        // todo: the kiln should light players on fire
+
         if (box.temperature == 0 || box.heatingCount < 4 || Math.abs(box.temperature - box.burnTemperature) > BellowsBlockEntity.MAX_DEVICE_AIR_TICKS + 1)
             box.heatingTimestamp = Calendars.SERVER.getTicks();
         if (box.getTimeLeft() <= 0)
@@ -113,8 +122,9 @@ public class FireboxBlockEntity extends TickableInventoryBlockEntity<ItemStackHa
         final List<BlockPos> positions = new ArrayList<>(!firebox.operableBlocks.isEmpty() ? firebox.operableBlocks.size() : 16);
         final Queue<Path> queue = new ArrayDeque<>();
 
-        positions.add(pos);
-        queue.add(new Path(pos, 0));
+        final BlockPos abovePos = pos.above();
+        positions.add(abovePos);
+        queue.add(new Path(abovePos, 0));
 
         int capacity = firebox.getTotalHeatableBlocks();
 
@@ -129,10 +139,10 @@ public class FireboxBlockEntity extends TickableInventoryBlockEntity<ItemStackHa
                 break;
             }
 
-            for (Direction direction : NOT_DOWN)
+            for (Direction direction : Helpers.DIRECTIONS)
             {
                 cursor.setWithOffset(current.pos, direction);
-                if (!positions.contains(cursor.immutable()))
+                if (!positions.contains(cursor.immutable()) && !cursor.equals(pos))
                 {
                     final BlockState state = level.getBlockState(cursor);
                     if (!isValidExterior(level, cursor, state, direction))
@@ -140,6 +150,20 @@ public class FireboxBlockEntity extends TickableInventoryBlockEntity<ItemStackHa
                         if (isValidInterior(state))
                         {
                             final BlockPos posNext = cursor.immutable();
+
+                            // check if this block is adjacent to or below the firebox, which invalidates the kiln
+                            // (in this case the firebox is not below the structure, or is inside the structure)
+                            for (Direction direction1 : Helpers.DIRECTIONS)
+                            {
+                                if (direction1 != Direction.UP)
+                                {
+                                    if (posNext.equals(pos.relative(direction1)))
+                                    {
+                                        positions.clear();
+                                        break;
+                                    }
+                                }
+                            }
 
                             queue.add(new Path(posNext, current.cost + 1));
                             positions.add(posNext);
@@ -159,35 +183,34 @@ public class FireboxBlockEntity extends TickableInventoryBlockEntity<ItemStackHa
     private static void performHeating(Level level, FireboxBlockEntity firebox, List<BlockPos> filled)
     {
         filled.forEach(testPos -> {
-            if (level.getBlockEntity(testPos) instanceof PlacedItemBlockEntity)
+            if (level.getBlockEntity(testPos) instanceof PlacedItemBlockEntity placedItem)
             {
                 if (level instanceof ServerLevel server && level.random.nextFloat() < 0.01f)
                     server.sendParticles(ParticleTypes.FLAME, testPos.getX() + 0.5, testPos.getY() + 0.5, testPos.getZ() + 0.5, 1, 0, 0, 0, 0.01);
-                if (level.getBlockEntity(testPos) instanceof PlacedItemBlockEntity placedItem)
+                final IItemHandler inv = placedItem.getInventory();
+                for (int i = 0; i < inv.getSlots(); i++)
                 {
-                    final IItemHandler inv = placedItem.getInventory();
-                    for (int i = 0; i < inv.getSlots(); i++)
+                    final ItemStack item = inv.getStackInSlot(i);
+                    final IHeat heat = HeatCapability.get(item);
+                    if (heat != null)
                     {
-                        final ItemStack item = inv.getStackInSlot(i);
-                        final IHeat heat = HeatCapability.get(item);
-                        if (heat != null)
+                        HeatCapability.addTemp(heat, firebox.temperature);
+                        if (level.getGameTime() % 20 == 0)
                         {
-                            HeatCapability.addTemp(heat, firebox.temperature);
-                            if (level.getGameTime() % 20 == 0)
+                            final HeatingRecipe recipe = HeatingRecipe.getRecipe(item);
+                            if (recipe != null && recipe.matches(item) && recipe.isValidTemperature(heat.getTemperature()))
                             {
-                                final HeatingRecipe recipe = HeatingRecipe.getRecipe(item);
-                                if (recipe != null && recipe.matches(item) && recipe.isValidTemperature(heat.getTemperature()))
-                                {
-                                    final ItemStack output = recipe.assembleItem(item);
-                                    item.setCount(0);
-                                    inv.insertItem(i, output, false);
-                                    placedItem.markForSync();
-                                }
+                                final ItemStack output = recipe.assembleItem(item);
+                                item.setCount(0);
+                                inv.insertItem(i, output, false);
+                                placedItem.markForSync();
+                                placedItem.updateBlock();
                             }
                         }
                     }
                 }
-            }});
+            }
+        });
     }
 
     private static boolean isValidInterior(BlockState state)
@@ -219,6 +242,13 @@ public class FireboxBlockEntity extends TickableInventoryBlockEntity<ItemStackHa
         airTicks = 0;
         heatingCount = 0;
         heatingTimestamp = Calendars.SERVER.getTicks();
+
+        if (TFCConfig.SERVER.fireboxEnableAutomation.get())
+        {
+            sidedInventory
+                .on(new PartialItemHandler(inventory).insert(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15), Direction.Plane.HORIZONTAL)
+                .on(new PartialItemHandler(inventory).extract(0), Direction.DOWN);
+        }
     }
 
     /**
@@ -402,6 +432,18 @@ public class FireboxBlockEntity extends TickableInventoryBlockEntity<ItemStackHa
         lastPlayerTick = tick;
     }
 
+    @Override
+    public int getRecipeDuration()
+    {
+        return isHeating() ? getTimeToHeat() : 0;
+    }
+
+    @Override
+    public long getRemainingTime()
+    {
+        return isHeating() ? getTimeLeft() : 0;
+    }
+
     @Nullable
     @Override
     public AbstractContainerMenu createMenu(int windowID, Inventory playerInv, Player player)
@@ -429,5 +471,4 @@ public class FireboxBlockEntity extends TickableInventoryBlockEntity<ItemStackHa
         }
         needsSlotUpdate = false;
     }
-
 }

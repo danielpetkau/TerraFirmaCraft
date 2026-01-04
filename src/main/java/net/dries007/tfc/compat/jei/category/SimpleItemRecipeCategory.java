@@ -19,6 +19,7 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import org.jetbrains.annotations.Nullable;
 
 import net.dries007.tfc.common.recipes.ItemRecipe;
@@ -26,7 +27,7 @@ import net.dries007.tfc.compat.jei.JEIIntegration;
 
 public abstract class SimpleItemRecipeCategory<T extends ItemRecipe> extends BaseRecipeCategory<T>
 {
-    public SimpleItemRecipeCategory(RecipeType<T> type, IGuiHelper helper, ItemStack icon)
+    public SimpleItemRecipeCategory(RecipeType<RecipeHolder<T>> type, IGuiHelper helper, ItemStack icon)
     {
         super(type, helper, 98, 26, icon);
     }

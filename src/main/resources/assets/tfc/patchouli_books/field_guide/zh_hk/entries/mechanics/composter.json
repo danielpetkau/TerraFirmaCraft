@@ -15,7 +15,8 @@
     },
     {
       "type": "patchouli:text",
-      "text": "堆肥桶的工作效率會受其所在環境影響。若堆肥桶上方有積雪，工作效率會略微提升。處於降雨量小於 150mm 或大於 350mm 的氣候中時堆肥桶的效率會大幅降低 - 乾濕度越極端，效率降低得越多。最後，相鄰得其他堆肥桶會使工作效率降低。"
+      "text": "Composters operate better in certain conditions. Composters in regions of less than 150mm or greater than 350mm of rainfall operate much slower, with that effect getting stronger closer to the maximum and minimum rainfall. Also, composters that are touching other composters work slower.",
+      "title": "Working Conditions"
     },
     {
       "type": "tfc:multimultiblock",

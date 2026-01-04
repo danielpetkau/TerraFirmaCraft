@@ -10,7 +10,6 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
-import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.Holder;
@@ -18,8 +17,6 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.sounds.SoundEvent;
@@ -238,31 +235,38 @@ public class BarrelRecipe implements INoopInputRecipe, IRecipePredicate<BarrelIn
             this.onFinish = onFinish;
         }
 
-        public Builder input(ItemLike item) { return input(SizedIngredient.of(item, 1)); }
-        public Builder input(TagKey<Item> item) { return input(SizedIngredient.of(item, 1)); }
-        public Builder input(Ingredient item) { return input(new SizedIngredient(item, 1)); }
+        public Builder input(ItemLike item) {return input(SizedIngredient.of(item, 1));}
+
+        public Builder input(TagKey<Item> item) {return input(SizedIngredient.of(item, 1));}
+
+        public Builder input(Ingredient item) {return input(new SizedIngredient(item, 1));}
+
         public Builder input(SizedIngredient item)
         {
             this.inputItem = Optional.of(item);
             return this;
         }
 
-        public Builder input(TagKey<Fluid> fluid, int amount) { return input(SizedFluidIngredient.of(fluid, amount)); }
-        public Builder input(Fluid fluid, int amount)  { return input(SizedFluidIngredient.of(fluid, amount)); }
+        public Builder input(TagKey<Fluid> fluid, int amount) {return input(SizedFluidIngredient.of(fluid, amount));}
+
+        public Builder input(Fluid fluid, int amount) {return input(SizedFluidIngredient.of(fluid, amount));}
+
         public Builder input(SizedFluidIngredient fluid)
         {
             this.inputFluid = fluid;
             return this;
         }
 
-        public Builder output(ItemLike item) { return output(ItemStackProvider.of(item)); }
+        public Builder output(ItemLike item) {return output(ItemStackProvider.of(item));}
+
         public Builder output(ItemStackProvider item)
         {
             this.outputItem = item;
             return this;
         }
 
-        public Builder output(Fluid fluid, int amount) { return output(new FluidStack(fluid, amount)); }
+        public Builder output(Fluid fluid, int amount) {return output(new FluidStack(fluid, amount));}
+
         public Builder output(FluidStack fluid)
         {
             this.outputFluid = fluid;
@@ -280,7 +284,8 @@ public class BarrelRecipe implements INoopInputRecipe, IRecipePredicate<BarrelIn
             onFinish.accept(new InstantBarrelRecipe(parent()));
         }
 
-        public void instantOnAdd(Fluid fluid) { instantOnAdd(SizedFluidIngredient.of(fluid, 1)); }
+        public void instantOnAdd(Fluid fluid) {instantOnAdd(SizedFluidIngredient.of(fluid, 1));}
+
         public void instantOnAdd(SizedFluidIngredient addedFluid)
         {
             onFinish.accept(new InstantFluidBarrelRecipe(Objects.requireNonNull(inputFluid, "Missing input fluid"), addedFluid, outputFluid, sound));

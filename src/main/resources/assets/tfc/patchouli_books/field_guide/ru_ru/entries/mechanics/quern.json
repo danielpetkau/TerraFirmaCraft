@@ -1,29 +1,29 @@
 {
   "__comment__": "This file was automatically created by mcresources",
-  "name": "Жернов",
+  "name": "Жёрнов",
   "category": "tfc:mechanics",
   "icon": "tfc:quern",
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "$(thing)Жернов$() - это устройство для измельчения предметов. Он может производить порошки, $(l:mechanics/dye)красители$(), и некоторые другие предметы. Он собирается из $(thing)Основания$() и $(thing)Ручного камня$().$(br2)Жернов также может быть подключен к сети $(l:mechanics/mechanical_power#quern)Механической энергии$()."
+      "text": "$(thing)Жёрнов$() — это устройство для измельчения предметов. Он может производить порошки, $(l:mechanics/dye)красители$() и некоторые другие предметы. Он собирается из $(thing)основания$() и $(thing)ручного камня$().$(br2)Жёрнов также может быть запитан $(l:mechanics/mechanical_power#quern)механической энергией$()."
     },
     {
       "type": "patchouli:crafting",
       "recipe": "tfc:crafting/quern",
-      "text": "Основание жернова можно изготовить из трех $(thing)гладкого камня$() и трех блоков любого другого $(thing)Камня$()."
+      "text": "Основание жёрнова можно изготовить из трех $(thing)гладких камней$() и трех блоков любого другого $(thing)камня$()."
     },
     {
       "type": "patchouli:crafting",
       "recipe": "tfc:crafting/handstone",
-      "text": "Для работы жернова необходим $(thing)Ручной камень$()."
+      "text": "Для работы жёрнова необходим $(thing)ручной камень$()."
     },
     {
       "type": "patchouli:image",
       "images": [
         "tfc:textures/gui/book/tutorial/quern_empty.png"
       ],
-      "text": "Наведите на верхнюю часть блока жернова и $(item)$(k:key.use)$(), чтобы поставить ручной камень.",
+      "text": "Помотрите на верхнюю часть жёрнова и нажмите $(item)$(k:key.use)$(), чтобы поставить ручной жёрнов.",
       "border": true
     },
     {
@@ -31,7 +31,7 @@
       "images": [
         "tfc:textures/gui/book/tutorial/quern_add_item.png"
       ],
-      "text": "Используйте $(item)$(k:key.use)$() на верхней части ручного камня, чтобы добавить предметы.",
+      "text": "Используйте $(item)$(k:key.use)$() на верхней части жёрнова, чтобы добавить предметы.",
       "border": true
     },
     {
@@ -39,7 +39,7 @@
       "images": [
         "tfc:textures/gui/book/tutorial/quern_handle.png"
       ],
-      "text": "Используйте $(item)$(k:key.use)$() на ручке, чтобы вращать ручной камень.",
+      "text": "Зажмите $(item)$(k:key.use)$() на ручке, чтобы вращать жёрнов.",
       "border": true
     },
     {
@@ -47,33 +47,33 @@
       "images": [
         "tfc:textures/gui/book/tutorial/quern_result.png"
       ],
-      "text": "Продукция должна появиться на основании жернова. $(item)$(k:key.use)$() в любом месте основания, чтобы забрать её.",
+      "text": "Результат должен появиться на основании жёрнова. Нажмите на него $(item)$(k:key.use)$(), чтобы собрать.",
       "border": true
     },
     {
       "type": "tfc:quern_recipe",
       "recipe": "tfc:quern/powder/sulfur",
-      "text": "Жернов используется для изготовления различных $(thing)порошков$() из руд, например, $(thing)серы$()."
+      "text": "Жёрнов используется для изготовления различных $(thing)порошков$() из руд, например, $(thing)серы$()."
     },
     {
       "type": "tfc:quern_recipe",
       "recipe": "tfc:quern/red_dye",
-      "text": "$(l:mechanics/dye)Краситель$() можно получить из различных цветов."
+      "text": "$(l:mechanics/dye)Красители$() можно получить из различных цветов."
     },
     {
       "type": "tfc:quern_recipe",
       "recipe": "tfc:quern/powder/emerald",
-      "text": "$(thing)Драгоценные камни$() также могут быть измельчены в порошок."
+      "text": "$(thing)Драгоценные камни$() могут быть измельчены в порошок."
     },
     {
       "type": "tfc:quern_recipe",
       "recipe": "tfc:quern/food/barley_flour",
-      "text": "$(thing)Мука$() также доступна из жернова."
+      "text": "$(thing)Мука$() делается в жёрнове."
     },
     {
       "type": "tfc:quern_recipe",
       "recipe": "tfc:quern/powder/flux",
-      "text": "$(l:mechanics/flux)флюс$() также можно получить из жернова."
+      "text": "$(l:mechanics/flux)Флюс$() можно получить в жёрнове."
     }
   ],
   "read_by_default": true

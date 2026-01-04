@@ -74,7 +74,6 @@ public final class PlayerInfo extends net.minecraft.world.food.FoodData implemen
     private float thirst = MAX_THIRST; // The current thirst of the player
     private long lastDrinkTick = Long.MIN_VALUE;
     private long intoxicationTick = Long.MIN_VALUE; // A future tick that the player is intoxicated until
-    private long sleepTick = Long.MIN_VALUE; // The last tick this player slept
     private ChiselMode chiselMode = ChiselMode.SMOOTH.value();
     private INutritionData nutrition; // Nutrition information
 
@@ -139,19 +138,6 @@ public final class PlayerInfo extends net.minecraft.world.food.FoodData implemen
     }
 
     @Override
-    public int getPossibleSleepDuration()
-    {
-        final long sleepTicks = calendar().getFixedCalendarTicksFromTick((calendar().getTicks() - sleepTick) / 2);
-        return sleepTicks < ICalendar.CALENDAR_TICKS_IN_HOUR ? 0 : (int) sleepTicks;
-    }
-
-    @Override
-    public void resetSleepRestoration()
-    {
-        sleepTick = calendar().getTicks();
-    }
-
-    @Override
     public float getThirst()
     {
         return thirst;
@@ -169,7 +155,7 @@ public final class PlayerInfo extends net.minecraft.world.food.FoodData implemen
     {
         if (TFCConfig.SERVER.enableThirstOverheating.get())
         {
-            final float temp = Climate.getTemperature(player.level(), player.blockPosition());
+            final float temp = Climate.getInstantTemperature(player.level(), player.blockPosition());
             return Mth.clampedMap(temp, 22f, 34f, 0f, MAX_TEMPERATURE_THIRST_DECAY);
         }
         return 0;
@@ -211,6 +197,14 @@ public final class PlayerInfo extends net.minecraft.world.food.FoodData implemen
         addThirst(food.water());
         addIntoxication(food.intoxication());
 
+        // It is important to add nutrients before calling `FoodData#eat`, otherwise `getFoodLevel` will return the food level _after_ eating, instead of the food level at time of eating.
+        // We can't rely on `getLastFoodLevel` either since that value only gets set in `FoodData#tick`, so a tick-perfect call to this method would lead to an incorrect value being used.
+        // This only leaves splitting the call to `INutritionData#addNutrients` and the call to `INutritionData#setHungerAndUpdate` into separate parts before and after calling `FoodData#eat`
+        if (!player.level().isClientSide)
+        {
+            nutrition.addNutrients(food, getFoodLevel());
+        }
+
         if (food.hunger() > 0)
         {
             // In order to get the exact saturation we want, apply this scaling factor here
@@ -220,7 +214,6 @@ public final class PlayerInfo extends net.minecraft.world.food.FoodData implemen
         // Add nutrients and update the hunger value in NutritionData
         if (!player.level().isClientSide)
         {
-            nutrition.addNutrients(food, getFoodLevel());
             nutrition.setHungerAndUpdate(getFoodLevel());
         }
 
@@ -372,7 +365,6 @@ public final class PlayerInfo extends net.minecraft.world.food.FoodData implemen
         nutrition.setHunger(getFoodLevel());
         nutrition.readFromNbt(tag.get("nutrition"));
         intoxicationTick = tag.getLong("intoxication");
-        sleepTick = tag.getLong("sleep");
     }
 
     @Override
@@ -387,7 +379,6 @@ public final class PlayerInfo extends net.minecraft.world.food.FoodData implemen
         tag.putString("chiselMode", ChiselMode.REGISTRY.getKey(chiselMode).toString());
         tag.put("nutrition", nutrition.writeToNbt());
         tag.putLong("intoxication", intoxicationTick);
-        tag.putLong("sleep", sleepTick);
     }
 
     @Override

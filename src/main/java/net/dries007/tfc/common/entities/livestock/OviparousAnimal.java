@@ -234,7 +234,7 @@ public abstract class OviparousAnimal extends ProducingAnimal implements Pluckab
                 baby.setGender(Gender.valueOf(random.nextBoolean()));
                 baby.setBirthTickNow();
                 baby.setFamiliarity(getFamiliarity() < 0.9F ? getFamiliarity() / 2.0F : getFamiliarity() * 0.9F);
-                stack.set(TFCComponents.EGG, EggComponent.of(baby, Calendars.SERVER.getTotalDays() + hatchDays.get()));
+                stack.set(TFCComponents.EGG, EggComponent.of(baby, Calendars.SERVER.getTotalCalendarDays() + hatchDays.get()));
                 FoodCapability.setInvisibleNonDecaying(stack);
             }
         }

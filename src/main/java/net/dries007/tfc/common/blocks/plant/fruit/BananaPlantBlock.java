@@ -11,6 +11,7 @@ import java.util.function.Supplier;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
@@ -29,25 +30,28 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
+import net.dries007.tfc.TerraFirmaCraft;
+import net.dries007.tfc.client.overworld.SolarCalculator;
 import net.dries007.tfc.common.TFCTags;
 import net.dries007.tfc.common.blockentities.BerryBushBlockEntity;
-import net.dries007.tfc.common.blockentities.TFCBlockEntities;
 import net.dries007.tfc.common.blocks.ExtendedProperties;
 import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.blocks.soil.FarmlandBlock;
 import net.dries007.tfc.common.blocks.soil.HoeOverlayBlock;
+import net.dries007.tfc.config.TFCConfig;
 import net.dries007.tfc.util.Helpers;
 import net.dries007.tfc.util.calendar.Calendars;
 import net.dries007.tfc.util.calendar.ICalendar;
+import net.dries007.tfc.util.calendar.Month;
 import net.dries007.tfc.util.climate.Climate;
 import net.dries007.tfc.util.climate.ClimateRange;
 import net.dries007.tfc.util.climate.ClimateRanges;
 
-public class BananaPlantBlock extends SeasonalPlantBlock implements IBushBlock, HoeOverlayBlock
+public class BananaPlantBlock extends SeasonalPlantBlock implements HoeOverlayBlock
 {
     public static void kill(Level level, BlockPos pos)
     {
-        // picking bananas kills the plant. this propagates death to the whole stalk.
+        // picking bananas or being in the wrong climate kills the plant. this propagates death to the whole stalk.
         Block deadBlock = TFCBlocks.DEAD_BANANA_PLANT.get();
         if (!level.isClientSide)
         {
@@ -70,6 +74,122 @@ public class BananaPlantBlock extends SeasonalPlantBlock implements IBushBlock, 
     public BananaPlantBlock(ExtendedProperties properties, Supplier<? extends Item> productItem, Lifecycle[] stages)
     {
         super(properties, ClimateRanges.BANANA_PLANT, productItem, stages);
+    }
+
+    @Override
+    protected void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random)
+    {
+        final BlockPos basePos;
+        if (level.getBlockEntity(pos) instanceof BerryBushBlockEntity plant)
+        {
+            basePos = plant.getStemPos();
+        }
+        else
+        {
+            basePos = pos;
+        }
+        final int hydration = getFruitBushHydrationFromRootPos(level, basePos);
+        final float temp = Climate.getAverageTemperature(level, basePos);
+
+        if (climateRange.get().checkBoth(hydration, temp, false))
+        {
+            this.tick(state, level, pos, random);
+        }
+        else
+        {
+            kill(level, pos);
+        }
+    }
+
+    /**
+     * Should only be called after the climate range has been checked
+     */
+    @Override
+    public void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource rand)
+    {
+        if (state.getBlock() instanceof SeasonalPlantBlock plant)
+        {
+            plant.onUpdate(level, pos, state);
+        }
+
+        // Must be in an active lifecycle to consider growing
+        // We get the blockstate from the pos in case the state has been updated by onUpdate
+        if (level.getBlockState(pos).getValue(LIFECYCLE).active() && level.getBlockEntity(pos) instanceof BerryBushBlockEntity counter)
+        {
+            // Then find the max number of times the plant could have grown in the time since the last update
+            int maxCycles = (int) (counter.getTicksSinceUpdate() / (long) TFCConfig.SERVER.bananaPlantGrowthTicks.get());
+            if (maxCycles >= 1)
+            {
+                // Cap the number of cycles for longer time skips
+                maxCycles = Math.min(maxCycles, 8);
+                int cycles = 0;
+                final int daysInMonth = Calendars.SERVER.getCalendarDaysInMonth();
+                final long currentTick = Calendars.SERVER.getTicks();
+                final long previousTick = counter.getLastUpdateTick();
+
+                // If it's been 8+ months, skip the simulation and set cycles to the max value
+                if (currentTick - previousTick >= (long) ICalendar.CALENDAR_TICKS_IN_DAY * daysInMonth * 8)
+                {
+                    cycles = 8;
+                }
+                else
+                {
+                    long simulatedTick = previousTick;
+                    boolean checkReverseDirection = false;
+
+                    // Check through the skipped time and only add growth if the plant was not dormant
+                    while (cycles < maxCycles && simulatedTick < currentTick)
+                    {
+                        final long simulatedCalendarTick = Calendars.SERVER.getCalendarTickFromOffset(simulatedTick - currentTick);
+                        Month month = Calendars.SERVER.getHemispheralCalendarMonthOfYear(SolarCalculator.getInNorthernHemisphere(pos, level), simulatedCalendarTick, daysInMonth);
+                        Lifecycle lifecycle = this.getLifecycleForMonth(month);
+                        if (lifecycle != Lifecycle.DORMANT)
+                        {
+                            cycles++;
+                            simulatedTick += (long) TFCConfig.SERVER.bananaPlantGrowthTicks.get();
+                        }
+                        else
+                        {
+                            // Stop checking the forward direction and check the reverse direction if we hit a dormant season
+                            checkReverseDirection = true;
+                            break;
+                        }
+                    }
+                    if (checkReverseDirection)
+                    {
+                        // Check through the skipped time and only add growth if the plant was not dormant, but in the opposite direction
+                        simulatedTick = currentTick;
+                        while (cycles < maxCycles && simulatedTick > previousTick)
+                        {
+                            final long simulatedCalendarTick = Calendars.SERVER.getCalendarTickFromOffset(simulatedTick - currentTick);
+                            Month month = Calendars.SERVER.getHemispheralCalendarMonthOfYear(SolarCalculator.getInNorthernHemisphere(pos, level), simulatedCalendarTick, daysInMonth);
+                            Lifecycle lifecycle = this.getLifecycleForMonth(month);
+                            if (lifecycle != Lifecycle.DORMANT)
+                            {
+                                cycles++;
+                                simulatedTick -= (long) TFCConfig.SERVER.bananaPlantGrowthTicks.get();
+                            }
+                            else
+                            {
+                                // If this state is reached, we have found both ends of a dormant period and all uncounted time is dormancy
+                                // We can be sure it is the same dormant period because only one such period can be found in a 6-month span
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                // Reset the counter because at this point we are either growing or in the middle of a dormant season
+                counter.resetCounter();
+
+                // Verify we actually had enough time to grow
+                if (cycles > 0)
+                {
+                    // Count down cycles
+                    grow(state, level, pos, rand, cycles - 1);
+                }
+            }
+        }
     }
 
     @Override
@@ -131,93 +251,52 @@ public class BananaPlantBlock extends SeasonalPlantBlock implements IBushBlock, 
         // no op the superclass
     }
 
-    @Override
-    public void onUpdate(Level level, BlockPos pos, BlockState state)
+    /**
+     * Performs growth of the plant
+     */
+    protected void grow(BlockState state, ServerLevel level, BlockPos pos, RandomSource random, int cycles)
     {
-        // Bananas grow vertically as long as they can, until they reach stage 2
-        // At that point the top block is able to fruit and flower
-        // Once it is picked, the top block dies. And the plant is therefore dead.
+        cycles--;
 
-        if (level.getBlockEntity(pos) instanceof BerryBushBlockEntity bush)
+        final int oldStage = state.getValue(STAGE);
+
+        // Bananas only grow for stage 1
+        if (oldStage == 1)
         {
-            Lifecycle currentLifecycle = state.getValue(LIFECYCLE);
-            Lifecycle expectedLifecycle = getLifecycleForCurrentMonth(level, pos);
-            // if we are not working with a plant that is or should be dormant
-            if (!checkAndSetDormant(level, pos, state, currentLifecycle, expectedLifecycle))
+            final BlockPos abovePos = pos.above();
+            if (level.isEmptyBlock(abovePos) && level.canSeeSky(abovePos))
             {
-                // Otherwise, we do a month-by-month evaluation of how the bush should have grown.
-                // We only do this up to a year. Why? Because eventually, it will have become dormant, and any 'progress' during that year would've been lost anyway because it would unconditionally become dormant.
-                long deltaTicks = Math.min(bush.getTicksSinceBushUpdate(), Calendars.SERVER.getCalendarTicksInYear());
-                long currentCalendarTick = Calendars.SERVER.getCalendarTicks();
-                long nextCalendarTick = currentCalendarTick - deltaTicks;
-
-                final BlockPos stemPos = bush.getStemPos();
-                float temperature = Climate.getAverageTemperature(level, stemPos);
-                int hydration = getFruitBushHydrationFromRootPos(level, stemPos.below());
-
-                final ClimateRange range = climateRange.get();
-                int stage = state.getValue(STAGE);
-
-                BlockPos abovePos = pos.above();
-                BlockState newState;
-                do
+                // If not too tall, continue to grow upwards
+                int distanceToGround = distanceToGround(level, pos, 6);
+                if (distanceToGround < random.nextInt(3, 6))
                 {
-                    // This always runs at least once. It is called through random ticks, and calendar updates - although calendar updates will only call this if they've waited at least a day, or the average delta between random ticks.
-                    // Otherwise it will just wait for the next random tick.
-
-                    // Jump forward to nextTick.
-                    // Advance both the stage (randomly, if the previous month was healthy), and lifecycle (if the at-the-time conditions were valid)
-                    nextCalendarTick = Math.min(nextCalendarTick + Calendars.SERVER.getCalendarTicksInMonth(), currentCalendarTick);
-                    if (currentLifecycle.active() && stage < 2)
-                    {
-                        BlockPos downPos = pos.below(3);
-                        // increase the stage 1/3 of the time, or always if we realize we're starting to get tall
-                        if (!Helpers.isBlock(level.getBlockState(abovePos), this) && (level.random.nextInt(4) == 0 || Helpers.isBlock(level.getBlockState(downPos), this)))
-                        {
-                            stage++;
-                        }
-                    }
-
-                    Lifecycle lifecycleAtNextTick = getLifecycleForMonth(ICalendar.getMonthOfYear(nextCalendarTick, Calendars.SERVER.getCalendarDaysInMonth()));
-                    if (range.checkBoth(hydration, temperature, false))
-                    {
-                        currentLifecycle = currentLifecycle.advanceTowards(lifecycleAtNextTick);
-                    }
-                    else
-                    {
-                        currentLifecycle = Lifecycle.DORMANT;
-                    }
-                    // we don't allow the trunk blocks to fruit or flower
-                    if (stage < 2 && currentLifecycle.active())
-                    {
-                        currentLifecycle = Lifecycle.HEALTHY;
-                    }
-
-                    newState = state.setValue(STAGE, stage).setValue(LIFECYCLE, currentLifecycle);
-
-                    // bananas only grow for stages 0 and 1
-                    if (stage < 2 && currentLifecycle.active())
-                    {
-                        if (level.isEmptyBlock(abovePos) && level.canSeeSky(abovePos))
-                        {
-                            level.setBlockAndUpdate(abovePos, newState);
-                            final long newBushTicks = nextCalendarTick;
-                            level.getBlockEntity(abovePos, TFCBlockEntities.BERRY_BUSH.get()).ifPresent(newBush ->
-                            {
-                                newBush.setLastBushTick(newBushTicks);
-                                newBush.setStemPos(stemPos);
-                            });
-                        }
-                    }
+                    final BlockState newState = state.setValue(STAGE, 0);
+                    placeTrunk(level, abovePos, pos, state, newState, cycles);
+                    return;
                 }
-                while (nextCalendarTick < currentCalendarTick);
-
-                if (state != newState)
-                {
-                    level.setBlockAndUpdate(pos, newState);
-                }
+                // Otherwise, place top block
+                level.setBlockAndUpdate(pos, state.setValue(STAGE, 2));
             }
         }
+    }
+
+    private void placeTrunk(ServerLevel level, BlockPos newPos, BlockPos oldPos, BlockState newPosState, BlockState oldPosState, int cycles)
+    {
+        level.setBlockAndUpdate(newPos, newPosState);
+        level.setBlockAndUpdate(oldPos, oldPosState);
+        // If block grows, set the new block's stem position to match the original
+        if (level.getBlockEntity(oldPos) instanceof BerryBushBlockEntity sourceBush && level.getBlockEntity(newPos) instanceof BerryBushBlockEntity newBush)
+        {
+            newBush.resetCounter();
+            newBush.increaseCounter((long) TFCConfig.SERVER.bananaPlantGrowthTicks.get() * cycles);
+
+            newBush.setStemPos(sourceBush.getStemPos());
+        }
+        else
+        {
+            TerraFirmaCraft.LOGGER.error("Failed to update growing berry bush block entity at: {}", oldPos);
+        }
+        level.getBlockState(newPos).tick(level, newPos, level.random);
     }
 
     @Override
@@ -237,4 +316,5 @@ public class BananaPlantBlock extends SeasonalPlantBlock implements IBushBlock, 
         BlockState belowState = level.getBlockState(belowPos);
         return Helpers.isBlock(belowState, TFCTags.Blocks.BUSH_PLANTABLE_ON) || Helpers.isBlock(belowState, this);
     }
+
 }

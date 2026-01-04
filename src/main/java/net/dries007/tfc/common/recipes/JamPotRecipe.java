@@ -20,6 +20,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.neoforged.neoforge.items.ItemHandlerHelper;
 
+import net.dries007.tfc.common.TFCTags;
+import net.dries007.tfc.common.blockentities.IPotInventory;
 import net.dries007.tfc.common.blockentities.PotBlockEntity;
 import net.dries007.tfc.common.component.food.FoodCapability;
 import net.dries007.tfc.common.items.TFCItems;
@@ -76,7 +78,7 @@ public class JamPotRecipe extends PotRecipe
     }
 
     @Override
-    public PotOutput getOutput(PotBlockEntity.PotInventory inventory)
+    public PotOutput getOutput(IPotInventory inventory)
     {
         inventory.clearFluid();
         return new JamOutput(jarredStack.copy(), jarredStackWithLid.copy(), texture);
@@ -97,7 +99,7 @@ public class JamPotRecipe extends PotRecipe
         }
 
         @Override
-        public ItemInteractionResult onInteract(PotBlockEntity entity, Player player, ItemStack clickedWith)
+        public ItemInteractionResult onInteract(IPotInventory entity, Player player, ItemStack clickedWith)
         {
             if (Helpers.isItem(clickedWith, TFCItems.EMPTY_JAR) && !unsealedStack.isEmpty())
             {
@@ -107,7 +109,7 @@ public class JamPotRecipe extends PotRecipe
                 ItemHandlerHelper.giveItemToPlayer(player, unsealedStack.split(1));
                 return ItemInteractionResult.sidedSuccess(player.level().isClientSide);
             }
-            if (Helpers.isItem(clickedWith, TFCItems.EMPTY_JAR_WITH_LID) && !sealedStack.isEmpty())
+            if (Helpers.isItem(clickedWith, TFCTags.Items.EMPTY_JARS_WITH_LID) && !sealedStack.isEmpty())
             {
                 // take the player's empty jar
                 clickedWith.shrink(1);

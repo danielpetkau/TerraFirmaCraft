@@ -8,6 +8,7 @@ package net.dries007.tfc.client.overworld;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.List;
 import com.machinezoo.noexception.throwing.ThrowingSupplier;
 import com.mojang.blaze3d.platform.GlStateManager;
@@ -21,11 +22,12 @@ import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexBuffer;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import com.mojang.math.Axis;
+
 import net.dries007.tfc.common.TFCTags;
-import net.dries007.tfc.common.blocks.MoltenBlock;
 import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.blocks.devices.CharcoalForgeBlock;
 import net.dries007.tfc.common.blocks.devices.FirepitBlock;
+
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.ParticleStatus;
@@ -49,12 +51,12 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.CampfireBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.FogType;
+import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -63,7 +65,6 @@ import org.joml.Matrix4f;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
-import net.dries007.tfc.TerraFirmaCraft;
 import net.dries007.tfc.client.ClimateRenderCache;
 import net.dries007.tfc.common.blocks.IBlockRain;
 import net.dries007.tfc.util.Helpers;
@@ -71,8 +72,6 @@ import net.dries007.tfc.util.calendar.Calendars;
 import net.dries007.tfc.util.climate.Climate;
 import net.dries007.tfc.util.climate.ClimateModel;
 import net.dries007.tfc.util.tracker.WeatherHelpers;
-
-import static net.dries007.tfc.common.blocks.devices.FirepitBlock.LIT;
 
 /**
  * Overrides {@link DimensionSpecialEffects.OverworldEffects} in order to provide additional features and modifications of the weather
@@ -99,6 +98,9 @@ public class LevelRendererExtension extends DimensionSpecialEffects.OverworldEff
     };
     private static final ResourceLocation MOON_LOCATION = ResourceLocation.withDefaultNamespace("textures/environment/moon_phases.png");
     private static final ResourceLocation SUN_LOCATION = ResourceLocation.withDefaultNamespace("textures/environment/sun.png");
+
+    private static final float RAIN_MAX_ANGLE = 20 * Mth.DEG_TO_RAD;
+    private static final float SNOW_MAX_ANGLE = 30 * Mth.DEG_TO_RAD;
 
     private static VertexBuffer createBuffer(ThrowingSupplier<?> draw)
     {
@@ -253,39 +255,6 @@ public class LevelRendererExtension extends DimensionSpecialEffects.OverworldEff
                 final float starAlpha = level.getStarBrightness(partialTick);
                 final float nightAlpha = starAlpha * rainAlpha;
 
-                // The moon uses a separate shader color, that alpha's out the moon somewhat when it's during the day, just to make it
-                // seem a little less prominent than in night
-                final float moonAlpha = (0.2f + 0.8f * starAlpha) * rainAlpha;
-
-                // Sun
-                final Matrix4f sun = rotateTo(stack, sunPos);
-
-                RenderSystem.setShaderColor(1f, 1f, 1f, rainAlpha);
-                RenderSystem.setShader(GameRenderer::getPositionTexShader);
-                RenderSystem.setShaderTexture(0, SUN_LOCATION);
-                BufferBuilder buffer = tesselator.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
-                buffer.addVertex(sun, -30.0F, 100.0F, -30.0F).setUv(0.0F, 0.0F);
-                buffer.addVertex(sun, 30.0F, 100.0F, -30.0F).setUv(1.0F, 0.0F);
-                buffer.addVertex(sun, 30.0F, 100.0F, 30.0F).setUv(1.0F, 1.0F);
-                buffer.addVertex(sun, -30.0F, 100.0F, 30.0F).setUv(0.0F, 1.0F);
-                BufferUploader.drawWithShader(buffer.buildOrThrow());
-
-                // Moon
-                final SkyPos moonPos = ClientSolarCalculatorBridge.getMoonPosition(level, camera.getBlockPosition());
-                final int moonPhase = ClientSolarCalculatorBridge.getMoonPhase();
-                final int moonU = moonPhase % 4;
-                final int moonV = moonPhase / 4 % 2;
-                final Matrix4f moon = rotateTo(stack, moonPos);
-
-                RenderSystem.setShaderColor(1f, 1f, 1f, moonAlpha);
-                RenderSystem.setShaderTexture(0, MOON_LOCATION);
-                buffer = tesselator.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
-                buffer.addVertex(moon, -20.0F, 100.0F, -20.0F).setUv((moonU + 1) / 4.0F, (moonV + 1) / 2.0F);
-                buffer.addVertex(moon, 20.0F, 100.0F, -20.0F).setUv(moonU / 4.0F, (moonV + 1) / 2.0F);
-                buffer.addVertex(moon, 20.0F, 100.0F, 20.0F).setUv(moonU / 4.0F, moonV / 2.0F);
-                buffer.addVertex(moon, -20.0F, 100.0F, 20.0F).setUv((moonU + 1) / 4.0F, moonV / 2.0F);
-                BufferUploader.drawWithShader(buffer.buildOrThrow());
-
                 // Stars
                 if (nightAlpha > 0.0F && starBuffer != null)
                 {
@@ -305,8 +274,6 @@ public class LevelRendererExtension extends DimensionSpecialEffects.OverworldEff
 
                 RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
                 RenderSystem.disableBlend();
-                RenderSystem.defaultBlendFunc();
-                RenderSystem.setShaderColor(0f, 0f, 0f, 0f);
 
                 final double distanceAboveHorizon = camera.getEntity().getEyePosition(partialTick).y - level.getLevelData().getHorizonHeight(level);
                 if (distanceAboveHorizon < 0.0)
@@ -319,6 +286,80 @@ public class LevelRendererExtension extends DimensionSpecialEffects.OverworldEff
                     stack.popPose();
                 }
 
+                // Sun and Moon positions
+                final Matrix4f sun = rotateTo(stack, sunPos);
+                final SkyPos moonPos = ClientSolarCalculatorBridge.getMoonPosition(level, camera.getBlockPosition());
+                final Matrix4f moon = rotateTo(stack, moonPos);
+
+                // We need to cut a sky-colored quad out of the sky in order to render the sun and moon with the correct blending
+                float[] coverColors;
+                if (sunriseColor != null)
+                {
+                    coverColors = Arrays.copyOf(sunriseColor,sunriseColor.length);
+                } else {
+                    coverColors = new float[3];
+                    coverColors[0] = (float) skyColor.x;
+                    coverColors[1] = (float) skyColor.y;
+                    coverColors[2] = (float) skyColor.z;
+                }
+
+                coverColors[0] = (float) skyColor.x;
+                coverColors[1] = (float) skyColor.y;
+                coverColors[2] = (float) skyColor.z;
+
+                FogRenderer.levelFogColor();
+                RenderSystem.depthMask(false);
+
+                RenderSystem.setShaderColor(1, 1, 1, 1.0F);
+                RenderSystem.setShader(GameRenderer::getPositionColorShader);
+                BufferBuilder buffer = tesselator.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
+                buffer.addVertex(sun, -7.5F, 100.0F, -7.5F).setColor(coverColors[0],coverColors[1],coverColors[2], 1.0f);
+                buffer.addVertex(sun, 7.5F, 100.0F, -7.5F).setColor(coverColors[0],coverColors[1],coverColors[2], 1.0f);
+                buffer.addVertex(sun, 7.5F, 100.0F, 7.5F).setColor(coverColors[0],coverColors[1],coverColors[2], 1.0f);
+                buffer.addVertex(sun, -7.5F, 100.0F, 7.5F).setColor(coverColors[0],coverColors[1],coverColors[2], 1.0f);
+                BufferUploader.drawWithShader(buffer.buildOrThrow());
+
+                buffer = tesselator.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
+                buffer.addVertex(moon, -7.5F, 100.0F, -7.5F).setColor(coverColors[0],coverColors[1],coverColors[2], 1.0f);
+                buffer.addVertex(moon, 7.5F, 100.0F, -7.5F).setColor(coverColors[0],coverColors[1],coverColors[2], 1.0f);
+                buffer.addVertex(moon, 7.5F, 100.0F, 7.5F).setColor(coverColors[0],coverColors[1],coverColors[2], 1.0f);
+                buffer.addVertex(moon, -7.5F, 100.0F, 7.5F).setColor(coverColors[0],coverColors[1],coverColors[2], 1.0f);
+                BufferUploader.drawWithShader(buffer.buildOrThrow());
+
+                RenderSystem.enableBlend();
+
+                // Sun With Glow
+
+                RenderSystem.setShaderColor(1f, 1f, 1f, rainAlpha);
+                RenderSystem.setShader(GameRenderer::getPositionTexShader);
+                RenderSystem.setShaderTexture(0, SUN_LOCATION);
+                buffer = tesselator.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
+                buffer.addVertex(sun, -30.0F, 100.0F, -30.0F).setUv(0.0F, 0.0F);
+                buffer.addVertex(sun, 30.0F, 100.0F, -30.0F).setUv(1.0F, 0.0F);
+                buffer.addVertex(sun, 30.0F, 100.0F, 30.0F).setUv(1.0F, 1.0F);
+                buffer.addVertex(sun, -30.0F, 100.0F, 30.0F).setUv(0.0F, 1.0F);
+                BufferUploader.drawWithShader(buffer.buildOrThrow());
+
+
+                // Moon With Glow
+                // The moon uses a separate shader color, that alpha's out the moon somewhat when it's during the day, just to make it
+                // seem a little less prominent than in night
+                final float moonAlpha = (0.2f + 0.8f * starAlpha) * rainAlpha;
+
+                final int moonPhase = ClientSolarCalculatorBridge.getMoonPhase();
+                final int moonU = (moonPhase % 4);
+                final int moonV = (moonPhase / 4 % 2);
+
+                RenderSystem.setShaderColor(1f, 1f, 1f, moonAlpha);
+                RenderSystem.setShaderTexture(0, MOON_LOCATION);
+                buffer = tesselator.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
+                buffer.addVertex(moon, -30.0F, 100.0F, -30.0F).setUv(moonU / 4.0F, (moonV + 1) / 2.0F);
+                buffer.addVertex(moon, 30.0F, 100.0F, -30.0F).setUv((moonU + 1) / 4.0F, (moonV + 1) / 2.0F);
+                buffer.addVertex(moon, 30.0F, 100.0F, 30.0F).setUv((moonU + 1) / 4.0F, moonV / 2.0F);
+                buffer.addVertex(moon, -30.0F, 100.0F, 30.0F).setUv(moonU / 4.0F, moonV / 2.0F);
+                BufferUploader.drawWithShader(buffer.buildOrThrow());
+
+                RenderSystem.disableBlend();
                 RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
                 RenderSystem.depthMask(true);
             }
@@ -331,7 +372,7 @@ public class LevelRendererExtension extends DimensionSpecialEffects.OverworldEff
         stack.pushPose();
         stack.mulPose(Axis.YP.rotation(pos.azimuth()));
         stack.mulPose(Axis.XN.rotation(pos.zenith()));
-        final Matrix4f pose = stack.last().pose();
+        final Matrix4f pose = new Matrix4f(stack.last().pose());
         stack.popPose();
         return pose;
     }
@@ -341,7 +382,7 @@ public class LevelRendererExtension extends DimensionSpecialEffects.OverworldEff
         stack.pushPose();
         stack.mulPose(Axis.XN.rotation(pos.zenith()));
         stack.mulPose(Axis.YN.rotation(pos.azimuth()));
-        final Matrix4f pose = stack.last().pose();
+        final Matrix4f pose = new Matrix4f(stack.last().pose());
         stack.popPose();
         return pose;
     }
@@ -379,7 +420,7 @@ public class LevelRendererExtension extends DimensionSpecialEffects.OverworldEff
             final ClimateModel model = Climate.get(level);
             final long calendarTick = Calendars.get(level).getCalendarTicks();
             final float climateRain = model.getRain(calendarTick);
-            final float climateRainfall = model.getRainfall(level, cursor);
+            final float climateRainfall = model.getInstantRainfall(level, cursor);
             final float rainIntensity = WeatherHelpers.calculateRealRainIntensity(climateRain, climateRainfall);
             final float currentTick = ticks + partialTick;
 
@@ -401,6 +442,21 @@ public class LevelRendererExtension extends DimensionSpecialEffects.OverworldEff
             RenderSystem.setShader(GameRenderer::getParticleShader);
 
             int stateFlag = -1;
+
+            Vec2 wind = ClimateRenderCache.INSTANCE.getWind();
+
+            // max angle is at ~50 kmh
+
+            final float xAngleRain = Mth.TWO_PI / (360f / Mth.clampedMap(wind.x, -0.4f, 0.4f, -RAIN_MAX_ANGLE, RAIN_MAX_ANGLE));
+            final float zAngleRain = Mth.TWO_PI / (360f / Mth.clampedMap(wind.y, -0.4f, 0.4f, -RAIN_MAX_ANGLE, RAIN_MAX_ANGLE));
+            final float xAngleSnow = Mth.TWO_PI / (360f / Mth.clampedMap(wind.x, -0.4f, 0.4f, -SNOW_MAX_ANGLE, SNOW_MAX_ANGLE));
+            final float zAngleSnow = Mth.TWO_PI / (360f / Mth.clampedMap(wind.y, -0.4f, 0.4f, -SNOW_MAX_ANGLE, SNOW_MAX_ANGLE));
+
+            final float defaultXOffsetRain = (float) (Math.tan(xAngleRain * Mth.RAD_TO_DEG) * 10);
+            final float defaultZOffsetRain = (float) (Math.tan(zAngleRain * Mth.RAD_TO_DEG) * 10);
+
+            final float defaultXOffsetSnow = (float) (Math.tan(xAngleSnow * Mth.RAD_TO_DEG) * 10);
+            final float defaultZOffsetSnow = (float) (Math.tan(zAngleSnow * Mth.RAD_TO_DEG) * 10);
 
             for (int z = blockZ - blockRadius; z <= blockZ + blockRadius; z++)
             {
@@ -432,7 +488,7 @@ public class LevelRendererExtension extends DimensionSpecialEffects.OverworldEff
                         final RandomSource random = RandomSource.create(x * x * 3121L + x * 45238971L ^ z * z * 418711L + z * 13761L);
                         cursor.set(x, minY, z);
 
-                        if (model.getTemperature(level, cursor) > 0) // If positive temperature, then raining
+                        if (model.getInstantTemperature(level, cursor) > 0) // If positive temperature, then raining
                         {
                             if (stateFlag != 0)
                             {
@@ -445,7 +501,7 @@ public class LevelRendererExtension extends DimensionSpecialEffects.OverworldEff
 
 
                                 // select the texture based on the amount of rain
-                                RenderSystem.setShaderTexture(0, RAIN_LOCATIONS[Mth.clamp(Mth.floor(rainIntensity * 4.0f), 0,3)]);
+                                RenderSystem.setShaderTexture(0, RAIN_LOCATIONS[Mth.clamp(Mth.floor(rainIntensity * 4.0f), 0, 3)]);
 
                                 buffer = tesselator.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.PARTICLE);
                             }
@@ -465,29 +521,53 @@ public class LevelRendererExtension extends DimensionSpecialEffects.OverworldEff
                             // Note we also fix a bug here by clamping, so alpha does not go negative, which causes random non-alpha rainfall on
                             // far-away blocks. This affects us more as we have more distant rainfall (15 vs. 10 max in vanilla)
                             float f6 = (float) Math.sqrt(d2 * d2 + d3 * d3) / blockRadius;
-                            final float alpha = Mth.clamp((1.0F - f6 * f6) * 0.5F + 0.5F, 0f, 1f)
-                                * rainLevel;
+                            final float alpha = Mth.clamp((1.0F - f6 * f6) * 0.5F + 0.5F, 0f, 1f) * rainLevel;
+
+                            float height = maxY - minY;
+
+                            float xOffset = defaultXOffsetRain;
+                            float zOffset = defaultZOffsetRain;
+                            if (height != 10)
+                            {
+                                // avoid extra math for most of these quads
+                                zOffset = (float) (Math.tan(zAngleRain * Mth.RAD_TO_DEG) * height);
+                                xOffset = (float) (Math.tan(xAngleRain * Mth.RAD_TO_DEG) * height);
+                            }
 
                             cursor.set(x, y, z);
 
                             final int light = LevelRenderer.getLightColor(level, cursor);
 
-                            buffer.addVertex(x - camX - rainSizeX + 0.5f, maxY - camY, z - camZ - rainSizeZ + 0.5f)
+                            Vector3f vert0 = new Vector3f(x - camX - rainSizeX + 0.5f, maxY - camY, z - camZ - rainSizeZ + 0.5f);
+                            Vector3f vert1 = new Vector3f(x - camX + rainSizeX + 0.5f, maxY - camY, z - camZ + rainSizeZ + 0.5f);
+                            Vector3f vert2 = new Vector3f(x - camX + rainSizeX + 0.5f, minY - camY, z - camZ + rainSizeZ + 0.5f);
+                            Vector3f vert3 = new Vector3f(x - camX - rainSizeX + 0.5f, minY - camY, z - camZ - rainSizeZ + 0.5f);
+
+                            vert0 = vert0.add(-xOffset / 2, 0, -zOffset / 2);
+                            vert1 = vert1.add(-xOffset / 2, 0, -zOffset / 2);
+                            vert2 = vert2.add(xOffset / 2, 0, zOffset / 2);
+                            vert3 = vert3.add(xOffset / 2, 0, zOffset / 2);
+
+                            buffer.addVertex(vert0)
                                 .setUv(0.0F, minY * 0.25F + v)
                                 .setColor(1.0F, 1.0F, 1.0F, alpha)
                                 .setLight(light);
-                            buffer.addVertex(x - camX + rainSizeX + 0.5f, maxY - camY, z - camZ + rainSizeZ + 0.5f)
+
+                            buffer.addVertex(vert1)
                                 .setUv(1.0F, minY * 0.25F + v)
                                 .setColor(1.0F, 1.0F, 1.0F, alpha)
                                 .setLight(light);
-                            buffer.addVertex(x - camX + rainSizeX + 0.5f, minY - camY, z - camZ + rainSizeZ + 0.5f)
+
+                            buffer.addVertex(vert2)
                                 .setUv(1.0F, maxY * 0.25F + v)
                                 .setColor(1.0F, 1.0F, 1.0F, alpha)
                                 .setLight(light);
-                            buffer.addVertex(x - camX - rainSizeX + 0.5f, minY - camY, z - camZ - rainSizeZ + 0.5f)
+
+                            buffer.addVertex(vert3)
                                 .setUv(0.0F, maxY * 0.25F + v)
                                 .setColor(1.0F, 1.0F, 1.0F, alpha)
                                 .setLight(light);
+
                         }
                         else
                         {
@@ -501,13 +581,14 @@ public class LevelRendererExtension extends DimensionSpecialEffects.OverworldEff
 
                                 stateFlag = 1;
 
-                                RenderSystem.setShaderTexture(0, SNOW_LOCATIONS[Mth.clamp(Mth.floor(rainIntensity * 4.0f), 0,3)]);
+                                RenderSystem.setShaderTexture(0, SNOW_LOCATIONS[Mth.clamp(Mth.floor(rainIntensity * 4.0f), 0, 3)]);
 
                                 buffer = tesselator.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.PARTICLE);
                             }
 
+                            float speed = Mth.clampedMap(wind.length(), 0, 0.7f, 1, 16);
                             // Mojang magic
-                            float f8 = -((float) (ticks & 511) + partialTick) / 512.0F;
+                            float f8 = -((float) (ticks & 511) + partialTick) / (512f / speed);
                             float f9 = (float) (random.nextDouble() + currentTick * 0.01 * random.nextGaussian());
                             float f10 = (float) (random.nextDouble() + (currentTick * random.nextGaussian()) * 0.001);
                             double d4 = (double) x + 0.5 - camX;
@@ -523,19 +604,42 @@ public class LevelRendererExtension extends DimensionSpecialEffects.OverworldEff
                             final int brightLightV = (lightV * 3 + 240) / 4;
                             final int brightLightU = (lightU * 3 + 240) / 4;
 
-                            buffer.addVertex(x - camX - rainSizeX + 0.5f, maxY - camY, z - camZ - rainSizeZ + 0.5f)
+                            float height = maxY - minY;
+
+                            // avoid extra math for most of these quads
+                            float xoffset = defaultXOffsetSnow;
+                            float zoffset = defaultZOffsetSnow;
+                            if (height != 10)
+                            {
+                                xoffset = (float) (Math.tan(xAngleSnow * Mth.RAD_TO_DEG) * height);
+                                zoffset = (float) (Math.tan(zAngleSnow * Mth.DEG_TO_RAD) * height);
+                            }
+
+                            cursor.set(x, y, z);
+
+                            Vector3f vert0 = new Vector3f(x - camX - rainSizeX + 0.5f, maxY - camY, z - camZ - rainSizeZ + 0.5f);
+                            Vector3f vert1 = new Vector3f(x - camX + rainSizeX + 0.5f, maxY - camY, z - camZ + rainSizeZ + 0.5f);
+                            Vector3f vert2 = new Vector3f(x - camX + rainSizeX + 0.5f, minY - camY, z - camZ + rainSizeZ + 0.5f);
+                            Vector3f vert3 = new Vector3f(x - camX - rainSizeX + 0.5f, minY - camY, z - camZ - rainSizeZ + 0.5f);
+
+                            vert0 = vert0.add(-xoffset / 2, 0, -zoffset / 2);
+                            vert1 = vert1.add(-xoffset / 2, 0, -zoffset / 2);
+                            vert2 = vert2.add(xoffset / 2, 0, zoffset / 2);
+                            vert3 = vert3.add(xoffset / 2, 0, zoffset / 2);
+
+                            buffer.addVertex(vert0)
                                 .setUv(0.0F + f9, minY * 0.25F + f8 + f10)
                                 .setColor(1.0F, 1.0F, 1.0F, alpha)
                                 .setUv2(brightLightU, brightLightV);
-                            buffer.addVertex(x - camX + rainSizeX + 0.5f, maxY - camY, z - camZ + rainSizeZ + 0.5f)
+                            buffer.addVertex(vert1)
                                 .setUv(1.0F + f9, minY * 0.25F + f8 + f10)
                                 .setColor(1.0F, 1.0F, 1.0F, alpha)
                                 .setUv2(brightLightU, brightLightV);
-                            buffer.addVertex(x - camX + rainSizeX + 0.5f, minY - camY, z - camZ + rainSizeZ + 0.5f)
+                            buffer.addVertex(vert2)
                                 .setUv(1.0F + f9, maxY * 0.25F + f8 + f10)
                                 .setColor(1.0F, 1.0F, 1.0F, alpha)
                                 .setUv2(brightLightU, brightLightV);
-                            buffer.addVertex(x - camX - rainSizeX + 0.5f, minY - camY, z - camZ - rainSizeZ + 0.5f)
+                            buffer.addVertex(vert3)
                                 .setUv(0.0F + f9, maxY * 0.25F + f8 + f10)
                                 .setColor(1.0F, 1.0F, 1.0F, alpha)
                                 .setUv2(brightLightU, brightLightV);
@@ -570,7 +674,7 @@ public class LevelRendererExtension extends DimensionSpecialEffects.OverworldEff
     {
         final Minecraft minecraft = Minecraft.getInstance();
         final float rainLevel = ClimateRenderCache.INSTANCE.getRainLevel(0f);
-        final boolean isSnowing = ClimateRenderCache.INSTANCE.getTemperature() < 0;
+        final boolean isSnowing = ClimateRenderCache.INSTANCE.getInstantTemperature() < 0;
         if (rainLevel > 0.0F)
         {
             final RandomSource random = RandomSource.create(ticks * 312987231L);
@@ -668,7 +772,7 @@ public class LevelRendererExtension extends DimensionSpecialEffects.OverworldEff
         final ClimateModel model = Climate.get(level);
         final long calendarTick = Calendars.get(level).getCalendarTicks();
         final float climateRain = model.getRain(calendarTick);
-        final float climateRainfall = model.getRainfall(level, cameraPos);
+        final float climateRainfall = model.getInstantRainfall(level, cameraPos);
         return WeatherHelpers.calculateRealRainIntensity(climateRain, climateRainfall);
     }
 

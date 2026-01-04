@@ -16,9 +16,6 @@
     {
       "type": "minecraft:heightmap",
       "heightmap": "OCEAN_FLOOR_WG"
-    },
-    {
-      "type": "tfc:biome"
     }
   ]
 }

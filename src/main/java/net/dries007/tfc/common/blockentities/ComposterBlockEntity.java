@@ -12,7 +12,6 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.tags.BlockTags;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -54,7 +53,9 @@ public class ComposterBlockEntity extends InventoryBlockEntity<ItemStackHandler>
     public void randomTick()
     {
         assert level != null;
-        if (green >= MAX_AMOUNT && brown >= MAX_AMOUNT & !isRotten())
+
+        // If the compost is ready but the item has been already been extracted, empty the composter
+        if (!checkAndSetEmpty() && green >= MAX_AMOUNT && brown >= MAX_AMOUNT & !isRotten())
         {
             if (getTicksSinceUpdate() > getReadyTicks())
             {
@@ -69,12 +70,30 @@ public class ComposterBlockEntity extends InventoryBlockEntity<ItemStackHandler>
         }
     }
 
+    private boolean checkAndSetEmpty()
+    {
+        if (isReady() && inventory.getStackInSlot(0).isEmpty())
+        {
+            reset();
+            markForSync();
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public void setAndUpdateSlots(int slot)
+    {
+        super.setAndUpdateSlots(slot);
+        checkAndSetEmpty();
+    }
+
     public long getReadyTicks()
     {
         assert level != null;
         final BlockPos.MutableBlockPos cursor = new BlockPos.MutableBlockPos();
         cursor.set(getBlockPos());
-        final float rainfall = Climate.getRainfall(level, cursor);
+        final float rainfall = Climate.getAverageRainfall(level, cursor);
         long readyTicks = TFCConfig.SERVER.composterTicks.get();
         if (rainfall < 150f) // inverted trapezoid wave
         {
@@ -83,11 +102,6 @@ public class ComposterBlockEntity extends InventoryBlockEntity<ItemStackHandler>
         else if (rainfall > 350f)
         {
             readyTicks *= (long) ((rainfall - 350f) / 50f + 1f);
-        }
-        cursor.move(0, 1, 0);
-        if (Helpers.isBlock(level.getBlockState(cursor), BlockTags.SNOW))
-        {
-            readyTicks *= 0.9f;
         }
         for (Direction direction : Direction.Plane.HORIZONTAL)
         {
@@ -127,25 +141,16 @@ public class ComposterBlockEntity extends InventoryBlockEntity<ItemStackHandler>
         final Compost compost = getCompost(stack);
         if (stack.isEmpty() && player.isShiftKeyDown()) // extract compost
         {
-            if (brown == MAX_AMOUNT && green == MAX_AMOUNT)
+            if (brown == MAX_AMOUNT && green == MAX_AMOUNT && !rotten)
             {
                 Helpers.spawnItem(level, pos.above(), inventory.extractItem(0, 1, false));
             }
+            else
+            {
+                Helpers.spawnItem(level, pos.above(), inventory.extractItem(0, getRottenCount(), false));
+            }
             reset();
             Helpers.playSound(level, pos, SoundEvents.ROOTED_DIRT_BREAK);
-            return finishUse(client);
-        }
-        else if (rotten)
-        {
-            if (!client) player.displayClientMessage(Component.translatable("tfc.composter.rotten"), true);
-            return finishUse(client);
-        }
-        else if (compost.type == AdditionType.POISON)
-        {
-            if (!client) setState(TFCComposterBlock.CompostType.ROTTEN);
-            if (!player.isCreative()) stack.shrink(1);
-            inventory.setStackInSlot(0, new ItemStack(TFCItems.ROTTEN_COMPOST.get()));
-            Helpers.playSound(level, pos, SoundEvents.HOE_TILL);
             return finishUse(client);
         }
         else if (green <= MAX_AMOUNT && compost.type == AdditionType.GREEN)
@@ -184,6 +189,18 @@ public class ComposterBlockEntity extends InventoryBlockEntity<ItemStackHandler>
             }
             return finishUse(client);
         }
+        else if (rotten)
+        {
+            if (!client) player.displayClientMessage(Component.translatable("tfc.composter.rotten"), true);
+            return finishUse(client);
+        }
+        else if (compost.type == AdditionType.POISON)
+        {
+            if (!client) setState(TFCComposterBlock.CompostType.ROTTEN);
+            if (!player.isCreative()) stack.shrink(1);
+            Helpers.playSound(level, pos, SoundEvents.HOE_TILL);
+            return finishUse(client);
+        }
         return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
     }
 
@@ -199,14 +216,6 @@ public class ComposterBlockEntity extends InventoryBlockEntity<ItemStackHandler>
         return Calendars.get(level).getTicks() - lastUpdateTick;
     }
 
-    @Override
-    public void setAndUpdateSlots(int slot)
-    {
-        super.setAndUpdateSlots(slot);
-        if (inventory.getStackInSlot(slot).isEmpty())
-            reset();
-    }
-
     public ItemInteractionResult finishUse(boolean client)
     {
         if (!client)
@@ -216,10 +225,20 @@ public class ComposterBlockEntity extends InventoryBlockEntity<ItemStackHandler>
             {
                 stage = Math.max(stage, 1);
             }
+            if (isRotten())
+            {
+                int count = getRottenCount();
+                inventory.setStackInSlot(0, new ItemStack(TFCItems.ROTTEN_COMPOST.get(), count));
+            }
             setState(stage);
             markForSync();
         }
         return ItemInteractionResult.sidedSuccess(client);
+    }
+
+    private int getRottenCount()
+    {
+        return Math.min(green, brown) / 4;
     }
 
     public int getGreen()

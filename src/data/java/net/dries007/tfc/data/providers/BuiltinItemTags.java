@@ -108,6 +108,15 @@ public class BuiltinItemTags extends TagsProvider<Item> implements Accessors
         tag(Tags.Items.STRINGS).add(TFCItems.WOOL_YARN);
         tag(Tags.Items.SEEDS).add(TFCItems.CROP_SEEDS);
         tag(Tags.Items.RODS_WOODEN).add(TFCBlocks.WOODS, Wood.BlockType.TWIG);
+        tag(Tags.Items.BUCKETS).add(
+            TFCItems.WOODEN_BUCKET,
+            TFCItems.RED_STEEL_BUCKET,
+            TFCItems.BLUE_STEEL_BUCKET);
+
+        tag(Tags.Items.GEMS_AMETHYST).add(TFCItems.GEMS.get(Ore.AMETHYST));
+        tag(Tags.Items.GEMS_DIAMOND).add(TFCItems.GEMS.get(Ore.DIAMOND));
+        tag(Tags.Items.GEMS_EMERALD).add(TFCItems.GEMS.get(Ore.EMERALD));
+        tag(Tags.Items.GEMS_LAPIS).add(TFCItems.GEMS.get(Ore.LAPIS_LAZULI));
 
         // ===== TFC Tags ===== //
 
@@ -130,9 +139,9 @@ public class BuiltinItemTags extends TagsProvider<Item> implements Accessors
             commonTagOf(Metal.BLACK_BRONZE, Metal.ItemType.DOUBLE_SHEET));
 
         tag(FRUITS).add(Food.BLACKBERRY, Food.BLUEBERRY, Food.BUNCHBERRY, Food.CLOUDBERRY, Food.CRANBERRY, Food.ELDERBERRY, Food.GOOSEBERRY, Food.RASPBERRY, Food.SNOWBERRY, Food.STRAWBERRY, Food.WINTERGREEN_BERRY, Food.BANANA, Food.CHERRY, Food.GREEN_APPLE, Food.LEMON, Food.OLIVE, Food.ORANGE, Food.PEACH, Food.PLUM, Food.RED_APPLE, Food.PUMPKIN_CHUNKS, Food.MELON_SLICE);
-        tag(VEGETABLES).add(Food.BEET, Food.CABBAGE, Food.CARROT, Food.GARLIC, Food.GREEN_BEAN, Food.GREEN_BELL_PEPPER, Food.ONION, Food.POTATO, Food.BAKED_POTATO, Food.RED_BELL_PEPPER, Food.SOYBEAN, Food.SUGARCANE, Food.SQUASH, Food.TOMATO, Food.YELLOW_BELL_PEPPER, Food.CASSAVA, Food.LENTIL, Food.PEANUT, Food.RADISH);
-        tag(RAW_MEATS).add(Food.BEEF, Food.PORK, Food.CHICKEN, Food.QUAIL, Food.MUTTON, Food.BEAR, Food.HORSE_MEAT, Food.PHEASANT, Food.GROUSE, Food.TURKEY, Food.PEAFOWL, Food.VENISON, Food.WOLF, Food.RABBIT, Food.FOX, Food.HYENA, Food.DUCK, Food.CHEVON, Food.GRAN_FELINE, Food.TURTLE, Food.CAMELIDAE, Food.FROG_LEGS);
-        tag(COOKED_MEATS).add(Food.COOKED_BEEF, Food.COOKED_PORK, Food.COOKED_CHICKEN, Food.COOKED_QUAIL, Food.COOKED_MUTTON, Food.COOKED_BEAR, Food.COOKED_HORSE_MEAT, Food.COOKED_PHEASANT, Food.COOKED_TURKEY, Food.COOKED_PEAFOWL, Food.COOKED_GROUSE, Food.COOKED_VENISON, Food.COOKED_WOLF, Food.COOKED_RABBIT, Food.COOKED_FOX, Food.COOKED_HYENA, Food.COOKED_DUCK, Food.COOKED_CHEVON, Food.COOKED_CAMELIDAE, Food.COOKED_FROG_LEGS, Food.COOKED_GRAN_FELINE);
+        tag(VEGETABLES).add(Food.BEET, Food.CABBAGE, Food.CARROT, Food.GARLIC, Food.GREEN_BEAN, Food.GREEN_BELL_PEPPER, Food.ONION, Food.POTATO, Food.BAKED_POTATO, Food.RED_BELL_PEPPER, Food.SOYBEAN, Food.SUGARCANE, Food.SQUASH, Food.TOMATO, Food.YELLOW_BELL_PEPPER, Food.CASSAVA, Food.COOKED_CASSAVA, Food.LENTIL, Food.COOKED_LENTIL, Food.PEANUT, Food.RADISH);
+        tag(RAW_MEATS).add(Food.BEEF, Food.PORK, Food.CHICKEN, Food.QUAIL, Food.MUTTON, Food.BEAR, Food.HORSE_MEAT, Food.PHEASANT, Food.GROUSE, Food.TURKEY, Food.PEAFOWL, Food.VENISON, Food.BISON, Food.WOLF, Food.RABBIT, Food.FOX, Food.HYENA, Food.DUCK, Food.CHEVON, Food.GRAN_FELINE, Food.TURTLE, Food.CAMELIDAE, Food.FROG_LEGS, Food.COD, Food.TROPICAL_FISH, Food.CALAMARI, Food.SHELLFISH, Food.BLUEGILL, Food.CRAPPIE, Food.LAKE_TROUT, Food.LARGEMOUTH_BASS, Food.RAINBOW_TROUT, Food.SALMON, Food.SMALLMOUTH_BASS);
+        tag(COOKED_MEATS).add(Food.COOKED_BEEF, Food.COOKED_PORK, Food.COOKED_CHICKEN, Food.COOKED_QUAIL, Food.COOKED_MUTTON, Food.COOKED_BEAR, Food.COOKED_HORSE_MEAT, Food.COOKED_PHEASANT, Food.COOKED_TURKEY, Food.COOKED_PEAFOWL, Food.COOKED_GROUSE, Food.COOKED_VENISON, Food.COOKED_BISON, Food.COOKED_WOLF, Food.COOKED_RABBIT, Food.COOKED_FOX, Food.COOKED_HYENA, Food.COOKED_DUCK, Food.COOKED_CHEVON, Food.COOKED_CAMELIDAE, Food.COOKED_FROG_LEGS, Food.COOKED_GRAN_FELINE, Food.COOKED_TURTLE, Food.COOKED_COD, Food.COOKED_TROPICAL_FISH, Food.COOKED_CALAMARI, Food.COOKED_SHELLFISH, Food.COOKED_BLUEGILL, Food.COOKED_CRAPPIE, Food.COOKED_LAKE_TROUT, Food.COOKED_LARGEMOUTH_BASS, Food.COOKED_RAINBOW_TROUT, Food.COOKED_SALMON, Food.COOKED_SMALLMOUTH_BASS);
         tag(MEATS).addTag(RAW_MEATS).addTag(COOKED_MEATS);
         tag(RAW_FISH).add(Food.COD, Food.TROPICAL_FISH, Food.CALAMARI, Food.SHELLFISH, Food.BLUEGILL, Food.CRAPPIE, Food.LAKE_TROUT, Food.LARGEMOUTH_BASS, Food.RAINBOW_TROUT, Food.SALMON, Food.SMALLMOUTH_BASS);
         tag(COOKED_FISH).add(Food.COOKED_TURTLE, Food.COOKED_COD, Food.COOKED_TROPICAL_FISH, Food.COOKED_CALAMARI, Food.COOKED_SHELLFISH, Food.COOKED_BLUEGILL, Food.COOKED_CRAPPIE, Food.COOKED_LAKE_TROUT, Food.COOKED_LARGEMOUTH_BASS, Food.COOKED_RAINBOW_TROUT, Food.COOKED_SALMON, Food.COOKED_SMALLMOUTH_BASS);
@@ -159,6 +168,7 @@ public class BuiltinItemTags extends TagsProvider<Item> implements Accessors
                 TFCItems.EMPTY_JAR_WITH_LID
             );
         tag(FILLED_JARS).addTags(SEALED_PRESERVES, PRESERVES);
+        tag(EMPTY_JARS_WITH_LID).add(TFCItems.EMPTY_JAR_WITH_LID);
         tag(JARS).addTags(EMPTY_JARS, FILLED_JARS);
         tag(SWEETENERS).add(Items.SUGAR);
         tag(BOWLS).add(Items.BOWL, TFCBlocks.CERAMIC_BOWL);
@@ -192,23 +202,20 @@ public class BuiltinItemTags extends TagsProvider<Item> implements Accessors
         tag(TURTLE_FOOD).add(TFCItems.FOOD.get(Food.DRIED_KELP), TFCItems.FOOD.get(Food.DRIED_SEAWEED));
         tag(FROG_FOOD).addTag(RAW_FISH).add(Items.SPIDER_EYE);
         tag(RABBIT_FOOD).addTags(GRAINS, VEGETABLES);
+        tag(ItemTags.PANDA_FOOD).addTag(BAMBOO);
 
         // Greens and Browns intentionally overlap - we check browns first, then greens, to resolve
         tag(COMPOST_GREENS).addTags(COMPOST_GREENS_LOW, COMPOST_GREENS_MEDIUM, COMPOST_GREENS_HIGH);
-        tag(COMPOST_GREENS_LOW).addTag(PLANTS).add(TFCItems.ALFALFA);
+        tag(COMPOST_GREENS_LOW)
+            .addOnly(TFCBlocks.PLANTS, Plant::givesGreenCompost)
+            .add(TFCItems.ALFALFA);
         tag(COMPOST_GREENS_MEDIUM).addTag(GRAINS);
-        tag(COMPOST_GREENS_HIGH).addTags(VEGETABLES, FRUITS);
+        tag(COMPOST_GREENS_HIGH).addTags(VEGETABLES, FRUITS).add(TFCBlocks.PUMPKIN, TFCBlocks.MELON);
         tag(COMPOST_BROWNS).addTags(COMPOST_BROWNS_LOW, COMPOST_BROWNS_MEDIUM, COMPOST_BROWNS_HIGH);
         tag(COMPOST_BROWNS_LOW)
             .addTag(ItemTags.LEAVES)
+            .addOnly(TFCBlocks.PLANTS, Plant::givesBrownCompost)
             .add(
-                TFCBlocks.PLANTS.get(Plant.HANGING_VINES),
-                TFCBlocks.PLANTS.get(Plant.SPANISH_MOSS),
-                TFCBlocks.PLANTS.get(Plant.LIANA),
-                TFCBlocks.PLANTS.get(Plant.TREE_FERN),
-                TFCBlocks.PLANTS.get(Plant.ARUNDO),
-                TFCBlocks.PLANTS.get(Plant.DRY_PHRAGMITE),
-                TFCBlocks.PLANTS.get(Plant.JUNGLE_VINES),
                 Items.HANGING_ROOTS,
                 TFCItems.CANOLA);
         tag(COMPOST_BROWNS_MEDIUM).add(
@@ -254,10 +261,10 @@ public class BuiltinItemTags extends TagsProvider<Item> implements Accessors
         tag(COLORED_CARPETS).addNotWhite("carpet");
         tag(COLORED_BEDS).addNotWhite("bed");
         tag(COLORED_BANNERS).addNotWhite("banner");
-        tag(COLORED_TERRACOTTA).addNotWhite("terracotta");
-        tag(COLORED_GLAZED_TERRACOTTA).addNotWhite("glazed_terracotta");
-        tag(COLORED_SHULKER_BOXES).addNotWhite("shulker_box");
-        tag(COLORED_CONCRETE_POWDER).addNotWhite("concrete_powder");
+        tag(COLORED_TERRACOTTA).addAllColors("terracotta");
+        tag(COLORED_GLAZED_TERRACOTTA).addAllColors("glazed_terracotta");
+        tag(COLORED_SHULKER_BOXES).addAllColors("shulker_box");
+        tag(COLORED_CONCRETE_POWDER).addAllColors("concrete_powder");
         tag(COLORED_CANDLES).add(TFCBlocks.DYED_CANDLE);
         tag(COLORED_WINDMILL_BLADES)
             .addOnly(TFCItems.WINDMILL_BLADES, c -> c != DyeColor.WHITE);
@@ -296,10 +303,6 @@ public class BuiltinItemTags extends TagsProvider<Item> implements Accessors
         tag(TWIGS).add(TFCBlocks.WOODS, Wood.BlockType.TWIG);
         tag(ItemTags.BOATS).add(TFCItems.BOATS);
         copy(TFCTags.Blocks.LAMPS, LAMPS);
-        tag(Tags.Items.BUCKETS).add(
-            TFCItems.WOODEN_BUCKET,
-            TFCItems.RED_STEEL_BUCKET,
-            TFCItems.BLUE_STEEL_BUCKET);
         tag(MINECARTS)
             .add(Items.MINECART)
             .add(TFCItems.CHEST_MINECARTS);
@@ -421,8 +424,7 @@ public class BuiltinItemTags extends TagsProvider<Item> implements Accessors
         tag(TOOLS_SHARP).addTags(
             ItemTags.HOES,
             TOOLS_KNIFE,
-            TOOLS_SCYTHE,
-            TOOLS_SAW);
+            TOOLS_SCYTHE);
         tag(SCRAPED_HIDES)
             .add(TFCItems.HIDES.get(HideItemType.SCRAPED));
         tag(TOOLS_STONE)
@@ -590,6 +592,7 @@ public class BuiltinItemTags extends TagsProvider<Item> implements Accessors
             .addAll(TFCItems.GRADED_ORES);
 
         tag(MUD_BRICK_ITEMS)
+            .addTag(MUD_BRICKS)
             .add(TFCItems.ENTISOL_MUD_BRICK)
             .add(TFCItems.ALFISOL_MUD_BRICK)
             .add(TFCItems.PODZOL_MUD_BRICK)
@@ -819,7 +822,7 @@ public class BuiltinItemTags extends TagsProvider<Item> implements Accessors
         copy(TFCTags.Blocks.GRASS, GRASS);
         copy(TFCTags.Blocks.COARSE_DIRT, COARSE_DIRT);
         copy(TFCTags.Blocks.MUD, MUD);
-        copy(TFCTags.Blocks.MUD_BRICKS, MUD_BRICK_ITEMS);
+        copy(TFCTags.Blocks.MUD_BRICKS, MUD_BRICKS);
 
         copy(TFCTags.Blocks.ANVILS, ANVILS);
         copy(TFCTags.Blocks.WORKBENCHES, WORKBENCHES);
@@ -918,6 +921,12 @@ public class BuiltinItemTags extends TagsProvider<Item> implements Accessors
         <T> ItemTagAppender addOnly(Map<T, ? extends ItemLike> items, Predicate<T> only)
         {
             return add(items.entrySet().stream().filter(e -> only.test(e.getKey())).map(Map.Entry::getValue));
+        }
+
+        ItemTagAppender addAllColors(String itemName)
+        {
+            for (DyeColor c : Helpers.DYE_COLORS) add(itemOf(ResourceLocation.withDefaultNamespace(c.getSerializedName() + "_" + itemName)));
+            return this;
         }
 
         ItemTagAppender addNotWhite(String itemName)

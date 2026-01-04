@@ -38,7 +38,7 @@ import net.dries007.tfc.util.SyncableContainerData;
 import net.dries007.tfc.util.calendar.ICalendarTickable;
 import net.dries007.tfc.util.data.Fuel;
 
-public abstract class AbstractFirepitBlockEntity<C extends IItemHandlerModifiable & INBTSerializable<CompoundTag>> extends TickableInventoryBlockEntity<C> implements ICalendarTickable, MenuProvider
+public abstract class AbstractFirepitBlockEntity<C extends IItemHandlerModifiable & INBTSerializable<CompoundTag>> extends TickableInventoryBlockEntity<C> implements ICalendarTickable, MenuProvider, IHeatable
 {
     public static final int SLOT_FUEL_CONSUME = 0; // where fuel is taken by the firepit
     public static final int SLOT_FUEL_2 = 1;

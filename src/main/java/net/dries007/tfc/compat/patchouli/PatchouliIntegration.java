@@ -7,16 +7,15 @@
 package net.dries007.tfc.compat.patchouli;
 
 import java.util.Optional;
-import java.util.function.BiFunction;
 import java.util.function.Function;
 import com.mojang.logging.LogUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LeverBlock;
 import net.minecraft.world.level.block.PipeBlock;
@@ -25,6 +24,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.AttachFace;
 import net.minecraft.world.level.block.state.properties.RedstoneSide;
 import net.minecraft.world.level.material.Fluids;
+import net.neoforged.neoforge.items.ItemStackHandler;
+
 import org.slf4j.Logger;
 import vazkii.patchouli.api.IMultiblock;
 import vazkii.patchouli.api.IStateMatcher;
@@ -32,13 +33,12 @@ import vazkii.patchouli.api.PatchouliAPI;
 
 import net.dries007.tfc.common.blockentities.TFCBlockEntities;
 import net.dries007.tfc.common.blocks.CharcoalPileBlock;
-import net.dries007.tfc.common.blocks.DirectionPropertyBlock;
 import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.blocks.devices.BlastFurnaceBlock;
 import net.dries007.tfc.common.blocks.devices.BloomeryBlock;
 import net.dries007.tfc.common.blocks.devices.ChannelBlock;
 import net.dries007.tfc.common.blocks.devices.CharcoalForgeBlock;
-import net.dries007.tfc.common.blocks.devices.MoldBlock;
+import net.dries007.tfc.common.blocks.devices.MoldTableBlock;
 import net.dries007.tfc.common.blocks.rock.Rock;
 import net.dries007.tfc.common.blocks.rock.RockCategory;
 import net.dries007.tfc.common.blocks.rotation.AxleBlock;
@@ -51,7 +51,6 @@ import net.dries007.tfc.common.items.TFCItems;
 import net.dries007.tfc.config.TFCConfig;
 import net.dries007.tfc.util.Helpers;
 import net.dries007.tfc.util.Metal;
-import net.dries007.tfc.util.MetalItem;
 
 public final class PatchouliIntegration
 {
@@ -230,9 +229,9 @@ public final class PatchouliIntegration
                     .setValue(ChannelBlock.NORTH, true)),
             'C',
             api.stateMatcher(TFCBlocks.MOLD_TABLE.get().defaultBlockState()
-                    .setValue(MoldBlock.SOUTH, true)),
+                    .setValue(MoldTableBlock.SOUTH, true)),
             'c', api.stateMatcher(TFCBlocks.MOLD_TABLE.get().defaultBlockState()
-                    .setValue(MoldBlock.NORTH, true)));
+                    .setValue(MoldTableBlock.NORTH, true)));
 
         return multiblock;
     }
@@ -260,7 +259,14 @@ public final class PatchouliIntegration
 
         sneakIntoMultiblock(multiblock)
             .flatMap(access -> access.getBlockEntity(new BlockPos(0, 6, 6), TFCBlockEntities.WINDMILL.get()))
-            .ifPresent(entity -> entity.getRotationNode().setRotationFromOutsideWorld());
+            .ifPresent(entity -> {
+                entity.getRotationNode().setRotationFromOutsideWorld();
+                final ItemStackHandler inventory = entity.getInventory();
+                for (int i = 0; i < inventory.getSlots(); i++)
+                {
+                    inventory.setStackInSlot(i, new ItemStack(TFCItems.WINDMILL_BLADES.get(DyeColor.WHITE)));
+                }
+            });
 
         return multiblock;
     }
@@ -342,6 +348,7 @@ public final class PatchouliIntegration
             access.getBlockEntity(new BlockPos(0, 1, 0), TFCBlockEntities.QUERN.get()).ifPresent(quern -> {
                 quern.getRotationNode().setRotationFromOutsideWorld();
                 quern.setHandstoneFromOutsideWorld();
+                quern.setAxleAboveFromOutsideWorld(TFCBlocks.WOODS.get(Wood.OAK).get(Wood.BlockType.AXLE).get());
             });
             access.getBlockEntity(new BlockPos(0, 2, 0), TFCBlockEntities.AXLE.get()).ifPresent(axle -> axle.getRotationNode().setRotationFromOutsideWorld());
         });

@@ -6,10 +6,13 @@
     },
     {
       "item": "tfc:plant/grape_hyacinth"
+    },
+    {
+      "item": "tfc:plant/cornflower"
     }
   ],
   "result": {
-    "count": 1,
+    "count": 2,
     "id": "minecraft:blue_dye"
   }
 }

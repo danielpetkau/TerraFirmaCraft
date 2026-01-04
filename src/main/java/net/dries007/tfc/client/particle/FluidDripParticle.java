@@ -197,6 +197,15 @@ public class FluidDripParticle extends TextureSheetParticle
         }
     }
 
+    public static class BarrelSpillParticle extends FluidFallAndLandParticle
+    {
+        public BarrelSpillParticle(ClientLevel level, double x, double y, double z, Fluid fluid)
+        {
+            super(level, x, y, z, fluid);
+            gravity = 0.06f;
+        }
+    }
+
     public interface FluidParticleFactory
     {
         FluidDripParticle create(ClientLevel level, double x, double y, double z, Fluid fluid);

@@ -19,7 +19,6 @@ import net.minecraft.world.level.levelgen.placement.PlacementContext;
 import net.minecraft.world.level.levelgen.placement.PlacementModifier;
 import net.minecraft.world.level.levelgen.placement.PlacementModifierType;
 
-import net.dries007.tfc.TerraFirmaCraft;
 import net.dries007.tfc.client.overworld.SolarCalculator;
 import net.dries007.tfc.util.EnvironmentHelpers;
 import net.dries007.tfc.world.Codecs;
@@ -172,7 +171,7 @@ public class ClimatePlacement extends PlacementModifier
 
         final int y = pos.getY();
         final float temperature = EnvironmentHelpers.adjustAvgTempForElev(y, data.getAverageSeaLevelTemp(pos));
-        final float groundwater = ignoreRivers ? data.getRainfall(pos) : data.getGroundwater(pos);
+        final float groundwater = ignoreRivers ? data.getAverageRainfall(pos) : data.getAverageGroundwater(pos);
         final ForestType forestType = data.getForestType();
 
         //Empty list of Forest Types defaults to generating everywhere

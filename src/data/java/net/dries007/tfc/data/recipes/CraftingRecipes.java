@@ -6,36 +6,24 @@
 
 package net.dries007.tfc.data.recipes;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
-import java.util.function.BiConsumer;
 import java.util.function.Function;
-import com.google.common.collect.ImmutableMap;
 
 import net.dries007.tfc.common.blocks.*;
 
-import net.minecraft.core.Holder;
-import net.minecraft.core.NonNullList;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.crafting.Recipe;
-import net.minecraft.world.item.crafting.ShapedRecipe;
-import net.minecraft.world.item.crafting.ShapedRecipePattern;
-import net.minecraft.world.item.crafting.ShapelessRecipe;
 import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.material.Fluids;
 import net.neoforged.neoforge.common.Tags;
-import org.jetbrains.annotations.Nullable;
-
 import net.dries007.tfc.common.TFCTags;
 import net.dries007.tfc.common.blocks.plant.Plant;
 import net.dries007.tfc.common.blocks.rock.Ore;
@@ -44,35 +32,22 @@ import net.dries007.tfc.common.blocks.rock.RockCategory;
 import net.dries007.tfc.common.blocks.soil.SoilBlockType;
 import net.dries007.tfc.common.blocks.wood.Wood;
 import net.dries007.tfc.common.component.food.FoodData;
-import net.dries007.tfc.common.component.food.FoodTrait;
 import net.dries007.tfc.common.component.food.FoodTraits;
 import net.dries007.tfc.common.fluids.TFCFluids;
 import net.dries007.tfc.common.items.Food;
 import net.dries007.tfc.common.items.HideItemType;
 import net.dries007.tfc.common.items.Powder;
 import net.dries007.tfc.common.items.TFCItems;
-import net.dries007.tfc.common.recipes.AdvancedShapedRecipe;
-import net.dries007.tfc.common.recipes.AdvancedShapelessRecipe;
 import net.dries007.tfc.common.recipes.CastingCraftingRecipe;
 import net.dries007.tfc.common.recipes.FoodCombiningCraftingRecipe;
 import net.dries007.tfc.common.recipes.ingredients.AndIngredient;
 import net.dries007.tfc.common.recipes.ingredients.FluidContentIngredient;
 import net.dries007.tfc.common.recipes.ingredients.LacksTraitIngredient;
 import net.dries007.tfc.common.recipes.ingredients.NotRottenIngredient;
-import net.dries007.tfc.common.recipes.outputs.AddBaitToRodModifier;
-import net.dries007.tfc.common.recipes.outputs.AddGlassModifier;
-import net.dries007.tfc.common.recipes.outputs.AddPowderModifier;
-import net.dries007.tfc.common.recipes.outputs.AddTraitModifier;
-import net.dries007.tfc.common.recipes.outputs.CopyFoodModifier;
-import net.dries007.tfc.common.recipes.outputs.CopyForgingBonusModifier;
-import net.dries007.tfc.common.recipes.outputs.CopyInputModifier;
-import net.dries007.tfc.common.recipes.outputs.CopyOldestFoodModifier;
-import net.dries007.tfc.common.recipes.outputs.DamageCraftingRemainderModifier;
-import net.dries007.tfc.common.recipes.outputs.ExtraProductModifier;
-import net.dries007.tfc.common.recipes.outputs.ItemStackModifier;
-import net.dries007.tfc.common.recipes.outputs.ItemStackProvider;
 import net.dries007.tfc.common.recipes.outputs.MealModifier;
 import net.dries007.tfc.util.Metal;
+
+import static net.dries007.tfc.util.DataGenerationHelpers.Builder;
 
 public interface CraftingRecipes extends Recipes
 {
@@ -90,7 +65,6 @@ public interface CraftingRecipes extends Recipes
             "bolt_armor_trim_smithing_template",
             "bone_meal",
             "bookshelf",
-            "bow",
             "bricks",
             "bucket",
             "campfire",
@@ -163,7 +137,8 @@ public interface CraftingRecipes extends Recipes
             "wooden_hoe",
             "wooden_pickaxe",
             "wooden_shovel",
-            "wooden_sword"
+            "wooden_sword",
+            "snow_block"
         );
         for (String material : List.of("diamond", "golden", "iron"))
             remove(
@@ -183,7 +158,8 @@ public interface CraftingRecipes extends Recipes
             remove(
                 color.getSerializedName() + "_stained_glass",
                 color.getSerializedName() + "_stained_glass_pane",
-                color.getSerializedName() + "_stained_glass_pane_from_glass_pane"
+                color.getSerializedName() + "_stained_glass_pane_from_glass_pane",
+                "dye_" + color.getSerializedName() + "_bed"
             );
         }
 
@@ -323,7 +299,7 @@ public interface CraftingRecipes extends Recipes
                 .input('X', brick)
                 .input('M', TFCItems.MORTAR)
                 .pattern("X X", "MXM")
-                .shaped(blocks.get(Rock.BlockType.AQUEDUCT));
+                .shaped(blocks.get(Rock.BlockType.AQUEDUCT), 2);
             recipe()
                 .input(Ingredient.of(
                     blocks.get(Rock.BlockType.LOOSE),
@@ -354,6 +330,24 @@ public interface CraftingRecipes extends Recipes
             recipe().useTool(TFCTags.Items.TOOLS_CHISEL, blocks.get(Rock.BlockType.RAW), blocks.get(Rock.BlockType.SMOOTH));
 
             TFCBlocks.ROCK_DECORATIONS.get(rock).forEach((type, decorations) -> addDecorations(blocks.get(type), decorations));
+            recipe("from_slabs")
+                .input(rock.getSlab(Rock.BlockType.COBBLE).get())
+                .shapeless(blocks.get(Rock.BlockType.LOOSE), 2);
+            recipe("from_slabs")
+                .input(rock.getSlab(Rock.BlockType.MOSSY_COBBLE).get())
+                .shapeless(blocks.get(Rock.BlockType.MOSSY_LOOSE), 2);
+            recipe("from_stairs")
+                .input(rock.getStair(Rock.BlockType.COBBLE).get())
+                .shapeless(blocks.get(Rock.BlockType.LOOSE), 3);
+            recipe("from_stairs")
+                .input(rock.getStair(Rock.BlockType.MOSSY_COBBLE).get())
+                .shapeless(blocks.get(Rock.BlockType.MOSSY_LOOSE), 3);
+            recipe("from_walls")
+                .input(rock.getWall(Rock.BlockType.COBBLE).get())
+                .shapeless(blocks.get(Rock.BlockType.LOOSE), 4);
+            recipe("from_walls")
+                .input(rock.getWall(Rock.BlockType.MOSSY_COBBLE).get())
+                .shapeless(blocks.get(Rock.BlockType.MOSSY_LOOSE), 4);
         }
 
         TFCBlocks.SANDSTONE.forEach((color, blocks) -> {
@@ -380,7 +374,7 @@ public interface CraftingRecipes extends Recipes
             recipe("small")
                 .input('#', blocks.apply(SoilBlockType.MUD_BRICKS))
                 .pattern("# ", "##")
-                .shaped(TFCBlocks.MUD_BRICK_DECORATIONS.get(soil).stair(), 8);
+                .shaped(TFCBlocks.MUD_BRICK_DECORATIONS.get(soil).stair(), 4);
             recipe()
                 .input(blocks.apply(SoilBlockType.MUD))
                 .input(TFCBlocks.TREE_ROOTS)
@@ -460,7 +454,7 @@ public interface CraftingRecipes extends Recipes
             recipe()
                 .input('L', lumber)
                 .pattern("LL", "LL", "LL")
-                .shaped(blocks.get(Wood.BlockType.DOOR), 2);
+                .shaped(blocks.get(Wood.BlockType.DOOR));
             recipe()
                 .input('L', lumber)
                 .input('S', blocks.get(Wood.BlockType.STRIPPED_LOG))
@@ -507,6 +501,16 @@ public interface CraftingRecipes extends Recipes
                 .input(planks)
                 .damageInputs()
                 .shapeless(lumber, 4);
+            recipe("from_stairs")
+                .inputIsPrimary(TFCTags.Items.TOOLS_SAW)
+                .input(blocks.get(Wood.BlockType.STAIRS))
+                .damageInputs()
+                .shapeless(lumber, 3);
+            recipe("from_slabs")
+                .inputIsPrimary(TFCTags.Items.TOOLS_SAW)
+                .input(blocks.get(Wood.BlockType.SLAB))
+                .damageInputs()
+                .shapeless(lumber, 2);
             recipe().to2x2(lumber, planks, 1);
             recipe()
                 .input('L', lumber)
@@ -564,7 +568,7 @@ public interface CraftingRecipes extends Recipes
             recipe()
                 .input('L', lumber)
                 .pattern("LLL", "LLL")
-                .shaped(blocks.get(Wood.BlockType.TRAPDOOR));
+                .shaped(blocks.get(Wood.BlockType.TRAPDOOR), 2);
             recipe()
                 .input(blocks.get(Wood.BlockType.CHEST))
                 .input(Items.TRIPWIRE_HOOK)
@@ -581,12 +585,23 @@ public interface CraftingRecipes extends Recipes
 
         for (DyeColor color : DyeColor.values())
         {
-            replace(color.getSerializedName() + "_bed")
-                .input('D', dyeOf(color))
-                .input('H', TFCTags.Items.HIGH_QUALITY_CLOTH)
-                .input('L', TFCTags.Items.LUMBER)
-                .pattern("DDD", "HHH", "LLL")
-                .shaped(dyedOf(color, "bed"));
+            if (color == DyeColor.WHITE)
+            {
+                replace(color.getSerializedName() + "_bed")
+                    .input('H', TFCTags.Items.HIGH_QUALITY_CLOTH)
+                    .input('L', TFCTags.Items.LUMBER)
+                    .pattern("HHH", "LLL")
+                    .shaped(dyedOf(color, "bed"));
+            }
+            else
+            {
+                replace(color.getSerializedName() + "_bed")
+                    .input('D', dyeOf(color))
+                    .input('H', TFCTags.Items.HIGH_QUALITY_CLOTH)
+                    .input('L', TFCTags.Items.LUMBER)
+                    .pattern("DDD", "HHH", "LLL")
+                    .shaped(dyedOf(color, "bed"));
+            }
             replace(color.getSerializedName() + "_concrete_powder")
                 .input(Tags.Items.GRAVELS, 4)
                 .input(Tags.Items.SANDS, 4)
@@ -634,6 +649,11 @@ public interface CraftingRecipes extends Recipes
             .input('T', Items.REDSTONE_TORCH)
             .pattern("ISI", "ITI", "ISI")
             .shaped(Items.ACTIVATOR_RAIL, 12);
+        replace("bow")
+            .input('S', Tags.Items.STRINGS)
+            .input('T', Tags.Items.RODS_WOODEN)
+            .pattern("ST ", "S T", "ST ")
+            .shaped(Items.BOW);
         replace("comparator")
             .input('S', TFCTags.Items.STONES_RAW)
             .input('R', Tags.Items.DUSTS_REDSTONE)
@@ -802,7 +822,7 @@ public interface CraftingRecipes extends Recipes
             .input('L', Tags.Items.LEATHERS)
             .pattern("SSS", "SLS", "SSS")
             .shaped(Items.ITEM_FRAME, 4);
-        replace("ladder")
+        recipe()
             .input('L', TFCTags.Items.LUMBER)
             .pattern("L L", "L L", "L L")
             .shaped(Items.LADDER, 16);
@@ -914,7 +934,7 @@ public interface CraftingRecipes extends Recipes
         recipe()
             .input(Tags.Items.SANDS, 4)
             .input(Tags.Items.GRAVELS, 4)
-            .shapeless(TFCBlocks.AGGREGATE);
+            .shapeless(TFCBlocks.AGGREGATE, 8);
         recipe()
             .input('S', Items.STICK)
             .input('L', TFCTags.Items.LUMBER)
@@ -1111,6 +1131,7 @@ public interface CraftingRecipes extends Recipes
             .input(TFCItems.POWDERS.get(Powder.SALT))
             .copyInput()
             .addTrait(FoodTraits.SALTED)
+            .roundCreationDate()
             .shapeless("salting");
         recipe()
             .input(Items.PAPER)
@@ -1120,8 +1141,8 @@ public interface CraftingRecipes extends Recipes
             .input(TFCTags.Items.GEM_POWDERS)
             .shapeless(TFCItems.SANDPAPER);
         recipe()
-            .input(TFCTags.Items.MUD_BRICK_ITEMS)
             .input(TFCItems.DAUB)
+            .input(TFCTags.Items.MUD_BRICKS)
             .shapeless(TFCBlocks.SMOOTH_MUD_BRICKS);
         recipe()
             .input(TFCItems.GLUE)
@@ -1156,15 +1177,19 @@ public interface CraftingRecipes extends Recipes
         recipe("from_twigs")
             .input(TFCTags.Items.TWIGS)
             .shapeless(Items.STICK, 1);
-        recipe("from_golden_bamboo")
-            .input('X', TFCBlocks.PLANTS.get(Plant.GOLDEN_BAMBOO))
-            .pattern("X")
+        recipe("from_tfc_bamboo")
+            .input('X', TFCTags.Items.BAMBOO)
+            .pattern("X", "X")
             .shaped(Items.STICK);
-        recipe("from_golden_bamboo")
+        recipe("from_tfc_bamboo")
             .input('I', TFCTags.Items.BAMBOO)
             .input('~', Tags.Items.STRINGS)
             .pattern("I~I", "I I", "I I")
             .shaped(Items.SCAFFOLDING);
+        recipe()
+            .input('X', TFCBlocks.PLANTS.get(Plant.GOLDEN_BAMBOO))
+            .pattern("XXX", "XXX", "XXX")
+            .shaped(TFCBlocks.GOLDEN_BAMBOO_BLOCK);
         recipe().to2x2(TFCItems.STRAW, TFCBlocks.THATCH, 1);
         recipe()
             .input(TFCBlocks.THATCH)
@@ -1217,6 +1242,34 @@ public interface CraftingRecipes extends Recipes
         recipe("from_canola")
             .input(TFCItems.CANOLA)
             .shapeless(TFCItems.STRAW);
+        recipe()
+            .input('S', ingredientOf(Metal.CAST_IRON, Metal.ItemType.DOUBLE_SHEET))
+            .pattern(" S ", "S S", " S ")
+            .shaped(TFCBlocks.STOVE);
+        recipe()
+            .input('R', TFCItems.METAL_ITEMS.get(Metal.BRASS).get(Metal.ItemType.ROD))
+            .input('B', TFCItems.BRASS_MECHANISMS)
+            .pattern(" R ", "RBR", " R ")
+            .shaped(TFCBlocks.ANEMOMETER);
+        recipe()
+            .input('S', TFCItems.METAL_ITEMS.get(Metal.WROUGHT_IRON).get(Metal.ItemType.SHEET))
+            .input('W', TFCItems.METAL_ITEMS.get(Metal.WROUGHT_IRON).get(Metal.ItemType.ROD))
+            .input('B', TFCItems.BRASS_MECHANISMS)
+            .pattern(" S ", "WBW", " W ")
+            .shaped(TFCBlocks.VANE);
+        recipe()
+            .input('G', Blocks.GLASS_PANE)
+            .input('B', TFCItems.BRASS_MECHANISMS)
+            .input('S', TFCItems.METAL_ITEMS.get(Metal.BRASS).get(Metal.ItemType.SHEET))
+            .pattern(" G ", "SBS", " B ")
+            .shaped(TFCBlocks.CALENDAR_CLOCK);
+        recipe()
+            .input('G', Blocks.GLASS_PANE)
+            .input('B', TFCTags.Items.GLASS_BOTTLES)
+            .input('R', Items.REDSTONE)
+            .input('S', TFCItems.METAL_ITEMS.get(Metal.BRASS).get(Metal.ItemType.SHEET))
+            .pattern(" G ", "RBR", " S ")
+            .shaped(TFCBlocks.THERMOMETER);
     }
 
     /**
@@ -1274,7 +1327,8 @@ public interface CraftingRecipes extends Recipes
         final var meal = new MealModifier(
             FoodData.ofFood(1f, 0.5f, 4.5f),
             List.of(
-                new MealModifier.MealPortion(Optional.of(Ingredient.of(TFCItems.FOOD.get(bread))), 0.5f, 0.5f, 0.5f),
+                // For a 3-ingredient sandwich, average nutritional value is 0.75, matching salads
+                new MealModifier.MealPortion(Optional.of(Ingredient.of(TFCItems.FOOD.get(bread))), 0.675f, 0.5f, 0.5f),
                 new MealModifier.MealPortion(Optional.empty(), 0.8f, 0.8f, 0.8f)
             ));
 
@@ -1285,21 +1339,27 @@ public interface CraftingRecipes extends Recipes
             .copyFood()
             .extraProduct(TFCItems.STRAW)
             .shapeless(TFCItems.FOOD.get(grain));
-        recipe()
-            .input('K', TFCTags.Items.TOOLS_KNIFE)
-            .input('B', notRotten(bread))
-            .input('S', notRotten(Ingredient.of(TFCTags.Items.USABLE_IN_SANDWICH)))
-            .pattern("KB ", "SSS", " B ")
-            .damageInputs()
-            .addOutputModifier(meal)
-            .shaped(TFCItems.FOOD.get(sandwich), 2);
 
-        for (String pattern : List.of("JSS", "SJS", "SSJ"))
+        // Non-jam sandwiches
+        for (String pattern : List.of("SSS", "SS ", " SS", "S S", "S  ", " S ", "  S"))
+        {
+            recipe(pattern.replace(" ", "x").toLowerCase())
+                .input('K', TFCTags.Items.TOOLS_KNIFE)
+                .input('B', notRotten(bread))
+                .input('S', notRotten(Ingredient.of(TFCTags.Items.USABLE_IN_SANDWICH)))
+                .pattern("KB ", pattern, " B ")
+                .damageInputs()
+                .addOutputModifier(meal)
+                .shaped(TFCItems.FOOD.get(sandwich), 1);
+        }
+
+        // Two and three ingredient jam sandwiches
+        for (String pattern : List.of("JSS", "SJS", "SSJ", "JS ", "SJ ", " JS", " SJ", "S J", "J S"))
         {
             String variant = "_jar";
             for (TagKey<Item> tag : List.of(TFCTags.Items.PRESERVES, TFCTags.Items.JAM))
             {
-                recipe("" + pattern.indexOf('J') + variant)
+                recipe("" + pattern.replace(" ", "x").toLowerCase() + variant)
                     .input('K', TFCTags.Items.TOOLS_KNIFE)
                     .input('B', notRotten(bread))
                     .input('S', notRotten(Ingredient.of(TFCTags.Items.USABLE_IN_JAM_SANDWICH)))
@@ -1307,11 +1367,28 @@ public interface CraftingRecipes extends Recipes
                     .pattern("KB ", pattern, " B ")
                     .damageInputs()
                     .addOutputModifier(meal)
-                    .shaped(TFCItems.FOOD.get(jamSandwich), 2);
+                    .shaped(TFCItems.FOOD.get(jamSandwich));
                 variant = "_jam";
             }
         }
 
+        // One item jam sandwiches
+        for (String pattern : List.of(" J ", "J  ", "  J"))
+        {
+            String variant = "_jar";
+            for (TagKey<Item> tag : List.of(TFCTags.Items.PRESERVES, TFCTags.Items.JAM))
+            {
+                recipe("" + pattern.replace(" ", "x").toLowerCase() + variant)
+                    .input('K', TFCTags.Items.TOOLS_KNIFE)
+                    .input('B', notRotten(bread))
+                    .input('J', notRotten(Ingredient.of(tag)))
+                    .pattern("KB ", pattern, " B ")
+                    .damageInputs()
+                    .addOutputModifier(meal)
+                    .shaped(TFCItems.FOOD.get(jamSandwich));
+                variant = "_jam";
+            }
+        }
 
         for (int n = 1; n <= 8; n++)
             recipe("" + n)
@@ -1354,217 +1431,4 @@ public interface CraftingRecipes extends Recipes
         return AndIngredient.of(food, NotRottenIngredient.INSTANCE);
     }
 
-    /**
-     * A recipe builder capable of building shaped, shapeless recipes, optionally with both output and remainder features
-     * of advanced shaped / shapeless recipes. It has some preliminary validations to ensure legal recipes are built
-     */
-    class Builder
-    {
-        final BiConsumer<String, Recipe<?>> onFinish;
-        @Nullable String name = null;
-
-        final List<ItemStackModifier> remainder = new ArrayList<>(); // For advanced recipes, remainder modifiers
-        final List<ItemStackModifier> outputs = new ArrayList<>(); // For advanced recipes, output modifiers
-        final NonNullList<Ingredient> ingredients = NonNullList.create(); // Shapeless recipes only
-        final List<String> pattern = new ArrayList<>(); // Shaped recipes only
-        final ImmutableMap.Builder<Character, Ingredient> keys = ImmutableMap.builder();
-        int inputRow = 0, inputCol = 0;
-        @Nullable Ingredient primaryInput = null;
-        boolean needsAdvInput = false, hasAdvInputShaped = false, hasAdvInputShapeless = false;
-
-        Builder(BiConsumer<String, Recipe<?>> onFinish)
-        {
-            this.onFinish = onFinish;
-        }
-
-        void useTool(TagKey<Item> tool, ItemLike input, ItemLike output)
-        {
-            input(input).inputIsPrimary(tool).damageInputs().shapeless(output);
-        }
-
-        void useTool(TagKey<Item> tool, Ingredient input, ItemLike output, int count)
-        {
-            input(input).inputIsPrimary(tool).damageInputs().shapeless(output, count);
-        }
-
-        void bricksWithMortar(ItemLike brick, ItemLike bricks, int count)
-        {
-            input('Y', TFCItems.MORTAR).input('X', brick).pattern("XYX", "YXY", "XYX").shaped(bricks, count);
-        }
-
-        void to3x3(Ingredient input, ItemLike storage)
-        {
-            input('X', input).pattern("XXX", "XXX", "XXX").shaped(storage);
-        }
-
-        void from3x3(Ingredient input, ItemLike item)
-        {
-            input(input).shapeless(item, 9);
-        }
-
-        void to2x2(ItemLike input, ItemLike output, int count)
-        {
-            input('X', input).pattern("XX", "XX").shaped(output, count);
-        }
-
-        Builder damageInputs()
-        {
-            remainder.add(DamageCraftingRemainderModifier.INSTANCE);
-            return this;
-        }
-
-        Builder copyOldestFood()
-        {
-            outputs.add(CopyOldestFoodModifier.INSTANCE);
-            return this;
-        }
-
-        Builder copyFood()
-        {
-            outputs.add(CopyFoodModifier.INSTANCE);
-            return this;
-        }
-
-        Builder copyForging()
-        {
-            needsAdvInput = true;
-            return addOutputModifier(CopyForgingBonusModifier.INSTANCE);
-        }
-
-        Builder copyInput()
-        {
-            needsAdvInput = true;
-            return addOutputModifier(CopyInputModifier.INSTANCE);
-        }
-
-        Builder addGlass()
-        {
-            needsAdvInput = true;
-            return addOutputModifier(AddGlassModifier.INSTANCE);
-        }
-
-        Builder addPowder() {return addOutputModifier(AddPowderModifier.INSTANCE);}
-
-        Builder addBait() {return addOutputModifier(AddBaitToRodModifier.INSTANCE);}
-
-        Builder extraProduct(ItemLike item) {return extraProduct(item, 1);}
-
-        Builder extraProduct(ItemLike item, int count)
-        {
-            remainder.add(new ExtraProductModifier(new ItemStack(item, count)));
-            return this;
-        }
-
-        Builder addTrait(Holder<FoodTrait> trait) {return addOutputModifier(AddTraitModifier.of(trait));}
-
-        Builder addOutputModifier(ItemStackModifier modifier)
-        {
-            outputs.add(modifier);
-            return this;
-        }
-
-        Builder input(ItemLike item) {return input(item, 1);}
-
-        Builder input(ItemLike item, int count) {return input(Ingredient.of(item), count);}
-
-        Builder input(TagKey<Item> item) {return input(item, 1);}
-
-        Builder input(TagKey<Item> item, int count) {return input(Ingredient.of(item), count);}
-
-        Builder input(Ingredient item) {return input(item, 1);}
-
-        Builder input(Ingredient item, int count)
-        {
-            for (int n = 0; n < count; n++) ingredients.add(item);
-            return this;
-        }
-
-        Builder inputIsPrimary(ItemLike item) {return inputIsPrimary(Ingredient.of(item));}
-
-        Builder inputIsPrimary(TagKey<Item> item) {return inputIsPrimary(Ingredient.of(item));}
-
-        Builder inputIsPrimary(Ingredient item)
-        {
-            primaryInput = item;
-            hasAdvInputShapeless = true;
-            return input(item);
-        }
-
-        Builder input(char key, TagKey<Item> input) {return input(key, Ingredient.of(input));}
-
-        Builder input(char key, ItemLike input) {return input(key, Ingredient.of(input));}
-
-        Builder input(char key, Ingredient input)
-        {
-            keys.put(key, input);
-            return this;
-        }
-
-        Builder source(int row, int col)
-        {
-            inputRow = row;
-            inputCol = col;
-            hasAdvInputShaped = true;
-            return this;
-        }
-
-        Builder pattern(String... pattern)
-        {
-            this.pattern.addAll(List.of(pattern));
-            return this;
-        }
-
-        void shapeless(String name)
-        {
-            this.name = name;
-            shapeless(ItemStack.EMPTY);
-        }
-
-        void shapeless(ItemLike output) {shapeless(output, 1);}
-
-        void shapeless(ItemLike output, int count) {shapeless(new ItemStack(output, count));}
-
-        void shapeless(ItemStack output)
-        {
-            assert pattern.isEmpty() && keys.build().isEmpty() : "Mixing shaped and shapeless recipes";
-            assert hasAdvInputShapeless || !needsAdvInput : "Missing a .inputIsPrimary(Ingredient) for a recipe which depends on input";
-            assert !outputs.isEmpty() || !output.isEmpty() : "Either non-empty output, or output modifiers must be present";
-
-            onFinish.accept(name, isAdvanced()
-                ? new AdvancedShapelessRecipe(ingredients, ItemStackProvider.of(output, outputs), remainder(), Optional.ofNullable(primaryInput))
-                : new ShapelessRecipe("", CraftingBookCategory.MISC, output, ingredients));
-        }
-
-        void shaped(String name)
-        {
-            this.name = name;
-            shaped(ItemStack.EMPTY);
-        }
-
-        void shaped(ItemLike output) {shaped(output, 1);}
-
-        void shaped(ItemLike output, int count) {shaped(new ItemStack(output, count));}
-
-        void shaped(ItemStack output)
-        {
-            assert ingredients.isEmpty() : "Mixing shaped and shapeless recipes";
-            assert hasAdvInputShaped || !needsAdvInput : "Missing a .source(int, int) for a recipe which depends on input";
-            assert !outputs.isEmpty() || !output.isEmpty() : "Either non-empty output, or output modifiers must be present";
-
-            final ShapedRecipePattern pattern = ShapedRecipePattern.of(keys.build(), this.pattern);
-            onFinish.accept(name, isAdvanced()
-                ? new AdvancedShapedRecipe(pattern, true, ItemStackProvider.of(output, outputs), remainder(), inputRow, inputCol)
-                : new ShapedRecipe("", CraftingBookCategory.MISC, pattern, output));
-        }
-
-        private Optional<ItemStackProvider> remainder()
-        {
-            return remainder.isEmpty() ? Optional.empty() : Optional.of(ItemStackProvider.of(ItemStack.EMPTY, remainder));
-        }
-
-        private boolean isAdvanced()
-        {
-            return !remainder.isEmpty() || !outputs.isEmpty();
-        }
-    }
 }

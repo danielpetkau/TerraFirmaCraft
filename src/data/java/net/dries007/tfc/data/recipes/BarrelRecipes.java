@@ -7,14 +7,13 @@
 package net.dries007.tfc.data.recipes;
 
 import java.util.function.Function;
-import java.util.stream.Stream;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
@@ -28,7 +27,7 @@ import net.neoforged.neoforge.fluids.crafting.SizedFluidIngredient;
 import net.dries007.tfc.common.TFCTags;
 import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.blocks.rock.Ore;
-import net.dries007.tfc.common.blocks.wood.Wood;
+import net.dries007.tfc.common.blocks.soil.SoilBlockType;
 import net.dries007.tfc.common.component.food.FoodTraits;
 import net.dries007.tfc.common.fluids.SimpleFluid;
 import net.dries007.tfc.common.fluids.TFCFluids;
@@ -48,6 +47,7 @@ import net.dries007.tfc.common.recipes.outputs.CopyInputModifier;
 import net.dries007.tfc.common.recipes.outputs.DyeLeatherModifier;
 import net.dries007.tfc.common.recipes.outputs.EmptyBowlModifier;
 import net.dries007.tfc.common.recipes.outputs.ItemStackProvider;
+import net.dries007.tfc.common.recipes.outputs.RemoveDyeModifier;
 import net.dries007.tfc.common.recipes.outputs.RemoveTraitModifier;
 
 import static net.minecraft.world.item.crafting.Ingredient.*;
@@ -64,42 +64,42 @@ public interface BarrelRecipes extends Recipes
             barrel()
                 .input(itemOf(HideItemType.RAW, size)).input(fluidOf(SimpleFluid.LIMEWATER), amount)
                 .output(itemOf(HideItemType.SOAKED, size))
-                .sealed(hours(8));
+                .sealed(hours(6));
             barrel()
                 .input(itemOf(HideItemType.SCRAPED, size)).input(SizedFluidIngredient.of(Fluids.WATER, amount))
                 .output(TFCItems.HIDES.get(HideItemType.PREPARED).get(size))
-                .sealed(hours(8));
+                .sealed(hours(6));
             barrel(size.name() + "_leather")
                 .input(itemOf(HideItemType.PREPARED, size)).input(fluidOf(SimpleFluid.TANNIN), amount)
                 .output(ItemStackProvider.of(Items.LEATHER, 1 + size.ordinal()))
-                .sealed(hours(8));
+                .sealed(hours(6));
         }
 
         barrel()
             .input(TFCTags.Items.TANNIN_LOGS)
             .input(Fluids.WATER, 1000)
             .output(fluidOf(SimpleFluid.TANNIN), 1000)
-            .sealed(hours(8));
+            .sealed(hours(6));
         barrel()
             .input(TFCItems.JUTE)
             .input(Fluids.WATER, 200)
             .output(TFCItems.JUTE_FIBER)
-            .sealed(hours(8));
+            .sealed(hours(6));
         barrel()
             .input(notRotten(of(TFCItems.FOOD.get(Food.SUGARCANE))))
             .input(Fluids.WATER, 600)
             .output(Items.SUGAR)
-            .sealed(hours(8));
+            .sealed(hours(6));
         barrel()
             .input(Items.BONE_MEAL)
             .input(fluidOf(SimpleFluid.LIMEWATER), 600)
             .output(TFCItems.GLUE)
-            .sealed(hours(8));
+            .sealed(hours(6));
         barrel()
             .input(TFCItems.PAPYRUS_STRIP)
             .input(Fluids.WATER, 200)
             .output(TFCItems.SOAKED_PAPYRUS_STRIP)
-            .sealed(hours(8));
+            .sealed(hours(6));
         alcohol(of(TFCItems.FOOD.get(Food.BARLEY_FLOUR)), SimpleFluid.BEER);
         alcohol(of(TFCItems.FOOD.get(Food.RED_APPLE), TFCItems.FOOD.get(Food.GREEN_APPLE)), SimpleFluid.CIDER);
         alcohol(of(Items.SUGAR), SimpleFluid.RUM);
@@ -112,7 +112,7 @@ public interface BarrelRecipes extends Recipes
             .input(notRotten(of(TFCTags.Items.FRUITS)))
             .input(TFCTags.Fluids.ALCOHOLS, 250)
             .output(fluidOf(SimpleFluid.VINEGAR), 250)
-            .sealed(hours(8));
+            .sealed(hours(6));
 
         final Ingredient foods = ingredientOf(
             Ingredient.of(TFCTags.Items.FRUITS),
@@ -131,19 +131,20 @@ public interface BarrelRecipes extends Recipes
                 CopyInputModifier.INSTANCE,
                 AddTraitModifier.of(FoodTraits.BRINED)
             ))
-            .sealed(hours(4));
+            .sealed(hours(3));
         barrel("pickled")
             .input(AndIngredient.of(
                 foods,
                 NotRottenIngredient.INSTANCE,
                 HasTraitIngredient.of(FoodTraits.BRINED),
-                LacksTraitIngredient.of(FoodTraits.BRINED)
+                LacksTraitIngredient.of(FoodTraits.PICKLED)
             ))
             .input(fluidOf(SimpleFluid.VINEGAR), 125)
             .output(ItemStackProvider.of(
                 CopyInputModifier.INSTANCE,
                 AddTraitModifier.of(FoodTraits.PICKLED)
-            ));
+            ))
+            .sealed(hours(3));
         barrel("preserved_in_vinegar")
             .input(AndIngredient.of(
                 foods,
@@ -159,7 +160,7 @@ public interface BarrelRecipes extends Recipes
             .input(Tags.Items.SANDS)
             .input(fluidOf(SimpleFluid.LIMEWATER), 100)
             .output(ItemStackProvider.of(TFCItems.MORTAR, 16))
-            .sealed(hours(8));
+            .sealed(hours(6));
         barrel()
             .input(fluidOf(SimpleFluid.MILK_VINEGAR), 1)
             .output(fluidOf(SimpleFluid.CURDLED_MILK), 1)
@@ -177,20 +178,20 @@ public interface BarrelRecipes extends Recipes
             .input(Tags.Items.STRINGS)
             .input(fluidOf(SimpleFluid.TALLOW), 40)
             .output(TFCBlocks.CANDLE)
-            .sealed(hours(4));
+            .sealed(hours(3));
         removeDye(TFCTags.Items.COLORED_WOOL, Items.WHITE_WOOL);
         removeDye(TFCTags.Items.COLORED_CARPETS, Items.WHITE_CARPET);
         removeDye(TFCTags.Items.COLORED_BEDS, Items.WHITE_BED);
-        removeDye(TFCTags.Items.COLORED_BANNERS, Items.WHITE_BANNER);
-        removeDye(TFCTags.Items.COLORED_TERRACOTTA, Items.WHITE_TERRACOTTA);
-        removeDye(TFCTags.Items.COLORED_GLAZED_TERRACOTTA, Items.WHITE_GLAZED_TERRACOTTA);
+        removeDye(ItemTags.BANNERS, Items.WHITE_BANNER); // White banner should still be lye-able to clear patterns
+        removeDye(TFCTags.Items.COLORED_TERRACOTTA, Items.TERRACOTTA);
+        removeDye("glazed", TFCTags.Items.COLORED_GLAZED_TERRACOTTA, Items.TERRACOTTA);
         removeDye(TFCTags.Items.COLORED_SHULKER_BOXES, Items.SHULKER_BOX);
         removeDye(TFCTags.Items.COLORED_CONCRETE_POWDER, TFCBlocks.AGGREGATE);
         removeDye(TFCTags.Items.COLORED_CANDLES, TFCBlocks.CANDLE);
         removeDye(TFCTags.Items.COLORED_WINDMILL_BLADES, TFCItems.WINDMILL_BLADES.get(DyeColor.WHITE));
-        removeDye(TFCTags.Items.COLORED_RAW_ALABASTER, TFCBlocks.RAW_ALABASTER.get(DyeColor.WHITE));
-        removeDye(TFCTags.Items.COLORED_ALABASTER_BRICKS, TFCBlocks.ALABASTER_BRICKS.get(DyeColor.WHITE));
-        removeDye(TFCTags.Items.COLORED_POLISHED_ALABASTER, TFCBlocks.POLISHED_ALABASTER.get(DyeColor.WHITE));
+        removeDye(TFCTags.Items.COLORED_RAW_ALABASTER, TFCBlocks.PLAIN_ALABASTER);
+        removeDye(TFCTags.Items.COLORED_ALABASTER_BRICKS, TFCBlocks.PLAIN_ALABASTER_BRICKS);
+        removeDye(TFCTags.Items.COLORED_POLISHED_ALABASTER, TFCBlocks.PLAIN_POLISHED_ALABASTER);
         removeDye(TFCTags.Items.COLORED_VESSELS, TFCItems.UNFIRED_VESSEL);
         removeDye(TFCTags.Items.COLORED_LARGE_VESSELS, TFCItems.UNFIRED_LARGE_VESSEL);
         dye(Items.WHITE_WOOL, "wool");
@@ -210,12 +211,17 @@ public interface BarrelRecipes extends Recipes
         dye(TFCItems.UNFIRED_LARGE_VESSEL, TFCItems.UNFIRED_GLAZED_LARGE_VESSELS::get);
 
         for (DyeColor color : DyeColor.values())
-            barrel(color.name() + "_leather")
+            barrel(color.name() + "_dyeable")
                 .input(fluidOf(color), 25)
-                .input(Ingredient.of(Items.LEATHER_CHESTPLATE, Items.LEATHER_LEGGINGS, Items.LEATHER_BOOTS, Items
-                    .LEATHER_HELMET, Items.LEATHER_HORSE_ARMOR))
+                .input(Ingredient.of(ItemTags.DYEABLE))
                 .output(ItemStackProvider.of(CopyInputModifier.INSTANCE, DyeLeatherModifier.of(color)))
                 .sealed(hours(1));
+
+        barrel("bleach_dyeable")
+            .input(fluidOf(SimpleFluid.LYE), 25)
+            .input(Ingredient.of(ItemTags.DYEABLE))
+            .output(ItemStackProvider.of(CopyInputModifier.INSTANCE, RemoveDyeModifier.INSTANCE))
+            .sealed(hours(1));
 
         musicDisc(DyeColor.YELLOW, Items.MUSIC_DISC_13);
         musicDisc(DyeColor.ORANGE, Items.MUSIC_DISC_BLOCKS);
@@ -231,6 +237,13 @@ public interface BarrelRecipes extends Recipes
         musicDisc(DyeColor.BLUE, Items.MUSIC_DISC_WARD);
 
         // Instant Recipes
+        for (SoilBlockType.Variant soil : SoilBlockType.Variant.values())
+        {
+            barrel()
+                .input(soil.getBlock(SoilBlockType.DIRT).get()).input(Fluids.WATER, 250)
+                .output(soil.getBlock(SoilBlockType.MUD).get())
+                .instant();
+        }
         barrel()
             .input(TFCItems.POWDERS.get(Powder.SALT))
             .input(Fluids.WATER, 125)
@@ -284,6 +297,7 @@ public interface BarrelRecipes extends Recipes
             .output(TFCItems.JUTE_NET)
             .instant();
 
+
         // Instant Fluid Mixing
         barrel()
             .output(fluidOf(SimpleFluid.BRINE), 10)
@@ -301,7 +315,7 @@ public interface BarrelRecipes extends Recipes
             .input(notRotten(item))
             .input(Fluids.WATER, 500)
             .output(fluidOf(fluid), 500)
-            .sealed(hours(72));
+            .sealed(hours(60));
     }
 
     private void cooling(Fluid fluid, float amount)
@@ -319,7 +333,16 @@ public interface BarrelRecipes extends Recipes
 
     private void removeDye(TagKey<Item> input, ItemLike output)
     {
-        barrel("bleaching_" + nameOf(output).replace("white_", "").replace("/white", ""))
+        barrel("bleach_" + nameOf(output).replace("white_", "").replace("/white", ""))
+            .input(input)
+            .input(fluidOf(SimpleFluid.LYE), 25)
+            .output(output)
+            .sealed(hours(1));
+    }
+
+    private void removeDye(String prefix, TagKey<Item> input, ItemLike output)
+    {
+        barrel("bleach_" + prefix + "_" + nameOf(output).replace("white_", "").replace("/white", ""))
             .input(input)
             .input(fluidOf(SimpleFluid.LYE), 25)
             .output(output)

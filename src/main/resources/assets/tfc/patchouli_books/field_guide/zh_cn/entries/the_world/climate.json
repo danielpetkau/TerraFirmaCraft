@@ -42,7 +42,8 @@
     {
       "type": "patchouli:text",
       "anchor": "temperature",
-      "text": "一个地区的温度是由几个因素共同决定的。$(br)$(li)首先，地质结构和纬度（Z 坐标）的影响是最大的。$(li)其次是当前的季节——夏天最热，冬天最冷。$(li)最后，每天的不同时间温度也会有所不同，且天和天之间也会有小幅变动。"
+      "text": "一个地区的温度是由几个因素共同决定的。$(br)$(li)首先，地质结构和纬度（Z 坐标）的影响是最大的。$(li)其次是当前的季节——夏天最热，冬天最冷。$(li)最后，每天的不同时间温度也会有所不同，且天和天之间也会有小幅变动。",
+      "title": "Temperature"
     },
     {
       "type": "patchouli:text",
@@ -51,8 +52,16 @@
     {
       "type": "patchouli:text",
       "anchor": "rainfall",
-      "text": "Rainfall is another climate value that can vary depending on where you are in the world and the time of year. The annual rainfall is measured in millimeters (mm) and can be between 0mm - 500mm. Rainfall affects the types of flora that are found in an area, and also the types of soil.$(br)Depending on the local climate, rainfall may vary throughout the year to a peak of up to twice the local average.",
+      "text": "Rainfall is influenced by a number of factors:$(br2)The region, especially the longitude (X coordinate) will play the largest role, with wetter climates generally to the east of spawn. Distance from the coast also plays a role, with drier climates farther inland.",
       "title": "降雨量"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "The current season and local climate will also influence rainfall levels. These effects are also determined by the region: west coasts generally have dry summers, whereas the east sides of large continents have dramatic summer monsoons. The centers of continents and oceanic islands tend to have less seasonal variance."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "The annual rainfall is measured in millimeters (mm) and can be between 0mm - 500mm, though the instantaneous rainfall can reach 1000mm in highly seasonal climates. Rainfall affects the types of flora and fauna that are found in an area, as well as how often rain and snow occur.$(br)"
     },
     {
       "type": "patchouli:text",

@@ -17,7 +17,6 @@ import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.RandomSource;
@@ -31,6 +30,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.common.util.INBTSerializable;
 import net.neoforged.neoforge.fluids.FluidStack;
@@ -73,7 +73,7 @@ import net.dries007.tfc.util.calendar.CalendarTransaction;
 import net.dries007.tfc.util.calendar.Calendars;
 import net.dries007.tfc.util.calendar.ICalendarTickable;
 
-public class BarrelBlockEntity extends TickableInventoryBlockEntity<BarrelBlockEntity.BarrelInventory> implements ICalendarTickable, BarrelInventoryCallback
+public class BarrelBlockEntity extends TickableInventoryBlockEntity<BarrelBlockEntity.BarrelInventory> implements ICalendarTickable, BarrelInventoryCallback, IRecipeTimer
 {
     public static final int SLOT_FLUID_CONTAINER_IN = 0;
     public static final int SLOT_FLUID_CONTAINER_OUT = 1;
@@ -123,6 +123,12 @@ public class BarrelBlockEntity extends TickableInventoryBlockEntity<BarrelBlockE
                 if (nextRecipe != null)
                 {
                     nextRecipe.onSealed(barrel.inventory); // We're in a sequential recipe, so apply sealed affects to the new recipe
+                    if (recipe == nextRecipe)
+                    {
+                        // Used by recipes that have the same output as input e.g. leather dyeing
+                        // Otherwise, every tick they will craft the recipe
+                        barrel.resetTickTimer(level);
+                    }
                 }
             }
         }
@@ -241,16 +247,17 @@ public class BarrelBlockEntity extends TickableInventoryBlockEntity<BarrelBlockE
     public boolean isItemValid(int slot, ItemStack stack)
     {
         return switch (slot)
+        {
+            case SLOT_FLUID_CONTAINER_IN -> Helpers.mightHaveCapability(stack, Capabilities.FluidHandler.ITEM);
+            case SLOT_ITEM ->
             {
-                case SLOT_FLUID_CONTAINER_IN -> Helpers.mightHaveCapability(stack, Capabilities.FluidHandler.ITEM);
-                case SLOT_ITEM -> {
-                    // We only want to deny heavy/huge (aka things that can hold inventory).
-                    // Other than that, barrels don't need a size restriction, and should in general be unrestricted, so we can allow any kind of recipe input (i.e. unfired large vessel)
-                    final IItemSize size = ItemSizeManager.get(stack);
-                    yield size.getSize(stack).isSmallerThan(Size.HUGE) || size.getWeight(stack).isSmallerThan(Weight.VERY_HEAVY);
-                }
-                default -> true;
-            };
+                // We only want to deny heavy/huge (aka things that can hold inventory).
+                // Other than that, barrels don't need a size restriction, and should in general be unrestricted, so we can allow any kind of recipe input (i.e. unfired large vessel)
+                final IItemSize size = ItemSizeManager.get(stack);
+                yield size.getSize(stack).isSmallerThan(Size.HUGE) || size.getWeight(stack).isSmallerThan(Weight.VERY_HEAVY);
+            }
+            default -> true;
+        };
     }
 
     @Override
@@ -337,6 +344,12 @@ public class BarrelBlockEntity extends TickableInventoryBlockEntity<BarrelBlockE
             inventory.setStackInSlot(SLOT_ITEM, iter.next()); // First slot goes into the item slot
             while (iter.hasNext()) inventory.excess.add(iter.next()); // Any others go into excess
             inventory.tank.setFluid(barrel.fluidContent().copy());
+
+            //TODO should we reset the recipe tick instead to prevent this?
+            // Currently, barrels are able to complete recipes while the barrel is in item form
+            // This does not change current behavior but prevents recipes from completing instantly when the barrel is picked up and placed again
+            sealedTick = barrel.sealedTick();
+            recipeTick = barrel.recipeTick();
         }
         super.applyImplicitComponents(components);
     }
@@ -373,11 +386,45 @@ public class BarrelBlockEntity extends TickableInventoryBlockEntity<BarrelBlockE
     }
 
     @Override
+    public int getRecipeDuration()
+    {
+        @Nullable SealedBarrelRecipe recipe = getRecipe();
+        return recipe != null ? recipe.getDuration() : 0;
+    }
+
+    @Override
+    public long getRemainingTime()
+    {
+        return getRemainingTicks();
+    }
+
+    @Override
     public void ejectInventory()
     {
         super.ejectInventory();
         assert level != null;
         inventory.excess.stream().filter(item -> !item.isEmpty()).forEach(item -> Helpers.spawnItem(level, worldPosition, item));
+
+        final FluidStack fluid = inventory.tank.getFluid();
+        if (level instanceof ServerLevel server && !fluid.isEmpty())
+        {
+            final double fill = (double) inventory.getFluidInTank(0).getAmount() / inventory.getTankCapacity(0);
+            final VoxelShape shape = getBlockState().getShape(level, worldPosition);
+            Helpers.playSound(level, worldPosition, SoundEvents.PLAYER_SPLASH);
+
+            for (int i = 0; i < Math.ceil(25 * fill); i++)
+            {
+                RandomSource random = server.getRandom();
+                final double xMax = shape.max(Direction.Axis.X);
+                final double xMin = shape.min(Direction.Axis.X);
+                final double zMax = shape.max(Direction.Axis.Z);
+                final double zMin = shape.min(Direction.Axis.Z);
+                final double dx = xMin + (xMax - xMin) * random.nextDouble();
+                final double dy = shape.max(Direction.Axis.Y) * fill * random.nextDouble();
+                final double dz = zMin + (zMax - zMin) * random.nextDouble();
+                server.sendParticles(new FluidParticleOption(TFCParticles.BARREL_SPILL.get(), fluid.getFluid()), worldPosition.getX() + dx, worldPosition.getY() + dy, worldPosition.getZ() + dz, 1, 0, 0, 0, 1f);
+            }
+        }
     }
 
     public void tickPouring(Level level, BlockPos pos, boolean sealed, Direction facing)
@@ -405,7 +452,7 @@ public class BarrelBlockEntity extends TickableInventoryBlockEntity<BarrelBlockE
                     }
                 }
             }
-            }
+        }
     }
 
     public void onSeal()
@@ -437,7 +484,7 @@ public class BarrelBlockEntity extends TickableInventoryBlockEntity<BarrelBlockE
         assert level != null;
 
         sealedTick = 0L;
-        recipeTick = 0L;
+        recipeTick = -1L;
 
         final @Nullable SealedBarrelRecipe recipe = getRecipe();
         if (recipe != null)
@@ -490,9 +537,14 @@ public class BarrelBlockEntity extends TickableInventoryBlockEntity<BarrelBlockE
         if (oldRecipe != null && newRecipe != null && oldRecipe != newRecipe)
         {
             // The recipe has changed to a new one, so update the recipe ticks
-            recipeTick = Calendars.get(level).getTicks();
-            markForSync();
+            resetTickTimer(level);
         }
+    }
+
+    private void resetTickTimer(Level level)
+    {
+        recipeTick = Calendars.get(level).getTicks();
+        markForSync();
     }
 
     /**
@@ -544,7 +596,8 @@ public class BarrelBlockEntity extends TickableInventoryBlockEntity<BarrelBlockE
 
     public static class BarrelInventory implements DelegateItemHandler, DelegateFluidHandler, NonEmptyInput, FluidTankCallback, net.dries007.tfc.common.recipes.input.BarrelInventory, INBTSerializable<CompoundTag>
     {
-        public static final FluidContainerInfo INFO = new FluidContainerInfo() {
+        public static final FluidContainerInfo INFO = new FluidContainerInfo()
+        {
             @Override
             public boolean canContainFluid(Fluid input)
             {

@@ -22,10 +22,15 @@ def generate(rm: ResourceManager):
     rm.placed_feature_tag('in_biome/all_lakes', 'tfc:underground_flood_fill_lake', 'tfc:flood_fill_lake')
     rm.placed_feature_tag('in_biome/veins', *[
         'tfc:vein/gravel',
-        'tfc:vein/kaolin_disc',
         *['tfc:vein/%s_dike' % rock for rock, data in ROCKS.items() if data.category == 'igneous_intrusive'],
-        *('tfc:vein/%s' % v for v in ORE_VEINS.keys()),
+        *['tfc:vein/%s' % name for name, vein in ORE_VEINS.items() if not vein.rivers_only],
         'tfc:geode'
+    ])
+    rm.placed_feature_tag('in_biome/veins/kaolin', *[
+        'tfc:vein/kaolin_disc'
+    ])
+    rm.placed_feature_tag('in_biome/veins/river', *[
+        *['tfc:vein/%s' % name for name, vein in ORE_VEINS.items() if vein.rivers_only]
     ])
     rm.placed_feature_tag('in_biome/underground_decoration', *UNDERGROUND_FEATURES)
     rm.placed_feature_tag('in_biome/top_layer_modification', 'tfc:surface_loose_rocks', 'tfc:ice_and_snow')
@@ -71,7 +76,7 @@ def generate(rm: ResourceManager):
     biome(rm, 'rolling_hills', 'plains', boulders=True)
     biome(rm, 'highlands', 'plains', boulders=True, hot_spring_features='empty')
     biome(rm, 'lake', 'river')
-    biome(rm, 'lowlands', 'swamp', lake_features=False, ocean_features='both')
+    biome(rm, 'lowlands', 'swamp', lake_features=False)
     biome(rm, 'salt_marsh', 'swamp', lake_features=False, ocean_features='both')
     biome(rm, 'mountains', 'extreme_hills')
     biome(rm, 'volcanic_mountains', 'extreme_hills', volcano_features=True, hot_spring_features=True)
@@ -127,7 +132,7 @@ def generate(rm: ResourceManager):
     biome(rm, 'shilin_plateau', 'extreme_hills')
     biome(rm, 'doline_plateau', 'extreme_hills')
     biome(rm, 'cenote_plateau', 'extreme_hills')
-    biome(rm, 'tower_karst_lake', 'river', lake_features=False, ocean_features='both')
+    biome(rm, 'tower_karst_lake', 'river', lake_features=False)
     biome(rm, 'tower_karst_bay', 'beach', lake_features=False, ocean_features='both')
     biome(rm, 'extreme_doline_mountains', 'extreme_hills')
     biome(rm, 'burren_badlands', 'mesa')
@@ -293,7 +298,7 @@ def generate(rm: ResourceManager):
         'replace_fluids': [],
     })
 
-    rm.placed_feature('flood_fill_lake', 'tfc:flood_fill_lake', decorate_chance(5), decorate_square(), decorate_heightmap('world_surface_wg'), decorate_climate(min_water=125, min_temp=-17), decorate_biome())
+    rm.placed_feature('flood_fill_lake', 'tfc:flood_fill_lake', decorate_chance(5), decorate_square(), decorate_heightmap('world_surface_wg'), decorate_climate(min_water=125, min_temp=-17))
     rm.placed_feature('underground_flood_fill_lake', 'tfc:flood_fill_lake', decorate_chance(3), decorate_square(), decorate_range(-56, 63))
 
     # Underground springs, no restrictions
@@ -332,15 +337,15 @@ def generate(rm: ResourceManager):
         'state': utils.block_state('minecraft:water[falling=true]'),
         'valid_blocks': ['minecraft:packed_ice']
     })
-    rm.placed_feature('glacial_oceanic_spring', 'tfc:glacial_spring', decorate_count(200), decorate_square(), decorate_range(80, 92, bias='uniform'), decorate_biome())
-    rm.placed_feature('glacial_spring', 'tfc:glacial_spring', decorate_count(200), decorate_square(), decorate_range(110, 122, bias='uniform'), decorate_biome())
+    rm.placed_feature('glacial_oceanic_spring', 'tfc:glacial_spring', decorate_count(200), decorate_square(), decorate_range(80, 92, bias='uniform'))
+    rm.placed_feature('glacial_spring', 'tfc:glacial_spring', decorate_count(200), decorate_square(), decorate_range(110, 122, bias='uniform'))
 
     # Lava in stone, only present in volcanic biomes
     rm.configured_feature('lava_surface_spring', 'tfc:spring', {
         'state': utils.block_state('minecraft:lava[falling=true]'),
         'valid_blocks': ['tfc:rock/raw/%s' % rock for rock in ROCKS.keys()]
     })
-    rm.placed_feature('lava_surface_spring', 'tfc:lava_surface_spring', decorate_count(70), decorate_square(), decorate_range(64, 220, bias='uniform'), decorate_biome())
+    rm.placed_feature('lava_surface_spring', 'tfc:lava_surface_spring', decorate_count(70), decorate_square(), decorate_range(64, 220, bias='uniform'))
 
 
     rm.configured_feature('peat_disc', 'tfc:soil_disc', {
@@ -399,7 +404,7 @@ def generate(rm: ResourceManager):
             'height': 2,
             'integrity': 0.9,
             'states': [{'replace': 'tfc:rock/gravel/%s' % rock, 'with': 'tfc:deposit/%s/%s' % (ore, rock)} for rock in ROCKS.keys()]
-        }, decorate_chance(12), decorate_square(), decorate_heightmap('ocean_floor_wg'), decorate_biome())
+        }, decorate_chance(12), decorate_square(), decorate_heightmap('ocean_floor_wg'))
 
         configured_placed_feature(rm, '%s_deep_deposit' % ore, 'tfc:soil_disc', {
             'min_radius': 3,
@@ -407,7 +412,7 @@ def generate(rm: ResourceManager):
             'height': 3,
             'integrity': 0.9,
             'states': [{'replace': 'tfc:rock/raw/%s' % rock, 'with': 'tfc:deposit/%s/%s' % (ore, rock)} for rock in ROCKS.keys()]
-        }, decorate_chance(24), decorate_square(), decorate_range(40, 63), decorate_biome())
+        }, decorate_chance(24), decorate_square(), decorate_range(40, 63))
 
         rm.placed_feature_tag('feature/ore_deposits', 'tfc:%s_deposit' % ore, 'tfc:%s_deep_deposit' % ore)
 
@@ -743,7 +748,6 @@ def generate(rm: ResourceManager):
         'density': 1.0,
         'project': True,
         'random_name': 'kaolin',
-        'biomes': '#tfc:kaolin_clay_spawns_in',
         'indicator': {
             'depth': 35,
             'spread': 5,
@@ -760,16 +764,6 @@ def generate(rm: ResourceManager):
     rm.biome_tag('shilins', 'tfc:shilin_plains', 'tfc:shilin_canyons', 'tfc:shilin_hills', 'tfc:shilin_highlands', 'tfc:shilin_plateau')
     rm.biome_tag('burrens', 'tfc:burren_plains', 'tfc:burren_badlands', 'tfc:burren_badlands_tall', 'tfc:burren_plateau')
     rm.biome_tag('karsts', '#tfc:tower_karsts', '#tfc:dolines', '#tfc:cenotes', '#tfc:shilins', '#tfc:burrens')
-    # Kaolin clay biomes, each row sorted by height, last row misc.
-    (rm.biome_tag('kaolin_clay_spawns_in',
-                 'tfc:rolling_hills', 'tfc:highlands', 'tfc:plateau', 'tfc:plateau_wide', 'tfc:old_mountains',
-                 'tfc:tower_karst_hills', 'tfc:tower_karst_highlands', 'tfc:extreme_doline_plateau', 'tfc:extreme_doline_mountains',
-                 'tfc:doline_rolling_hills', 'tfc:doline_highlands', 'tfc:doline_plateau',
-                 'tfc:cenote_rolling_hills', 'tfc:cenote_highlands', 'tfc:cenote_plateau',
-                 'tfc:shilin_hills', 'tfc:shilin_highlands', 'tfc:shilin_plateau',
-                 'tfc:buttes', 'tfc:mesas', 'tfc:stair_step_canyons',
-                 'tfc:dormant_shield_volcano', 'tfc:extinct_shield_volcano', 'tfc:ancient_shield_volcano',
-                 'tfc:badlands', 'tfc:canyons'))
 
     configured_placed_feature(rm, ('vein', 'gravel'), 'tfc:disc_vein', {
         'rarity': 30,
@@ -794,7 +788,6 @@ def generate(rm: ResourceManager):
                 'max_y': 180,
                 'density': 0.98,
                 'random_name': rock,
-                'biomes': '#tfc:karsts',
                 'height': 150,
                 'radius': 18,
                 'min_skew': 7,
@@ -841,7 +834,7 @@ def generate(rm: ResourceManager):
         'replaceable': '#minecraft:base_stone_overworld',
         'ground_state': simple_state_provider('tfc:rooted_dirt/entisol')
     })
-    rm.placed_feature('hanging_roots_patch', 'tfc:hanging_roots_patch', decorate_count(10), decorate_square(), decorate_range(40, 72), decorate_scanner('up', 12), decorate_random_offset(0, -1), decorate_climate(min_water=300, min_temp=0), decorate_biome())
+    rm.placed_feature('hanging_roots_patch', 'tfc:hanging_roots_patch', decorate_count(10), decorate_square(), decorate_range(40, 72), decorate_scanner('up', 12), decorate_random_offset(0, -1), decorate_climate(min_water=300, min_temp=0))
 
     # Plants - Auto-Generated from Spreadsheet 8/31/25
     # https://docs.google.com/spreadsheets/d/1wlEzP2u6fPgcU13rXZ-Ge31_LIK4sia4PxmYoFX8eg4
@@ -1055,19 +1048,23 @@ def generate(rm: ResourceManager):
 
     for berry, info in BERRIES.items():
         if info.type == 'spreading':
-            configured_placed_feature(rm, ('plant', berry + '_bush'), 'tfc:spreading_bush', {'block': 'tfc:plant/%s_bush' % berry}, decorate_climate(info.min_temp, info.max_temp, info.min_water, info.max_water, min_forest=info.min_forest, max_forest=info.max_forest), decorate_heightmap('world_surface_wg'), decorate_square(), decorate_chance(22))
+            configured_placed_feature(rm, ('plant', berry + '_bush'), 'tfc:spreading_bush', {'block': 'tfc:plant/%s_bush' % berry}, decorate_climate(info.wild_min_temp, info.wild_max_temp, info.wild_min_water, info.wild_max_water, min_forest=info.min_forest, max_forest=info.max_forest), decorate_heightmap('world_surface_wg'), decorate_square(), decorate_chance(22))
             rm.placed_feature_tag('feature/berry_bushes', 'tfc:plant/%s_bush' % berry)
+        elif info.type == 'waterlogged':
+            bush_block = 'tfc:plant/%s_bush[lifecycle=healthy,stage=0,fluid=empty]' % berry
+            configured_patch_feature(rm, ('plant', berry + '_bush'), patch_config(bush_block, 1, 4, 4, 'fresh'), decorate_climate(info.wild_min_temp, info.wild_max_temp, info.wild_min_water, info.wild_max_water, min_forest=info.min_forest, max_forest=info.max_forest), decorate_square(), decorate_chance(5))
+            rm.placed_feature_tag('feature/berry_bushes', 'tfc:plant/%s_bush_patch' % berry)
         else:
-            bush_block = 'tfc:plant/%s_bush[lifecycle=healthy,stage=0%s]' % (berry, ',fluid=empty' if info.type == 'waterlogged' else '')
-            configured_patch_feature(rm, ('plant', berry + '_bush'), patch_config(bush_block, 1, 4, 4, 'fresh' if info.type == 'waterlogged' else False), decorate_climate(info.min_temp, info.max_temp, info.min_water, info.max_water, min_forest=info.min_forest, max_forest=info.max_forest), decorate_square(), decorate_chance(30), biome_check=False)
+            bush_block = 'tfc:plant/%s_bush[lifecycle=healthy,stage=0]' % berry
+            configured_patch_feature(rm, ('plant', berry + '_bush'), patch_config(bush_block, 1, 4, 4, False), decorate_climate(info.wild_min_temp, info.wild_max_temp, info.wild_min_water, info.wild_max_water, min_forest=info.min_forest, max_forest=info.max_forest), decorate_square(), decorate_chance(30))
             rm.placed_feature_tag('feature/berry_bushes', 'tfc:plant/%s_bush_patch' % berry)
 
     for fruit, info in FRUITS.items():
         config = {
-            'min_temperature': info.min_temp,
-            'max_temperature': info.max_temp,
-            'min_groundwater': info.min_water,
-            'max_groundwater': info.max_water,
+            'min_temperature': info.wild_min_temp,
+            'max_temperature': info.wild_max_temp,
+            'min_groundwater': info.wild_min_water,
+            'max_groundwater': info.wild_max_water,
             'max_forest': 3
         }
         feature = 'tfc:fruit_trees'
@@ -1108,8 +1105,8 @@ def generate(rm: ResourceManager):
         }), decorate_square(), decorate_heightmap('ocean_floor_wg'))
         rm.placed_feature_tag('feature/corals', 'tfc:coral_%s' % coral)
 
-    configured_placed_feature(rm, 'tide_pool', 'tfc:tide_pool', {}, decorate_chance(5), decorate_count(10), decorate_square(), decorate_heightmap('ocean_floor_wg'), decorate_biome())
-    rm.placed_feature('big_tide_pool', 'tfc:tide_pool', decorate_chance(15), decorate_count(40), decorate_square(), decorate_heightmap('ocean_floor_wg'), decorate_biome())
+    configured_placed_feature(rm, 'tide_pool', 'tfc:tide_pool', {}, decorate_chance(5), decorate_count(10), decorate_square(), decorate_heightmap('ocean_floor_wg'))
+    rm.placed_feature('big_tide_pool', 'tfc:tide_pool', decorate_chance(15), decorate_count(40), decorate_square(), decorate_heightmap('ocean_floor_wg'))
 
     # Groundcover
     configured_patch_feature(rm, 'driftwood', patch_config('tfc:groundcover/driftwood[fluid=empty]', 1, 15, 5, True), decorate_count(4), decorate_square(), extra_singular_decorators=[decorate_intertidal(1, 1)])
@@ -1120,18 +1117,18 @@ def generate(rm: ResourceManager):
     configured_patch_feature(rm, 'sticks_shore', patch_config('tfc:groundcover/stick[fluid=empty]', 1, 15, 18, True), decorate_chance(2), decorate_square(), decorate_climate(-50, 50, 50, 500), extra_singular_decorators=[decorate_intertidal(1, 10)])
     configured_patch_feature(rm, 'seaweed', patch_config('tfc:groundcover/seaweed[fluid=empty]', 1, 15, 8, True), decorate_chance(5), decorate_square(), decorate_climate(-20, 50, 150, 500))
     configured_patch_feature(rm, 'tideline_seaweed', patch_config('tfc:groundcover/seaweed[fluid=empty]', 1, 15, 5, True), decorate_count(2), decorate_square(), decorate_climate(-20, 50, 150, 500), extra_singular_decorators=[decorate_intertidal(1, 1)])
-    configured_patch_feature(rm, 'guano', patch_config('tfc:groundcover/guano[fluid=empty]', 1, 6, 25), decorate_chance(4), decorate_square(), decorate_biome(), decorate_climate(-30, 10, 100, 500), extra_singular_decorators=[decorate_intertidal(2, 32), decorate_on_top_of('tfc:creeping_stone_plantable_on')])
-    configured_patch_feature(rm, 'extra_island_guano', patch_config('tfc:groundcover/guano[fluid=empty]', 1, 3, 15), decorate_count(10), decorate_square(), decorate_biome(), decorate_climate(-30, 15, 0, 500), extra_singular_decorators=[decorate_intertidal(1, 32), decorate_on_top_of('tfc:creeping_stone_plantable_on')])
+    configured_patch_feature(rm, 'guano', patch_config('tfc:groundcover/guano[fluid=empty]', 1, 6, 25), decorate_chance(4), decorate_square(), decorate_climate(-30, 10, 100, 500), extra_singular_decorators=[decorate_intertidal(2, 32), decorate_on_top_of('tfc:creeping_stone_plantable_on')])
+    configured_patch_feature(rm, 'extra_island_guano', patch_config('tfc:groundcover/guano[fluid=empty]', 1, 3, 15), decorate_count(10), decorate_square(), decorate_climate(-30, 15, 0, 500), extra_singular_decorators=[decorate_intertidal(1, 32), decorate_on_top_of('tfc:creeping_stone_plantable_on')])
 
     # Forest Only
-    configured_patch_feature(rm, 'sticks_forest', patch_config('tfc:groundcover/stick[fluid=empty]', 1, 15, 20), decorate_chance(3), decorate_square(), decorate_climate(-20, 50, 70, 500, min_forest=3), biome_check=False)
-    configured_patch_feature(rm, 'pinecone', patch_config('tfc:groundcover/pinecone[fluid=empty]', 1, 15, 10), decorate_chance(5), decorate_square(), decorate_climate(-14, 0, 60, 320, needs_forest=True), biome_check=False)
-    configured_patch_feature(rm, 'humus', patch_config('tfc:groundcover/humus[fluid=empty]', 1, 5, 100), decorate_chance(5), decorate_square(), decorate_climate(8, 20, 180, 420, needs_forest=True, fuzzy=True), biome_check=False)
-    configured_patch_feature(rm, 'salt_lick', patch_config('tfc:groundcover/salt_lick[fluid=empty]', 1, 5, 100), decorate_chance(110), decorate_square(), decorate_climate(5, 33, 100, 500, needs_forest=True), biome_check=False)
-    configured_patch_feature(rm, 'rotten_flesh', patch_config('tfc:groundcover/rotten_flesh[fluid=empty]', 1, 10, 10), decorate_chance(100), decorate_square(), decorate_climate(-30, 30, 0, 400), biome_check=False)
-    configured_patch_feature(rm, 'bone', patch_config('tfc:groundcover/bone[fluid=empty]', 1, 10, 10), decorate_chance(100), decorate_square(), decorate_climate(-30, 30, 0, 400), biome_check=False)
-    configured_patch_feature(rm, 'pumice', patch_config('tfc:groundcover/pumice[fluid=empty]', 1, 10, 10), decorate_chance(3), decorate_square(), ('tfc:volcano', {'distance': 0.8}), biome_check=False)
-    configured_patch_feature(rm, 'pumice_shield_volcano', patch_config('tfc:groundcover/pumice[fluid=empty]', 1, 10, 10), decorate_chance(3), decorate_square(), decorate_biome())
+    configured_patch_feature(rm, 'sticks_forest', patch_config('tfc:groundcover/stick[fluid=empty]', 1, 15, 20), decorate_chance(3), decorate_square(), decorate_climate(-20, 50, 70, 500, min_forest=3))
+    configured_patch_feature(rm, 'pinecone', patch_config('tfc:groundcover/pinecone[fluid=empty]', 1, 15, 10), decorate_chance(5), decorate_square(), decorate_climate(-14, 0, 60, 320, needs_forest=True))
+    configured_patch_feature(rm, 'humus', patch_config('tfc:groundcover/humus[fluid=empty]', 1, 5, 100), decorate_chance(5), decorate_square(), decorate_climate(8, 20, 180, 420, needs_forest=True, fuzzy=True))
+    configured_patch_feature(rm, 'salt_lick', patch_config('tfc:groundcover/salt_lick[fluid=empty]', 1, 5, 100), decorate_chance(110), decorate_square(), decorate_climate(5, 33, 100, 500, needs_forest=True))
+    configured_patch_feature(rm, 'rotten_flesh', patch_config('tfc:groundcover/rotten_flesh[fluid=empty]', 1, 10, 10), decorate_chance(100), decorate_square(), decorate_climate(-30, 30, 0, 400))
+    configured_patch_feature(rm, 'bone', patch_config('tfc:groundcover/bone[fluid=empty]', 1, 10, 10), decorate_chance(100), decorate_square(), decorate_climate(-30, 30, 0, 400))
+    configured_patch_feature(rm, 'pumice', patch_config('tfc:groundcover/pumice[fluid=empty]', 1, 10, 10), decorate_chance(3), decorate_square(), ('tfc:volcano', {'distance': 0.8}))
+    configured_patch_feature(rm, 'pumice_shield_volcano', patch_config('tfc:groundcover/pumice[fluid=empty]', 1, 10, 10), decorate_chance(3), decorate_square())
 
     # Loose Rocks - Both Surface + Underground
     configured_placed_feature(rm, 'loose_rock', 'tfc:loose_rock', {}, decorate_heightmap('ocean_floor_wg'))
@@ -1142,7 +1139,7 @@ def generate(rm: ResourceManager):
     rm.configured_feature('geode', 'tfc:geode', {'outer': 'tfc:rock/hardened/basalt', 'middle': 'tfc:rock/hardened/quartzite', 'inner': [
         {'data': 'tfc:ore/amethyst/quartzite', 'weight': 1}, {'data': 'tfc:rock/hardened/quartzite', 'weight': 5}
     ]})
-    rm.placed_feature('geode', 'tfc:geode', decorate_chance(500), decorate_square(), decorate_range(-48, 32), decorate_biome())
+    rm.placed_feature('geode', 'tfc:geode', decorate_chance(500), decorate_square(), decorate_range(-48, 32))
 
     rm.biome_tag('has_predictable_winds', '#tfc:is_ocean', 'tfc:shore', 'tfc:tidal_flats')
 
@@ -1271,7 +1268,7 @@ class PatchConfig(NamedTuple):
 def patch_config(block: str, y_spread: int, xz_spread: int, tries: int = 64, water: Union[bool, Literal['salt']] = False, custom_feature: Optional[str] = None, custom_config: Json = None) -> PatchConfig:
     return PatchConfig(block, y_spread, xz_spread, tries, (isinstance(water, bool) and water) or isinstance(water, str), water == 'salt', water == 'fresh', custom_feature, custom_config)
 
-def configured_patch_feature(rm: ResourceManager, name_parts: ResourceIdentifier, patch: PatchConfig, *patch_decorators: Json, extra_singular_decorators: Optional[List[Json]] = None, biome_check: bool = True):
+def configured_patch_feature(rm: ResourceManager, name_parts: ResourceIdentifier, patch: PatchConfig, *patch_decorators: Json, extra_singular_decorators: Optional[List[Json]] = None):
     feature = 'minecraft:simple_block'
     config = {'to_place': {'type': 'minecraft:simple_state_provider', 'state': utils.block_state(patch.block)}}
     singular_decorators = []
@@ -1301,8 +1298,6 @@ def configured_patch_feature(rm: ResourceManager, name_parts: ResourceIdentifier
 
     if extra_singular_decorators is not None:
         singular_decorators += extra_singular_decorators
-    if biome_check:
-        patch_decorators = [*patch_decorators, decorate_biome()]
 
     res = utils.resource_location(rm.domain, name_parts)
     patch_feature = res.join() + '_patch'
@@ -1523,11 +1518,6 @@ HeightProviderType = Literal['constant', 'uniform', 'biased_to_bottom', 'very_bi
 
 def decorate_square() -> Json:
     return 'minecraft:in_square'
-
-
-def decorate_biome() -> Json:
-    return 'tfc:biome'
-
 
 def decorate_chance(rarity_or_probability: Union[int, float]) -> Json:
     return {'type': 'minecraft:rarity_filter', 'chance': round(1 / rarity_or_probability) if isinstance(rarity_or_probability, float) else rarity_or_probability}
@@ -1941,6 +1931,8 @@ def biome(rm: ResourceManager, name: str, category: str, boulders: bool = False,
         '#tfc:in_biome/surface_structures',  # Surface Structures
         '#tfc:in_biome/strongholds',  # Strongholds
         '#tfc:in_biome/veins',  # Underground Ores
+        '#tfc:in_biome/veins/kaolin' if name in KAOLIN_BIOMES else None,
+        '#tfc:in_biome/veins/river' if category == 'river' else None,
         '#tfc:in_biome/underground_decoration',  # Underground Decoration
         '#tfc:in_biome/large_features/%s' % name,  # Fluid Springs (we co-opt this as they likely won't interfere and it's in the right order)
         '#tfc:in_biome/surface_decoration/%s' % name,  # Vegetal Decoration

@@ -6,6 +6,8 @@
 
 package net.dries007.tfc.client;
 
+import net.minecraft.client.Minecraft;
+
 import net.dries007.tfc.util.calendar.Calendar;
 
 public final class ClientCalendar extends Calendar
@@ -16,7 +18,12 @@ public final class ClientCalendar extends Calendar
      */
     void onClientTick()
     {
-        playerTicks++;
-        advanceCalendarTick();
+        // Tick freeze is automatically synchronized to the client already, we just have to fetch it.
+        // Keep in mind that the level will never be null, since the client must be in a world to get ticked
+        if (!Minecraft.getInstance().level.tickRateManager().isFrozen())
+        {
+            playerTicks++;
+            advanceCalendarTick();
+        }
     }
 }

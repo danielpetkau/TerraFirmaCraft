@@ -20,6 +20,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -58,15 +59,57 @@ import net.dries007.tfc.util.Helpers;
 import net.dries007.tfc.util.calendar.Calendars;
 import net.dries007.tfc.util.calendar.ICalendar;
 import net.dries007.tfc.util.calendar.Month;
+import net.dries007.tfc.util.climate.Climate;
 import net.dries007.tfc.util.climate.ClimateRange;
 import net.dries007.tfc.util.tracker.WorldTracker;
 
 public abstract class SeasonalPlantBlock extends BushBlock implements IForgeBlockExtension, EntityBlockExtension, ISlowEntities
 {
+
     public static final VoxelShape PLANT_SHAPE = box(2.0, 0.0, 2.0, 14.0, 16.0, 14.0);
 
     public static final IntegerProperty STAGE = TFCBlockStateProperties.STAGE_2;
     public static final EnumProperty<Lifecycle> LIFECYCLE = TFCBlockStateProperties.LIFECYCLE;
+
+    public void randomTick(SeasonalPlantBlock plant, BlockState state, ServerLevel level, BlockPos pos, RandomSource random)
+    {
+        plant.onUpdate(level, pos, state);
+    }
+
+    // By default, we only keep track of the life cycle with this method as that functionality is shared by all seasonal plant blocks
+    public void onUpdate(Level level, BlockPos pos, BlockState state)
+    {
+        if (level.getBlockEntity(pos) instanceof BerryBushBlockEntity plant)
+        {
+            Lifecycle currentLifecycle = state.getValue(LIFECYCLE);
+            Lifecycle expectedLifecycle = getLifecycleForCurrentMonth(level, pos);
+            // if we are not working with a plant that is or should be dormant
+            if (!checkAndSetDormant(level, pos, state, currentLifecycle, expectedLifecycle))
+            {
+                final ClimateRange range = climateRange.get();
+
+                final BlockPos stemPos = plant.getStemPos();
+                final int hydration = getFruitBushHydrationFromRootPos(level, stemPos.below());
+
+                if (range.checkBoth(hydration, Climate.getAverageTemperature(level, stemPos), false))
+                {
+                    currentLifecycle = currentLifecycle.advanceTowards(expectedLifecycle);
+                }
+                else
+                {
+                    currentLifecycle = Lifecycle.DORMANT;
+                }
+
+                BlockState newState = state.setValue(LIFECYCLE, currentLifecycle);
+
+                if (state != newState && (currentLifecycle != Lifecycle.FLOWERING ||
+                    Calendars.SERVER.getTicks() - plant.getLastPickedTick() > (long) TFCConfig.SERVER.fruitPickBloomDelayTicks.get()))
+                {
+                    level.setBlock(pos, newState, 3);
+                }
+            }
+        }
+    }
 
     /**
      * This function is essentially min(blocks to reach the ground, provided distance value)
@@ -149,6 +192,7 @@ public abstract class SeasonalPlantBlock extends BushBlock implements IForgeBloc
             {
                 ItemHandlerHelper.giveItemToPlayer(player, getProductItem(level.random));
             }
+            BerryBushBlockEntity.resetPickedTick(level, pos);
             level.setBlockAndUpdate(pos, stateAfterPicking(state));
             return ItemInteractionResult.sidedSuccess(level.isClientSide);
         }
@@ -198,6 +242,7 @@ public abstract class SeasonalPlantBlock extends BushBlock implements IForgeBloc
     public float slowEntityFactor(BlockState state)
     {
         float modifier = TFCConfig.SERVER.leavesMovementModifier.get().floatValue();
+        //TODO does this reference to PlantBlock.AGE need to change?
         if (state.hasProperty(PlantBlock.AGE))
         {
             modifier = Mth.lerp((1f + state.getValue(PlantBlock.AGE)) / 4f, NO_SLOW, modifier);
@@ -209,6 +254,13 @@ public abstract class SeasonalPlantBlock extends BushBlock implements IForgeBloc
         return modifier;
     }
 
+    @Override
+    public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack)
+    {
+        BerryBushBlockEntity.reset(level, pos);
+        super.setPlacedBy(level, pos, state, placer, stack);
+    }
+
     public ItemStack getProductItem(RandomSource random)
     {
         return new ItemStack(productItem.get());
@@ -216,6 +268,7 @@ public abstract class SeasonalPlantBlock extends BushBlock implements IForgeBloc
 
     /**
      * Evaluates hydration at the base of the tree/bush/plant
+     *
      * @param leafPos Must be the position of a valid {@link BerryBushBlockEntity}
      */
     protected static int getFruitBushHydration(Level level, BlockPos leafPos)
@@ -227,7 +280,7 @@ public abstract class SeasonalPlantBlock extends BushBlock implements IForgeBloc
         }
         else
         {
-            TerraFirmaCraft.LOGGER.error("Fruit tree leaf block entity not present");
+            TerraFirmaCraft.LOGGER.error("Fruit tree leaf block entity not present at {}", leafPos);
             sourcePos = leafPos;
         }
         return getFruitBushHydrationFromRootPos(level, sourcePos);
@@ -235,12 +288,13 @@ public abstract class SeasonalPlantBlock extends BushBlock implements IForgeBloc
 
     /**
      * Evaluates hydration at the base of the tree/bush/plant
+     *
      * @param rootPos can be any block location you want to know the hydration level at
      */
     protected static int getFruitBushHydrationFromRootPos(Level level, BlockPos rootPos)
     {
         final float averageRainfall = WorldTracker.get(level).getClimateModel().getAverageRainfall(level, rootPos);
-        return FarmlandBlock.getHydrationFromRainHydration(level, rootPos, FarmlandBlock.getRainHydration(averageRainfall));
+        return FarmlandBlock.getInstantHydrationFromRainHydration(level, rootPos, FarmlandBlock.getInstantRainHydration(averageRainfall));
     }
 
     protected Lifecycle getLifecycleForCurrentMonth(Level level, BlockPos pos)

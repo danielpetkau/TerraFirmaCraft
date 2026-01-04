@@ -118,7 +118,7 @@ public final class ServerCalendar extends Calendar
      */
     void onServerTick()
     {
-        if (arePlayersLoggedOn)
+        if (!getServer().tickRateManager().isFrozen() && arePlayersLoggedOn)
         {
             playerTicks++;
         }
@@ -135,7 +135,7 @@ public final class ServerCalendar extends Calendar
      */
     void onOverworldTick(ServerLevel level)
     {
-        if (arePlayersLoggedOn)
+        if (!getServer().tickRateManager().isFrozen() && arePlayersLoggedOn)
         {
             advanceCalendarTick();
             if ((calendarTicks & 0x100) == 0) checkIfInTheFuture(level);

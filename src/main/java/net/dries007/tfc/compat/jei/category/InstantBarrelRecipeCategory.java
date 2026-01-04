@@ -8,13 +8,14 @@ package net.dries007.tfc.compat.jei.category;
 
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.RecipeType;
+import net.minecraft.world.item.crafting.RecipeHolder;
 
 import net.dries007.tfc.common.blocks.wood.Wood;
 import net.dries007.tfc.common.recipes.InstantBarrelRecipe;
 
 public class InstantBarrelRecipeCategory extends BarrelRecipeCategory<InstantBarrelRecipe>
 {
-    public InstantBarrelRecipeCategory(RecipeType<InstantBarrelRecipe> type, IGuiHelper helper)
+    public InstantBarrelRecipeCategory(RecipeType<RecipeHolder<InstantBarrelRecipe>> type, IGuiHelper helper)
     {
         super(type, helper, 118, 26, Wood.DOUGLAS_FIR);
     }

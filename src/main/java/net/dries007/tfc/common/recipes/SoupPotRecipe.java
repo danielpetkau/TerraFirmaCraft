@@ -22,6 +22,7 @@ import net.neoforged.neoforge.items.ItemHandlerHelper;
 import org.jetbrains.annotations.Nullable;
 
 import net.dries007.tfc.common.TFCTags;
+import net.dries007.tfc.common.blockentities.IPotInventory;
 import net.dries007.tfc.common.blockentities.PotBlockEntity;
 import net.dries007.tfc.common.component.Bowl;
 import net.dries007.tfc.common.component.TFCComponents;
@@ -50,21 +51,26 @@ public class SoupPotRecipe extends PotRecipe
     public static final int SOUP_HUNGER_VALUE = 4;
     public static final float SOUP_DECAY_MODIFIER = 3.5F;
 
+    public static int ingredientsToServings(int ingredientCount)
+    {
+        return (int) (ingredientCount / 2f) + 1;
+    }
+
     public SoupPotRecipe(PotRecipe base)
     {
         super(base);
     }
 
     @Override
-    public PotOutput getOutput(PotBlockEntity.PotInventory inventory)
+    public PotOutput getOutput(IPotInventory inventory)
     {
         inventory.clearFluid();
         int ingredientCount = 0;
-        float water = 20, saturation = 2;
+        float water = 20, saturation = 2, extraWater = 0, extraSaturation = 0;
         float[] nutrition = new float[Nutrient.TOTAL];
         ItemStack soupStack = ItemStack.EMPTY;
         final List<ItemStack> itemIngredients = new ArrayList<>();
-        for (int i = PotBlockEntity.SLOT_EXTRA_INPUT_START; i <= PotBlockEntity.SLOT_EXTRA_INPUT_END; i++)
+        for (int i = inventory.inputStart(); i <= inventory.inputEnd(); i++)
         {
             final ItemStack stack = inventory.getStackInSlot(i);
             final @Nullable IFood food = FoodCapability.get(stack);
@@ -77,8 +83,8 @@ public class SoupPotRecipe extends PotRecipe
                     break;
                 }
                 final FoodData data = food.getData();
-                water += data.water();
-                saturation += data.saturation();
+                extraWater += data.water();
+                extraSaturation += data.saturation();
                 for (Nutrient nutrient : Nutrient.VALUES)
                 {
                     nutrition[nutrient.ordinal()] += data.nutrient(nutrient);
@@ -88,8 +94,10 @@ public class SoupPotRecipe extends PotRecipe
         }
         if (ingredientCount > 0)
         {
-            float multiplier = 1 - (0.05f * ingredientCount); // per-serving multiplier of nutrition
-            water *= multiplier; saturation *= multiplier;
+            int outputCount = ingredientsToServings(ingredientCount);
+            float multiplier = 1.2f / outputCount; // per-serving multiplier of nutrition.
+            water += extraWater * multiplier;
+            saturation += extraSaturation * multiplier;
             Nutrient maxNutrient = Nutrient.GRAIN; // determines what item you get. this is a default
             float maxNutrientValue = 0;
             for (Nutrient nutrient : Nutrient.VALUES)
@@ -102,8 +110,7 @@ public class SoupPotRecipe extends PotRecipe
                     maxNutrient = nutrient;
                 }
             }
-
-            soupStack = new ItemStack(TFCItems.SOUPS.get(maxNutrient).get(), (int) (ingredientCount / 2f) + 1);
+            soupStack = new ItemStack(TFCItems.SOUPS.get(maxNutrient).get(), outputCount);
             soupStack.set(TFCComponents.INGREDIENTS, ItemListComponent.of(itemIngredients));
             FoodCapability.setFoodForDynamicItemOnCreate(
                 soupStack,
@@ -128,7 +135,7 @@ public class SoupPotRecipe extends PotRecipe
         }
 
         @Override
-        public ItemInteractionResult onInteract(PotBlockEntity entity, Player player, ItemStack clickedWith)
+        public ItemInteractionResult onInteract(IPotInventory entity, Player player, ItemStack clickedWith)
         {
             if (Helpers.isItem(clickedWith.getItem(), TFCTags.Items.SOUP_BOWLS) && !stack.isEmpty())
             {

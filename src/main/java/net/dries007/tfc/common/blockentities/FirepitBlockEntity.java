@@ -57,6 +57,12 @@ public class FirepitBlockEntity extends AbstractFirepitBlockEntity<ItemStackHand
     }
 
     @Override
+    public Component getDisplayName()
+    {
+        return customName == null ? this.getBlockState().getBlock().getName() : customName;
+    }
+
+    @Override
     protected void handleCooking()
     {
         assert level != null;

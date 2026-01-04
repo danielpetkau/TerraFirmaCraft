@@ -63,25 +63,14 @@ public class TripHammerBlockEntityRenderer implements BlockEntityRenderer<TripHa
         stack.translate(-0.5f, -0.5f, -0.5f);
 
         final float angle = rotation == null ? 0 : hammer.getRealRotationDegrees(rotation, partialTick);
-        final float pivotStart = 130f;
-        final float pivotMiddle = 180f;
-        final float pivotEnd = 183f;
+        final boolean isNegative = rotation != null && rotation.speed() != rotation.positiveSpeed();
+        float pivotAngle = getPivotAngle(isNegative, angle, 50, 180, 3);
 
-        float pivotAngle = 0f;
-
-        if (angle > pivotStart && angle < pivotMiddle)
-        {
-            pivotAngle = Mth.map(angle, pivotStart, pivotMiddle, 0f, 45f);
-        }
-        else if (angle > pivotMiddle && angle < pivotEnd)
-        {
-            pivotAngle = 45f - Mth.map(angle, pivotMiddle, pivotEnd, 0f, 45f);
-        }
         final float pivotX = 8f * px;
         final float pivotY = 14f * px;
         final float pivotZ = 3f * px;
 
-        if (pivotAngle != 0f && rotation.positiveDirection() == state.getValue(TripHammerBlock.FACING).getClockWise())
+        if (pivotAngle != 0f && rotation != null && rotation.positiveDirection() == state.getValue(TripHammerBlock.FACING).getClockWise())
         {
             stack.translate(pivotX, pivotY, pivotZ);
 
@@ -94,5 +83,38 @@ public class TripHammerBlockEntityRenderer implements BlockEntityRenderer<TripHa
         RenderHelpers.renderTexturedCuboid(stack, buffer, RenderHelpers.blockTexture(hammerTexture), packedLight, packedOverlay, 5.5f * px, 11f * px, -11f * px, 10.5f * px, 17f * px, -6f * px, false);
 
         stack.popPose();
+    }
+
+    private static float getPivotAngle(boolean isNegative, float angle, float startAngleOffset, float apexAngle, float endAngleOffset)
+    {
+        if (isNegative)
+        {
+            // Angle goes high to low
+            final float pivotStart = apexAngle + startAngleOffset;
+            final float pivotEnd = apexAngle - endAngleOffset;
+            if (angle > apexAngle && angle < pivotStart)
+            {
+                return 45 - Mth.map(angle, apexAngle, pivotStart, 0f, 45f);
+            }
+            else if (angle > pivotEnd && angle < apexAngle)
+            {
+                return Mth.map(angle, pivotEnd, apexAngle, 0f, 45f);
+            }
+        }
+        else
+        {
+            // Angle goes low to high
+            final float pivotStart = apexAngle - startAngleOffset;
+            final float pivotEndPositive = apexAngle + endAngleOffset;
+            if (angle > pivotStart && angle < apexAngle)
+            {
+                return Mth.map(angle, pivotStart, apexAngle, 0f, 45f);
+            }
+            else if (angle > apexAngle && angle < pivotEndPositive)
+            {
+                return 45f - Mth.map(angle, apexAngle, pivotEndPositive, 0f, 45f);
+            }
+        }
+        return 0f;
     }
 }

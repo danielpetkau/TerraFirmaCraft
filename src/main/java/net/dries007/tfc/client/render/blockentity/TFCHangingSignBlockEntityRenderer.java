@@ -7,7 +7,6 @@
 package net.dries007.tfc.client.render.blockentity;
 
 import java.util.Map;
-import java.util.Objects;
 import java.util.function.Function;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -26,10 +25,8 @@ import org.jetbrains.annotations.Nullable;
 
 import net.dries007.tfc.client.RenderHelpers;
 import net.dries007.tfc.common.blocks.TFCBlocks;
-import net.dries007.tfc.common.blocks.wood.Wood;
 import net.dries007.tfc.mixin.client.accessor.SignRendererAccessor;
 import net.dries007.tfc.util.Helpers;
-import net.dries007.tfc.util.Metal;
 
 public class TFCHangingSignBlockEntityRenderer extends HangingSignRenderer
 {
@@ -40,7 +37,7 @@ public class TFCHangingSignBlockEntityRenderer extends HangingSignRenderer
                     Sheets.SIGN_SHEET,
                     Helpers.identifier("entity/signs/hanging/" + metal.getSerializedName() + "/" + wood.getSerializedName())
                 ),
-                Helpers.resourceLocation(wood.getSerializedName() + ".png").withPrefix("textures/gui/hanging_signs/" + metal.getSerializedName() + "/"),
+                Helpers.identifier(wood.getSerializedName() + ".png").withPrefix("textures/gui/hanging_signs/" + metal.getSerializedName() + "/"),
                 context -> new HangingSignModel(context.bakeLayer(RenderHelpers.layerId("hanging_sign/" + wood.getSerializedName())))
             );
 

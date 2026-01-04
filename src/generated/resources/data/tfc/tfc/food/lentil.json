@@ -4,7 +4,7 @@
   "ingredient": {
     "item": "tfc:food/lentil"
   },
-  "protein": 0.75,
+  "protein": 0.3,
   "saturation": 2.0,
-  "vegetables": 0.75
+  "vegetables": 0.3
 }

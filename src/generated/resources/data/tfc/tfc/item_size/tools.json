@@ -1,6 +1,27 @@
 {
   "ingredient": [
     {
+      "tag": "minecraft:pickaxes"
+    },
+    {
+      "tag": "minecraft:shovels"
+    },
+    {
+      "tag": "minecraft:hoes"
+    },
+    {
+      "tag": "c:tools/hammer"
+    },
+    {
+      "tag": "c:tools/saw"
+    },
+    {
+      "tag": "c:tools/scythe"
+    },
+    {
+      "tag": "c:tools/propick"
+    },
+    {
       "tag": "c:tools/fishing_rod"
     },
     {
@@ -11,6 +32,12 @@
     },
     {
       "tag": "c:tools/ranged_weapon"
+    },
+    {
+      "tag": "tfc:all_blowpipes"
+    },
+    {
+      "tag": "c:tools/glassworking"
     },
     {
       "tag": "c:tools/mace"
