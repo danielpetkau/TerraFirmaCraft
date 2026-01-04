@@ -9,6 +9,8 @@ package net.dries007.tfc.world.noise;
 import java.util.function.ToDoubleFunction;
 import it.unimi.dsi.fastutil.HashCommon;
 
+import net.dries007.tfc.util.Helpers;
+
 /**
  * Modified from {@link FastNoiseLite#SingleCellular(int, double, double)}
  */
@@ -68,6 +70,7 @@ public class Cellular2D implements Noise2D
 
         double distance0 = Double.MAX_VALUE;
         double distance1 = Double.MAX_VALUE;
+        double angle0 = -1;
         double closestCenterX = 0;
         double closestCenterY = 0;
         int closestHash = 0;
@@ -89,26 +92,30 @@ public class Cellular2D implements Noise2D
                 double vecX = xi + FastNoiseLite.RandVecs2D[idx] * jitter;
                 double vecY = yi + FastNoiseLite.RandVecs2D[idx | 1] * jitter;
 
-                double newDistance = (vecX - x) * (vecX - x) + (vecY - y) * (vecY - y);
+                double newDistanceX = vecX - x;
+                double newDistanceY = vecY - y;
+                double newAngle = Helpers.diamondAngle(newDistanceX, newDistanceY);
+                double newDistance = newDistanceX * newDistanceX + newDistanceY * newDistanceY;
 
                 distance1 = FastNoiseLite.FastMax(FastNoiseLite.FastMin(distance1, newDistance), distance0);
                 if (newDistance < distance0)
                 {
                     distance0 = newDistance;
+                    angle0 = newAngle;
                     closestHash = hash;
 
                     // Store the last computed centers
-                    closestCenterX = vecX;
-                    closestCenterY = vecY;
-                    closestCellX = xi;
-                    closestCellY = yi;
+                    closestCenterX = vecX; // Cell 1 X
+                    closestCenterY = vecY; // Cell 1 Y
+                    closestCellX = xi; // Cell 2 X
+                    closestCellY = yi; // Cell 2 Y
                 }
                 yPrimed += primeY;
             }
             xPrimed += primeX;
         }
 
-        return new Cell(closestCenterX / frequency, closestCenterY / frequency, closestCellX, closestCellY, distance0, distance1, closestHash * (1 / 2147483648.0f));
+        return new Cell(closestCenterX / frequency, closestCenterY / frequency, closestCellX, closestCellY, distance0, distance1, closestHash * (1 / 2147483648.0f), angle0);
     }
 
     /**
@@ -119,6 +126,7 @@ public class Cellular2D implements Noise2D
      * @param f1 Distance to x, y
      * @param f2 Distance to cx, cy
      * @param noise Hash value of the cell, range 0-1
+     * @param angle Diamond angle to the center
      */
-    public record Cell(double x, double y, int cx, int cy, double f1, double f2, double noise) {}
+    public record Cell(double x, double y, int cx, int cy, double f1, double f2, double noise, double angle) {}
 }

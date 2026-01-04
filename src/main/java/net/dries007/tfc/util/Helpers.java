@@ -1495,6 +1495,17 @@ public final class Helpers
     }
 
     /**
+     * Returns an approximate angle in the range [0, 4] where 4 is the equivalent of 360 degrees from a vector in the form x, y
+     */
+    public static double diamondAngle(double x, double y)
+    {
+        if (y >= 0)
+            return (x >= 0 ? y/(x+y) : 1-x/(-x+y));
+        else
+            return (x < 0 ? 2-y/(-x-y) : 3+x/(x-y));
+    }
+
+    /**
      * Checks the existence of a <a href="https://en.wikipedia.org/wiki/Perfect_matching">perfect matching</a> of a <a href="https://en.wikipedia.org/wiki/Bipartite_graph">bipartite graph</a>.
      * The graph is interpreted as the matches between the set of inputs, and the set of tests.
      * This algorithm computes the <a href="https://en.wikipedia.org/wiki/Edmonds_matrix">Edmonds Matrix</a> of the graph, which has the property that the determinant is identically zero iff the graph does not admit a perfect matching.

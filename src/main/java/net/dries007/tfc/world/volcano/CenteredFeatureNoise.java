@@ -150,9 +150,10 @@ public class CenteredFeatureNoise
     {
         return new CenteredFeatureNoiseSampler()
         {
-            final Cellular2D cellNoise = new Cellular2D(seed.seed()).spread(0.003f);
+            final Cellular2D cellNoise = new Cellular2D(seed.seed(), 0.2f, 1).spread(0.003f);
             final Noise2D jitterNoise = new OpenSimplex2D(seed.seed() + 1234123L).octaves(2).scaled(-0.032f, 0.032f).spread(0.064f);
-            final Noise2D addedNoise = new OpenSimplex2D(seed.seed()).octaves(2).spread(0.1).scaled(-2, 8);
+            final Noise2D addedCliffNoise = new OpenSimplex2D(seed.seed()).octaves(2).spread(0.1).scaled(-2, 10);
+            final Noise2D everywhereNoise = new OpenSimplex2D(seed.next()).octaves(3).spread(0.03).scaled(-10, 10);
 
             @Override
             public double setColumnAndSampleHeight(double heightIn, int x, int z, BiomeSourceExtension biomeSource)
@@ -182,11 +183,11 @@ public class CenteredFeatureNoise
                 {
                     final double f1 = cell.f1();
                     final double easing = Mth.clamp(calculateEasing((float) f1) + jitterNoise.noise(x, z), 0, 1);
-                    final double shape = calculateShape(1 - easing);
-                    final double ringAdditionalHeight = (shape * biome.getCenteredFeatureScaleHeight() + (shape > 0.5 ? addedNoise.noise(x, z) : 0f));
+                    final double shape = calculateShape(1 - easing) * getGapVerticalEasing(cell, 1.2, 0.25);
+                    final double ringAdditionalHeight = (shape * biome.getCenteredFeatureScaleHeight() + (shape > 0.5 ? addedCliffNoise.noise(x, z) : 0f));
                     final double ringHeight = SEA_LEVEL_Y + biome.getCenteredFeatureBaseHeight() + ringAdditionalHeight;
                     //Linearly scales between baseHeight and the max of baseHeight and ringHeight near the edges of cells
-                    return Mth.lerp(50 * Mth.clamp(cell.f2() - f1, 0, 0.02), heightIn, Math.max(ringHeight, heightIn));
+                    return Mth.lerp(50 * Mth.clamp(cell.f2() - f1, 0, 0.02), heightIn, Math.max(ringHeight, heightIn)) + everywhereNoise.noise(x, z);
                 }
                 return heightIn;
             }
@@ -248,6 +249,33 @@ public class CenteredFeatureNoise
                 return null;
             }
         };
+    }
+
+    /**
+     * Method for adding a single gap to a cellular feature at a random angle
+     * @return a value ranging from 1 far from the gap, to 0 in the middle of a large gap
+     */
+    private static double getGapVerticalEasing(Cellular2D.Cell cell, double maxGapScale, double gapSizeOffset)
+    {
+        final double gapSize = maxGapScale * (((cell.noise() * 100) % 1) - gapSizeOffset);
+
+        // Only adjust this if a gap should exist at all
+        double gapVerticalEasing = 1;
+        if (gapSize > 0)
+        {
+            final double aGap = 4 * ((cell.noise() * 10000) % 1);
+            final double a1 = cell.angle();
+            final double angleToGap = Math.abs(a1 - aGap);
+            // If angle to gap is larger than the gap size, we are far from the gap and can skip calculations
+            if (angleToGap < gapSize)
+            {
+                final double angleToGapEdge = Math.abs(Math.min(angleToGap + gapSize, angleToGap - gapSize));
+
+                // Gap scale should be lowest at the center of the gap
+                gapVerticalEasing = Mth.clampedMap(angleToGapEdge, 0, 0.3, 1, 0);
+            }
+        }
+        return gapVerticalEasing;
     }
 
     public static CenteredFeatureNoiseSampler tuya(Seed seed)
