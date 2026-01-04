@@ -18,7 +18,6 @@ import net.dries007.tfc.world.surface.SurfaceBuilderContext;
 import net.dries007.tfc.world.volcano.CenteredFeatureNoise;
 import net.dries007.tfc.world.volcano.CenteredFeatureNoiseSampler;
 
-// TODO: Needs to use the new system for querying volcano noise
 public class CinderConeSurfaceBuilder implements SurfaceBuilder
 {
     public static SurfaceBuilderFactory create(SurfaceBuilderFactory parent)

@@ -31,6 +31,6 @@ public class TuffRingPlacement extends CenterOrDistanceToPlacement<CenteredFeatu
     @Override
     protected CenteredFeatureNoiseSampler createContext(Seed seed)
     {
-        return CenteredFeatureNoise.cinder(seed);
+        return CenteredFeatureNoise.tuffRing(seed);
     }
 }

@@ -14,7 +14,7 @@ import net.dries007.tfc.world.biome.BiomeSourceExtension;
 import net.dries007.tfc.world.noise.Cellular2D;
 
 /**
- * TODO: Add a helpful comment here, maybe change all this stuff to be called cellular features instead of volcanoes
+ * Interface for cellular noise features that are dependent on the biome at the center of a 2D cell
  */
 public interface CenteredFeatureNoiseSampler
 {
