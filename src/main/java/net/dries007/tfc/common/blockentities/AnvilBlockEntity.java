@@ -295,7 +295,6 @@ public class AnvilBlockEntity extends InventoryBlockEntity<AnvilBlockEntity.Anvi
             forge.addStep(step);
 
             // Damage the hammer
-            //assert hammerSlot != null;
             Helpers.damageItem(hammer, player, hammerSlot);
 
             if (forge.work() < 0 || forge.work() > ForgeStep.LIMIT)
