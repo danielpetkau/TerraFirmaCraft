@@ -143,12 +143,12 @@ public class AnvilBlockEntity extends InventoryBlockEntity<AnvilBlockEntity.Anvi
     public boolean isItemValid(int slot, ItemStack stack)
     {
         return switch (slot)
-            {
-                case SLOT_INPUT_MAIN, SLOT_INPUT_SECOND -> true;
-                case SLOT_HAMMER -> Helpers.isItem(stack, TFCTags.Items.TOOLS_HAMMER);
-                case SLOT_CATALYST -> Helpers.isItem(stack, TFCTags.Items.WELDING_FLUX);
-                default -> false;
-            };
+        {
+            case SLOT_INPUT_MAIN, SLOT_INPUT_SECOND -> true;
+            case SLOT_HAMMER -> Helpers.isItem(stack, TFCTags.Items.TOOLS_HAMMER);
+            case SLOT_CATALYST -> Helpers.isItem(stack, TFCTags.Items.WELDING_FLUX);
+            default -> false;
+        };
     }
 
     @Override
@@ -435,11 +435,12 @@ public class AnvilBlockEntity extends InventoryBlockEntity<AnvilBlockEntity.Anvi
 
     /**
      * Sends feedback to the action bar, as the anvil gui will be closed.
+     *
      * @return {@code SUCCESS} if welding was successful, {@code FAIL} if it failed, and {@code PASS} if it was not attempted.
      */
     public InteractionResult weld(Player player)
     {
-        final ItemStack left = inventory.getLeft(), right = inventory.getRight();
+        final ItemStack left = inventory.getMainIngot(), right = inventory.getSecondaryIngot();
         if (left.isEmpty() && right.isEmpty())
         {
             return InteractionResult.PASS;
@@ -452,7 +453,7 @@ public class AnvilBlockEntity extends InventoryBlockEntity<AnvilBlockEntity.Anvi
         {
             if (!recipe.isCorrectTier(getTier()))
             {
-                player.displayClientMessage(Component.translatable("tfc.tooltip.anvil_is_too_low_tier_to_weld"), true);
+                player.displayClientMessage(Component.translatable("tfc.tooltip.anvil_is_too_low_tier_to_weld"), false);
                 return InteractionResult.FAIL;
             }
 
@@ -461,13 +462,13 @@ public class AnvilBlockEntity extends InventoryBlockEntity<AnvilBlockEntity.Anvi
 
             if ((leftHeat != null && !leftHeat.canWeld()) || (rightHeat != null && !rightHeat.canWeld()))
             {
-                player.displayClientMessage(Component.translatable("tfc.tooltip.not_hot_enough_to_weld"), true);
+                player.displayClientMessage(Component.translatable("tfc.tooltip.not_hot_enough_to_weld"), false);
                 return InteractionResult.FAIL;
             }
 
             if (inventory.getStackInSlot(SLOT_CATALYST).isEmpty())
             {
-                player.displayClientMessage(Component.translatable("tfc.tooltip.no_flux_to_weld"), true);
+                player.displayClientMessage(Component.translatable("tfc.tooltip.no_flux_to_weld"), false);
                 return InteractionResult.FAIL;
             }
 
@@ -489,6 +490,57 @@ public class AnvilBlockEntity extends InventoryBlockEntity<AnvilBlockEntity.Anvi
             return InteractionResult.sidedSuccess(level.isClientSide);
         }
         return InteractionResult.PASS;
+    }
+
+    public boolean canWeldNow()
+    {
+        return getWeldStatus() == WeldStatus.WELDABLE;
+    }
+
+    public WeldStatus getWeldStatus()
+    {
+        final ItemStack left = inventory.getMainIngot(), right = inventory.getSecondaryIngot();
+        if (left.isEmpty() && right.isEmpty())
+        {
+            return WeldStatus.PROBLEM_INGOTS;
+        }
+
+        assert level != null;
+        final WeldingRecipe recipe = RecipeHelpers.unbox(RecipeHelpers.getHolder(level, TFCRecipeTypes.WELDING, inventory));
+        if (recipe != null)
+        {
+            if (!recipe.isCorrectTier(getTier()))
+            {
+                return WeldStatus.PROBLEM_TIER;
+            }
+
+            final @Nullable IHeat leftHeat = HeatCapability.get(left);
+            final @Nullable IHeat rightHeat = HeatCapability.get(right);
+
+            if ((leftHeat != null && !leftHeat.canWeld()) || (rightHeat != null && !rightHeat.canWeld()))
+            {
+                return WeldStatus.PROBLEM_HEAT;
+            }
+
+            if (inventory.getStackInSlot(SLOT_CATALYST).isEmpty())
+            {
+                return WeldStatus.PROBLEM_FLUX;
+            }
+
+            return WeldStatus.WELDABLE;
+        }
+        return WeldStatus.PROBLEM_UNKNOWN;
+    }
+
+    enum WeldStatus
+    {
+        PROBLEM_TIER,
+        PROBLEM_HEAT,
+        PROBLEM_FLUX,
+        PROBLEM_HAMMER,
+        PROBLEM_INGOTS,
+        PROBLEM_UNKNOWN,
+        WELDABLE
     }
 
     public int getTier()
@@ -525,13 +577,13 @@ public class AnvilBlockEntity extends InventoryBlockEntity<AnvilBlockEntity.Anvi
         }
 
         @Override
-        public ItemStack getLeft()
+        public ItemStack getMainIngot()
         {
             return getStackInSlot(SLOT_INPUT_MAIN);
         }
 
         @Override
-        public ItemStack getRight()
+        public ItemStack getSecondaryIngot()
         {
             return getStackInSlot(SLOT_INPUT_SECOND);
         }

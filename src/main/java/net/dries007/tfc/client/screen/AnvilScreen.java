@@ -18,12 +18,11 @@ import org.jetbrains.annotations.Nullable;
 import net.dries007.tfc.TerraFirmaCraft;
 import net.dries007.tfc.client.screen.button.AnvilPlanButton;
 import net.dries007.tfc.client.screen.button.AnvilStepButton;
+import net.dries007.tfc.client.screen.button.AnvilWeldButton;
 import net.dries007.tfc.common.blockentities.AnvilBlockEntity;
 import net.dries007.tfc.common.component.forge.ForgeRule;
 import net.dries007.tfc.common.component.forge.ForgeStep;
-import net.dries007.tfc.common.component.forge.ForgeSteps;
 import net.dries007.tfc.common.component.forge.Forging;
-import net.dries007.tfc.common.component.forge.ForgingComponent;
 import net.dries007.tfc.common.container.AnvilContainer;
 import net.dries007.tfc.common.recipes.AnvilRecipe;
 import net.dries007.tfc.config.TFCConfig;
@@ -47,6 +46,7 @@ public class AnvilScreen extends BlockEntityScreen<AnvilBlockEntity, AnvilContai
         super.init();
 
         addRenderableWidget(new AnvilPlanButton(blockEntity, getGuiLeft(), getGuiTop()));
+        addRenderableWidget(new AnvilWeldButton(blockEntity, getGuiLeft(), getGuiTop()));
 
         for (ForgeStep step : ForgeStep.VALUES)
         {
@@ -64,7 +64,7 @@ public class AnvilScreen extends BlockEntityScreen<AnvilBlockEntity, AnvilContai
 
         if (TerraFirmaCraft.JEI)
         {
-            graphics.blit(texture, guiLeft + 26, guiTop + 24, 0, 207, 9, 14);
+            graphics.blit(texture, guiLeft + 141, guiTop + 40, 0, 207, 9, 14);
         }
 
         assert level != null;
@@ -79,13 +79,13 @@ public class AnvilScreen extends BlockEntityScreen<AnvilBlockEntity, AnvilContai
         if (recipe != null)
         {
             // progress indicator
-            graphics.blit(texture, guiLeft + 13 + forging.work(), guiTop + 100, 176, 0, 5, 5);
+            graphics.blit(texture, guiLeft + 13 + forging.work(), guiTop + 104, 176, 0, 5, 5);
 
             // target indicator
-            if (range == 0)
+            if (range < 2)
             {
                 // render the pointer
-                graphics.blit(texture, guiLeft + 13 + target, guiTop + 94, 181, 0, 5, 5);
+                graphics.blit(texture, guiLeft + 13 + target, guiTop + 98, 181, 0, 5, 5);
             }
             else
             {
@@ -94,20 +94,20 @@ public class AnvilScreen extends BlockEntityScreen<AnvilBlockEntity, AnvilContai
                 final int rightLimit = Math.min(145, target + range);
 
                 // left
-                graphics.blit(texture, guiLeft + 13 + leftLimit, guiTop + 92, 181 - 5, 7, 5, 7);
+                graphics.blit(texture, guiLeft + 13 + leftLimit, guiTop + 96, 176, 7, 5, 7);
                 // right
-                graphics.blit(texture, guiLeft + 13 + rightLimit, guiTop + 92, 181 + 5, 7, 5, 7);
+                graphics.blit(texture, guiLeft + 13 + rightLimit, guiTop + 96, 186, 7, 5, 7);
 
                 // bar
                 for (int i = leftLimit + 2; i < rightLimit - 1; i++)
                 {
-                    graphics.blit(texture, guiLeft + 13 + i + 2, guiTop + 90, 181 + 11, 5, 1, 5);
+                    graphics.blit(texture, guiLeft + 15 + i, guiTop + 94, 192, 5, 1, 5);
                 }
 
                 // center
                 if (range > 2)
                 {
-                    graphics.blit(texture, guiLeft + 13 + (rightLimit + leftLimit) / 2, guiTop + 90, 181, 5, 5, 5);
+                    graphics.blit(texture, guiLeft + 13 + (rightLimit + leftLimit) / 2, guiTop + 94, 181, 5, 5, 5);
                 }
 
             }
