@@ -402,7 +402,7 @@ public class ServerConfig extends BaseConfig
 
         builder.swap("anvil");
 
-        anvilAcceptableWorkRange = builder.comment("The number of pixels that the anvil's result may be off by, but still count as recipe completion. By default this requires pixel perfect accuracy.").define("anvilAcceptableWorkRange", 2, 0, 150);
+        anvilAcceptableWorkRange = builder.comment("The number of pixels that the anvil's result may be off by, but still count as recipe completion. By default this requires pixel perfect accuracy.").define("anvilAcceptableWorkRange", 0, 0, 150);
         anvilModestlyForgedThreshold = builder.comment("The minimum efficiency (ratio of number of steps taken / minimum number of steps required) that must be passed for a item to be considered 'Modestly Forged'.").define("anvilModestlyForgedThreshold", 10.0, 1.0, Double.MAX_VALUE);
         anvilWellForgedThreshold = builder.comment("The minimum efficiency (ratio of number of steps taken / minimum number of steps required) that must be passed for a item to be considered 'Well Forged'.").define("anvilWellForgedThreshold", 5.0, 1.0, Double.MAX_VALUE);
         anvilExpertForgedThreshold = builder.comment("The minimum efficiency (ratio of number of steps taken / minimum number of steps required) that must be passed for a item to be considered 'Expertly Forged'.").define("anvilExpertForgedThreshold", 2.0, 1.0, Double.MAX_VALUE);
