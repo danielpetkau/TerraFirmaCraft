@@ -208,12 +208,12 @@ public enum ForgeRule implements StringRepresentable
 
     public int iconX()
     {
-        return type == HIT_LIGHT ? 218 : type.iconX();
+        return type.iconX();
     }
 
     public int iconY()
     {
-        return type == HIT_LIGHT ? 18 : type.iconY();
+        return type.iconY();
     }
 
     public int overlayY()
