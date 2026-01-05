@@ -74,6 +74,6 @@ public interface CenteredFeatureNoiseSampler
     default boolean checkCellRarity(Cellular2D.Cell cell, int rarity)
     {
         if (rarity == 0) return false;
-        return Math.abs(cell.noise()) <= 1f / rarity;
+        return Math.abs(cell.noise()) <= 1f; // rarity;
     }
 }

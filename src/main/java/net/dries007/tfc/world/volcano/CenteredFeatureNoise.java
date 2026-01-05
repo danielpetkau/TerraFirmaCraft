@@ -183,7 +183,7 @@ public class CenteredFeatureNoise
                 {
                     final double f1 = cell.f1();
                     final double easing = Mth.clamp(calculateEasing((float) f1) + jitterNoise.noise(x, z), 0, 1);
-                    final double shape = calculateShape(1 - easing) * getGapVerticalEasing(cell, 1.2, 0.25);
+                    final double shape = calculateShape(1 - easing) * getGapVerticalEasing(cell);
                     final double ringAdditionalHeight = (shape * biome.getCenteredFeatureScaleHeight() + (shape > 0.5 ? addedCliffNoise.noise(x, z) : 0f));
                     final double ringHeight = SEA_LEVEL_Y + biome.getCenteredFeatureBaseHeight() + ringAdditionalHeight;
                     //Linearly scales between baseHeight and the max of baseHeight and ringHeight near the edges of cells
@@ -255,15 +255,16 @@ public class CenteredFeatureNoise
      * Method for adding a single gap to a cellular feature at a random angle
      * @return a value ranging from 1 far from the gap, to 0 in the middle of a large gap
      */
-    private static double getGapVerticalEasing(Cellular2D.Cell cell, double maxGapScale, double gapSizeOffset)
+    private static double getGapVerticalEasing(Cellular2D.Cell cell)
     {
-        final double gapSize = maxGapScale * (((cell.noise() * 100) % 1) - gapSizeOffset);
+        // Gap size from 0 to 2
+        final double gapSize = ((1 + cell.noise()) * 100) % 1;
 
         // Only adjust this if a gap should exist at all
         double gapVerticalEasing = 1;
         if (gapSize > 0)
         {
-            final double aGap = 4 * ((cell.noise() * 10000) % 1);
+            final double aGap = 4 * (Math.abs(cell.noise() * 10000) % 1);
             final double a1 = cell.angle();
             final double angleToGap = Math.abs(a1 - aGap);
             // If angle to gap is larger than the gap size, we are far from the gap and can skip calculations
@@ -272,7 +273,7 @@ public class CenteredFeatureNoise
                 final double angleToGapEdge = Math.abs(Math.min(angleToGap + gapSize, angleToGap - gapSize));
 
                 // Gap scale should be lowest at the center of the gap
-                gapVerticalEasing = Mth.clampedMap(angleToGapEdge, 0, 0.3, 1, 0);
+                gapVerticalEasing = Mth.clampedMap(angleToGapEdge, 0, Math.max(0.3, 0.6 * gapSize), 1, 0);
             }
         }
         return gapVerticalEasing;
