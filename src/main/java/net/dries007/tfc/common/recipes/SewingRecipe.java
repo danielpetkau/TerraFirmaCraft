@@ -6,6 +6,10 @@
 
 package net.dries007.tfc.common.recipes;
 
+import java.util.List;
+import java.util.regex.MatchResult;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import com.google.common.base.Splitter;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
@@ -26,6 +30,8 @@ public class SewingRecipe implements ISimpleRecipe<SewingTableContainer.Input>
 {
     private static final int MAX_STITCHES = SewingTableContainer.MAX_STITCHES;
 
+    private static final Pattern INVALID_SQUARES = Pattern.compile("[^ BW]+");
+
     private static Codec<String> flatCodec(int width, int height)
     {
         return Codec.string(width, width)
@@ -45,7 +51,21 @@ public class SewingRecipe implements ISimpleRecipe<SewingTableContainer.Input>
                 return builder.toString();
             }
         ).fieldOf("stitches").forGetter(c -> c.stitches),
-        flatCodec(8, 4).fieldOf("squares").forGetter(c -> c.squares),
+        flatCodec(8, 4).validate(squares -> {
+            final Matcher match = INVALID_SQUARES.matcher(squares);
+            if (match.find())
+            {
+                final List<Character> chars = match.results()
+                    .map(MatchResult::group)
+                    .<Character>mapMulti((s, c) -> {
+                        for (char ch : s.toCharArray()) c.accept(ch);
+                    })
+                    .distinct()
+                    .toList();
+                return DataResult.error(() -> "Invalid char(s) for cloth squares: " + chars);
+            }
+            return DataResult.success(squares);
+        }).fieldOf("squares").forGetter(c -> c.squares),
         ItemStack.CODEC.fieldOf("result").forGetter(c -> c.result)
     ).apply(i, SewingRecipe::new));
 
@@ -79,7 +99,7 @@ public class SewingRecipe implements ISimpleRecipe<SewingTableContainer.Input>
     }
 
     private final long stitches; // A bitset of 45 total stitches, where 0 = false, 1 = true
-    private final String squares; // A string of 32 total squares (characters), where ' ' = none, 'B' = burlap, 'N' = normal
+    private final String squares; // A string of 32 total squares (characters), where ' ' = none, 'B' = burlap, 'W' = wool
 
     private final ItemStack result;
 
@@ -97,7 +117,13 @@ public class SewingRecipe implements ISimpleRecipe<SewingTableContainer.Input>
 
     public int getSquare(int index)
     {
-        return squares.charAt(index) == '#' ? 1 : 0;
+        return switch (squares.charAt(index))
+        {
+            case ' ' -> SewingTableContainer.EMPTY_ID;
+            case 'B' -> SewingTableContainer.BURLAP_ID;
+            case 'W' -> SewingTableContainer.WOOL_ID;
+            default -> throw new IllegalStateException("Sewing Recipe has invalid square at index " + index);
+        };
     }
 
     @Override

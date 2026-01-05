@@ -8,6 +8,7 @@ package net.dries007.tfc.mixin;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+
 import net.minecraft.core.component.PatchedDataComponentMap;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
@@ -33,6 +34,23 @@ public abstract class ItemStackMixin
     private void modifyItemStackOnConstructing(CallbackInfo ci)
     {
         ItemStackHooks.onModifyItemStackComponents((ItemStack) (Object) this);
+    }
+
+    /**
+     * Before performing an equality comparison of components on item
+     * stacks, make sure both are sanitized.
+     * Then, check if food with slightly different expiration dates
+     * should be able to be stacked together.
+     * @see ItemStackHooks#onCompareItemStackComponents
+     */
+    @Inject(method = "isSameItemSameComponents", at = @At("HEAD"), cancellable = true)
+    private static void sanitizeComponentsAndStackFood(ItemStack stack, ItemStack other, CallbackInfoReturnable<Boolean> cir)
+    {
+        ItemStackHooks.onCompareItemStackComponents(stack, other);
+        if (ItemStackHooks.shouldFoodStacksStack(stack, other))
+        {
+            cir.setReturnValue(true);
+        }
     }
 
     /**

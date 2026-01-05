@@ -16,6 +16,7 @@ import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.neoforged.neoforge.common.crafting.SizedIngredient;
 import org.jetbrains.annotations.Nullable;
 
@@ -31,7 +32,7 @@ public class KnappingRecipeCategory<T extends KnappingRecipe> extends BaseRecipe
     private final KnappingType knappingType;
     private final IGuiHelper helper;
 
-    public KnappingRecipeCategory(RecipeType<T> type, IGuiHelper helper, KnappingType knappingType)
+    public KnappingRecipeCategory(RecipeType<RecipeHolder<T>> type, IGuiHelper helper, KnappingType knappingType)
     {
         super(type, helper, 155, 82, knappingType.icon());
 

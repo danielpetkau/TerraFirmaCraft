@@ -126,6 +126,14 @@ public record ItemStackProvider(
     }
 
     /**
+     * {@link ItemStackProvider#getStack(ItemStack)} but for JEI
+     */
+    public ItemStack getStackDisplayOnly(ItemStack input)
+    {
+        return getStack(input, ItemStackModifier.Context.NO_RANDOM_CHANCE);
+    }
+
+    /**
      * Gets the output stack from this provider, for the given input stack, and allows providing a non-typical
      * context to the provider.
      * @return A new stack, possibly dependent on the input stack
@@ -133,6 +141,13 @@ public record ItemStackProvider(
     public ItemStack getStack(ItemStack input, ItemStackModifier.Context context)
     {
         ItemStack output = stack.copy();
+
+        // Since we might need to be able to apply modifiers to the entire output at once, set the count here.
+        if (!input.isEmpty())
+        {
+            output.setCount(output.getCount() * input.getCount());
+        }
+
         for (ItemStackModifier modifier : modifiers)
         {
             output = modifier.apply(output, input, context);

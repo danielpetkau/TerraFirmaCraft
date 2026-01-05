@@ -152,6 +152,8 @@ public class ServerConfig extends BaseConfig
     public final Supplier<Boolean> fireboxEnableAutomation;
     // Blocks - Hot Water
     public final Supplier<Double> hotWaterHealAmount;
+    // Blocks - Bubble Column
+    public final Supplier<Boolean> bubbleColumnProvidesAir;
     // Blocks - Sapling
     public final Supplier<Double> saplingGrowthModifier;
     public final Map<Wood, Supplier<Integer>> saplingGrowthTicks;
@@ -314,7 +316,7 @@ public class ServerConfig extends BaseConfig
             "TFC will try and infer metals from tags that match the pattern 'c:type/...', where 'type' is one of 'ingots' or 'double_ingots'",
             "These will be used to determine what metal is an item for the purpose of rendering it in an ingot pile",
             "This is a list of tag names (not including the 'c' namespace), that look like the above (so i.e. 'ingots/not_a_real_metal') that should not be included"
-        ).define("", List.of(), e -> true);
+        ).define("inferredMetals", List.of(), e -> true);
 
         builder.swap("blocks").push("farmland");
 
@@ -372,23 +374,23 @@ public class ServerConfig extends BaseConfig
 
         builder.swap("torch");
 
-        torchTicks = builder.comment("Number of ticks required for a torch to burn out (1000 = 1 in game hour = 50 seconds), default is 72 hours. Set to -1 to disable torch burnout.").define("torchTicks", 72000, -1, Integer.MAX_VALUE);
+        torchTicks = builder.comment("Number of ticks required for a torch to burn out (1200 = 1 in game hour = 60 seconds), default is 72 hours. Set to -1 to disable torch burnout.").define("torchTicks", 86400, -1, Integer.MAX_VALUE);
 
         builder.swap("candle");
 
-        candleTicks = builder.comment("Number of ticks required for a candle to burn out (1000 = 1 in game hour = 50 seconds), default is 264 hours. Set to -1 to disable candle burnout.").define("candleTicks", 264000, -1, Integer.MAX_VALUE);
+        candleTicks = builder.comment("Number of ticks required for a candle to burn out (1200 = 1 in game hour = 60 seconds), default is 240 hours. Set to -1 to disable candle burnout.").define("candleTicks", 288000, -1, Integer.MAX_VALUE);
 
         builder.swap("dryingBricks");
 
-        mudBricksTicks = builder.comment("Number of ticks required for mud bricks to dry (1000 = 1 in game hour = 50 seconds), default is 24 hours. Set to -1 to disable drying.").define("mudBricksTicks",  24000, -1, Integer.MAX_VALUE);
+        mudBricksTicks = builder.comment("Number of ticks required for mud bricks to dry (1200 = 1 in game hour = 60 seconds), default is 24 hours. Set to -1 to disable drying.").define("mudBricksTicks", 28800, -1, Integer.MAX_VALUE);
 
         builder.swap("charcoal");
 
-        charcoalTicks = builder.comment("Number of ticks required for charcoal pit to complete. (1000 = 1 in game hour = 50 seconds), default is 18 hours.").define("charcoalTicks", 18000, -1, Integer.MAX_VALUE);
+        charcoalTicks = builder.comment("Number of ticks required for charcoal pit to complete. (1200 = 1 in game hour = 60 seconds), default is 15 hours.").define("charcoalTicks", 18000, -1, Integer.MAX_VALUE);
 
         builder.swap("pitKiln");
 
-        pitKilnTicks = builder.comment("Number of ticks required for a pit kiln to burn out. (1000 = 1 in game hour = 50 seconds), default is 8 hours.").define("pitKilnTicks", 8000, 20, Integer.MAX_VALUE);
+        pitKilnTicks = builder.comment("Number of ticks required for a pit kiln to burn out. (1200 = 1 in game hour = 60 seconds), default is 6 hours.").define("pitKilnTicks", 7200, 20, Integer.MAX_VALUE);
         pitKilnTemperature = builder.comment("The maximum temperature which a pit kiln reaches.").define("pitKilnTemperature", 1400, 0, Integer.MAX_VALUE);
 
         builder.swap("crucible");
@@ -421,7 +423,7 @@ public class ServerConfig extends BaseConfig
 
         builder.swap("composter");
 
-        composterTicks = builder.comment("Number of ticks required for a composter in normal conditions to complete. (24000 = 1 game day), default is 12 days.").define("composterTicks", 288000, 20, Integer.MAX_VALUE);
+        composterTicks = builder.comment("Number of ticks required for a composter in normal conditions to complete. (28800 = 1 game day), default is 10 days.").define("composterTicks", 288000, 20, Integer.MAX_VALUE);
         composterEnableAutomation = builder.comment("If true, the composter will interact with in-world automation such as hoppers on a side-specific basis.").define("composterEnableAutomation", true);
 
         builder.swap("sluice");
@@ -434,7 +436,7 @@ public class ServerConfig extends BaseConfig
         builder.swap("pumpkin");
 
         enablePumpkinCarving = builder.comment("Enables the knifing of pumpkins to carve them.").define("enablePumpkinCarving", true);
-        jackOLanternTicks = builder.comment("Number of ticks required for a jack 'o lantern to burn out (1000 = 1 in game hour = 50 seconds), default is 108 hours. Set to -1 to disable burnout.").define("jackOLanternTicks", 108000, -1, Integer.MAX_VALUE);
+        jackOLanternTicks = builder.comment("Number of ticks required for a jack 'o lantern to burn out (1200 = 1 in game hour = 60 seconds), default is 90 hours. Set to -1 to disable burnout.").define("jackOLanternTicks", 108000, -1, Integer.MAX_VALUE);
 
         builder.swap("bloomery");
 
@@ -501,6 +503,10 @@ public class ServerConfig extends BaseConfig
 
         hotWaterHealAmount = builder.comment("An amount that sitting in hot water will restore health, approximately twice per second.").define("hotWaterHealAmount", 0.08, 0.0, 20.0);
 
+        builder.swap("bubbleColumn");
+
+        bubbleColumnProvidesAir = builder.comment("If true, bubble columns will provide air to player and mobs, as in vanilla.").define("bubbleColumnProvidesAir", false);
+
         builder.swap("saplings");
 
         saplingGrowthModifier = builder
@@ -516,19 +522,19 @@ public class ServerConfig extends BaseConfig
             .define(getConfigName(type, "SaplingGrowthTicks"), type.defaultTicksToGrow(), 0, Integer.MAX_VALUE));
         fruitBranchGrowthTicks = builder
             .comment("Ticks required between fruit branch growth steps")
-            .define("fruitBranchGrowthTicks", 5 * ICalendar.CALENDAR_TICKS_IN_DAY, 0, Integer.MAX_VALUE);
+            .define("fruitBranchGrowthTicks", 5 * ICalendar.PLAYER_TICKS_IN_DEFAULT_DAY, 0, Integer.MAX_VALUE);
         bananaSaplingGrowthTicks = builder
             .comment("Ticks required before a banana sapling can grow into a tree")
-            .define("bananaSaplingGrowthTicks", 6 * ICalendar.CALENDAR_TICKS_IN_DAY, 0, Integer.MAX_VALUE);
+            .define("bananaSaplingGrowthTicks", 6 * ICalendar.PLAYER_TICKS_IN_DEFAULT_DAY, 0, Integer.MAX_VALUE);
         bananaPlantGrowthTicks = builder
             .comment("Ticks required between banana tree growth steps")
-            .define("bananaPlantGrowthTicks", 4 * ICalendar.CALENDAR_TICKS_IN_DAY, 0, Integer.MAX_VALUE);
+            .define("bananaPlantGrowthTicks", 4 * ICalendar.PLAYER_TICKS_IN_DEFAULT_DAY, 0, Integer.MAX_VALUE);
         fruitPickBloomDelayTicks = builder
             .comment("Ticks required for fruit blocks to bloom after being placed/picked")
-            .define("fruitPickBloomDelayTicks", 10 * ICalendar.CALENDAR_TICKS_IN_DAY, 0, Integer.MAX_VALUE);
+            .define("fruitPickBloomDelayTicks", 10 * ICalendar.PLAYER_TICKS_IN_DEFAULT_DAY, 0, Integer.MAX_VALUE);
         berryBushGrowthTicks = builder
             .comment("Ticks required between berry bush growth steps")
-            .define("bananaPlantGrowthTicks", 4 * ICalendar.CALENDAR_TICKS_IN_DAY, 0, Integer.MAX_VALUE);
+            .define("bananaPlantGrowthTicks", 4 * ICalendar.PLAYER_TICKS_IN_DEFAULT_DAY, 0, Integer.MAX_VALUE);
 
         builder.swap("crops");
 
@@ -645,7 +651,7 @@ public class ServerConfig extends BaseConfig
         foodDecayStackTicks = builder.comment(
             "How many ticks should different foods ignore when trying to stack together automatically?",
             "Food made with different creation dates doesn't stack by default, unless it's within a specific window. This is the number of ticks that different foods will try and stack together at the loss of a little extra expiry time."
-        ).define("foodDecayStackTicks", 6 * ICalendar.CALENDAR_TICKS_IN_DAY, 1, Integer.MAX_VALUE);
+        ).define("foodDecayStackTicks", 6 * ICalendar.PLAYER_TICKS_IN_DEFAULT_HOUR, 1, Integer.MAX_VALUE);
         foodDecayModifier = builder.comment(
             "A multiplier for food decay, or expiration times. Larger values will result in naturally shorter expiration times.",
             "Setting this to zero will cause decay not to apply.",
@@ -661,7 +667,7 @@ public class ServerConfig extends BaseConfig
         nutritionMaximumHealthModifier = builder.comment("A multiplier for the maximum health that the player will obtain, based on their nutrition").define("nutritionMaximumHealthModifier", 3.0, 0.001, 1000);
         maxIntoxicationTicks = builder
             .comment("The maximum number of ticks that a player is allowed to be intoxicated for.")
-            .define("maxIntoxicationTicks", 36 * ICalendar.CALENDAR_TICKS_IN_DAY, 1000, Integer.MAX_VALUE);
+            .define("maxIntoxicationTicks", 36 * ICalendar.PLAYER_TICKS_IN_DEFAULT_HOUR, 1000, Integer.MAX_VALUE);
 
         builder.swap("foodTraits");
 
@@ -714,31 +720,31 @@ public class ServerConfig extends BaseConfig
         rabbitConfig = MammalConfig.build(builder, "rabbit", 0.35, 30, 40, true, 19, 6);
 
         builder.swap("cow");
-        cowConfig = ProducingMammalConfig.build(builder, "cow", 0.35, 192, 128, true, 58, 2, 24000, 0.15);
+        cowConfig = ProducingMammalConfig.build(builder, "cow", 0.35, 192, 128, true, 58, 2, 24 * ICalendar.PLAYER_TICKS_IN_DEFAULT_HOUR, 0.15);
 
         builder.swap("goat");
-        goatConfig = ProducingMammalConfig.build(builder, "goat", 0.35, 96, 60, true, 32, 2, 72000, 0.15);
+        goatConfig = ProducingMammalConfig.build(builder, "goat", 0.35, 96, 60, true, 32, 2, 72 * ICalendar.PLAYER_TICKS_IN_DEFAULT_HOUR, 0.15);
 
         builder.swap("yak");
-        yakConfig = ProducingMammalConfig.build(builder, "yak", 0.35, 180, 230, false, 64, 1, 23500, 0.15);
+        yakConfig = ProducingMammalConfig.build(builder, "yak", 0.35, 180, 230, false, 64, 1, 24 * ICalendar.PLAYER_TICKS_IN_DEFAULT_HOUR, 0.15);
 
         builder.swap("alpaca");
-        alpacaConfig = ProducingMammalConfig.build(builder, "alpaca", 0.35, 98, 128, false, 36, 2, 120000, 0.15);
+        alpacaConfig = ProducingMammalConfig.build(builder, "alpaca", 0.35, 98, 128, false, 36, 2, 120 * ICalendar.PLAYER_TICKS_IN_DEFAULT_HOUR, 0.15);
 
         builder.swap("sheep");
-        sheepConfig = ProducingMammalConfig.build(builder, "sheep", 0.35, 56, 60, false, 32, 2, 168000, 0.15);
+        sheepConfig = ProducingMammalConfig.build(builder, "sheep", 0.35, 56, 60, false, 32, 2, 168 * ICalendar.PLAYER_TICKS_IN_DEFAULT_HOUR, 0.15);
 
         builder.swap("muskOx");
-        muskOxConfig = ProducingMammalConfig.build(builder, "muskOx", 0.35, 168, 160, false, 64, 1, 96000, 0.15);
+        muskOxConfig = ProducingMammalConfig.build(builder, "muskOx", 0.35, 168, 160, false, 64, 1, 96 * ICalendar.PLAYER_TICKS_IN_DEFAULT_HOUR, 0.15);
 
         builder.swap("chicken");
-        chickenConfig = OviparousAnimalConfig.build(builder, "chicken", 0.35, 24, 100, true, 30000, 0.15, 8);
+        chickenConfig = OviparousAnimalConfig.build(builder, "chicken", 0.35, 24, 100, true, 30 * ICalendar.PLAYER_TICKS_IN_DEFAULT_HOUR, 0.15, 8);
 
         builder.swap("duck");
-        duckConfig = OviparousAnimalConfig.build(builder, "duck", 0.35, 32, 72, false, 32000, 0.15, 8);
+        duckConfig = OviparousAnimalConfig.build(builder, "duck", 0.35, 32, 72, false, 32 * ICalendar.PLAYER_TICKS_IN_DEFAULT_HOUR, 0.15, 8);
 
         builder.swap("quail");
-        quailConfig = OviparousAnimalConfig.build(builder, "quail", 0.35, 22, 48, true, 28000, 0.15, 8);
+        quailConfig = OviparousAnimalConfig.build(builder, "quail", 0.35, 22, 48, true, 28 * ICalendar.PLAYER_TICKS_IN_DEFAULT_HOUR, 0.15, 8);
         builder.pop(2);
 
         familiarityDecayLimit = builder.comment("Familiarity value above which familiarity no longer will decay. Default is 0.3, or 30%. Setting it to 0 will cause familiarity to never decay.").define("familiarityDecayLimit", 0.3, 0.0, 1.0);

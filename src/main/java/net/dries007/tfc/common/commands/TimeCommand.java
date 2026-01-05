@@ -117,7 +117,7 @@ public final class TimeCommand
         final CommandSourceStack source = context.getSource();
         final ClimateModel model = Climate.get(source.getLevel());
         final long calendarTick = Calendars.SERVER.getCalendarTicks();
-        final float rainfall = model.getRainfall(source.getLevel(), BlockPos.containing(source.getPosition()));
+        final float rainfall = model.getInstantRainfall(source.getLevel(), BlockPos.containing(source.getPosition()));
         for (int tick = 0; tick < 400_000; tick += 1_000)
         {
             if (WeatherHelpers.isPrecipitating(model.getRain(calendarTick + tick), rainfall) == rain)

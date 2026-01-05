@@ -225,7 +225,7 @@ public final class TFCBiomes
 
     public static BiomeExtension getExtensionOrThrow(LevelAccessor level, Biome biome)
     {
-        return Objects.requireNonNull(getExtension(level, biome), () -> "Biome: " + level.registryAccess().registryOrThrow(Registries.BIOME).getId(biome));
+        return Objects.requireNonNull(getExtension(level, biome), () -> "Biome: " + level.registryAccess().registryOrThrow(Registries.BIOME).getKey(biome));
     }
 
     public static boolean hasExtension(CommonLevelAccessor level, Biome biome)

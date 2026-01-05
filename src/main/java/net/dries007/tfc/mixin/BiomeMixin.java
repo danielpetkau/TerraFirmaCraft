@@ -60,7 +60,8 @@ public abstract class BiomeMixin implements BiomeBridge
     private Biome.Precipitation getPrecipitaitionFromClimate(Biome.Precipitation original, @Local BlockPos pos)
     {
         Level level = Minecraft.getInstance().level;
-        if (level == null) {
+        if (level == null)
+        {
             return original;
         }
         return WeatherHelpers.getPrecipitationAt(level, pos, original);

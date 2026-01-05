@@ -12,6 +12,7 @@ issueTrackerURL = "https://github.com/TerraFirmaCraft/TerraFirmaCraft/issues"
     credits = "By AlcatrazEscapee, Disastermoo, Dries007, Bunsan, Claycorp, DavidTriphon, EERussianguy, Gaelmare, and many others. Based on the original work by Bioxx, Dunk, and Kitty. Music by Mike \"Menoch\" Pelaez"
     authors = "AlcatrazEscapee"
     description = '''TerraFirmaCraft - The Next Generation'''
+    enumExtensions = "META-INF/enumextensions.json"
 
 # Dependencies
 [[dependencies.tfc]]
@@ -47,5 +48,4 @@ issueTrackerURL = "https://github.com/TerraFirmaCraft/TerraFirmaCraft/issues"
 
 # We do our own biome coloring, see #2279
 [mods."sodium:options"]
-    "mixin.features.fast_biome_colors"=false  # Rubidium
-    "mixin.features.render.world.sky"=false  # Embeddium, probably Sodium as well
+    "mixin.features.render.world.sky"=false

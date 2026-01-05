@@ -5,10 +5,10 @@
     "id": "minecraft:ward_armor_trim_smithing_template"
   },
   "squares": [
-    "     #  ",
-    " ##  #  ",
-    " ##  #  ",
-    "     #  "
+    "BBBBBWBB",
+    "BWWBBWBB",
+    "BWWBBWBB",
+    "BBBBBWBB"
   ],
   "stitches": [
     "     ##  ",

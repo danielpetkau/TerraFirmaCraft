@@ -1,6 +1,6 @@
 {
   "type": "tfc:pot",
-  "duration": 2000,
+  "duration": 2400,
   "fluid_ingredient": {
     "amount": 1000,
     "fluid": "minecraft:water"

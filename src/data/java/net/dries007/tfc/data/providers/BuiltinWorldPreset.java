@@ -30,7 +30,6 @@ import net.dries007.tfc.TerraFirmaCraft;
 import net.dries007.tfc.common.blocks.SandstoneBlockType;
 import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.blocks.rock.Rock;
-import net.dries007.tfc.common.blocks.rock.RockCategory;
 import net.dries007.tfc.common.blocks.soil.SandBlockType;
 import net.dries007.tfc.world.TFCChunkGenerator;
 import net.dries007.tfc.world.biome.RegionBiomeSource;
@@ -41,7 +40,6 @@ import net.dries007.tfc.world.settings.RockSettings;
 import net.dries007.tfc.world.settings.Settings;
 
 import static net.dries007.tfc.common.blocks.rock.Rock.*;
-
 
 public final class BuiltinWorldPreset
 {

@@ -22,9 +22,7 @@ import net.dries007.tfc.common.blocks.soil.FarmlandBlock;
 import net.dries007.tfc.util.calendar.Calendars;
 import net.dries007.tfc.util.calendar.ICalendar;
 import net.dries007.tfc.util.calendar.ICalendarTickable;
-import net.dries007.tfc.util.climate.ClimateModel;
 import net.dries007.tfc.util.data.Fertilizer;
-import net.dries007.tfc.util.tracker.WorldTracker;
 import net.dries007.tfc.world.chunkdata.ChunkData;
 
 import static net.dries007.tfc.common.blockentities.FarmlandBlockEntity.NutrientType.*;
@@ -116,12 +114,12 @@ public class FarmlandBlockEntity extends TFCBlockEntity implements IFarmland, IC
         if (includeHydration)
         {
             final ChunkData data = ChunkData.get(level, pos);
-            final int totalRainHydration = FarmlandBlock.getRainHydration(level, pos);
-            final int hydrationValue = FarmlandBlock.getHydrationFromRainHydration(level, pos, totalRainHydration);
+            final int totalRainHydration = FarmlandBlock.getInstantRainHydration(level, pos);
+            final int hydrationValue = FarmlandBlock.getInstantHydrationFromRainHydration(level, pos, totalRainHydration);
             final int minRainfallHydration = (int) data.getMinRainfallHydration(pos);
-            final int minHydrationValue = FarmlandBlock.getHydrationFromRainHydration(level, pos, minRainfallHydration);
+            final int minHydrationValue = FarmlandBlock.getInstantHydrationFromRainHydration(level, pos, minRainfallHydration);
             final int maxRainfallHydration = (int) data.getMaxRainfallHydration(pos);
-            final int maxHydrationValue = FarmlandBlock.getHydrationFromRainHydration(level, pos, maxRainfallHydration);
+            final int maxHydrationValue = FarmlandBlock.getInstantHydrationFromRainHydration(level, pos, maxRainfallHydration);
             final MutableComponent hydration = Component.translatable("tfc.tooltip.farmland.hydration", hydrationValue, minHydrationValue, maxHydrationValue);
             text.accept(hydration);
         }

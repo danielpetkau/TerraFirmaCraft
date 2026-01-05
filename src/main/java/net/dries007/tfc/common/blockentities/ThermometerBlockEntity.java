@@ -17,7 +17,6 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.dries007.tfc.common.blocks.TFCBlockStateProperties;
 import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.component.heat.Heat;
-import net.dries007.tfc.common.component.heat.IHeat;
 import net.dries007.tfc.util.Helpers;
 import net.dries007.tfc.util.climate.Climate;
 
@@ -57,7 +56,7 @@ public class ThermometerBlockEntity extends TickableBlockEntity
             }
             else
             {
-                newPower = (int) Math.floor(Mth.clampedMap(Climate.get(level).getTemperature(level, pos), -40, 40, 0, 15));
+                newPower = (int) Math.floor(Mth.clampedMap(Climate.get(level).getInstantTemperature(level, pos), -40, 40, 0, 15));
             }
 
             if (newPower != state.getValue(BlockStateProperties.POWER))

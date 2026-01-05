@@ -24,7 +24,6 @@ import com.mojang.blaze3d.vertex.VertexFormat;
 import com.mojang.math.Axis;
 
 import net.dries007.tfc.common.TFCTags;
-import net.dries007.tfc.common.blocks.MoltenBlock;
 import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.blocks.devices.CharcoalForgeBlock;
 import net.dries007.tfc.common.blocks.devices.FirepitBlock;
@@ -52,7 +51,6 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.CampfireBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
@@ -67,7 +65,6 @@ import org.joml.Matrix4f;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
-import net.dries007.tfc.TerraFirmaCraft;
 import net.dries007.tfc.client.ClimateRenderCache;
 import net.dries007.tfc.common.blocks.IBlockRain;
 import net.dries007.tfc.util.Helpers;
@@ -75,8 +72,6 @@ import net.dries007.tfc.util.calendar.Calendars;
 import net.dries007.tfc.util.climate.Climate;
 import net.dries007.tfc.util.climate.ClimateModel;
 import net.dries007.tfc.util.tracker.WeatherHelpers;
-
-import static net.dries007.tfc.common.blocks.devices.FirepitBlock.LIT;
 
 /**
  * Overrides {@link DimensionSpecialEffects.OverworldEffects} in order to provide additional features and modifications of the weather
@@ -425,7 +420,7 @@ public class LevelRendererExtension extends DimensionSpecialEffects.OverworldEff
             final ClimateModel model = Climate.get(level);
             final long calendarTick = Calendars.get(level).getCalendarTicks();
             final float climateRain = model.getRain(calendarTick);
-            final float climateRainfall = model.getRainfall(level, cursor);
+            final float climateRainfall = model.getInstantRainfall(level, cursor);
             final float rainIntensity = WeatherHelpers.calculateRealRainIntensity(climateRain, climateRainfall);
             final float currentTick = ticks + partialTick;
 
@@ -493,7 +488,7 @@ public class LevelRendererExtension extends DimensionSpecialEffects.OverworldEff
                         final RandomSource random = RandomSource.create(x * x * 3121L + x * 45238971L ^ z * z * 418711L + z * 13761L);
                         cursor.set(x, minY, z);
 
-                        if (model.getTemperature(level, cursor) > 0) // If positive temperature, then raining
+                        if (model.getInstantTemperature(level, cursor) > 0) // If positive temperature, then raining
                         {
                             if (stateFlag != 0)
                             {
@@ -679,7 +674,7 @@ public class LevelRendererExtension extends DimensionSpecialEffects.OverworldEff
     {
         final Minecraft minecraft = Minecraft.getInstance();
         final float rainLevel = ClimateRenderCache.INSTANCE.getRainLevel(0f);
-        final boolean isSnowing = ClimateRenderCache.INSTANCE.getTemperature() < 0;
+        final boolean isSnowing = ClimateRenderCache.INSTANCE.getInstantTemperature() < 0;
         if (rainLevel > 0.0F)
         {
             final RandomSource random = RandomSource.create(ticks * 312987231L);
@@ -777,7 +772,7 @@ public class LevelRendererExtension extends DimensionSpecialEffects.OverworldEff
         final ClimateModel model = Climate.get(level);
         final long calendarTick = Calendars.get(level).getCalendarTicks();
         final float climateRain = model.getRain(calendarTick);
-        final float climateRainfall = model.getRainfall(level, cameraPos);
+        final float climateRainfall = model.getInstantRainfall(level, cameraPos);
         return WeatherHelpers.calculateRealRainIntensity(climateRain, climateRainfall);
     }
 

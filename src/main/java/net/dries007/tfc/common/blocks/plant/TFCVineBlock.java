@@ -29,7 +29,7 @@ public class TFCVineBlock extends VineBlock implements IForgeBlockExtension
     @Override
     protected void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random)
     {
-        if (Climate.getTemperature(level, pos) > 0f)
+        if (Climate.getInstantTemperature(level, pos) > 0f)
         {
             super.randomTick(state, level, pos, random);
         }

@@ -73,7 +73,7 @@ public class PotRecipe implements ISimpleRecipe<IPotInventory>
             return false;
         }
         final List<ItemStack> stacks = new ArrayList<>();
-        for (int i = PotBlockEntity.SLOT_EXTRA_INPUT_START; i <= PotBlockEntity.SLOT_EXTRA_INPUT_END; i++)
+        for (int i = inventory.inputStart(); i <= inventory.inputEnd(); i++)
         {
             ItemStack stack = inventory.getStackInSlot(i);
             if (!stack.isEmpty())

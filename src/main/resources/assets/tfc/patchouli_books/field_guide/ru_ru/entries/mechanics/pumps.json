@@ -16,7 +16,7 @@
     {
       "type": "patchouli:crafting",
       "recipe": "tfc:crafting/steel_pump",
-      "text": "Для работы насоса вам также понадобится $(l:mechanics/crankshaft)коленчатый вал$() и источник $(l:mechanics/mechanical_power)механической энергии$(): $(br)$(li)насос должен быть подключен к трубе снизу."
+      "text": "Для работы насоса вам также понадобится $(l:mechanics/crankshaft)коленчатый вал$() и источник $(l:mechanics/mechanical_power)механической энергии$().$(br)$(li)Насос должен быть подключен к трубе снизу."
     },
     {
       "type": "patchouli:text",

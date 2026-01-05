@@ -15,13 +15,14 @@ import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeHolder;
 
 import net.dries007.tfc.common.items.TFCItems;
 import net.dries007.tfc.common.recipes.LoomRecipe;
 
 public class LoomRecipeCategory extends BaseRecipeCategory<LoomRecipe>
 {
-    public LoomRecipeCategory(RecipeType<LoomRecipe> type, IGuiHelper helper)
+    public LoomRecipeCategory(RecipeType<RecipeHolder<LoomRecipe>> type, IGuiHelper helper)
     {
         super(type, helper, 78, 26, new ItemStack(TFCItems.BURLAP_CLOTH.get()));
     }

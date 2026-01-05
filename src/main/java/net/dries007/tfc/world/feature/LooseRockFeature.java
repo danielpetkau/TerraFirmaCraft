@@ -42,7 +42,7 @@ public class LooseRockFeature extends Feature<NoneFeatureConfiguration>
         final var random = context.random();
 
         final ChunkData data = ChunkData.get(level, pos);
-        final RockSettings rock = data.getRockData().getRock(pos);
+        final RockSettings rock = data.getRockData().getSurfaceRock(pos.getX(), pos.getZ());
 
         final @Nullable Block looseRock = rock.loose().orElse(null);
         final @Nullable Block mossyLooseRock = rock.mossyLoose().orElse(null);
@@ -55,7 +55,7 @@ public class LooseRockFeature extends Feature<NoneFeatureConfiguration>
         final BlockState stateAt = level.getBlockState(pos);
         BlockState rockState;
 
-        if (mossyLooseRock != null && data.getRainfall(pos) > 250f && random.nextBoolean() && stateAt.getFluidState().isEmpty())
+        if (mossyLooseRock != null && data.getAverageRainfall(pos) > 250f && random.nextBoolean() && stateAt.getFluidState().isEmpty())
         {
             rockState = FluidHelpers.fillWithFluid(mossyLooseRock.defaultBlockState(), stateAt.getFluidState().getType());
         }

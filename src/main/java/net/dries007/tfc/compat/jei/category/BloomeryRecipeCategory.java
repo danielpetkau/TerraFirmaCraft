@@ -14,6 +14,7 @@ import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeHolder;
 
 import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.recipes.BloomeryRecipe;
@@ -24,7 +25,7 @@ import net.dries007.tfc.compat.jei.JEIIntegration;
  */
 public class BloomeryRecipeCategory extends BaseRecipeCategory<BloomeryRecipe>
 {
-    public BloomeryRecipeCategory(RecipeType<BloomeryRecipe> type, IGuiHelper helper)
+    public BloomeryRecipeCategory(RecipeType<RecipeHolder<BloomeryRecipe>> type, IGuiHelper helper)
     {
         super(type, helper, 98, 26, new ItemStack(TFCBlocks.BLOOMERY.get()));
     }

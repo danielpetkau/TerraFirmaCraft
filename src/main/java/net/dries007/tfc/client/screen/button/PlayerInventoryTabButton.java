@@ -140,7 +140,7 @@ public class PlayerInventoryTabButton extends Button
                 {
                     final TemperatureDisplayStyle style = TFCConfig.CLIENT.climateTooltipStyle.get();
                     final Component title = Component.translatable("tfc.screen.climate");
-                    final Component hoverText = Objects.requireNonNull(style.formatRange(ClimateRenderCache.INSTANCE.getTemperature()));
+                    final Component hoverText = Objects.requireNonNull(style.formatRange(ClimateRenderCache.INSTANCE.getInstantTemperature()));
                     graphics.renderComponentTooltip(font, List.of(title, hoverText), mouseX, mouseY);
                 }
                 case BOOK ->

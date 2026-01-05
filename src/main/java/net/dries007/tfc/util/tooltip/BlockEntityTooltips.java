@@ -65,7 +65,6 @@ import net.dries007.tfc.common.blockentities.rotation.WindmillBlockEntity;
 import net.dries007.tfc.common.blocks.BloomBlock;
 import net.dries007.tfc.common.blocks.FireboxBlock;
 import net.dries007.tfc.common.blocks.HotPouredGlassBlock;
-import net.dries007.tfc.common.blocks.ShelfBlock;
 import net.dries007.tfc.common.blocks.TFCBlockStateProperties;
 import net.dries007.tfc.common.blocks.TFCCandleBlock;
 import net.dries007.tfc.common.blocks.TFCCandleCakeBlock;
@@ -173,7 +172,6 @@ public final class BlockEntityTooltips
         callback.register("hot_poured_glass", HOT_POURED_GLASS, HotPouredGlassBlock.class);
         callback.register("mold_table", MOLD_TABLE, MoldTableBlock.class);
         callback.register("placed_item", PLACED_ITEM, PlacedItemBlock.class);
-        callback.register("shelf", PLACED_ITEM, ShelfBlock.class);
         callback.register("calendar_clock", CALENDAR_CLOCK, CalendarClockBlock.class);
         callback.register("thermometer", THERMOMETER, ThermometerBlock.class);
         callback.register("anemometer", ANEMOMETER, AnemometerBlock.class);
@@ -269,7 +267,7 @@ public final class BlockEntityTooltips
                 tooltip.accept(Component.translatable("tfc.tooltip.thermometer_ambient_mode"));
 
                 final TemperatureDisplayStyle style = TFCConfig.CLIENT.climateTooltipStyle.get();
-                final Component temperatureComponent = Objects.requireNonNull(style.formatRange(ClimateRenderCache.INSTANCE.getTemperature()));
+                final Component temperatureComponent = Objects.requireNonNull(style.formatRange(ClimateRenderCache.INSTANCE.getInstantTemperature()));
 
                 tooltip.accept(temperatureComponent);
             }

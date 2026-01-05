@@ -72,6 +72,7 @@ public class BuiltinItemSizes extends DataManagerProvider<ItemSizeDefinition> im
         add("large_vessels", TFCTags.Items.LARGE_VESSELS, Size.HUGE, Weight.HEAVY);
         add("unfired_molds", TFCTags.Items.UNFIRED_MOLDS, Size.NORMAL, Weight.MEDIUM);
         add("fired_molds", TFCTags.Items.FIRED_MOLDS, Size.NORMAL, Weight.MEDIUM);
+        add("unfired_crucible", TFCItems.UNFIRED_CRUCIBLE, Size.LARGE, Weight.HEAVY);
         add("powders", TFCTags.Items.BOWL_POWDERS, Size.TINY, Weight.VERY_LIGHT);
         add("stick_bunch", TFCItems.STICK_BUNCH, Size.NORMAL, Weight.LIGHT);
         add("stick_bundle", TFCItems.STICK_BUNDLE, Size.VERY_LARGE, Weight.MEDIUM);
@@ -102,6 +103,14 @@ public class BuiltinItemSizes extends DataManagerProvider<ItemSizeDefinition> im
             Ingredient.of(TFCItems.FIRESTARTER.get())
         ), Size.LARGE, Weight.MEDIUM);
         add("tools", ingredientOf(
+            Ingredient.of(ItemTags.PICKAXES),
+            Ingredient.of(ItemTags.SHOVELS),
+            Ingredient.of(ItemTags.HOES),
+            Ingredient.of(TFCTags.Items.TOOLS_HAMMER),
+            Ingredient.of(TFCTags.Items.TOOLS_SAW),
+            Ingredient.of(TFCTags.Items.TOOLS_SCYTHE),
+            Ingredient.of(TFCTags.Items.TOOLS_PROPICK),
+
             Ingredient.of(Tags.Items.TOOLS_FISHING_ROD),
             Ingredient.of(Tags.Items.TOOLS_SHIELD),
             Ingredient.of(Tags.Items.MELEE_WEAPON_TOOLS),

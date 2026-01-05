@@ -37,7 +37,7 @@ public class BouldersFeature extends Feature<BoulderConfig>
         final BoulderConfig config = context.config();
 
         final ChunkData data = ChunkData.get(context.level(), pos);
-        final RockSettings rock = data.getRockData().getRock(pos);
+        final RockSettings rock = data.getRockData().getSurfaceRock(pos.getX(), pos.getZ());
         final List<BlockState> states = config.getStates(rock.raw());
         if (states != null)
         {

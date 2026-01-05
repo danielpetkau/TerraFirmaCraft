@@ -1,6 +1,6 @@
 {
   "type": "tfc:barrel_sealed",
-  "duration": 24000,
+  "duration": 28800,
   "input_fluid": {
     "amount": 625,
     "fluid": "tfc:curdled_milk"

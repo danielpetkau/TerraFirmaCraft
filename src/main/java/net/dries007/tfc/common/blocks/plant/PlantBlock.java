@@ -224,7 +224,7 @@ public abstract class PlantBlock extends TFCBushBlock
     {
         if (random.nextInt(400) == 0 && Helpers.isBlock(state, BlockTags.FLOWERS) && Calendars.CLIENT.getHemispheralCalendarMonthOfYear(ClientHelpers.inNorthernHemisphere()).getSeason() == Season.SPRING)
         {
-            final Butterfly but = Butterfly.getRandomButterfly(ClimateRenderCache.INSTANCE.getTemperature(), ClimateRenderCache.INSTANCE.getAverageGroundwater(), random);
+            final Butterfly but = Butterfly.getRandomButterfly(ClimateRenderCache.INSTANCE.getInstantTemperature(), ClimateRenderCache.INSTANCE.getAverageGroundwater(), random);
             if (but != null)
             {
                 level.addParticle(TFCParticles.BUTTERFLIES.get(but).get(), pos.getX() + random.nextFloat(), pos.getY() + random.nextFloat(), pos.getZ() + random.nextFloat(), 0, 0, 0);

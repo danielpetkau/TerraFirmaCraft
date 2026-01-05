@@ -10,7 +10,7 @@
     },
     {
       "type": "patchouli:crafting",
-      "recipe": "tfc:crafting/food/wheat_bread_sandwich",
+      "recipe": "tfc:crafting/food/wheat_bread_sandwich_sss",
       "text": "Рецепт бутерброда, выложенный на верстаке."
     },
     {

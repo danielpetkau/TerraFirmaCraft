@@ -100,7 +100,7 @@ public final class FoodComponent implements IFood
      *
      * @return A sanitized component value.
      */
-    FoodComponent sanitize()
+    public FoodComponent sanitize()
     {
         if (creationDate >= 0 && parent != null && FoodCapability.isRotten(creationDate, getDecayDateModifier()))
         {

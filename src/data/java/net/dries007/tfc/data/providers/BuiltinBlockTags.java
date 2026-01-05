@@ -129,6 +129,9 @@ public class BuiltinBlockTags extends TagsProvider<Block> implements Accessors
             .add(TFCBlocks.DEAD_CROPS)
             .add(TFCBlocks.WILD_CROPS);
         // todo: other crops?
+        tag(BlockTags.WALL_POST_OVERRIDE).add(
+            TFCBlocks.TORCH,
+            TFCBlocks.DEAD_TORCH);
         tag(BlockTags.CLIMBABLE).add(
             TFCBlocks.PLANTS.get(Plant.JUNGLE_VINES).get(),
             TFCBlocks.PLANTS.get(Plant.HANGING_VINES).get(),

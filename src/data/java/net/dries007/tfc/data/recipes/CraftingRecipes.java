@@ -299,7 +299,7 @@ public interface CraftingRecipes extends Recipes
                 .input('X', brick)
                 .input('M', TFCItems.MORTAR)
                 .pattern("X X", "MXM")
-                .shaped(blocks.get(Rock.BlockType.AQUEDUCT));
+                .shaped(blocks.get(Rock.BlockType.AQUEDUCT), 2);
             recipe()
                 .input(Ingredient.of(
                     blocks.get(Rock.BlockType.LOOSE),
@@ -1131,6 +1131,7 @@ public interface CraftingRecipes extends Recipes
             .input(TFCItems.POWDERS.get(Powder.SALT))
             .copyInput()
             .addTrait(FoodTraits.SALTED)
+            .roundCreationDate()
             .shapeless("salting");
         recipe()
             .input(Items.PAPER)
@@ -1140,8 +1141,8 @@ public interface CraftingRecipes extends Recipes
             .input(TFCTags.Items.GEM_POWDERS)
             .shapeless(TFCItems.SANDPAPER);
         recipe()
-            .input(TFCTags.Items.MUD_BRICK_ITEMS)
             .input(TFCItems.DAUB)
+            .input(TFCTags.Items.MUD_BRICKS)
             .shapeless(TFCBlocks.SMOOTH_MUD_BRICKS);
         recipe()
             .input(TFCItems.GLUE)
@@ -1326,7 +1327,8 @@ public interface CraftingRecipes extends Recipes
         final var meal = new MealModifier(
             FoodData.ofFood(1f, 0.5f, 4.5f),
             List.of(
-                new MealModifier.MealPortion(Optional.of(Ingredient.of(TFCItems.FOOD.get(bread))), 0.5f, 0.5f, 0.5f),
+                // For a 3-ingredient sandwich, average nutritional value is 0.75, matching salads
+                new MealModifier.MealPortion(Optional.of(Ingredient.of(TFCItems.FOOD.get(bread))), 0.675f, 0.5f, 0.5f),
                 new MealModifier.MealPortion(Optional.empty(), 0.8f, 0.8f, 0.8f)
             ));
 
@@ -1337,21 +1339,27 @@ public interface CraftingRecipes extends Recipes
             .copyFood()
             .extraProduct(TFCItems.STRAW)
             .shapeless(TFCItems.FOOD.get(grain));
-        recipe()
-            .input('K', TFCTags.Items.TOOLS_KNIFE)
-            .input('B', notRotten(bread))
-            .input('S', notRotten(Ingredient.of(TFCTags.Items.USABLE_IN_SANDWICH)))
-            .pattern("KB ", "SSS", " B ")
-            .damageInputs()
-            .addOutputModifier(meal)
-            .shaped(TFCItems.FOOD.get(sandwich), 2);
 
-        for (String pattern : List.of("JSS", "SJS", "SSJ"))
+        // Non-jam sandwiches
+        for (String pattern : List.of("SSS", "SS ", " SS", "S S", "S  ", " S ", "  S"))
+        {
+            recipe(pattern.replace(" ", "x").toLowerCase())
+                .input('K', TFCTags.Items.TOOLS_KNIFE)
+                .input('B', notRotten(bread))
+                .input('S', notRotten(Ingredient.of(TFCTags.Items.USABLE_IN_SANDWICH)))
+                .pattern("KB ", pattern, " B ")
+                .damageInputs()
+                .addOutputModifier(meal)
+                .shaped(TFCItems.FOOD.get(sandwich), 1);
+        }
+
+        // Two and three ingredient jam sandwiches
+        for (String pattern : List.of("JSS", "SJS", "SSJ", "JS ", "SJ ", " JS", " SJ", "S J", "J S"))
         {
             String variant = "_jar";
             for (TagKey<Item> tag : List.of(TFCTags.Items.PRESERVES, TFCTags.Items.JAM))
             {
-                recipe("" + pattern.indexOf('J') + variant)
+                recipe("" + pattern.replace(" ", "x").toLowerCase() + variant)
                     .input('K', TFCTags.Items.TOOLS_KNIFE)
                     .input('B', notRotten(bread))
                     .input('S', notRotten(Ingredient.of(TFCTags.Items.USABLE_IN_JAM_SANDWICH)))
@@ -1359,11 +1367,28 @@ public interface CraftingRecipes extends Recipes
                     .pattern("KB ", pattern, " B ")
                     .damageInputs()
                     .addOutputModifier(meal)
-                    .shaped(TFCItems.FOOD.get(jamSandwich), 2);
+                    .shaped(TFCItems.FOOD.get(jamSandwich));
                 variant = "_jam";
             }
         }
 
+        // One item jam sandwiches
+        for (String pattern : List.of(" J ", "J  ", "  J"))
+        {
+            String variant = "_jar";
+            for (TagKey<Item> tag : List.of(TFCTags.Items.PRESERVES, TFCTags.Items.JAM))
+            {
+                recipe("" + pattern.replace(" ", "x").toLowerCase() + variant)
+                    .input('K', TFCTags.Items.TOOLS_KNIFE)
+                    .input('B', notRotten(bread))
+                    .input('J', notRotten(Ingredient.of(tag)))
+                    .pattern("KB ", pattern, " B ")
+                    .damageInputs()
+                    .addOutputModifier(meal)
+                    .shaped(TFCItems.FOOD.get(jamSandwich));
+                variant = "_jam";
+            }
+        }
 
         for (int n = 1; n <= 8; n++)
             recipe("" + n)

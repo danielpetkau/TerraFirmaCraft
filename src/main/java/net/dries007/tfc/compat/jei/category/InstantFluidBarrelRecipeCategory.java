@@ -11,6 +11,7 @@ import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.neoforged.neoforge.fluids.crafting.SizedFluidIngredient;
 
 import net.dries007.tfc.common.blocks.wood.Wood;
@@ -19,7 +20,7 @@ import net.dries007.tfc.compat.jei.JEIIntegration;
 
 public class InstantFluidBarrelRecipeCategory extends BarrelRecipeCategory<InstantFluidBarrelRecipe>
 {
-    public InstantFluidBarrelRecipeCategory(RecipeType<InstantFluidBarrelRecipe> type, IGuiHelper helper)
+    public InstantFluidBarrelRecipeCategory(RecipeType<RecipeHolder<InstantFluidBarrelRecipe>> type, IGuiHelper helper)
     {
         super(type, helper, 118, 26, Wood.KAPOK);
     }

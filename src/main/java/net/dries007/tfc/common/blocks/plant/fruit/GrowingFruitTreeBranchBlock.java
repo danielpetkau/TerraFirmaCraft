@@ -330,6 +330,6 @@ public class GrowingFruitTreeBranchBlock extends FruitTreeBranchBlock implements
     protected static int getFruitBranchHydrationFromRootPos(Level level, BlockPos rootPos)
     {
         final float averageRainfall = WorldTracker.get(level).getClimateModel().getAverageRainfall(level, rootPos);
-        return FarmlandBlock.getHydrationFromRainHydration(level, rootPos, FarmlandBlock.getRainHydration(averageRainfall));
+        return FarmlandBlock.getInstantHydrationFromRainHydration(level, rootPos, FarmlandBlock.getInstantRainHydration(averageRainfall));
     }
 }

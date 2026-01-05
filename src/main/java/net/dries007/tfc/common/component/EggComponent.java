@@ -28,7 +28,7 @@ import net.dries007.tfc.util.calendar.ICalendar;
 /**
  *
  * @param fertilized Is this egg fertilized?
- * @param hatchDay The day it will hatch, as per {@link ICalendar#getTotalDays()}
+ * @param hatchDay The day it will hatch, as per {@link ICalendar#getTotalCalendarDays()}
  * @param entity The saved NBT of the entity that it will hatch into
  */
 public record EggComponent(
@@ -63,7 +63,7 @@ public record EggComponent(
     {
         if (fertilized())
         {
-            final long remainingDays = hatchDay() - Calendars.CLIENT.getTotalDays();
+            final long remainingDays = hatchDay() - Calendars.CLIENT.getTotalCalendarDays();
             text.accept(Component.translatable("tfc.tooltip.fertilized"));
             if (remainingDays > 0)
             {
@@ -82,7 +82,7 @@ public record EggComponent(
      */
     public boolean canHatch()
     {
-        return fertilized && hatchDay <= Calendars.SERVER.getTotalDays();
+        return fertilized && hatchDay <= Calendars.SERVER.getTotalCalendarDays();
     }
 
     /**

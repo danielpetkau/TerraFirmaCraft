@@ -7,12 +7,12 @@
 package net.dries007.tfc.compat.jei.transfer;
 
 import java.util.Optional;
-import java.util.stream.Collectors;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.transfer.IRecipeTransferError;
 import mezz.jei.api.recipe.transfer.IRecipeTransferHandlerHelper;
 import mezz.jei.api.recipe.transfer.IRecipeTransferInfo;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.crafting.SizedFluidIngredient;
 import org.jetbrains.annotations.Nullable;
@@ -21,7 +21,6 @@ import net.dries007.tfc.common.blockentities.PotBlockEntity;
 import net.dries007.tfc.common.container.PotContainer;
 import net.dries007.tfc.common.container.TFCContainerTypes;
 import net.dries007.tfc.common.recipes.PotRecipe;
-import net.dries007.tfc.util.Helpers;
 
 import static net.dries007.tfc.common.blockentities.GrillBlockEntity.*;
 
@@ -30,19 +29,19 @@ import static net.dries007.tfc.common.blockentities.GrillBlockEntity.*;
  * {@link PotBlockEntity#hasRecipeStarted()} as the slots get locked
  */
 public class PotTransferInfo
-    extends BaseTransferInfo<PotContainer, PotRecipe>
-    implements IRecipeTransferInfo<PotContainer, PotRecipe>
+    extends BaseTransferInfo<PotContainer, RecipeHolder<PotRecipe>>
+    implements IRecipeTransferInfo<PotContainer, RecipeHolder<PotRecipe>>
 {
     private final IRecipeTransferHandlerHelper transferHelper;
 
-    public PotTransferInfo(IRecipeTransferHandlerHelper transferHelper, RecipeType<PotRecipe> recipeType)
+    public PotTransferInfo(IRecipeTransferHandlerHelper transferHelper, RecipeType<RecipeHolder<PotRecipe>> recipeType)
     {
         super(PotContainer.class, Optional.of(TFCContainerTypes.POT.get()), recipeType, 9, SLOT_EXTRA_INPUT_START, 5, 6, 7, SLOT_EXTRA_INPUT_END);
         this.transferHelper = transferHelper;
     }
 
     @Override
-    public boolean canHandle(PotContainer container, PotRecipe recipe)
+    public boolean canHandle(PotContainer container, RecipeHolder<PotRecipe> recipe)
     {
         if (container.getBlockEntity().hasRecipeStarted())
         {
@@ -50,15 +49,15 @@ public class PotTransferInfo
         }
 
         final var inventory = container.getBlockEntity().getInventory();
-        return recipe.getFluidIngredient().test(inventory.getFluidInTank(0));
+        return recipe.value().getFluidIngredient().test(inventory.getFluidInTank(0));
     }
 
     @Nullable
     @Override
-    public IRecipeTransferError getHandlingError(PotContainer container, PotRecipe recipe)
+    public IRecipeTransferError getHandlingError(PotContainer container, RecipeHolder<PotRecipe> recipe)
     {
         final var inventory = container.getBlockEntity().getInventory();
-        final SizedFluidIngredient fluidIngredient = recipe.getFluidIngredient();
+        final SizedFluidIngredient fluidIngredient = recipe.value().getFluidIngredient();
         final FluidStack fluidInTank = inventory.getFluidInTank(0);
 
         if (!fluidIngredient.ingredient().test(fluidInTank))

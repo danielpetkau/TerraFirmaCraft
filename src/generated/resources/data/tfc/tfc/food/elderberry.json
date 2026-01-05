@@ -1,6 +1,6 @@
 {
   "decay_modifier": 4.9,
-  "fruit": 1.0,
+  "fruit": 1.1,
   "hunger": 4,
   "ingredient": {
     "item": "tfc:food/elderberry"

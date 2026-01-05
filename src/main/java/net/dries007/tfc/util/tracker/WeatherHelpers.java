@@ -96,10 +96,10 @@ public final class WeatherHelpers
 
         final long calendarTicks = Calendars.get(level).getCalendarTicks();
         final float rainIntensity = tracker.isWeatherEnabled() ? model.getRain(calendarTicks) : -1;
-        final float rainValue = model.getRainfall(level, pos);
+        final float rainValue = model.getInstantRainfall(level, pos);
 
         return isPrecipitating(rainIntensity, rainValue)
-            ? model.getTemperature(level, pos) > 0f
+            ? model.getInstantTemperature(level, pos) > 0f
             ? Biome.Precipitation.RAIN
             : Biome.Precipitation.SNOW
             : Biome.Precipitation.NONE;
@@ -107,7 +107,7 @@ public final class WeatherHelpers
 
     /**
      * @param rainIntensity The rainfall intensity, i.e. {@link ClimateModel#getRain}
-     * @param rainfall      The time-variant average rainfall, i.e. {@link ClimateModel#getRainfall}
+     * @param rainfall      The time-variant average rainfall, i.e. {@link ClimateModel#getInstantRainfall}
      * @return {@code true} if it is precipitating (rain or snow) with the provided values.
      */
     public static boolean isPrecipitating(float rainIntensity, float rainfall)
@@ -117,7 +117,7 @@ public final class WeatherHelpers
 
     public static float calculateRealRainIntensity(float rainIntensity, float rainfall)
     {
-        return rainIntensity - Mth.clampedMap(rainfall, ClimateModel.MIN_RAINFALL, ClimateModel.MAX_RAINFALL, 1, 0);
+        return rainIntensity - Mth.clampedMap(rainfall, ClimateModel.MIN_AVERAGE_RAINFALL, ClimateModel.MAX_AVERAGE_RAINFALL, 1, 0);
     }
 
     /**
@@ -242,8 +242,8 @@ public final class WeatherHelpers
             {
                 calendarTick += 4_000;
                 // Take the max of the two temperatures to ensure that snow will not accumulate in too-warm spots in the autumn
-                final float estimatedTemperature = Math.max(model.getTemperature(level, climateCheckSurfacePos, calendarTick, daysInMonth),
-                    model.getTemperature(level, snowPlacementSurfacePos, calendarTick, daysInMonth));
+                final float estimatedTemperature = Math.max(model.getInstantTemperature(level, climateCheckSurfacePos, calendarTick, daysInMonth),
+                    model.getInstantTemperature(level, snowPlacementSurfacePos, calendarTick, daysInMonth));
                 if (estimatedTemperature > 2f)
                 {
                     netChangeInSnow = netChangeInSnow - UPDATES_PER_SNOW_MELT_SKIP;
@@ -279,7 +279,7 @@ public final class WeatherHelpers
         else if (level.random.nextInt(TICKS_PER_SNOW_ACCUMULATION) == 0)
         {
             // Trigger either accumulation event or snow melt
-            final float realTemperature = model.getTemperature(level, snowPlacementSurfacePos);
+            final float realTemperature = model.getInstantTemperature(level, snowPlacementSurfacePos);
             // Use the actual temperature for accumulation to avoid placing snow somewhere too warm
             if (realTemperature < -2f && isPrecipitating(model.getRain(currentCalendarTick), rainfall))
             {
@@ -289,7 +289,7 @@ public final class WeatherHelpers
                 data.iterateSnowPos(chunk);
             }
             // Use the random surface pos for melting to avoid getting stuck on a block
-            else if (model.getTemperature(level, climateCheckSurfacePos) > 2f && level.random.nextInt(TICKS_PER_SNOW_MELT_PER_SNOW_ACCUMULATION) == 0)
+            else if (model.getInstantTemperature(level, climateCheckSurfacePos) > 2f && level.random.nextInt(TICKS_PER_SNOW_MELT_PER_SNOW_ACCUMULATION) == 0)
             {
                 // Trigger melting
                 handleSnowMelting(level, chunkPos, 1);

@@ -23,12 +23,12 @@
     },
     {
       "type": "patchouli:text",
-      "text": "The exterior of a Kiln must be made of some combination of Clay Bricks, Fire Bricks, Tinted Glass, or Fireproof Doors. Stone bricks don't work. If the structure is broken during heating, then the heating will be lost and must start over once the seal is re-made. The timer will also restart if the temperature increases or decreases from the initial setpoint."
+      "text": "Внешняя часть топки должна быть выполнена из любой комбинации глиняных кирпичей, огнеупорных кирпичей, тонированного стекла и огнеупорных дверей. Если конструкция нарушится во время нагрева, процесс нагрева прервётся и начнётся заново после восстановления герметичности. Таймер также сбросится, если температура отклонится от первоначально заданного значения."
     },
     {
       "type": "patchouli:crafting",
       "recipe": "tfc:crafting/fireproof_door",
-      "text": "Огнеупорная дверь может быть изготовлена из листов серого чугуна."
+      "text": "Огнеупорная дверь может быть изготовлена из листов литейного чугуна."
     }
   ],
   "read_by_default": true

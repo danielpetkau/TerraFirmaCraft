@@ -48,7 +48,7 @@ public class PotScreen extends BlockEntityScreen<PotBlockEntity, PotContainer>
         super.renderLabels(graphics, mouseX, mouseY);
         if (blockEntity.shouldRenderAsBoiling())
         {
-            drawDisabled(graphics, PotBlockEntity.SLOT_EXTRA_INPUT_START, PotBlockEntity.SLOT_EXTRA_INPUT_END);
+            drawDisabled(graphics, blockEntity.getInventory().inputStart(), blockEntity.getInventory().inputEnd());
         }
 
         final MutableComponent text = Component.empty();

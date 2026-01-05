@@ -65,6 +65,7 @@ public class SewingTableContainer extends Container implements ISlotCallback, Bu
     public static final int SLOT_INPUT_1 = 2;
     public static final int SLOT_INPUT_2 = 3;
     public static final int SLOT_RESULT = 4;
+    public static final int EMPTY_ID = -1;
     public static final int BURLAP_ID = 0;
     public static final int WOOL_ID = 1;
     public static final int REMOVE_ID = 2;
@@ -96,9 +97,9 @@ public class SewingTableContainer extends Container implements ISlotCallback, Bu
         super(TFCContainerTypes.SEWING_TABLE.get(), windowId);
         this.access = access;
         this.inventory = new InventoryItemHandler(this, NUM_SLOTS);
-        addDataSlot(activeMaterialData).set(-1);
+        addDataSlot(activeMaterialData).set(EMPTY_ID);
         for (int i = 0; i < MAX_SQUARES; i++)
-            placedMaterialData.set(i, -1);
+            placedMaterialData.set(i, EMPTY_ID);
         for (int i = 0; i < MAX_STITCHES; i++)
             stitchData.set(i, 0);
         addDataSlots(placedMaterialData);
@@ -135,7 +136,7 @@ public class SewingTableContainer extends Container implements ISlotCallback, Bu
                 if (result.getItem() != inventory.getStackInSlot(SLOT_RESULT).getItem())
                 {
                     inventory.setStackInSlot(SLOT_RESULT, result);
-                    activeMaterialData.set(-1);
+                    activeMaterialData.set(EMPTY_ID);
                 }
             }, () -> inventory.setStackInSlot(SLOT_RESULT, ItemStack.EMPTY));
         });
@@ -230,7 +231,7 @@ public class SewingTableContainer extends Container implements ISlotCallback, Bu
             {
                 access.execute((level, pos) -> Helpers.playSound(level, pos, SoundEvents.WOOL_BREAK));
             }
-            placedMaterialData.set(buttonID - PLACED_SLOTS_OFFSET, activeMaterial == REMOVE_ID ? -1 : activeMaterial);
+            placedMaterialData.set(buttonID - PLACED_SLOTS_OFFSET, activeMaterial == REMOVE_ID ? EMPTY_ID : activeMaterial);
         }
         else if (buttonID == PLACE_STITCH_ID && extraNBT != null && !inventory.getStackInSlot(SLOT_TOOL).isEmpty())
         {
@@ -281,7 +282,7 @@ public class SewingTableContainer extends Container implements ISlotCallback, Bu
             usedString.set(0);
             activeMaterialData.set(-1);
             for (int i = 0; i < MAX_SQUARES; i++)
-                placedMaterialData.set(i, -1);
+                placedMaterialData.set(i, EMPTY_ID);
             for (int i = 0; i < MAX_STITCHES; i++)
                 stitchData.set(i, 0);
             Helpers.damageItem(inventory.getStackInSlot(SLOT_TOOL), player.level());

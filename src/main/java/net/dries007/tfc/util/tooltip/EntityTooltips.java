@@ -139,7 +139,7 @@ public final class EntityTooltips
                 tooltip.accept(Component.translatable("tfc.tooltip.animal.pregnant", entity.getName().getString()));
 
                 final ICalendar calendar = Calendars.get(level);
-                tooltip.accept(Component.translatable("tfc.jade.gestation_time_left", calendar.getTimeDelta(ICalendar.TICKS_IN_DAY * (mammal.getGestationDays() + mammal.getPregnantTime() - Calendars.get(level).getTotalDays()))));
+                tooltip.accept(Component.translatable("tfc.jade.gestation_time_left", calendar.getTimeDelta(ICalendar.CALENDAR_TICKS_IN_DAY * (mammal.getGestationDays() + mammal.getPregnantTime() - Calendars.get(level).getTotalCalendarDays()))));
             }
         }
         if (entity instanceof HorseProperties horse)

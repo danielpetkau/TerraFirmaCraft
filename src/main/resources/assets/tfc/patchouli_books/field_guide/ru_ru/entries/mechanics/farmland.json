@@ -110,7 +110,7 @@
         }
       },
       "name": "Моллизол",
-      "text": "Mollisol is found in cold grasslands with a $(l:the_world/climate#rainfall)rainfall$() of at least 250mm. It is a very high quality soil, receiving 20% bonus nutrients.",
+      "text": "Встречается в холодных равнинах с $(l:the_world/climate#rainfall)осадками$() больше 250 мм. Почва очень высокого качества. $(2)20 % больше$() питательных веществ.",
       "enable_visualize": false
     },
     {

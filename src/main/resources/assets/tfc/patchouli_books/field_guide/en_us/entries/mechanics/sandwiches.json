@@ -6,11 +6,11 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "$(thing)Sandwiches$() are a meal allowing the combination of two $(l:mechanics/bread)Bread$() items and three sandwich foods, which can be any combination of $(l:mechanics/bread)Vegetables$(), $(thing)Cooked Meats$(), and $(l:mechanics/dairy)Cheeses$()."
+      "text": "$(thing)Sandwiches$() are a meal allowing the combination of two $(l:mechanics/bread)Bread$() items and up to three sandwich foods, which can be any combination of $(l:mechanics/bread)Vegetables$(), $(thing)Cooked Meats$(), and $(l:mechanics/dairy)Cheeses$()."
     },
     {
       "type": "patchouli:crafting",
-      "recipe": "tfc:crafting/food/wheat_bread_sandwich",
+      "recipe": "tfc:crafting/food/wheat_bread_sandwich_sss",
       "text": "The sandwich recipe, which is executed in a $(thing)Workbench$()."
     },
     {

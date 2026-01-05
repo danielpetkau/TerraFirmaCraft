@@ -345,7 +345,7 @@ public class ForestFeature extends Feature<ForestConfig>
         // For southern hemispheres, flip rain variance
         final float rainVariance = chunkData.getRainVariance(pos) * (SolarCalculator.getInNorthernHemisphere(pos, level.getLevel()) ? 1f : -1f);
 
-        final float groundwater = chunkData.getGroundwater(pos);
+        final float groundwater = chunkData.getAverageGroundwater(pos);
         final int elevation = pos.getY();
         final float averageTemperature = EnvironmentHelpers.adjustAvgTempForElev(elevation, chunkData.getAverageSeaLevelTemp(pos));
         final List<ForestConfig.Entry> entries = config.entries().stream().map(configuredFeature -> configuredFeature.value().config()).map(cfg -> (ForestConfig.Entry) cfg)

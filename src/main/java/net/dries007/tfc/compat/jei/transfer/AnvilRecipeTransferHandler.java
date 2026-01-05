@@ -12,23 +12,23 @@ import mezz.jei.api.recipe.transfer.IRecipeTransferHandler;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
 
 import net.dries007.tfc.common.recipes.AnvilRecipe;
-import net.dries007.tfc.network.PacketHandler;
 import net.dries007.tfc.network.SelectAnvilPlanPacket;
 
 /**
  * Custom transfer handler which selects the anvil plan as part of the transfer process
  */
 public class AnvilRecipeTransferHandler<C extends AbstractContainerMenu>
-    extends BaseTransferInfo<C, AnvilRecipe>
-    implements IRecipeTransferHandler<C, AnvilRecipe>
+    extends BaseTransferInfo<C, RecipeHolder<AnvilRecipe>>
+    implements IRecipeTransferHandler<C, RecipeHolder<AnvilRecipe>>
 {
-    private final IRecipeTransferHandler<C, AnvilRecipe> transferHandler;
+    private final IRecipeTransferHandler<C, RecipeHolder<AnvilRecipe>> transferHandler;
 
-    public AnvilRecipeTransferHandler(IRecipeTransferHandler<C, AnvilRecipe> transferHandler)
+    public AnvilRecipeTransferHandler(IRecipeTransferHandler<C, RecipeHolder<AnvilRecipe>> transferHandler)
     {
         super(transferHandler.getContainerClass(), transferHandler.getMenuType(), transferHandler.getRecipeType(), -1);
         this.transferHandler = transferHandler;
@@ -36,9 +36,10 @@ public class AnvilRecipeTransferHandler<C extends AbstractContainerMenu>
 
     @Nullable
     @Override
-    public IRecipeTransferError transferRecipe(C container, AnvilRecipe recipe, IRecipeSlotsView recipeSlots, Player player, boolean maxTransfer, boolean doTransfer)
+    public IRecipeTransferError transferRecipe(C container, RecipeHolder<AnvilRecipe> holder, IRecipeSlotsView recipeSlots, Player player, boolean maxTransfer, boolean doTransfer)
     {
-        final IRecipeTransferError transferError = transferHandler.transferRecipe(container, recipe, recipeSlots, player, maxTransfer, doTransfer);
+        AnvilRecipe recipe = holder.value();
+        final IRecipeTransferError transferError = transferHandler.transferRecipe(container, holder, recipeSlots, player, maxTransfer, doTransfer);
         // Non-null return means some sort of error happened and nothing will get transferred
         if (transferError != null)
         {

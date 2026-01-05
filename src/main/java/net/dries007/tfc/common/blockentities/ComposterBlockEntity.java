@@ -93,7 +93,7 @@ public class ComposterBlockEntity extends InventoryBlockEntity<ItemStackHandler>
         assert level != null;
         final BlockPos.MutableBlockPos cursor = new BlockPos.MutableBlockPos();
         cursor.set(getBlockPos());
-        final float rainfall = Climate.getRainfall(level, cursor);
+        final float rainfall = Climate.getAverageRainfall(level, cursor);
         long readyTicks = TFCConfig.SERVER.composterTicks.get();
         if (rainfall < 150f) // inverted trapezoid wave
         {

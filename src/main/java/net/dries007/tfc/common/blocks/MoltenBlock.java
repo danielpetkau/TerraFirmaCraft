@@ -12,6 +12,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -20,13 +21,22 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
-
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import net.dries007.tfc.util.Helpers;
 
 public class MoltenBlock extends ExtendedBlock
 {
-    public static final IntegerProperty LAYERS = TFCBlockStateProperties.LAYERS_4;
     public static final BooleanProperty LIT = BlockStateProperties.LIT;
+    public static final IntegerProperty LAYERS = TFCBlockStateProperties.LAYERS_4;
+    public static final VoxelShape[] SHAPE_BY_LAYER = new VoxelShape[] {
+        Shapes.empty(),
+        box(0, 0, 0, 16, 4, 16),
+        box(0, 0, 0, 16, 8, 16),
+        box(0, 0, 0, 16, 12, 16),
+        Shapes.block()
+    };
 
     public static void removeMoltenBlockTower(Level level, BlockPos pos, int maxHeight)
     {
@@ -121,5 +131,11 @@ public class MoltenBlock extends ExtendedBlock
         {
             Helpers.fireSpreaderTick(level, pos, rand, 2);
         }
+    }
+
+    @Override
+    protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context)
+    {
+        return SHAPE_BY_LAYER[state.getValue(LAYERS)];
     }
 }

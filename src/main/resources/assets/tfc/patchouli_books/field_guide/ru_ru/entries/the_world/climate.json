@@ -42,7 +42,8 @@
     {
       "type": "patchouli:text",
       "anchor": "temperature",
-      "text": "Температура в TerraFirmaCraft зависит от множества факторов.$(br)$(li)Во-первых, местоположение, особенно широта (координата Z), играет наибольшую роль.$(li)Во-вторых, текущий сезон влияет на температуру — летом будет самая высокая температура, а зимой — самая низкая.$(li)Кроме того, температура может отличаться от дня к дню, а также меняться с течением времени."
+      "text": "Температура в TerraFirmaCraft зависит от множества факторов.$(br)$(li)Во-первых, местоположение, особенно широта (координата Z), играет наибольшую роль.$(li)Во-вторых, текущий сезон влияет на температуру — летом будет самая высокая температура, а зимой — самая низкая.$(li)Кроме того, температура может отличаться от дня к дню, а также меняться с течением времени.",
+      "title": "Temperature"
     },
     {
       "type": "patchouli:text",
@@ -51,8 +52,16 @@
     {
       "type": "patchouli:text",
       "anchor": "rainfall",
-      "text": "Количество осадков — ещё одна величина, меняющаяся в зависимости от местоположения и времени года. Годовое количество осадков измеряется в миллиметрах и может составлять от 0 до 500 мм. Количество осадков влияет на виды растительности и типы почв, встречающиеся в регионе. Количество осадков может меняться в течение года, достигая пиковых значений — до двукратного превышения местной нормы.",
+      "text": "Rainfall is influenced by a number of factors:$(br2)The region, especially the longitude (X coordinate) will play the largest role, with wetter climates generally to the east of spawn. Distance from the coast also plays a role, with drier climates farther inland.",
       "title": "Осадки"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "The current season and local climate will also influence rainfall levels. These effects are also determined by the region: west coasts generally have dry summers, whereas the east sides of large continents have dramatic summer monsoons. The centers of continents and oceanic islands tend to have less seasonal variance."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "The annual rainfall is measured in millimeters (mm) and can be between 0mm - 500mm, though the instantaneous rainfall can reach 1000mm in highly seasonal climates. Rainfall affects the types of flora and fauna that are found in an area, as well as how often rain and snow occur.$(br)"
     },
     {
       "type": "patchouli:text",

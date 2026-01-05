@@ -16,6 +16,7 @@ import mezz.jei.api.recipe.RecipeType;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeHolder;
 
 import net.dries007.tfc.common.items.TFCItems;
 import net.dries007.tfc.common.recipes.PotRecipe;
@@ -24,7 +25,7 @@ import net.dries007.tfc.common.recipes.SoupPotRecipe;
 
 public class SoupPotRecipeCategory extends PotRecipeCategory<PotRecipe>
 {
-    public SoupPotRecipeCategory(RecipeType<PotRecipe> type, IGuiHelper helper)
+    public SoupPotRecipeCategory(RecipeType<RecipeHolder<PotRecipe>> type, IGuiHelper helper)
     {
         super(type, helper, 175, 50);
     }

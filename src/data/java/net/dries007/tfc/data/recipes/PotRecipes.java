@@ -66,6 +66,7 @@ public interface PotRecipes extends Recipes
 
         potX5(AndIngredient.of(Ingredient.of(Items.EGG), NotRottenIngredient.INSTANCE), TFCItems.FOOD.get(Food.BOILED_EGG), hours(1), true);
         potX5(AndIngredient.of(Ingredient.of(TFCItems.FOOD.get(Food.RICE_GRAIN)), NotRottenIngredient.INSTANCE), TFCItems.FOOD.get(Food.COOKED_RICE), hours(1), true);
+        potX5(AndIngredient.of(Ingredient.of(TFCItems.FOOD.get(Food.LENTIL)), NotRottenIngredient.INSTANCE), TFCItems.FOOD.get(Food.COOKED_LENTIL), hours(1), true);
 
         soup(3);
         soup(4);

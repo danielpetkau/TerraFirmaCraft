@@ -73,7 +73,7 @@
     {
       "type": "tfc:quern_recipe",
       "recipe": "tfc:quern/powder/flux",
-      "text": "$(l:mechanics/flux)флюс$() можно получить в жёрнове."
+      "text": "$(l:mechanics/flux)Флюс$() можно получить в жёрнове."
     }
   ],
   "read_by_default": true
