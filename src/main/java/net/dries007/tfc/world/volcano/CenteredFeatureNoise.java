@@ -11,6 +11,7 @@ import net.minecraft.core.QuartPos;
 import net.minecraft.util.Mth;
 import org.jetbrains.annotations.Nullable;
 
+import net.dries007.tfc.util.Helpers;
 import net.dries007.tfc.world.ChunkHeightFiller;
 import net.dries007.tfc.world.Seed;
 import net.dries007.tfc.world.biome.BiomeExtension;
@@ -183,11 +184,14 @@ public class CenteredFeatureNoise
                 {
                     final double f1 = cell.f1();
                     final double easing = Mth.clamp(calculateEasing((float) f1) + jitterNoise.noise(x, z), 0, 1);
-                    final double shape = calculateShape(1 - easing) * getGapVerticalEasing(cell);
+                    final double shape = calculateShape(1 - easing);
                     final double ringAdditionalHeight = (shape * biome.getCenteredFeatureScaleHeight() + (shape > 0.5 ? addedCliffNoise.noise(x, z) : 0f));
-                    final double ringHeight = SEA_LEVEL_Y + biome.getCenteredFeatureBaseHeight() + ringAdditionalHeight;
-                    //Linearly scales between baseHeight and the max of baseHeight and ringHeight near the edges of cells
-                    return Mth.lerp(50 * Mth.clamp(cell.f2() - f1, 0, 0.02), heightIn, Math.max(ringHeight, heightIn)) + everywhereNoise.noise(x, z);
+                    final double gapAdjustedAdditionalHeight = Math.min(ringAdditionalHeight * getGapVerticalEasing(cell), ringAdditionalHeight);
+                    final double ringHeight = SEA_LEVEL_Y + biome.getCenteredFeatureBaseHeight() + gapAdjustedAdditionalHeight + everywhereNoise.noise(x, z);
+
+                    // Abruptly scales down to the baseHeight near the edges of cells
+                    final double delta = 25 * Mth.clamp(cell.f2() - f1, 0, 0.04);
+                    return Mth.lerp(delta, heightIn, Math.max(ringHeight, heightIn));
                 }
                 return heightIn;
             }
