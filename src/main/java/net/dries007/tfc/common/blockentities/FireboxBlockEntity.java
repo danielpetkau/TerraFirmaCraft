@@ -230,7 +230,7 @@ public class FireboxBlockEntity extends TickableInventoryBlockEntity<ItemStackHa
                     final IHeat heat = HeatCapability.get(item);
                     if (heat != null)
                     {
-                        HeatCapability.addTemp(heat, firebox.temperature);
+                        heat.setTemperatureIfWarmer(firebox.temperature);
                         if (level.getGameTime() % 20 == 0)
                         {
                             final HeatingRecipe recipe = HeatingRecipe.getRecipe(item);
