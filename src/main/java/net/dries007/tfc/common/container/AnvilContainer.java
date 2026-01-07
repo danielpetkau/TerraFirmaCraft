@@ -79,17 +79,7 @@ public class AnvilContainer extends BlockEntityContainer<AnvilBlockEntity> imple
                         final InteractionResult weldResult = anvil.weld(player);
                         if (weldResult.consumesAction())
                         {
-                            final BlockPos pos = anvil.getBlockPos();
-
-                            // Welding occurred
-                            if (level instanceof ServerLevel server)
-                            {
-                                final double x = pos.getX() + Mth.nextDouble(level.random, 0.2, 0.8);
-                                final double z = pos.getZ() + Mth.nextDouble(level.random, 0.2, 0.8);
-                                final double y = pos.getY() + Mth.nextDouble(level.random, 0.8, 1.0);
-                                server.sendParticles(TFCParticles.SPARK.get(), x, y, z, 8, 0, 0, 0, 0.2f);
-                            }
-                            Helpers.playSound(level, pos, SoundEvents.ANVIL_USE);
+                            anvil.createForgingEffects();
                         }
                     }
                 }

@@ -69,7 +69,7 @@ public class AnvilScreen extends BlockEntityScreen<AnvilBlockEntity, AnvilContai
 
         assert level != null;
 
-        // Draw rule icons
+
         final Forging forging = blockEntity.getMainInputForging();
 
         // Draw the progress indicators
@@ -113,7 +113,7 @@ public class AnvilScreen extends BlockEntityScreen<AnvilBlockEntity, AnvilContai
             }
         }
 
-
+        // Draw rule icons
         if (recipe != null)
         {
             final List<ForgeRule> rules = recipe.getRules();
@@ -125,7 +125,7 @@ public class AnvilScreen extends BlockEntityScreen<AnvilBlockEntity, AnvilContai
                     final int xOffset = i * 19;
 
                     // The rule icon
-                    graphics.blit(texture, guiLeft + 61 + xOffset, guiTop + 7, 16, 16, rule.iconX(), rule.iconY() - 16, 16, 16, 256, 256);
+                    graphics.blit(texture, guiLeft + 61 + xOffset, guiTop + 13, 16, 16, rule.iconX(), rule.iconY() - 16, 16, 16, 256, 256);
 
                     // The overlay
                     if (forging.matches(rule))
@@ -137,7 +137,7 @@ public class AnvilScreen extends BlockEntityScreen<AnvilBlockEntity, AnvilContai
                         RenderSystem.setShaderColor(1f, 0.4f, 0, 1f); // Red
                     }
 
-                    graphics.blit(texture, guiLeft + 59 + xOffset, guiTop + 7, 198, rule.overlayY(), 20, 22);
+                    graphics.blit(texture, guiLeft + 59 + xOffset, guiTop + 13, 198, rule.overlayY(), 20, 22);
                     RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
                 }
             }
@@ -147,7 +147,7 @@ public class AnvilScreen extends BlockEntityScreen<AnvilBlockEntity, AnvilContai
         int index = 0;
         for (ForgeStep step : forging.lastSteps())
         {
-            graphics.blit(texture, guiLeft + 99 - (index * 19), guiTop + 28, 16, 16, step.iconX(), step.iconY() - 16, 16, 16, 256, 256);
+            graphics.blit(texture, guiLeft + 99 - (index * 19), guiTop + 34, 16, 16, step.iconX(), step.iconY() - 16, 16, 16, 256, 256);
             index++;
         }
     }
@@ -172,7 +172,7 @@ public class AnvilScreen extends BlockEntityScreen<AnvilBlockEntity, AnvilContai
                     {
                         final int xOffset = i * 19;
                         final int x = getGuiLeft() + 64 + xOffset;
-                        final int y = getGuiTop() + 10;
+                        final int y = getGuiTop() + 16;
                         if (mouseX > x && mouseX < x + 10 && mouseY > y && mouseY < y + 10)
                         {
                             graphics.renderTooltip(font, rule.getDescriptionId(), mouseX, mouseY);

@@ -420,7 +420,7 @@ public class AnvilBlockEntity extends InventoryBlockEntity<AnvilBlockEntity.Anvi
         return true;
     }
 
-    private void createForgingEffects()
+    public void createForgingEffects()
     {
         assert level != null;
         level.playSound(null, worldPosition, TFCSounds.ANVIL_HIT.get(), SoundSource.PLAYERS, 0.4f, 1.0f);
@@ -434,13 +434,11 @@ public class AnvilBlockEntity extends InventoryBlockEntity<AnvilBlockEntity.Anvi
     }
 
     /**
-     * Sends feedback to the action bar, as the anvil gui will be closed.
-     *
      * @return {@code SUCCESS} if welding was successful, {@code FAIL} if it failed, and {@code PASS} if it was not attempted.
      */
     public InteractionResult weld(Player player)
     {
-        final ItemStack left = inventory.getMainIngot(), right = inventory.getSecondaryIngot();
+        final ItemStack left = inventory.getMain(), right = inventory.getSecondary();
         if (left.isEmpty() && right.isEmpty())
         {
             return InteractionResult.PASS;
@@ -499,7 +497,7 @@ public class AnvilBlockEntity extends InventoryBlockEntity<AnvilBlockEntity.Anvi
 
     public WeldStatus getWeldStatus()
     {
-        final ItemStack left = inventory.getMainIngot(), right = inventory.getSecondaryIngot();
+        final ItemStack left = inventory.getMain(), right = inventory.getSecondary();
         if (left.isEmpty() && right.isEmpty())
         {
             return WeldStatus.PROBLEM_INGOTS;
@@ -577,13 +575,13 @@ public class AnvilBlockEntity extends InventoryBlockEntity<AnvilBlockEntity.Anvi
         }
 
         @Override
-        public ItemStack getMainIngot()
+        public ItemStack getMain()
         {
             return getStackInSlot(SLOT_INPUT_MAIN);
         }
 
         @Override
-        public ItemStack getSecondaryIngot()
+        public ItemStack getSecondary()
         {
             return getStackInSlot(SLOT_INPUT_SECOND);
         }
