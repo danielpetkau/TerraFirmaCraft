@@ -8,6 +8,7 @@ package net.dries007.tfc.world.feature;
 
 import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.Objects;
 import java.util.Set;
 import com.mojang.serialization.Codec;
 import net.minecraft.core.BlockPos;
@@ -20,27 +21,26 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
-import net.minecraft.world.level.levelgen.feature.configurations.BlockStateConfiguration;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.material.FluidState;
 import org.jetbrains.annotations.NotNull;
 
 import net.dries007.tfc.common.fluids.FluidHelpers;
 
-public class RivuletFeature extends Feature<BlockStateConfiguration>
+public class RivuletFeature extends Feature<BlockStateMapConfig>
 {
-    public RivuletFeature(Codec<BlockStateConfiguration> codec)
+    public RivuletFeature(Codec<BlockStateMapConfig> codec)
     {
         super(codec);
     }
 
     @Override
-    public boolean place(FeaturePlaceContext<BlockStateConfiguration> context)
+    public boolean place(FeaturePlaceContext<BlockStateMapConfig> context)
     {
         final WorldGenLevel world = context.level();
         final BlockPos pos = context.origin();
         final RandomSource rand = context.random();
-        final BlockStateConfiguration config = context.config();
+        final BlockStateMapConfig config = context.config();
 
         final ChunkPos chunkPos = new ChunkPos(pos);
         final BoundingBox box = new BoundingBox(chunkPos.getMinBlockX() - 14, Integer.MIN_VALUE, chunkPos.getMinBlockZ() - 14, chunkPos.getMaxBlockX() + 14, Integer.MAX_VALUE, chunkPos.getMaxBlockZ() + 14); // Leeway so we can check outside this box
@@ -148,9 +148,14 @@ public class RivuletFeature extends Feature<BlockStateConfiguration>
                 mutablePos.setWithOffset(chosenPos, Direction.DOWN);
                 setBlock(world, mutablePos, getReplaceState(world, mutablePos));
                 mutablePos.move(Direction.DOWN);
-                setBlock(world, mutablePos, config.state);
-                mutablePos.move(Direction.DOWN);
-                setBlock(world, mutablePos, config.state);
+                final BlockState stateAt = world.getBlockState(mutablePos);
+                final BlockState placementState = config.getState(stateAt);
+                if (placementState != null)
+                {
+                    setBlock(world, mutablePos, placementState);
+                    mutablePos.move(Direction.DOWN);
+                    setBlock(world, mutablePos, placementState);
+                }
             }
             return true;
         }
