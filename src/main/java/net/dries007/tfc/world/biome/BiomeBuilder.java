@@ -211,11 +211,11 @@ public class BiomeBuilder
         return this;
     }
 
-    public BiomeBuilder tuyas(int frequency, int baseHeight, int scaleHeight, int tuyaTuffHeight, boolean icy)
+    public BiomeBuilder tuyas(int frequency, int baseHeight, int scaleHeight, int tuyaBasaltHeight, boolean icy)
     {
         this.hasTuyas = true;
         this.centeredFeatureFrequency = frequency;
-        this.centeredFeatureRockHeight = SEA_LEVEL_Y + tuyaTuffHeight;
+        this.centeredFeatureRockHeight = SEA_LEVEL_Y + tuyaBasaltHeight;
         this.centeredFeatureBaseHeight = baseHeight;
         this.centeredFeatureScaleHeight = scaleHeight;
         this.centeredFeatureIce = icy;

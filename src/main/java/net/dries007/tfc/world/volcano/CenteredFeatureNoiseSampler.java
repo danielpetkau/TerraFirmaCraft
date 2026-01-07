@@ -68,12 +68,12 @@ public interface CenteredFeatureNoiseSampler
     BlockPos calculateCenter(int x, int y, int z, int rarity);
 
     /**
-     * Sample the nearest volcano cell to a given position for a volcano.
+     * Sample the nearest cellular noise feature cell to a given position.
      * Returns false if the cell was excluded due to a rarity condition, or if the cell was too close to adjacent cells (possibly causing overlapping volcanoes)
      */
     default boolean checkCellRarity(Cellular2D.Cell cell, int rarity)
     {
         if (rarity == 0) return false;
-        return Math.abs(cell.noise()) <= 1f; // rarity;
+        return Math.abs(cell.noise()) <= 1.0 / rarity;
     }
 }
