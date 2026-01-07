@@ -314,7 +314,7 @@ public class PotBlockEntity extends AbstractFirepitBlockEntity<PotBlockEntity.Po
         @Override
         public @NotNull FluidStack drain(int maxDrain, FluidAction action)
         {
-            return pot.hasRecipeStarted() ? FluidStack.EMPTY : DelegateFluidHandler.super.drain(maxDrain, action);
+            return pot.hasRecipeStarted() ? FluidStack.EMPTY : getFluidHandler().drain(maxDrain, action);
         }
 
         @Override
