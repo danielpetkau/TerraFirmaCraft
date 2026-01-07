@@ -11,7 +11,7 @@ import org.jetbrains.annotations.Nullable;
 
 /**
  * Note that this interface doesn't make the block in question pileable, necessarily. The tag tfc:can_be_snow_piled is still required.
- * The tag is intentionally left off of some blocks that don't maake sense to be piled.
+ * The tag is intentionally left off of some blocks that don't make sense to be piled.
  */
 public interface ISpecialPile
 {
