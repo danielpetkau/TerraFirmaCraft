@@ -99,9 +99,23 @@ public class FireboxBlockEntity extends TickableInventoryBlockEntity<ItemStackHa
                 box.heatingTimestamp = Calendars.SERVER.getTicks();
                 box.markForSync();
             }
+            if (!box.operableBlocks.isEmpty())
+            {
+                box.operableBounds = calculateBoundingBox(box.operableBlocks);
+            }
         }
 
-        // todo: the kiln should light players on fire
+        if (box.temperature > 300 && box.operableBounds != null)
+        {
+            final List<LivingEntity> livingEntities = level.getEntitiesOfClass(LivingEntity.class, box.operableBounds);
+            for (LivingEntity living : livingEntities)
+            {
+                if (box.operableBlocks.contains(living.blockPosition()))
+                {
+                    living.igniteForTicks(80);
+                }
+            }
+        }
 
         if (box.temperature == 0 || box.heatingCount < 4 || Math.abs(box.temperature - box.burnTemperature) > BellowsBlockEntity.MAX_DEVICE_AIR_TICKS + 1)
             box.heatingTimestamp = Calendars.SERVER.getTicks();
@@ -180,6 +194,28 @@ public class FireboxBlockEntity extends TickableInventoryBlockEntity<ItemStackHa
         return positions;
     }
 
+    private static AABB calculateBoundingBox(List<BlockPos> positions)
+    {
+        int minX = Integer.MAX_VALUE;
+        int minY = Integer.MAX_VALUE;
+        int minZ = Integer.MAX_VALUE;
+        int maxX = Integer.MIN_VALUE;
+        int maxY = Integer.MIN_VALUE;
+        int maxZ = Integer.MIN_VALUE;
+
+        for (BlockPos pos : positions)
+        {
+            if (pos.getX() < minX) minX = pos.getX();
+            if (pos.getY() < minY) minY = pos.getY();
+            if (pos.getZ() < minZ) minZ = pos.getZ();
+            if (pos.getX() > maxX) maxX = pos.getX();
+            if (pos.getY() > maxY) maxY = pos.getY();
+            if (pos.getZ() > maxZ) maxZ = pos.getZ();
+        }
+
+        return new AABB(minX, minY, minZ, maxX + 1, maxY + 1, maxZ + 1);
+    }
+
     private static void performHeating(Level level, FireboxBlockEntity firebox, List<BlockPos> filled)
     {
         filled.forEach(testPos -> {
@@ -231,6 +267,7 @@ public class FireboxBlockEntity extends TickableInventoryBlockEntity<ItemStackHa
     private float temperature, burnTemperature;
     private boolean needsSlotUpdate = true;
     private List<BlockPos> operableBlocks = new ArrayList<>();
+    private @Nullable AABB operableBounds = null;
 
     public FireboxBlockEntity(BlockPos pos, BlockState state)
     {
