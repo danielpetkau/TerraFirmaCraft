@@ -1500,9 +1500,9 @@ public final class Helpers
     public static double diamondAngle(double x, double y)
     {
         if (y >= 0)
-            return (x >= 0 ? y/(x+y) : 1-x/(-x+y));
+            return (x >= 0 ? y / (x + y) : 1 - x / (-x + y));
         else
-            return (x < 0 ? 2-y/(-x-y) : 3+x/(x-y));
+            return (x < 0 ? 2 - y / (-x - y) : 3 + x / (x - y));
     }
 
     /**

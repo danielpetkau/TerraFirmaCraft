@@ -119,12 +119,12 @@ public class Cellular2D implements Noise2D
     }
 
     /**
-     * @param x "X"-coordinate of cell center. X/Y coordinates of cells are not tied to in game coordinates
-     * @param y "Y"-coordinate of cell center
-     * @param cx "X"-coordinate of the nearest cell (C2) center
-     * @param cy "Y"-coordinate of the nearest cell (C2) center
-     * @param f1 Distance to x, y
-     * @param f2 Distance to cx, cy
+     * @param x     "X"-coordinate of cell center. X/Y coordinates of cells are not tied to in game coordinates
+     * @param y     "Y"-coordinate of cell center
+     * @param cx    "X"-coordinate of the nearest cell (C2) center
+     * @param cy    "Y"-coordinate of the nearest cell (C2) center
+     * @param f1    Distance to x, y
+     * @param f2    Distance to cx, cy
      * @param noise Hash value of the cell, range 0-1
      * @param angle Diamond angle to the center
      */

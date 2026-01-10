@@ -257,6 +257,7 @@ public class CenteredFeatureNoise
 
     /**
      * Method for adding a single gap to a cellular feature at a random angle
+     *
      * @return a value ranging from 1 far from the gap, to 0 in the middle of a large gap
      */
     private static double getGapVerticalEasing(Cellular2D.Cell cell)
