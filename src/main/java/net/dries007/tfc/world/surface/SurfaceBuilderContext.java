@@ -42,6 +42,9 @@ public class SurfaceBuilderContext
 
     @Nullable private BiomeExtension biome;
     @Nullable private BiomeExtension originalBiome;
+    private BiomeExtension cinderConeBiome;
+    private BiomeExtension tuffRingBiome;
+    private BiomeExtension tuyaBiome;
     private double biomeWeight;
     private double slope;
     private float temperature;
@@ -50,7 +53,7 @@ public class SurfaceBuilderContext
     private float rainVariance;
     private boolean salty;
 
-    public SurfaceBuilderContext(LevelAccessor level, ChunkAccess chunk, ChunkData chunkData, RandomSource random, RockLayerSettings rockLayerSettings, int seaLevel, int minY)
+    public SurfaceBuilderContext(LevelAccessor level, ChunkAccess chunk, ChunkData chunkData, RandomSource random, RockLayerSettings rockLayerSettings, int seaLevel, int minY, BiomeExtension cinderConeBiome, BiomeExtension tuffRingBiome, BiomeExtension tuyaBiome)
     {
         this.level = level;
         this.chunk = chunk;
@@ -59,6 +62,9 @@ public class SurfaceBuilderContext
         this.random = random;
         this.seaLevel = seaLevel;
         this.minY = minY;
+        this.cinderConeBiome = cinderConeBiome;
+        this.tuffRingBiome = tuffRingBiome;
+        this.tuyaBiome = tuyaBiome;
 
         this.defaultBlockStates = new ObjectOpenHashSet<>();
         this.defaultFluidStates = new ObjectOpenHashSet<>();
@@ -105,6 +111,21 @@ public class SurfaceBuilderContext
     {
         assert originalBiome != null;
         return originalBiome;
+    }
+
+    public BiomeExtension cinderConeBiome()
+    {
+        return cinderConeBiome;
+    }
+
+    public BiomeExtension tuffRingBiome()
+    {
+        return tuffRingBiome;
+    }
+
+    public BiomeExtension tuyaBiome()
+    {
+        return tuyaBiome;
     }
 
     public double weight()
