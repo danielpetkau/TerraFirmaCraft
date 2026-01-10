@@ -1,7 +1,6 @@
 ### Changes
 
-- Fix issues with egg-laying AI
-- Fix some fluid ingredients not appearing in JEI (#3031)
-- Fix an issue where rock layer ordering is not preserved when recreating a world.
-- Updated the Japanese translation
-- Removed AlcatrazEscapee (#1)
+- Fix being able to extract fluid from a boiling pot (#3371)
+- Fix milking with a full bucket adding wear and tear to dairy animals (#3045)
+- Fix magma textures being outdated compared to rock textures.
+- Updated Polish and Portuguese translations.
