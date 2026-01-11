@@ -9,10 +9,11 @@ package net.dries007.tfc.world.surface.builder;
 import net.minecraft.world.level.block.state.BlockState;
 
 import net.dries007.tfc.world.Seed;
-import net.dries007.tfc.world.biome.TuffRingNoise;
 import net.dries007.tfc.world.surface.SurfaceBuilderContext;
 import net.dries007.tfc.world.surface.SurfaceState;
 import net.dries007.tfc.world.surface.SurfaceStates;
+import net.dries007.tfc.world.volcano.CenteredFeatureNoise;
+import net.dries007.tfc.world.volcano.CenteredFeatureNoiseSampler;
 
 public class TuffRingsSurfaceBuilder implements SurfaceBuilder
 {
@@ -22,20 +23,20 @@ public class TuffRingsSurfaceBuilder implements SurfaceBuilder
     }
 
     private final SurfaceBuilder parent;
-    private final TuffRingNoise tuffRingNoise;
-
+    private final Seed seed;
     public TuffRingsSurfaceBuilder(SurfaceBuilder parent, Seed seed)
     {
         this.parent = parent;
-        this.tuffRingNoise = new TuffRingNoise(seed);
+        this.seed = seed;
     }
 
     @Override
     public void buildSurface(SurfaceBuilderContext context, int startY, int endY)
     {
-        if (context.biome().hasTuffRings())
+        if (context.tuffRingBiome().hasTuffRings())
         {
-            final float easing = tuffRingNoise.calculateEasing(context.pos().getX(), context.pos().getZ(), context.biome().getTuffRingRarity());
+            final CenteredFeatureNoiseSampler sampler = CenteredFeatureNoise.tuffRing(seed);
+            final float easing = sampler.calculateEasing(context.pos(), context.tuffRingBiome());
             if (easing > 0.6f)
             {
                 if (startY < context.getSeaLevel() + 3)

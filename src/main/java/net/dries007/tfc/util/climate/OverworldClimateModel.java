@@ -265,7 +265,7 @@ public class OverworldClimateModel implements ClimateModel
     {
         // seed as if we're 2 hours in the future, in order to start the cycle at 4am (2 hours before sunrise)
         final ICalendar calendar = Calendars.get(level);
-        final RandomSource random = seededRandom(calendar.getTotalDays(), 129341623413L);
+        final RandomSource random = seededRandom(calendar.getTotalCalendarDays(), 129341623413L);
         if (random.nextInt(FOGGY_DAY_RARITY) != 0)
         {
             return 0;

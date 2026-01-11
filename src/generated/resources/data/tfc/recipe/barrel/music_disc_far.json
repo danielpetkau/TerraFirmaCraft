@@ -1,6 +1,6 @@
 {
   "type": "tfc:barrel_sealed",
-  "duration": 1000,
+  "duration": 1200,
   "input_fluid": {
     "amount": 25,
     "fluid": "tfc:green_dye"

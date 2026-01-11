@@ -6,7 +6,6 @@
 
 package net.dries007.tfc.util.calendar;
 
-import java.util.Optional;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 
@@ -38,9 +37,18 @@ public interface ICalendar
 
     /**
      * Use if you're specifically trying to measure calendar ticks in a day, not player ticks.
+     * Most use cases want player ticks instead.
      */
     int CALENDAR_TICKS_IN_HOUR = 1000;
     int CALENDAR_TICKS_IN_DAY = CALENDAR_TICKS_IN_HOUR * HOURS_IN_DAY;
+
+    /**
+     * Use to create constants in player ticks from hours, days, etc.
+     * Only for things that must be constant such as configs and recipes.
+     * DO NOT use in game logic since day lengths can be changed.
+     */
+    int PLAYER_TICKS_IN_DEFAULT_HOUR = 60 * 20;
+    int PLAYER_TICKS_IN_DEFAULT_DAY = PLAYER_TICKS_IN_DEFAULT_HOUR * HOURS_IN_DAY;
 
     static MutableComponent getTimeAndDate(long calendarTick, long daysInMonth)
     {
@@ -208,16 +216,6 @@ public interface ICalendar
      * @return The calendar tick closest to representing the target player tick
      */
     long getFixedCalendarTicksFromTick(long playerTick);
-
-    /**
-     * Gets the total amount of days passed
-     * @deprecated almost everything counting days in player ticks is now wrong.
-     */
-    @Deprecated
-    default long getTotalDays()
-    {
-        return ICalendar.getTotalCalendarDays(getTicks());
-    }
 
     /**
      * Gets the total amount of days passed since Jan 1, 1000

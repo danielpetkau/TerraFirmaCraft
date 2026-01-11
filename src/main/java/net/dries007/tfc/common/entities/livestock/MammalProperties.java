@@ -41,7 +41,7 @@ public interface MammalProperties extends TFCAnimalProperties
         Level level = getEntity().level();
         if (!level.isClientSide && level.getGameTime() % 20 == 0)
         {
-            if (getPregnantTime() > 0 && Calendars.SERVER.getTotalDays() >= getPregnantTime() + getGestationDays() && isFertilized())
+            if (getPregnantTime() > 0 && Calendars.SERVER.getTotalCalendarDays() >= getPregnantTime() + getGestationDays() && isFertilized())
             {
                 birthChildren();
                 setFertilized(false);
@@ -83,7 +83,7 @@ public interface MammalProperties extends TFCAnimalProperties
     {
         //Mark the day this female became pregnant
         TFCAnimalProperties.super.onFertilized(male); // setFertilized(true)
-        setPregnantTime(calendar().getTotalDays());
+        setPregnantTime(calendar().getTotalCalendarDays());
 
         CompoundTag genes = new CompoundTag();
         createGenes(genes, male);

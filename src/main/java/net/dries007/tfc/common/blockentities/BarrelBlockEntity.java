@@ -484,7 +484,7 @@ public class BarrelBlockEntity extends TickableInventoryBlockEntity<BarrelBlockE
         assert level != null;
 
         sealedTick = 0L;
-        recipeTick = 0L;
+        recipeTick = -1L;
 
         final @Nullable SealedBarrelRecipe recipe = getRecipe();
         if (recipe != null)

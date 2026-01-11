@@ -219,14 +219,14 @@ public class SewingTableScreen extends TFCContainerScreen<SewingTableContainer>
         super.renderBg(graphics, partialTick, mouseX, mouseY);
         forEachClothSquare((x, y, i) -> {
             final int mat = menu.getPlacedMaterial(i);
-            if (mat != -1)
+            if (mat != SewingTableContainer.EMPTY_ID)
             {
                 graphics.blit(TEXTURE, getScreenX(x * 12 + 6), getScreenY(y * 12 + 6), 208, mat == SewingTableContainer.BURLAP_ID ? 16 : 0, 12, 12);
             }
             else if (selectedRecipe != null)
             {
                 final int recipeMat = selectedRecipe.getSquare(i);
-                if (recipeMat != -1)
+                if (recipeMat != SewingTableContainer.EMPTY_ID)
                 {
                     graphics.blit(TEXTURE, getScreenX(x * 12 + 6), getScreenY(y * 12 + 6), 208, recipeMat == SewingTableContainer.BURLAP_ID ? 80 : 64, 12, 12);
                 }

@@ -1,6 +1,6 @@
 {
   "type": "tfc:barrel_sealed",
-  "duration": 4000,
+  "duration": 3600,
   "input_fluid": {
     "amount": 125,
     "fluid": "tfc:brine"

@@ -1,6 +1,6 @@
 {
   "type": "tfc:barrel_sealed",
-  "duration": 8000,
+  "duration": 7200,
   "input_fluid": {
     "amount": 600,
     "fluid": "tfc:limewater"

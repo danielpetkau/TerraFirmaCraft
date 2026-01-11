@@ -5,10 +5,10 @@
     "id": "minecraft:sentry_armor_trim_smithing_template"
   },
   "squares": [
-    "   ##   ",
-    "###  ###",
-    "  #  #  ",
-    "   ##   "
+    "BBBWWBBB",
+    "WWWBBWWW",
+    "BBWBBWBB",
+    "BBBWWBBB"
   ],
   "stitches": [
     "   # #   ",
