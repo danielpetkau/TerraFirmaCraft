@@ -23,14 +23,14 @@ import net.dries007.tfc.network.StreamCodecs;
 
 public enum ForgeStep implements StringRepresentable
 {
-    HIT_LIGHT(-3, 53, 50, 128, 224),
-    HIT_MEDIUM(-6, 71, 50, 160, 224),
-    HIT_HARD(-9, 53, 68, 192, 224),
-    DRAW(-15, 71, 68, 224, 224),
-    PUNCH(2, 89, 50, 0, 224),
-    BEND(7, 107, 50, 32, 224),
-    UPSET(13, 89, 68, 64, 224),
-    SHRINK(16, 107, 68, 96, 224);
+    HIT_LIGHT(-3, 53, 56, 64, 240),
+    HIT_MEDIUM(-6, 71, 56, 80, 240),
+    HIT_HARD(-9, 53, 74, 96, 240),
+    DRAW(-15, 71, 74, 112, 240),
+    PUNCH(2, 89, 56, 0, 240),
+    BEND(7, 107, 56, 16, 240),
+    UPSET(13, 89, 74, 32, 240),
+    SHRINK(16, 107, 74, 48, 240);
 
     public static final int LIMIT = 150;
 
