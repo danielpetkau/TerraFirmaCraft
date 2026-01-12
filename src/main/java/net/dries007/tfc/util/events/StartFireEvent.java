@@ -12,6 +12,7 @@ import net.dries007.tfc.common.blockentities.TFCBlockEntities;
 import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.blocks.devices.FirepitBlock;
 import net.dries007.tfc.util.Helpers;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerPlayer;
@@ -27,6 +28,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseFireBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.AABB;
 import net.neoforged.bus.api.Event;
 import net.neoforged.bus.api.ICancellableEvent;
@@ -76,6 +78,13 @@ public final class StartFireEvent extends Event implements ICancellableEvent
     // Pass in a firepitBaseChance of -1 to disable firepit creation for a given firestarter
     public static boolean startFire(Level level, BlockPos pos, BlockState state, Direction direction, @Nullable Player player, ItemStack stack, FireStrength strength, double firepitBaseChance)
     {
+        final BlockPos abovePos = pos.above();
+        BlockState aboveBlockState = level.getBlockState(abovePos);
+        FluidState aboveFluidState = level.getFluidState(abovePos);
+        if (!aboveFluidState.isEmpty() || !aboveBlockState.isAir())
+        {
+            return false;
+        }
         final StartFireEvent event = new StartFireEvent(level, pos, state, direction, player, stack, strength);
         final boolean cancelled = NeoForge.EVENT_BUS.post(event).isCanceled();
 
@@ -86,7 +95,6 @@ public final class StartFireEvent extends Event implements ICancellableEvent
 
         if (!cancelled && event.isStrong())
         {
-            final BlockPos abovePos = pos.above();
             // Check conditions for creating a firepit if a valid firestarter
             if (FirepitBlock.canSurvive(level, abovePos) && firepitBaseChance != -1)
             {
@@ -171,7 +179,7 @@ public final class StartFireEvent extends Event implements ICancellableEvent
                 return true;
             }
         }
-        return cancelled;
+        return !cancelled;
     }
 
     private final Level world;
