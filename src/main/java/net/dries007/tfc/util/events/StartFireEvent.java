@@ -78,10 +78,9 @@ public final class StartFireEvent extends Event implements ICancellableEvent
     // Pass in a firepitBaseChance of -1 to disable firepit creation for a given firestarter
     public static boolean startFire(Level level, BlockPos pos, BlockState state, Direction direction, @Nullable Player player, ItemStack stack, FireStrength strength, double firepitBaseChance)
     {
-        final BlockPos abovePos = pos.above();
-        BlockState aboveBlockState = level.getBlockState(abovePos);
-        FluidState aboveFluidState = level.getFluidState(abovePos);
-        if (!aboveFluidState.isEmpty() || !aboveBlockState.isAir())
+        final BlockPos relativePos = pos.relative(direction);
+        final BlockState relativeState = level.getBlockState(relativePos);
+        if (!relativeState.getFluidState().isEmpty() || !relativeState.isAir())
         {
             return false;
         }
@@ -96,9 +95,9 @@ public final class StartFireEvent extends Event implements ICancellableEvent
         if (!cancelled && event.isStrong())
         {
             // Check conditions for creating a firepit if a valid firestarter
-            if (FirepitBlock.canSurvive(level, abovePos) && firepitBaseChance != -1)
+            if (FirepitBlock.canSurvive(level, relativePos) && firepitBaseChance != -1)
             {
-                final List<ItemEntity> items = level.getEntitiesOfClass(ItemEntity.class, new AABB(abovePos.getX() - 0.5, abovePos.getY(), abovePos.getZ() - 0.5, abovePos.getX() + 1.5, abovePos.getY() + 1, abovePos.getZ() + 1.5));
+                final List<ItemEntity> items = level.getEntitiesOfClass(ItemEntity.class, new AABB(relativePos.getX() - 0.5, relativePos.getY(), relativePos.getZ() - 0.5, relativePos.getX() + 1.5, relativePos.getY() + 1, relativePos.getZ() + 1.5));
                 final List<ItemEntity> usableItems = new ArrayList<>();
 
                 int sticks = 0, kindling = 0;
@@ -144,8 +143,8 @@ public final class StartFireEvent extends Event implements ICancellableEvent
                         {
                             firepitState = TFCBlocks.FIREPIT.get().defaultBlockState().setValue(FirepitBlock.AXIS, Direction.Axis.X);
                         }
-                        level.setBlock(abovePos, firepitState, 3);
-                        level.getBlockEntity(abovePos, TFCBlockEntities.FIREPIT.get()).ifPresent(firepit -> {
+                        level.setBlock(relativePos, firepitState, 3);
+                        level.getBlockEntity(relativePos, TFCBlockEntities.FIREPIT.get()).ifPresent(firepit -> {
                             firepit.getInventory().setStackInSlot(AbstractFirepitBlockEntity.SLOT_FUEL_CONSUME, initialLog);
                             firepit.light(firepitState);
                         });
@@ -179,7 +178,7 @@ public final class StartFireEvent extends Event implements ICancellableEvent
                 return true;
             }
         }
-        return !cancelled;
+        return cancelled;
     }
 
     private final Level world;
