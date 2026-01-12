@@ -77,14 +77,14 @@ public class WeldingRecipe implements INoopInputRecipe, IRecipePredicate<Welding
     @Override
     public boolean matches(Inventory input)
     {
-        final ItemStack left = input.getLeft(), right = input.getRight();
+        final ItemStack left = input.getMain(), right = input.getSecondary();
         return (firstInput.test(left) && secondInput.test(right))
             || (firstInput.test(right) && secondInput.test(left));
     }
 
     public ItemStack assemble(Inventory input)
     {
-        final ItemStack stack = output.getSingleStack(input.getLeft());
+        final ItemStack stack = output.getSingleStack(input.getMain());
         if (bonus != Behavior.IGNORE)
         {
             // Compare the two bonuses and copy the actual component that we want
@@ -93,13 +93,13 @@ public class WeldingRecipe implements INoopInputRecipe, IRecipePredicate<Welding
             //
             // This makes the most sense imo, other options are use the welding author, or drop the author entirely
             // This is a flavor addition, it's fine.
-            final ForgingBonus left = ForgingBonusComponent.get(input.getLeft());
-            final ForgingBonus right = ForgingBonusComponent.get(input.getRight());
+            final ForgingBonus left = ForgingBonusComponent.get(input.getMain());
+            final ForgingBonus right = ForgingBonusComponent.get(input.getSecondary());
 
             final boolean leftIsHigher = left.ordinal() > right.ordinal();
             final boolean copyHigher = bonus == Behavior.COPY_BEST;
 
-            ForgingBonusComponent.copy(leftIsHigher == copyHigher ? input.getLeft() : input.getRight(), stack);
+            ForgingBonusComponent.copy(leftIsHigher == copyHigher ? input.getMain() : input.getSecondary(), stack);
         }
         return stack;
     }
@@ -134,9 +134,9 @@ public class WeldingRecipe implements INoopInputRecipe, IRecipePredicate<Welding
 
     public interface Inventory extends RecipeInput
     {
-        ItemStack getLeft();
+        ItemStack getMain();
 
-        ItemStack getRight();
+        ItemStack getSecondary();
 
         int getTier();
     }

@@ -18,14 +18,14 @@ import org.jetbrains.annotations.Nullable;
 import net.dries007.tfc.TerraFirmaCraft;
 import net.dries007.tfc.client.screen.button.AnvilPlanButton;
 import net.dries007.tfc.client.screen.button.AnvilStepButton;
+import net.dries007.tfc.client.screen.button.AnvilWeldButton;
 import net.dries007.tfc.common.blockentities.AnvilBlockEntity;
 import net.dries007.tfc.common.component.forge.ForgeRule;
 import net.dries007.tfc.common.component.forge.ForgeStep;
-import net.dries007.tfc.common.component.forge.ForgeSteps;
 import net.dries007.tfc.common.component.forge.Forging;
-import net.dries007.tfc.common.component.forge.ForgingComponent;
 import net.dries007.tfc.common.container.AnvilContainer;
 import net.dries007.tfc.common.recipes.AnvilRecipe;
+import net.dries007.tfc.config.TFCConfig;
 import net.dries007.tfc.util.Helpers;
 
 public class AnvilScreen extends BlockEntityScreen<AnvilBlockEntity, AnvilContainer>
@@ -46,6 +46,7 @@ public class AnvilScreen extends BlockEntityScreen<AnvilBlockEntity, AnvilContai
         super.init();
 
         addRenderableWidget(new AnvilPlanButton(blockEntity, getGuiLeft(), getGuiTop()));
+        addRenderableWidget(new AnvilWeldButton(blockEntity, getGuiLeft(), getGuiTop()));
 
         for (ForgeStep step : ForgeStep.VALUES)
         {
@@ -63,22 +64,56 @@ public class AnvilScreen extends BlockEntityScreen<AnvilBlockEntity, AnvilContai
 
         if (TerraFirmaCraft.JEI)
         {
-            graphics.blit(texture, guiLeft + 26, guiTop + 24, 0, 207, 9, 14);
+            graphics.blit(texture, guiLeft + 141, guiTop + 40, 0, 207, 9, 14);
         }
 
         assert level != null;
 
-        // Draw rule icons
+
         final Forging forging = blockEntity.getMainInputForging();
 
         // Draw the progress indicators
-        final int progress = forging.work();
-        graphics.blit(texture, guiLeft + 13 + progress, guiTop + 100, 176, 0, 5, 5);
-
         final int target = forging.target();
-        graphics.blit(texture, guiLeft + 13 + target, guiTop + 94, 181, 0, 5, 5);
-
+        final int range = TFCConfig.SERVER.anvilAcceptableWorkRange.get();
         final AnvilRecipe recipe = forging.getRecipe();
+        if (recipe != null)
+        {
+            // progress indicator
+            graphics.blit(texture, guiLeft + 13 + forging.work(), guiTop + 104, 176, 0, 5, 5);
+
+            // target indicator
+            if (range < 2)
+            {
+                // render the pointer
+                graphics.blit(texture, guiLeft + 13 + target, guiTop + 98, 181, 0, 5, 5);
+            }
+            else
+            {
+                // render the bracket
+                final int leftLimit = Math.max(0, target - range);
+                final int rightLimit = Math.min(145, target + range);
+
+                // left
+                graphics.blit(texture, guiLeft + 13 + leftLimit, guiTop + 96, 176, 7, 5, 7);
+                // right
+                graphics.blit(texture, guiLeft + 13 + rightLimit, guiTop + 96, 186, 7, 5, 7);
+
+                // bar
+                for (int i = leftLimit + 2; i < rightLimit - 1; i++)
+                {
+                    graphics.blit(texture, guiLeft + 15 + i, guiTop + 94, 192, 5, 1, 5);
+                }
+
+                // center
+                if (range > 2)
+                {
+                    graphics.blit(texture, guiLeft + 13 + (rightLimit + leftLimit) / 2, guiTop + 94, 181, 5, 5, 5);
+                }
+
+            }
+        }
+
+        // Draw rule icons
         if (recipe != null)
         {
             final List<ForgeRule> rules = recipe.getRules();
@@ -90,7 +125,7 @@ public class AnvilScreen extends BlockEntityScreen<AnvilBlockEntity, AnvilContai
                     final int xOffset = i * 19;
 
                     // The rule icon
-                    graphics.blit(texture, guiLeft + 64 + xOffset, guiTop + 10, 10, 10, rule.iconX(), rule.iconY(), 32, 32, 256, 256);
+                    graphics.blit(texture, guiLeft + 61 + xOffset, guiTop + 13, 16, 16, rule.iconX(), rule.iconY() - 16, 16, 16, 256, 256);
 
                     // The overlay
                     if (forging.matches(rule))
@@ -102,7 +137,7 @@ public class AnvilScreen extends BlockEntityScreen<AnvilBlockEntity, AnvilContai
                         RenderSystem.setShaderColor(1f, 0.4f, 0, 1f); // Red
                     }
 
-                    graphics.blit(texture, guiLeft + 59 + xOffset, guiTop + 7, 198, rule.overlayY(), 20, 22);
+                    graphics.blit(texture, guiLeft + 59 + xOffset, guiTop + 13, 198, rule.overlayY(), 20, 22);
                     RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
                 }
             }
@@ -112,7 +147,7 @@ public class AnvilScreen extends BlockEntityScreen<AnvilBlockEntity, AnvilContai
         int index = 0;
         for (ForgeStep step : forging.lastSteps())
         {
-            graphics.blit(texture, guiLeft + 102 - (index * 19), guiTop + 31, 10, 10, step.iconX(), step.iconY(), 32, 32, 256, 256);
+            graphics.blit(texture, guiLeft + 99 - (index * 19), guiTop + 34, 16, 16, step.iconX(), step.iconY() - 16, 16, 16, 256, 256);
             index++;
         }
     }
@@ -137,7 +172,7 @@ public class AnvilScreen extends BlockEntityScreen<AnvilBlockEntity, AnvilContai
                     {
                         final int xOffset = i * 19;
                         final int x = getGuiLeft() + 64 + xOffset;
-                        final int y = getGuiTop() + 10;
+                        final int y = getGuiTop() + 16;
                         if (mouseX > x && mouseX < x + 10 && mouseY > y && mouseY < y + 10)
                         {
                             graphics.renderTooltip(font, rule.getDescriptionId(), mouseX, mouseY);

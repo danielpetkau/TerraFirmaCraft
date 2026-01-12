@@ -34,6 +34,6 @@ public class AnvilStepButton extends Button
     @Override
     public void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float partialTick)
     {
-        graphics.blit(AnvilScreen.BACKGROUND, getX(), getY(), 16, 16, step.iconX(), step.iconY(), 32, 32, 256, 256);
+        graphics.blit(AnvilScreen.BACKGROUND, getX(), getY(), 16, 16, step.iconX(), step.iconY(), 16, 16, 256, 256);
     }
 }

@@ -287,7 +287,7 @@ public final class JEIIntegration implements IModPlugin
     public void registerGuiHandlers(IGuiHandlerRegistration registry)
     {
         registry.addRecipeClickArea(KnappingScreen.class, 97, 44, 22, 15, KNAPPING_TYPES.values().toArray(RecipeType[]::new));
-        registry.addRecipeClickArea(AnvilScreen.class, 26, 24, 9, 14, ANVIL, WELDING);
+        registry.addRecipeClickArea(AnvilScreen.class, 140, 40, 9, 14, ANVIL, WELDING);
         registry.addRecipeClickArea(BarrelScreen.class, 92, 21, 9, 14, SEALED_BARREL, INSTANT_BARREL, INSTANT_FLUID_BARREL);
         registry.addRecipeClickArea(CrucibleScreen.class, 82, 100, 10, 15, HEATING);
         registry.addRecipeClickArea(CrucibleScreen.class, 139, 100, 10, 15, ALLOYING, CASTING);
