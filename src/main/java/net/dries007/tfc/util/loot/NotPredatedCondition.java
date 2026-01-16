@@ -15,6 +15,8 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
 
+import org.jetbrains.annotations.Contract;
+
 import net.dries007.tfc.common.TFCTags;
 import net.dries007.tfc.util.Helpers;
 
@@ -43,5 +45,11 @@ public enum NotPredatedCondition implements LootItemCondition
         }
         final Entity killer = context.getParam(LootContextParams.ATTACKING_ENTITY);
         return killer instanceof Player || (!Helpers.isEntity(killer, TFCTags.Entities.HUNTS_LAND_PREY) && !Helpers.isEntity(killer, TFCTags.Entities.OCEAN_PREDATORS));
+    }
+
+    @Contract(pure = true)
+    public static LootItemCondition.Builder notPredated()
+    {
+        return () -> INSTANCE;
     }
 }

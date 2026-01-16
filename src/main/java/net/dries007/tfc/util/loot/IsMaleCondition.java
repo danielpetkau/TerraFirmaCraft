@@ -11,6 +11,8 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
 
+import org.jetbrains.annotations.Contract;
+
 import net.dries007.tfc.common.entities.livestock.TFCAnimalProperties;
 
 public enum IsMaleCondition implements LootItemCondition
@@ -29,5 +31,9 @@ public enum IsMaleCondition implements LootItemCondition
         return context.hasParam(LootContextParams.THIS_ENTITY) && context.getParam(LootContextParams.THIS_ENTITY) instanceof TFCAnimalProperties properties && properties.isMale();
     }
 
-
+    @Contract(pure = true)
+    public static LootItemCondition.Builder isMale()
+    {
+        return () -> INSTANCE;
+    }
 }

@@ -6,6 +6,8 @@
 
 package net.dries007.tfc.data;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.BiConsumer;
@@ -15,6 +17,7 @@ import net.minecraft.core.RegistrySetBuilder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
+import net.minecraft.data.loot.LootTableProvider;
 import net.minecraft.data.tags.TagsProvider;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.DamageTypeTags;
@@ -22,6 +25,7 @@ import net.minecraft.tags.PaintingVariantTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.tags.WorldPresetTags;
 import net.minecraft.world.damagesource.DamageTypes;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.common.data.DatapackBuiltinEntriesProvider;
@@ -35,6 +39,7 @@ import net.dries007.tfc.data.providers.BuiltinDensityFunctions;
 import net.dries007.tfc.data.providers.BuiltinDeposits;
 import net.dries007.tfc.data.providers.BuiltinDrinkables;
 import net.dries007.tfc.data.providers.BuiltinEntityDamageResist;
+import net.dries007.tfc.data.providers.BuiltinEntityLoot;
 import net.dries007.tfc.data.providers.BuiltinEntityTags;
 import net.dries007.tfc.data.providers.BuiltinFauna;
 import net.dries007.tfc.data.providers.BuiltinFertilizers;
@@ -134,6 +139,17 @@ public final class DataEntryPoint
         add(event, new BuiltinFauna(output, lookup));
 
         add(event, new BuiltinDataMaps(output, lookup));
+
+        add(event,
+            new LootTableProvider(
+                output,
+                Collections.emptySet(),
+                List.of(
+                    new LootTableProvider.SubProviderEntry(BuiltinEntityLoot::new, LootContextParamSets.ENTITY)
+                ),
+                lookup
+            )
+        );
     }
 
     private static <T extends DataProvider> T add(GatherDataEvent event, T provider)

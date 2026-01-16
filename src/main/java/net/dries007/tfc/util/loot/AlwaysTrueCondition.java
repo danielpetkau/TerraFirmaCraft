@@ -10,6 +10,8 @@ import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
 
+import org.jetbrains.annotations.Contract;
+
 public enum AlwaysTrueCondition implements LootItemCondition
 {
     INSTANCE;
@@ -24,5 +26,11 @@ public enum AlwaysTrueCondition implements LootItemCondition
     public boolean test(LootContext context)
     {
         return true;
+    }
+
+    @Contract(pure = true)
+    public static LootItemCondition.Builder alwaysTrue()
+    {
+        return () -> INSTANCE;
     }
 }
