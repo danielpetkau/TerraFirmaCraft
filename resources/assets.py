@@ -921,6 +921,9 @@ def generate(rm: ResourceManager):
     # Dry clay
     rm.blockstate('hardened_clay', use_default_model=False).with_block_model().with_block_loot('tfc:hardened_clay').with_item_model().with_lang(lang('hardened clay'))
 
+    # Fire Clay
+    rm.blockstate('fire_clay_block').with_block_model().with_item_model().with_block_loot('4 tfc:fire_clay').with_lang(lang('fire clay block'))
+
     # Stone-less Minerals
     rm.blockstate('halite', use_default_model=False).with_block_model().with_block_loot('1-3 tfc:powder/salt').with_item_model().with_lang(lang('halite'))
     rm.blockstate('lignite', use_default_model=False).with_block_model().with_block_loot('tfc:ore/lignite').with_item_model().with_lang(lang('lignite'))
