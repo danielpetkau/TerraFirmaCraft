@@ -80,7 +80,7 @@ public final class StartFireEvent extends Event implements ICancellableEvent
     {
         final BlockPos relativePos = pos.relative(direction);
         final BlockState relativeState = level.getBlockState(relativePos);
-        if (!relativeState.getFluidState().isEmpty() || !relativeState.isAir())
+        if (!relativeState.getFluidState().isEmpty())
         {
             return false;
         }
