@@ -737,11 +737,11 @@ public interface CraftingRecipes extends Recipes
             .pattern("G", "P")
             .shaped(Items.STICKY_PISTON);
         replace("tripwire_hook")
-            .input('S', ingredientOf(Metal.WROUGHT_IRON, Metal.ItemType.SHEET))
+            .input('S', ingredientOf(Metal.WROUGHT_IRON, Metal.ItemType.INGOT))
             .input('L', TFCTags.Items.LUMBER)
             .input('R', Tags.Items.RODS_WOODEN)
-            .pattern("S", "L", "R")
-            .shaped(Items.TRIPWIRE_HOOK);
+            .pattern("S", "R", "L")
+            .shaped(Items.TRIPWIRE_HOOK, 2);
         replace("smithing_table")
             .input('D', Tags.Items.DYES_BLACK)
             .input('S', ingredientOf(Metal.WROUGHT_IRON, Metal.ItemType.SHEET))
