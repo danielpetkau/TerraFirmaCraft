@@ -64,23 +64,16 @@ public class AnvilContainer extends BlockEntityContainer<AnvilBlockEntity> imple
         else if (buttonID == WELD_ID)
         {
             final Level level = blockEntity.getLevel();
-            if (level != null)
+            if (level != null && player instanceof ServerPlayer)
             {
-                final ItemStack stack = getSlot(AnvilBlockEntity.SLOT_INPUT_MAIN).getItem();
-
-                if (AnvilRecipe.hasAny(level, stack, blockEntity.getTier()) && player instanceof ServerPlayer)
+                AnvilBlockEntity anvil = this.getBlockEntity();
+                if (Helpers.isItem(anvil.getInventory().getStackInSlot(AnvilBlockEntity.SLOT_HAMMER), TFCTags.Items.TOOLS_HAMMER)
+                    || Helpers.isItem(player.getMainHandItem(), TFCTags.Items.TOOLS_HAMMER))
                 {
-
-                    AnvilBlockEntity anvil = this.getBlockEntity();
-                    if (Helpers.isItem(anvil.getInventory().getStackInSlot(AnvilBlockEntity.SLOT_HAMMER), TFCTags.Items.TOOLS_HAMMER)
-                        || Helpers.isItem(player.getMainHandItem(), TFCTags.Items.TOOLS_HAMMER))
+                    final InteractionResult weldResult = anvil.weld(player);
+                    if (weldResult.consumesAction())
                     {
-
-                        final InteractionResult weldResult = anvil.weld(player);
-                        if (weldResult.consumesAction())
-                        {
-                            anvil.createForgingEffects();
-                        }
+                        anvil.createForgingEffects();
                     }
                 }
             }
