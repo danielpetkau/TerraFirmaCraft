@@ -27,7 +27,7 @@
     {
       "type": "tfc:knapping_recipe",
       "anchor": "fire_bricks",
-      "recipe": "tfc:knapping/ceramic/unfired_brick",
+      "recipe": "tfc:knapping/ceramic/unfired_fire_brick",
       "text": "The $(l:mechanics/blast_furnace)Blast Furnace$() only accepts fire bricks as insulation."
     },
     {

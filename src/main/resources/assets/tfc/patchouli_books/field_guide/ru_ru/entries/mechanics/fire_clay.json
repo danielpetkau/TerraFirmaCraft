@@ -27,7 +27,7 @@
     {
       "type": "tfc:knapping_recipe",
       "anchor": "fire_bricks",
-      "recipe": "tfc:knapping/ceramic/unfired_brick",
+      "recipe": "tfc:knapping/ceramic/unfired_fire_brick",
       "text": "$(l:mechanics/blast_furnace)Доменная печь$() принимает только огнеупорные кирпичи в качестве изоляции."
     },
     {

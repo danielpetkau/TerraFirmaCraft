@@ -27,7 +27,7 @@
     {
       "type": "tfc:knapping_recipe",
       "anchor": "fire_bricks",
-      "recipe": "tfc:knapping/ceramic/unfired_brick",
+      "recipe": "tfc:knapping/ceramic/unfired_fire_brick",
       "text": "Конструкція $(l:mechanics/blast_furnace)доменної пічі$() будується виключно з вогнетривкої цегли."
     },
     {
