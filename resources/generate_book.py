@@ -890,7 +890,7 @@ def make_book(rm: ResourceManager, i18n: I18n, local_instance: bool = False, rev
             knapping('tfc:knapping/ceramic/unfired_bowl_1', 'Multiple unfired bowls can be made from one knapping.').link('tfc:ceramic/unfired_bowl', 'tfc:ceramic/bowl'),
             crafting('minecraft:bowl', text_contents='Bowls can also be made out of wood via crafting them together with $(thing)Glue$()$(br2)$(thing)Glue$() can be made by soaking $(thing)Bone Meal$() in a barrel of $(l:mechanics/barrels#limewater)Limewater$().', title='Wooden Bowls').link('minecraft:bowl'),
             sealed_barrel_recipe('tfc:barrel/glue', 'Bowls can also be placed on the ground like blocks. When placed, they can be filled with any type of $(thing)Powder$() - the results of grinding ores, minerals, or gems in the $(l:mechanics/quern)Quern$().'),
-            item_spotlight('#tfc:powders', 'Powders', text_contents='The Powder Bowl can hold up to 16 of a given powder. To insert items, $(item)$(k:key.use)$() while holding the powder. To extract items, $(item)$(k:key.use)$() with an empty hand.$(br2)$(item)$(k:key.sneak)$() allows extracting the entire contents of the bowl.'),
+            item_spotlight('#tfc:bowl_powders', 'Powders', text_contents='The Powder Bowl can hold up to 16 of a given powder. To insert items, $(item)$(k:key.use)$() while holding the powder. To extract items, $(item)$(k:key.use)$() with an empty hand.$(br2)$(item)$(k:key.sneak)$() allows extracting the entire contents of the bowl.'),
             item_spotlight('tfc:powder/salt', text_contents='If there is salt in the bowl, clicking with unsalted raw meat will salt the meat. This is the same as crafting the meat with the salt in your inventory.'),
         )),
         entry('jarring', 'Jarring', 'tfc:jar/plum', pages=(
@@ -1234,7 +1234,7 @@ def make_book(rm: ResourceManager, i18n: I18n, local_instance: bool = False, rev
             crafting('tfc:crafting/fire_clay', text_contents='Fire clay is made from $(l:the_world/ores_and_minerals#graphite)graphite$() powder, crushed in a $(l:mechanics/quern)quern$(), as well as $(l:the_world/ores_and_minerals#kaolinite)kaolinite$() powder'),
             heat_recipe('tfc:heating/powder/kaolinite', 'Kaolinite powder is made by heating $(l:the_world/ores_and_minerals#kaolinite)Kaolin Clay$(). However, the process is not perfect, and only 20%% of clay will form powder!'),
             knapping('tfc:knapping/ceramic/unfired_crucible', 'The $(l:mechanics/crucible)Crucible$() in its unfired state is made from fire clay.').anchor('crucible'),
-            knapping('tfc:knapping/ceramic/unfired_brick', 'The $(l:mechanics/blast_furnace)Blast Furnace$() only accepts fire bricks as insulation.').anchor('fire_bricks'),
+            knapping('tfc:knapping/ceramic/unfired_fire_brick', 'The $(l:mechanics/blast_furnace)Blast Furnace$() only accepts fire bricks as insulation.').anchor('fire_bricks'),
             knapping('tfc:knapping/ceramic/unfired_fire_ingot_mold', '$(thing)Fire Ingot Molds$() are a stronger type of $(l:getting_started/pottery#mold)Ingot Mold$() that has just a 1 in 100 chance of breaking, compared to 1 in 10 for a regular ingot mold.'),
         )),
         entry('quern', 'Quern', 'tfc:quern', pages=(
@@ -1355,7 +1355,7 @@ def make_book(rm: ResourceManager, i18n: I18n, local_instance: bool = False, rev
             sealed_barrel_recipe('tfc:barrel/red_concrete_powder', 'Dyeing items in a barrel is cheaper than using items, requiring only 25mB of dyed fluid.'),
             sealed_barrel_recipe('tfc:barrel/music_disc_chirp', 'Dye fluids can be used to finish $(item)Music Discs$().'),
             sealed_barrel_recipe('tfc:barrel/red_dyeable', 'Dye fluids can even dye leather as if it were crafted!'),
-            sealed_barrel_recipe('tfc:barrel/bleaching_bed', 'Five $(item)Wood Ash$() and 1000mB of $(item)Water$() boiled in a $(l:mechanics/pot)Pot$() produces lye. 25mB of Lye removes the color from a colored item.').anchor('lye'),
+            sealed_barrel_recipe('tfc:barrel/bleach_bed', 'Five $(item)Wood Ash$() and 1000mB of $(item)Water$() boiled in a $(l:mechanics/pot)Pot$() produces lye. 25mB of Lye removes the color from a colored item.').anchor('lye'),
             text('$(li)$(item)Black Dye$() is used for $(l:mechanics/scribing_table)Scribing Tables$().$(li)$(item)Red Dye$() is used for $(l:mechanics/powderkegs)Powderkegs$(). $(li)Unfired $(l:mechanics/decay#small_vessels)Small Vessels$() and $(l:mechanics/decay#large_vessels)Large Vessels$() can be dyed$().', title='Miscellaneous'),
             empty_last_page()
         )),

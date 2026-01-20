@@ -24,7 +24,7 @@
       "item": "tfc:metal/ingot/weak_steel",
       "title": "軟鋼",
       "link_recipes": false,
-      "text": "$(br)$(bold)要件:$()$(br)$(li)50 - 70 % : $(thing)鋼$()$(li)15 - 25 % : $(thing)ニッケル$( )$(li)15 - 25 % : $(thing)黒色青銅$()$(br2) $(thing)軟鋼$() はインゴットに鋳造できます。"
+      "text": "$(br)$(bold)要件:$()$(br)$(li)50 - 70 % : $(thing)鋼$()$(li)15 - 25 % : $(thing)ニッケル$()$(li)15 - 25 % : $(thing)黒色青銅$()$(br2) $(thing)軟鋼$() はインゴットに鋳造できます。"
     },
     {
       "type": "tfc:welding_recipe",

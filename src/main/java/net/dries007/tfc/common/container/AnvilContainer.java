@@ -6,25 +6,34 @@
 
 package net.dries007.tfc.common.container;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.Mth;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 
+import net.dries007.tfc.client.particle.TFCParticles;
+import net.dries007.tfc.common.TFCTags;
 import net.dries007.tfc.common.blockentities.AnvilBlockEntity;
 import net.dries007.tfc.common.component.forge.ForgeStep;
 import net.dries007.tfc.common.component.forge.Forging;
 import net.dries007.tfc.common.component.forge.ForgingCapability;
 import net.dries007.tfc.common.container.slot.CallbackSlot;
 import net.dries007.tfc.common.recipes.AnvilRecipe;
+import net.dries007.tfc.util.Helpers;
 
 public class AnvilContainer extends BlockEntityContainer<AnvilBlockEntity> implements ButtonHandlerContainer
 {
     // IDs [0, 7] indicate step buttons
     public static final int PLAN_ID = 8;
+    public static final int WELD_ID = 9;
 
     public static AnvilContainer create(AnvilBlockEntity anvil, Inventory playerInv, int windowId)
     {
@@ -52,6 +61,23 @@ public class AnvilContainer extends BlockEntityContainer<AnvilBlockEntity> imple
                 }
             }
         }
+        else if (buttonID == WELD_ID)
+        {
+            final Level level = blockEntity.getLevel();
+            if (level != null && player instanceof ServerPlayer)
+            {
+                AnvilBlockEntity anvil = this.getBlockEntity();
+                if (Helpers.isItem(anvil.getInventory().getStackInSlot(AnvilBlockEntity.SLOT_HAMMER), TFCTags.Items.TOOLS_HAMMER)
+                    || Helpers.isItem(player.getMainHandItem(), TFCTags.Items.TOOLS_HAMMER))
+                {
+                    final InteractionResult weldResult = anvil.weld(player);
+                    if (weldResult.consumesAction())
+                    {
+                        anvil.createForgingEffects();
+                    }
+                }
+            }
+        }
         else
         {
             final ForgeStep step = ForgeStep.valueOf(buttonID);
@@ -65,34 +91,35 @@ public class AnvilContainer extends BlockEntityContainer<AnvilBlockEntity> imple
     @Override
     protected void addContainerSlots()
     {
-        addSlot(new CallbackSlot(blockEntity, AnvilBlockEntity.SLOT_INPUT_MAIN, 31, 68));
-        addSlot(new CallbackSlot(blockEntity, AnvilBlockEntity.SLOT_INPUT_SECOND, 13, 68));
-        addSlot(new CallbackSlot(blockEntity, AnvilBlockEntity.SLOT_HAMMER, 129, 68));
-        addSlot(new CallbackSlot(blockEntity, AnvilBlockEntity.SLOT_CATALYST, 147, 68));
+        addSlot(new CallbackSlot(blockEntity, AnvilBlockEntity.SLOT_INPUT_MAIN, 22, 76));
+        addSlot(new CallbackSlot(blockEntity, AnvilBlockEntity.SLOT_INPUT_SECOND, 22, 20));
+        addSlot(new CallbackSlot(blockEntity, AnvilBlockEntity.SLOT_HAMMER, 138, 76));
+        addSlot(new CallbackSlot(blockEntity, AnvilBlockEntity.SLOT_CATALYST, 22, 38));
     }
 
     @Override
     protected boolean moveStack(ItemStack stack, int slotIndex)
     {
         return switch (typeOf(slotIndex))
+        {
+            case MAIN_INVENTORY, HOTBAR -> !moveItemStackTo(stack, AnvilBlockEntity.SLOT_HAMMER, AnvilBlockEntity.SLOT_CATALYST + 1, false)
+                && !moveItemStackTo(stack, AnvilBlockEntity.SLOT_INPUT_MAIN, AnvilBlockEntity.SLOT_INPUT_SECOND + 1, false);
+            case CONTAINER ->
             {
-                case MAIN_INVENTORY, HOTBAR -> !moveItemStackTo(stack, AnvilBlockEntity.SLOT_HAMMER, AnvilBlockEntity.SLOT_CATALYST + 1, false)
-                    && !moveItemStackTo(stack, AnvilBlockEntity.SLOT_INPUT_MAIN, AnvilBlockEntity.SLOT_INPUT_SECOND + 1, false);
-                case CONTAINER -> {
-                    // Shift clicking needs to attempt to clear the recipe on the stack, then restore it if we fail to transfer out
-                    // 1. Reference the original stack's forging component - this saves the component as part of the view
-                    final Forging forge = ForgingCapability.get(stack);
+                // Shift clicking needs to attempt to clear the recipe on the stack, then restore it if we fail to transfer out
+                // 1. Reference the original stack's forging component - this saves the component as part of the view
+                final Forging forge = ForgingCapability.get(stack);
 
-                    // 2. Clear the recipe on the stack, which may remove the component
-                    ForgingCapability.clearRecipeIfNotWorked(stack);
+                // 2. Clear the recipe on the stack, which may remove the component
+                ForgingCapability.clearRecipeIfNotWorked(stack);
 
-                    // 3. Do the stack movement
-                    final boolean result = !moveItemStackTo(stack, containerSlots, slots.size(), false);
+                // 3. Do the stack movement
+                final boolean result = !moveItemStackTo(stack, containerSlots, slots.size(), false);
 
-                    // 4. If the stack is non-empty, restore the component using the original reference we obtained to the forging component
-                    if (!stack.isEmpty()) forge.restoreRecipeAndWork();
-                    yield result;
-                }
-            };
+                // 4. If the stack is non-empty, restore the component using the original reference we obtained to the forging component
+                if (!stack.isEmpty()) forge.restoreRecipeAndWork();
+                yield result;
+            }
+        };
     }
 }

@@ -27,7 +27,7 @@
     {
       "type": "tfc:knapping_recipe",
       "anchor": "fire_bricks",
-      "recipe": "tfc:knapping/ceramic/unfired_brick",
+      "recipe": "tfc:knapping/ceramic/unfired_fire_brick",
       "text": "$(l:mechanics/blast_furnace)高炉$() は断熱材として耐火レンガのみを受け入れます。"
     },
     {

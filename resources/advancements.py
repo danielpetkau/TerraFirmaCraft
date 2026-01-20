@@ -1,7 +1,6 @@
-from mcresources import ResourceManager, utils, advancements
-from mcresources.advancements import AdvancementCategory
+from mcresources import ResourceManager, utils
+from mcresources.advancements import AdvancementCategory, inventory_changed
 from mcresources.type_definitions import Json
-from mcresources.utils import is_sequence, resource_location, parse_item_stack
 
 from constants import *
 
@@ -154,7 +153,7 @@ def entity_predicate(mob: str, other: Dict = None) -> Json:
 def consume_item(item: str, name: str = 'item_consumed') -> Json:
     if isinstance(item, str) and name == 'item_consumed':
         name = item.split(':')[1]
-    return generic('minecraft:consume_item', {'item': item_predicate(item)}, name=name)
+    return generic('minecraft:consume_item', {'item': utils.item_predicate(item)}, name=name)
 
 def icon(name: str) -> Json:
     return {'id': name}
@@ -186,42 +185,6 @@ def multiple_all(*conditions: Json) -> Json:
 
 def generic(trigger_type: str, conditions: Json, name: str = 'special_condition') -> Json:
     return {name: {'trigger': trigger_type, 'conditions': conditions}}
-
-def inventory_changed(item: str | Json, name: str = 'item_obtained') -> Json:
-    if isinstance(item, str) and name == 'item_obtained':
-        name = item.split(':')[1]
-    return {name: inventory_changed2(item)}
-
-#todo: move all this to mcresources
-
-def inventory_changed2(*item_predicates: Json) -> Json:
-    return {
-        'trigger': 'minecraft:inventory_changed',
-        'conditions': {
-            'items': [item_predicate(ip) for ip in item_predicates]
-        }
-    }
-
-def item_predicate(data_in: Json) -> Json:
-    if isinstance(data_in, dict):
-        return data_in
-    elif is_sequence(data_in):  # List of item IDs
-        return {'items': [resource_location(e).join() for e in data_in]}
-    elif isinstance(data_in, str):  # Single item or tag
-        item, tag, count, _ = parse_item_stack(data_in, False)
-        d: Json = {'items': '#' + item} if tag else {'items': item}
-        if count:
-            d['count'] = count
-        return d
-    else:
-        raise ValueError('Unknown object %s at item_predicate' % str(data_in))
-
-def item_use_on_block(block: str, item: str, name: str = 'item_use_on_block_condition'):
-    block_json = {'tag': block[1:]} if block[0] == '#' else {'blocks': [block]}
-    return {name: {'trigger': 'minecraft:item_used_on_block', 'conditions': {
-        'location': {'block': block_json},
-        'item': {'items': [item]}
-    }}}
 
 def root_trigger() -> Json:
     return {'in_game_condition': {'trigger': 'minecraft:tick'}}

@@ -33,7 +33,7 @@
     {
       "type": "tfc:sealed_barrel_recipe",
       "anchor": "lye",
-      "recipe": "tfc:barrel/bleaching_bed",
+      "recipe": "tfc:barrel/bleach_bed",
       "text": "Five $(item)Wood Ash$() and 1000mB of $(item)Water$() boiled in a $(l:mechanics/pot)Pot$() produces lye. 25mB of Lye removes the color from a colored item."
     },
     {

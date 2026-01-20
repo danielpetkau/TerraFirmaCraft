@@ -26,7 +26,7 @@
     },
     {
       "type": "patchouli:spotlight",
-      "item": "tag:tfc:powders",
+      "item": "tag:tfc:bowl_powders",
       "title": "Порошки",
       "link_recipes": false,
       "text": "Миска может вместить до 16 единиц одного вида порошка. Чтобы добавить порошок, возьмите его в руку и нажмите $(item)$(k:key.use)$() по миске. Чтобы извлечь порошок, нажмите $(item)$(k:key.use)$() пустой рукой.$(br2)$(item)$(k:key.sneak)$() позволяет извлечь все содержимое миски."

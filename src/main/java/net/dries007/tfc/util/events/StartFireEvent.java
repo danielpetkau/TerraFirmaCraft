@@ -12,6 +12,7 @@ import net.dries007.tfc.common.blockentities.TFCBlockEntities;
 import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.blocks.devices.FirepitBlock;
 import net.dries007.tfc.util.Helpers;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerPlayer;
@@ -27,6 +28,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseFireBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.AABB;
 import net.neoforged.bus.api.Event;
 import net.neoforged.bus.api.ICancellableEvent;
@@ -76,6 +78,12 @@ public final class StartFireEvent extends Event implements ICancellableEvent
     // Pass in a firepitBaseChance of -1 to disable firepit creation for a given firestarter
     public static boolean startFire(Level level, BlockPos pos, BlockState state, Direction direction, @Nullable Player player, ItemStack stack, FireStrength strength, double firepitBaseChance)
     {
+        final BlockPos relativePos = pos.relative(direction);
+        final BlockState relativeState = level.getBlockState(relativePos);
+        if (!relativeState.getFluidState().isEmpty())
+        {
+            return false;
+        }
         final StartFireEvent event = new StartFireEvent(level, pos, state, direction, player, stack, strength);
         final boolean cancelled = NeoForge.EVENT_BUS.post(event).isCanceled();
 
@@ -86,11 +94,10 @@ public final class StartFireEvent extends Event implements ICancellableEvent
 
         if (!cancelled && event.isStrong())
         {
-            final BlockPos abovePos = pos.above();
             // Check conditions for creating a firepit if a valid firestarter
-            if (FirepitBlock.canSurvive(level, abovePos) && firepitBaseChance != -1)
+            if (FirepitBlock.canSurvive(level, relativePos) && firepitBaseChance != -1)
             {
-                final List<ItemEntity> items = level.getEntitiesOfClass(ItemEntity.class, new AABB(abovePos.getX() - 0.5, abovePos.getY(), abovePos.getZ() - 0.5, abovePos.getX() + 1.5, abovePos.getY() + 1, abovePos.getZ() + 1.5));
+                final List<ItemEntity> items = level.getEntitiesOfClass(ItemEntity.class, new AABB(relativePos.getX() - 0.5, relativePos.getY(), relativePos.getZ() - 0.5, relativePos.getX() + 1.5, relativePos.getY() + 1, relativePos.getZ() + 1.5));
                 final List<ItemEntity> usableItems = new ArrayList<>();
 
                 int sticks = 0, kindling = 0;
@@ -136,8 +143,8 @@ public final class StartFireEvent extends Event implements ICancellableEvent
                         {
                             firepitState = TFCBlocks.FIREPIT.get().defaultBlockState().setValue(FirepitBlock.AXIS, Direction.Axis.X);
                         }
-                        level.setBlock(abovePos, firepitState, 3);
-                        level.getBlockEntity(abovePos, TFCBlockEntities.FIREPIT.get()).ifPresent(firepit -> {
+                        level.setBlock(relativePos, firepitState, 3);
+                        level.getBlockEntity(relativePos, TFCBlockEntities.FIREPIT.get()).ifPresent(firepit -> {
                             firepit.getInventory().setStackInSlot(AbstractFirepitBlockEntity.SLOT_FUEL_CONSUME, initialLog);
                             firepit.light(firepitState);
                         });

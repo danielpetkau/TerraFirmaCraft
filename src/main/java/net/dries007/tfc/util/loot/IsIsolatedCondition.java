@@ -10,6 +10,8 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 
+import org.jetbrains.annotations.Contract;
+
 public enum IsIsolatedCondition implements LootItemCondition
 {
     INSTANCE;
@@ -24,5 +26,11 @@ public enum IsIsolatedCondition implements LootItemCondition
     public boolean test(LootContext context)
     {
         return context.hasParam(TFCLoot.ISOLATED);
+    }
+
+    @Contract(pure = true)
+    public static LootItemCondition.Builder isIsolated()
+    {
+        return () -> INSTANCE;
     }
 }

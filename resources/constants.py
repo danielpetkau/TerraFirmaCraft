@@ -847,7 +847,7 @@ VESSEL_TYPES = {
     'green': 'd'
 }
 
-SIMPLE_BLOCKS = ('peat', 'aggregate', 'fire_bricks', 'fire_clay_block', 'smooth_mud_bricks')
+SIMPLE_BLOCKS = ('peat', 'aggregate', 'fire_bricks', 'smooth_mud_bricks')
 SIMPLE_ITEMS = ('alabaster_brick', 'bone_needle', 'blank_disc', 'blubber', 'brass_mechanisms', 'burlap_cloth', 'cactus_wood', 'compost', 'daub', 'dirty_jute_net', 'dried_cactus_wood', 'empty_jar', 'empty_jar_with_lid', 'fire_clay', 'goat_horn', 'gem_saw', 'glow_arrow', 'glue', 'hematitic_glass_batch', 'jacks', 'jar_lid', 'canola', 'alfalfa', 'jute', 'jute_fiber', 'jute_net', 'kaolin_clay', 'lamp_glass', 'lens', 'mortar', 'olive_paste', 'canola_paste', 'olivine_glass_batch', 'paddle', 'papyrus', 'papyrus_strip', 'pure_nitrogen', 'pure_phosphorus', 'pure_potassium', 'rotten_compost', 'sandpaper', 'silica_glass_batch', 'silk_cloth', 'soaked_papyrus_strip', 'soot', 'spindle', 'stick_bunch', 'stick_bundle', 'straw', 'treated_hide', 'unrefined_paper', 'volcanic_glass_batch', 'wool', 'wool_cloth', 'wool_yarn', 'wrought_iron_grill')
 
 GENERIC_POWDERS = {
@@ -1223,6 +1223,7 @@ DEFAULT_LANG = {
     'tfc.tooltip.welding': '§f - Can Weld',
     'tfc.tooltip.danger': '§f - Danger!!',
     'tfc.tooltip.anvil_plan': 'Plans',
+    'tfc.tooltip.anvil_weld': 'Weld',
     'tfc.tooltip.anvil_tier_required': 'Requires %s Anvil',
     'tfc.tooltip.calendar_days_years': '%d, %04d',
     'tfc.tooltip.calendar_days_left_in_month': '%s days left in %s',
@@ -1339,6 +1340,7 @@ DEFAULT_LANG = {
     'tfc.tooltip.not_hot_enough_to_work': 'Not hot enough to work!',
     'tfc.tooltip.no_flux_to_weld': 'There is no flux in the anvil!',
     'tfc.tooltip.hammer_required_to_work': 'A hammer is required to work in the anvil!',
+    'tfc.tooltip.hammer_required_to_weld': 'A hammer is required to weld in the anvil!',
     'tfc.tooltip.anvil_has_been_worked': 'Worked',
     'tfc.tooltip.blast_furnace_ore': 'Input: %d / %d',
     'tfc.tooltip.blast_furnace_fuel': 'Fuel: %d / %d',

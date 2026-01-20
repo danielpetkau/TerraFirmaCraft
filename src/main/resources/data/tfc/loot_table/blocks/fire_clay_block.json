@@ -8,7 +8,13 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "tfc:fire_clay_block"
+          "name": "tfc:fire_clay",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": 4
+            }
+          ]
         }
       ],
       "conditions": [

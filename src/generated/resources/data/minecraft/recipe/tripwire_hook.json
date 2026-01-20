@@ -9,16 +9,16 @@
       "tag": "c:rods/wooden"
     },
     "S": {
-      "tag": "c:sheets/wrought_iron"
+      "tag": "c:ingots/wrought_iron"
     }
   },
   "pattern": [
     "S",
-    "L",
-    "R"
+    "R",
+    "L"
   ],
   "result": {
-    "count": 1,
+    "count": 2,
     "id": "minecraft:tripwire_hook"
   }
 }

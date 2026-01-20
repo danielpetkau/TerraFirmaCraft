@@ -29,7 +29,7 @@ public class AnvilPlanButton extends Button
 
     public AnvilPlanButton(AnvilBlockEntity anvil, int guiLeft, int guiTop)
     {
-        super(guiLeft + 21, guiTop + 40, 18, 18, Component.translatable("tfc.tooltip.anvil_plan"), button -> {
+        super(guiLeft + 137, guiTop + 56, 18, 18, Component.translatable("tfc.tooltip.anvil_plan"), button -> {
             PacketDistributor.sendToServer(new ScreenButtonPacket(AnvilContainer.PLAN_ID));
         }, RenderHelpers.NARRATION);
         setTooltip(Tooltip.create(Component.translatable("tfc.tooltip.anvil_plan")));
@@ -42,11 +42,11 @@ public class AnvilPlanButton extends Button
     {
         int x = getX();
         int y = getY();
-        graphics.blit(AnvilScreen.BACKGROUND, x, y, 218, 0, width, height, 256, 256);
 
         final AnvilRecipe recipe = getRecipe();
         if (recipe != null)
         {
+            graphics.blit(AnvilScreen.BACKGROUND, x, y, 218, 0, width, height, 256, 256);
             final RegistryAccess access = ClientHelpers.getLevelOrThrow().registryAccess();
             graphics.renderItem(recipe.getResultItem(access), x + 1, y + 1);
             graphics.renderItemDecorations(Minecraft.getInstance().font, recipe.getResultItem(access), x + 1, y + 1);
@@ -54,7 +54,8 @@ public class AnvilPlanButton extends Button
         else
         {
             final boolean workable = anvil.getLevel() != null && AnvilRecipe.hasAny(anvil.getLevel(), anvil.getInventory().getStackInSlot(AnvilBlockEntity.SLOT_INPUT_MAIN), anvil.getTier());
-            graphics.blit(AnvilScreen.BACKGROUND, x + 1, y + 1, workable ? 236 : 219, workable ? 0 : 51, 16, 16, 256, 256);
+            graphics.blit(AnvilScreen.BACKGROUND, x, y, 218, workable ? 0 : 18, width, height, 256, 256);
+            graphics.blit(AnvilScreen.BACKGROUND, x + 1, y + 1, 236, 0, 16, 16, 256, 256);
         }
 
     }

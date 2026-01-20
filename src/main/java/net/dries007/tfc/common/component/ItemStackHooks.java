@@ -103,16 +103,28 @@ public final class ItemStackHooks
         if (TFCComponents.HEAT.holder().isBound())
         {
             final @Nullable HeatComponent heat = components.get(TFCComponents.HEAT.get());
-            if (heat != null) heat.sanitize();
+            if (heat != null && components instanceof PatchedDataComponentMap patched)
+            {
+                patched.set(TFCComponents.HEAT.get(), heat.sanitize());
+            }
             final @Nullable HeatComponent otherHeat = otherComponents.get(TFCComponents.HEAT.get());
-            if (otherHeat != null) otherHeat.sanitize();
+            if (otherHeat != null && otherComponents instanceof PatchedDataComponentMap otherPatched)
+            {
+                otherPatched.set(TFCComponents.HEAT.get(), otherHeat.sanitize());
+            }
         }
         if (TFCComponents.FOOD.holder().isBound())
         {
             final @Nullable FoodComponent food = components.get(TFCComponents.FOOD.get());
-            if (food != null) food.sanitize();
+            if (food != null && components instanceof PatchedDataComponentMap patched)
+            {
+                patched.set(TFCComponents.FOOD.get(), food.sanitize());
+            }
             final @Nullable FoodComponent otherFood = otherComponents.get(TFCComponents.FOOD.get());
-            if (otherFood != null) otherFood.sanitize();
+            if (otherFood != null && otherComponents instanceof PatchedDataComponentMap otherPatched)
+            {
+                otherPatched.set(TFCComponents.FOOD.get(), otherFood.sanitize());
+            }
         }
     }
 
