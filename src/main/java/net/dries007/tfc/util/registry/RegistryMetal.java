@@ -44,4 +44,12 @@ public interface RegistryMetal extends StringRepresentable
      * no weathering occurs for this block, and weathered block variants are not registered.
      */
     float weatheringResistance();
+
+    /**
+     * This is only implemented on the ingot item
+     */
+    default boolean isPiglinCurrency()
+    {
+        return false;
+    }
 }

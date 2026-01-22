@@ -54,6 +54,7 @@ import net.dries007.tfc.common.blocks.WeatheringSlabBlock;
 import net.dries007.tfc.common.blocks.WeatheringStairBlock;
 import net.dries007.tfc.common.blocks.devices.AnvilBlock;
 import net.dries007.tfc.common.blocks.devices.LampBlock;
+import net.dries007.tfc.common.items.BarteringItem;
 import net.dries007.tfc.common.items.ChiselItem;
 import net.dries007.tfc.common.items.HammerItem;
 import net.dries007.tfc.common.items.JavelinItem;
@@ -206,6 +207,12 @@ public enum Metal implements StringRepresentable, RegistryMetal
         return TFCBlocks.METALS.get(this).get(type).get();
     }
 
+    @Override
+    public boolean isPiglinCurrency()
+    {
+        return this == GOLD;
+    }
+
     public int tier()
     {
         return toolTier != null ? toolTier.level() : 0;
@@ -323,7 +330,7 @@ public enum Metal implements StringRepresentable, RegistryMetal
     public enum ItemType
     {
         // Generic
-        INGOT(PartType.INGOT, true),
+        INGOT(PartType.INGOT, true, metal -> new BarteringItem(new Item.Properties(), metal.isPiglinCurrency())),
         DOUBLE_INGOT(PartType.DEFAULT, false),
         SHEET(PartType.DEFAULT, false),
         DOUBLE_SHEET(PartType.DEFAULT, false),
