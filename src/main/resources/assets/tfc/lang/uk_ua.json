@@ -2,6 +2,7 @@
   "__comment1__": "Ukranian translation for TFC",
   "__comment2__": "Translated by:",
   "__comment3__": "Starman(StarmanMine142)",
+  "fml.menu.mods.info.description.tfc": "TerraFirmaCraft — Наступне покоління.",
   "death.attack.tfc.grill": "%1$s засмажив себе до смерти",
   "death.attack.tfc.grill.player": "%1$s засмажив себе до смерти втікаючи від %2$s",
   "death.attack.tfc.pot": "%1$s зварив з себе суп",
@@ -5110,7 +5111,6 @@
   "block.tfc.peat": "Торф",
   "block.tfc.aggregate": "Цемент",
   "block.tfc.fire_bricks": "Вогнетривка цегла",
-  "block.tfc.fire_clay_block": "Вогнетривка глина",
   "block.tfc.smooth_mud_bricks": "Гладкий лимпач",
   "block.tfc.thatch": "Тюк соломи",
   "block.tfc.golden_bamboo_block": "Золотистий блок бамбука",
@@ -5505,6 +5505,7 @@
   "block.tfc.white_kaolin_clay": "Біла каолінова глина",
   "block.tfc.kaolin_clay_grass": "Трав'яна каолінова глина",
   "block.tfc.hardened_clay": "Посилена глина",
+  "block.tfc.fire_clay_block": "Вогнетривка глина",
   "block.tfc.halite": "Галіт",
   "block.tfc.lignite": "Буре вугілля",
   "block.tfc.bituminous_coal": "Бітумне вугілля",
@@ -9844,6 +9845,5 @@
   "tag.item.tfc.spruce_logs": "Spruce Logs",
   "tag.item.tfc.sycamore_logs": "Sycamore Logs",
   "tag.item.tfc.white_cedar_logs": "White Cedar Logs",
-  "tag.item.tfc.willow_logs": "Willow Logs",
-  "fml.menu.mods.info.description.tfc": "TerraFirmaCraft — Наступне покоління."
+  "tag.item.tfc.willow_logs": "Willow Logs"
 }

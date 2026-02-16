@@ -1,5 +1,6 @@
 {
   "__comment__": "Adapated from the 1.12 pt_br.lang by AlcatrazEscapee automatically",
+  "fml.menu.mods.info.description.tfc": "TerraFirmaCraft",
   "death.attack.tfc.grill": "%1$s grilled themself to death",
   "death.attack.tfc.grill.player": "%1$s grilled themselves while trying to escape %2$s",
   "death.attack.tfc.pot": "%1$s boiled themselves into soup",
@@ -5108,7 +5109,6 @@
   "block.tfc.peat": "Turfa",
   "block.tfc.aggregate": "Mistura para concreto",
   "block.tfc.fire_bricks": "Tijolos refratários",
-  "block.tfc.fire_clay_block": "Bloco de argila refratária",
   "block.tfc.smooth_mud_bricks": "Smooth Mud Bricks",
   "block.tfc.thatch": "Bloco de palha",
   "block.tfc.golden_bamboo_block": "Golden Bamboo Block",
@@ -5503,6 +5503,7 @@
   "block.tfc.white_kaolin_clay": "White Kaolin Clay",
   "block.tfc.kaolin_clay_grass": "Kaolin Clay Grass",
   "block.tfc.hardened_clay": "Hardened Clay",
+  "block.tfc.fire_clay_block": "Bloco de argila refratária",
   "block.tfc.halite": "Halite",
   "block.tfc.lignite": "Lignite",
   "block.tfc.bituminous_coal": "Bituminous Coal",

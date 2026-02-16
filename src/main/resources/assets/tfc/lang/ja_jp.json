@@ -1,5 +1,6 @@
 {
   "__comment__": "This file was created by _CobaltB, Modified by katyusha",
+  "fml.menu.mods.info.description.tfc": "TerraFirmaCraft",
   "death.attack.tfc.grill": "%1$s はグリルの上で焼け死んだ",
   "death.attack.tfc.grill.player": "%1$s は %2$s から逃れようとしてグリルの上で焼け死んだ",
   "death.attack.tfc.pot": "%1$s はスープの具材になった",
@@ -5108,7 +5109,6 @@
   "block.tfc.peat": "泥炭",
   "block.tfc.aggregate": "コンクリートパウダー",
   "block.tfc.fire_bricks": "耐火レンガ",
-  "block.tfc.fire_clay_block": "耐火レンガブロック",
   "block.tfc.smooth_mud_bricks": "Smooth Mud Bricks",
   "block.tfc.thatch": "藁ブロック",
   "block.tfc.golden_bamboo_block": "Golden Bamboo Block",
@@ -5503,6 +5503,7 @@
   "block.tfc.white_kaolin_clay": "White Kaolin Clay",
   "block.tfc.kaolin_clay_grass": "Kaolin Clay Grass",
   "block.tfc.hardened_clay": "Hardened Clay",
+  "block.tfc.fire_clay_block": "耐火レンガブロック",
   "block.tfc.halite": "Halite",
   "block.tfc.lignite": "Lignite",
   "block.tfc.bituminous_coal": "Bituminous Coal",

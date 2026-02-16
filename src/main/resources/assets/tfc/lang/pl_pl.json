@@ -1,5 +1,6 @@
 {
   "__comment__": "This translation file was created by talerzyk, updated by kuba",
+  "fml.menu.mods.info.description.tfc": "TerraFirmaCraft",
   "death.attack.tfc.grill": "%1$s doświadcza śmierci przez usmażenie",
   "death.attack.tfc.grill.player": "%1$s doświadcza śmierci przez usmażenie próbując uciec przed %2$s",
   "death.attack.tfc.pot": "%1$s staje się jednością z zupą",
@@ -5108,7 +5109,6 @@
   "block.tfc.peat": "Torf",
   "block.tfc.aggregate": "Agregat",
   "block.tfc.fire_bricks": "Cegły ogniotrwałe",
-  "block.tfc.fire_clay_block": "Glina ogniotrwała",
   "block.tfc.smooth_mud_bricks": "gładkie cegłu z błota",
   "block.tfc.thatch": "Strzecha",
   "block.tfc.golden_bamboo_block": "Golden Bamboo Block",
@@ -5503,6 +5503,7 @@
   "block.tfc.white_kaolin_clay": "biała glina kaolinowa",
   "block.tfc.kaolin_clay_grass": "Trawa gliny kaolinowej",
   "block.tfc.hardened_clay": "Hardened Clay",
+  "block.tfc.fire_clay_block": "Glina ogniotrwała",
   "block.tfc.halite": "Halite",
   "block.tfc.lignite": "Lignite",
   "block.tfc.bituminous_coal": "Bituminous Coal",

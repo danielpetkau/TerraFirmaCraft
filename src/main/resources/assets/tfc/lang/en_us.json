@@ -1,5 +1,6 @@
 {
   "__comment__": "This file was automatically created by mcresources",
+  "fml.menu.mods.info.description.tfc": "TerraFirmaCraft",
   "death.attack.tfc.grill": "%1$s grilled themself to death",
   "death.attack.tfc.grill.player": "%1$s grilled themselves while trying to escape %2$s",
   "death.attack.tfc.pot": "%1$s boiled themselves into soup",
@@ -5108,7 +5109,6 @@
   "block.tfc.peat": "Peat",
   "block.tfc.aggregate": "Aggregate",
   "block.tfc.fire_bricks": "Fire Bricks",
-  "block.tfc.fire_clay_block": "Fire Clay Block",
   "block.tfc.smooth_mud_bricks": "Smooth Mud Bricks",
   "block.tfc.thatch": "Thatch",
   "block.tfc.golden_bamboo_block": "Golden Bamboo Block",
@@ -5503,6 +5503,7 @@
   "block.tfc.white_kaolin_clay": "White Kaolin Clay",
   "block.tfc.kaolin_clay_grass": "Kaolin Clay Grass",
   "block.tfc.hardened_clay": "Hardened Clay",
+  "block.tfc.fire_clay_block": "Fire Clay Block",
   "block.tfc.halite": "Halite",
   "block.tfc.lignite": "Lignite",
   "block.tfc.bituminous_coal": "Bituminous Coal",

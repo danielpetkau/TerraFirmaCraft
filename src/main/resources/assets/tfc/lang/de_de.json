@@ -1,6 +1,7 @@
 {
   "__comment1__": "This file was created by GERZAC1002",
   "__comment2__": "German translation for TerraFirmaCraft 1.2.11",
+  "fml.menu.mods.info.description.tfc": "TerraFirmaCraft",
   "death.attack.tfc.grill": "%1$s hat sich zu Tode gegrillt",
   "death.attack.tfc.grill.player": "%1$s hat sich selbst gegrillt beim Versuch %2$s zu entkommen",
   "death.attack.tfc.pot": "%1$s wurde zu Suppe gekocht.",
@@ -5109,7 +5110,6 @@
   "block.tfc.peat": "Torf",
   "block.tfc.aggregate": "Betonmischung",
   "block.tfc.fire_bricks": "Schamottesteine",
-  "block.tfc.fire_clay_block": "Schamottblock",
   "block.tfc.smooth_mud_bricks": "Smooth Mud Bricks",
   "block.tfc.thatch": "Stroh",
   "block.tfc.golden_bamboo_block": "Golden Bamboo Block",
@@ -5504,6 +5504,7 @@
   "block.tfc.white_kaolin_clay": "White Kaolin Clay",
   "block.tfc.kaolin_clay_grass": "Kaolin Clay Grass",
   "block.tfc.hardened_clay": "Hardened Clay",
+  "block.tfc.fire_clay_block": "Schamottblock",
   "block.tfc.halite": "Halite",
   "block.tfc.lignite": "Lignite",
   "block.tfc.bituminous_coal": "Bituminous Coal",

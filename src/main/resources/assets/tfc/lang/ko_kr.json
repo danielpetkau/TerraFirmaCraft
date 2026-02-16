@@ -1,6 +1,7 @@
 {
   "__comment1__": "This file was created by PERIOT, a.k.a papertoy1127",
   "__comment2__": "If finding any issue, contact me with discord PERIOT#5492",
+  "fml.menu.mods.info.description.tfc": "TerraFirmaCraft",
   "death.attack.tfc.grill": "%1$s이(가) 석쇠에 구워졌습니다.",
   "death.attack.tfc.grill.player": "%1$s이(가) %2$s로부터 도망치려다 석쇠에 구워졌습니다.",
   "death.attack.tfc.pot": "%1$s이(가) 수프가 되었습니다.",
@@ -5109,7 +5110,6 @@
   "block.tfc.peat": "이탄",
   "block.tfc.aggregate": "골재",
   "block.tfc.fire_bricks": "내화벽돌",
-  "block.tfc.fire_clay_block": "내화점토",
   "block.tfc.smooth_mud_bricks": "Smooth Mud Bricks",
   "block.tfc.thatch": "짚단",
   "block.tfc.golden_bamboo_block": "Golden Bamboo Block",
@@ -5504,6 +5504,7 @@
   "block.tfc.white_kaolin_clay": "하얀 고령토",
   "block.tfc.kaolin_clay_grass": "고령토 잔디",
   "block.tfc.hardened_clay": "Hardened Clay",
+  "block.tfc.fire_clay_block": "내화점토",
   "block.tfc.halite": "Halite",
   "block.tfc.lignite": "Lignite",
   "block.tfc.bituminous_coal": "Bituminous Coal",

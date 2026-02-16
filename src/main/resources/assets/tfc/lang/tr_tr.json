@@ -1,5 +1,6 @@
 {
   "__comment__": "This file is created by Gofret#2182. Contact for requests.",
+  "fml.menu.mods.info.description.tfc": "TerraFirmaCraft",
   "death.attack.tfc.grill": "%1$s kendini kızarttı",
   "death.attack.tfc.grill.player": "%1$s, %2$s'den kaçarken kendini kızarttı",
   "death.attack.tfc.pot": "%1$s kendini çorba gibi kaynattı",
@@ -5108,7 +5109,6 @@
   "block.tfc.peat": "Turf",
   "block.tfc.aggregate": "Kırmataş",
   "block.tfc.fire_bricks": "Ateş Tuğlası",
-  "block.tfc.fire_clay_block": "Ateş Kili Blok",
   "block.tfc.smooth_mud_bricks": "Smooth Mud Bricks",
   "block.tfc.thatch": "Saman",
   "block.tfc.golden_bamboo_block": "Golden Bamboo Block",
@@ -5503,6 +5503,7 @@
   "block.tfc.white_kaolin_clay": "White Kaolin Clay",
   "block.tfc.kaolin_clay_grass": "Kaolin Clay Grass",
   "block.tfc.hardened_clay": "Hardened Clay",
+  "block.tfc.fire_clay_block": "Ateş Kili Blok",
   "block.tfc.halite": "Halite",
   "block.tfc.lignite": "Lignite",
   "block.tfc.bituminous_coal": "Bituminous Coal",

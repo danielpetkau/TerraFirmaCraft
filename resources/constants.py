@@ -969,6 +969,7 @@ VANILLA_OVERRIDE_LANG = {
 # This is here as it's used only once in a generic lang call by generate_resources.py
 DEFAULT_LANG = {
     # Misc
+    'fml.menu.mods.info.description.tfc': 'TerraFirmaCraft',
     'death.attack.tfc.grill': '%1$s grilled themself to death',
     'death.attack.tfc.grill.player': '%1$s grilled themselves while trying to escape %2$s',
     'death.attack.tfc.pot': '%1$s boiled themselves into soup',
