@@ -536,6 +536,7 @@ public class TFCTags
         public static final TagKey<Item> HIGH_QUALITY_CLOTH = tag("high_quality_cloth");
         public static final TagKey<Item> GEM_POWDERS = tag("gem_powders");
         public static final TagKey<Item> BOOKS = commonTag("books");
+        public static final TagKey<Item> SULFUR_POWDER = commonTag("powders/sulfur");
         /** Used by patchouli */
         public static final TagKey<Item> ORE_DEPOSITS = tag("ore_deposits");
         public static final TagKey<Item> TANNIN_LOGS = tag("tannin_logs");

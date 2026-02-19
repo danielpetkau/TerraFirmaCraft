@@ -663,6 +663,7 @@ public class BuiltinItemTags extends TagsProvider<Item> implements Accessors
 
         tag(HIGH_QUALITY_CLOTH).add(TFCItems.SILK_CLOTH, TFCItems.WOOL_CLOTH);
         tag(GEM_POWDERS).addOnly(TFCItems.ORE_POWDERS, Ore::isGem);
+        tag(SULFUR_POWDER).add(TFCItems.ORE_POWDERS.get(Ore.SULFUR).asItem());
         tag(BOOKS).add(
             Items.BOOK,
             Items.ENCHANTED_BOOK,
