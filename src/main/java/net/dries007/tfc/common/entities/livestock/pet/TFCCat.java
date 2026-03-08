@@ -34,6 +34,7 @@ import net.minecraft.world.level.ServerLevelAccessor;
 
 import net.dries007.tfc.client.TFCSounds;
 import net.dries007.tfc.common.TFCTags;
+import net.dries007.tfc.common.entities.EntityHelpers;
 import net.dries007.tfc.common.entities.livestock.MammalProperties;
 import net.dries007.tfc.common.entities.livestock.TFCAnimalProperties;
 import net.dries007.tfc.config.TFCConfig;
@@ -66,7 +67,9 @@ public class TFCCat extends TamableMammal
         super.createGenes(tag, male);
         if (male instanceof TFCCat maleCat)
         {
-            tag.putString("variant", random.nextBoolean() ? maleCat.getVariant().toString() : getVariant().toString());
+            final ResourceLocation variant = BuiltInRegistries.CAT_VARIANT.getKey(random.nextBoolean() ? maleCat.getVariant() : getVariant());
+            if (variant != null)
+                tag.putString("variant", variant.toString());
         }
     }
 
@@ -76,8 +79,9 @@ public class TFCCat extends TamableMammal
         super.applyGenes(tag, baby);
         if (baby instanceof TFCCat cat)
         {
-            BuiltInRegistries.CAT_VARIANT.getHolder(CatVariant.BLACK)
-                .ifPresent(this::setVariant);
+            final ResourceLocation variant = ResourceLocation.tryParse(EntityHelpers.getStringOrDefault(tag, "variant", CatVariant.BLACK.toString()));
+            if (variant != null)
+                BuiltInRegistries.CAT_VARIANT.getHolder(variant).ifPresent(cat::setVariant);
         }
     }
 
