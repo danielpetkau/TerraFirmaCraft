@@ -183,7 +183,7 @@ public final class FluidHelpers
         }
 
         final FluidStack aggressiveDrained = itemHandler.drain(Integer.MAX_VALUE, IFluidHandler.FluidAction.SIMULATE);
-        if (aggressiveDrained.isEmpty() || blockHandler.fill(aggressiveDrained, IFluidHandler.FluidAction.SIMULATE) <= )
+        if (aggressiveDrained.isEmpty() || blockHandler.fill(aggressiveDrained, IFluidHandler.FluidAction.SIMULATE) <= 0)
         {
             // Transfer block -> item.
             return transferBetweenItemAndOther(originalStack, itemHandler, blockHandler, itemHandler, Transfer.FILL, level, pos, after);
