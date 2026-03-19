@@ -28,7 +28,7 @@ import generate_trees
 import validate_assets
 import world_gen
 
-BOOK_LANGUAGES = ('en_us', 'ja_jp', 'ko_kr', 'pt_br', 'ru_ru', 'uk_ua', 'zh_cn', 'zh_tw', 'zh_hk')
+BOOK_LANGUAGES = ('en_us', 'ja_jp', 'ko_kr', 'pt_br', 'ru_ru', 'uk_ua', 'zh_cn', 'zh_tw', 'zh_hk', 'tr_tr')
 MOD_LANGUAGES = ('en_us', 'es_es', 'de_de', 'ja_jp', 'ko_kr', 'pl_pl', 'pt_br', 'ru_ru', 'tr_tr', 'uk_ua', 'zh_cn', 'zh_tw', 'zh_hk')
 RESOURCE_DIR = 'src/main/resources'
 TEST_RESOURCE_DIR = 'src/test/resources'
