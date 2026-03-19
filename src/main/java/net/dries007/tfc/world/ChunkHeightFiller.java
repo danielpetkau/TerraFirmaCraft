@@ -111,7 +111,7 @@ public class ChunkHeightFiller
     {
         columnBiomeNoiseSamplers.clear();
 
-        double height = 0, normalHeight = 0, shoreHeight = 0, shoreBaseHeight = 0, oceanHeight = 0;
+        double height = 0, normalHeight = 0, shoreHeight = 0;
         double shoreWeight = 0, oceanWeight = 0;
 
         BiomeExtension biomeAt = null, normalBiomeAt = null, shoreBiomeAt = null, oceanBiomeAt = null;
@@ -148,7 +148,6 @@ public class ChunkHeightFiller
             {
                 shoreHeight += biomeHeight;
                 shoreWeight += biomeWeight;
-                shoreBaseHeight += biomeWeight * biome.getShoreBaseHeight();
                 if (maxShoreWeight < biomeWeight)
                 {
                     shoreBiomeAt = biome;
@@ -157,7 +156,6 @@ public class ChunkHeightFiller
             }
             else if (biome.biomeBlendType() == BiomeBlendType.OCEAN)
             {
-                oceanHeight += biomeHeight;
                 oceanWeight += biomeWeight;
                 if (maxOceanWeight < biomeWeight)
                 {
