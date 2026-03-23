@@ -34,7 +34,6 @@ public enum Food implements StringRepresentable
     PLUM(true),
     RED_APPLE(true),
     // Misc Fruit
-    PUMPKIN_CHUNKS(true),
     MELON_SLICE(true),
     // Grains
     BARLEY,
@@ -102,6 +101,7 @@ public enum Food implements StringRepresentable
     COOKED_LENTIL,
     PEANUT(true),
     RADISH,
+    PUMPKIN_CHUNKS,
     // Non-Vegetables
     CHEESE,
     COOKED_EGG,
