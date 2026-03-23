@@ -10,25 +10,25 @@
     },
     {
       "type": "patchouli:text",
-      "text": "$(br) 1. $(l:mechanics/advanced_building_materials#alabaster)雪花石膏$()$(br) 2. $(l:mechanics/advanced_building_materials#bricks_and_mortar)石砖和砂浆$()$(br)",
+      "text": "$(br) 1. $(l:mechanics/advanced_building_materials#plaster)石膏$()$(br) 2. $(l:mechanics/advanced_building_materials#bricks_and_mortar)石砖和砂浆$()$(br)",
       "title": "材料目录"
     },
     {
       "type": "patchouli:text",
       "anchor": "plaster",
-      "text": "雪花石膏是一种用$(l:the_world/ores_and_minerals#gypsum)石膏$()矿做成的建筑材料。石膏可以直接在物品栏中做成雪花石膏，不过等以后有了$(l:mechanics/barrels)桶$()会有更高效的制作方法。",
-      "title": "Plaster"
+      "text": "石膏是一种由$(l:the_world/ores_and_minerals#gypsum)石膏矿$()制成的建筑材料。石膏可以直接用$(l:the_world/ores_and_minerals#gypsum)石膏矿$()合成获得，但更高效的方法是在大桶中用 100 mB $(thing)石灰水$()密封一些石膏矿。",
+      "title": "石膏"
     },
     {
       "type": "patchouli:crafting",
       "recipe": "tfc:crafting/alabaster_brick",
       "recipe2": "tfc:crafting/alabaster/bricks",
-      "title": "Plaster Bricks"
+      "title": "石膏砖"
     },
     {
       "type": "patchouli:text",
-      "text": "Plaster can be $(l:mechanics/dye)dyed$() in a $(l:mechanics/barrels)Barrel$() of dye into any color. Raw Plaster blocks can also be $(l:mechanics/chisel)chiseled$() into $(thing)Polished Plaster$() using the $(thing)Smooth$() chisel mode, or crafted into stairs, slabs, or walls.",
-      "title": "Plaster Decorations"
+      "text": "石膏可以在装有染料的$(l:mechanics/barrels)大桶$()中$(l:mechanics/dye)染色$()成任何颜色。天然石膏块也可以用$(l:mechanics/chisel)凿子$()在$(thing)平滑$()模式下凿制成$(thing)磨制石膏$()，或者合成为楼梯、台阶或墙。",
+      "title": "石膏装饰"
     },
     {
       "type": "patchouli:crafting",

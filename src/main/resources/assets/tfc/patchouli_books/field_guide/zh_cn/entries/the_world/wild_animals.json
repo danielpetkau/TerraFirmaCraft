@@ -64,8 +64,8 @@
       "type": "patchouli:entity",
       "entity": "tfc:tiger",
       "scale": 0.55,
-      "name": "Tiger",
-      "text": "The tiger spawns in forests with an average $(l:the_world/climate#temperature)temperature$() of at least 13°C, and $(l:the_world/climate#rainfall)rainfall$() above 100mm."
+      "name": "老虎",
+      "text": "老虎生成在森林中，需要平均$(l:the_world/climate#temperature)温度$()至少 13°C，且$(l:the_world/climate#rainfall)降雨量$()高于 100mm。"
     },
     {
       "type": "patchouli:entity",
@@ -84,32 +84,32 @@
       "type": "patchouli:entity",
       "entity": "tfc:direwolf",
       "scale": 0.7,
-      "text": "The direwolf spawns at any $(l:the_world/climate#temperature)temperature$() below freezing, and $(l:the_world/climate#rainfall)rainfall$() between 150 and 420mm. They hunt in packs. They are larger than regular wolves, and are not tamable."
+      "text": "冰原狼生成在$(l:the_world/climate#temperature)温度$()低于冰点的任何地区，且$(l:the_world/climate#rainfall)降雨量$()在 150 到 420mm 之间。它们成群狩猎，比普通狼更大，且无法驯服。"
     },
     {
       "type": "patchouli:entity",
       "entity": "tfc:hyena",
       "scale": 0.7,
-      "text": "The hyena spawns at any $(l:the_world/climate#temperature)temperature$() warmer than 15°C, and $(l:the_world/climate#rainfall)rainfall$() between 80 and 380mm. They hunt in packs. They are not tamable."
+      "text": "鬣狗生成在$(l:the_world/climate#temperature)温度$()高于 15°C 的任何地区，且$(l:the_world/climate#rainfall)降雨量$()在 80 到 380mm 之间。它们成群狩猎，且无法驯服。"
     },
     {
       "type": "patchouli:entity",
       "entity": "tfc:crocodile",
       "scale": 0.7,
-      "name": "Crocodile",
-      "text": "The crocodile spawns near rivers, lakes, and marshes at any $(l:the_world/climate#temperature)temperature$() warmer than 15°C, and at any $(l:the_world/climate#rainfall)rainfall$(). They are nocturnal, and most dangerous in the water."
+      "name": "鳄鱼",
+      "text": "鳄鱼生成在河流、湖泊和沼泽附近，需要$(l:the_world/climate#temperature)温度$()高于 15°C，$(l:the_world/climate#rainfall)降雨量$()不限。它们是夜行性动物，在水中最为危险。"
     },
     {
       "type": "patchouli:entity",
       "entity": "tfc:ocelot",
       "scale": 0.7,
-      "text": "The ocelot attacks small animals. It spawns at any $(l:the_world/climate#temperature)temperature$() from 15 to 30°C, and $(l:the_world/climate#rainfall)rainfall$() between 300 and 500mm, in forests. Feeding an ocelot enough times will tame it into a $(l:mechanics/pets)Cat$(). Ocelots can eat raw fish"
+      "text": "豹猫会攻击小动物。它们生成在森林中，需要$(l:the_world/climate#temperature)温度$()在 15 到 30°C 之间，$(l:the_world/climate#rainfall)降雨量$()在 300 到 500mm 之间。多次喂食豹猫可以将其驯化为$(l:mechanics/pets)猫$()。豹猫可以吃生鱼。"
     },
     {
       "type": "patchouli:text",
       "anchor": "ramming_prey",
-      "text": "$(thing)Ramming$() animals occasionally attempt to charge nearby creatures, including the player. Their attacks are powerful, but can be dodged. They will ram more frequently if attacked.",
-      "title": "Ramming"
+      "text": "$(thing)冲撞$()动物有时会试图冲撞附近的生物，包括玩家。它们的攻击威力强大，但可以躲避。如果被攻击，它们会更频繁地进行冲撞。",
+      "title": "冲撞"
     },
     {
       "type": "patchouli:entity",
@@ -128,14 +128,14 @@
       "type": "patchouli:entity",
       "entity": "tfc:wildebeest",
       "scale": 0.7,
-      "text": "The wildebeest spawns in open plains at any $(l:the_world/climate#temperature)temperature$() above 13°C, and $(l:the_world/climate#rainfall)rainfall$() between 90 and 380mm."
+      "text": "牛羚生成在开阔的平原上，需要$(l:the_world/climate#temperature)温度$()高于 13°C，且$(l:the_world/climate#rainfall)降雨量$()在 90 到 380mm 之间。"
     },
     {
       "type": "patchouli:entity",
       "entity": "tfc:bison",
       "scale": 0.6,
-      "name": "Bison",
-      "text": "The bison spawns in open plains at any $(l:the_world/climate#temperature)temperature$() above -10°C and below 15°C, and $(l:the_world/climate#rainfall)rainfall$() between 160 and 420mm."
+      "name": "野牛",
+      "text": "野牛生成在开阔的平原上，需要$(l:the_world/climate#temperature)温度$()在 -10°C 到 15°C 之间，且$(l:the_world/climate#rainfall)降雨量$()在 160 到 420mm 之间。"
     },
     {
       "type": "patchouli:empty"
@@ -170,21 +170,21 @@
       "type": "patchouli:entity",
       "entity": "tfc:caribou",
       "scale": 0.5,
-      "name": "Caribou",
-      "text": "The caribou spawns at any $(l:the_world/climate#temperature)temperature$() below -9°C, and $(l:the_world/climate#rainfall)rainfall$() between 110 and 500mm."
+      "name": "驯鹿",
+      "text": "驯鹿生成在$(l:the_world/climate#temperature)温度$()低于 -9°C 的任何地区，且$(l:the_world/climate#rainfall)降雨量$()在 110 到 500mm 之间。"
     },
     {
       "type": "patchouli:entity",
       "entity": "tfc:gazelle",
       "scale": 0.7,
-      "text": "The gazelle spawns in open plains at any $(l:the_world/climate#temperature)temperature$() above 12°C, and $(l:the_world/climate#rainfall)rainfall$() between 90 and 380mm."
+      "text": "瞪羚生成在开阔的平原上，需要$(l:the_world/climate#temperature)温度$()高于 12°C，且$(l:the_world/climate#rainfall)降雨量$()在 90 到 380mm 之间。"
     },
     {
       "type": "patchouli:entity",
       "entity": "tfc:bongo",
       "scale": 0.7,
-      "name": "Bongo",
-      "text": "The bongo spawns in forests at any $(l:the_world/climate#temperature)temperature$() above 15°C, and $(l:the_world/climate#rainfall)rainfall$() between 230 and 500mm."
+      "name": "羚羊",
+      "text": "羚羊生成在森林中，需要$(l:the_world/climate#temperature)温度$()高于 15°C，且$(l:the_world/climate#rainfall)降雨量$()在 230 到 500mm 之间。"
     },
     {
       "type": "patchouli:entity",
@@ -208,8 +208,8 @@
       "type": "patchouli:entity",
       "entity": "tfc:peafowl",
       "scale": 0.8,
-      "name": "Peafowl",
-      "text": "The peafowl spawns in forests at any $(l:the_world/climate#temperature)temperature$() above 14°C, and $(l:the_world/climate#rainfall)rainfall$() between 190 and 500mm."
+      "name": "孔雀",
+      "text": "孔雀生成在森林中，需要$(l:the_world/climate#temperature)温度$()高于 14°C，且$(l:the_world/climate#rainfall)降雨量$()在 190 到 500mm 之间。"
     },
     {
       "type": "patchouli:empty"
@@ -229,14 +229,14 @@
       "entity": "tfc:penguin",
       "scale": 0.7,
       "name": "企鹅",
-      "text": "The penguin spawns on only the coldest beaches, ice sheet edges, and sea ice with $(l:the_world/climate#temperature)temperature$() of at most -14°C and $(l:the_world/climate#rainfall)rainfall$() of at least 75mm."
+      "text": "企鹅只生成在最寒冷的海滩、冰盖边缘和海冰上，需要$(l:the_world/climate#temperature)温度$()不超过 -14°C，且$(l:the_world/climate#rainfall)降雨量$()至少 75mm。"
     },
     {
       "type": "patchouli:entity",
       "entity": "tfc:leopard_seal",
       "scale": 0.7,
-      "name": "Leopard Seal",
-      "text": "The Leopard Seal spawns on cold beaches, ice sheet edges, and sea ice with $(l:the_world/climate#temperature)temperatures$() of at most -9°C and $(l:the_world/climate#rainfall)rainfall$() of at least 105mm."
+      "name": "豹斑海豹",
+      "text": "豹斑海豹生成在寒冷的海滩、冰盖边缘和海冰上，需要$(l:the_world/climate#temperature)温度$()不超过 -9°C，且$(l:the_world/climate#rainfall)降雨量$()至少 105mm。"
     },
     {
       "type": "patchouli:entity",

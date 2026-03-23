@@ -55,7 +55,7 @@
       "item": "tfc:food/fruit_soup",
       "title": "炖汤配方",
       "link_recipes": false,
-      "text": "Soup is made from 3-5 $(thing)fruits$(), $(thing)vegetables$(), or $(thing)meats$() in a pot of $(thing)water$(). When the recipe is done, the water in the pot will turn red. $(item)$(k:key.use)$() with a $(l:mechanics/bowls)bowl$() to retrieve it. Soup combines multiple nutrients into a number of output meals depending on how much food is added. They are cheaper, but not as nutrition-dense as other meals."
+      "text": "汤由 3-5 份$(thing)水果$()、$(thing)蔬菜$()或$(thing)肉类$()在一锅$(thing)水$()中制成。配方完成后，锅中的水会变红。用$(l:mechanics/bowls)碗$()右键点击锅即可取出。汤将多种营养素组合成一定数量的餐点，具体数量取决于加入的食物量。它们更节省食材，但营养密度不如其他餐点。"
     },
     {
       "type": "patchouli:spotlight",

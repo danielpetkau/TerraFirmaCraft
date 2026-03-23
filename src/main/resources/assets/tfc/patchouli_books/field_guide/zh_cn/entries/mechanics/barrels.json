@@ -11,7 +11,7 @@
     {
       "type": "patchouli:crafting",
       "recipe": "tfc:crafting/wood/barrel/oak",
-      "text": "The barrel is made from seven $(thing)lumber$()."
+      "text": "大桶由七个$(thing)木材$()制成。"
     },
     {
       "type": "patchouli:image",
@@ -61,7 +61,7 @@
     },
     {
       "type": "patchouli:text",
-      "text": "Barrels have the ability to $(l:mechanics/dye)Dye$() and $(l:mechanics/dye#lye)Bleach$() items. Most color-able things, like carpet, candles, and $(l:mechanics/advanced_building_materials#plaster)Plaster$() can be dyed by sealing them in a barrel of dye or bleached by sealing them in a barrel of lye. See the dye chapter for more information."
+      "text": "大桶具有$(l:mechanics/dye)染色$()和$(l:mechanics/dye#lye)漂白$()物品的能力。大多数可染色的东西，如地毯、蜡烛和$(l:mechanics/advanced_building_materials#plaster)石膏$()，可以通过密封在装有染料的大桶中染色，或密封在装有碱液的大桶中漂白。更多信息请参阅染料章节。"
     },
     {
       "type": "patchouli:text",
@@ -70,7 +70,7 @@
     {
       "type": "patchouli:crafting",
       "recipe": "tfc:crafting/barrel_rack",
-      "text": "Barrels placed against the side of a block work the same as vertical barrels, but have restrictions on placement. For example, they must have a $(thing)Barrel Rack$() added to them with $(item)$(k:key.use)$() in order to have another sideways barrel above them."
+      "text": "靠墙放置的侧放大桶与直立大桶功能相同，但放置有约束。例如，要在它们上方再放一个侧放大桶，必须先给它们添加$(thing)桶架$()，只需$(item)$(k:key.use)$()即可添加。"
     },
     {
       "type": "patchouli:multiblock",
@@ -91,20 +91,20 @@
           "Y": "tfc:wood/barrel/kapok[facing=north,rack=true,sealed=false]"
         }
       },
-      "name": "Sideways Barrels",
-      "text": "Sideways barrels show their sealed state using the $(thing)Tap$(). If the tap is sideways, it is sealed.",
+      "name": "侧放大桶",
+      "text": "侧放大桶通过$(thing)龙头$()显示其密封状态。如果龙头是侧向的，则表示已密封。",
       "enable_visualize": false
     },
     {
       "type": "patchouli:text",
-      "text": "Unsealed sideways barrels automatically drain their fluid into open barrels (and other fluid containers) placed below the tap. The block the tap extends into must be a free air block in order for fluid to be able to drain."
+      "text": "未密封的侧放大桶会自动将其中的液体排入龙头下方放置的开口大桶（或其他流体容器）。龙头伸入的方块必须是空气方块，液体才能排出。"
     },
     {
       "type": "patchouli:image",
       "images": [
         "tfc:textures/gui/book/tutorial/barrel_drip.png"
       ],
-      "text": "A barrel dripping.",
+      "text": "一个正在滴漏的大桶。",
       "border": true
     }
   ],

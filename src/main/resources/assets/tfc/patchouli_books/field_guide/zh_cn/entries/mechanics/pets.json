@@ -10,13 +10,13 @@
     },
     {
       "type": "patchouli:text",
-      "text": "Pets recognize a certain player as their $(thing)Owner$(). To become a pet's owner, feed it to raise its familiarity above 15%%. Pets will only obey commands that come from their owner.$(br2)Clicking on a pet with $(l:mechanics/dye)dye$() changes its collar color."
+      "text": "宠物会认某个玩家为自己的$(thing)主人$()。要成为宠物的主人，需要喂食将其亲密度提升到 15%% 以上。宠物只会听从主人的命令。$(br2)用$(l:mechanics/dye)染料$()右键点击宠物可以改变其项圈颜色。"
     },
     {
       "type": "patchouli:entity",
       "entity": "tfc:dog{NoAI:1b,birth:-100000000L,oldDay:9223372036854775807L,geneticSize:16}",
       "scale": 0.7,
-      "text": "狗"
+      "text": "狗。"
     },
     {
       "type": "patchouli:text",
@@ -26,7 +26,7 @@
       "type": "patchouli:entity",
       "entity": "tfc:cat{NoAI:1b,birth:-100000000L,oldDay:9223372036854775807L,geneticSize:16}",
       "scale": 0.7,
-      "text": "猫"
+      "text": "猫。"
     },
     {
       "type": "patchouli:text",

@@ -16,7 +16,7 @@
     },
     {
       "type": "patchouli:text",
-      "text": "With a firestarter, it is now possible to make a $(thing)Firepit$(). In order to make one, you will need one $(thing)log$(), three $(thing)sticks$(), and optionally up to five pieces of $(thing)kindling$(). Kindling can be items such as paper products, straw, or pinecones, and will increase the chance of successfully creating a firepit by 10 percent per item used. Throw ($(item)$(k:key.drop)$()) all the items on the ground, on the same block. Then use the firestarter on the block with the items floating above it.",
+      "text": "有了起火器，现在可以制作$(thing)篝火$()了。要制作一个篝火，你需要一根$(thing)原木$()、三根$(thing)木棍$()，以及可选的最多五份$(thing)引火物$()。引火物可以是纸制品、干草或松果等物品，每使用一份引火物，成功点燃篝火的几率提高 10%。将所有物品丢（$(item)$(k:key.drop)$()）在地上，放在同一个方块上。然后用起火器对准有物品浮在上面的方块使用。",
       "title": "篝火"
     },
     {
@@ -116,7 +116,7 @@
     {
       "type": "patchouli:crafting",
       "recipe": "tfc:crafting/flint_and_pyrite",
-      "text": "A more advanced firestarter can be formed using flint and pyrite, or later flint and steel."
+      "text": "可以使用燧石和黄铁矿制作更高级的起火器，或者之后用燧石和钢。"
     }
   ],
   "read_by_default": true,

@@ -55,17 +55,17 @@
     {
       "type": "tfc:knapping_recipe",
       "recipe": "tfc:knapping/ceramic/unfired_vessel",
-      "text": "粘土塑形小缸。"
+      "text": "塑造粘土小缸。"
     },
     {
       "type": "patchouli:text",
-      "text": "The $(l:mechanics/decay#large_vessels)Large Vessel$() is created in a similar way. It can be placed, and has nine slots for items. View the linked chapter for more information.",
-      "title": "Large Vessel"
+      "text": "$(l:mechanics/decay#large_vessels)大缸$()的制作方法类似。它可以放置在地上，拥有九个物品槽。更多信息请查看链接章节。",
+      "title": "大缸"
     },
     {
       "type": "tfc:knapping_recipe",
       "recipe": "tfc:knapping/ceramic/unfired_large_vessel",
-      "text": "Knapping a Clay Large Vessel."
+      "text": "塑造粘土大缸"
     },
     {
       "type": "patchouli:text",
@@ -76,7 +76,7 @@
     {
       "type": "tfc:knapping_recipe",
       "recipe": "tfc:knapping/ceramic/unfired_jug",
-      "text": "粘土塑形陶罐。"
+      "text": "塑造粘土陶罐。"
     },
     {
       "type": "patchouli:text",
@@ -87,7 +87,7 @@
     {
       "type": "tfc:knapping_recipe",
       "recipe": "tfc:knapping/ceramic/unfired_ingot_mold",
-      "text": "粘土塑形铸锭模具"
+      "text": "塑造粘土铸锭模具"
     },
     {
       "type": "tfc:heat_recipe",

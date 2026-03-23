@@ -10,12 +10,12 @@
     },
     {
       "type": "patchouli:text",
-      "text": "In addition, some ores are $(thing)Graded$(). Ore blocks may be Poor, Normal, or Rich, and different veins will have different concentrations of each type of block. Veins that are $(thing)richer$() are more lucrative.$(br2)The next several pages show the different types of ores, what they look like, and where to find them."
+      "text": "另外，某些矿石是$(thing)分级的$()。矿石块可能是贫瘠、普通或富集的，不同的矿脉中各类矿石块的比例也不同。$(thing)更富集$()的矿脉价值更高。$(br2)接下来的几页将展示不同类型的矿石、它们的模样以及在哪里可以找到它们。"
     },
     {
       "type": "patchouli:text",
       "anchor": "native_copper",
-      "text": "Native Copper is an ore of $(thing)Copper$() metal. It can be found in $(l:the_world/geology#igneous_extrusive)Igneous Extrusive$() rocks, at elevations above y=40.$(br2)It can also be found in deposits in $(thing)rivers$(), which can be $(l:mechanics/panning)panned$().",
+      "text": "原生铜是$(thing)铜$()的矿石。它可以在$(l:the_world/geology#igneous_extrusive)喷出岩$()中找到，海拔高于 y=40。$(br2)它也可以出现在$(thing)河流$()的沉积物中，这些沉积物可以用$(l:mechanics/panning)淘金盘$()淘洗。",
       "title": "原生铜"
     },
     {
@@ -66,7 +66,7 @@
     {
       "type": "patchouli:text",
       "anchor": "native_gold",
-      "text": "Native Gold is an ore of $(thing)Gold$() metal. It can be found at elevations below y=70, but deeper veins are larger and richer. It can be found in $(l:the_world/geology#igneous_extrusive)Igneous Extrusive$() and $(l:the_world/geology#igneous_intrusive)Igneous Intrusive$() rocks.$(br2)It can also be found in deposits in $(thing)rivers$(), which can be $(l:mechanics/panning)panned$().",
+      "text": "原生金是$(thing)金$()的矿石。它可以在 y=70 以下的海拔找到，但更深的矿脉更大更富集。它可以在$(l:the_world/geology#igneous_extrusive)喷出岩$()和$(l:the_world/geology#igneous_intrusive)侵入岩$()中找到。$(br2)它也可以出现在$(thing)河流$()的沉积物中，这些沉积物可以用$(l:mechanics/panning)淘金盘$()淘洗。",
       "title": "原生金"
     },
     {
@@ -117,7 +117,7 @@
     {
       "type": "patchouli:text",
       "anchor": "native_silver",
-      "text": "Native Silver is an ore of $(thing)Silver$() metal. Small poor veins can be found in $(thing)Granite$() or $(thing)Diorite$() in uplift regions, above y=90. Larger and richer veins can be found in $(thing)Granite$(), $(thing)Diorite$(), $(thing)Schist$(), and $(thing)Gneiss$() deep underground below y=20.$(br2)It can also be found in deposits in $(thing)rivers$(), which can be $(l:mechanics/panning)panned$().",
+      "text": "原生银是$(thing)银$()的矿石。在隆升区域 y=90 以上的$(thing)花岗岩$()或$(thing)闪长岩$()中可以找到小型贫瘠矿脉。在 y=20 以下的深层地下，在$(thing)花岗岩$()、$(thing)闪长岩$()、$(thing)片岩$()和$(thing)片麻岩$()中可以找到更大更富集的矿脉。$(br2)它也可以出现在$(thing)河流$()的沉积物中，这些沉积物可以用$(l:mechanics/panning)淘金盘$()淘洗。",
       "title": "原生银"
     },
     {
@@ -219,12 +219,12 @@
     {
       "type": "patchouli:text",
       "anchor": "malachite",
-      "text": "Malachite is an ore of $(thing)Copper$() metal. It can be found primarily in $(thing)Marble$() or $(thing)Limestone$(), $(thing)Chalk$(), and $(thing)Dolomite$(). It can be found at most elevations, however deeper veins are often larger and richer.",
+      "text": "孔雀石是$(thing)铜$()的矿石。它主要出现在$(thing)大理岩$()或$(thing)石灰岩$()、$(thing)白垩岩$()和$(thing)白云岩$()中。它可以在大多数海拔找到，但更深的矿脉通常更大更富集。",
       "title": "孔雀石"
     },
     {
       "type": "tfc:multimultiblock",
-      "text": "大理石中的孔雀石矿。",
+      "text": "大理岩中的孔雀石矿。",
       "multiblocks": [
         {
           "pattern": [
@@ -270,7 +270,7 @@
     {
       "type": "patchouli:text",
       "anchor": "cassiterite",
-      "text": "Cassiterite is an ore of $(thing)Tin$() metal. It can be found in $(l:the_world/geology#igneous_intrusive)Igneous Intrusive$() rocks at high elevation, above y=80 in uplift regions or in dikes.$(br2)It can also be found in deposits in $(thing)rivers$(), which can be $(l:mechanics/panning)panned$().",
+      "text": "锡石是$(thing)锡$()的矿石。它可以在高海拔的$(l:the_world/geology#igneous_intrusive)侵入岩$()中找到，在隆升区域或岩墙中 y=80 以上。$(br2)它也可以出现在$(thing)河流$()的沉积物中，这些沉积物可以用$(l:mechanics/panning)淘金盘$()淘洗。",
       "title": "锡石"
     },
     {
@@ -321,7 +321,7 @@
     {
       "type": "patchouli:text",
       "anchor": "bismuthinite",
-      "text": "Bismuthinite is an ore of $(thing)Bismuth$() metal. It can be found in $(l:the_world/geology#sedimentary)Sedimentary$() rocks near the surface, or larger and richer veins in $(l:the_world/geology#igneous_intrusive)Igneous Intrusive$() rocks deep underground.",
+      "text": "辉铋矿是$(thing)铋$()的矿石。它可以在近地表的$(l:the_world/geology#sedimentary)沉积岩$()中找到，或者在深层地下的$(l:the_world/geology#igneous_intrusive)侵入岩$()中找到更大更富集的矿脉。",
       "title": "辉铋矿"
     },
     {
@@ -372,7 +372,7 @@
     {
       "type": "patchouli:text",
       "anchor": "garnierite",
-      "text": "Garnierite is an ore of $(thing)Nickel$() metal. It can be found at elevations below y=0. It can be found primarily in $(thing)Gabbro$() deep underground. Smaller, rarer veins can also be found in any $(l:the_world/geology#igneous_intrusive)Igneous Intrusive$() rock.",
+      "text": "绿镍矿是$(thing)镍$()的矿石。它可以在 y=0 以下的海拔找到。主要存在于深层地下的$(thing)辉长岩$()中。在$(l:the_world/geology#igneous_intrusive)侵入岩$()中也可以找到较小、更稀少的矿脉。",
       "title": "绿镍矿"
     },
     {
@@ -423,7 +423,7 @@
     {
       "type": "patchouli:text",
       "anchor": "hematite",
-      "text": "Hematite is an ore of $(thing)Iron$() metal. It can be found in large veins in any $(l:the_world/geology#igneous_extrusive)Igneous Extrusive$() rocks near the surface.",
+      "text": "赤铁矿是$(thing)铁$()的矿石。它可以在近地表的任何$(l:the_world/geology#igneous_extrusive)喷出岩$()中以大型矿脉的形式找到。",
       "title": "赤铁矿"
     },
     {
@@ -474,12 +474,12 @@
     {
       "type": "patchouli:text",
       "anchor": "magnetite",
-      "text": "Magnetite is an ore of $(thing)Iron$() metal. It can be found in large veins in any $(l:the_world/geology#sedimentary)Sedimentary$() rocks near the surface.",
+      "text": "磁铁矿是$(thing)铁$()的矿石。它可以在近地表的任何$(l:the_world/geology#sedimentary)沉积岩$()中以大型矿脉的形式找到。",
       "title": "磁铁矿"
     },
     {
       "type": "tfc:multimultiblock",
-      "text": "石灰石中的磁铁矿。",
+      "text": "石灰岩中的磁铁矿。",
       "multiblocks": [
         {
           "pattern": [
@@ -525,7 +525,7 @@
     {
       "type": "patchouli:text",
       "anchor": "limonite",
-      "text": "Limonite is an ore of $(thing)Iron$() metal. It can be found in large veins in any $(l:the_world/geology#sedimentary)Sedimentary$() rocks near the surface.",
+      "text": "褐铁矿是$(thing)铁$()的矿石。它可以在近地表的任何$(l:the_world/geology#sedimentary)沉积岩$()中以大型矿脉的形式找到。",
       "title": "褐铁矿"
     },
     {
@@ -576,7 +576,7 @@
     {
       "type": "patchouli:text",
       "anchor": "sphalerite",
-      "text": "Sphalerite is an ore of $(thing)Zinc$() metal. Small, poor veins can be found in $(l:the_world/geology#igneous_extrusive)Igneous Extrusive$() rocks near the surface, and large richer veins can be found in $(l:the_world/geology#igneous_intrusive)Igneous Intrusive$() rocks deep underground.",
+      "text": "闪锌矿是$(thing)锌$()的矿石。小型贫瘠矿脉可以在近地表的$(l:the_world/geology#igneous_extrusive)喷出岩$()中找到，而大型富集矿脉可以在深层地下的$(l:the_world/geology#igneous_intrusive)侵入岩$()中找到。",
       "title": "闪锌矿"
     },
     {
@@ -630,7 +630,7 @@
       "item": "tfc:ore/lignite",
       "title": "褐煤",
       "link_recipes": false,
-      "text": "Lignite is a type of low-grade $(thing)Coal$() ore. It can be found in very large flat deposits near the surface in $(l:the_world/geology#sedimentary)Sedimentary$() rocks."
+      "text": "褐煤是一种低品位的$(thing)煤$()矿石。它可以在近地表的$(l:the_world/geology#sedimentary)沉积岩$()中以非常巨大的扁平矿层形式找到。"
     },
     {
       "type": "patchouli:multiblock",
@@ -648,7 +648,7 @@
         }
       },
       "name": "",
-      "text": "Lignite.",
+      "text": "褐煤。",
       "enable_visualize": false
     },
     {
@@ -657,7 +657,7 @@
       "item": "tfc:ore/bituminous_coal",
       "title": "烟煤",
       "link_recipes": false,
-      "text": "Bituminous Coal is a type of mid-grade $(thing)Coal$() ore. It can be found in very large flat deposits near the surface in $(l:the_world/geology#sedimentary)Sedimentary$() rocks."
+      "text": "烟煤是一种中等品位的$(thing)煤$()矿石。它可以在近地表的$(l:the_world/geology#sedimentary)沉积岩$()中以非常巨大的扁平矿层形式找到。"
     },
     {
       "type": "patchouli:multiblock",
@@ -684,11 +684,11 @@
       "item": "tfc:kaolin_clay",
       "title": "高岭石",
       "link_recipes": false,
-      "text": "Kaolinite is a soft $(thing)Mineral$() which is used in the construction of $(l:mechanics/fire_clay)Fire Clay$(). It can be found spawning at high altitudes in Plateaus, Old Mountains, Rolling Hills, and Highlands, at a $(l:the_world/climate#temperature)temperature$() of at least 18°C, with a $(l:the_world/climate#rainfall)rainfall$() of at least 300mm. The $(thing)Blood Lily$() flower grows on Kaolin clay."
+      "text": "高岭石是一种柔软的$(thing)矿物$()，用于制作$(l:mechanics/fire_clay)耐火粘土$()。它可以在高原、古老山脉、丘陵和高地的海拔较高处生成，需要$(l:the_world/climate#temperature)温度$()至少 18°C，$(l:the_world/climate#rainfall)降雨量$()至少 300mm。$(thing)火球花$()生长在高岭土上。"
     },
     {
       "type": "tfc:multimultiblock",
-      "text": "Variants of kaolin clay.",
+      "text": "高岭土的变种。",
       "multiblocks": [
         {
           "pattern": [
@@ -766,7 +766,7 @@
       "item": "tfc:ore/graphite",
       "title": "石墨",
       "link_recipes": false,
-      "text": "Graphite is a $(thing)Mineral$() which is used in the construction of $(l:mechanics/fire_clay)Fire Clay$(). It can be found in $(thing)Gneiss$(), $(thing)Marble$(), $(thing)Quartzite$(), and $(thing)Schist$() rocks, in elevations below y=60."
+      "text": "石墨是一种$(thing)矿物$()，用于制作$(l:mechanics/fire_clay)耐火粘土$()。它可以在 y=60 以下的$(thing)片麻岩$()、$(thing)大理岩$()、$(thing)石英岩$()和$(thing)片岩$()中找到。"
     },
     {
       "type": "patchouli:multiblock",
@@ -793,7 +793,7 @@
       "item": "tfc:ore/cinnabar",
       "title": "朱砂",
       "link_recipes": false,
-      "text": "Cinnabar is a $(thing)Mineral$() which can be ground in the $(l:mechanics/quern)Quern$() to obtain $(thing)Redstone Dust$(). It can be found in veins deep underground, in $(thing)Quartzite$(), $(thing)Granite$(), $(thing)Phyllite$(), and $(thing)Schist$()."
+      "text": "朱砂是一种$(thing)矿物$()，可以在$(l:mechanics/quern)手推磨$()中研磨得到$(thing)红石粉$()。它可以在深层地下的矿脉中找到，存在于$(thing)石英岩$()、$(thing)花岗岩$()、$(thing)千枚岩$()和$(thing)片岩$()中。"
     },
     {
       "type": "patchouli:multiblock",
@@ -820,7 +820,7 @@
       "item": "tfc:ore/cryolite",
       "title": "冰晶石",
       "link_recipes": false,
-      "text": "Cryolite is a $(thing)Mineral$() which can be ground in the $(l:mechanics/quern)Quern$() to obtain $(thing)Redstone Dust$(). It can be found in veins deep underground, in $(thing)Granite$(), and $(thing)Diorite$()."
+      "text": "冰晶石是一种$(thing)矿物$()，可以在$(l:mechanics/quern)手推磨$()中研磨得到$(thing)红石粉$()。它可以在深层地下的矿脉中找到，存在于$(thing)花岗岩$()和$(thing)闪长岩$()中。"
     },
     {
       "type": "patchouli:multiblock",
@@ -847,7 +847,7 @@
       "item": "tfc:ore/saltpeter",
       "title": "硝石",
       "link_recipes": false,
-      "text": "Saltpeter is a $(thing)Mineral$() which can be ground in the $(l:mechanics/quern)Quern$(), and then used in the crafting of $(thing)Gunpowder$(). It can be found in very large flat deposits near the surface in $(l:the_world/geology#sedimentary)Sedimentary$() rocks."
+      "text": "硝石是一种$(thing)矿物$()，可以在$(l:mechanics/quern)手推磨$()中研磨，然后用于制作$(thing)火药$()。它可以在近地表的$(l:the_world/geology#sedimentary)沉积岩$()中以非常巨大的扁平矿层形式找到。"
     },
     {
       "type": "patchouli:multiblock",
@@ -874,7 +874,7 @@
       "item": "tfc:ore/sulfur",
       "title": "硫磺",
       "link_recipes": false,
-      "text": "Sulfur is a $(thing)Mineral$() which can be ground in the $(l:mechanics/quern)Quern$(), and then used in the crafting of $(thing)Gunpowder$(). It is found near lava level deep underground, in sparse but large and plentiful veins, in any $(l:the_world/geology#metamorphic)Metamorphic$() or $(l:the_world/geology#igneous_intrusive)Igneous Intrusive$() rock."
+      "text": "硫磺是一种$(thing)矿物$()，可以在$(l:mechanics/quern)手推磨$()中研磨，然后用于制作$(thing)火药$()。它出现在深层地下靠近岩浆层的位置，以稀疏但大型且丰富的矿脉形式存在，可在任何$(l:the_world/geology#metamorphic)变质岩$()或$(l:the_world/geology#igneous_intrusive)侵入岩$()中找到。"
     },
     {
       "type": "patchouli:multiblock",
@@ -892,7 +892,7 @@
         }
       },
       "name": "",
-      "text": "Sulfur in Gabbro.",
+      "text": "辉长岩中的硫磺。",
       "enable_visualize": false
     },
     {
@@ -901,7 +901,7 @@
       "item": "tfc:ore/sylvite",
       "title": "钾石盐",
       "link_recipes": false,
-      "text": "Sylvite is a $(thing)Mineral$() which can be ground in the $(l:mechanics/quern)Quern$(), and then used as a $(l:mechanics/fertilizers)Fertilizer$(). It can be found in very large flat deposits near the surface in $(thing)Shale$(), $(thing)Claystone$() and $(thing)Chert$()."
+      "text": "钾石盐是一种$(thing)矿物$()，可以在$(l:mechanics/quern)手推磨$()中研磨，然后用作$(l:mechanics/fertilizers)肥料$()。它可以在近地表的$(thing)页岩$()、$(thing)粘土岩$()和$(thing)燧石岩$()中以非常巨大的扁平矿层形式找到。"
     },
     {
       "type": "patchouli:multiblock",
@@ -928,7 +928,7 @@
       "item": "tfc:ore/borax",
       "title": "硼砂",
       "link_recipes": false,
-      "text": "Borax is a $(thing)Mineral$() which can be ground in the $(l:mechanics/quern)Quern$() to produce $(l:mechanics/flux)Flux$(). It can be found in very large flat deposits near the surface in $(thing)Claystone$(), $(thing)Limestone$(), and $(thing)Shale$()."
+      "text": "硼砂是一种$(thing)矿物$()，可以在$(l:mechanics/quern)手推磨$()中研磨制成$(l:mechanics/flux)助焊剂$()。它可以在近地表的$(thing)粘土岩$()、$(thing)石灰岩$()和$(thing)页岩$()中以非常巨大的扁平矿层形式找到。"
     },
     {
       "type": "patchouli:multiblock",
@@ -955,7 +955,7 @@
       "item": "tfc:ore/gypsum",
       "title": "石膏",
       "link_recipes": false,
-      "text": "Gypsum is a decorative $(thing)Mineral$() which can be used to make $(l:mechanics/advanced_building_materials#plaster)Plaster$(). It can be found in very large flat deposits near the surface in $(l:the_world/geology#sedimentary)Sedimentary$() rocks."
+      "text": "石膏是一种装饰性$(thing)矿物$()，可用于制作$(l:mechanics/advanced_building_materials#plaster)灰泥$()。它可以在近地表的$(l:the_world/geology#sedimentary)沉积岩$()中以非常巨大的扁平矿层形式找到。"
     },
     {
       "type": "patchouli:multiblock",
@@ -973,16 +973,16 @@
         }
       },
       "name": "",
-      "text": "Gypsum in Chalk.",
+      "text": "白垩岩中的石膏。",
       "enable_visualize": false
     },
     {
       "type": "patchouli:spotlight",
       "anchor": "halite",
       "item": "tfc:ore/halite",
-      "title": "石盐",
+      "title": "岩盐",
       "link_recipes": false,
-      "text": "Halite is a $(thing)Mineral$() which can be ground in the $(l:mechanics/quern)Quern$() to make $(thing)Salt$(), which is an important $(l:mechanics/decay#salting)Preservative$(). It can be found in very large flat deposits near the surface in $(l:the_world/geology#sedimentary)Sedimentary$() rocks."
+      "text": "岩盐是一种$(thing)矿物$()，可以在$(l:mechanics/quern)手推磨$()中研磨制成$(thing)盐$()，这是一种重要的$(l:mechanics/decay#salting)防腐剂$()。它可以在近地表的$(l:the_world/geology#sedimentary)沉积岩$()中以非常巨大的扁平矿层形式找到。"
     },
     {
       "type": "patchouli:multiblock",
@@ -1000,7 +1000,7 @@
         }
       },
       "name": "",
-      "text": "Halite.",
+      "text": "岩盐。",
       "enable_visualize": false
     },
     {
@@ -1009,7 +1009,7 @@
       "item": "tfc:ore/emerald",
       "title": "祖母绿",
       "link_recipes": false,
-      "text": "祖母绿是一种用来做装饰品的$(thing)宝石$()。它看起来相当漂亮，要是这个孤苦伶仃的世界上有其他人愿意用它和你交易就好了……$(br2)它的矿脉形状细长，垂直方向可达 60 方块。它只会在$(l:the_world/geology#igneous_intrusive)侵入岩$()中出现。"
+      "text": "祖母绿是一种装饰性$(l:mechanics/gems)宝石$()。它看起来相当漂亮，也许如果你能在这个无比孤独的世界中找到另一个人，你可以用它和他们交易……$(br2)它以细长的垂直矿脉形式出现，最高可达一百格。它可以在$(l:the_world/geology#igneous_intrusive)侵入岩$()中找到。"
     },
     {
       "type": "patchouli:multiblock",
@@ -1036,7 +1036,7 @@
       "item": "tfc:ore/diamond",
       "title": "金伯利岩",
       "link_recipes": false,
-      "text": "金伯利岩是一种用来做装饰品的$(thing)无价之宝$()。它只会形成于一种被称为$(l:https://zh.wikipedia.org/wiki/%E7%81%AB%E5%B1%B1%E7%AD%92)火山筒$()的矿脉结构中，其垂直方向可达 60 方块。金伯利岩只能在$(thing)辉长岩$()中生成。"
+      "text": "金伯利岩是一种装饰性且价值连城的$(l:mechanics/gems)宝石$()。它以细长的垂直矿脉形式出现，称为$(l:https://en.wikipedia.org/wiki/Volcanic_pipe)金伯利岩管$()，最高可达一百格。它只能在$(thing)辉长岩$()中找到。"
     },
     {
       "type": "patchouli:multiblock",
@@ -1063,7 +1063,7 @@
       "item": "tfc:ore/lapis_lazuli",
       "title": "青金石",
       "link_recipes": false,
-      "text": "Lapis Lazuli is a decorative $(thing)Mineral$() which can be used to make $(l:mechanics/dye)Blue Dye$(). It can be found in large, but sparse veins in $(thing)Limestone$() and $(thing)Marble$(), between y=-20 and y=80."
+      "text": "青金石是一种装饰性$(thing)矿物$()，可用于制作$(l:mechanics/dye)蓝色染料$()。它可以在 y=-20 到 y=80 之间的$(thing)石灰岩$()和$(thing)大理岩$()中以大型但稀疏的矿脉形式找到。"
     },
     {
       "type": "patchouli:multiblock",
@@ -1081,16 +1081,16 @@
         }
       },
       "name": "",
-      "text": "Lapis Lazuli in Marble.",
+      "text": "大理岩中的青金石。",
       "enable_visualize": false
     },
     {
       "type": "patchouli:spotlight",
       "anchor": "amethyst",
       "item": "tfc:ore/amethyst",
-      "title": "Amethyst",
+      "title": "紫水晶",
       "link_recipes": false,
-      "text": "Amethyst is a decorative $(thing)Mineral$() which can be used to make $(l:mechanics/glassworking)Glass$(). It can be found in $(thing)Sedimentary$() and $(thing)Metamorphic$() rock beneath rivers above y=40."
+      "text": "紫水晶是一种装饰性$(thing)矿物$()，可用于制作$(l:mechanics/glassworking)玻璃$()。它可以在 y=40 以上的河流下方的$(thing)沉积岩$()和$(thing)变质岩$()中找到。"
     },
     {
       "type": "patchouli:multiblock",
@@ -1108,16 +1108,16 @@
         }
       },
       "name": "",
-      "text": "Amethyst in Marble.",
+      "text": "大理岩中的紫水晶。",
       "enable_visualize": false
     },
     {
       "type": "patchouli:spotlight",
       "anchor": "opal",
       "item": "tfc:ore/opal",
-      "title": "Opal",
+      "title": "蛋白石",
       "link_recipes": false,
-      "text": "Opal is a decorative $(thing)Mineral$(). It can be found in $(thing)Sedimentary) and $(thing)Igneous Extrusive$() rock beneath rivers above y=40."
+      "text": "蛋白石是一种装饰性$(thing)矿物$()。它可以在 y=40 以上的河流下方的$(thing)沉积岩$()和$(thing)喷出岩$()中找到。"
     },
     {
       "type": "patchouli:multiblock",
@@ -1135,16 +1135,16 @@
         }
       },
       "name": "",
-      "text": "Opal in Basalt.",
+      "text": "玄武岩中的蛋白石。",
       "enable_visualize": false
     },
     {
       "type": "patchouli:spotlight",
       "anchor": "ruby",
       "item": "tfc:ore/ruby",
-      "title": "Ruby",
+      "title": "红宝石",
       "link_recipes": false,
-      "text": "Ruby is a decorative $(thing)Mineral$(). It can be found in $(thing)Schist$() and $(thing)Gneiss$() rock below y=-10."
+      "text": "红宝石是一种装饰性$(thing)矿物$()。它可以在 y=-10 以下的$(thing)片岩$()和$(thing)片麻岩$()中找到。"
     },
     {
       "type": "patchouli:multiblock",
@@ -1162,7 +1162,7 @@
         }
       },
       "name": "",
-      "text": "Ruby in Schist.",
+      "text": "片岩中的红宝石。",
       "enable_visualize": false
     }
   ],

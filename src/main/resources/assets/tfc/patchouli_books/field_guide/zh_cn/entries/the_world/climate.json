@@ -28,7 +28,7 @@
     {
       "type": "patchouli:text",
       "anchor": "climate",
-      "text": "Another tab on the main inventory screen is the $(thing)Climate$() screen. This one shows information about the current location$(br2)From top to bottom, the screen displays the $(l:https://en.wikipedia.org/wiki/K%C3%B6ppen_climate_classification)Local Climate$(), the $(thing)Average Annual Temperature$(), the current temperature, the $(thing)Average Annual Rainfall$(), the current rainfall, the peak rainfall, and the season when the peak occurs.",
+      "text": "主物品栏屏幕上的另一个选项卡是$(thing)气候$()屏幕。它显示当前位置的信息。$(br2)从上到下，屏幕依次显示$(l:https://en.wikipedia.org/wiki/K%C3%B6ppen_climate_classification)当地气候$()、$(thing)年平均温度$()、当前温度、$(thing)年平均降雨量$()、当前降雨量、峰值降雨量以及峰值出现的季节。",
       "title": "气候"
     },
     {
@@ -43,7 +43,7 @@
       "type": "patchouli:text",
       "anchor": "temperature",
       "text": "一个地区的温度是由几个因素共同决定的。$(br)$(li)首先，地质结构和纬度（Z 坐标）的影响是最大的。$(li)其次是当前的季节——夏天最热，冬天最冷。$(li)最后，每天的不同时间温度也会有所不同，且天和天之间也会有小幅变动。",
-      "title": "Temperature"
+      "title": "温度"
     },
     {
       "type": "patchouli:text",
@@ -52,20 +52,20 @@
     {
       "type": "patchouli:text",
       "anchor": "rainfall",
-      "text": "Rainfall is influenced by a number of factors:$(br2)The region, especially the longitude (X coordinate) will play the largest role, with wetter climates generally to the east of spawn. Distance from the coast also plays a role, with drier climates farther inland.",
+      "text": "降雨量受多种因素影响：$(br2)区域，尤其是经度（X 坐标）影响最大，通常出生点以东气候更湿润。距离海岸的远近也有影响，内陆地区气候更干燥。",
       "title": "降雨量"
     },
     {
       "type": "patchouli:text",
-      "text": "The current season and local climate will also influence rainfall levels. These effects are also determined by the region: west coasts generally have dry summers, whereas the east sides of large continents have dramatic summer monsoons. The centers of continents and oceanic islands tend to have less seasonal variance."
+      "text": "当前季节和当地气候也会影响降雨量。这些影响也取决于区域：西海岸通常夏季干燥，而大型大陆的东侧则有显著的夏季季风。大陆中心和海洋岛屿的季节变化较小。"
     },
     {
       "type": "patchouli:text",
-      "text": "The annual rainfall is measured in millimeters (mm) and can be between 0mm - 500mm, though the instantaneous rainfall can reach 1000mm in highly seasonal climates. Rainfall affects the types of flora and fauna that are found in an area, as well as how often rain and snow occur.$(br)"
+      "text": "年降雨量以毫米（mm）为单位，范围在 0mm 到 500mm 之间，但在季节性强的气候中，瞬时降雨量可达 1000mm。降雨量影响一个地区的动植物种类，以及降雨和降雪的频率。$(br)"
     },
     {
       "type": "patchouli:text",
-      "text": "一个区域的降雨量还决定了何种农作物能被种植在这儿。降雨量的多少是影响土地$(l:mechanics/hydration)湿润度$()的一个重要因素，而湿润度则决定了$(l:mechanics/crops)农作物$()、$(l:the_world/wild_fruits#fruit_trees)果树$()、和$(l:the_world/wild_fruits#tall_bushes)灌木丛$()是否可以生长。"
+      "text": "一个区域的降雨量还决定了何种农作物能被种植在这儿。降雨量的多少是影响土地$(l:mechanics/hydration)湿度$()的一个重要因素，而湿度则决定了$(l:mechanics/crops)农作物$()、$(l:the_world/wild_fruits#fruit_trees)果树$()、和$(l:the_world/wild_fruits#tall_bushes)灌木丛$()是否可以生长。"
     }
   ],
   "read_by_default": true,

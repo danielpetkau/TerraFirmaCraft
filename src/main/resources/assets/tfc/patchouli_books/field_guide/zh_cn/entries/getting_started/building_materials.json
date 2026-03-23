@@ -146,7 +146,7 @@
       "images": [
         "tfc:textures/gui/book/tutorial/wattle_stained.png"
       ],
-      "text": "It can then be $(thing)stained$() by using $(l:mechanics/dye)Dye$() on it.",
+      "text": "之后可以用$(l:mechanics/dye)染料$()右键点击它来$(thing)染色$()。",
       "border": true
     },
     {

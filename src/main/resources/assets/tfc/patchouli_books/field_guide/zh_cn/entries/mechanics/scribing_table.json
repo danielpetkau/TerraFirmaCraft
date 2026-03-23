@@ -37,7 +37,7 @@
       "images": [
         "tfc:textures/gui/book/gui/scribing.png"
       ],
-      "text": "The scribing screen takes text entry at the top, an input on the left, a dye in the center. The output is taken from the right slot. Using fluid dye only costs 250mb instead of 1000mb, if possible.",
+      "text": "命名界面顶部是文本输入栏，左侧是物品输入槽，中间是染料槽。成品从右侧槽取出。如果可能，使用流体染料只需消耗 250mb 而非 1000mb。",
       "border": false
     }
   ],
