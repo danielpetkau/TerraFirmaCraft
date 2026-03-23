@@ -76,7 +76,7 @@ public interface BiomeSourceExtension
         BlockPos found = null;
         int count = 0;
 
-        for (int radius = maxRadius; radius <= maxRadius; radius += step)
+        for (int radius = -maxRadius; radius <= maxRadius; radius += step)
         {
             for (int dx = -radius; dx <= radius; dx += step)
             {
