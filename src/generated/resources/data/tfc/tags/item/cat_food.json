@@ -1,7 +1,8 @@
 {
   "values": [
-    "#c:foods/raw_meat",
+    "#c:foods/grain",
+    "#c:foods/cooked_meat",
     "#c:foods/dairy",
-    "#c:foods/raw_fish"
+    "#c:foods/cooked_fish"
   ]
 }

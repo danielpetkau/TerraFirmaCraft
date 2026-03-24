@@ -195,7 +195,8 @@ public class BuiltinItemTags extends TagsProvider<Item> implements Accessors
         tag(DONKEY_FOOD).addTag(HORSE_FOOD);
         tag(MULE_FOOD).addTag(HORSE_FOOD);
         tag(HORSE_FOOD).addTags(GRAINS, FRUITS);
-        tag(CAT_FOOD).addTags(RAW_MEATS, DAIRY, RAW_FISH);
+        tag(CAT_FOOD).addTags(GRAINS, COOKED_MEATS, DAIRY, COOKED_FISH);
+        tag(OCELOT_FOOD).addTags(RAW_FISH);
         tag(DOG_FOOD).addTag(MEATS);
         tag(PENGUIN_FOOD).addTags(RAW_FISH);
         tag(SEAL_FOOD).addTags(RAW_FISH);
