@@ -18,6 +18,8 @@ import net.minecraft.world.entity.ai.behavior.declarative.BehaviorBuilder;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.memory.WalkTarget;
 import net.minecraft.world.entity.ai.util.AirAndWaterRandomPos;
+import net.minecraft.world.entity.ai.util.DefaultRandomPos;
+import net.minecraft.world.entity.ai.util.RandomPos;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 
@@ -63,39 +65,60 @@ public class AmphibiousSetWalkTargetAwayFrom
                         }
                     }
 
+                    boolean isOceanPredator = Helpers.isEntity(attacker, TFCTags.Entities.OCEAN_PREDATORS);
+
                     // Evaluate positions for escape, favors land positions if an ocean predator is attacking it
                     Vec3 bestLandEscapePos = currentPos;
                     Vec3 bestWaterEscapePos = currentPos;
-                    for (int i = 0; i < 25; ++i)
+                    boolean foundLand = false;
+                    boolean foundWater = false;
+                    for (int i = 0; i < 10; ++i)
                     {
-                        Vec3 destination = AirAndWaterRandomPos.getPos(mob, 10, 7, 3, 0, 0, 1);
+                        Vec3 destination = DefaultRandomPos.getPosAway(mob, 10, 7, escapeFromPos);
                         if (destination != null)
                         {
                             final BlockPos pos = new BlockPos((int) destination.x, (int) destination.y, (int) destination.z);
-                            final BlockState state = level.getBlockState(pos);
-                            if (Helpers.isFluid(state.getFluidState(), FluidTags.WATER))
+                            final BlockState state = level.getBlockState(pos.above());
+                            if (Helpers.isFluid(state.getFluidState(), TFCTags.Fluids.ANY_INFINITE_WATER))
                             {
                                 bestWaterEscapePos = getVectorFartherFromChaser(escapeFromPos, bestWaterEscapePos, destination);
+                                foundWater = true;
+                                if (!isOceanPredator)
+                                {
+                                    break;
+                                }
                             }
                             else
                             {
-                                final BlockState belowState = level.getBlockState(pos.below());
-                                if (!belowState.isEmpty() && !Helpers.isFluid(belowState.getFluidState(), FluidTags.WATER))
+                                final BlockState belowState = level.getBlockState(pos);
+                                if (!belowState.isEmpty() && !Helpers.isFluid(belowState.getFluidState(), TFCTags.Fluids.ANY_INFINITE_WATER))
                                 {
                                     bestLandEscapePos = getVectorFartherFromChaser(escapeFromPos, bestLandEscapePos, destination);
+                                    foundLand = true;
+                                    if (isOceanPredator)
+                                    {
+                                        break;
+                                    }
                                 }
                             }
                         }
-                        if (Helpers.isEntity(attacker, TFCTags.Entities.OCEAN_PREDATORS) && isTargetPosValidForEscape(currentPos, escapeFromPos, bestLandEscapePos))
-                        {
-                            pathToTarget.set(new WalkTarget(bestLandEscapePos, speedModifier.apply(mob), 0));
-                        }
-                        else
-                        {
-                            final Vec3 bestEscapePos = getVectorFartherFromChaser(escapeFromPos, bestLandEscapePos, bestWaterEscapePos);
-                            pathToTarget.set(new WalkTarget(bestEscapePos, speedModifier.apply(mob), 0));
-                        }
                     }
+
+                    final Vec3 bestEscapePos;
+                    if (isOceanPredator)
+                    {
+                        bestEscapePos = foundLand ? bestLandEscapePos : (foundWater ? bestWaterEscapePos : null);
+                    }
+                    else
+                    {
+                        bestEscapePos = foundWater ? bestWaterEscapePos : (foundLand ? bestLandEscapePos : null);
+                    }
+
+                    if (bestEscapePos == null)
+                    {
+                        return false;
+                    }
+                    pathToTarget.set(new WalkTarget(bestEscapePos, speedModifier.apply(mob), 0));
 
                     return true;
                 }
@@ -120,13 +143,8 @@ public class AmphibiousSetWalkTargetAwayFrom
 
     private static boolean isTargetPosValidForEscape(Vec3 currentPos, Vec3 escapeFromPos, Vec3 destinationPos)
     {
-
         Vec3 destinationDelta = destinationPos.subtract(currentPos);
         Vec3 escapeFromDelta = escapeFromPos.subtract(currentPos);
-        if (destinationDelta.dot(escapeFromDelta) < (double) 0.0F)
-        {
-            return true;
-        }
-        return false;
+        return destinationDelta.dot(escapeFromDelta) < 0.0;
     }
 }
