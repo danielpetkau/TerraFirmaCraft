@@ -2434,13 +2434,15 @@ def generate(rm: ResourceManager):
     rm.custom_block_model('ingot_pile', 'tfc:ingot_pile', {})
     rm.custom_block_model('double_ingot_pile', 'tfc:double_ingot_pile', {})
 
-    rm.block_loot('creative_motor')
     rm.blockstate('creative_motor', variants={
         'axis=x': {'model': 'tfc:block/creative_motor', 'y' : 270},
         'axis=z': {'model': 'tfc:block/creative_motor', 'y': 180},
         'axis=y': {'model': 'tfc:block/creative_motor', 'y': 180, 'x': 90},
     }).with_lang(lang('Creative Motor'))
     rm.item_model('creative_motor', parent='tfc:block/creative_motor', no_textures=True)
+
+    block = rm.blockstate('power_loom', variants=four_rotations('tfc:block/power_loom', (270, 180, None, 90)))
+    block.with_lang(lang('power loom')).with_item_model().with_block_loot('tfc:power_loom')
 
     for fluid in SIMPLE_FLUIDS:
         water_based_fluid(rm, fluid)

@@ -280,6 +280,7 @@ public class BuiltinBlockTags extends TagsProvider<Block> implements Accessors
                 TFCBlocks.STEEL_PIPE,
                 TFCBlocks.STEEL_PUMP,
                 TFCBlocks.TRIP_HAMMER,
+                TFCBlocks.POWER_LOOM,
                 TFCBlocks.BRONZE_BELL,
                 TFCBlocks.BRASS_BELL,
                 TFCBlocks.LARGE_VESSEL

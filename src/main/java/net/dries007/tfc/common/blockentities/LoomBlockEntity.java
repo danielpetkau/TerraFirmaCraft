@@ -17,6 +17,7 @@ import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.items.ItemHandlerHelper;
 import net.neoforged.neoforge.items.ItemStackHandler;
@@ -30,8 +31,8 @@ import net.dries007.tfc.util.Helpers;
 
 public class LoomBlockEntity extends TickableInventoryBlockEntity<ItemStackHandler>
 {
-    private static final int SLOT_RECIPE = 0;
-    private static final int SLOT_OUTPUT = 1;
+    protected static final int SLOT_RECIPE = 0;
+    protected static final int SLOT_OUTPUT = 1;
 
     public static void tick(Level level, BlockPos pos, BlockState state, LoomBlockEntity loom)
     {
@@ -80,17 +81,22 @@ public class LoomBlockEntity extends TickableInventoryBlockEntity<ItemStackHandl
         }
     }
 
-    @Nullable private LoomRecipe recipe = null;
+    @Nullable protected LoomRecipe recipe = null;
     @Nullable private ResourceLocation lastTexture;
 
-    private int progress = 0;
-    private long lastPushed = 0L;
-    private boolean needsProgressUpdate = false;
-    private boolean needsRecipeUpdate = false;
+    protected int progress = 0; // an integer that counts up to the number of steps
+    protected long lastPushed = 0L;
+    protected boolean needsProgressUpdate = false;
+    protected boolean needsRecipeUpdate = false;
 
     public LoomBlockEntity(BlockPos pos, BlockState state)
     {
-        super(TFCBlockEntities.LOOM.get(), pos, state, defaultInventory(2));
+        this(TFCBlockEntities.LOOM.get(), pos, state);
+    }
+
+    public LoomBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
+    {
+        super(type, pos, state, defaultInventory(2));
 
         if (TFCConfig.SERVER.loomEnableAutomation.get())
         {
@@ -146,7 +152,7 @@ public class LoomBlockEntity extends TickableInventoryBlockEntity<ItemStackHandl
         }
 
         // Push the loom
-        if (recipe != null && heldItem.isEmpty() && recipe.getInputCount() == inventory.getStackInSlot(SLOT_RECIPE).getCount() && progress < recipe.getStepCount() && !needsProgressUpdate)
+        if (canPushManually() && recipe != null && heldItem.isEmpty() && recipe.getInputCount() == inventory.getStackInSlot(SLOT_RECIPE).getCount() && progress < recipe.getStepCount() && !needsProgressUpdate)
         {
             final long time = level.getGameTime() - lastPushed;
             // This acts strangely when set to just 'time < 20', for some reason
@@ -286,5 +292,10 @@ public class LoomBlockEntity extends TickableInventoryBlockEntity<ItemStackHandl
             lastTexture = null;
             markForSync();
         }
+    }
+
+    protected boolean canPushManually()
+    {
+        return true;
     }
 }

@@ -269,6 +269,8 @@ public final class JEIIntegration implements IModPlugin
         addRecipeCatalyst(registry, TFCTags.Items.ANVILS, ANVIL);
 
         addRecipeCatalyst(registry, Wood.BlockType.LOOM, LOOM);
+        registry.addRecipeCatalyst(new ItemStack(TFCBlocks.POWER_LOOM), LOOM);
+
         addRecipeCatalyst(registry, Wood.BlockType.BARREL, SEALED_BARREL);
         addRecipeCatalyst(registry, Wood.BlockType.BARREL, INSTANT_BARREL);
         addRecipeCatalyst(registry, Wood.BlockType.BARREL, INSTANT_FLUID_BARREL);

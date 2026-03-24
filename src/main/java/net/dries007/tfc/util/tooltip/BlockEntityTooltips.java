@@ -59,6 +59,7 @@ import net.dries007.tfc.common.blockentities.ThermometerBlockEntity;
 import net.dries007.tfc.common.blockentities.TickCounterBlockEntity;
 import net.dries007.tfc.common.blockentities.TickingPlantBlockEntity;
 import net.dries007.tfc.common.blockentities.VaneBlockEntity;
+import net.dries007.tfc.common.blockentities.rotation.PowerLoomBlockEntity;
 import net.dries007.tfc.common.blockentities.rotation.RotatingBlockEntity;
 import net.dries007.tfc.common.blockentities.rotation.WaterWheelBlockEntity;
 import net.dries007.tfc.common.blockentities.rotation.WindmillBlockEntity;
@@ -92,6 +93,7 @@ import net.dries007.tfc.common.blocks.devices.NestBoxBlock;
 import net.dries007.tfc.common.blocks.devices.PitKilnBlock;
 import net.dries007.tfc.common.blocks.devices.PlacedItemBlock;
 import net.dries007.tfc.common.blocks.devices.PowderkegBlock;
+import net.dries007.tfc.common.blocks.devices.PowerLoomBlock;
 import net.dries007.tfc.common.blocks.devices.QuernBlock;
 import net.dries007.tfc.common.blocks.devices.TFCComposterBlock;
 import net.dries007.tfc.common.blocks.devices.ThermometerBlock;
@@ -159,6 +161,7 @@ public final class BlockEntityTooltips
         callback.register("mud_bricks", MUD_BRICKS, DryingBricksBlock.class);
         callback.register("decaying", DECAYING, DecayingBlock.class);
         callback.register("loom", LOOM, TFCLoomBlock.class);
+        callback.register("power_loom", POWER_LOOM, PowerLoomBlock.class);
         callback.register("ingot_pile", INGOT_PILE, IngotPileBlock.class);
         callback.register("axle", ROTATING, AbstractShaftAxleBlock.class);
         callback.register("encased_axle", ROTATING, EncasedAxleBlock.class);
@@ -578,6 +581,18 @@ public final class BlockEntityTooltips
             final ItemStack stack = decaying.getStack();
             tooltip.accept(stack.getHoverName());
             FoodCapability.addTooltipInfo(stack, tooltip);
+        }
+    };
+
+    public static final BlockEntityTooltip POWER_LOOM = (level, state, pos, entity, tooltip) -> {
+        if (entity instanceof PowerLoomBlockEntity loom)
+        {
+            getRotationComponent(loom).ifPresent(tooltip);
+            final LoomRecipe recipe = loom.getRecipe();
+            if (recipe != null)
+            {
+                tooltip.accept(Component.translatable("tfc.jade.loom_progress", loom.getProgress(), recipe.getStepCount(), recipe.getResultItem(level.registryAccess()).getDisplayName()));
+            }
         }
     };
 

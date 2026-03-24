@@ -73,6 +73,7 @@ import net.dries007.tfc.common.blockentities.TFCBlockEntities;
 import net.dries007.tfc.common.blockentities.ThermometerBlockEntity;
 import net.dries007.tfc.common.blockentities.VaneBlockEntity;
 import net.dries007.tfc.common.blockentities.rotation.CreativeRotationBlockEntity;
+import net.dries007.tfc.common.blockentities.rotation.PowerLoomBlockEntity;
 import net.dries007.tfc.common.blockentities.rotation.PumpBlockEntity;
 import net.dries007.tfc.common.blockentities.rotation.TripHammerBlockEntity;
 import net.dries007.tfc.common.blocks.crop.Crop;
@@ -100,6 +101,7 @@ import net.dries007.tfc.common.blocks.devices.PitKilnBlock;
 import net.dries007.tfc.common.blocks.devices.PlacedItemBlock;
 import net.dries007.tfc.common.blocks.devices.PotBlock;
 import net.dries007.tfc.common.blocks.devices.PowderkegBlock;
+import net.dries007.tfc.common.blocks.devices.PowerLoomBlock;
 import net.dries007.tfc.common.blocks.devices.QuernBlock;
 import net.dries007.tfc.common.blocks.devices.ScrapingBlock;
 import net.dries007.tfc.common.blocks.devices.StoveBlock;
@@ -486,6 +488,7 @@ public final class TFCBlocks
     public static final Id<Block> TRIP_HAMMER = register("trip_hammer", () -> new TripHammerBlock(ExtendedProperties.of().sound(SoundType.METAL).strength(3f).noOcclusion().pushReaction(PushReaction.DESTROY).blockEntity(TFCBlockEntities.TRIP_HAMMER).serverTicks(TripHammerBlockEntity::serverTick)));
     public static final Id<Block> STEEL_PIPE = register("steel_pipe", () -> new FluidPipeBlock(ExtendedProperties.of().strength(5f).sound(SoundType.METAL)));
     public static final Id<Block> STEEL_PUMP = register("steel_pump", () -> new FluidPumpBlock(ExtendedProperties.of().strength(5f).sound(SoundType.METAL).blockEntity(TFCBlockEntities.PUMP).serverTicks(PumpBlockEntity::serverTick).forceSolidOn()));
+    public static final Id<Block> POWER_LOOM = register("power_loom", () -> new PowerLoomBlock(ExtendedProperties.of().strength(5f).noOcclusion().sound(SoundType.METAL).blockEntity(TFCBlockEntities.POWER_LOOM).ticks(PowerLoomBlockEntity::powerLoomTick)));
 
     public static final Id<Block> CHANNEL = register("channel", () -> new ChannelBlock(ExtendedProperties.of(MapColor.METAL).strength(3).sound(SoundType.METAL).blockEntity(TFCBlockEntities.CHANNEL).lightLevel(s -> s.getValue(ChannelBlock.WITH_METAL) ? 10 : 0)));
     public static final Id<Block> MOLD_TABLE = register("mold_table", () -> new MoldTableBlock(ExtendedProperties.of(MapColor.METAL).strength(3).sound(SoundType.METAL).blockEntity(TFCBlockEntities.MOLD_TABLE).serverTicks(MoldTableBlockEntity::serverTick)));
@@ -507,7 +510,7 @@ public final class TFCBlocks
         register("ceramic/large_vessel/" + color.getName(), () -> new LargeVesselBlock(ExtendedProperties.of(MapColor.CLAY).strength(2.5F).noOcclusion().blockEntity(TFCBlockEntities.LARGE_VESSEL)), block -> new TooltipBlockItem(block, new Item.Properties()))
     );
 
-    public static final Id<Block> CREATIVE_MOTOR = register("creative_motor", () -> new CreativeRotationBlock(ExtendedProperties.of(Blocks.IRON_BLOCK).blockEntity(TFCBlockEntities.CREATIVE_MOTOR).ticks(CreativeRotationBlockEntity::serverTick, CreativeRotationBlockEntity::clientTick)));
+    public static final Id<Block> CREATIVE_MOTOR = register("creative_motor", () -> new CreativeRotationBlock(ExtendedProperties.of(Blocks.IRON_BLOCK).noLootTable().blockEntity(TFCBlockEntities.CREATIVE_MOTOR).ticks(CreativeRotationBlockEntity::serverTick, CreativeRotationBlockEntity::clientTick)));
 
     // Fluids
 

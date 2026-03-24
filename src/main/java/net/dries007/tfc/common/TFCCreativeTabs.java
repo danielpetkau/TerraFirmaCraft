@@ -553,6 +553,7 @@ public final class TFCCreativeTabs
         out.accept(TFCItems.HANDSTONE);
         out.accept(TFCBlocks.CRANKSHAFT);
         out.accept(TFCBlocks.TRIP_HAMMER);
+        out.accept(TFCBlocks.POWER_LOOM);
         out.accept(TFCBlocks.CRUCIBLE);
         out.accept(TFCBlocks.COMPOSTER);
         out.accept(TFCBlocks.BLOOMERY);
