@@ -144,7 +144,7 @@ public class TFCOcelot extends Ocelot
     public boolean isFood(ItemStack stack)
     {
         return !FoodCapability.isRotten(stack)
-            && Helpers.isItem(stack, TFCTags.Items.CAT_FOOD);
+            && Helpers.isItem(stack, TFCTags.Items.OCELOT_FOOD);
     }
 
     @Override

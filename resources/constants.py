@@ -901,7 +901,7 @@ FRUITS: dict[str, Fruit] = {
     'peach': Fruit(-3.4, 15.8, 180, 470, -4.6, 17, 15, 95),
     'plum': Fruit(-7, 12.2, 120, 300, -8.2, 13.4, 9, 75),
 }
-JAR_FRUITS = tuple([*BERRIES.keys(), *FRUITS.keys(), 'pumpkin_chunks', 'melon_slice', 'peanut'])
+JAR_FRUITS = tuple([*BERRIES.keys(), *FRUITS.keys(), 'melon_slice', 'peanut'])
 
 SIMPLE_FRESHWATER_FISH = ('bluegill', 'crappie', 'lake_trout', 'largemouth_bass', 'rainbow_trout', 'salmon', 'smallmouth_bass',)
 ADVANCEMENT_FISH = ('cod', 'calamari', 'shellfish', 'tropical_fish', *SIMPLE_FRESHWATER_FISH)
