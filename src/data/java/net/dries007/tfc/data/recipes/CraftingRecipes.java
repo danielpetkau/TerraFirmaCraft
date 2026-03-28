@@ -1201,6 +1201,13 @@ public interface CraftingRecipes extends Recipes
             .pattern("SMR", "SMR")
             .shaped(TFCBlocks.TRIP_HAMMER);
         recipe()
+            .input('S', ingredientOf(Metal.STEEL, Metal.ItemType.SHEET))
+            .input('M', TFCItems.BRASS_MECHANISMS)
+            .input('R', Tags.Items.RODS_WOODEN)
+            .input('L', TFCTags.Items.LOOMS)
+            .pattern("SRS", "RMR", "MLM")
+            .shaped(TFCBlocks.POWER_LOOM);
+        recipe()
             .input('X', ItemTags.LOGS)
             .pattern("X", "X")
             .shaped(TFCBlocks.WATTLE, 6);

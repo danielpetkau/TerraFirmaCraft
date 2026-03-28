@@ -60,6 +60,16 @@
       "type": "patchouli:crafting",
       "recipe": "minecraft:light_blue_bed",
       "recipe2": "minecraft:painting"
+    },
+    {
+      "type": "patchouli:crafting",
+      "anchor": "power_loom",
+      "recipe": "tfc:crafting/power_loom",
+      "text": "Weaving can be automated using $(l:mechanics/mechanical_power#quern)Mechanical Power$() with the use of a $(thing)Power Loom$()."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "The Power Loom, like the regular Loom, can take input from hoppers on the side and extraction from hoppers on the bottom. On the right side of the loom, it can take power input from an $(thing)Axle$(). Fill the loom as normal, and it will slowly weave together the final product for you. Power looms cannot be operated manually."
     }
   ],
   "read_by_default": true,
@@ -70,6 +80,7 @@
     "tfc:wool_cloth": 4,
     "minecraft:white_wool": 6,
     "tfc:silk_cloth": 7,
-    "tfc:burlap_cloth": 8
+    "tfc:burlap_cloth": 8,
+    "tfc:power_loom": 10
   }
 }

@@ -23,7 +23,7 @@ public class PowerLoomBlockEntity extends LoomBlockEntity implements RotationSin
         final Rotation rotation = loom.node.rotation();
         if (rotation != null)
         {
-            loom.progressTicker += rotation.speed();
+            loom.progressTicker += Mth.abs(rotation.speed());
             if (loom.progressTicker > PROGRESS_FOR_ONE_PUSH)
             {
                 loom.progressTicker = 0;
@@ -44,7 +44,7 @@ public class PowerLoomBlockEntity extends LoomBlockEntity implements RotationSin
         tick(level, pos, state, loom);
     }
 
-    private static final float PROGRESS_FOR_ONE_PUSH = Mth.TWO_PI;
+    private static final float PROGRESS_FOR_ONE_PUSH = Mth.TWO_PI / 4f;
 
     private float progressTicker = 0f;
     private final Node node;

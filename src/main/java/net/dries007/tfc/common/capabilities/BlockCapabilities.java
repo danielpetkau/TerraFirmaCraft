@@ -57,6 +57,7 @@ public final class BlockCapabilities
         event.registerBlockEntity(FLUID, TFCBlockEntities.LAMP.get(), LampBlockEntity::getSidedFluidInventory);
         registerInventory(event, TFCBlockEntities.LARGE_VESSEL);
         registerInventory(event, TFCBlockEntities.LOOM);
+        registerInventory(event, TFCBlockEntities.POWER_LOOM);
         registerInventory(event, TFCBlockEntities.NEST_BOX);
         registerInventory(event, TFCBlockEntities.POT);
         event.registerBlockEntity(FLUID, TFCBlockEntities.POT.get(), PotBlockEntity::getSidedFluidInventory);

@@ -146,6 +146,10 @@
     {
       "type": "patchouli:text",
       "text": "在传动杆下方放置杵锤，然后用$(item)$(k:key.use)$()将锤子添加到其上。锤子必须是金属锤。确保杵锤的朝向正确，使带刃传动杆能向下推动锤柄。然后锤子会敲击放置在它前方的砧。杵锤总是记录$(thing)“轻击”$()动作，并且总是使指针向目标靠近。如果锭不够热或砧的等级不正确，会发出沉闷的金属撞击声提醒你。"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(l:mechanics/weaving#power_loom)Weaving$() can be automated through the use of a $(l:mechanics/weaving#power_loom)Power Loom$(). Read that chapter for more information."
     }
   ],
   "read_by_default": true,

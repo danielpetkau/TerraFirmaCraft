@@ -146,6 +146,10 @@
     {
       "type": "patchouli:text",
       "text": "Mekanik çekici aksın altına yerleştirin ve ona bir çekiç eklemek için $(item)$(k:key.use)$() tuşunu kullanın. Çekiç, metal bir çekiç olmalıdır. Mekanik çekicin, bıçaklı aksın çekiç sapını aşağı iteceği şekilde yönlendirildiğinden emin olun. Çekiç daha sonra önüne yerleştirilen bir örse vuracaktır. Mekanik çekiç her zaman $(thing)'Hafif Vuruş'$() eylemini kaydeder ve imleci her zaman hedefe yaklaştırır. Eğer bir külçe yeterince sıcak değilse veya örs yanlış seviyedeyse, derin bir metal çarpma sesi sizi uyaracaktır."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(l:mechanics/weaving#power_loom)Weaving$() can be automated through the use of a $(l:mechanics/weaving#power_loom)Power Loom$(). Read that chapter for more information."
     }
   ],
   "read_by_default": true,
