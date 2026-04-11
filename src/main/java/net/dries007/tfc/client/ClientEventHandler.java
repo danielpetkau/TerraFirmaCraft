@@ -365,7 +365,7 @@ public final class ClientEventHandler
             registerSealedProperty(TFCBlocks.POWDERKEG, TFCComponents.CONTENTS);
             registerSealedProperty(TFCBlocks.LARGE_VESSEL, TFCComponents.CONTENTS);
             TFCBlocks.GLAZED_LARGE_VESSELS.values().forEach(item -> registerSealedProperty(item, TFCComponents.CONTENTS));
-            TFCBlocks.WOODS.values().forEach(map -> registerSealedProperty(map.get(BARREL), TFCComponents.BARREL));
+            TFCBlocks.WOODS.values().forEach(map -> registerSealedProperty(map.get(BARREL), TFCComponents.BARREL, barrel -> !barrel.isEmpty()));
 
             /*ItemProperties.register(TFCBlocks.LIGHT.get().asItem(), Helpers.identifierMC("level"), (stack, level, entity, unused) -> {
                 CompoundTag stackTag = stack.getTag();
@@ -523,9 +523,14 @@ public final class ClientEventHandler
 
     private static final ResourceLocation SEALED = Helpers.identifier("sealed");
 
-    private static void registerSealedProperty(ItemLike item, Supplier<? extends DataComponentType<?>> type)
+    private static <T> void registerSealedProperty(ItemLike item, Supplier<? extends DataComponentType<T>> type)
     {
-        ItemProperties.register(item.asItem(), SEALED, (stack, level, entity, unused) -> stack.has(type) ? 1.0f : 0f);
+        registerSealedProperty(item, type, t -> true);
+    }
+
+    private static <T> void registerSealedProperty(ItemLike item, Supplier<? extends DataComponentType<T>> type, Predicate<T> predicate)
+    {
+        ItemProperties.register(item.asItem(), SEALED, (stack, level, entity, unused) -> stack.has(type) && predicate.test(stack.get(type)) ? 1.0f : 0f);
     }
 
     public static void registerMenuScreens(RegisterMenuScreensEvent event)
