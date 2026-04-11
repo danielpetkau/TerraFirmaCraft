@@ -127,7 +127,6 @@ public class BellowsBlock extends DeviceBlock
     }
 
     @Override
-    @SuppressWarnings("deprecation")
     public RenderShape getRenderShape(BlockState state)
     {
         return RenderShape.MODEL;
@@ -140,7 +139,6 @@ public class BellowsBlock extends DeviceBlock
     }
 
     @Override
-    @SuppressWarnings("deprecation")
     public BlockState rotate(BlockState state, Rotation rot)
     {
         return state.setValue(FACING, rot.rotate(state.getValue(FACING)));
