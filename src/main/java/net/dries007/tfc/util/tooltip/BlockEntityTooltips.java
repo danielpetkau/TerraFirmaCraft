@@ -45,6 +45,7 @@ import net.dries007.tfc.common.blockentities.CropBlockEntity;
 import net.dries007.tfc.common.blockentities.CrucibleBlockEntity;
 import net.dries007.tfc.common.blockentities.DecayingBlockEntity;
 import net.dries007.tfc.common.blockentities.FireboxBlockEntity;
+import net.dries007.tfc.common.blockentities.HotPouredGlassBlockEntity;
 import net.dries007.tfc.common.blockentities.IHeatable;
 import net.dries007.tfc.common.blockentities.IngotPileBlockEntity;
 import net.dries007.tfc.common.blockentities.LampBlockEntity;
@@ -123,6 +124,7 @@ import net.dries007.tfc.config.TFCConfig;
 import net.dries007.tfc.config.TemperatureDisplayStyle;
 import net.dries007.tfc.util.Helpers;
 import net.dries007.tfc.util.calendar.Calendars;
+import net.dries007.tfc.util.calendar.ICalendar;
 import net.dries007.tfc.util.data.LampFuel;
 import net.dries007.tfc.util.rotation.Rotation;
 import net.dries007.tfc.util.tracker.WeatherHelpers;
@@ -182,9 +184,10 @@ public final class BlockEntityTooltips
     }
 
     public static final BlockEntityTooltip HOT_POURED_GLASS = (level, state, pos, entity, tooltip) -> {
-        if (state.getBlock() instanceof HotPouredGlassBlock && !state.getValue(HotPouredGlassBlock.FLAT))
+        if (state.getBlock() instanceof HotPouredGlassBlock && entity instanceof HotPouredGlassBlockEntity glass && !state.getValue(HotPouredGlassBlock.FLAT))
         {
             tooltip.accept(Component.translatable("tfc.tooltip.glass.flatten_me"));
+            timeLeft(level, tooltip, HotPouredGlassBlockEntity.TICKS_TO_DESTROY - Calendars.get(level).getTicks() + glass.getCreated());
         }
     };
 
