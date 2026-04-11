@@ -12,6 +12,7 @@ import org.jetbrains.annotations.Nullable;
 
 import net.dries007.tfc.world.region.Units;
 import net.dries007.tfc.world.settings.RockSettings;
+import net.dries007.tfc.TerraFirmaCraft;
 
 public class RockData
 {
@@ -53,8 +54,18 @@ public class RockData
 
     public RockSettings getRock(int x, int y, int z)
     {
-        assert generator != null && surfaceHeight != null;
-        return generator.generateRock(x, y, z, surfaceHeight[Units.index(x, z)], cache);
+        assert generator != null;
+        if (surfaceHeight != null)
+        {
+            return generator.generateRock(x, y, z, surfaceHeight[Units.index(x, z)], cache);
+        }
+        else
+        {
+            // Fallback in case a mod is trying to generate a TFC chunk before the surface height cache is populated,
+            // which has caused many crashes and incompatibilities in the past.
+            TerraFirmaCraft.LOGGER.warn("Queried rock data for position ({}, {}, {}) before surface height cache was populated", x, y, z);
+            return generator.generateRock(x, y, z, 64, cache);
+        }
     }
 
     public int[] getSurfaceHeight()
