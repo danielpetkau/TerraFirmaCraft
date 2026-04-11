@@ -365,7 +365,7 @@ public class BlastFurnaceBlockEntity extends TickableInventoryBlockEntity<BlastF
     public void onCalendarUpdate(long ticks)
     {
         assert level != null;
-        if(level.getBlockState(worldPosition).getValue(BlastFurnaceBlock.LIT))
+        if (level.getBlockState(worldPosition).getValue(BlastFurnaceBlock.LIT))
         {
             final HeatCapability.Remainder remainder = HeatCapability.consumeFuelForTicks(ticks, burnTicks, burnTemperature, fuelStacks);
 
