@@ -365,19 +365,21 @@ public class BlastFurnaceBlockEntity extends TickableInventoryBlockEntity<BlastF
     public void onCalendarUpdate(long ticks)
     {
         assert level != null;
-
-        final HeatCapability.Remainder remainder = HeatCapability.consumeFuelForTicks(ticks, burnTicks, burnTemperature, fuelStacks);
-
-        burnTicks = remainder.burnTicks();
-        burnTemperature = remainder.burnTemperature();
-
-        if (remainder.ticks() > 0)
+        if(level.getBlockState(worldPosition).getValue(BlastFurnaceBlock.LIT))
         {
-            // Consumed all fuel, so extinguish and cool instantly
-            extinguish(getBlockState());
-            for (ItemStack stack : inputStacks)
+            final HeatCapability.Remainder remainder = HeatCapability.consumeFuelForTicks(ticks, burnTicks, burnTemperature, fuelStacks);
+
+            burnTicks = remainder.burnTicks();
+            burnTemperature = remainder.burnTemperature();
+
+            if (remainder.ticks() > 0)
             {
-                HeatCapability.setTemperature(stack, 0);
+                // Consumed all fuel, so extinguish and cool instantly
+                extinguish(getBlockState());
+                for (ItemStack stack : inputStacks)
+                {
+                    HeatCapability.setTemperature(stack, 0);
+                }
             }
         }
     }
