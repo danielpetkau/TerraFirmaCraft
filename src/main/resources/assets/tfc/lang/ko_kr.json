@@ -12,7 +12,6 @@
   "death.attack.tfc.coral.player": "%1$s이(가) %2$s로부터 도망치려다 산호초에 들이박았습니다",
   "death.attack.tfc.pluck": "%1$s이(가) 털이 뽑혀 죽었습니다.",
   "death.attack.tfc.pluck.player": "%1$s이(가) %2$s로 인해 털이 뽑혀 죽었습니다. 근데 좀 이상한데요, 사람들에게는 깃털이 없는걸요?",
-  "effect.tfc.pinned": "기절",
   "effect.tfc.ink": "먹물",
   "effect.tfc.glow_ink": "발광 먹물",
   "effect.tfc.overburdened": "과중량",
