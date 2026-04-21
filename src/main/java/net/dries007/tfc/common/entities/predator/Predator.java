@@ -160,20 +160,9 @@ public class Predator extends WildAnimal
     @Override
     public boolean doHurtTarget(Entity target)
     {
-        return this.doHurtTarget(target, 5);
-    }
-
-    public boolean doHurtTarget(Entity target, int pinChance)
-    {
         boolean hurt = super.doHurtTarget(target);
         level().broadcastEntityEvent(this, (byte) 4);
         playSound(getAttackSound(), 1.0f, getVoicePitch());
-
-        if (pinChance > 0 && hurt && target instanceof Player player && random.nextInt(pinChance) == 0 && player.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE) <= 0)
-        {
-            pinPlayer(player);
-        }
-
         return hurt;
     }
 
@@ -248,18 +237,5 @@ public class Predator extends WildAnimal
         {
             predator.getBrain().setMemory(MemoryModuleType.HOME, GlobalPos.of(level().dimension(), PredatorAi.getHomePos(this)));
         }
-    }
-
-    public boolean pinPlayer(Player player)
-    {
-        if (distanceToSqr(player) < 6D)
-        {
-            if (!player.level().isClientSide)
-            {
-                player.addEffect(new MobEffectInstance(TFCEffects.PINNED.holder(), 35, 0, false, false));
-            }
-            return true;
-        }
-        return false;
     }
 }

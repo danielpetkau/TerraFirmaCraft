@@ -176,7 +176,6 @@ import net.dries007.tfc.common.recipes.CollapseRecipe;
 import net.dries007.tfc.common.recipes.LandslideRecipe;
 import net.dries007.tfc.config.TFCConfig;
 import net.dries007.tfc.network.DataManagerSyncPacket;
-import net.dries007.tfc.network.EffectExpirePacket;
 import net.dries007.tfc.network.PlayerDrinkPacket;
 import net.dries007.tfc.network.UpdateClimateModelPacket;
 import net.dries007.tfc.util.AxeLoggingHelper;
@@ -788,36 +787,10 @@ public final class ForgeEventHandler
         }
     }
 
-    public static void onEffectRemove(MobEffectEvent.Remove event)
-    {
-        final MobEffectInstance inst = event.getEffectInstance();
-        if (event.getEntity() instanceof ServerPlayer player && inst != null)
-        {
-            PacketDistributor.sendToPlayer(player, new EffectExpirePacket(inst.getEffect()));
-            if (inst.getEffect() == TFCEffects.PINNED.get())
-            {
-                player.setForcedPose(null);
-            }
-        }
-    }
-
-    public static void onEffectExpire(MobEffectEvent.Expired event)
-    {
-        final MobEffectInstance instance = event.getEffectInstance();
-        if (instance != null && event.getEntity() instanceof ServerPlayer player)
-        {
-            PacketDistributor.sendToPlayer(player, new EffectExpirePacket(instance.getEffect()));
-            if (instance.getEffect() == TFCEffects.PINNED.get())
-            {
-                player.setForcedPose(null);
-            }
-        }
-    }
-
     public static void onLivingJump(LivingEvent.LivingJumpEvent event)
     {
         LivingEntity entity = event.getEntity();
-        if (entity.hasEffect(TFCEffects.PINNED.holder()) || entity.hasEffect(TFCEffects.OVERBURDENED.holder()))
+        if (entity.hasEffect(TFCEffects.OVERBURDENED.holder()))
         {
             entity.setDeltaMovement(0, 0, 0);
             entity.hasImpulse = false;

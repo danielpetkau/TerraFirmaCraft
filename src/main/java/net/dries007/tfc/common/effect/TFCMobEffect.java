@@ -30,11 +30,7 @@ public class TFCMobEffect extends MobEffect
     {
         if (entity instanceof Player player)
         {
-            if (this == TFCEffects.PINNED.get())
-            {
-                player.setForcedPose(Pose.SLEEPING);
-            }
-            else if (this == TFCEffects.THIRST.get())
+            if (this == TFCEffects.THIRST.get())
             {
                 final IPlayerInfo info = IPlayerInfo.get(player);
                 if (info.getThirst() > 0.05f)
@@ -53,7 +49,7 @@ public class TFCMobEffect extends MobEffect
     @Override
     public boolean shouldApplyEffectTickThisTick(int duration, int amplitude)
     {
-        return this == TFCEffects.PINNED.get() || tickForAmplitude(TFCEffects.THIRST, 50, amplitude) || tick(TFCEffects.EXHAUSTED, duration % 20 == 0);
+        return tickForAmplitude(TFCEffects.THIRST, 50, amplitude) || tick(TFCEffects.EXHAUSTED, duration % 20 == 0);
     }
 
     private boolean tick(Supplier<MobEffect> check, boolean accepted)
