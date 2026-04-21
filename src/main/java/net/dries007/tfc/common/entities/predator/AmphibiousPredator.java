@@ -102,12 +102,6 @@ public class AmphibiousPredator extends Predator implements AquaticMob
     }
 
     @Override
-    public boolean doHurtTarget(Entity target)
-    {
-        return super.doHurtTarget(target, target.isInWaterOrBubble() ? 2 : 0);
-    }
-
-    @Override
     public boolean canSpawnIn(Fluid fluid)
     {
         return fluid.isSame(Fluids.WATER);
